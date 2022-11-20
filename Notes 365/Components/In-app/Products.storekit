@@ -1,0 +1,52 @@
+{
+  "identifier" : "9B10CBE2",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_timeRate" : 0
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "204F5445",
+      "localizations" : [
+
+      ],
+      "name" : "basic",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "4.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "1B82CA1C",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Yearly Package",
+              "displayName" : "Yearly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "YEARLY449",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "YEARLY AUTO 499",
+          "subscriptionGroupID" : "204F5445",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 1,
+    "minor" : 2
+  }
+}

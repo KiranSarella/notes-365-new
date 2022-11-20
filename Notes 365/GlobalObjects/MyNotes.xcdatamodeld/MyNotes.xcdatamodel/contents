@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21C52" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+    <entity name="DayBaseVersion" representedClassName="DayBaseVersion" syncable="YES" codeGenerationType="class">
+        <attribute name="content" optional="YES" attributeType="String"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="noteId" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+    </entity>
+    <entity name="Note" representedClassName="Note" syncable="YES" codeGenerationType="class">
+        <attribute name="content" optional="YES" attributeType="String"/>
+        <attribute name="contentCount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="orderNumber" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="updatedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="childNotes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Note" inverseName="parentNote" inverseEntity="Note"/>
+        <relationship name="noteChanges" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NoteChange" inverseName="note" inverseEntity="NoteChange"/>
+        <relationship name="parentNote" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Note" inverseName="childNotes" inverseEntity="Note"/>
+    </entity>
+    <entity name="NoteChange" representedClassName="NoteChange" syncable="YES" codeGenerationType="class">
+        <attribute name="contentChanges" optional="YES" attributeType="String"/>
+        <attribute name="contentCount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="note" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Note" inverseName="noteChanges" inverseEntity="Note"/>
+        <relationship name="timeline" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Timeline" inverseName="noteChanges" inverseEntity="Timeline"/>
+    </entity>
+    <entity name="Timeline" representedClassName="Timeline" syncable="YES" codeGenerationType="class">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="noteChanges" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="NoteChange" inverseName="timeline" inverseEntity="NoteChange"/>
+    </entity>
+    <elements>
+        <element name="DayBaseVersion" positionX="-45" positionY="63" width="128" height="74"/>
+        <element name="Note" positionX="-36" positionY="72" width="128" height="179"/>
+        <element name="NoteChange" positionX="-54" positionY="54" width="128" height="104"/>
+        <element name="Timeline" positionX="-18" positionY="126" width="128" height="59"/>
+    </elements>
+</model>

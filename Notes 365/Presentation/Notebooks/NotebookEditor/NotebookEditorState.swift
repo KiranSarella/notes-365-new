@@ -1,0 +1,78 @@
+//
+//  NotebookEditorState.swift
+//  Notes 365
+//
+//  Created by Kiran Sarella on 18/11/22.
+//
+
+import Foundation
+import SwiftUI
+
+class NotebookEditorState: ObservableObject {
+    
+    let notebookBusiness = NotebookContentBusiness.shared
+    
+    @Published var isFetchingData = true
+    
+    @Published var contentStr: String = ""
+    
+    @Published var txt: String = ""
+    
+    @Published var editorType = EditorType.smart
+    
+    
+    
+    @Published var theme: MarkdownTheme
+    
+    @Published var showSymbols = false
+    
+    
+    let autoSaveTimer = Timer.publish(every: 60, on: .main, in: .common).autoconnect() // 1 min
+    
+    init() {
+        theme = ThemeManager.shared.getSelectedTheme()
+    }
+    
+    func loadContent(notebookInfo: UserSelectionState) {
+        
+        contentStr = ""
+        
+        txt = ""
+        
+        isFetchingData = true
+        
+        self.contentStr = NotebookContentBusiness.loadContent(selection: notebookInfo)
+        self.txt = self.contentStr
+        
+        isFetchingData = false
+    }
+    
+    // diff
+    func getChanges(old: String, new: String) -> String {
+        
+        return NotebookContentBusiness.getChanges(old: old, new: new)
+    }
+    
+    
+    func setBaseVersion(userSelectionState: UserSelectionState) {
+        
+        VersionBusiness.cleanOldBaseVersions()
+        
+        guard let notebook = NotebooksListState.shared.getNotebook(levels: userSelectionState.selectedLevels, index: userSelectionState.selectedIndex) else { return }
+        
+        if NotebookContentBusiness.isBaseVersionExists(fileName: notebook.id.uuidString) == false {
+            
+            // case 1: for new notes
+            // case 2: for existing notes
+            NotebookContentBusiness.createBaseVersion(for: notebook.id.uuidString, with: self.contentStr)
+        }
+    }
+    
+    
+    
+    func saveContentChanges(userSelectionState: UserSelectionState) {
+        
+        NotebookContentBusiness.saveContentChanges(userSelectionState: userSelectionState, txt: txt)
+    }
+    
+}

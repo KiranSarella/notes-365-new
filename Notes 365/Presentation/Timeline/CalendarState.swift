@@ -1,0 +1,163 @@
+//
+//  TimelineStateTwo.swift
+//  MyNotes
+//
+//  Created by Kiran Sarella on 21/10/21.
+//
+
+import Foundation
+import SwiftUI
+
+// MARK: - Day
+public struct DayDate {
+    let date: Date
+}
+
+extension DayDate: Equatable {}
+
+// MARK: - Week
+public struct WeekDate {
+    let start: Date
+    let end: Date
+    
+    let days: [Date]
+    
+    
+    init(date: Date) {
+        (start, end) = date.getWeekStartEndDates()
+        days = WeekDetailView.getWeekDates(startDate: start)
+    }
+}
+
+extension WeekDate: Equatable {}
+
+// MARK: - Month
+public struct MonthDate {
+    let start: Date
+    let end: Date
+    
+//    var days:[Date] {
+//        return []
+//    }
+    
+    init(date: Date) {
+        (start, end) = date.getMonthStartEndDates()
+//        monthDate = MonthDate(start: start, end: end)
+    }
+    
+}
+
+extension MonthDate: Equatable {}
+
+
+class CalendarState: ObservableObject {
+    
+    static let shared: CalendarState = CalendarState()
+    
+    var selectedDate: Date = Date() {
+        didSet {
+            switch calenderType {
+            case .day:
+                dayDate = DayDate(date: selectedDate)
+            case .week:
+                break
+            case .month:
+                break
+            }
+        }
+    }    // todays date by default
+    
+    @Published var calenderType: CalendarType = .day {
+        didSet {
+            switch oldValue {
+            case .day:
+                switch calenderType {
+                case .day:
+                    break
+                case .week:
+                    // convert day to week
+                    weekDate = WeekDate(date: dayDate.date)
+                case .month:
+                    // convert day to month
+                    monthDate = MonthDate(date: dayDate.date)
+                }
+            case .week:
+                switch calenderType {
+                case .day:
+                    // convert week to day
+                    dayDate = DayDate(date: weekDate.start)
+                case .week:
+                    break
+                case .month:
+                    // convert week to month
+                    // TODO: get week navigation date, from get month
+                    // choose active month date from (start or end)
+                    
+                    if weekDate.start.getMonth() == navigationDate.getMonth() {
+                        monthDate = MonthDate(date: weekDate.start)
+                    } else {
+                        monthDate = MonthDate(date: weekDate.end)
+                    }
+                    
+                    
+                }
+            case .month:
+                switch calenderType {
+                case .day:
+                    // convert month to day
+                    dayDate = DayDate(date: monthDate.start)
+                case .week:
+                    // convert month to week
+                    weekDate = WeekDate(date: monthDate.start)
+                case .month:
+                    break
+                }
+            }
+        }
+    }
+    
+    @Published var dayDate: DayDate
+    @Published var weekDate: WeekDate
+    @Published var monthDate: MonthDate
+    
+    var navigationDate: Date = Date()
+    
+    private init() {
+        // set current day
+        dayDate = DayDate(date: Date())
+        // set current week
+        weekDate = WeekDate(date: Date())
+        // set current month
+        monthDate = MonthDate(date: Date())
+    }
+    
+}
+
+extension Date {
+    
+    func getWeekStartEndDates() -> (Date, Date) {
+        
+        guard
+            let weekInterval = Calendar.current.dateInterval(of: .weekOfMonth, for: self)
+        else { fatalError() }
+        
+        let startDate = weekInterval.start
+        let endDate = Calendar.current.date(byAdding: .day, value: 7, to: startDate)!
+        
+        return (startDate, endDate)
+    }
+    
+    func getMonthStartEndDates() -> (Date, Date) {
+        
+        guard
+            let monthInterval = Calendar.current.dateInterval(of: .month, for: self)
+        else { fatalError() }
+        
+        let startDate = monthInterval.start
+        let endDate = monthInterval.end
+        
+        return (startDate, endDate)
+    }
+    
+    
+}
