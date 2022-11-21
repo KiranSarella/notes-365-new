@@ -235,6 +235,7 @@ func getWeekDates(_ inputDate: Date) -> [Week] {
         let dates = Array(calendarDates[startIndex..<endIndex])
         
         let weekNumber = calendar.component(.weekOfYear, from: dates[3])
+//        let weekNumber = calendar.component(.weekOfYear, from: dates[0])
         
         weeks.append(Week(weekNumber: weekNumber, weekDays: dates))
     }

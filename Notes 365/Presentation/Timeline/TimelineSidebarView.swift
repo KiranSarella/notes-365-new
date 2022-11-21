@@ -24,7 +24,7 @@ struct TimelineSidebarView: View {
             HStack(alignment: .bottom) {
                 switch calendarState.calenderType {
                 case .day:
-                    DayCalendarView(selectedDate: $calendarState.selectedDate, dayDate: $calendarState.dayDate)
+                    DayCalendarView(dayDate: $calendarState.dayDate)
                 case .week:
                     WeekCalendarView(weekDate: $calendarState.weekDate)
                 case .month:

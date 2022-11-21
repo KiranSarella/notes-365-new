@@ -8,75 +8,47 @@
 import SwiftUI
 
 struct DayCalendarView: View {
-    
-    @Binding var selectedDate: Date {
-        didSet {
-            dayDate = DayDate(date: selectedDate)
-        }
-    }
-    
-    @State private var selectedDateForNav: Date?
-    
+
     @Binding var dayDate: DayDate
-    
     @State private var navigationDate: Date = Date()
     
     var calendar = Calendar(identifier: .gregorian)
-    
     
     var body: some View {
         
         VStack {
             // current month, prev, next actions
-            HeaderView(navigationDate: $navigationDate, selectedDate: $selectedDate, selectedDateForNav: $selectedDateForNav)
-            
+            HeaderView(dayDate: $dayDate, navigationDate: $navigationDate)
             // grid view 7 x 7
             // 7 columns
             // titles: sun, mon...
             // detail rows: 6
-            DayGridView(navigationDate: $navigationDate, selectedDate: $selectedDate, selectedDateForNav: $selectedDateForNav, dates: getCalenderDates(navigationDate))
+            DayGridView(dayDate: $dayDate, navigationDate: $navigationDate)
         }
         .padding()
         .onAppear {
-            navigationDate = selectedDate
-            selectedDate = selectedDate
+            navigationDate = dayDate.date
         }
-        
     }
-    
-   
-   
 }
-
 
 fileprivate struct HeaderView: View {
     
+    @Binding var dayDate: DayDate
     @Binding var navigationDate: Date
-    
-    @Binding var selectedDate: Date {
-        didSet {
-//            dayDate = DayDate(date: selectedDate)
-        }
-    }
-     
-    @Binding var selectedDateForNav: Date?
      
     var calendar = Calendar(identifier: .gregorian)
      
-    
     var body: some View {
         HStack {
             Text(navigationDate.string(withFormat: "MMMM, YYYY"))
                 .font(.system(size: 14, weight: Font.Weight.semibold, design: Font.Design.rounded))
                 .padding(.leading, 9)
             Spacer()
-            
             // previous
             Button {
                 guard let newDate = calendar.date(byAdding: .month, value: -1, to: navigationDate) else { return }
-                
                 navigationDate = newDate
-                
             } label: {
                 Label(
                     title: { Text("Previous") },
@@ -87,16 +59,10 @@ fileprivate struct HeaderView: View {
                 .frame(maxHeight: .infinity)
             }
             .buttonStyle(PlainButtonStyle())
-            
             // today
             Button {
-                
                 navigationDate = Date()
-                
-                selectedDate = navigationDate
-                
-                selectedDateForNav = selectedDate
-                
+                dayDate = DayDate(date: navigationDate)
             } label: {
                 Label(
                     title: { Text("Today") },
@@ -108,15 +74,10 @@ fileprivate struct HeaderView: View {
                 .help("today")
             }
             .buttonStyle(PlainButtonStyle())
-            
-            
             // next
             Button {
-                
                 guard let newDate = calendar.date(byAdding: .month, value: 1, to: navigationDate) else { return }
-                
                 navigationDate = newDate
-                
             } label: {
                 Label(
                     title: { Text("Next") },
@@ -129,85 +90,59 @@ fileprivate struct HeaderView: View {
             .buttonStyle(PlainButtonStyle())
         }
         .frame(height: 50)
-        
     }
-    
 }
 
 fileprivate struct DayGridView: View {
     
     var columns = Array(repeating: GridItem(), count: 7)
-    
     var weekdaySymbols = Calendar.current.shortWeekdaySymbols
-    
+    @Binding var dayDate: DayDate
     @Binding var navigationDate: Date
-    
-    @Binding var selectedDate: Date
-    
-    @Binding var selectedDateForNav: Date?
-    
-    var dates: [Date]
+    @State private var dates: [Date] = []
     
     var body: some View {
-        
-        
         VStack {
             LazyVGrid(columns: columns) {
-                
                 // mon, tue,..
                 ForEach(weekdaySymbols, id: \.self) { weekdaySymbol in
                     Text(weekdaySymbol)
                         .padding(.bottom, 4)
                         .font(.system(size: 10, weight: Font.Weight.light, design: Font.Design.rounded))
                 }
-                
-                
                 // grid numbers
                 ForEach(dates, id: \.self) { date in
                     // get day number from date
                     // check if month is selected month
-                    
-                    
                     if date.getMonth() == navigationDate.getMonth() {
-                        
                         ZStack {
-                            
                             Button {
-                                
-                                selectedDate = date
-                                selectedDateForNav = date
-                                
+                                dayDate = DayDate(date: date)
                             } label: {
-                                
                                 Text("\(date.getDay())")
                                     .padding(4)
                                     .font(.system(size: 10))
                                     .foregroundColor(.primary)
                             }
                             .buttonStyle(PlainButtonStyle())
-                            
                             RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.blue, lineWidth: date.isSameDayAs(selectedDate) ? 1 : 0)
+                                .stroke(Color.blue, lineWidth: date.isSameDayAs(dayDate.date) ? 1 : 0)
                         }
-                        
                     } else {
-                        
                         Text("\(date.getDay())")
                             .padding(.bottom, 4)
                             .foregroundColor(.clear)
                     }
-                    
                 }.buttonStyle(PlainButtonStyle())
-                
-                
                 Spacer()
             }
-            
             Spacer()
         }
         .onAppear(perform: {
-            selectedDate = selectedDate
-            selectedDateForNav = selectedDate
+            dates = getCalenderDates(navigationDate)
+        })
+        .onChange(of: navigationDate, perform: { newValue in
+            dates = getCalenderDates(newValue)
         })
         .frame(height: 220)
     }
