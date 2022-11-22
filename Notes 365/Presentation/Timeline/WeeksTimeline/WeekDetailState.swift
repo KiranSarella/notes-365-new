@@ -42,9 +42,7 @@ public struct DayChanges: Identifiable {
     let metadata: String
 }
 
-
-
-class WeekDetailState: ObservableObject {
+@MainActor class WeekDetailState: ObservableObject {
     
     let timelineBusiness = TimelineBusiness.shared
     
@@ -68,6 +66,9 @@ class WeekDetailState: ObservableObject {
             }
     }
     
+    deinit {
+        cancellable.cancel()
+    }
     
     func readWeekData(weekDate: WeekDate) {
         
@@ -88,11 +89,8 @@ class WeekDetailState: ObservableObject {
         }
         
         generatorTask = Task {
-            
             var weekGenerator = WeekContentGenerator(days: weekDate.days)
-            
             await loadDaysData(weekGenerator: &weekGenerator)
-            
             currentState = weekTimelineList.count > 0 ? .data : .empty
         }
     }

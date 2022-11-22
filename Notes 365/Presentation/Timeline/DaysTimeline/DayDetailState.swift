@@ -101,9 +101,13 @@ class DayDetailState: ObservableObject {
 //        CalendarState.shared.$dayDate.assign(to: &dayDateTest)
     }
     
-    func updateNewDateDate(newDayDate: DayDate) {
-        self.dayDate = newDayDate
+    deinit {
+        cancellable.cancel()
     }
+    
+//    func updateNewDateDate(newDayDate: DayDate) {
+//        self.dayDate = newDayDate
+//    }
     
     func readDayData(dayDate: DayDate) {
         

@@ -20,6 +20,10 @@ struct PurchaseSettingsView: View {
      3. subscription was expired screen
      */
     
+    func subscriptionsExists() -> Bool {
+        store.subscriptions.count > 0
+    }
+    
     var product: Product {
         store.subscriptions.first!
     }
@@ -91,7 +95,9 @@ struct PurchaseSettingsView: View {
                 
                 Group {
                     
-                    Text("\(product.displayPrice) / \(product.displayName)")
+                    if subscriptionsExists() {
+                        Text("\(product.displayPrice) / \(product.displayName)")
+                    }
                     
                     Button {
                         
@@ -129,9 +135,13 @@ struct PurchaseSettingsView: View {
         .padding(40)
         .onAppear(perform: {
             Task {
-                isPurchased = (try? await store.isPurchased(product)) ?? false
-                //When this view appears, get the latest subscription status.
-                await updateSubscriptionStatus()
+                
+                if subscriptionsExists() {
+                    isPurchased = (try? await store.isPurchased(product)) ?? false
+                    //When this view appears, get the latest subscription status.
+                    await updateSubscriptionStatus()
+                }
+                
             }
         })
         .onChange(of: store.purchasedSubscriptions) { _ in

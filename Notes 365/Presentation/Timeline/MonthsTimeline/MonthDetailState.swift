@@ -26,7 +26,7 @@ extension MonthTimelineThree {
 }
 
 
-class MonthDetailState: ObservableObject {
+@MainActor class MonthDetailState: ObservableObject {
     
     let timelineBusiness = TimelineBusiness.shared
     
@@ -47,6 +47,10 @@ class MonthDetailState: ObservableObject {
             .sink { newMonthDate in
                 self.monthDate = newMonthDate
             }
+    }
+    
+    deinit {
+        cancellable.cancel()
     }
     
     func readMonthData(monthDate: MonthDate) {

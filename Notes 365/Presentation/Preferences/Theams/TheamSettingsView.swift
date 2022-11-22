@@ -46,7 +46,7 @@ struct TheamSettingsView: View {
             NavigationView {
                 List($themes) { $theme in
                     NavigationLink(tag: theme.id, selection: $selectedThemeID) {
-//                        ThemeDetailView(theme: $theme, selectedThemeIndex: getSelectedThemeIndex(), globalColor: theme.bodyColor)
+                        ThemeDetailView(theme: $theme, selectedThemeIndex: getSelectedThemeIndex(), globalColor: theme.bodyColor)
                     } label: {
                         Text(theme.themeName)
                     }

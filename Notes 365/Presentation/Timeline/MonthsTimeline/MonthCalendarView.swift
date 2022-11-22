@@ -114,7 +114,7 @@ struct MonthGridView: View {
                         } label: {
                             Text("\(monthSymbol)")
                                 .padding()
-                                .foregroundColor(isCurrentMonth(monthNumber) ? .green : .primary)
+                                .foregroundColor(isCurrentMonth(monthNumber) ? CalendarState.todayTint : .primary)
 //                                .font(.title3)
                         }
                         .buttonStyle(.plain)

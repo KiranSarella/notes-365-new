@@ -11,6 +11,9 @@
 		9F09CEB229267FBC00609D99 /* VersionBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F09CEB029267FBC00609D99 /* VersionBusiness.swift */; };
 		9F09CEB4292684D700609D99 /* PathHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F09CEB3292684D700609D99 /* PathHelper.swift */; };
 		9F09CEB5292684D700609D99 /* PathHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F09CEB3292684D700609D99 /* PathHelper.swift */; };
+		9F1AAE31292C940A00B4D254 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1AAE30292C940A00B4D254 /* FeedbackView.swift */; };
+		9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1AAE32292C94F800B4D254 /* FeedbackState.swift */; };
+		9F1AAE34292CA89E00B4D254 /* PreviewContent.md in Resources */ = {isa = PBXBuildFile; fileRef = 9F45BD392920CCCF003DE332 /* PreviewContent.md */; };
 		9F45BCA22920CAAE003DE332 /* Notes_365App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCA12920CAAE003DE332 /* Notes_365App.swift */; };
 		9F45BCA42920CAAE003DE332 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCA32920CAAE003DE332 /* ContentView.swift */; };
 		9F45BCA62920CAB0003DE332 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F45BCA52920CAB0003DE332 /* Assets.xcassets */; };
@@ -72,7 +75,6 @@
 		9F45BD9F2920CE2F003DE332 /* FontPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD342920CCCF003DE332 /* FontPicker.swift */; };
 		9F45BDA02920CE2F003DE332 /* FontPicker+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD362920CCCF003DE332 /* FontPicker+iOS.swift */; };
 		9F45BDA12920CE2F003DE332 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD352920CCCF003DE332 /* PreferencesView.swift */; };
-		9F45BDA22920CE2F003DE332 /* FontSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD372920CCCF003DE332 /* FontSettingsView.swift */; };
 		9F45BDA32920CE36003DE332 /* ThemeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD3A2920CCCF003DE332 /* ThemeDetailView.swift */; };
 		9F45BDA42920CE41003DE332 /* ThemePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD3F2920CCCF003DE332 /* ThemePreviewView.swift */; };
 		9F45BDA52920CE41003DE332 /* ColorPickerWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD3C2920CCCF003DE332 /* ColorPickerWindow.swift */; };
@@ -133,6 +135,8 @@
 /* Begin PBXFileReference section */
 		9F09CEB029267FBC00609D99 /* VersionBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionBusiness.swift; sourceTree = "<group>"; };
 		9F09CEB3292684D700609D99 /* PathHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathHelper.swift; sourceTree = "<group>"; };
+		9F1AAE30292C940A00B4D254 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
+		9F1AAE32292C94F800B4D254 /* FeedbackState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackState.swift; sourceTree = "<group>"; };
 		9F45BC9E2920CAAE003DE332 /* Notes 365.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Notes 365.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F45BCA12920CAAE003DE332 /* Notes_365App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes_365App.swift; sourceTree = "<group>"; };
 		9F45BCA32920CAAE003DE332 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -199,7 +203,6 @@
 		9F45BD342920CCCF003DE332 /* FontPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontPicker.swift; sourceTree = "<group>"; };
 		9F45BD352920CCCF003DE332 /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
 		9F45BD362920CCCF003DE332 /* FontPicker+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FontPicker+iOS.swift"; sourceTree = "<group>"; };
-		9F45BD372920CCCF003DE332 /* FontSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSettingsView.swift; sourceTree = "<group>"; };
 		9F45BD392920CCCF003DE332 /* PreviewContent.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PreviewContent.md; sourceTree = "<group>"; };
 		9F45BD3A2920CCCF003DE332 /* ThemeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeDetailView.swift; sourceTree = "<group>"; };
 		9F45BD3C2920CCCF003DE332 /* ColorPickerWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerWindow.swift; sourceTree = "<group>"; };
@@ -259,6 +262,37 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9F1AAE2D292C93D900B4D254 /* Theams */ = {
+			isa = PBXGroup;
+			children = (
+				9F45BD3C2920CCCF003DE332 /* ColorPickerWindow.swift */,
+				9F45BD3A2920CCCF003DE332 /* ThemeDetailView.swift */,
+				9F45BD3F2920CCCF003DE332 /* ThemePreviewView.swift */,
+				9F45BD362920CCCF003DE332 /* FontPicker+iOS.swift */,
+				9F45BD342920CCCF003DE332 /* FontPicker.swift */,
+				9F45BD452920CCCF003DE332 /* ScaleFontView.swift */,
+				9F45BD472920CCCF003DE332 /* TheamSettingsView.swift */,
+				9F45BD3D2920CCCF003DE332 /* ThemeManager.swift */,
+			);
+			path = Theams;
+			sourceTree = "<group>";
+		};
+		9F1AAE2E292C93DC00B4D254 /* Purchases */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Purchases;
+			sourceTree = "<group>";
+		};
+		9F1AAE2F292C93E000B4D254 /* Feedback */ = {
+			isa = PBXGroup;
+			children = (
+				9F1AAE30292C940A00B4D254 /* FeedbackView.swift */,
+				9F1AAE32292C94F800B4D254 /* FeedbackState.swift */,
+			);
+			path = Feedback;
+			sourceTree = "<group>";
+		};
 		9F45BC952920CAAE003DE332 = {
 			isa = PBXGroup;
 			children = (
@@ -423,10 +457,10 @@
 		9F45BD332920CCCF003DE332 /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
-				9F45BD342920CCCF003DE332 /* FontPicker.swift */,
 				9F45BD352920CCCF003DE332 /* PreferencesView.swift */,
-				9F45BD362920CCCF003DE332 /* FontPicker+iOS.swift */,
-				9F45BD372920CCCF003DE332 /* FontSettingsView.swift */,
+				9F1AAE2D292C93D900B4D254 /* Theams */,
+				9F1AAE2E292C93DC00B4D254 /* Purchases */,
+				9F1AAE2F292C93E000B4D254 /* Feedback */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";
@@ -435,17 +469,11 @@
 			isa = PBXGroup;
 			children = (
 				9F45BD392920CCCF003DE332 /* PreviewContent.md */,
-				9F45BD3A2920CCCF003DE332 /* ThemeDetailView.swift */,
-				9F45BD3B2920CCCF003DE332 /* Crayons.clr */,
-				9F45BD3C2920CCCF003DE332 /* ColorPickerWindow.swift */,
-				9F45BD3D2920CCCF003DE332 /* ThemeManager.swift */,
-				9F45BD3E2920CCCF003DE332 /* NamedSystemColor.swift */,
-				9F45BD3F2920CCCF003DE332 /* ThemePreviewView.swift */,
-				9F45BD402920CCCF003DE332 /* MarkdownTheme.swift */,
 				9F45BD412920CCCF003DE332 /* Colors */,
-				9F45BD452920CCCF003DE332 /* ScaleFontView.swift */,
+				9F45BD3B2920CCCF003DE332 /* Crayons.clr */,
+				9F45BD3E2920CCCF003DE332 /* NamedSystemColor.swift */,
+				9F45BD402920CCCF003DE332 /* MarkdownTheme.swift */,
 				9F45BD462920CCCF003DE332 /* NamedColor.swift */,
-				9F45BD472920CCCF003DE332 /* TheamSettingsView.swift */,
 				9F45BD482920CCCF003DE332 /* MarkdownTheme+iOS.swift */,
 			);
 			path = Theams;
@@ -748,6 +776,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F45BCAA2920CAB0003DE332 /* Preview Assets.xcassets in Resources */,
+				9F1AAE34292CA89E00B4D254 /* PreviewContent.md in Resources */,
 				9F45BCA62920CAB0003DE332 /* Assets.xcassets in Resources */,
 				9F45BDB02920CE63003DE332 /* Products.plist in Resources */,
 			);
@@ -775,6 +804,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F45BD9D2920CE21003DE332 /* AttributedString+StyledMarkdown+iOS.swift in Sources */,
+				9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */,
 				9FB6C69C29275E0300C8EC76 /* NotebookEditorState.swift in Sources */,
 				9F45BDA32920CE36003DE332 /* ThemeDetailView.swift in Sources */,
 				9F45BD5A2920CD65003DE332 /* MotivationView.swift in Sources */,
@@ -812,7 +842,6 @@
 				9F45BD852920CDE0003DE332 /* EditorUI+iOS.swift in Sources */,
 				9F45BD9C2920CE21003DE332 /* FileHelper.swift in Sources */,
 				9F45BD622920CD90003DE332 /* WeekDetailView.swift in Sources */,
-				9F45BDA22920CE2F003DE332 /* FontSettingsView.swift in Sources */,
 				9F45BD672920CDA9003DE332 /* TimelineSidebarView.swift in Sources */,
 				9FB6C6A52927936F00C8EC76 /* DayDetailState.swift in Sources */,
 				9F45BD5F2920CD8A003DE332 /* DayDetailView.swift in Sources */,
@@ -836,6 +865,7 @@
 				9F45BD932920CDF9003DE332 /* Mode.swift in Sources */,
 				9F45BDAD2920CE5A003DE332 /* PurchaseSettingsView.swift in Sources */,
 				9F45BDA62920CE41003DE332 /* NamedSystemColor.swift in Sources */,
+				9F1AAE31292C940A00B4D254 /* FeedbackView.swift in Sources */,
 				9F45BD7F2920CDE0003DE332 /* UsersSidebarView.swift in Sources */,
 				9F45BDA12920CE2F003DE332 /* PreferencesView.swift in Sources */,
 				9F45BD802920CDE0003DE332 /* ViewerUI.swift in Sources */,
@@ -1029,6 +1059,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -1067,6 +1098,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

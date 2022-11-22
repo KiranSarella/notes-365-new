@@ -178,7 +178,7 @@ struct WeekView: View {
                         Text("\(date.getDay())")
                             .frame(maxWidth: .infinity)
                             .font(.system(size: 10))
-                            .foregroundColor(week.isCurrentWeek() ? .green : .primary)
+                            .foregroundColor(week.isCurrentWeek() ? CalendarState.todayTint : .primary)
                     } else {
                         Text("\(date.getDay())")
                             .frame(maxWidth: .infinity)

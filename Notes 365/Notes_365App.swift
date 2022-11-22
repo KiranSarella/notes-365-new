@@ -28,10 +28,10 @@ struct Notes_365App: App {
             //            }
         }
 #if os(macOS)
-//        Settings {
-//            PreferencesView()
-//                .environmentObject(store)
-//        }
+        Settings {
+            PreferencesView()
+                .environmentObject(store)
+        }
 #endif
     }
 }

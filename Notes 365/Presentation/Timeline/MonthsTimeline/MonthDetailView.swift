@@ -10,12 +10,6 @@ import SwiftUI
 struct MonthDetailView: View {
     
    @StateObject private var monthState = MonthDetailState()
-    
-    init(selectedDate: Date) {
-
-//        let (start, end) = MonthDetailView.getMonthStartEndDates(date: selectedDate)
-//        monthState.monthDate = MonthDate(start: start, end: end)
-    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -46,7 +40,7 @@ struct MonthDetailView: View {
 //                .padding()
             }
             .onAppear {
-//                monthState.readMonthData(monthDate: monthState.monthDate)
+                monthState.readMonthData(monthDate: monthState.monthDate)
             }
             .onReceive(NotificationCenter.default.publisher(for: Notification.Name("theme.modified"))) { output in
                 guard let newTheme = output.object as? MarkdownTheme else { return }
@@ -62,18 +56,18 @@ struct MonthDetailView: View {
                 }
             }
             .onChange(of: monthState.monthDate, perform: { newValue in
-//                Task {
-//                    monthState.generatorTask?.cancel()
-//                    DispatchQueue.main.async {
-//                        monthState.currentState = .loading
-//                        monthState.monthTimelineList.removeAll()
-//                    }
-//
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-//                        // your code here
-//                        monthState.readMonthData(monthDate: newValue)
-//                    }
-//                }
+                Task {
+                    monthState.generatorTask?.cancel()
+                    DispatchQueue.main.async {
+                        monthState.currentState = .loading
+                        monthState.monthTimelineList.removeAll()
+                    }
+
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        // your code here
+                        monthState.readMonthData(monthDate: newValue)
+                    }
+                }
             })
             .onDisappear {
                 monthState.generatorTask?.cancel()

@@ -122,7 +122,8 @@ fileprivate struct DayGridView: View {
                                 Text("\(date.getDay())")
                                     .padding(4)
                                     .font(.system(size: 10))
-                                    .foregroundColor(.primary)
+                                    .foregroundColor(isToday(date.getDay()) ? CalendarState.todayTint : .primary)
+                                    
                             }
                             .buttonStyle(PlainButtonStyle())
                             RoundedRectangle(cornerRadius: 8)
@@ -147,7 +148,17 @@ fileprivate struct DayGridView: View {
         .frame(height: 220)
     }
     
-   
+    private func isToday(_ day: Int) -> Bool {
+        // check same year
+        // check same month
+        let today = Date()
+        
+        if navigationDate.getYear() == today.getYear() && navigationDate.getMonth() == today.getMonth() && today.getDay() == day {
+            return true
+        }
+        
+        return false
+    }
 }
 
 

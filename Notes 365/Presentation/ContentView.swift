@@ -57,7 +57,7 @@ struct ContentView: View {
                     case .week:
                         WeekDetailView()
                     case .month:
-                        MonthDetailView(selectedDate: calendarState.selectedDate)
+                        MonthDetailView()
                     }
                 case .noteBooks:
                     if userSelectionState != nil {
