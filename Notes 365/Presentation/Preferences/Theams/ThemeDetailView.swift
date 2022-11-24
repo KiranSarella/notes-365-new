@@ -10,62 +10,89 @@
 import SwiftUI
 //import SwiftUIWindow
 
+
+//struct NavContainerView: View {
+//    
+//    @Binding var baseTheme: MarkdownTheme?
+//    
+//    @State private var showContent = false
+//    
+//    var body: some View {
+//        VStack {
+//            
+//            if let baseThemee = $baseTheme {
+//                ThemeDetailView(theme: Binding(baseThemee)!)
+//            }
+//            
+//        }.onChange(of: baseTheme) { newValue in
+//            if newValue == nil {
+//                showContent = false
+//            } else {
+//                
+//            }
+//        }
+//    }
+//}
+
 struct ThemeDetailView: View {
     
-    @Binding var globalTheme: MarkdownTheme
-    var selectedThemeIndex: Int
-    @State private var globalColor: NamedColor
+    var didThemeChange: ((MarkdownTheme)->())
+    
+    @Binding var baseTheme: MarkdownTheme
+    @State private var globalColor: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
+    @State private var tintColor: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
     @State private var theme: MarkdownTheme
+    
+    @State private var font: NSFont
     
     @State private var isColorPickerWindowOpened = false
     
-    init(theme: Binding<MarkdownTheme>, selectedThemeIndex: Int, globalColor: NamedColor) {
-        _globalTheme = theme
-        self.selectedThemeIndex = selectedThemeIndex
-        _globalColor = State(initialValue: globalColor)
-        _theme = State(initialValue: theme.wrappedValue)
+    init(theme inputTheme: Binding<MarkdownTheme>, didThemeChange: @escaping ((MarkdownTheme)->())) {
+        _baseTheme = inputTheme
+        _theme = State(initialValue: inputTheme.wrappedValue)
+        self.didThemeChange = didThemeChange
+        _font = State(initialValue: inputTheme.wrappedValue.font)
     }
     
-    @State var testColor: Color = .purple
-    @State var testColor2: Color = .purple
-    
     var body: some View {
-        
         HStack {
             // settings
             ScrollView(.vertical, showsIndicators: false) {
                 VStack {
                     // body
                     HStack(alignment: .top) {
-                        
-                        FontPicker("Font", selection: $theme.font)
+                        // font name
+                        FontPicker("Font", selection: $font)
                             .padding(.leading)
-                        
                         Spacer()
-//
-//                        ColorPicker("test", selection: $testColor)
-//                            .onChange(of: testColor) { newValue in
-//                                print(NSColor(newValue).colorNameComponent)
-//
-//
-////                                NSColor(named: NSColor(newValue).colorNameComponent)
-//                            }
-//
-//                        ColorPicker("test2", selection: $testColor2)
-                        
-                        ColorPickerButton(selection: $globalColor)
-                          .onChange(of: globalColor) { newValue in
-                                theme.bodyColor = newValue
-                                theme.headingColor = newValue
-                                theme.styleColor = newValue
-                                theme.codeColor = newValue
-                                theme.blockQuoteColor = newValue
-                                theme.listColor = newValue
-//                                theme.linkColor = newValue
-                            }
-                            .padding(.trailing)
+                        // global color
+                        ColorPickerButton(selection: $globalColor, isGeneric: true) {
+                            theme.headingColor = globalColor
+                            tintColor = globalColor
+                            
+                            theme.bodyColor = globalColor
+                            theme.styleColor = globalColor
+                            theme.codeColor = globalColor
+                            theme.blockQuoteColor = globalColor
+                            theme.listColor = globalColor
+                        }
+                        .padding(.trailing)
                         
                     }.padding([.leading, .trailing, .top])
+                    // tint color
+                    HStack(alignment: .top) {
+                        Spacer()
+                        VStack(alignment: .trailing) {
+                            ColorPickerButton(selection: $tintColor, isGeneric: true) {
+                                theme.bodyColor = tintColor
+                                theme.styleColor = tintColor
+                                theme.codeColor = tintColor
+                                theme.blockQuoteColor = tintColor
+                                theme.listColor = tintColor
+                            }
+                            .padding(.trailing)
+                        }
+                    }.padding([.top, .leading, .trailing])
                     // bold, italic
                     VStack {
                         ZStack {
@@ -129,13 +156,15 @@ struct ThemeDetailView: View {
                             .stroke(Color.gray, lineWidth: 1)
                             .brightness(0.38)
                     )
-                    .padding()
+                    .padding([.horizontal])
                     // heading
                     HStack(alignment: .top) {
                         Spacer()
                         VStack(alignment: .trailing) {
-                            ColorPickerButton(selection: $theme.headingColor)
-                                .padding(.trailing)
+                            ColorPickerButton(selection: $theme.headingColor, isGeneric: true) {
+                                
+                            }
+                            .padding(.trailing)
                         }
                     }.padding([.top, .leading, .trailing])
                     
@@ -144,19 +173,18 @@ struct ThemeDetailView: View {
                         .padding([.horizontal])
                     
                     HStack {
-                        Spacer()
                         Button {
                             
                             var newTheme: MarkdownTheme!
                             
                             if theme.themeName == "Black&White" {
-                                newTheme = MarkdownTheme.generateBlackWhiteTheme()
+                                newTheme = ThemeBusiness.generateBlackWhiteTheme()
                             } else if theme.themeName == "Color" {
-                                newTheme = MarkdownTheme.generateColorTheme()
+                                newTheme = ThemeBusiness.generateColorTheme()
                             } else if theme.themeName == "Customized1" {
-                                newTheme = MarkdownTheme.generateCustomized1Theme()
+                                newTheme = ThemeBusiness.generateCustomized1Theme()
                             } else if theme.themeName == "Customized2" {
-                                newTheme = MarkdownTheme.generateCustomized2Theme()
+                                newTheme = ThemeBusiness.generateCustomized2Theme()
                             }
                             // use same id
                             newTheme.id = theme.id
@@ -164,6 +192,22 @@ struct ThemeDetailView: View {
                             
                         } label: {
                             Text("Reset")
+                        }
+                        .padding()
+                        Spacer()
+                        Button {
+                            // do any post updates
+                            theme.fontName = font.fontName
+                            theme.fontSize = Float(font.fontDescriptor.pointSize)
+                            didThemeChange(theme)
+                        } label: {
+                            Text("Save Changes")
+                        }
+//                        .padding()
+                        Button {
+                            theme = baseTheme
+                        } label: {
+                            Text("Discard")
                         }
                         .padding()
                     }
@@ -178,23 +222,32 @@ struct ThemeDetailView: View {
             .frame(width: 420)
             
             // preview
-            ThemePreviewView(theme: theme, selectedThemeIndex: selectedThemeIndex)
+            ThemePreviewView(theme: theme)
+        }
+        .onChange(of: baseTheme, perform: { newValue in
+            self.theme = newValue
+            globalColor = baseTheme.bodyColor
+            font = newValue.font
+        })
+        .onAppear {
+            globalColor = baseTheme.bodyColor
+            font = baseTheme.font
         }
         .focusable()
         .onDisappear {
             // reset state
-            theme = globalTheme
+            theme = baseTheme
         }
         .onReceive(NotificationCenter.default.publisher(for: Notification.Name("theme.set"))) { output in
             
             guard let selectedIndex = output.object as? Int else { return }
             
-            if selectedThemeIndex == selectedIndex {
-                // set if any changes
-                globalTheme = theme // onChange will not work if no changes made to theme object
-                // notify manually to set new selectedIndex
-                NotificationCenter.default.post(name: Notification.Name("theme.save_object"), object: selectedIndex)
-            }
+//            if selectedThemeIndex == selectedIndex {
+//                // set if any changes
+////                baseTheme = theme // onChange will not work if no changes made to theme object
+//                // notify manually to set new selectedIndex
+//                NotificationCenter.default.post(name: Notification.Name("theme.save_object"), object: selectedIndex)
+//            }
         }
         .onReceive(NotificationCenter.default.publisher(for: Notification.Name("colorpicker.window.appear"))) { output in
             
@@ -207,108 +260,6 @@ struct ThemeDetailView: View {
     
 }
 
-
-struct ColorPickerButton: View {
-    
-    var colorPickerManager = ColorPickerWindowManager.shared
-    
-    @Binding var selection: NamedColor
-    
-    var body: some View {
-     
-        Button {
-            
-//            WindowGroup("colorpicker") {
-//                ColorPickerWindow { newValue in
-//                    selection = newValue
-//                }
-//            }
-            
-            colorPickerManager.openColorPickerWindow(caller: $selection)
-            
-//            openColorPickerWindow { newValue in
-//                selection = newValue
-//            }
-            
-        } label: {
-            
-            ZStack(alignment: .center) {
-                
-                Rectangle()
-                    .foregroundColor(.clear)
-                    .border(Color.gray.opacity(0.8), width: 1)
-                    .frame(width: 42, height: 23)
-                
-                Rectangle()
-                    .foregroundColor(selection.color)
-                    .border(Color.gray.opacity(0.8), width: 1)
-                    .frame(width: 42 * 0.72, height: 23 * 0.58)
-            }
-            
-        }
-        .buttonStyle(.plain)
-        
-        
-        
-//        .onReceive(NotificationCenter.default.publisher(for: Notification.Name("colorpicker.selection"))) { output in
-//
-//            guard let colorName = output.object as? NamedColor else { return }
-//            print(colorName.rawValue)
-//            selection = colorName
-//        }
-    }
-    
-    func openColorPickerWindow(completion: @escaping (NamedColor) -> ()) {
-        
-//        SwiftUIWindow.open { _ in
-//
-//            ColorPickerWindow { newValue in
-//               completion(newValue)
-//            }
-//            .frame(width: 240, height: 360)
-//        }
-//        .clickable(true)
-//        .mouseMovesWindow(true)
-//        .alwaysOnTop(true)
-//        .style([.titled, .closable])
-    }
-    
-}
-
-
-class ColorPickerWindowManager {
-    
-    static let shared = ColorPickerWindowManager()
-    private init() {}
-    
-    var someWindow: NSWindow?
-    
-    func openColorPickerWindow(caller: Binding<NamedColor>) {
-       
-        if someWindow == nil {
-            someWindow = NSWindow( contentRect: NSRect(x: 0, y: 0, width: 240, height: 360), styleMask: [.titled, .closable],  backing: .buffered, defer: false)
-            someWindow?.isReleasedWhenClosed = false
-        }
-
-        guard let someWindow = someWindow else {
-            return
-        }
-
-        someWindow.contentView = NSHostingView(rootView: ColorPickerWindow(didSelectionChanged: { newValue in
-            caller.wrappedValue = newValue
-        }))
-
-        if someWindow.isVisible == false {
-
-            someWindow.title = "Colors"
-            someWindow.animationBehavior = .utilityWindow
-            someWindow.collectionBehavior = .stationary
-            someWindow.level = .floating
-            someWindow.makeKeyAndOrderFront(nil)
-            someWindow.center()
-        }
-    }
-}
 
 
 

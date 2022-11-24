@@ -10,9 +10,10 @@ import SwiftUI
 @main
 struct Notes_365App: App {
     
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.scenePhase) private var scenePhase
-    @StateObject var store: Store = Store()
     
+    @StateObject var store: Store = Store()
     
     var body: some Scene {
         WindowGroup {
@@ -26,6 +27,10 @@ struct Notes_365App: App {
             //            if phase == .active {
             //                TimelineState.cleanOldBaseVersions()
             //            }
+        }
+        .onChange(of: colorScheme) { newValue in
+            // capture changes here
+            ThemeState.shared.didColorSchemeChange()
         }
 #if os(macOS)
         Settings {

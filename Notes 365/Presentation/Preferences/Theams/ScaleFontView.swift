@@ -15,7 +15,7 @@ struct ScaleFontView: View {
         // scale font size
         HStack {
             Button {
-                theme.font = theme.font.withSize(theme.font.pointSize - 2)
+//                theme.font = theme.font.withSize(theme.font.pointSize - 2)
                 
                 let index = ThemeManager.shared.themes.firstIndex { t in
                     theme.themeName == t.themeName
@@ -34,7 +34,7 @@ struct ScaleFontView: View {
             Divider()
             
             Button {
-                theme.font = theme.font.withSize(theme.font.pointSize + 2)
+//                theme.font = theme.font.withSize(theme.font.pointSize + 2)
                 let index = ThemeManager.shared.themes.firstIndex { t in
                     theme.themeName == t.themeName
                 }

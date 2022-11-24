@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @State private var showSettings = false
+    
     @State private var selectedModeID: Mode.ID?
     // timeline related
     @StateObject var calendarState = CalendarState.shared
@@ -18,16 +20,45 @@ struct ContentView: View {
     @State private var userSelectionStateDB: UserSelectionState?
     @StateObject var usersState = NotebooksListState.shared
     
+    
+    
     var body: some View {
         NavigationSplitView {
             // navigation headings
-            List(Mode.allCases, selection: $selectedModeID) { selectedMode in
-                HStack(spacing: 0) {
-                    Image(systemName: selectedMode.image)
-                    Text(selectedMode.name)
-                        .padding(.horizontal)
+            
+            VStack {
+                List(Mode.allCases, selection: $selectedModeID) { selectedMode in
+                    HStack(spacing: 0) {
+                        Image(systemName: selectedMode.image)
+                        Text(selectedMode.name)
+                            .padding(.horizontal)
+                    }
+                }.scrollDisabled(true)
+                
+                #if os(iOS)
+                
+                Spacer()
+                
+                HStack {
+                    Button {
+                        showSettings = true
+                    } label: {
+                        HStack(spacing: 0) {
+                            Image(systemName: "gearshape")
+                            Text("Settings")
+                                .padding(.horizontal)
+                        }.padding(.horizontal)
+                    }
+                    Spacer()
                 }
-            }
+                .padding(.horizontal)
+                .sheet(isPresented: $showSettings) {
+                    SettingsView_iPadOS()
+                }
+                
+                #endif
+            }.background(.regularMaterial)
+            
         } content: {
             // calender and notebooks list
             if let selectedMode = Mode.getMode(id: selectedModeID) {

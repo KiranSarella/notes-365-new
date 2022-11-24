@@ -96,7 +96,7 @@ fileprivate struct HeaderView: View {
 fileprivate struct DayGridView: View {
     
     var columns = Array(repeating: GridItem(), count: 7)
-    var weekdaySymbols = Calendar.current.shortWeekdaySymbols
+    var weekdaySymbols = Calendar.current.veryShortWeekdaySymbols
     @Binding var dayDate: DayDate
     @Binding var navigationDate: Date
     @State private var dates: [Date] = []

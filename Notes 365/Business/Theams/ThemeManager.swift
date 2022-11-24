@@ -22,7 +22,7 @@ class ThemeManager: ObservableObject, Codable {
         
         if loadFromDefaults == false {
             
-            themes = MarkdownTheme.getDefaultTheams()
+            themes = ThemeBusiness.getDefaultTheams()
             selectedThemeIndex = 0
             
             return
@@ -33,10 +33,10 @@ class ThemeManager: ObservableObject, Codable {
             if let obj = try? PropertyListDecoder().decode([MarkdownTheme].self, from: data) {
                 self.themes = obj
             } else {
-                themes = MarkdownTheme.getDefaultTheams()
+                themes = ThemeBusiness.getDefaultTheams()
             }
         } else {
-            themes = MarkdownTheme.getDefaultTheams()
+            themes = ThemeBusiness.getDefaultTheams()
         }
         
         if let selectedIndex = UserDefaults.standard.object(forKey: "selected_theme_index") as? Int {
@@ -56,15 +56,15 @@ class ThemeManager: ObservableObject, Codable {
             if let obj = try? PropertyListDecoder().decode([MarkdownTheme].self, from: data) {
                 self.themes = obj
             } else {
-                themes = MarkdownTheme.getDefaultTheams()
+                themes = ThemeBusiness.getDefaultTheams()
             }
         } else {
-            themes = MarkdownTheme.getDefaultTheams()
+            themes = ThemeBusiness.getDefaultTheams()
         }
     }
     
     func resetSavedThemes() {
-        themes = MarkdownTheme.getDefaultTheams()
+        themes = ThemeBusiness.getDefaultTheams()
         self.selectedThemeIndex = 0
         
         saveThemeState()
@@ -117,9 +117,4 @@ extension ThemeManager  {
         try container.encode(selectedThemeIndex, forKey: .selectedThemeIndex)
     }
 }
-
-
-//struct MDTheme: Identifiable {
-//
-//}
 

@@ -14,7 +14,6 @@ import AppKit
 struct ThemePreviewView: View {
     
     var theme: MarkdownTheme
-    var selectedThemeIndex: Int
     
     @State private var attrStr = AttributedString()
     let previewContent = ThemePreviewView.loadContent()
@@ -28,7 +27,7 @@ struct ThemePreviewView: View {
         
         var themeZoomed = theme
 //        themeZoomed.font = themeZoomed.font.withSize(themeZoomed.font.pointSize * (75 / 100))
-        themeZoomed.font = themeZoomed.font.withSize(themeZoomed.font.pointSize * zoomLevel)
+//        themeZoomed.font = themeZoomed.font.withSize(themeZoomed.font.pointSize * zoomLevel)
         
         let markdownAttrStr = MarkdownAttriburedString(theme: themeZoomed)
         let newAttS = markdownAttrStr.getAttriburedString(forMarkdown: previewContent)
@@ -97,17 +96,17 @@ struct ThemePreviewView: View {
                 
                 
                 
-                HStack {
-                    
-                    
-                    
-                    Button {
-                        NotificationCenter.default.post(name: Notification.Name("theme.set"), object: selectedThemeIndex)
-                    } label: {
-                        Text("Save and Set Theme")            
-                    }
-                }
-                .padding(.bottom)
+//                HStack {
+//                    
+//
+//
+//                    Button {
+////                        NotificationCenter.default.post(name: Notification.Name("theme.set"), object: selectedThemeIndex)
+//                    } label: {
+//                        Text("Save and Set Theme")
+//                    }
+//                }
+//                .padding(.bottom)
             }
         }
     }

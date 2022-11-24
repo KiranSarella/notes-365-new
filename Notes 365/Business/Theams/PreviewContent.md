@@ -51,6 +51,6 @@ for try await line in handle.bytes.lines {
 }
 ```
 
->Note:
->Sundar Pichai: so take the time to find the thing that excites you more then anything else in the world, not the thing that  your parents want you to do or the thing that all your friends are doing, be open, be impatient, be hopeful. You have the chance to change everything. I am optimistic, you will.
+>Sundar Pichai Motivation:
+>so take the time to find the thing that excites you more then anything else in the world, not the thing that  your parents want you to do or the thing that all your friends are doing, be open, be impatient, be hopeful. You have the chance to change everything. I am optimistic, you will.
 
