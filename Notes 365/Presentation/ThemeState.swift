@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 
 /*
@@ -17,16 +18,26 @@ class ThemeState: ObservableObject {
     
     static let shared = ThemeState()
     
-    @Environment(\.colorScheme) var colorScheme
+    @Published var colorScheme: ColorScheme = .light
     
     @Published var theme: MarkdownTheme!
     
+    var cancellable: Cancellable?
+    
     init() {
-        
-        loadTheme()
+        observeColorSchemaChanges()
+        loadTheme(colorScheme: colorScheme)
+    }
+
+    func observeColorSchemaChanges() {
+        cancellable = $colorScheme.sink { newValue in
+            if newValue !=  self.colorScheme {
+                self.loadTheme(colorScheme: newValue)
+            }
+        }
     }
     
-    private func loadTheme() {
+    private func loadTheme(colorScheme: ColorScheme) {
         if colorScheme == .light {
             theme = ThemeBusiness().getLightTheme()
         } else {
@@ -34,7 +45,19 @@ class ThemeState: ObservableObject {
         }
     }
     
-    func didColorSchemeChange() {
-        loadTheme()
+    // trigged on 'save changes' action
+    func themeUpdated(newValue: MarkdownTheme) {
+        // if updated is current theme, then update immediately
+        if theme.id == newValue.id {
+            theme = newValue
+        }
+    }
+    
+    // trigged on 'set light/dark' action
+    func themeChanged(for mode: ColorScheme, newValue: MarkdownTheme) {
+        // if theme modified on current mode, the update with new theme
+        if colorScheme == mode {
+            theme = newValue
+        }
     }
 }

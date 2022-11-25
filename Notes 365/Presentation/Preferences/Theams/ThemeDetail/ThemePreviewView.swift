@@ -26,6 +26,8 @@ struct ThemePreviewView: View {
     func getAttrStr(_ zoomLevel: CGFloat) -> AttributedString {
         
         var themeZoomed = theme
+        themeZoomed.fontSize = themeZoomed.fontSize * Float(zoomLevel)
+        
 //        themeZoomed.font = themeZoomed.font.withSize(themeZoomed.font.pointSize * (75 / 100))
 //        themeZoomed.font = themeZoomed.font.withSize(themeZoomed.font.pointSize * zoomLevel)
         
@@ -46,8 +48,6 @@ struct ThemePreviewView: View {
                 ZStack {
                     
                     ScrollView(.vertical, showsIndicators: false) {
-                        
-                        
                         Text(getAttrStr(zoomLevel))
                         // .scaleEffect(CGSize(width: 0.8, height: 0.8))
                             .padding()

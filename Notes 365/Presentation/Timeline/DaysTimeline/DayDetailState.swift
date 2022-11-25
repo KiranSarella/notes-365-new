@@ -79,7 +79,7 @@ class DayDetailState: ObservableObject {
     @Published var currentState = CurrentState.loading
     @Published var timelineList = [TimelineThree]()
     @Published var searchInput: String = ""
-    @Published var theme: MarkdownTheme = ThemeManager.shared.getSelectedTheme()
+    @Published var theme: MarkdownTheme = ThemeState.shared.theme
     @Published var generatorTask: Task<(), Never>?
     
     @Published var speechState = SpeechState.stopped
@@ -89,20 +89,33 @@ class DayDetailState: ObservableObject {
 //    @Published var dayDateTest: DayDate
     
     var cancellable: Cancellable!
+    var cancellableTheme: Cancellable!
     
     init() {
         
+        observeCalenderChanges()
+        observeThemeChanges()
+    }
+    
+    func observeCalenderChanges() {
         cancellable = CalendarState.shared.$dayDate
             .receive(on: DispatchQueue.main)
             .sink { newDayDate in
-            self.dayDate = newDayDate
-        }
-//        cancellable =
-//        CalendarState.shared.$dayDate.assign(to: &dayDateTest)
+                self.dayDate = newDayDate
+            }
+    }
+    
+    func observeThemeChanges() {
+        cancellableTheme = ThemeState.shared.$theme
+            .receive(on: DispatchQueue.main)
+            .sink { newTheme in
+                self.theme = newTheme!
+            }
     }
     
     deinit {
         cancellable.cancel()
+        cancellableTheme.cancel()
     }
     
 //    func updateNewDateDate(newDayDate: DayDate) {

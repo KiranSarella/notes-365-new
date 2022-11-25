@@ -7,30 +7,33 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 class NotebookEditorState: ObservableObject {
     
     let notebookBusiness = NotebookContentBusiness.shared
-    
     @Published var isFetchingData = true
-    
     @Published var contentStr: String = ""
-    
     @Published var txt: String = ""
-    
     @Published var editorType = EditorType.smart
-    
-    
-    
     @Published var theme: MarkdownTheme
-    
     @Published var showSymbols = false
-    
     
     let autoSaveTimer = Timer.publish(every: 60, on: .main, in: .common).autoconnect() // 1 min
     
+    var cancellableTheme: Cancellable!
+    
     init() {
-        theme = ThemeManager.shared.getSelectedTheme()
+        theme = ThemeState.shared.theme
+        observeThemeChanges()
+    }
+    
+    func observeThemeChanges() {
+        cancellableTheme = ThemeState.shared.$theme
+            .receive(on: DispatchQueue.main)
+            .sink { newTheme in
+                self.theme = newTheme!
+            }
     }
     
     func loadContent(notebookInfo: UserSelectionState) {

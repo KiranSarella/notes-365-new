@@ -9,9 +9,11 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @Environment(\.colorScheme) private var colorScheme
+    
     @State private var showSettings = false
     
-    @State private var selectedModeID: Mode.ID?
+    @State private var selectedModeID: Mode.ID? = Mode.timeline.id
     // timeline related
     @StateObject var calendarState = CalendarState.shared
     // notebooks related
@@ -58,6 +60,12 @@ struct ContentView: View {
                 
                 #endif
             }.background(.regularMaterial)
+                .onAppear {
+                    ThemeState.shared.colorScheme = colorScheme
+                }
+                .onChange(of: colorScheme) { newValue in
+                    ThemeState.shared.colorScheme = newValue
+                }
             
         } content: {
             // calender and notebooks list

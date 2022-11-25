@@ -39,11 +39,11 @@ struct ThemeDetailView: View {
     var didThemeChange: ((MarkdownTheme)->())
     
     @Binding var baseTheme: MarkdownTheme
-    @State private var globalColor: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
-    @State private var tintColor: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
     @State private var theme: MarkdownTheme
     
     @State private var font: NSFont
+    @State private var globalColor: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
+    @State private var tintColor: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
     
     @State private var isColorPickerWindowOpened = false
     
@@ -62,8 +62,11 @@ struct ThemeDetailView: View {
                     // body
                     HStack(alignment: .top) {
                         // font name
-                        FontPicker("Font", selection: $font)
-                            .padding(.leading)
+                        FontPicker("Font", selection: $font) {
+                            theme.fontName = font.fontName
+                            theme.fontSize = Float(font.fontDescriptor.pointSize)
+                        }
+                        .padding(.leading)
                         Spacer()
                         // global color
                         ColorPickerButton(selection: $globalColor, isGeneric: true) {
@@ -196,9 +199,6 @@ struct ThemeDetailView: View {
                         .padding()
                         Spacer()
                         Button {
-                            // do any post updates
-                            theme.fontName = font.fontName
-                            theme.fontSize = Float(font.fontDescriptor.pointSize)
                             didThemeChange(theme)
                         } label: {
                             Text("Save Changes")
@@ -237,17 +237,6 @@ struct ThemeDetailView: View {
         .onDisappear {
             // reset state
             theme = baseTheme
-        }
-        .onReceive(NotificationCenter.default.publisher(for: Notification.Name("theme.set"))) { output in
-            
-            guard let selectedIndex = output.object as? Int else { return }
-            
-//            if selectedThemeIndex == selectedIndex {
-//                // set if any changes
-////                baseTheme = theme // onChange will not work if no changes made to theme object
-//                // notify manually to set new selectedIndex
-//                NotificationCenter.default.post(name: Notification.Name("theme.save_object"), object: selectedIndex)
-//            }
         }
         .onReceive(NotificationCenter.default.publisher(for: Notification.Name("colorpicker.window.appear"))) { output in
             

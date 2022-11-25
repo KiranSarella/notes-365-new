@@ -33,15 +33,21 @@ extension MonthTimelineThree {
     @Published var monthDate: MonthDate
     @Published var currentState = CurrentState.loading
     @Published var monthTimelineList = [DayChanges]()
-    @Published var theme: MarkdownTheme = ThemeManager.shared.getSelectedTheme()
+    @Published var theme: MarkdownTheme = ThemeState.shared.theme
     
     @Published var generatorTask: Task<(), Never>?
     
     var cancellable: Cancellable!
+    var cancellableTheme: Cancellable!
     
     init() {
         monthDate = CalendarState.shared.monthDate
         // observe changes
+        observeMonthChanges()
+        observeThemeChanges()
+    }
+    
+    func observeMonthChanges() {
         cancellable = CalendarState.shared.$monthDate
             .receive(on: DispatchQueue.main)
             .sink { newMonthDate in
@@ -49,8 +55,17 @@ extension MonthTimelineThree {
             }
     }
     
+    func observeThemeChanges() {
+        cancellableTheme = ThemeState.shared.$theme
+            .receive(on: DispatchQueue.main)
+            .sink { newTheme in
+                self.theme = newTheme!
+            }
+    }
+    
     deinit {
         cancellable.cancel()
+        cancellableTheme.cancel()
     }
     
     func readMonthData(monthDate: MonthDate) {

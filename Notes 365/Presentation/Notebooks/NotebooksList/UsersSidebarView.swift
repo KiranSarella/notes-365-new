@@ -428,36 +428,9 @@ struct HeadingView: View {
                     selectedUser = user
                     
                 } label: {
-                    
-                    HStack {
-                        
-                        Menu {
-                            Button(action: {
-                                
-                            }) {
-                                Label("Add", systemImage: "plus.circle")
-                            }
-                            Divider()
-                            Button(action: {
-                                
-                            }) {
-                                Label("Delete", systemImage: "minus.circle")
-                            }
-                            Button(action: {
-                                
-                            }) {
-                                Label("Edit", systemImage: "pencil.circle")
-                            }
-                        } label: {
-                            Image(systemName: "ellipsis.circle")
-                        }
-                        
-                        Text(user.name + "                                         ")
-                            .font(Font.system(size: titleFont))
-                            .foregroundColor(isSelected ? Color.blue : Color.primary)
-                    }
-                    
-                    
+                    Text(user.name + "                                         ")
+                        .font(Font.system(size: titleFont))
+                        .foregroundColor(isSelected ? Color.blue : Color.primary)
                 }
 
                 

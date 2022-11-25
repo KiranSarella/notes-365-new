@@ -29,9 +29,12 @@ public struct FontPicker: View {
     @Binding var font: NSFont
     @State var fontPickerDelegate: FontPickerDelegate? = nil
     
-    public init(_ label: String, selection: Binding<NSFont>) {
+    var didChangeValue: (()->())?
+    
+    public init(_ label: String, selection: Binding<NSFont>, didChangeValue: (()->())? = nil) {
         self.labelString = label
         self._font = selection
+        self.didChangeValue = didChangeValue
     }
     
     func openFontPanel() {
@@ -79,6 +82,7 @@ public struct FontPicker: View {
     
     func fontSelected() {
         self.font = NSFontPanel.shared.convert(self.font)
+        didChangeValue?()
     }
 }
 

@@ -10,7 +10,9 @@ import SwiftUI
 struct ThemesListView: View {
     
     @StateObject private var themesListState = ThemesListState()
-    @State private var selectedThemeID: MarkdownTheme.ID?
+    @State private var selectedThemeID: MarkdownTheme.ID = UUID()
+    @State private var selectedLightThemeID: MarkdownTheme.ID = UUID()
+    @State private var selectedDarkThemeID: MarkdownTheme.ID = UUID()
     @State private var showDetail = false
     @State private var selectedTheme: MarkdownTheme?
     
@@ -25,29 +27,34 @@ struct ThemesListView: View {
                 Spacer()
                 // selection pickers
                 VStack {
-                    Picker("Light", selection: $themesListState.selectedLightTheme) {
+                    Picker("Light", selection: $selectedLightThemeID) {
                         ForEach(themesListState.themes) { theme in
-                            Text(theme.themeName).tag(theme)
+                            Text(theme.themeName).tag(theme.id)
                         }
                     }
-                    Picker("Dark", selection: $themesListState.selectedDarkTheme) {
+                    Picker("Dark", selection: $selectedDarkThemeID) {
                         ForEach(themesListState.themes, id:\.self) { theme in
-                            Text(theme.themeName).tag(theme)
+                            Text(theme.themeName).tag(theme.id)
                         }
                     }
-                }.padding()
+                }
+                .padding()
+                .onChange(of: selectedLightThemeID) { newValue in
+                    
+                    themesListState.saveLightTheme(newValue)
+                }
+                .onChange(of: selectedDarkThemeID) { newValue in
+                    themesListState.saveDarkTheme(newValue)
+                }
                     
             }.frame(width: 200)
+                .background(Color("ListBackground"))
             
             // detail view
             if showDetail {
                 if let themee = themesListState.themes.first { $0.id == selectedThemeID } {
                     ThemeDetailView(theme: Binding.constant(themee)) { modifiedTheme in
-                        if let index = themesListState.themes.firstIndex(of: themee) {
-                            themesListState.themes[index] = modifiedTheme
-                            // presist changes
-                            themesListState.persisteThemes()
-                        }
+                        themesListState.saveChanges(modifiedTheme)
                     }
                 }
             }
@@ -57,29 +64,29 @@ struct ThemesListView: View {
         .onChange(of: selectedThemeID, perform: { newValue in
             showDetail = false
             Task {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    if newValue != nil {
-                        showDetail = true
-                    }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    showDetail = true
                 }
             }
         })
         .onAppear {
             // by default select/highlight current theme in the list
             selectedThemeID = ThemeState.shared.theme.id
+            selectedLightThemeID = themesListState.selectedLightTheme.id
+            selectedDarkThemeID = themesListState.selectedDarkTheme.id
         }
-        .onReceive(NotificationCenter.default.publisher(for: Notification.Name("theme.save_object"))) { output in
-            
-            guard let newSelectedIndex = output.object as? Int else { return }
-
-            let themeManager = ThemeManager.shared
-
-            themeManager.themes[newSelectedIndex] = themesListState.themes[newSelectedIndex]
-            themeManager.selectedThemeIndex = newSelectedIndex
-            themeManager.saveThemeState()
-
-            NotificationCenter.default.post(name: Notification.Name("theme.modified"), object: themesListState.themes[newSelectedIndex])
-        }
+//        .onReceive(NotificationCenter.default.publisher(for: Notification.Name("theme.save_object"))) { output in
+//
+//            guard let newSelectedIndex = output.object as? Int else { return }
+//
+//            let themeManager = ThemeManager.shared
+//
+//            themeManager.themes[newSelectedIndex] = themesListState.themes[newSelectedIndex]
+//            themeManager.selectedThemeIndex = newSelectedIndex
+//            themeManager.saveThemeState()
+//
+//            NotificationCenter.default.post(name: Notification.Name("theme.modified"), object: themesListState.themes[newSelectedIndex])
+//        }
     }
 }
 

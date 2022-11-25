@@ -11,6 +11,8 @@ import Foundation
 class ThemeBusiness {
     
     private let themeManagerKey = "theme_manager_ud"
+    private let themeLightKey = "theme_light"
+    private let themeDarkKey = "theme_dark"
     
     
     /*
@@ -24,12 +26,21 @@ class ThemeBusiness {
     
     func getThemes() -> [MarkdownTheme] {
         
-        let themes = getStoredThemes()
-        if themes != nil {
-            return themes!
+        if let themes = getStoredThemes() {
+            return themes
         } else {
-            return ThemeBusiness.getDefaultTheams()
+            let defaultThemes = ThemeBusiness.getDefaultTheams()
+            saveThemes(themes: defaultThemes)
+            return defaultThemes
         }
+    }
+    
+    func getLightTheme() -> MarkdownTheme {
+        return fetchLightTheme() ?? getThemes().first!
+    }
+    
+    func getDarkTheme() -> MarkdownTheme {
+        return fetchDarkTheme() ?? getThemes().first!
     }
     
     // MARK: - Persist Themes List
@@ -43,32 +54,40 @@ class ThemeBusiness {
         return nil
     }
     
-    func clearSavedThemes() {
-        
-        UserDefaults.standard.removeObject(forKey: themeManagerKey)
-        UserDefaults.standard.removeObject(forKey: "selected_theme_index")
-    }
+//    func clearSavedThemes() {
+//        UserDefaults.standard.removeObject(forKey: themeManagerKey)
+//    }
     
-    
-    // MARK: - Selected Theme
-    func saveThemeState(themes: [MarkdownTheme], selectedThemeIndex: Int) {
-        
+    func saveThemes(themes: [MarkdownTheme]) {
         UserDefaults.standard.set(try? PropertyListEncoder().encode(themes), forKey: themeManagerKey)
-        UserDefaults.standard.set(selectedThemeIndex, forKey: "selected_theme_index")
     }
     
-    func getLightTheme() -> MarkdownTheme {
+    func saveLightTheme(theme: MarkdownTheme) {
+        UserDefaults.standard.set(try? PropertyListEncoder().encode(theme), forKey: themeLightKey)
+    }
+    
+    func saveDarkTheme(theme: MarkdownTheme) {
+        UserDefaults.standard.set(try? PropertyListEncoder().encode(theme), forKey: themeDarkKey)
+    }
+    
+    func fetchLightTheme() -> MarkdownTheme? {
+        if let data = UserDefaults.standard.value(forKey: themeLightKey) as? Data {
+            if let obj = try? PropertyListDecoder().decode(MarkdownTheme.self, from: data) {
+                return obj
+            }
+        }
         
-         ThemeBusiness.generateColorTheme()
+        return nil
     }
     
-    func getDarkTheme() -> MarkdownTheme {
+    func fetchDarkTheme() -> MarkdownTheme?   {
+        if let data = UserDefaults.standard.value(forKey: themeDarkKey) as? Data {
+            if let obj = try? PropertyListDecoder().decode(MarkdownTheme.self, from: data) {
+                return obj
+            }
+        }
         
-        ThemeBusiness.generateCustomized2Theme()
-    }
-    
-    func getSelectedThemeIndex() -> Int {
-        (UserDefaults.standard.object(forKey: "selected_theme_index") as? Int) ?? 0
+        return nil
     }
     
 }
@@ -80,7 +99,7 @@ extension ThemeBusiness {
     }
     
     static func generateBlackWhiteTheme() -> MarkdownTheme {
-        var blackWhiteTheme = MarkdownTheme()
+        var blackWhiteTheme = MarkdownTheme(id: UUID())
         blackWhiteTheme.themeName = "Black&White"
         // leaving all to defaults
         return blackWhiteTheme
@@ -89,7 +108,7 @@ extension ThemeBusiness {
     static func generateColorTheme() -> MarkdownTheme {
         
         // apple markdown
-        var theme = MarkdownTheme()
+        var theme = MarkdownTheme(id: UUID())
         theme.themeName = "Color"
         theme.bodyColor = NamedColor(colorName: "Primary", listName: "Dynamic")
         theme.styleColor = NamedColor(colorName: "purple", listName: "System")
@@ -108,7 +127,7 @@ extension ThemeBusiness {
     }
     
     static func generateCustomized1Theme() -> MarkdownTheme {
-        var theme = MarkdownTheme()
+        var theme = MarkdownTheme(id: UUID())
         theme.themeName = "Customized1"
         theme.fontName = "Courier New Bold"
         theme.fontSize = 16
@@ -130,7 +149,7 @@ extension ThemeBusiness {
     
     static func generateCustomized2Theme() -> MarkdownTheme {
         // Orchid theme
-        var theme = MarkdownTheme()
+        var theme = MarkdownTheme(id: UUID())
         theme.themeName = "Customized2"
         theme.fontName = "Comic Sans MS"
         theme.fontSize = 16

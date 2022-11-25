@@ -49,16 +49,22 @@ public struct DayChanges: Identifiable {
     @Published var weekDate: WeekDate
     @Published var currentState = CurrentState.loading
     @Published var weekTimelineList = [DayChanges]()
-    @Published var theme: MarkdownTheme = ThemeManager.shared.getSelectedTheme()
+    @Published var theme: MarkdownTheme = ThemeState.shared.theme
     
     @Published var generatorTask: Task<(), Never>?
     
     var cancellable: Cancellable!
+    var cancellableTheme: Cancellable!
     
     init() {
         
         weekDate = CalendarState.shared.weekDate
         // observe changes
+        observeCalenderChanges()
+        observeThemeChanges()
+    }
+    
+    func observeCalenderChanges() {
         cancellable = CalendarState.shared.$weekDate
             .receive(on: DispatchQueue.main)
             .sink { newWeekDate in
@@ -66,8 +72,17 @@ public struct DayChanges: Identifiable {
             }
     }
     
+    func observeThemeChanges() {
+        cancellableTheme = ThemeState.shared.$theme
+            .receive(on: DispatchQueue.main)
+            .sink { newTheme in
+                self.theme = newTheme!
+            }
+    }
+    
     deinit {
         cancellable.cancel()
+        cancellableTheme.cancel()
     }
     
     func readWeekData(weekDate: WeekDate) {

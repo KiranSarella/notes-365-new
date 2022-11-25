@@ -1,28 +1,32 @@
-# heading 1
-## heading 2
-### heading 3
-#### heading 4
-##### heading 5
-###### heading 6
 **bold**
 *italic*
 ***bold & italic***
 ~~strikethrough~~
+
 `inline code`
+
 ```
-source code
+// multiline
+// multiline 
 ```
+
 >Block Quote
+
 1. ordered list
 - unordered list
+
 - [X] checked
 - [ ] unchecked
-[link](www.notes365.app)
-----
 
-preview content: 
+[Notes365](www.notes365.app)
 
-(inspiration from apple)
+# heading 1 +
+## heading 2 +
+### heading 3 +
+#### heading 4
+##### heading 5 -
+###### heading 6 -
+
 # Think different
 ## Here's to the crazy ones.
 
@@ -37,13 +41,14 @@ The round pegs in the square holes. The ones who see things differently. They're
 And while some may see them as the crazy ones, we see genius. Because the people who are crazy enough to think they can change the world, are the ones who do.
 
 [Think different]: https://www.apple.com
-----
 
-#### vapor.codes commands
+
+# Code Snippets
+### vapor.codes commands
 `vapor new notes365 -n`     # create new project
 `swift run`                         # to build and run
 
-#### Asynchronous Sequences
+### Asynchronous Sequences
 ```
 let handle = FileHandle.standardInput
 for try await line in handle.bytes.lines {
@@ -51,6 +56,6 @@ for try await line in handle.bytes.lines {
 }
 ```
 
->Sundar Pichai Motivation:
->so take the time to find the thing that excites you more then anything else in the world, not the thing that  your parents want you to do or the thing that all your friends are doing, be open, be impatient, be hopeful. You have the chance to change everything. I am optimistic, you will.
-
+# Quotes
+So take the time to **find the thing that excites you more then anything else in the world**, not the thing that your parents want you to do or the thing that all your friends are doing, be open, be impatient, be hopeful. ***You have the chance to change everything.*** I am optimistic, you will.
+            *-- Sundar Pichai*
