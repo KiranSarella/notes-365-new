@@ -8,21 +8,37 @@
 import SwiftUI
 import StoreKit
 
-
 class PurchasesState: ObservableObject {
+    
+    var purchasesBusiness = PurchasesBusiness()
     
     @Published var isPurchased: Bool = false
     
+    @Published private(set) var status: Product.SubscriptionInfo.Status?
+    @Published private(set) var product: Product?
+    
     func subscriptionsExists() -> Bool {
-        store.subscriptions.count > 0
+        purchasesBusiness.subscriptionsExists()
     }
     
-    var product: Product {
-        store.subscriptions.first!
+    func buy() async throws {
+        guard let product = product else { return }
+        do {
+            if try await purchasesBusiness.purchase(product) != nil {
+                withAnimation {
+                    isPurchased = true
+                }
+            }
+        } catch StoreError.failedVerification {
+            throw StoreError.failedVerification
+        } catch {
+            print("Failed purchase for \(product.id): \(error)")
+        }
     }
     
-    //    var isSubscribed: Bool {
-    //        store.purchasedSubscriptions.count != 0
-    //    }
+    @MainActor
+    func updateSubscriptionStatus() async {
+        (status, product) = await purchasesBusiness.getupdatedSubscriptionStatus()
+    }
     
 }

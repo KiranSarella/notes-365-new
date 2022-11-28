@@ -12,7 +12,7 @@ struct Notes_365App: App {
     
     @Environment(\.scenePhase) private var scenePhase
     
-    @StateObject var store: Store = Store()
+    var store: Store = Store.shared
     
     var body: some Scene {
         WindowGroup {

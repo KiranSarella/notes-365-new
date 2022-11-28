@@ -15,12 +15,12 @@ struct ContentView: View {
     
     @State private var selectedModeID: Mode.ID? = Mode.timeline.id
     // timeline related
-    @StateObject var calendarState = CalendarState.shared
+    @ObservedObject var calendarState = CalendarState.shared
     // notebooks related
     @State private var selectedUser: NotebookM?
     @State private var userSelectionState: UserSelectionState?
     @State private var userSelectionStateDB: UserSelectionState?
-    @StateObject var usersState = NotebooksListState.shared
+    @ObservedObject var usersState = NotebooksListState.shared
     
     
     

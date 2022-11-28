@@ -122,6 +122,7 @@
 		9FE9D0C329347FFA006CCC1E /* CodingDocument.md in Resources */ = {isa = PBXBuildFile; fileRef = 9FE9D0C229347FFA006CCC1E /* CodingDocument.md */; };
 		9FE9D0C6293485F5006CCC1E /* PurchasesState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE9D0C5293485F5006CCC1E /* PurchasesState.swift */; };
 		9FE9D0C82934862F006CCC1E /* PurchasesBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE9D0C72934862F006CCC1E /* PurchasesBusiness.swift */; };
+		9FE9D0CD2934C134006CCC1E /* StoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE9D0CC2934C134006CCC1E /* StoreHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -254,6 +255,7 @@
 		9FE9D0C429348012006CCC1E /* Preview.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Preview.md; sourceTree = "<group>"; };
 		9FE9D0C5293485F5006CCC1E /* PurchasesState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesState.swift; sourceTree = "<group>"; };
 		9FE9D0C72934862F006CCC1E /* PurchasesBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesBusiness.swift; sourceTree = "<group>"; };
+		9FE9D0CC2934C134006CCC1E /* StoreHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -517,6 +519,7 @@
 				9F45BD4B2920CCCF003DE332 /* Products.storekit */,
 				9F45BD4C2920CCCF003DE332 /* StatusInfoView.swift */,
 				9F45BD4E2920CCCF003DE332 /* Store.swift */,
+				9FE9D0CC2934C134006CCC1E /* StoreHelper.swift */,
 			);
 			path = "In-app";
 			sourceTree = "<group>";
@@ -889,6 +892,7 @@
 				9F3DB0C4292DF82300704860 /* FeedbackView+iPadOS.swift in Sources */,
 				9F45BD842920CDE0003DE332 /* EditorView.swift in Sources */,
 				9F188D812930E49F0078D413 /* MarkdownHeading.swift in Sources */,
+				9FE9D0CD2934C134006CCC1E /* StoreHelper.swift in Sources */,
 				9F45BD502920CD45003DE332 /* Extensions.swift in Sources */,
 				9F3DB0C2292DE09500704860 /* SettingsView+iPadOS.swift in Sources */,
 				9F45BD9F2920CE2F003DE332 /* FontPicker.swift in Sources */,

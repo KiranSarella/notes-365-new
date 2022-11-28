@@ -125,6 +125,18 @@ class NotebooksListState: ObservableObject {
         let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks)
         usersDB = NotebooksHierarchy(notes: notesList)
     }
+
+    func canAddNotebook() -> Bool {
+        if isSubscribed {
+            return true
+        } else {
+            return isNotebooksLimitExceeded == false
+        }
+    }
+    
+    var isSubscribed: Bool {
+        return PurchasesBusiness().isSubscribed
+    }
     
     func isSelected(userID: UUID) -> Bool {
         guard let selectedUser = self.userSelectionStateTwo?.selectedUser else { return false }

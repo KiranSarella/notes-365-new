@@ -6,19 +6,28 @@
 //
 
 import Foundation
+import StoreKit
 
 class PurchasesBusiness {
+  
+    var store: Store = Store.shared
     
-    /*
-     1. buy option of not purchases
-     buy option with - diff subscriptions list
-     or
-     retry button to get subscriptions list
-     
-     2. if already purchases, show status, exp. date
-     
-     - restore button for all states
-     
-     */
+    func subscriptionsExists() -> Bool {
+        store.subscriptions.count > 0
+    }
+    
+    var isSubscribed: Bool {
+        return store.purchasedSubscriptions.count != 0
+    }
+    
+    func purchase(_ product: Product) async throws -> Transaction? {
+        try await store.purchase(product)
+    }
+    
+    
+    @MainActor
+    func getupdatedSubscriptionStatus() async -> (Product.SubscriptionInfo.Status?, Product?) {
+        await StoreHelper.getupdatedSubscriptionStatus(store)
+    }
     
 }

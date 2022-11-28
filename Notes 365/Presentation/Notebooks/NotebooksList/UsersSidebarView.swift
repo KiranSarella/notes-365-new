@@ -7,17 +7,14 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
-#if os(macOS)
-//import SwiftUIWindow
-#endif
 
 struct UsersSidebarView: View {
     
-    @EnvironmentObject var store: Store
-    
-    var isSubscribed: Bool {
-        return store.purchasedSubscriptions.count != 0
-    }
+//    @EnvironmentObject var store: Store
+//
+//    var isSubscribed: Bool {
+//        return store.purchasedSubscriptions.count != 0
+//    }
 
     let directoryManager = DirectoryManager.shared
     
@@ -38,6 +35,8 @@ struct UsersSidebarView: View {
     @State var isLoading = true
     
     @State private var isPresentingConfirm: Bool = false
+    
+    @State var presentingPurchasesView = false
     
     var body: some View {
         
@@ -132,67 +131,65 @@ struct UsersSidebarView: View {
         HStack(spacing: 20) {
             
             Group {
-                
                 // insert below
                 Button(action: {
-                    
-//                    if isSubscribed == false && usersState.isNotebooksLimitExceeded {
-//                        // show purchase window
-//                        openMyWindow()
-//                        return
-//                    }
-                   
+                    if usersState.canAddNotebook() == false {
+                        // show purchase window
+                        self.presentingPurchasesView.toggle()
+                        return
+                    }
                     usersState.insertUserBelowSelection()
-//                    usersState.usersDB.saveObject()
                 }) {
                     //                Image(systemName: "arrow.down")
                     //                    .renderingMode(.original)
                     Text("Add Below")
                 }
-                
-                
                 // insert inside
                 Button(action: {
-                    
-//                    if isSubscribed == false && usersState.isNotebooksLimitExceeded {
-//                        // show purchase window
-//                        openMyWindow()
-//                        return
-//                    }
-                    
+                    if usersState.canAddNotebook() == false {
+                        // show purchase window
+                        self.presentingPurchasesView.toggle()
+                        return
+                    }
                     usersState.insertInsideSelection()
-//                    usersState.usersDB.saveObject()
                 }) {
                     //                Image(systemName: "arrow.turn.down.right")
                     //                    .renderingMode(.original)
                     Text("Add Inside")
                 }
-                
             }
+            .sheet(isPresented: $presentingPurchasesView, content: {
+                
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button {
+                            self.presentingPurchasesView.toggle()
+                        } label: {
+                            Text("Close")
+                        }
+                        .padding()
+                    }
+                    .buttonStyle(.plain)
+                    PurchasesView()
+                }
+                
+            })
             .buttonStyle(.bordered)
-            
-           
             Spacer()
             // trash
             Button(action: {
-                
                isPresentingConfirm = true
-                
             }) {
                 Image(systemName: "trash")
                     .renderingMode(.original)
             }
-            .confirmationDialog("Are you sure?",
-                                isPresented: $isPresentingConfirm) {
+            .confirmationDialog("Are you sure?", isPresented: $isPresentingConfirm) {
                 Button("Delete", role: .destructive) {
                     DispatchQueue.main.async {
                         usersState.deleteUser()
-                        
                         userSelectionState = nil
-                        
-//                        usersState.usersDB.saveObject()
                     }
-                    
                 }
             } message: {
                 Text("You cannot undo this action")
@@ -202,39 +199,6 @@ struct UsersSidebarView: View {
         .padding()
     }
     
-    
-//    func openMyWindow()
-//    {
-//        var windowRef:NSWindow
-//        windowRef = NSWindow(
-//            contentRect: NSRect(x: 100, y: 100, width: 400, height: 800),
-////            styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
-//            styleMask: [.titled, .closable, .fullSizeContentView],
-//            backing: .buffered, defer: false)
-//        windowRef.contentView = NSHostingView(rootView: PurchaseView())
-//        windowRef.makeKeyAndOrderFront(nil)
-//    }
-    
-    
-    func openMyWindow()
-    {
-        
-//        #if os(macOS)
-//
-//        SwiftUIWindow.open { _ in
-//            PurchaseView()
-//            .frame(minWidth: 800, maxWidth: .infinity, minHeight: 500, maxHeight: .infinity)
-//            .environmentObject(store)
-//        }
-////        .style(.borderless)
-//        .clickable(true)
-//        .mouseMovesWindow(true)
-////        .transparentBackground(true)
-//        .alwaysOnTop(true)
-//        .style([.titled, .closable])
-//
-//        #endif
-    }
 }
 
 //struct ContentView_Previews: PreviewProvider {
