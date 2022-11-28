@@ -21,7 +21,7 @@ struct PreferencesView: View {
                     Label("Themes", systemImage: "paintbrush")
                 }
             
-            PurchaseSettingsView()
+            PurchasesView()
                 .tabItem {
                     Label("Purchases", systemImage: "cart")
                 }

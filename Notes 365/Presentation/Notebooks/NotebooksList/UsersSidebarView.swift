@@ -211,7 +211,7 @@ struct UsersSidebarView: View {
 ////            styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
 //            styleMask: [.titled, .closable, .fullSizeContentView],
 //            backing: .buffered, defer: false)
-//        windowRef.contentView = NSHostingView(rootView: PurchaseSettingsView())
+//        windowRef.contentView = NSHostingView(rootView: PurchaseView())
 //        windowRef.makeKeyAndOrderFront(nil)
 //    }
     
@@ -222,7 +222,7 @@ struct UsersSidebarView: View {
 //        #if os(macOS)
 //
 //        SwiftUIWindow.open { _ in
-//            PurchaseSettingsView()
+//            PurchaseView()
 //            .frame(minWidth: 800, maxWidth: .infinity, minHeight: 500, maxHeight: .infinity)
 //            .environmentObject(store)
 //        }

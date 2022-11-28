@@ -90,7 +90,7 @@
 		9F45BDA92920CE52003DE332 /* ScaleFontView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD452920CCCF003DE332 /* ScaleFontView.swift */; };
 		9F45BDAA2920CE52003DE332 /* NamedColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD462920CCCF003DE332 /* NamedColor.swift */; };
 		9F45BDAB2920CE52003DE332 /* ThemesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD472920CCCF003DE332 /* ThemesListView.swift */; };
-		9F45BDAD2920CE5A003DE332 /* PurchaseSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD4D2920CCCF003DE332 /* PurchaseSettingsView.swift */; };
+		9F45BDAD2920CE5A003DE332 /* PurchasesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD4D2920CCCF003DE332 /* PurchasesView.swift */; };
 		9F45BDAE2920CE5A003DE332 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD4E2920CCCF003DE332 /* Store.swift */; };
 		9F45BDAF2920CE5A003DE332 /* StatusInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD4C2920CCCF003DE332 /* StatusInfoView.swift */; };
 		9F45BDB02920CE63003DE332 /* Products.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9F45BD4A2920CCCF003DE332 /* Products.plist */; };
@@ -118,6 +118,10 @@
 		9FB6C6A52927936F00C8EC76 /* DayDetailState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB6C6A42927936F00C8EC76 /* DayDetailState.swift */; };
 		9FB6C6A72927939E00C8EC76 /* WeekDetailState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB6C6A62927939E00C8EC76 /* WeekDetailState.swift */; };
 		9FB6C6A929279BEC00C8EC76 /* TimelineBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB6C6A829279BEC00C8EC76 /* TimelineBusiness.swift */; };
+		9FE9D0C129347BFB006CCC1E /* MemoryTechniques.md in Resources */ = {isa = PBXBuildFile; fileRef = 9FE9D0C029347BFB006CCC1E /* MemoryTechniques.md */; };
+		9FE9D0C329347FFA006CCC1E /* CodingDocument.md in Resources */ = {isa = PBXBuildFile; fileRef = 9FE9D0C229347FFA006CCC1E /* CodingDocument.md */; };
+		9FE9D0C6293485F5006CCC1E /* PurchasesState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE9D0C5293485F5006CCC1E /* PurchasesState.swift */; };
+		9FE9D0C82934862F006CCC1E /* PurchasesBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE9D0C72934862F006CCC1E /* PurchasesBusiness.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -228,7 +232,7 @@
 		9F45BD4A2920CCCF003DE332 /* Products.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Products.plist; sourceTree = "<group>"; };
 		9F45BD4B2920CCCF003DE332 /* Products.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Products.storekit; sourceTree = "<group>"; };
 		9F45BD4C2920CCCF003DE332 /* StatusInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusInfoView.swift; sourceTree = "<group>"; };
-		9F45BD4D2920CCCF003DE332 /* PurchaseSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseSettingsView.swift; sourceTree = "<group>"; };
+		9F45BD4D2920CCCF003DE332 /* PurchasesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesView.swift; sourceTree = "<group>"; };
 		9F45BD4E2920CCCF003DE332 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		9F45BDBD2920EA31003DE332 /* NotebooksBusinessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksBusinessTests.swift; sourceTree = "<group>"; };
 		9F45BDC72920FD34003DE332 /* PlistHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlistHelper.swift; sourceTree = "<group>"; };
@@ -245,6 +249,11 @@
 		9FB6C6A42927936F00C8EC76 /* DayDetailState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayDetailState.swift; sourceTree = "<group>"; };
 		9FB6C6A62927939E00C8EC76 /* WeekDetailState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDetailState.swift; sourceTree = "<group>"; };
 		9FB6C6A829279BEC00C8EC76 /* TimelineBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineBusiness.swift; sourceTree = "<group>"; };
+		9FE9D0C029347BFB006CCC1E /* MemoryTechniques.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MemoryTechniques.md; sourceTree = "<group>"; };
+		9FE9D0C229347FFA006CCC1E /* CodingDocument.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CodingDocument.md; sourceTree = "<group>"; };
+		9FE9D0C429348012006CCC1E /* Preview.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Preview.md; sourceTree = "<group>"; };
+		9FE9D0C5293485F5006CCC1E /* PurchasesState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesState.swift; sourceTree = "<group>"; };
+		9FE9D0C72934862F006CCC1E /* PurchasesBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesBusiness.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -277,12 +286,11 @@
 			isa = PBXGroup;
 			children = (
 				9F45BD3A2920CCCF003DE332 /* ThemeDetailView.swift */,
-				9F45BD3F2920CCCF003DE332 /* ThemePreviewView.swift */,
 				9F45BD342920CCCF003DE332 /* FontPicker.swift */,
 				9F45BD3C2920CCCF003DE332 /* ColorPickerWindow.swift */,
 				9F3DB0CF292E70BA00704860 /* ColorPickerWindowManager.swift */,
 				9F3DB0CD292E704D00704860 /* ColorPickerButton.swift */,
-				9F45BD452920CCCF003DE332 /* ScaleFontView.swift */,
+				9FE9D0BF29347BCD006CCC1E /* Preview */,
 			);
 			path = ThemeDetail;
 			sourceTree = "<group>";
@@ -294,7 +302,6 @@
 				9F45BD472920CCCF003DE332 /* ThemesListView.swift */,
 				9F3DB0C9292E23D900704860 /* ThemesListState.swift */,
 				9F188D822930E5E80078D413 /* ThemeDetail */,
-				9F45BD392920CCCF003DE332 /* PreviewContent.md */,
 			);
 			path = Theams;
 			sourceTree = "<group>";
@@ -302,6 +309,8 @@
 		9F1AAE2E292C93DC00B4D254 /* Purchases */ = {
 			isa = PBXGroup;
 			children = (
+				9F45BD4D2920CCCF003DE332 /* PurchasesView.swift */,
+				9FE9D0C5293485F5006CCC1E /* PurchasesState.swift */,
 			);
 			path = Purchases;
 			sourceTree = "<group>";
@@ -507,7 +516,6 @@
 				9F45BD4A2920CCCF003DE332 /* Products.plist */,
 				9F45BD4B2920CCCF003DE332 /* Products.storekit */,
 				9F45BD4C2920CCCF003DE332 /* StatusInfoView.swift */,
-				9F45BD4D2920CCCF003DE332 /* PurchaseSettingsView.swift */,
 				9F45BD4E2920CCCF003DE332 /* Store.swift */,
 			);
 			path = "In-app";
@@ -537,7 +545,7 @@
 				9F45BDD5292340DB003DE332 /* Notebooks */,
 				9F45BDDC292343B2003DE332 /* Timeline */,
 				9F45BD382920CCCF003DE332 /* Theams */,
-				9F45BDDD292343BF003DE332 /* In-AppPurchases */,
+				9F45BDDD292343BF003DE332 /* Purchases */,
 			);
 			path = Business;
 			sourceTree = "<group>";
@@ -564,11 +572,12 @@
 			path = Timeline;
 			sourceTree = "<group>";
 		};
-		9F45BDDD292343BF003DE332 /* In-AppPurchases */ = {
+		9F45BDDD292343BF003DE332 /* Purchases */ = {
 			isa = PBXGroup;
 			children = (
+				9FE9D0C72934862F006CCC1E /* PurchasesBusiness.swift */,
 			);
-			path = "In-AppPurchases";
+			path = Purchases;
 			sourceTree = "<group>";
 		};
 		9F45BDDF2923441C003DE332 /* Presentation */ = {
@@ -640,6 +649,19 @@
 				9FB6C69929275D5100C8EC76 /* FormatOptions.swift */,
 			);
 			path = NotebookEditor;
+			sourceTree = "<group>";
+		};
+		9FE9D0BF29347BCD006CCC1E /* Preview */ = {
+			isa = PBXGroup;
+			children = (
+				9FE9D0C429348012006CCC1E /* Preview.md */,
+				9F45BD3F2920CCCF003DE332 /* ThemePreviewView.swift */,
+				9F45BD392920CCCF003DE332 /* PreviewContent.md */,
+				9FE9D0C229347FFA006CCC1E /* CodingDocument.md */,
+				9FE9D0C029347BFB006CCC1E /* MemoryTechniques.md */,
+				9F45BD452920CCCF003DE332 /* ScaleFontView.swift */,
+			);
+			path = Preview;
 			sourceTree = "<group>";
 		};
 		9FEE09DE2923C24D003C070D /* __tests */ = {
@@ -760,6 +782,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FE9D0C129347BFB006CCC1E /* MemoryTechniques.md in Resources */,
+				9FE9D0C329347FFA006CCC1E /* CodingDocument.md in Resources */,
 				9F45BCAA2920CAB0003DE332 /* Preview Assets.xcassets in Resources */,
 				9F1AAE34292CA89E00B4D254 /* PreviewContent.md in Resources */,
 				9F45BCA62920CAB0003DE332 /* Assets.xcassets in Resources */,
@@ -789,6 +813,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F45BD9D2920CE21003DE332 /* AttributedString+StyledMarkdown+iOS.swift in Sources */,
+				9FE9D0C82934862F006CCC1E /* PurchasesBusiness.swift in Sources */,
 				9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */,
 				9FB6C69C29275E0300C8EC76 /* NotebookEditorState.swift in Sources */,
 				9F3DB0CA292E23D900704860 /* ThemesListState.swift in Sources */,
@@ -842,6 +867,7 @@
 				9F45BD962920CE00003DE332 /* CalendarType.swift in Sources */,
 				9F45BD792920CDE0003DE332 /* NotebookEditorView.swift in Sources */,
 				9F45BD922920CDED003DE332 /* StringDiff.swift in Sources */,
+				9FE9D0C6293485F5006CCC1E /* PurchasesState.swift in Sources */,
 				9F45BCA22920CAAE003DE332 /* Notes_365App.swift in Sources */,
 				9F45BD952920CDF9003DE332 /* AppState.swift in Sources */,
 				9F45BD9E2920CE21003DE332 /* SpeechHelpr.swift in Sources */,
@@ -849,7 +875,7 @@
 				9F45BD832920CDE0003DE332 /* EditorUI.swift in Sources */,
 				9FB6C69829275D0600C8EC76 /* FormatOptionsView.swift in Sources */,
 				9F45BD932920CDF9003DE332 /* Mode.swift in Sources */,
-				9F45BDAD2920CE5A003DE332 /* PurchaseSettingsView.swift in Sources */,
+				9F45BDAD2920CE5A003DE332 /* PurchasesView.swift in Sources */,
 				9F45BDA62920CE41003DE332 /* NamedSystemColor.swift in Sources */,
 				9F1AAE31292C940A00B4D254 /* FeedbackView+macOS.swift in Sources */,
 				9F45BD7F2920CDE0003DE332 /* UsersSidebarView.swift in Sources */,

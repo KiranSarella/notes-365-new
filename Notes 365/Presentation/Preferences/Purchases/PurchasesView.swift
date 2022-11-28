@@ -1,5 +1,5 @@
 //
-//  PurchaseSettingsView.swift
+//  PurchaseView.swift
 //  Notes 365
 //
 //  Created by Kiran Sarella on 08/07/22.
@@ -8,7 +8,7 @@
 import SwiftUI
 import StoreKit
 
-struct PurchaseSettingsView: View {
+struct PurchasesView: View {
     
     @Environment(\.openURL) private var openURL
     

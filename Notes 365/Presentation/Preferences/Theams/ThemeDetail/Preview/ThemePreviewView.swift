@@ -19,7 +19,7 @@ struct ThemePreviewView: View {
     let previewContent = ThemePreviewView.loadContent()
     
     static func loadContent() -> String {
-        let path = Bundle.main.path(forResource: "PreviewContent", ofType: "md")!
+        let path = Bundle.main.path(forResource: "MemoryTechniques", ofType: "md")!
         return try! String(contentsOfFile: path, encoding: .utf8)
     }
     
