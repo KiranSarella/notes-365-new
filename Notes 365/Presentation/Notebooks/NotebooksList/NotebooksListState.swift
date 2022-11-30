@@ -54,32 +54,18 @@ struct NotebookM: Identifiable {
             notebook.name = self.name
         }
     }
-    var children: [NotebookM]?
+    var children: [NotebookM]? = nil
     var content: String = ""
-    var isSelected: Bool = false
+    var isExpanded: Bool = false
     
-    private var notebook: Notebook
+    private(set) var notebook: Notebook
     
     init(notebook: Notebook) {
         self.id = notebook.id
         self.name = notebook.name
         self.notebook = notebook
-        
-//        observeNameChanges()
     }
-//
-//    mutating func observeNameChanges() {
-//
-//        var result = self
-//
-//        notebook.onNameChange = { newName in
-//            result.name = newName
-//        }
-//
-//        self = result
-//    }
-    
-    
+
     var containChildNotebooks: Bool {
         
         var result: Bool = false
@@ -98,7 +84,11 @@ struct NotebookM: Identifiable {
 extension NotebookM: Equatable, Hashable {
     
     static func == (lhs: NotebookM, rhs: NotebookM) -> Bool {
-        return lhs.id == rhs.id
+        return lhs.id == rhs.id && lhs.name == rhs.name
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }
 
@@ -111,7 +101,7 @@ class NotebooksListState: ObservableObject {
     
     @Published var usersDB: NotebooksHierarchy
     
-    var userSelectionStateTwo: UserSelectionState?
+    var userSelectionStateTwo: SelectedNotebookInfo?
     
     var isNotebooksLimitExceeded: Bool {
         
@@ -127,6 +117,9 @@ class NotebooksListState: ObservableObject {
     }
 
     func canAddNotebook() -> Bool {
+#if DEBUG
+        return true
+#endif
         if isSubscribed {
             return true
         } else {
@@ -139,7 +132,7 @@ class NotebooksListState: ObservableObject {
     }
     
     func isSelected(userID: UUID) -> Bool {
-        guard let selectedUser = self.userSelectionStateTwo?.selectedUser else { return false }
+        guard let selectedUser = self.userSelectionStateTwo?.notebook else { return false }
         
         return selectedUser.id == userID
     }
@@ -147,10 +140,10 @@ class NotebooksListState: ObservableObject {
     
     func deleteUser() {
         
-        guard let selectedLevels = userSelectionStateTwo?.selectedLevels else {
+        guard let selectedLevels = userSelectionStateTwo?.levels else {
             return
         }
-        guard let selectedIndex = userSelectionStateTwo?.selectedIndex else {
+        guard let selectedIndex = userSelectionStateTwo?.index else {
             return
         }
         
@@ -200,11 +193,11 @@ class NotebooksListState: ObservableObject {
   
     func insertUserBelowSelection() {
         
-        guard let selectedLevels = userSelectionStateTwo?.selectedLevels else {
+        guard let selectedLevels = userSelectionStateTwo?.levels else {
             return
         }
         
-        guard let selectedIndex = userSelectionStateTwo?.selectedIndex else {
+        guard let selectedIndex = userSelectionStateTwo?.index else {
             return
         }
         
@@ -252,12 +245,13 @@ class NotebooksListState: ObservableObject {
         
     }
     
+    
     func insertInsideSelection() {
         
-        guard var selectedLevels = userSelectionStateTwo?.selectedLevels else {
+        guard var selectedLevels = userSelectionStateTwo?.levels else {
             return
         }
-        guard let lastLevel = userSelectionStateTwo?.selectedIndex else {
+        guard let lastLevel = userSelectionStateTwo?.index else {
             return
         }
         
@@ -315,12 +309,31 @@ class NotebooksListState: ObservableObject {
         }
     }
     
+    func insertInside(ref notebook: Notebook) {
+        
+        let childNotebook = notebookBusiness.insertInside(ref: notebook)
+        
+        // get path
+        getNotebookReferenceForPath(uuidPath: notebook.uuidPath) { noteM in
+            if noteM.children == nil {
+                // create object
+                let notebookM = NotebookM(notebook: childNotebook)
+                noteM.children = [notebookM]
+
+            } else {
+                // create object
+                let notebookM = NotebookM(notebook: childNotebook)
+                noteM.children?.append(notebookM)
+            }
+        }
+    }
+    
     func renameNotebook(editingFileName: String) throws {
         
-        guard let selectedLevels = userSelectionStateTwo?.selectedLevels else {
+        guard let selectedLevels = userSelectionStateTwo?.levels else {
             return
         }
-        guard let selectedIndex = userSelectionStateTwo?.selectedIndex else {
+        guard let selectedIndex = userSelectionStateTwo?.index else {
             return
         }
         
@@ -338,6 +351,36 @@ class NotebooksListState: ObservableObject {
     func getFolderNamesPath(levels: [Int]) -> String {
         notebookBusiness.getFolderNamesPath(levels: levels)
     }
+    
+    func getNotebookReferenceForPath(uuidPath: [UUID], completion: ((inout NotebookM) -> ())) {
+        
+        if uuidPath.count == 0 {
+            // top level
+            let index = usersDB.notes.firstIndex(where: { $0.id == uuidPath.first! })!
+            completion(&usersDB.notes[index])
+        } else {
+            
+            var uuids = uuidPath
+            var index = usersDB.notes.firstIndex(where: { $0.id == uuids.first! })!
+            uuids.removeFirst()
+            // get selected Notebook reference (bcz we are using struct, we need use assignment)
+            func getSelectedNotebookReference(notebook: inout NotebookM) {
+                // base condition
+                if uuids.count <= 0 {
+                    completion(&notebook)
+                    return
+                }
+                // next level
+                index = notebook.children!.firstIndex(where: { $0.id == uuids.first! })!
+                uuids.removeFirst()
+                // next element
+                getSelectedNotebookReference(notebook: &notebook.children![index])
+            }
+            // start resurssion
+            getSelectedNotebookReference(notebook: &usersDB.notes[index])
+        }
+    }
+    
     
     func getNotebookReference(levels selectedLevels: [Int], index selectedIndex: Int,
                               completion: ((inout NotebookM) -> ())) {

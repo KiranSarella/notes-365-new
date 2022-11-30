@@ -10,7 +10,7 @@ import SwiftUI
 
 struct NotebookEditorView: View {
     
-    var userSelectionState: UserSelectionState
+    var userSelectionState: SelectedNotebookInfo
     
     @StateObject private var editorState = NotebookEditorState()
     
@@ -22,7 +22,7 @@ struct NotebookEditorView: View {
 
     @Binding var selectedMode: Mode.ID?
     
-    init(userSelectionState: UserSelectionState, selectedMode: Binding<Mode.ID?>) {
+    init(userSelectionState: SelectedNotebookInfo, selectedMode: Binding<Mode.ID?>) {
         self.userSelectionState = userSelectionState
         _selectedMode = selectedMode
     }
@@ -161,7 +161,7 @@ struct NotebookEditorView: View {
                 speechHelperState.speechState = .stopped
             }
         })
-        .navigationTitle(self.userSelectionState.selectedUser.name)
+        .navigationTitle(self.userSelectionState.notebook.name)
         .toolbar {
             /*
 //            ScaleFontView(theme: $theme)

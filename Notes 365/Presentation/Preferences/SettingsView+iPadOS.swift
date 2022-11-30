@@ -98,7 +98,7 @@ struct SettingsView_iPadOS: View {
                     case .themes:
                         Text("inprogress")
                     case .purchases:
-                        PurchaseView()
+                        PurchasesView()
                     case .feedback:
                         FeedbackView_iPadOS()
                     }

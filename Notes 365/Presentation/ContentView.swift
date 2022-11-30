@@ -18,8 +18,7 @@ struct ContentView: View {
     @ObservedObject var calendarState = CalendarState.shared
     // notebooks related
     @State private var selectedUser: NotebookM?
-    @State private var userSelectionState: UserSelectionState?
-    @State private var userSelectionStateDB: UserSelectionState?
+    @State private var userSelectionState: SelectedNotebookInfo?
     @ObservedObject var usersState = NotebooksListState.shared
     
     
@@ -75,7 +74,7 @@ struct ContentView: View {
                     TimelineSidebarView()
                         .environmentObject(calendarState)
                 case .noteBooks:
-                    UsersSidebarView(selectedMode: Binding.constant(selectedMode), userSelectionState: $userSelectionState, userSelectionStateDB: $userSelectionStateDB, selectedUser: $selectedUser)
+                    NotebooksListView(userSelectionState: $userSelectionState, selectedUser: $selectedUser)
                         .environmentObject(usersState)
                         .onChange(of: userSelectionState, perform: { newValue in
                             usersState.userSelectionStateTwo = newValue

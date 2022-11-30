@@ -20,10 +20,11 @@ struct ThemesListView: View {
     var body: some View {
         HStack {
             VStack {
-                // list view
+                #if os(macOS)
                 List(themesListState.themes, selection: $selectedThemeID) { theme in
                     Text(theme.themeName)
                 }
+                #endif
                 Spacer()
                 // selection pickers
                 VStack {
@@ -52,11 +53,13 @@ struct ThemesListView: View {
             
             // detail view
             if showDetail {
+                #if os(macOS)
                 if let themee = themesListState.themes.first { $0.id == selectedThemeID } {
                     ThemeDetailView(theme: Binding.constant(themee)) { modifiedTheme in
                         themesListState.saveChanges(modifiedTheme)
                     }
                 }
+                #endif
             }
             
             Spacer()

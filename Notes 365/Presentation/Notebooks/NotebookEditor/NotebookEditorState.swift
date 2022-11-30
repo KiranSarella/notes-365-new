@@ -36,7 +36,7 @@ class NotebookEditorState: ObservableObject {
             }
     }
     
-    func loadContent(notebookInfo: UserSelectionState) {
+    func loadContent(notebookInfo: SelectedNotebookInfo) {
         
         contentStr = ""
         
@@ -57,11 +57,11 @@ class NotebookEditorState: ObservableObject {
     }
     
     
-    func setBaseVersion(userSelectionState: UserSelectionState) {
+    func setBaseVersion(userSelectionState: SelectedNotebookInfo) {
         
         VersionBusiness.cleanOldBaseVersions()
         
-        guard let notebook = NotebooksListState.shared.getNotebook(levels: userSelectionState.selectedLevels, index: userSelectionState.selectedIndex) else { return }
+        guard let notebook = NotebooksListState.shared.getNotebook(levels: userSelectionState.levels, index: userSelectionState.index) else { return }
         
         if NotebookContentBusiness.isBaseVersionExists(fileName: notebook.id.uuidString) == false {
             
@@ -73,7 +73,7 @@ class NotebookEditorState: ObservableObject {
     
     
     
-    func saveContentChanges(userSelectionState: UserSelectionState) {
+    func saveContentChanges(userSelectionState: SelectedNotebookInfo) {
         
         NotebookContentBusiness.saveContentChanges(userSelectionState: userSelectionState, txt: txt)
     }

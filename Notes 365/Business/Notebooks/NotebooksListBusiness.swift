@@ -320,6 +320,34 @@ class NotebooksListBusiness {
         }
     }
     
+    func insertInside(ref notebook: Notebook) -> Notebook {
+        
+        // get path for all folders using level numbers
+        let fullPath = notebook.folderPath
+        let newNotebook = createNotebook(atPath: notebook.folderPath)
+        newNotebook.parent = notebook
+        
+        if notebook.children == nil {
+            // create object
+            notebook.children = [newNotebook]
+            // create folder
+            FilesHelper.shared.createDirectory(folderName: fullPath)
+            // create file
+            FilesHelper.shared.writeToFile(fileName: newNotebook.name, folderPath: fullPath, content: "")
+        } else {
+            // create object
+            notebook.children?.append(newNotebook)
+            // folder already exists
+            // create file
+            FilesHelper.shared.writeToFile(fileName: newNotebook.name, folderPath: fullPath, content: "")
+        }
+        
+        // persist
+        NotebooksListBusiness.persistObject(notebooks: notebooks)
+        
+        return newNotebook
+    }
+    
     
     // MARK: - Create
     func createNotebook(atPath path: String) -> Notebook {

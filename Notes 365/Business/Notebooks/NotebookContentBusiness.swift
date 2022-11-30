@@ -16,12 +16,12 @@ class NotebookContentBusiness {
         
     }
     
-    static func loadContent(selection: UserSelectionState) -> String {
+    static func loadContent(selection: SelectedNotebookInfo) -> String {
         
         // read data from file
-        guard let notebook = NotebooksListState.shared.getNotebook(levels: selection.selectedLevels, index: selection.selectedIndex) else { return "" }
+        guard let notebook = NotebooksListState.shared.getNotebook(levels: selection.levels, index: selection.index) else { return "" }
         
-        let folderPath = NotebooksListState.shared.getFolderNamesPath(levels: selection.selectedLevels)
+        let folderPath = NotebooksListState.shared.getFolderNamesPath(levels: selection.levels)
         
 //        print(folderPath, contentStr)
         
@@ -54,7 +54,7 @@ class NotebookContentBusiness {
     }
     
     
-    static func saveContentChanges(userSelectionState: UserSelectionState, txt: String) {
+    static func saveContentChanges(userSelectionState: SelectedNotebookInfo, txt: String) {
         
         
         // TODO: check date
@@ -68,7 +68,7 @@ class NotebookContentBusiness {
         //            return
         //        }
         
-        guard var notebook = NotebooksListState.shared.getNotebook(levels: userSelectionState.selectedLevels, index: userSelectionState.selectedIndex) else { return }
+        guard var notebook = NotebooksListState.shared.getNotebook(levels: userSelectionState.levels, index: userSelectionState.index) else { return }
         notebook.content = txt
         
         // compare with snapshot version
@@ -84,7 +84,7 @@ class NotebookContentBusiness {
         if newContent.count > 0 {
             // get / create Timeline object for a day
             
-            let folderPath = NotebooksListState.shared.getFolderNamesPath(levels: userSelectionState.selectedLevels)
+            let folderPath = NotebooksListState.shared.getFolderNamesPath(levels: userSelectionState.levels)
             
             VersionBusiness.shared.addOrUpdateToday(contentChanges: newContent, uuid: notebook.id, fileName: notebook.name, filePath: folderPath)
             

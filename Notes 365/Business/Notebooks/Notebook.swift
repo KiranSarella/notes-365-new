@@ -14,10 +14,10 @@ class Notebook: Identifiable, Codable {
     var name: String {
         didSet {
             NotificationCenter.default.post(name: .notebookChangeNotification, object: nil)
-//            onNameChange?(name)
         }
     }
     var children: [Notebook]?
+    unowned var parent: Notebook?
     
     init(id: UUID, name: String) {
         self.id = id
@@ -34,6 +34,13 @@ class Notebook: Identifiable, Codable {
         self.init(id: id, name: name)
         
         children = try? container.decode([Notebook].self, forKey: .friends)
+        
+        // set parent reference
+        if let children = children {
+            for child in children {
+                child.parent = self
+            }
+        }
     }
     
     var containChildNotebooks: Bool {
@@ -68,4 +75,38 @@ extension Notebook {
         try container.encode(name, forKey: .name)
         try container.encode(children, forKey: .friends)
     }
+}
+
+extension Notebook {
+    
+    var uuidPath: [UUID] {
+        
+        var uuids = [UUID]()
+        // add self
+        uuids.append(self.id)
+        // add parents
+        var parentRef = self.parent
+        while parentRef != nil {
+            uuids.append(parentRef!.id)
+            parentRef = parentRef?.parent
+        }
+        
+        return uuids.reversed()
+    }
+    
+    var folderPath: String {
+        // add self
+        var path: String = self.name
+        // add parents
+        var parentRef = self.parent
+        while parentRef != nil {
+            path = parentRef!.name + "/" + path
+            parentRef = parentRef?.parent
+        }
+        // base path
+        path = "notebooks" + "/" + path
+        // return
+        return path
+    }
+    
 }
