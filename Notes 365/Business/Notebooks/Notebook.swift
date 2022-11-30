@@ -110,3 +110,14 @@ extension Notebook {
     }
     
 }
+
+
+extension Notebook {
+    
+    func loadContent() -> String {
+        
+        let fullPath = self.folderPath + ".md"
+        print(fullPath)
+        return FilesHelper.shared.readFile(from: fullPath) ?? ""
+    }
+}

@@ -118,6 +118,25 @@ public class FilesHelper {
         }
     }
     
+    func readFile(from path: String) -> String? {
+        
+        let DocumentDirURL = getDocumentDiretoryURL()
+        
+        let fileURL = DocumentDirURL
+            .appendingPathComponent(path)
+        
+        var readString: String?
+        do {
+            // Read the file contents
+            readString = try String(contentsOf: fileURL)
+            print(fileURL)
+        } catch let error as NSError {
+            print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
+        }
+        
+        return readString
+    }
+    
     func readFile(fileName: String, folderPath: String) -> String? {
         
         let DocumentDirURL = getDocumentDiretoryURL()

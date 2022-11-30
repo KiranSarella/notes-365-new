@@ -79,31 +79,30 @@ struct ContentView: View {
                         .onChange(of: userSelectionState, perform: { newValue in
                             usersState.userSelectionStateTwo = newValue
                         })
+                        
                 }
             } else {
                 // no selection done
                 Text("NOT SELECTED")
             }
         } detail: {
-            if let selectedMode = Mode.getMode(id: selectedModeID) {
-                switch selectedMode {
-                case .timeline:
-                    let calendarType = calendarState.calenderType
-                    switch calendarType {
-                    case .day:
-                        DayDetailView(date: calendarState.selectedDate)
-                    case .week:
-                        WeekDetailView()
-                    case .month:
-                        MonthDetailView()
-                    }
-                case .noteBooks:
-                    if userSelectionState != nil {
-                        NotebookEditorView(userSelectionState: userSelectionState!,
-                                         selectedMode: $selectedModeID)
-                    }
+            let selectedMode = Mode.getMode(id: selectedModeID!)!
+            switch selectedMode {
+            case .timeline:
+                let calendarType = calendarState.calenderType
+                switch calendarType {
+                case .day:
+                    DayDetailView(date: calendarState.selectedDate)
+                case .week:
+                    WeekDetailView()
+                case .month:
+                    MonthDetailView()
                 }
+            case .noteBooks:
+                NotebookEditorView(notebookM: $selectedUser)
+                    .navigationTitle(selectedUser?.name ?? "")
             }
+
         }
     }
     

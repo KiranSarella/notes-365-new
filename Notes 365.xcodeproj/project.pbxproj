@@ -645,8 +645,8 @@
 		9FB6C69629275C1500C8EC76 /* NotebookEditor */ = {
 			isa = PBXGroup;
 			children = (
-				9FB6C69B29275E0300C8EC76 /* NotebookEditorState.swift */,
 				9F45BD242920CCCE003DE332 /* NotebookEditorView.swift */,
+				9FB6C69B29275E0300C8EC76 /* NotebookEditorState.swift */,
 				9FB6C69D2927615700C8EC76 /* SpeechState.swift */,
 				9FB6C69729275D0600C8EC76 /* FormatOptionsView.swift */,
 				9FB6C69929275D5100C8EC76 /* FormatOptions.swift */,

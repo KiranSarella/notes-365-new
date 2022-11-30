@@ -36,6 +36,16 @@ class NotebookEditorState: ObservableObject {
             }
     }
     
+    func loadContent(_ notebook: Notebook) {
+        
+        contentStr = ""
+        txt = ""
+        isFetchingData = true
+        self.contentStr = notebook.loadContent()
+        self.txt = self.contentStr
+        isFetchingData = false
+    }
+    
     func loadContent(notebookInfo: SelectedNotebookInfo) {
         
         contentStr = ""

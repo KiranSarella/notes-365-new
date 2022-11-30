@@ -32,12 +32,20 @@ struct NotebooksListView: View {
 //            }
             
             List(selection: $selectedUser) {
-                DisclosureGroup(isExpanded: $isExpanded) {
-                    ListGroupView(notebooks: $usersState.usersDB.notes)
-                } label: {
-
-                }
+                ListGroupView(notebooks: $usersState.usersDB.notes)
+//                DisclosureGroup(isExpanded: .constant(true)) {
+//
+//                } label: {
+//
+//                }.disabled(true)
             }
+            .listStyle(SidebarListStyle())
+            .navigationTitle(selectedUser?.name ?? "Notes 365")
+            /*
+             ** IMP
+             this is required to show disclosureGroup when first item have no childs.
+             and only working with SidebarListStyle.
+             */
 
 //            List(selection: $selectedUserID) {
 //                DisclosureGroup(isExpanded: $isExpanded) {
@@ -221,6 +229,7 @@ struct ListGroupView: View {
                 }
             } else {
                 Text(notebook.name)
+//                NavigationLink(notebook.name, value: notebook)
             }
         }
     }

@@ -16,7 +16,19 @@ class NotebookContentBusiness {
         
     }
     
+    static func loadContent(for notebook: Notebook) -> String {
+        
+        
+        let folderPath = notebook.folderPath
+        
+        //        print(folderPath, contentStr)
+        
+        return FilesHelper.shared.readFile(fileName: notebook.name, folderPath: folderPath) ?? ""
+    }
+    
     static func loadContent(selection: SelectedNotebookInfo) -> String {
+        
+        
         
         // read data from file
         guard let notebook = NotebooksListState.shared.getNotebook(levels: selection.levels, index: selection.index) else { return "" }
