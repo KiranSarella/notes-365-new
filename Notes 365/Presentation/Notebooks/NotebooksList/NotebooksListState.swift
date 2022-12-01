@@ -246,84 +246,96 @@ class NotebooksListState: ObservableObject {
     }
     
     
-    func insertInsideSelection() {
-        
-        guard var selectedLevels = userSelectionStateTwo?.levels else {
-            return
-        }
-        guard let lastLevel = userSelectionStateTwo?.index else {
-            return
-        }
-        
-        let notebookRef = notebookBusiness.insertInsideSelection(levels: selectedLevels, index: lastLevel)
-        let notebookM = NotebookM(notebook: notebookRef)
-        
-        if selectedLevels.isEmpty {
-            // top level
-            let selectedNotebook = usersDB.notes[lastLevel]
-            
-            if selectedNotebook.children == nil {
-                
-                usersDB.notes[lastLevel].children = [notebookM]
-            } else {
-                // create object
-                usersDB.notes[lastLevel].children?.append(notebookM)
-            }
+//    func insertInsideSelection() {
+//
+//        guard var selectedLevels = userSelectionStateTwo?.levels else {
+//            return
+//        }
+//        guard let lastLevel = userSelectionStateTwo?.index else {
+//            return
+//        }
+//
+//        let notebookRef = notebookBusiness.insertInsideSelection(levels: selectedLevels, index: lastLevel)
+//        let notebookM = NotebookM(notebook: notebookRef)
+//
+//        if selectedLevels.isEmpty {
+//            // top level
+//            let selectedNotebook = usersDB.notes[lastLevel]
+//
+//            if selectedNotebook.children == nil {
+//
+//                usersDB.notes[lastLevel].children = [notebookM]
+//            } else {
+//                // create object
+//                usersDB.notes[lastLevel].children?.append(notebookM)
+//            }
+//        } else {
+//
+//            selectedLevels.append(lastLevel) // because selectedIndex is the last level
+//
+//            var baseLevel = selectedLevels.first!
+//
+//            var levels = selectedLevels
+//            levels.removeFirst() // remove base level
+//
+//            // get selected Notebook reference (bcz we are using struct, we need use assignment)
+//            func getSelectedNotebookReference(notebook: inout NotebookM) {
+//
+//                // base condition
+//                if levels.count <= 0 {
+//
+//                    if notebook.children == nil {
+//                        // create object
+//                        notebook.children = [notebookM]
+//
+//                    } else {
+//                        // create object
+//                        notebook.children?.append(notebookM)
+//                    }
+//
+//                    return
+//                }
+//
+//                // next level
+//                baseLevel = levels.first!
+//                levels.removeFirst()
+//
+//                // next element
+//                getSelectedNotebookReference(notebook: &notebook.children![baseLevel])
+//
+//            }
+//
+//            getSelectedNotebookReference(notebook: &usersDB.notes[baseLevel])
+//        }
+//    }
+    
+    func insertBelow(ref notebook: Notebook) {
+        // create actual notebook
+        let (childNotebook, parent, index) = notebookBusiness.insertBelow(ref: notebook)
+        // create state notebook object
+        let notebookM = NotebookM(notebook: childNotebook)
+        // insert in hierachy
+        if parent == nil {
+            // insert at base level
+            usersDB.notes.insert(notebookM, at: index + 1)
         } else {
-            
-            selectedLevels.append(lastLevel) // because selectedIndex is the last level
-            
-            var baseLevel = selectedLevels.first!
-            
-            var levels = selectedLevels
-            levels.removeFirst() // remove base level
-            
-            // get selected Notebook reference (bcz we are using struct, we need use assignment)
-            func getSelectedNotebookReference(notebook: inout NotebookM) {
-                
-                // base condition
-                if levels.count <= 0 {
-                    
-                    if notebook.children == nil {
-                        // create object
-                        notebook.children = [notebookM]
-                        
-                    } else {
-                        // create object
-                        notebook.children?.append(notebookM)
-                    }
-                    
-                    return
-                }
-                
-                // next level
-                baseLevel = levels.first!
-                levels.removeFirst()
-                
-                // next element
-                getSelectedNotebookReference(notebook: &notebook.children![baseLevel])
-                
+            getNotebookReferenceForPath(uuidPath: parent!.uuidPath) { noteM in
+                noteM.children!.insert(notebookM, at: index + 1)
             }
-            
-            getSelectedNotebookReference(notebook: &usersDB.notes[baseLevel])
         }
     }
     
     func insertInside(ref notebook: Notebook) {
-        
+        // create actual notebook in the storage and hierarchy
         let childNotebook = notebookBusiness.insertInside(ref: notebook)
-        
-        // get path
+        // create state notebook object
+        let notebookM = NotebookM(notebook: childNotebook)
+        // insert in hierachy
         getNotebookReferenceForPath(uuidPath: notebook.uuidPath) { noteM in
             if noteM.children == nil {
-                // create object
-                let notebookM = NotebookM(notebook: childNotebook)
                 noteM.children = [notebookM]
-
             } else {
-                // create object
-                let notebookM = NotebookM(notebook: childNotebook)
-                noteM.children?.append(notebookM)
+                noteM.children!.append(notebookM)
             }
         }
     }

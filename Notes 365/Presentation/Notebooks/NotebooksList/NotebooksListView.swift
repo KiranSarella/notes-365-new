@@ -27,14 +27,10 @@ struct NotebooksListView: View {
     var body: some View {
         VStack {
             
-//            List(usersState.usersDB.notes, id:\.self, children: \.children, selection: $multiSelection) { item in
-//                Text("\(item.name)")
-//            }
-            
             List(selection: $selectedUser) {
                 ListGroupView(notebooks: $usersState.usersDB.notes)
 //                DisclosureGroup(isExpanded: .constant(true)) {
-//
+//                      ListGroupView(notebooks: $usersState.usersDB.notes)
 //                } label: {
 //
 //                }.disabled(true)
@@ -119,17 +115,18 @@ struct NotebooksListView: View {
     func getToolbarView() -> some View {
         // tool bar
         HStack(spacing: 20) {
-            
             Group {
                 // insert below
                 Button(action: {
-                    
+                    if selectedUser == nil {
+                        return
+                    }
                     if usersState.canAddNotebook() == false {
                         // show purchase window
                         self.presentingPurchasesView.toggle()
                         return
                     }
-                    usersState.insertUserBelowSelection()
+                    usersState.insertBelow(ref: selectedUser!.notebook)
                 }) {
                     //                Image(systemName: "arrow.down")
                     //                    .renderingMode(.original)
@@ -137,16 +134,16 @@ struct NotebooksListView: View {
                 }
                 // insert inside
                 Button(action: {
-//                    print(multiSelection)
-                    usersState.insertInside(ref: selectedUser!.notebook)
-                    return
-                    
+                    if selectedUser == nil {
+                        return
+                    }
+                    // check free app limit
                     if usersState.canAddNotebook() == false {
                         // show purchase window
                         self.presentingPurchasesView.toggle()
                         return
                     }
-                    usersState.insertInsideSelection()
+                    usersState.insertInside(ref: selectedUser!.notebook)
                 }) {
                     //                Image(systemName: "arrow.turn.down.right")
                     //                    .renderingMode(.original)
@@ -154,7 +151,6 @@ struct NotebooksListView: View {
                 }
             }
             .sheet(isPresented: $presentingPurchasesView, content: {
-                
                 VStack {
                     HStack {
                         Spacer()
@@ -168,7 +164,6 @@ struct NotebooksListView: View {
                     .buttonStyle(.plain)
                     PurchasesView()
                 }
-                
             })
             .buttonStyle(.bordered)
             Spacer()

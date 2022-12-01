@@ -232,119 +232,145 @@ class NotebooksListBusiness {
     }
     
     
-    func insertInsideSelection(levels selectedLevels: [Int], index selectedIndex: Int) -> Notebook {
+//    func insertInsideSelection(levels selectedLevels: [Int], index selectedIndex: Int) -> Notebook {
+//
+//
+//        if selectedLevels.isEmpty {
+//            // top level
+//            let selectedNotebook = notebooks[selectedIndex]
+//
+//            let fullPath = "notebooks" + "/" + "\(selectedNotebook.name)"
+//
+//            let notebook = createNotebook(atPath: fullPath)
+//
+//            if selectedNotebook.children == nil {
+//
+//                // create object
+//                notebooks[selectedIndex].children = [notebook]
+//                // create folder
+//                FilesHelper.shared.createDirectory(folderName: fullPath)
+//                // create file
+//                FilesHelper.shared.writeToFile(fileName: notebook.name, folderPath: fullPath, content: "")
+//            } else {
+//                // create object
+//                notebooks[selectedIndex].children?.append(notebook)
+//                // folder already exists
+//                FilesHelper.shared.writeToFile(fileName: notebook.name, folderPath: fullPath, content: "")
+//            }
+//            // persist
+//            NotebooksListBusiness.persistObject(notebooks: notebooks)
+//
+//            return notebook
+//
+//        } else {
+//
+//            var selectedLevels = selectedLevels
+//            selectedLevels.append(selectedIndex) // because selectedIndex is the last level
+//
+//            var baseLevel = selectedLevels.first!
+//
+//            var levels = selectedLevels
+//            levels.removeFirst() // remove base level
+//
+//            var newNotebook: Notebook!
+//
+//            // get selected Notebook reference (bcz we are using struct, we need use assignment)
+//            func getSelectedNotebookReference(notebook: Notebook) {
+//
+//                // base condition
+//                if levels.count <= 0 {
+//
+//                    // get path for all folders using level numbers
+//                    let fullPath = getFolderNamesPath(levels: selectedLevels)
+//                    newNotebook = createNotebook(atPath: fullPath)
+//
+//                    if notebook.children == nil {
+//                        // create object
+//                        notebook.children = [newNotebook]
+//                        // create folder
+//                        FilesHelper.shared.createDirectory(folderName: fullPath)
+//                        // create file
+//                        FilesHelper.shared.writeToFile(fileName: newNotebook.name, folderPath: fullPath, content: "")
+//                    } else {
+//                        // create object
+//                        notebook.children?.append(newNotebook)
+//                        // folder already exists
+//                        // create file
+//                        FilesHelper.shared.writeToFile(fileName: newNotebook.name, folderPath: fullPath, content: "")
+//                    }
+//
+//                    return
+//                }
+//
+//                // next level
+//                baseLevel = levels.first!
+//                levels.removeFirst()
+//
+//                // next element
+//                getSelectedNotebookReference(notebook: notebook.children![baseLevel])
+//
+//            }
+//
+//            getSelectedNotebookReference(notebook: notebooks[baseLevel])
+//
+//            // persist
+//            persistNotebooks()
+//
+//            return newNotebook
+//        }
+//    }
+    
+    // return - (newNotebook, parent, ref notebook Index)
+    func insertBelow(ref notebook: Notebook) -> (Notebook, Notebook?, Int) {
         
-        
-        if selectedLevels.isEmpty {
-            // top level
-            let selectedNotebook = notebooks[selectedIndex]
-            
-            let fullPath = "notebooks" + "/" + "\(selectedNotebook.name)"
-            
-            let notebook = createNotebook(atPath: fullPath)
-            
-            if selectedNotebook.children == nil {
-                
-                // create object
-                notebooks[selectedIndex].children = [notebook]
-                // create folder
-                FilesHelper.shared.createDirectory(folderName: fullPath)
-                // create file
-                FilesHelper.shared.writeToFile(fileName: notebook.name, folderPath: fullPath, content: "")
-            } else {
-                // create object
-                notebooks[selectedIndex].children?.append(notebook)
-                // folder already exists
-                FilesHelper.shared.writeToFile(fileName: notebook.name, folderPath: fullPath, content: "")
-            }
+        if let parent = notebook.parent {
+            // get index of current notebook
+            let index = parent.children!.firstIndex(of: notebook)!
+            let childNote = insertInside(ref: parent, below: index)
+            return (childNote, parent, index)
+        } else {
+            // base level
+            let fullPath = "notebooks"
+            let newNotebook = createNotebook(atPath: fullPath)
+            // get index of current notebook
+            let index = notebooks.firstIndex(of: notebook)!
+            // create object
+            notebooks.insert(newNotebook, at: index + 1)
+            // create folder
+            FilesHelper.shared.createDirectory(folderName: fullPath)
+            // create phycical file
+            FilesHelper.shared.writeToFile(fileName: newNotebook.name, folderPath: fullPath, content: "")
             // persist
             NotebooksListBusiness.persistObject(notebooks: notebooks)
-            
-            return notebook
-            
-        } else {
-            
-            var selectedLevels = selectedLevels
-            selectedLevels.append(selectedIndex) // because selectedIndex is the last level
-            
-            var baseLevel = selectedLevels.first!
-            
-            var levels = selectedLevels
-            levels.removeFirst() // remove base level
-            
-            var newNotebook: Notebook!
-            
-            // get selected Notebook reference (bcz we are using struct, we need use assignment)
-            func getSelectedNotebookReference(notebook: Notebook) {
-                
-                // base condition
-                if levels.count <= 0 {
-                    
-                    // get path for all folders using level numbers
-                    let fullPath = getFolderNamesPath(levels: selectedLevels)
-                    newNotebook = createNotebook(atPath: fullPath)
-                    
-                    if notebook.children == nil {
-                        // create object
-                        notebook.children = [newNotebook]
-                        // create folder
-                        FilesHelper.shared.createDirectory(folderName: fullPath)
-                        // create file
-                        FilesHelper.shared.writeToFile(fileName: newNotebook.name, folderPath: fullPath, content: "")
-                    } else {
-                        // create object
-                        notebook.children?.append(newNotebook)
-                        // folder already exists
-                        // create file
-                        FilesHelper.shared.writeToFile(fileName: newNotebook.name, folderPath: fullPath, content: "")
-                    }
-                    
-                    return
-                }
-                
-                // next level
-                baseLevel = levels.first!
-                levels.removeFirst()
-                
-                // next element
-                getSelectedNotebookReference(notebook: notebook.children![baseLevel])
-                
-            }
-            
-            getSelectedNotebookReference(notebook: notebooks[baseLevel])
-            
-            // persist
-            persistNotebooks()
-            
-            return newNotebook
+            return (newNotebook, nil, index)
         }
     }
     
-    func insertInside(ref notebook: Notebook) -> Notebook {
+    func insertInside(ref notebook: Notebook, below index: Int? = nil) -> Notebook {
         
-        // get path for all folders using level numbers
         let fullPath = notebook.folderPath
-        let newNotebook = createNotebook(atPath: notebook.folderPath)
+        let newNotebook = createNotebook(atPath: fullPath)
         newNotebook.parent = notebook
         
-        if notebook.children == nil {
+        if let index = index {
+            // create object
+            notebook.children?.insert(newNotebook, at: index + 1)
+            // ..folder already exists
+        } else if notebook.children == nil {
             // create object
             notebook.children = [newNotebook]
             // create folder
             FilesHelper.shared.createDirectory(folderName: fullPath)
-            // create file
-            FilesHelper.shared.writeToFile(fileName: newNotebook.name, folderPath: fullPath, content: "")
         } else {
             // create object
             notebook.children?.append(newNotebook)
-            // folder already exists
-            // create file
-            FilesHelper.shared.writeToFile(fileName: newNotebook.name, folderPath: fullPath, content: "")
+            // ..folder already exists
         }
+        // create phycical file
+        FilesHelper.shared.writeToFile(fileName: newNotebook.name, folderPath: fullPath, content: "")
         
         // persist
         NotebooksListBusiness.persistObject(notebooks: notebooks)
-        
         return newNotebook
     }
     
