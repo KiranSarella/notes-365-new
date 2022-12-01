@@ -169,7 +169,11 @@ struct NotebooksListView: View {
             Spacer()
             // trash
             Button(action: {
-               isPresentingConfirm = true
+                if selectedUser == nil {
+                    return
+                }
+                
+                isPresentingConfirm = true
             }) {
                 Image(systemName: "trash")
                     .renderingMode(.original)
@@ -177,8 +181,7 @@ struct NotebooksListView: View {
             .confirmationDialog("Are you sure?", isPresented: $isPresentingConfirm) {
                 Button("Delete", role: .destructive) {
                     DispatchQueue.main.async {
-                        usersState.deleteUser()
-                        userSelectionState = nil
+                        usersState.deleteNotebook(ref: selectedUser!.notebook)
                     }
                 }
             } message: {

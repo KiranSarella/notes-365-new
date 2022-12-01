@@ -191,59 +191,59 @@ class NotebooksListState: ObservableObject {
     }
     
   
-    func insertUserBelowSelection() {
-        
-        guard let selectedLevels = userSelectionStateTwo?.levels else {
-            return
-        }
-        
-        guard let selectedIndex = userSelectionStateTwo?.index else {
-            return
-        }
-        
-        let notebook = notebookBusiness.insertUserBelowSelection(levels: selectedLevels, index: selectedIndex)
-        let notebookM = NotebookM(notebook: notebook)
-        
-        if selectedLevels.isEmpty {
-            // top level
-            usersDB.notes.insert(notebookM, at: selectedIndex + 1)
-        } else {
-            
-            var baseLevel = selectedLevels.first!
-            var levels = selectedLevels
-            levels.removeFirst()
-            
-            func getSelectedNotebookReference(notebook: inout NotebookM) {
-                
-                // when referered to last level (ie selected notebook)
-                if levels.count <= 0 {
-                    
-                    // get path for all folders using level numbers
-                    
-                    let insertIndex = selectedIndex + 1
-                    // check index out
-                    if let count = notebook.children?.count, count >= insertIndex {
-                        notebook.children?.insert(notebookM, at: selectedIndex + 1)
-                    } else {
-                        notebook.children?.append(notebookM)
-                    }
-                    
-                    return
-                }
-                
-                baseLevel = levels.first!
-                levels.removeFirst()
-                
-                // next element
-                getSelectedNotebookReference(notebook: &notebook.children![baseLevel])
-            }
-            
-            getSelectedNotebookReference(notebook: &usersDB.notes[baseLevel])
-        }
-        
-        
-        
-    }
+//    func insertUserBelowSelection() {
+//
+//        guard let selectedLevels = userSelectionStateTwo?.levels else {
+//            return
+//        }
+//
+//        guard let selectedIndex = userSelectionStateTwo?.index else {
+//            return
+//        }
+//
+//        let notebook = notebookBusiness.insertUserBelowSelection(levels: selectedLevels, index: selectedIndex)
+//        let notebookM = NotebookM(notebook: notebook)
+//
+//        if selectedLevels.isEmpty {
+//            // top level
+//            usersDB.notes.insert(notebookM, at: selectedIndex + 1)
+//        } else {
+//
+//            var baseLevel = selectedLevels.first!
+//            var levels = selectedLevels
+//            levels.removeFirst()
+//
+//            func getSelectedNotebookReference(notebook: inout NotebookM) {
+//
+//                // when referered to last level (ie selected notebook)
+//                if levels.count <= 0 {
+//
+//                    // get path for all folders using level numbers
+//
+//                    let insertIndex = selectedIndex + 1
+//                    // check index out
+//                    if let count = notebook.children?.count, count >= insertIndex {
+//                        notebook.children?.insert(notebookM, at: selectedIndex + 1)
+//                    } else {
+//                        notebook.children?.append(notebookM)
+//                    }
+//
+//                    return
+//                }
+//
+//                baseLevel = levels.first!
+//                levels.removeFirst()
+//
+//                // next element
+//                getSelectedNotebookReference(notebook: &notebook.children![baseLevel])
+//            }
+//
+//            getSelectedNotebookReference(notebook: &usersDB.notes[baseLevel])
+//        }
+//
+//
+//
+//    }
     
     
 //    func insertInsideSelection() {
@@ -337,6 +337,22 @@ class NotebooksListState: ObservableObject {
             } else {
                 noteM.children!.append(notebookM)
             }
+        }
+    }
+    
+    func deleteNotebook(ref notebook: Notebook) {
+        
+        notebookBusiness.deleteNotebook(ref: notebook)
+        
+        if let parent = notebook.parent {
+            // delete in hierachy
+            getNotebookReferenceForPath(uuidPath: parent.uuidPath) { noteM in
+                noteM.children!.removeAll(where: { $0.id == notebook.id })
+            }
+        } else {
+            // base level
+            // delete object
+            usersDB.notes.removeAll(where: { $0.id == notebook.id })
         }
     }
     

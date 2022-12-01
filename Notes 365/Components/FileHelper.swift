@@ -307,6 +307,19 @@ public class FilesHelper {
         }
     }
     
+    
+    func deleteItem(at path: String) {
+        let documentDirectoryURL = getDocumentDiretoryURL()
+        let directoryURL = documentDirectoryURL.appendingPathComponent(path, isDirectory: true)
+        
+        do {
+            try FileManager.default.removeItem(at: directoryURL)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    
     func deleteFolder(path: String) {
         let documentDirectoryURL = getDocumentDiretoryURL()
         let directoryURL = documentDirectoryURL.appendingPathComponent(path, isDirectory: true)

@@ -385,6 +385,34 @@ class NotebooksListBusiness {
     }
     
     // MARK: - Delete
+    func deleteNotebook(ref notebook: Notebook) {
+        
+        if let parent = notebook.parent {
+            // delete folder if exists
+            let folderPath = notebook.folderPath
+            FilesHelper.shared.deleteItem(at: folderPath)
+            // delete file.md
+            let filePath = folderPath + ".md"
+            FilesHelper.shared.deleteItem(at: filePath)
+            // delete notebook
+            parent.children!.removeAll(where: { $0 == notebook })
+        } else {
+            // base level
+            // delete folder if exists
+            let folderPath = "notebooks" + "/" + notebook.name
+            FilesHelper.shared.deleteItem(at: folderPath)
+            // delete file.md
+            let filePath = folderPath + ".md"
+            FilesHelper.shared.deleteItem(at: filePath)
+            // delete notebook
+            notebooks.removeAll(where: { $0 == notebook })
+        }
+        
+        // persist
+        persistNotebooks()
+    }
+    
+    
     func deleteNotebook(levels selectedLevels: [Int], index selectedIndex: Int) {
         
         if selectedLevels.isEmpty {
