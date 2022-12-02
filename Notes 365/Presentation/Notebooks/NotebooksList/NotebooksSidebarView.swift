@@ -1,0 +1,182 @@
+//
+//  ContentView.swift
+//  ListExample
+//
+//  Created by Kiran Sarella on 23/11/21.
+//
+
+import SwiftUI
+import UniformTypeIdentifiers
+
+struct NotebooksSidebarView: View {
+
+    @EnvironmentObject var usersState: NotebooksListState
+    @Binding var selectedUser: NotebookM?
+    
+    @State private var presentDeleteConfirmation = false
+    @State private var presentPurchasesView = false
+    
+    var body: some View {
+        
+        if usersState.isEmpty {
+            
+            AddNotesView()
+                .padding([.top], -100)
+                .environmentObject(usersState)
+            
+        } else {
+            VStack {
+                List(selection: $selectedUser) {
+                    NotebooksListGroupView(notebooks: $usersState.usersDB.notes)
+                }
+                .listStyle(SidebarListStyle())
+                .navigationTitle(selectedUser?.name ?? "Notes 365")
+                /*
+                 ** IMP
+                 
+                 .listStyle(SidebarListStyle())
+                 
+                 this is required to show disclosureGroup when first item have no childs.
+                 and only working with SidebarListStyle.
+                 
+                 DisclosureGroup(isExpanded: .constant(true)) {
+                    ListGroupView(notebooks: $usersState.usersDB.notes)
+                 } label: {
+                 
+                 }.disabled(true)
+                 */
+                
+                VStack {
+                    getToolbarView()
+                    Spacer()
+                }
+                .frame(height: 30)
+            }
+            .frame(minWidth: 280, maxWidth: 500)
+            .onDisappear {
+                usersState.saveExpandedIds()
+            }
+        }
+    }
+    
+    func getToolbarView() -> some View {
+        // tool bar
+        HStack(alignment: .center, spacing: 20) {
+            Group {
+                // insert below
+                Button(action: {
+                    if selectedUser == nil {
+                        return
+                    }
+                    if usersState.canAddNotebook() == false {
+                        // show purchase window
+                        self.presentPurchasesView.toggle()
+                        return
+                    }
+                    usersState.insertBelow(ref: selectedUser!.notebook)
+                }) {
+                    //                Image(systemName: "arrow.down")
+                    //                    .renderingMode(.original)
+                    Text("Add Below")
+                }
+                // insert inside
+                Button(action: {
+                    if selectedUser == nil {
+                        return
+                    }
+                    // check free app limit
+                    if usersState.canAddNotebook() == false {
+                        // show purchase window
+                        self.presentPurchasesView.toggle()
+                        return
+                    }
+                    usersState.insertInside(ref: selectedUser!.notebook)
+                }) {
+                    //                Image(systemName: "arrow.turn.down.right")
+                    //                    .renderingMode(.original)
+                    Text("Add Inside")
+                }
+            }
+            .sheet(isPresented: $presentPurchasesView, content: {
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button {
+                            self.presentPurchasesView.toggle()
+                        } label: {
+                            Text("Close")
+                        }
+                        .padding()
+                    }
+                    .buttonStyle(.plain)
+                    PurchasesView()
+                }
+            })
+            .buttonStyle(.bordered)
+            Spacer()
+            // trash
+            Button(action: {
+                if selectedUser == nil {
+                    return
+                }
+                presentDeleteConfirmation = true
+            }) {
+                Image(systemName: "trash")
+                    .renderingMode(.original)
+            }
+            .confirmationDialog("Are you sure?", isPresented: $presentDeleteConfirmation) {
+                Button("Delete", role: .destructive) {
+                    DispatchQueue.main.async {
+                        usersState.deleteNotebook(ref: selectedUser!.notebook)
+                        selectedUser = nil
+                    }
+                }
+            } message: {
+                Text("You cannot undo this action")
+            }
+        }
+        .buttonStyle(PlainButtonStyle())
+        .backgroundStyle(.bar)
+        .padding(.horizontal)
+    }
+    
+}
+
+struct AddNotesView: View {
+    @EnvironmentObject var usersState: NotebooksListState
+    
+    var body: some View {
+        VStack(alignment: .center) {
+            // show add first notebook button
+            Button {
+                usersState.addFirstNotes()
+            } label: {
+                Text(" + Notebook ")
+            }.padding()
+            Text("add your first notebook")
+                .font(Font.subheadline)
+        }
+    }
+}
+
+
+struct NotebooksListGroupView: View {
+    
+    @Binding var notebooks: [NotebookM]
+    
+    var body: some View {
+        
+        ForEach($notebooks, id: \.self) { $notebook in
+            if notebook.containChildNotebooks {
+                DisclosureGroup(isExpanded: $notebook.isExpanded) {
+                    NotebooksListGroupView(notebooks: $notebook.children.unwrap()!)
+                } label: {
+                    Text(notebook.name)
+                }
+            } else {
+                Text(notebook.name)
+            }
+        }
+    }
+    
+}

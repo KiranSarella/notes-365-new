@@ -13,7 +13,7 @@ struct NotebooksHierarchy {
     
     var notes: [NotebookM]
     
-    static func constructHierarchy(notebooks: [Notebook]) -> [NotebookM] {
+    static func constructHierarchy(notebooks: [Notebook], expandedIds: Set<String>) -> [NotebookM] {
         
         var noteList = [NotebookM]()
         
@@ -27,9 +27,10 @@ struct NotebooksHierarchy {
              */
             // - create notebookM
             var note = NotebookM(notebook: notebook)
+            note.isExpanded = expandedIds.contains(note.id.uuidString)
             
             if let children = notebook.children {
-                note.children = constructHierarchy(notebooks: children)
+                note.children = constructHierarchy(notebooks: children, expandedIds: expandedIds)
             }
             
             noteList.append(note)
@@ -46,6 +47,10 @@ enum ListState {
     case search
 }
 
+extension  Notification.Name {
+    public static let ExpandCollapseNotification = Notification.Name("com.notes365.ExpandCollapseNotification")
+}
+
 struct NotebookM: Identifiable {
     
     var id: UUID
@@ -56,7 +61,12 @@ struct NotebookM: Identifiable {
     }
     var children: [NotebookM]? = nil
     var content: String = ""
-    var isExpanded: Bool = false
+    var isExpanded: Bool = false {
+        didSet {
+            let info = ["id": id, "isExpanded": isExpanded] as [String : Any]
+            NotificationCenter.default.post(name: .ExpandCollapseNotification, object: nil, userInfo: info)
+        }
+    }
     
     private(set) var notebook: Notebook
     
@@ -103,19 +113,52 @@ class NotebooksListState: ObservableObject {
     
     var userSelectionStateTwo: SelectedNotebookInfo?
     
+    var expandedIds = Set<String>()
+    
     var isNotebooksLimitExceeded: Bool {
-        
         return notebookBusiness.isNotebooksLimitExceeded()
     }
     
-  
     init() {
+        // get saved expandedIds
+        if let expandedList = UserDefaults.standard.object(forKey: "notes365.expandedIds") as? [String] {
+            expandedIds = Set(expandedList)
+        }
+        
         // create notesHierarchy with actual notebook objects
         let notebooks = notebookBusiness.getNotebooks()
-        let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks)
+        let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
         usersDB = NotebooksHierarchy(notes: notesList)
+        
+        // observe after initial hierarcy is constructed
+        NotificationCenter.default.addObserver(self, selector: #selector(listenExpandCollapseNotification(_:)), name: .ExpandCollapseNotification, object: nil)
     }
 
+    @objc func listenExpandCollapseNotification(_ sender: Notification) {
+        guard let userInfo = sender.userInfo else { return }
+        
+        guard
+            let id = userInfo["id"] as? UUID,
+            let isExpanded = userInfo["isExpanded"] as? Bool
+        else { return }
+        
+        if isExpanded {
+            expandedIds.insert(id.uuidString)
+        } else {
+            expandedIds.remove(id.uuidString)
+        }
+        
+        print(expandedIds)
+    }
+    
+    func saveExpandedIds() {
+        UserDefaults.standard.set(Array(expandedIds), forKey: "notes365.expandedIds")
+    }
+    
+//    func fetchExpandedIds() {
+//        expandedIds = UserDefaults.standard.object(forKey: "notes365.expandedIds") as? Set<UUID> ?? Set<UUID>()
+//    }
+    
     func canAddNotebook() -> Bool {
 #if DEBUG
         return true
@@ -125,6 +168,10 @@ class NotebooksListState: ObservableObject {
         } else {
             return isNotebooksLimitExceeded == false
         }
+    }
+    
+    var isEmpty: Bool {
+        usersDB.notes.count == 0
     }
     
     var isSubscribed: Bool {
@@ -184,130 +231,10 @@ class NotebooksListState: ObservableObject {
         }
     }
     
-    
     func addFirstNotes() {
         let notebook = notebookBusiness.addFirstNotes()
         usersDB.notes.append(NotebookM(notebook: notebook))
     }
-    
-  
-//    func insertUserBelowSelection() {
-//
-//        guard let selectedLevels = userSelectionStateTwo?.levels else {
-//            return
-//        }
-//
-//        guard let selectedIndex = userSelectionStateTwo?.index else {
-//            return
-//        }
-//
-//        let notebook = notebookBusiness.insertUserBelowSelection(levels: selectedLevels, index: selectedIndex)
-//        let notebookM = NotebookM(notebook: notebook)
-//
-//        if selectedLevels.isEmpty {
-//            // top level
-//            usersDB.notes.insert(notebookM, at: selectedIndex + 1)
-//        } else {
-//
-//            var baseLevel = selectedLevels.first!
-//            var levels = selectedLevels
-//            levels.removeFirst()
-//
-//            func getSelectedNotebookReference(notebook: inout NotebookM) {
-//
-//                // when referered to last level (ie selected notebook)
-//                if levels.count <= 0 {
-//
-//                    // get path for all folders using level numbers
-//
-//                    let insertIndex = selectedIndex + 1
-//                    // check index out
-//                    if let count = notebook.children?.count, count >= insertIndex {
-//                        notebook.children?.insert(notebookM, at: selectedIndex + 1)
-//                    } else {
-//                        notebook.children?.append(notebookM)
-//                    }
-//
-//                    return
-//                }
-//
-//                baseLevel = levels.first!
-//                levels.removeFirst()
-//
-//                // next element
-//                getSelectedNotebookReference(notebook: &notebook.children![baseLevel])
-//            }
-//
-//            getSelectedNotebookReference(notebook: &usersDB.notes[baseLevel])
-//        }
-//
-//
-//
-//    }
-    
-    
-//    func insertInsideSelection() {
-//
-//        guard var selectedLevels = userSelectionStateTwo?.levels else {
-//            return
-//        }
-//        guard let lastLevel = userSelectionStateTwo?.index else {
-//            return
-//        }
-//
-//        let notebookRef = notebookBusiness.insertInsideSelection(levels: selectedLevels, index: lastLevel)
-//        let notebookM = NotebookM(notebook: notebookRef)
-//
-//        if selectedLevels.isEmpty {
-//            // top level
-//            let selectedNotebook = usersDB.notes[lastLevel]
-//
-//            if selectedNotebook.children == nil {
-//
-//                usersDB.notes[lastLevel].children = [notebookM]
-//            } else {
-//                // create object
-//                usersDB.notes[lastLevel].children?.append(notebookM)
-//            }
-//        } else {
-//
-//            selectedLevels.append(lastLevel) // because selectedIndex is the last level
-//
-//            var baseLevel = selectedLevels.first!
-//
-//            var levels = selectedLevels
-//            levels.removeFirst() // remove base level
-//
-//            // get selected Notebook reference (bcz we are using struct, we need use assignment)
-//            func getSelectedNotebookReference(notebook: inout NotebookM) {
-//
-//                // base condition
-//                if levels.count <= 0 {
-//
-//                    if notebook.children == nil {
-//                        // create object
-//                        notebook.children = [notebookM]
-//
-//                    } else {
-//                        // create object
-//                        notebook.children?.append(notebookM)
-//                    }
-//
-//                    return
-//                }
-//
-//                // next level
-//                baseLevel = levels.first!
-//                levels.removeFirst()
-//
-//                // next element
-//                getSelectedNotebookReference(notebook: &notebook.children![baseLevel])
-//
-//            }
-//
-//            getSelectedNotebookReference(notebook: &usersDB.notes[baseLevel])
-//        }
-//    }
     
     func insertBelow(ref notebook: Notebook) {
         // create actual notebook

@@ -21,8 +21,6 @@ struct ContentView: View {
     @State private var userSelectionState: SelectedNotebookInfo?
     @ObservedObject var usersState = NotebooksListState.shared
     
-    
-    
     var body: some View {
         NavigationSplitView {
             // navigation headings
@@ -74,7 +72,7 @@ struct ContentView: View {
                     TimelineSidebarView()
                         .environmentObject(calendarState)
                 case .noteBooks:
-                    NotebooksListView(userSelectionState: $userSelectionState, selectedUser: $selectedUser)
+                    NotebooksSidebarView(selectedUser: $selectedUser)
                         .environmentObject(usersState)
                         .onChange(of: userSelectionState, perform: { newValue in
                             usersState.userSelectionStateTwo = newValue
