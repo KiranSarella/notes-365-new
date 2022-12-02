@@ -283,23 +283,32 @@ class NotebooksListState: ObservableObject {
         }
     }
     
-    func renameNotebook(editingFileName: String) throws {
+    func rename(for notebook: Notebook, newValue: String) throws {
         
-        guard let selectedLevels = userSelectionStateTwo?.levels else {
-            return
-        }
-        guard let selectedIndex = userSelectionStateTwo?.index else {
-            return
-        }
-        
-        try notebookBusiness.renameNotebook(levels: selectedLevels, index: selectedIndex, editingFileName: editingFileName)
-        
+        try notebookBusiness.rename(for: notebook, newValue: newValue)
         // update model
-        getNotebookReference(levels: selectedLevels, index: selectedIndex) { refNotebook in
-            refNotebook.name = editingFileName
+        getNotebookReferenceForPath(uuidPath: notebook.uuidPath) { noteM in
+            noteM.name = newValue
         }
-        
     }
+    
+//    func renameNotebook(editingFileName: String) throws {
+//
+//        guard let selectedLevels = userSelectionStateTwo?.levels else {
+//            return
+//        }
+//        guard let selectedIndex = userSelectionStateTwo?.index else {
+//            return
+//        }
+//
+//        try notebookBusiness.renameNotebook(levels: selectedLevels, index: selectedIndex, editingFileName: editingFileName)
+//
+//        // update model
+//        getNotebookReference(levels: selectedLevels, index: selectedIndex) { refNotebook in
+//            refNotebook.name = editingFileName
+//        }
+//
+//    }
     
     // MARK: -
     

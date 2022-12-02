@@ -11,6 +11,12 @@ extension  Notification.Name {
     public static let notebookChangeNotification = Notification.Name("NotebookChangeNotification")
 }
 
+public enum NotebookBusinessError: Error {
+    case alreadyExists
+    case invalidCharacters
+    case invalidSelection
+}
+
 class NotebooksListBusiness {
     
     static let shared = NotebooksListBusiness()
@@ -30,15 +36,15 @@ class NotebooksListBusiness {
             self.notebooks = [Notebook]()
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookChangeNotification(_:)), name: .notebookChangeNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookChangeNotification(_:)), name: .notebookChangeNotification, object: nil)
         
         // generate hash map
 //        generateNotebooksHashMap()
     }
     
-    @objc func handleNotebookChangeNotification(_ sender: Notification) {
-        print(#function)
-    }
+//    @objc func handleNotebookChangeNotification(_ sender: Notification) {
+//        print(#function)
+//    }
     
 //    func generateNotebooksHashMap() {
 //        // clean
@@ -469,42 +475,64 @@ class NotebooksListBusiness {
         // persist
         persistNotebooks()
     }
-    
-    enum NotebookBusinessError: Error {
-        case rename
-        case invalidSelection
-    }
-    
-    func renameNotebook(levels selectedLevels: [Int], index selectedIndex: Int, editingFileName: String) throws {
-        
-        // get folders path
-        let path = NotebooksListState.shared.getFolderNamesPath(levels: selectedLevels)
-        
+  
+    func rename(for notebook: Notebook, newValue: String) throws {
+        // validate characters
+        if newValue.contains(":") {
+            throw NotebookBusinessError.invalidCharacters
+        }
         // check if already same file name exists
-        if FilesHelper.shared.fileExists(atPath: path, fileName: editingFileName) {
-            
-            throw NotebookBusinessError.rename
-        }
+        let dirPath = notebook.directoryPath
+        let newFilePath = dirPath + "/" + newValue + ".md"
         
-        guard let notebook = getNotebook(levels: selectedLevels, index: selectedIndex) else {
-            throw NotebookBusinessError.invalidSelection
+        if FilesHelper.shared.fileExists(atPath: newFilePath) {
+            throw NotebookBusinessError.alreadyExists
         }
-        
         // rename file
-        FilesHelper.shared.renameFile(newFileName: editingFileName, oldFileName: notebook.name, filePath: path)
+        FilesHelper.shared.renameFile(new: newValue, old: notebook.name, folderPath: notebook.directoryPath, ext: "md")
         
         // rename folder if exists
         if notebook.containChildNotebooks {
             // rename folder
-            FilesHelper.shared.renameFolder(new: editingFileName, old: notebook.name, folderPath: path)
+            FilesHelper.shared.renameFolder(new: newValue, old: notebook.name, folderPath: notebook.folderPath)
         }
         
         // store name
-        notebook.name = editingFileName
+        notebook.name = newValue
         
         persistNotebooks()
     }
     
+//    func renameNotebook(levels selectedLevels: [Int], index selectedIndex: Int, editingFileName: String) throws {
+//
+//        // get folders path
+//        let path = NotebooksListState.shared.getFolderNamesPath(levels: selectedLevels)
+//
+//        // check if already same file name exists
+//        if FilesHelper.shared.fileExists(atPath: path, fileName: editingFileName) {
+//            
+//            throw NotebookBusinessError.rename
+//        }
+//
+//        guard let notebook = getNotebook(levels: selectedLevels, index: selectedIndex) else {
+//            throw NotebookBusinessError.invalidSelection
+//        }
+//
+//        // rename file
+//        FilesHelper.shared.renameFile(newFileName: editingFileName, oldFileName: notebook.name, filePath: path)
+//
+//        // rename folder if exists
+//        if notebook.containChildNotebooks {
+//            // rename folder
+//            FilesHelper.shared.renameFolder(new: editingFileName, old: notebook.name, folderPath: path)
+//        }
+//
+//        // store name
+//        notebook.name = editingFileName
+//
+//        persistNotebooks()
+//    }
+//
     // MARK: - GET
     
     func getNotebook(levels selectedLevels: [Int], index selectedIndex: Int) -> Notebook? {

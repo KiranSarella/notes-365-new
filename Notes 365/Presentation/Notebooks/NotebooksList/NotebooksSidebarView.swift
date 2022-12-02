@@ -174,8 +174,59 @@ struct NotebooksListGroupView: View {
                     Text(notebook.name)
                 }
             } else {
-                Text(notebook.name)
+                RowView(notebook: $notebook)
             }
+        }
+    }
+    
+}
+
+
+struct RowView: View {
+    @EnvironmentObject var usersState: NotebooksListState
+    @Binding var notebook: NotebookM
+    @State private var name: String = ""
+    @FocusState private var isFocused: Bool
+    
+    @State private var showFileExistsAlert = false
+    @State private var showInvalidCharsAlert = false
+    
+    var body: some View {
+        TextField(text: $name) {
+            Text("Notebook")
+        }
+        .onAppear {
+            name = notebook.name
+        }
+        .focused($isFocused)
+        .contextMenu {
+            RenameButton()
+            // ... your own custom actions
+        }
+        .renameAction { isFocused = true }
+        .onSubmit {
+            
+            do {
+                try usersState.rename(for: notebook.notebook, newValue: name)
+            } catch NotebookBusinessError.alreadyExists {
+                showFileExistsAlert = true
+                isFocused = true
+            } catch NotebookBusinessError.invalidCharacters {
+                showInvalidCharsAlert = true
+                isFocused = true
+            } catch {
+//                name = notebook.name
+            }
+        }
+        .confirmationDialog("Failed to rename file", isPresented: $showFileExistsAlert) {
+            
+        } message: {
+            Text("filename already exists")
+        }
+        .confirmationDialog("Failed to rename file", isPresented: $showInvalidCharsAlert) {
+            
+        } message: {
+            Text("filename contains unsupported characters")
         }
     }
     

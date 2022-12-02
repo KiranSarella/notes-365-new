@@ -94,6 +94,22 @@ extension Notebook {
         return uuids.reversed()
     }
     
+    var filePath: String {
+        // add self
+        var path: String = self.name + ".md"
+        // add parents
+        var parentRef = self.parent
+        while parentRef != nil {
+            path = parentRef!.name + "/" + path
+            parentRef = parentRef?.parent
+        }
+        // base path
+        path = "notebooks" + "/" + path
+        // return
+        return path
+    }
+    
+    
     var folderPath: String {
         // add self
         var path: String = self.name
@@ -109,6 +125,26 @@ extension Notebook {
         return path
     }
     
+    
+    var directoryPath: String {
+        
+        // add parents
+        var parentRef = self.parent
+        if parentRef == nil {
+            return "notebooks"
+        } else {
+            var path = parentRef!.name
+            parentRef = parentRef!.parent
+            while parentRef != nil {
+                path = parentRef!.name + "/" + path
+                parentRef = parentRef?.parent
+            }
+            // base path
+            path = "notebooks" + "/" + path
+            // return
+            return path
+        }
+    }
 }
 
 

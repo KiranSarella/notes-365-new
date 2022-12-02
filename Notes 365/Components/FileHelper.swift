@@ -207,14 +207,14 @@ public class FilesHelper {
     
     
     
-    func renameFile(newFileName: String, oldFileName:String, filePath: String) -> () {
+    func renameFile(new newValue: String, old oldValue:String, folderPath: String, ext: String) -> () {
         
         let documentDirURL = getDocumentDiretoryURL()
         
-        let fullPath = documentDirURL.appendingPathComponent(filePath)
+        let fullPath = documentDirURL.appendingPathComponent(folderPath)
         
-        let newFilePath = fullPath.appendingPathComponent(newFileName).appendingPathExtension("md")
-        let oldFilePath = fullPath.appendingPathComponent(oldFileName).appendingPathExtension("md")
+        let newFilePath = fullPath.appendingPathComponent(newValue).appendingPathExtension(ext)
+        let oldFilePath = fullPath.appendingPathComponent(oldValue).appendingPathExtension(ext)
         
         // Create a FileManager instance
         let fileManager = FileManager.default
@@ -336,16 +336,15 @@ public class FilesHelper {
 
 extension FilesHelper {
     
-    func folderExists(atPath folderPath: String) -> Bool {
+    func folderExists(atPath path: String) -> Bool {
         
         let documentDirectoryURL = getDocumentDiretoryURL()
-        let directoryURL = documentDirectoryURL.appendingPathComponent(folderPath)  //appendingPathComponent(folderPath, isDirectory: true)
-        
-//        print(directoryURL.path, FileManager.default.fileExists(atPath: directoryURL.path))
+        let directoryURL = documentDirectoryURL.appendingPathComponent(path)
         
         return FileManager.default.fileExists(atPath: directoryURL.path)
     }
     
+   
     
     func fileExists(atPath filePath: String, fileName: String) -> Bool {
         
