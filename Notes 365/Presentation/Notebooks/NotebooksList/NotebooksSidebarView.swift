@@ -206,6 +206,10 @@ struct RowView: View {
         .renameAction { isFocused = true }
         .onSubmit {
             
+            if name == notebook.name {
+                return
+            }
+            
             do {
                 try usersState.rename(for: notebook.notebook, newValue: name)
             } catch NotebookBusinessError.alreadyExists {
