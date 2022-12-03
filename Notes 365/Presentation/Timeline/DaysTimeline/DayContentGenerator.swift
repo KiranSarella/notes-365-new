@@ -46,18 +46,18 @@ struct DayContentGenerator: AsyncSequence, AsyncIteratorProtocol {
         
         var timeline = TimelineThree(fileUUID: uuid, fileName: fileName, filePath: filePath)
         
-        // try to get dynamic notebook path if exists
-        if let dynamicFilePath = TimelineBusiness.shared.dynamicFolderPath(uuid: uuid) {
-            // file path
-            timeline.filePath = dynamicFilePath
-            // file name
-            if let dynamicFileName = dynamicFilePath.components(separatedBy: "/").last {
-                timeline.fileName = dynamicFileName
-            }
-            timeline.isNotebookExists = true
-        } else {
-            timeline.isNotebookExists = false
-        }
+//        // try to get dynamic notebook path if exists
+//        if let dynamicFilePath = TimelineBusiness.shared.dynamicFolderPath(uuid: uuid) {
+//            // file path
+//            timeline.filePath = dynamicFilePath
+//            // file name
+//            if let dynamicFileName = dynamicFilePath.components(separatedBy: "/").last {
+//                timeline.fileName = dynamicFileName
+//            }
+//            timeline.isNotebookExists = true
+//        } else {
+//            timeline.isNotebookExists = false
+//        }
         // fetch content
         timeline.content = await TimelineBusiness.shared.readContent(today: today, fileName: timeline.fileUUID.uuidString) ?? "<no content>"
         if Task.isCancelled {

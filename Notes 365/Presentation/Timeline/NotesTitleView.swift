@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct NotesTitleView: View {
-    
     @Environment(\.colorScheme) var colorScheme
     
     var noteChange: TimelineThree
@@ -18,7 +17,6 @@ struct NotesTitleView: View {
         if components.count > 0 {
             components.removeFirst()
         }
-        
         // https://www.compart.com/en/unicode/U+203A
         return components.joined(separator: "  \u{203A}   ")
     }
@@ -27,7 +25,7 @@ struct NotesTitleView: View {
         HStack {
             VStack(alignment: .leading) {
                 Text(noteChange.fileName.capitalized)
-                    .strikethrough(noteChange.isNotebookExists ? false : true)
+//                    .strikethrough(noteChange.isNotebookExists ? false : true)
                     .font(.title)
                     .foregroundColor(.primary)
 //                Text(noteChange.filePath)
@@ -45,9 +43,6 @@ struct NotesTitleView: View {
         .background(colorScheme == .light ? Color(UIColor.systemBackground) : Color(UIColor.darkGray))
         #endif
         .cornerRadius(4)
-        
-        
-        
     }
 }
 //

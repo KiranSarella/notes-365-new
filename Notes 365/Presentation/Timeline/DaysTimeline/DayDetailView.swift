@@ -9,22 +9,15 @@ import SwiftUI
 import Foundation
 
 struct DayDetailView: View {
-    
     @StateObject private var dayState = DayDetailState()
-    
-    init(date: Date) {
-//        self.dayState.dayDate = DayDate(date: date)
-    }
 
     var body: some View {
         VStack(spacing: 0) {
             List {
                 ForEach($dayState.timelineList) { $noteChange in
                     VStack {
-                        
                         // notebook heading view
                         NotesTitleView(noteChange: noteChange)
-                        
                         HStack {
                             Text(noteChange.attriburedString!)
                                 .padding()
@@ -42,35 +35,15 @@ struct DayDetailView: View {
                    
                     Spacer()
                 }
-//                // motivation question
-//                HStack {
-//                    Spacer()
-//                    
-//                    Text(MotivationQuestions.dayQuestions.randomElement() ?? "")
-//                        .fontWeight(.thin)
-//                        .foregroundColor(.gray)
-//                        .padding()
-//                        .opacity(currentState == .empty ? 1 : 0)
-//                    
-//                    Spacer()
-//                }
-//                .padding()
             }
         }
         .onChange(of: dayState.dayDate) { newValue in
-//
-//            if dayState.speechState != .stopped {
-//                dayState.speechHelper.stopSpeech()
-//                dayState.speechState = .stopped
-//            }
-            
             Task {
                 dayState.generatorTask?.cancel()
                 DispatchQueue.main.async {
                     dayState.currentState = .loading
                     dayState.timelineList.removeAll()
                 }
-                
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     // your code here
                     dayState.readDayData(dayDate: newValue)
@@ -95,105 +68,14 @@ struct DayDetailView: View {
         }
         .onDisappear {
             dayState.generatorTask?.cancel()
-//            if dayState.speechState != .stopped {
-//                dayState.speechHelper.stopSpeech()
-//                dayState.speechState = .stopped
-//            }
-        }
-        .toolbar {
-            
-//            Button {
-//
-//                switch dayState.speechState {
-//
-//                case .stopped:
-//                    var input = ""
-//                    for timeline in dayState.timelineList {
-//                        input += timeline.fileName
-//                        input += "\n"
-//                        input += timeline.content ?? ""
-//                        input += "\n"
-//                    }
-//
-////                    var attrInput = NSMutableAttributedString()
-////                    for timeline in timelineList {
-////
-////                        if let attrStr = timeline.attriburedString {
-////                            attrInput.append(NSAttributedString(attrStr))
-////                        }
-////                    }
-//
-//
-//                    dayState.speechHelper.startSpeech(string: input)
-//
-////                    speechHelper.startSpeech(attributedStting: attrInput)
-//
-//                    dayState.speechState = .playing
-//
-//                    dayState.speechHelper.finished = {
-//                        dayState.speechState = .stopped
-//                    }
-//
-//                case .playing:
-//
-//                    dayState.speechHelper.pauseSpeech()
-//                    dayState.speechState = .paused
-//                case .paused:
-//                    dayState.speechHelper.continueSpeech()
-//                    dayState.speechState = .playing
-//                }
-//
-//
-//            } label: {
-//                Text(dayState.speechState.buttonTitle)
-//            }
-
-            
         }
     }
 }
-
-
-
-//struct MarkdownViewer: View {
-//
-//    var noteChange: TimelineTwo
-//
-//    @State private var attributedString: AttributedString?
-//
-//    @Binding var contentCache: ContentCache
-//
-//    var body: some View {
-//
-//        if attributedString != nil {
-//            Text(attributedString!)
-//        } else {
-//            Text("loading")
-//                .foregroundColor(.gray)
-//                .task {
-//                    attributedString = AttributedString(attributedText(from: noteChange.content))
-//                    if let attributedString = attributedString {
-//                        contentCache.contentsDB[noteChange.id] = attributedString
-//                    }
-//                }
-//        }
-//    }
-//
-//
-//
-//}
-
-///// Transforms markdown text to NSAttributedString
-//func attributedText(from markdown: String, theme newTheme: MarkdownTheme) -> NSAttributedString {
-//    print(#function)
-//    return Markdownosaur.attributedText(from: markdown, theme: newTheme)
-//}
 
 class ContentCache {
     
     var contentsDB = [UUID: AttributedString]()
 }
-
 
 extension String {
     func substring(with nsrange: NSRange) -> Substring? {

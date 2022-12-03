@@ -92,7 +92,7 @@ struct ContentView: View {
                 let calendarType = calendarState.calenderType
                 switch calendarType {
                 case .day:
-                    DayDetailView(date: calendarState.selectedDate)
+                    DayDetailView()
                 case .week:
                     WeekDetailView()
                 case .month:

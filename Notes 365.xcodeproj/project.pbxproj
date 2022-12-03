@@ -439,8 +439,8 @@
 			children = (
 				9F45BCED2920CCCE003DE332 /* DayCalendarView.swift */,
 				9F45BCEE2920CCCE003DE332 /* DayDetailView.swift */,
-				9F45BCEB2920CCCE003DE332 /* DayContentGenerator.swift */,
 				9FB6C6A42927936F00C8EC76 /* DayDetailState.swift */,
+				9F45BCEB2920CCCE003DE332 /* DayContentGenerator.swift */,
 			);
 			path = DaysTimeline;
 			sourceTree = "<group>";

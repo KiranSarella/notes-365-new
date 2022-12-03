@@ -90,19 +90,6 @@ public struct DayChanges: Identifiable {
         currentState = .loading
         weekTimelineList.removeAll()
         
-        // read data from folder path
-        // read metadata
-        // read files content for each metadata line
-        // construct list
-        
-        // notebook path (to show as subheading)
-        if DirectoryManager.shared.fullPaths.isEmpty {
-            //            let users = UsersList.shared.usersDB.retrieveObject()
-            //            UsersList.shared.usersDB.users = users ?? []
-            //            // prepare full paths
-            //            DirectoryManager.shared.prepareFolderPaths()
-        }
-        
         generatorTask = Task {
             var weekGenerator = WeekContentGenerator(days: weekDate.days)
             await loadDaysData(weekGenerator: &weekGenerator)

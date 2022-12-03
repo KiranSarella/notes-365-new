@@ -40,9 +40,9 @@ class TimelineBusiness {
         return await FilesHelper.shared.readBinaryFileAsync(fileName: "metadata", folderPath: timelinePath)!
     }
     
-    func dynamicFolderPath(uuid: UUID) -> String? {
-        return DirectoryManager.shared.fullPaths[uuid]
-    }
+//    func dynamicFolderPath(uuid: UUID) -> String? {
+//        return DirectoryManager.shared.fullPaths[uuid]
+//    }
     
     func readContent(today: Date, fileName: String) async -> String? {
         let folderPath = "timeline/\(today.getYear())/\(today.getMonth())/\(today.getDay())"

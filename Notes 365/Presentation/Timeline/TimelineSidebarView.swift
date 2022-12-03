@@ -32,36 +32,9 @@ struct TimelineSidebarView: View {
                 }
             }
             
-            
-            //            // summary view
-            //            HStack {
-            //
-            //                VStack {
-            //                    Text("Summary ")
-            //                        .font(.title2)
-            //                }
-            //
-            //                Spacer()
-            //            }.padding()
-            
-            
             Spacer()
-            
         }
         .frame(width: 280)
         .pickerStyle(SegmentedPickerStyle())
     }
 }
-
-
-
-
-//struct DairySidebarView_Previews: PreviewProvider {
-//
-//    @State static var selectedDate = Date()
-//    @State static var selectedCalendar = CalendarType.day
-//
-//    static var previews: some View {
-//        TimelineSidebarView(selectedDate: $selectedDate, selectedCalendar: $selectedCalendar)
-//    }
-//}

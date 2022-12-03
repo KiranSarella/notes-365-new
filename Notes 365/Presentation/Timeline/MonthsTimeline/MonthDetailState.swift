@@ -69,33 +69,14 @@ extension MonthTimelineThree {
     }
     
     func readMonthData(monthDate: MonthDate) {
-        
         currentState = .loading
         monthTimelineList.removeAll()
-        
-        // read data from folder path
-        // read metadata
-        // read files content for each metadata line
-        // construct list
-        
-        // notebook path (to show as subheading)
-        if DirectoryManager.shared.fullPaths.isEmpty {
-            //            let users = UsersList.shared.usersDB.retrieveObject()
-            //            UsersList.shared.usersDB.users = users ?? []
-            //            // prepare full paths
-            //            DirectoryManager.shared.prepareFolderPaths()
-        }
-        
         generatorTask = Task {
-            
             var weekGenerator = WeekContentGenerator(days: Date.dates(from: monthDate.start, to: monthDate.end))
-            
             await loadDaysData(weekGenerator: &weekGenerator)
-            
             currentState = monthTimelineList.count > 0 ? .data : .empty
         }
     }
-    
     
     // trying recursive
     func loadDaysData(weekGenerator: inout WeekContentGenerator) async {

@@ -604,7 +604,6 @@ extension NotebooksListBusiness {
         for notebook in notebooks {
             prepareFolderPaths(notebook: notebook, path: "notebooks", fullPaths: &fullPaths)
         }
-        //        dump(fullPaths)
     }
     
 }

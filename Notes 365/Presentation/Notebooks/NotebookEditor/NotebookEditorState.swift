@@ -24,7 +24,7 @@ class NotebookEditorState: ObservableObject {
     
     var getNotebook: (()->(Notebook?))?
     
-    let autoSaveTimer = Timer.publish(every: 60, on: .main, in: .common).autoconnect() // 1 min
+//    let autoSaveTimer = Timer.publish(every: 60, on: .main, in: .common).autoconnect() // 1 min
     
     var cancellableTheme: Cancellable!
     var cancellableTimer: Cancellable?
@@ -32,6 +32,7 @@ class NotebookEditorState: ObservableObject {
     init() {
         theme = ThemeState.shared.theme
         observeThemeChanges()
+//        observeAutoSaveTimer()
     }
     
     func observeThemeChanges() {
@@ -42,17 +43,17 @@ class NotebookEditorState: ObservableObject {
             }
     }
     
-    func observeAutoSaveTimer() {
-        cancellableTimer = Timer.publish(every: 60, on: .main, in: .common) // 1 min
-            .autoconnect()
-            .sink() {
-                print ("timer fired: \($0)")
-                self.saveContentChanges()
-//                if let notebook = self.getNotebook?() {
-//                    self.saveContentChanges(notebook: notebook)
-//                }
-            }
-    }
+//    func observeAutoSaveTimer() {
+//        cancellableTimer = Timer.publish(every: 60, on: .main, in: .common) // 1 min
+//            .autoconnect()
+//            .sink() {
+//                print ("timer fired: \($0)")
+//                self.saveContentChanges()
+////                if let notebook = self.getNotebook?() {
+////                    self.saveContentChanges(notebook: notebook)
+////                }
+//            }
+//    }
     
     func loadContent() {
         
@@ -97,6 +98,7 @@ class NotebookEditorState: ObservableObject {
     }
     
     func saveContentChanges() {
+        print(#function, "########")
         if contentEdited {
             NotebookContentBusiness.saveContentChanges(notebook: notebook, content: txt)
         }

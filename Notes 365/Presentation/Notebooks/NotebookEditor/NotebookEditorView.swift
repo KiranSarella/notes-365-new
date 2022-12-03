@@ -12,6 +12,7 @@ struct NotebookEditorView: View {
     @StateObject private var editorState = NotebookEditorState()
     @FocusState private var isTextFieldFocused: Bool
     @State var currentTextStyleAction: (TextStyleKey?, Any, Bool) = (.none, false, false)
+    let autoSaveTimer = Timer.publish(every: 60, on: .main, in: .common).autoconnect() // 1 min
     
     var body: some View {
         VStack {
@@ -66,6 +67,7 @@ struct NotebookEditorView: View {
                 })
                 .onDisappear(perform: {
                     isTextFieldFocused = false
+                    editorState.saveContentChanges()
                 })
                 .onChange(of: editorState.theme, perform: { newValue in
                     var change = currentTextStyleAction.2
@@ -115,6 +117,11 @@ struct NotebookEditorView: View {
             change.toggle()
             currentTextStyleAction = (.textUpdate, true, change)
         }
+        .onReceive(autoSaveTimer, perform: { _ in
+            print("autoSaveTimer")
+            editorState.saveContentChanges()
+//            saveContentChanges(userSelectionState: userSelectionState)
+        })
     }
     
 }
