@@ -240,6 +240,7 @@
 		9F45BDCA29214D48003DE332 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		9F45BDD929234150003DE332 /* Notebook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notebook.swift; sourceTree = "<group>"; };
 		9F45BDE329238D29003DE332 /* NotebooksHierarchyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksHierarchyTests.swift; sourceTree = "<group>"; };
+		9F498E042939E03B00FF4D17 /* EditorView.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = EditorView.md; sourceTree = "<group>"; };
 		9FB6C69729275D0600C8EC76 /* FormatOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatOptionsView.swift; sourceTree = "<group>"; };
 		9FB6C69929275D5100C8EC76 /* FormatOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatOptions.swift; sourceTree = "<group>"; };
 		9FB6C69B29275E0300C8EC76 /* NotebookEditorState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookEditorState.swift; sourceTree = "<group>"; };
@@ -645,6 +646,7 @@
 		9FB6C69629275C1500C8EC76 /* NotebookEditor */ = {
 			isa = PBXGroup;
 			children = (
+				9F498E042939E03B00FF4D17 /* EditorView.md */,
 				9F45BD242920CCCE003DE332 /* NotebookEditorView.swift */,
 				9FB6C69B29275E0300C8EC76 /* NotebookEditorState.swift */,
 				9FB6C69D2927615700C8EC76 /* SpeechState.swift */,

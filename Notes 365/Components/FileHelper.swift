@@ -98,6 +98,22 @@ public class FilesHelper {
         return readString
     }
     
+    func writeToFile(path filePath: String, content: String) {
+        
+        let DocumentDirURL = getDocumentDiretoryURL()
+        let fileURL = DocumentDirURL.appendingPathComponent(filePath)
+        
+        do {
+//            // create intermediate folders if not exists
+//            if folderExists(atPath: filePath) == false {
+//                createDirectory(folderName: folderPath)
+//            }
+            // Write to the file
+            try content.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
+        } catch let error as NSError {
+            print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
+        }
+    }
     
     // md files
     func writeToFile(fileName: String, folderPath: String, content: String) {

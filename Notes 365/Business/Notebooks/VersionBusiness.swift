@@ -7,30 +7,23 @@
 
 import Foundation
 
-
 class VersionBusiness {
-    
     static let shared = VersionBusiness()
+    private init() {}
     
-    private init() {
-        
-    }
-    
+    /*
+     1. save changes to today's version
+     2. remove existing metadata line
+     3. prepare metadata line
+     4. add new metadata line
+     */
     func addOrUpdateToday(contentChanges: String, uuid: UUID, fileName: String, filePath: String) {
-        
         let today = Date()
         let timelinePath = "timeline/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
-        
-        //        print(timelinePath)
-        
         // save content
         FilesHelper.shared.writeToFile(fileName: uuid.uuidString, folderPath: timelinePath, content: contentChanges)
-        
         // save metadata
-        
-        
         let metadataFilePath = timelinePath + "/" + "metadata"
-        
         var metadata: String = ""
         if FilesHelper.shared.fileExists(atPath: metadataFilePath) {
             /*
@@ -58,7 +51,6 @@ class VersionBusiness {
             if let searchIndex = searchIndex {
                 // remove object
                 lines.remove(at: searchIndex)
-                
                 // clean existing metadata and add each one again
                 metadata = ""
                 for line in lines {
@@ -68,15 +60,12 @@ class VersionBusiness {
                     }
                 }
             }
-            
-            
         }
         // add this file metadata to this object
         let metadataLine =  "\(uuid.uuidString)\t\(Date.now)\t\(fileName)\t\(filePath)\n"
         metadata = metadata.appending(metadataLine)
         
         FilesHelper.shared.writeToBinaryFile(fileName: "metadata", folderPath: timelinePath, content: metadata)
-        
     }
     
     

@@ -171,7 +171,7 @@ struct NotebooksListGroupView: View {
                 DisclosureGroup(isExpanded: $notebook.isExpanded) {
                     NotebooksListGroupView(notebooks: $notebook.children.unwrap()!)
                 } label: {
-                    Text(notebook.name)
+                    RowView(notebook: $notebook)
                 }
             } else {
                 RowView(notebook: $notebook)

@@ -58,11 +58,11 @@ struct DayDetailView: View {
             }
         }
         .onChange(of: dayState.dayDate) { newValue in
-            
-            if dayState.speechState != .stopped {
-                dayState.speechHelper.stopSpeech()
-                dayState.speechState = .stopped
-            }
+//
+//            if dayState.speechState != .stopped {
+//                dayState.speechHelper.stopSpeech()
+//                dayState.speechState = .stopped
+//            }
             
             Task {
                 dayState.generatorTask?.cancel()
@@ -95,58 +95,58 @@ struct DayDetailView: View {
         }
         .onDisappear {
             dayState.generatorTask?.cancel()
-            if dayState.speechState != .stopped {
-                dayState.speechHelper.stopSpeech()
-                dayState.speechState = .stopped
-            }
+//            if dayState.speechState != .stopped {
+//                dayState.speechHelper.stopSpeech()
+//                dayState.speechState = .stopped
+//            }
         }
         .toolbar {
             
-            Button {
-                
-                switch dayState.speechState {
-                    
-                case .stopped:
-                    var input = ""
-                    for timeline in dayState.timelineList {
-                        input += timeline.fileName
-                        input += "\n"
-                        input += timeline.content ?? ""
-                        input += "\n"
-                    }
-                    
-//                    var attrInput = NSMutableAttributedString()
-//                    for timeline in timelineList {
+//            Button {
 //
-//                        if let attrStr = timeline.attriburedString {
-//                            attrInput.append(NSAttributedString(attrStr))
-//                        }
+//                switch dayState.speechState {
+//
+//                case .stopped:
+//                    var input = ""
+//                    for timeline in dayState.timelineList {
+//                        input += timeline.fileName
+//                        input += "\n"
+//                        input += timeline.content ?? ""
+//                        input += "\n"
 //                    }
-                    
-                    
-                    dayState.speechHelper.startSpeech(string: input)
-                    
-//                    speechHelper.startSpeech(attributedStting: attrInput)
-                    
-                    dayState.speechState = .playing
-                    
-                    dayState.speechHelper.finished = {
-                        dayState.speechState = .stopped
-                    }
-                    
-                case .playing:
-                    
-                    dayState.speechHelper.pauseSpeech()
-                    dayState.speechState = .paused
-                case .paused:
-                    dayState.speechHelper.continueSpeech()
-                    dayState.speechState = .playing
-                }
-                
-                
-            } label: {
-                Text(dayState.speechState.buttonTitle)
-            }
+//
+////                    var attrInput = NSMutableAttributedString()
+////                    for timeline in timelineList {
+////
+////                        if let attrStr = timeline.attriburedString {
+////                            attrInput.append(NSAttributedString(attrStr))
+////                        }
+////                    }
+//
+//
+//                    dayState.speechHelper.startSpeech(string: input)
+//
+////                    speechHelper.startSpeech(attributedStting: attrInput)
+//
+//                    dayState.speechState = .playing
+//
+//                    dayState.speechHelper.finished = {
+//                        dayState.speechState = .stopped
+//                    }
+//
+//                case .playing:
+//
+//                    dayState.speechHelper.pauseSpeech()
+//                    dayState.speechState = .paused
+//                case .paused:
+//                    dayState.speechHelper.continueSpeech()
+//                    dayState.speechState = .playing
+//                }
+//
+//
+//            } label: {
+//                Text(dayState.speechState.buttonTitle)
+//            }
 
             
         }

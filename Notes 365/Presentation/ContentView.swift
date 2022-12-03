@@ -56,7 +56,9 @@ struct ContentView: View {
                 }
                 
                 #endif
-            }.background(.regularMaterial)
+            }
+            .frame(minWidth: 160)
+                .background(.regularMaterial)
                 .onAppear {
                     ThemeState.shared.colorScheme = colorScheme
                 }

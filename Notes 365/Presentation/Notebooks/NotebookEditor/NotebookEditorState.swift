@@ -18,10 +18,16 @@ class NotebookEditorState: ObservableObject {
     @Published var editorType = EditorType.smart
     @Published var theme: MarkdownTheme
     @Published var showSymbols = false
+    @Published var contentEdited = false
+    
+    unowned var notebook: Notebook!
+    
+    var getNotebook: (()->(Notebook?))?
     
     let autoSaveTimer = Timer.publish(every: 60, on: .main, in: .common).autoconnect() // 1 min
     
     var cancellableTheme: Cancellable!
+    var cancellableTimer: Cancellable?
     
     init() {
         theme = ThemeState.shared.theme
@@ -36,7 +42,19 @@ class NotebookEditorState: ObservableObject {
             }
     }
     
-    func loadContent(_ notebook: Notebook) {
+    func observeAutoSaveTimer() {
+        cancellableTimer = Timer.publish(every: 60, on: .main, in: .common) // 1 min
+            .autoconnect()
+            .sink() {
+                print ("timer fired: \($0)")
+                self.saveContentChanges()
+//                if let notebook = self.getNotebook?() {
+//                    self.saveContentChanges(notebook: notebook)
+//                }
+            }
+    }
+    
+    func loadContent() {
         
         contentStr = ""
         txt = ""
@@ -46,19 +64,19 @@ class NotebookEditorState: ObservableObject {
         isFetchingData = false
     }
     
-    func loadContent(notebookInfo: SelectedNotebookInfo) {
-        
-        contentStr = ""
-        
-        txt = ""
-        
-        isFetchingData = true
-        
-        self.contentStr = NotebookContentBusiness.loadContent(selection: notebookInfo)
-        self.txt = self.contentStr
-        
-        isFetchingData = false
-    }
+//    func loadContent(notebookInfo: SelectedNotebookInfo) {
+//
+//        contentStr = ""
+//
+//        txt = ""
+//
+//        isFetchingData = true
+//
+//        self.contentStr = NotebookContentBusiness.loadContent(selection: notebookInfo)
+//        self.txt = self.contentStr
+//
+//        isFetchingData = false
+//    }
     
     // diff
     func getChanges(old: String, new: String) -> String {
@@ -66,12 +84,9 @@ class NotebookEditorState: ObservableObject {
         return NotebookContentBusiness.getChanges(old: old, new: new)
     }
     
-    
-    func setBaseVersion(userSelectionState: SelectedNotebookInfo) {
+    func setBaseVersion(_ notebook: Notebook) {
         
         VersionBusiness.cleanOldBaseVersions()
-        
-        guard let notebook = NotebooksListState.shared.getNotebook(levels: userSelectionState.levels, index: userSelectionState.index) else { return }
         
         if NotebookContentBusiness.isBaseVersionExists(fileName: notebook.id.uuidString) == false {
             
@@ -81,11 +96,10 @@ class NotebookEditorState: ObservableObject {
         }
     }
     
-    
-    
-    func saveContentChanges(userSelectionState: SelectedNotebookInfo) {
-        
-        NotebookContentBusiness.saveContentChanges(userSelectionState: userSelectionState, txt: txt)
+    func saveContentChanges() {
+        if contentEdited {
+            NotebookContentBusiness.saveContentChanges(notebook: notebook, content: txt)
+        }
     }
     
 }

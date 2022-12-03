@@ -65,49 +65,34 @@ class NotebookContentBusiness {
         return FilesHelper.shared.readFile(fileName: fileName, folderPath: "today_base_version")
     }
     
-    
-    static func saveContentChanges(userSelectionState: SelectedNotebookInfo, txt: String) {
-        
-        
+    static func saveContentChanges(notebook: Notebook, content: String) {
         // TODO: check date
         // if now == appear date; continue
         // else have to handle on appear process again; like - today_base_version..
         
-        //        print(txt)
-        
-        //        // handle notebook not exists (notebook deleted case)
-        //        if UsersState.shared.userSelectionState == nil {
-        //            return
-        //        }
-        
-        guard var notebook = NotebooksListState.shared.getNotebook(levels: userSelectionState.levels, index: userSelectionState.index) else { return }
-        notebook.content = txt
-        
         // compare with snapshot version
         // base version will be created on appear, so assuming it will exists
         // but when we stay on same notebook while day changed, then?
-        guard let baseVersion = NotebookContentBusiness.getBaseVersion(for: notebook.id.uuidString) else { return }
+        guard
+            let baseVersion = NotebookContentBusiness.getBaseVersion(for: notebook.id.uuidString)
+        else { return }
         
         // track changes using diff algs
         // get new changes
-        let newContent = NotebookContentBusiness.getChanges(old: baseVersion, new: notebook.content)
+        let newContent = NotebookContentBusiness.getChanges(old: baseVersion, new: content)
         
-        
+        // 1. update today version content
+        // 2. update notebook content
         if newContent.count > 0 {
             // get / create Timeline object for a day
-            
-            let folderPath = NotebooksListState.shared.getFolderNamesPath(levels: userSelectionState.levels)
-            
-            VersionBusiness.shared.addOrUpdateToday(contentChanges: newContent, uuid: notebook.id, fileName: notebook.name, filePath: folderPath)
-            
-            
-            // write data to file if modified
-            FilesHelper.shared.writeToFile(fileName: notebook.name, folderPath: folderPath, content: notebook.content)
-            
-            //            print("------> saved to db ******")
+            // update version
+            VersionBusiness.shared.addOrUpdateToday(contentChanges: newContent, uuid: notebook.id, fileName: notebook.name, filePath: notebook.folderPath)
+            // update notebook
+            FilesHelper.shared.writeToFile(path: notebook.filePath, content: content)
+            print("------> saved to db ******")
         } else {
-            //            print("content not edited *****")
+            print("content not edited *****")
         }
-        
+    
     }
 }

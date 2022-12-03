@@ -9,15 +9,10 @@ import SwiftUI
 
 
 struct FormattingOptionsView: View {
-    
     @Binding var currentTextStyleAction: (TextStyleKey?, Any, Bool)
-    
     var body: some View {
-        
         HStack {
-            
             Spacer()
-            
             // bold, italic..
             HStack {
                 Group {
@@ -26,24 +21,19 @@ struct FormattingOptionsView: View {
                         var change = currentTextStyleAction.2
                         change.toggle()
                         currentTextStyleAction = (.bold, true, change)
-                        
                     } label: {
                         Image(systemName: "bold")
                             .help("Bold")
                     }
-                    
                     Button {
                         // make selected range as italic
                         var change = currentTextStyleAction.2
                         change.toggle()
-                        
                         currentTextStyleAction = (.italic, true, change)
-                        
                     } label: {
                         Image(systemName: "italic")
                             .help("Italic")
                     }
-                    
                     Button {
                         // make selected range as italic
                         var change = currentTextStyleAction.2
@@ -58,7 +48,6 @@ struct FormattingOptionsView: View {
                 }
                 .padding([.leading, .trailing], 10)
             }
-            
             // H1,.. H6
             HStack {
                 Group {
@@ -67,23 +56,19 @@ struct FormattingOptionsView: View {
                         var change = currentTextStyleAction.2
                         change.toggle()
                         currentTextStyleAction = (.h1, true, change)
-                        
                     } label: {
                         Text("H1")
                             .help("Heading 1")
                     }
-                    
                     Button {
                         // make selected range as bold
                         var change = currentTextStyleAction.2
                         change.toggle()
                         currentTextStyleAction = (.h2, true, change)
-                        
                     } label: {
                         Text("H2")
                             .help("Heading 2")
                     }
-                    
                     Button {
                         // make selected range as bold
                         var change = currentTextStyleAction.2
@@ -93,7 +78,6 @@ struct FormattingOptionsView: View {
                         Text("H3")
                             .help("Heading 3")
                     }
-                    
                     Button {
                         // make selected range as bold
                         var change = currentTextStyleAction.2
@@ -103,7 +87,6 @@ struct FormattingOptionsView: View {
                         Text("H4")
                             .help("Heading 4")
                     }
-                    
                     Button {
                         // make selected range as bold
                         var change = currentTextStyleAction.2
@@ -113,7 +96,6 @@ struct FormattingOptionsView: View {
                         Text("H5")
                             .help("Heading 5")
                     }
-                    
                     Button {
                         // make selected range as bold
                         var change = currentTextStyleAction.2
@@ -126,8 +108,6 @@ struct FormattingOptionsView: View {
                 }
                 .padding([.leading, .trailing], 10)
             }.padding([.leading], 40)
-            
-            
             //            HStack {
             //
             //                Group {
@@ -154,8 +134,6 @@ struct FormattingOptionsView: View {
             //                }
             //                .padding([.leading, .trailing], 5)
             //            }.padding([.leading], 40)
-            
-            
             HStack {
                 Group {
                     // code
@@ -180,7 +158,6 @@ struct FormattingOptionsView: View {
                         Image(systemName: "chevron.left.forwardslash.chevron.right")
                             .help("Source Code")
                     }
-                    
                     // quote
                     Button {
                         // make selected range as bold
@@ -191,12 +168,9 @@ struct FormattingOptionsView: View {
                         Image(systemName: "text.quote")
                             .help("Quote Block")
                     }
-                    
                 }
                 .padding([.leading, .trailing], 10)
             }.padding([.leading], 40)
-            
-            
             //            HStack {
             //
             //                Group {
@@ -222,11 +196,8 @@ struct FormattingOptionsView: View {
             //                }
             //                .padding([.leading, .trailing], 5)
             //            }.padding([.leading], 40)
-            
-            
             Spacer()
             HStack {
-                
                 Group {
                     // Clear
                     Button {
@@ -238,7 +209,6 @@ struct FormattingOptionsView: View {
                         Text("Clear")
                             .help("Clear format")
                     }
-                    
                 }
                 .padding([.leading, .trailing], 5)
             }.padding([.leading], 40)
