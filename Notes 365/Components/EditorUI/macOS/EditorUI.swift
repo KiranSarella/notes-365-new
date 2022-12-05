@@ -12,46 +12,36 @@ import SwiftUI
 
 
 struct EditorUI: NSViewRepresentable {
-    
-//    var editorType: EditorType
-
     var theme: MarkdownTheme
-    
     @Binding var text: String
-    
+    @Binding var editorView: EditorView
     var currentTextStyleAction: (TextStyleKey?, Any, Bool)
 
+//    var createdView: ((EditorView) -> ())? = nil
+    
     var completion: (String) -> ()
     var actionCompleted: () -> ()
     
-//    var commandStr: String = ""
-    
-    
     func makeNSView(context: Context) -> EditorView {
-        
-        let editorView = EditorView(theme: theme)
-        
+//        let editorView = EditorView(theme: theme)
+        editorView.theme = theme
         editorView.editorType = .smart
-        
         editorView.textView.delegate = context.coordinator
-        
         editorView.textView.font = theme.font
         editorView.textView.textColor = NSColor(theme.bodyColor.color)
-        
         let paragraphStyle = NSMutableParagraphStyle()
         //            paragraphStyle.minimumLineHeight = 10
         paragraphStyle.lineSpacing = 10
         editorView.textView.defaultParagraphStyle = paragraphStyle
-        
         editorView.textView.string = text
+        
+//        createdView?(editorView)
         
         return editorView
     }
     
-//    func updateNSView(_ nsView: EditorView, context: Context) { }
-    
     func updateNSView(_ nsView: EditorView, context: Context) {
-//        print(#function)
+        print(#function)
 
 //        nsView.textView.string = text // ** cursor will move to end; so never do this
 
@@ -176,7 +166,7 @@ extension EditorUI {
     
     func makeCoordinator() -> EditorUICoordinator {
         
-        return EditorUICoordinator(self)
+        return EditorUICoordinator(self, text: $text)
     }
     
 //    public func formatCommand(str: String) -> Self {
@@ -192,13 +182,12 @@ extension EditorUI {
 class EditorUICoordinator: NSObject {
     
     var parent: EditorUI
+    @Binding var text: String
     
-    
-    
-    init(_ parent: EditorUI) {
+    init(_ parent: EditorUI, text: Binding<String>) {
         self.parent = parent
+        _text = text
     }
-    
 }
 
 
@@ -212,8 +201,9 @@ extension EditorUICoordinator: NSTextViewDelegate {
         // Update text
 //        self.parent.$text.wrappedValue = textView.string
         
+//        text = textView.string
         
-        self.parent.completion(textView.string)
+//        self.parent.completion(textView.string)
     }
     
     

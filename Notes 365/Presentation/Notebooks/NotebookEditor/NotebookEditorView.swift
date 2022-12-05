@@ -14,6 +14,8 @@ struct NotebookEditorView: View {
     @State var currentTextStyleAction: (TextStyleKey?, Any, Bool) = (.none, false, false)
     let autoSaveTimer = Timer.publish(every: 60, on: .main, in: .common).autoconnect() // 1 min
     
+    @State private var editorView = EditorView()
+    
     var body: some View {
         VStack {
             if notebookM == nil {
@@ -21,7 +23,7 @@ struct NotebookEditorView: View {
             } else {
                 VStack(alignment: .leading) {
                     // formatting bar view
-                    FormattingOptionsView(currentTextStyleAction: $currentTextStyleAction)
+                    FormattingOptionsView(editorView: $editorView, currentTextStyleAction: $currentTextStyleAction)
                         .frame(height: 40)
                         .padding(.horizontal)
                         .backgroundStyle(.regularMaterial)
@@ -31,7 +33,8 @@ struct NotebookEditorView: View {
                     if editorState.isFetchingData {
                         Text("loading..")
                     } else {
-                        EditorUI(theme: editorState.theme, text: $editorState.contentStr, currentTextStyleAction: currentTextStyleAction, completion: { txt in
+                        EditorUI(theme: editorState.theme, text: $editorState.contentStr, editorView: $editorView, currentTextStyleAction: currentTextStyleAction,
+                        completion: { txt in
                             // 500000000 = 0.5 sec
                             DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 500000000)) {
                                 editorState.txt = txt
@@ -118,7 +121,7 @@ struct NotebookEditorView: View {
             currentTextStyleAction = (.textUpdate, true, change)
         }
         .onReceive(autoSaveTimer, perform: { _ in
-            print("autoSaveTimer")
+//            print("autoSaveTimer")
             editorState.saveContentChanges()
 //            saveContentChanges(userSelectionState: userSelectionState)
         })

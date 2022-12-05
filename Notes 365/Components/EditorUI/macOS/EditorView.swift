@@ -13,6 +13,8 @@ public class EditorView: NSView {
     
     var theme: MarkdownTheme = ThemeBusiness.generateBlackWhiteTheme()
     
+    
+    
     var editorType = EditorType.smart {
         didSet {
             switch editorType {

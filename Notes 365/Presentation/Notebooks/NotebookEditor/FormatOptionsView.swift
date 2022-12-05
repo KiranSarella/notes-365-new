@@ -9,6 +9,7 @@ import SwiftUI
 
 
 struct FormattingOptionsView: View {
+    @Binding var editorView: EditorView
     @Binding var currentTextStyleAction: (TextStyleKey?, Any, Bool)
     var body: some View {
         HStack {
@@ -18,9 +19,14 @@ struct FormattingOptionsView: View {
                 Group {
                     Button {
                         // make selected range as bold
-                        var change = currentTextStyleAction.2
-                        change.toggle()
-                        currentTextStyleAction = (.bold, true, change)
+//                        var change = currentTextStyleAction.2
+//                        change.toggle()
+//                        currentTextStyleAction = (.bold, true, change)
+                        
+                        editorView.markBold {
+                            
+                        }
+                        
                     } label: {
                         Image(systemName: "bold")
                             .help("Bold")

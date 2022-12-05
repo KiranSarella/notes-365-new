@@ -472,7 +472,6 @@
 				9F45BD1A2920CCCE003DE332 /* EditorUI+iOS.swift */,
 				9F45BD1C2920CCCE003DE332 /* SmartLayoutManagerDelegate+iOS.swift */,
 				9F45BD1D2920CCCE003DE332 /* MarkdownTextStorage+macOS.swift */,
-				9F45BD1E2920CCCE003DE332 /* EditorView.swift */,
 				9F45BD1F2920CCCE003DE332 /* MarkdownAttributedString.swift */,
 				9F45BD202920CCCE003DE332 /* MarkdownLayoutManagerDelegate.swift */,
 				9F45BD212920CCCE003DE332 /* SmartLayoutManagerDelegate.swift */,
@@ -530,6 +529,7 @@
 			children = (
 				9F45BD0C2920CCCE003DE332 /* EditorTextView.swift */,
 				9F45BD0F2920CCCE003DE332 /* EditorUI.swift */,
+				9F45BD1E2920CCCE003DE332 /* EditorView.swift */,
 			);
 			path = macOS;
 			sourceTree = "<group>";
