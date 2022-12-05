@@ -204,12 +204,16 @@ struct RowView: View {
             // ... your own custom actions
         }
         .renameAction { isFocused = true }
+        .onChange(of: isFocused, perform: { newValue in
+            if newValue == false {
+                // on escape, reset content
+                name = notebook.name
+            }
+        })
         .onSubmit {
-            
             if name == notebook.name {
                 return
             }
-            
             do {
                 try usersState.rename(for: notebook.notebook, newValue: name)
             } catch NotebookBusinessError.alreadyExists {

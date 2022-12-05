@@ -11,10 +11,9 @@ struct NotebookEditorView: View {
     @Binding var notebookM: NotebookM?
     @StateObject private var editorState = NotebookEditorState()
     @FocusState private var isTextFieldFocused: Bool
-    @State var currentTextStyleAction: (TextStyleKey?, Any, Bool) = (.none, false, false)
-    let autoSaveTimer = Timer.publish(every: 60, on: .main, in: .common).autoconnect() // 1 min
-    
     @State private var editorView = EditorView()
+
+    private let autoSaveTimer = Timer.publish(every: 60, on: .main, in: .common).autoconnect() // 1 min
     
     var body: some View {
         VStack {
@@ -23,7 +22,7 @@ struct NotebookEditorView: View {
             } else {
                 VStack(alignment: .leading) {
                     // formatting bar view
-                    FormattingOptionsView(editorView: $editorView, currentTextStyleAction: $currentTextStyleAction)
+                    FormattingOptionsView(editorView: $editorView)
                         .frame(height: 40)
                         .padding(.horizontal)
                         .backgroundStyle(.regularMaterial)
@@ -33,19 +32,7 @@ struct NotebookEditorView: View {
                     if editorState.isFetchingData {
                         Text("loading..")
                     } else {
-                        EditorUI(theme: editorState.theme, text: $editorState.contentStr, editorView: $editorView, currentTextStyleAction: currentTextStyleAction,
-                        completion: { txt in
-                            // 500000000 = 0.5 sec
-                            DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 500000000)) {
-                                editorState.txt = txt
-                                editorState.contentEdited = true
-                            }
-                        }, actionCompleted: {
-                            // 500000000 = 0.5 sec
-                            DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 500000000)) {
-                                currentTextStyleAction = (nil, false, false)
-                            }
-                        })
+                        EditorUI(theme: editorState.theme, text: editorState.baseContent, editorView: $editorView, contentEdited: $editorState.contentEdited)
                         .font(Font.body)
                         .focused($isTextFieldFocused)
                         .onChange(of: isTextFieldFocused) { isFocused in
@@ -63,19 +50,19 @@ struct NotebookEditorView: View {
                 .onAppear(perform: {
                     editorState.notebook = notebookM!.notebook
                     editorState.loadContent()
-                    // notify
-                    var change = currentTextStyleAction.2
-                    change.toggle()
-                    currentTextStyleAction = (.textUpdate, true, change)
+                    
+                    editorView.textView.string = editorState.baseContent
+                    
+                    editorState.getNewContent = {
+                        return editorView.textView.string
+                    }
                 })
                 .onDisappear(perform: {
                     isTextFieldFocused = false
                     editorState.saveContentChanges()
                 })
                 .onChange(of: editorState.theme, perform: { newValue in
-                    var change = currentTextStyleAction.2
-                    change.toggle()
-                    currentTextStyleAction = (.theme, newValue, change)
+                    editorView.updateTheme(theme: editorState.theme)
                 })
                 .navigationTitle(notebookM?.name ?? "")
                 .toolbar {
@@ -88,9 +75,8 @@ struct NotebookEditorView: View {
                             } else {
                                 editorState.editorType = .smart
                             }
-                            var change = currentTextStyleAction.2
-                            change.toggle()
-                            currentTextStyleAction = (.editorType, editorState.editorType, change)
+                            
+                            editorView.editorType = editorState.editorType
                         }
                 }
                 .pickerStyle(SegmentedPickerStyle())
@@ -113,17 +99,10 @@ struct NotebookEditorView: View {
             editorState.notebook = newValue.notebook
             
             editorState.loadContent()
-            editorState.contentEdited = false
-            
-            // notify
-            var change = currentTextStyleAction.2
-            change.toggle()
-            currentTextStyleAction = (.textUpdate, true, change)
+            editorView.textView.string = editorState.baseContent
         }
         .onReceive(autoSaveTimer, perform: { _ in
-//            print("autoSaveTimer")
             editorState.saveContentChanges()
-//            saveContentChanges(userSelectionState: userSelectionState)
         })
     }
     

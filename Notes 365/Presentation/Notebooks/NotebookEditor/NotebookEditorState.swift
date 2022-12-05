@@ -13,8 +13,7 @@ class NotebookEditorState: ObservableObject {
     
     let notebookBusiness = NotebookContentBusiness.shared
     @Published var isFetchingData = true
-    @Published var contentStr: String = ""
-    @Published var txt: String = ""
+    @Published var baseContent: String = ""
     @Published var editorType = EditorType.smart
     @Published var theme: MarkdownTheme
     @Published var showSymbols = false
@@ -23,6 +22,8 @@ class NotebookEditorState: ObservableObject {
     unowned var notebook: Notebook!
     
     var getNotebook: (()->(Notebook?))?
+    
+    var getNewContent: (()->(String))? = nil
     
 //    let autoSaveTimer = Timer.publish(every: 60, on: .main, in: .common).autoconnect() // 1 min
     
@@ -43,26 +44,12 @@ class NotebookEditorState: ObservableObject {
             }
     }
     
-//    func observeAutoSaveTimer() {
-//        cancellableTimer = Timer.publish(every: 60, on: .main, in: .common) // 1 min
-//            .autoconnect()
-//            .sink() {
-//                print ("timer fired: \($0)")
-//                self.saveContentChanges()
-////                if let notebook = self.getNotebook?() {
-////                    self.saveContentChanges(notebook: notebook)
-////                }
-//            }
-//    }
-    
     func loadContent() {
-        
-        contentStr = ""
-        txt = ""
+        baseContent = ""
         isFetchingData = true
-        self.contentStr = notebook.loadContent()
-        self.txt = self.contentStr
+        self.baseContent = notebook.loadContent()
         isFetchingData = false
+        contentEdited = false
     }
     
 //    func loadContent(notebookInfo: SelectedNotebookInfo) {
@@ -81,26 +68,24 @@ class NotebookEditorState: ObservableObject {
     
     // diff
     func getChanges(old: String, new: String) -> String {
-        
         return NotebookContentBusiness.getChanges(old: old, new: new)
     }
     
     func setBaseVersion(_ notebook: Notebook) {
-        
         VersionBusiness.cleanOldBaseVersions()
-        
         if NotebookContentBusiness.isBaseVersionExists(fileName: notebook.id.uuidString) == false {
-            
             // case 1: for new notes
             // case 2: for existing notes
-            NotebookContentBusiness.createBaseVersion(for: notebook.id.uuidString, with: self.contentStr)
+            NotebookContentBusiness.createBaseVersion(for: notebook.id.uuidString, with: self.baseContent)
         }
     }
     
     func saveContentChanges() {
 //        print(#function, "########")
         if contentEdited {
-            NotebookContentBusiness.saveContentChanges(notebook: notebook, content: txt)
+            if let txt = self.getNewContent?() {
+                NotebookContentBusiness.saveContentChanges(notebook: notebook, content: txt)
+            }
         }
     }
     

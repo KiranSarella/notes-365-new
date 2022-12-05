@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 class Notebook: Identifiable, Codable {
     
     var id: UUID

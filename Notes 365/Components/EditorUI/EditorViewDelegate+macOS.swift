@@ -18,7 +18,7 @@ protocol EditorViewDelegate {
 
 extension EditorView: EditorViewDelegate {
     
-    func markBold(completion: () -> ()) {
+    func markBold() {
         
 //        self.textView.usesFindBar = true
 
@@ -28,8 +28,6 @@ extension EditorView: EditorViewDelegate {
 //        textView.performFindPanelAction(nil)
         
         let selectedRange = textView.selectedRange()
-
-        
         
         if selectedRange.length == 0 {
             return
@@ -47,11 +45,11 @@ extension EditorView: EditorViewDelegate {
         
 //        self.textView.showFindIndicator(for: selectedRange)
         
-        completion()
+        
     }
     
     
-    func markItalic(completion: () -> ()) {
+    func markItalic() {
         
         let selectedRange = textView.selectedRange()
         
@@ -69,10 +67,10 @@ extension EditorView: EditorViewDelegate {
             self.textView.textStorage?.replaceCharacters(in: selectedRange, with: newStr)
         }
         
-        completion()
+        
     }
     
-    func headingFontChanged(fontName: String, completion: () -> ()) {
+    func headingFontChanged(fontName: String) {
         
 //        self.headingFontFamily = fontName
         
@@ -80,10 +78,10 @@ extension EditorView: EditorViewDelegate {
         // ?
         
         
-        completion()
+        
     }
     
-    func markStrikethrough(completion: () -> ()) {
+    func markStrikethrough() {
         
         let selectedRange = textView.selectedRange()
         
@@ -101,10 +99,10 @@ extension EditorView: EditorViewDelegate {
             self.textView.textStorage?.replaceCharacters(in: selectedRange, with: newStr)
         }
         
-        completion()
+        
     }
     
-    func markInline(completion: () -> ()) {
+    func markInline() {
         
         let selectedRange = textView.selectedRange()
         
@@ -122,10 +120,10 @@ extension EditorView: EditorViewDelegate {
             self.textView.textStorage?.replaceCharacters(in: selectedRange, with: newStr)
         }
         
-        completion()
+        
     }
     
-    func markCodeblock(completion: () -> ()) {
+    func markCodeblock() {
         
         let selectedRange = textView.selectedRange()
         
@@ -143,10 +141,10 @@ extension EditorView: EditorViewDelegate {
             self.textView.textStorage?.replaceCharacters(in: selectedRange, with: newStr)
         }
         
-        completion()
+        
     }
     
-    func markBlockQuote(completion: () -> ()) {
+    func markBlockQuote() {
         
         let selectedRange = textView.selectedRange()
         
@@ -164,11 +162,11 @@ extension EditorView: EditorViewDelegate {
             self.textView.textStorage?.replaceCharacters(in: selectedRange, with: newStr)
         }
         
-        completion()
+        
     }
     
     
-    func updateTheme(theme: MarkdownTheme, completion: () -> ()) {
+    func updateTheme(theme: MarkdownTheme) {
         
         self.theme = theme
         
@@ -179,10 +177,10 @@ extension EditorView: EditorViewDelegate {
         self.textView.font = theme.font
         self.textView.textColor = NSColor(theme.bodyColor.color)
         
-        completion()
+        
     }
     
-    func insertImage(completion: () -> ()) {
+    func insertImage() {
         
 //        let selectedRange = textView.textStorage?.editedRange
 //        
@@ -199,11 +197,11 @@ extension EditorView: EditorViewDelegate {
         
         textView.textStorage?.append(imageString)
         
-        completion()
+        
 //        textView.textStorage?.insert(imageString, at: selectedRange.location)
     }
     
-    func clearFormat(completion: () -> ()) {
+    func clearFormat() {
         
         // remove special chars
         // * # ~ `
@@ -223,11 +221,11 @@ extension EditorView: EditorViewDelegate {
             self.textView.textStorage?.replaceCharacters(in: selectedRange, with: cleanStr)
         }
         
-        completion()
+        
     }
     
     
-    func heading(textStyle: TextStyleKey, completion: () -> ()) {
+    func heading(textStyle: TextStyleKey) {
         
         let selectedRange = textView.selectedRange()
         
@@ -258,7 +256,7 @@ extension EditorView: EditorViewDelegate {
             
             self.textView.textStorage?.replaceCharacters(in: selectedRange, with: newStr)
             
-            completion()
+            
         }
         
     }

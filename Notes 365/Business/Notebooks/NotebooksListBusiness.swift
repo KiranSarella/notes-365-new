@@ -494,7 +494,7 @@ class NotebooksListBusiness {
         // rename folder if exists
         if notebook.containChildNotebooks {
             // rename folder
-            FilesHelper.shared.renameFolder(new: newValue, old: notebook.name, folderPath: notebook.folderPath)
+            FilesHelper.shared.renameFolder(new: newValue, old: notebook.name, folderPath: notebook.directoryPath)
         }
         
         // store name

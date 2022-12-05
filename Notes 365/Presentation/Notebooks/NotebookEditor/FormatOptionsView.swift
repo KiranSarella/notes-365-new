@@ -10,7 +10,7 @@ import SwiftUI
 
 struct FormattingOptionsView: View {
     @Binding var editorView: EditorView
-    @Binding var currentTextStyleAction: (TextStyleKey?, Any, Bool)
+    
     var body: some View {
         HStack {
             Spacer()
@@ -19,38 +19,24 @@ struct FormattingOptionsView: View {
                 Group {
                     Button {
                         // make selected range as bold
-//                        var change = currentTextStyleAction.2
-//                        change.toggle()
-//                        currentTextStyleAction = (.bold, true, change)
-                        
-                        editorView.markBold {
-                            
-                        }
-                        
+                        editorView.markBold()
                     } label: {
                         Image(systemName: "bold")
                             .help("Bold")
                     }
                     Button {
                         // make selected range as italic
-                        var change = currentTextStyleAction.2
-                        change.toggle()
-                        currentTextStyleAction = (.italic, true, change)
+                        editorView.markItalic()
                     } label: {
                         Image(systemName: "italic")
                             .help("Italic")
                     }
                     Button {
-                        // make selected range as italic
-                        var change = currentTextStyleAction.2
-                        change.toggle()
-                        
-                        currentTextStyleAction = (.strikethrough, true, change)
+                        editorView.markStrikethrough()
                     } label: {
                         Image(systemName: "strikethrough")
                             .help("Strikethrough")
                     }
-                    
                 }
                 .padding([.leading, .trailing], 10)
             }
@@ -58,55 +44,37 @@ struct FormattingOptionsView: View {
             HStack {
                 Group {
                     Button {
-                        // make selected range as bold
-                        var change = currentTextStyleAction.2
-                        change.toggle()
-                        currentTextStyleAction = (.h1, true, change)
+                        editorView.heading(textStyle: .h1)
                     } label: {
                         Text("H1")
                             .help("Heading 1")
                     }
                     Button {
-                        // make selected range as bold
-                        var change = currentTextStyleAction.2
-                        change.toggle()
-                        currentTextStyleAction = (.h2, true, change)
+                        editorView.heading(textStyle: .h2)
                     } label: {
                         Text("H2")
                             .help("Heading 2")
                     }
                     Button {
-                        // make selected range as bold
-                        var change = currentTextStyleAction.2
-                        change.toggle()
-                        currentTextStyleAction = (.h3, true, change)
+                        editorView.heading(textStyle: .h3)
                     } label: {
                         Text("H3")
                             .help("Heading 3")
                     }
                     Button {
-                        // make selected range as bold
-                        var change = currentTextStyleAction.2
-                        change.toggle()
-                        currentTextStyleAction = (.h4, true, change)
+                        editorView.heading(textStyle: .h4)
                     } label: {
                         Text("H4")
                             .help("Heading 4")
                     }
                     Button {
-                        // make selected range as bold
-                        var change = currentTextStyleAction.2
-                        change.toggle()
-                        currentTextStyleAction = (.h5, true, change)
+                        editorView.heading(textStyle: .h5)
                     } label: {
                         Text("H5")
                             .help("Heading 5")
                     }
                     Button {
-                        // make selected range as bold
-                        var change = currentTextStyleAction.2
-                        change.toggle()
-                        currentTextStyleAction = (.h6, true, change)
+                        editorView.heading(textStyle: .h6)
                     } label: {
                         Text("H6")
                             .help("Heading 6")
@@ -144,10 +112,7 @@ struct FormattingOptionsView: View {
                 Group {
                     // code
                     Button {
-                        // make selected range as bold
-                        var change = currentTextStyleAction.2
-                        change.toggle()
-                        currentTextStyleAction = (.inline, true, change)
+                        editorView.markInline()
                     } label: {
                         Image("inline_code")
                             .resizable()
@@ -156,20 +121,14 @@ struct FormattingOptionsView: View {
                     }
                     // code
                     Button {
-                        // make selected range as bold
-                        var change = currentTextStyleAction.2
-                        change.toggle()
-                        currentTextStyleAction = (.codeBlock, true, change)
+                        editorView.markCodeblock()
                     } label: {
                         Image(systemName: "chevron.left.forwardslash.chevron.right")
                             .help("Source Code")
                     }
                     // quote
                     Button {
-                        // make selected range as bold
-                        var change = currentTextStyleAction.2
-                        change.toggle()
-                        currentTextStyleAction = (.blockQuote, true, change)
+                        editorView.markBlockQuote()
                     } label: {
                         Image(systemName: "text.quote")
                             .help("Quote Block")
@@ -207,10 +166,7 @@ struct FormattingOptionsView: View {
                 Group {
                     // Clear
                     Button {
-                        // make selected range as bold
-                        var change = currentTextStyleAction.2
-                        change.toggle()
-                        currentTextStyleAction = (.clear, true, change)
+                        editorView.clearFormat()
                     } label: {
                         Text("Clear")
                             .help("Clear format")
