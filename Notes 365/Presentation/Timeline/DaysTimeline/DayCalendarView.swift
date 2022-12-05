@@ -108,7 +108,9 @@ fileprivate struct DayGridView: View {
                 ForEach(weekdaySymbols, id: \.self) { weekdaySymbol in
                     Text(String(weekdaySymbol.first!))
                         .padding(.bottom, 4)
-                        .font(.system(size: 10, weight: Font.Weight.light, design: Font.Design.rounded))
+                        .font(.system(size: 10))
+                        .fontWeight(.semibold)
+                        .foregroundColor(.secondary)
                 }
                 // grid numbers
                 ForEach(dates, id: \.self) { date in

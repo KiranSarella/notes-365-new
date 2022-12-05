@@ -129,13 +129,15 @@ struct WeekGridView: View {
                 ForEach(weekdaySymbols, id: \.self) { weekdaySymbol in
                     Text(String(weekdaySymbol.first!))
                         .padding(.bottom, 4)
-                        .font(.system(size: 10, weight: Font.Weight.light, design: Font.Design.rounded))
+                        .font(.system(size: 10))
                         .frame(maxWidth: .infinity)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.secondary)
                 }
             }
+            .padding(EdgeInsets(top: 20, leading: 5, bottom: 0, trailing: 5))
             // weeks grid
             ForEach(getWeekDates(navigationDate), id: \.self) { week in
-                
                WeekView(weekDate: $weekDate,
                         navigationDate: $navigationDate,
                         selectedWeek: $selectedWeek,
@@ -170,8 +172,7 @@ struct WeekView: View {
                 Text("\(week.weekNumber)")
                     .frame(maxWidth: .infinity)
 //                    .font(.system(size: 10))
-                    .font(.system(size: 11, weight: .heavy, design: .monospaced).italic())
-                    
+                    .font(.system(size: 11, weight: .bold))
                     .foregroundColor(Color.red)
                 ForEach(week.weekDays, id: \.self) { date in
                     if date.getMonth() == navigationDate.getMonth() {
@@ -183,7 +184,7 @@ struct WeekView: View {
                         Text("\(date.getDay())")
                             .frame(maxWidth: .infinity)
                             .font(.system(size: 10))
-                            .opacity(0.3)
+                            .opacity(0.4)
                     }
                 }
             }
