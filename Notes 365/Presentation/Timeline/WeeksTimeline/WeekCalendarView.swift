@@ -119,7 +119,7 @@ struct WeekGridView: View {
     @Binding var navigationDate: Date
     @Binding var selectedWeek: Week
     
-    var weekdaySymbols = [""] + Calendar.current.veryShortWeekdaySymbols
+    var weekdaySymbols = [" "] + Calendar.current.shortWeekdaySymbols   // [" "] is required
     var calendar = Calendar(identifier: .gregorian)
     
     var body: some View {
@@ -127,7 +127,7 @@ struct WeekGridView: View {
             // days
             HStack() {
                 ForEach(weekdaySymbols, id: \.self) { weekdaySymbol in
-                    Text(weekdaySymbol)
+                    Text(String(weekdaySymbol.first!))
                         .padding(.bottom, 4)
                         .font(.system(size: 10, weight: Font.Weight.light, design: Font.Design.rounded))
                         .frame(maxWidth: .infinity)

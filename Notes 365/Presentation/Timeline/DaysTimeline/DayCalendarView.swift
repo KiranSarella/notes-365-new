@@ -96,7 +96,7 @@ fileprivate struct HeaderView: View {
 fileprivate struct DayGridView: View {
     
     var columns = Array(repeating: GridItem(), count: 7)
-    var weekdaySymbols = Calendar.current.veryShortWeekdaySymbols
+    var weekdaySymbols = Calendar.current.shortWeekdaySymbols
     @Binding var dayDate: DayDate
     @Binding var navigationDate: Date
     @State private var dates: [Date] = []
@@ -106,7 +106,7 @@ fileprivate struct DayGridView: View {
             LazyVGrid(columns: columns) {
                 // mon, tue,..
                 ForEach(weekdaySymbols, id: \.self) { weekdaySymbol in
-                    Text(weekdaySymbol)
+                    Text(String(weekdaySymbol.first!))
                         .padding(.bottom, 4)
                         .font(.system(size: 10, weight: Font.Weight.light, design: Font.Design.rounded))
                 }
