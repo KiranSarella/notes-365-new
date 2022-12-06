@@ -22,7 +22,7 @@ struct NotebookEditorView: View {
             } else {
                 VStack(alignment: .leading) {
                     // formatting bar view
-                    FormattingOptionsView(editorView: $editorView)
+                    FormattingOptionsView(editorView: $editorView, contentEdited: $editorState.contentEdited)
                         .frame(height: 40)
                         .padding(.horizontal)
                         .backgroundStyle(.regularMaterial)

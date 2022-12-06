@@ -10,3 +10,8 @@
 - 
 
 
+# ContentEdited 
+(*true/false* is Important for every new editing/formating action)
+FormatOptionsView => contentEdited = true
+TextDidChange => contentEdited = true
+

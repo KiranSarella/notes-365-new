@@ -81,7 +81,7 @@ class NotebookEditorState: ObservableObject {
     }
     
     func saveContentChanges() {
-//        print(#function, "########")
+        print(#function, "########")
         if contentEdited {
             if let txt = self.getNewContent?() {
                 NotebookContentBusiness.saveContentChanges(notebook: notebook, content: txt)

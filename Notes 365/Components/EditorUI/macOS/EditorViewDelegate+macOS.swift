@@ -63,7 +63,6 @@ extension EditorView: EditorViewDelegate {
             // append
             let newStr = "*\(substr)*"
             // add spaces if not exists
-            
             self.textView.textStorage?.replaceCharacters(in: selectedRange, with: newStr)
         }
         

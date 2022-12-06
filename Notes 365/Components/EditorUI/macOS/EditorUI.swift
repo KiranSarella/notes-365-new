@@ -28,6 +28,8 @@ struct EditorUI: NSViewRepresentable {
         editorView.textView.defaultParagraphStyle = paragraphStyle
         editorView.textView.string = text
         
+        editorView.textView.textStorage?.addAttributes([NSAttributedString.Key.paragraphStyle: paragraphStyle])
+        
         return editorView
     }
     
@@ -53,9 +55,11 @@ class EditorUICoordinator: NSObject {
 }
 
 extension EditorUICoordinator: NSTextViewDelegate {
+    
     func textDidBeginEditing(_ notification: Notification) {
         parent.contentEdited = true
     }
 }
+
 
 #endif

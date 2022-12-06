@@ -6,8 +6,8 @@
 `inline code`
 
 ```
-// multiline
-// multiline 
+// multiline code
+// multiline code
 ```
 
 >Block Quote

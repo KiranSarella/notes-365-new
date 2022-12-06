@@ -61,7 +61,7 @@
 		9F45BD812920CDE0003DE332 /* MarkdownAttributedString+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD0B2920CCCE003DE332 /* MarkdownAttributedString+iOS.swift */; };
 		9F45BD822920CDE0003DE332 /* MarkdownLayoutManagerDelegate+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD182920CCCE003DE332 /* MarkdownLayoutManagerDelegate+iOS.swift */; };
 		9F45BD832920CDE0003DE332 /* EditorUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD0F2920CCCE003DE332 /* EditorUI.swift */; };
-		9F45BD842920CDE0003DE332 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD1E2920CCCE003DE332 /* EditorView.swift */; };
+		9F45BD842920CDE0003DE332 /* EditorView+macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD1E2920CCCE003DE332 /* EditorView+macOS.swift */; };
 		9F45BD852920CDE0003DE332 /* EditorUI+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD1A2920CCCE003DE332 /* EditorUI+iOS.swift */; };
 		9F45BD862920CDE0003DE332 /* MarkdownTextStorage+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD222920CCCE003DE332 /* MarkdownTextStorage+iOS.swift */; };
 		9F45BD872920CDE0003DE332 /* MarkdownLayoutManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD202920CCCE003DE332 /* MarkdownLayoutManagerDelegate.swift */; };
@@ -205,7 +205,7 @@
 		9F45BD1A2920CCCE003DE332 /* EditorUI+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorUI+iOS.swift"; sourceTree = "<group>"; };
 		9F45BD1C2920CCCE003DE332 /* SmartLayoutManagerDelegate+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SmartLayoutManagerDelegate+iOS.swift"; sourceTree = "<group>"; };
 		9F45BD1D2920CCCE003DE332 /* MarkdownTextStorage+macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MarkdownTextStorage+macOS.swift"; sourceTree = "<group>"; };
-		9F45BD1E2920CCCE003DE332 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
+		9F45BD1E2920CCCE003DE332 /* EditorView+macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorView+macOS.swift"; sourceTree = "<group>"; };
 		9F45BD1F2920CCCE003DE332 /* MarkdownAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownAttributedString.swift; sourceTree = "<group>"; };
 		9F45BD202920CCCE003DE332 /* MarkdownLayoutManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownLayoutManagerDelegate.swift; sourceTree = "<group>"; };
 		9F45BD212920CCCE003DE332 /* SmartLayoutManagerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartLayoutManagerDelegate.swift; sourceTree = "<group>"; };
@@ -463,7 +463,6 @@
 				9F45BD132920CCCE003DE332 /* SmartTextStorage+macOS.swift */,
 				9F45BD142920CCCE003DE332 /* Helpers.swift */,
 				9F45BD152920CCCE003DE332 /* MarkdownPattern.swift */,
-				9F45BD162920CCCE003DE332 /* EditorViewDelegate+macOS.swift */,
 				9F45BD172920CCCE003DE332 /* EditorViewDelegate+iOS.swift */,
 				9F45BD182920CCCE003DE332 /* MarkdownLayoutManagerDelegate+iOS.swift */,
 				9F45BD192920CCCE003DE332 /* ViewerUI.swift */,
@@ -527,7 +526,8 @@
 			children = (
 				9F45BD0C2920CCCE003DE332 /* EditorTextView.swift */,
 				9F45BD0F2920CCCE003DE332 /* EditorUI.swift */,
-				9F45BD1E2920CCCE003DE332 /* EditorView.swift */,
+				9F45BD1E2920CCCE003DE332 /* EditorView+macOS.swift */,
+				9F45BD162920CCCE003DE332 /* EditorViewDelegate+macOS.swift */,
 			);
 			path = macOS;
 			sourceTree = "<group>";
@@ -889,7 +889,7 @@
 				9F8EE98A293EB3090021409E /* CloudDataManager.swift in Sources */,
 				9F45BD542920CD5E003DE332 /* MonthCalendarView.swift in Sources */,
 				9F3DB0C4292DF82300704860 /* FeedbackView+iPadOS.swift in Sources */,
-				9F45BD842920CDE0003DE332 /* EditorView.swift in Sources */,
+				9F45BD842920CDE0003DE332 /* EditorView+macOS.swift in Sources */,
 				9F188D812930E49F0078D413 /* MarkdownHeading.swift in Sources */,
 				9FE9D0CD2934C134006CCC1E /* StoreHelper.swift in Sources */,
 				9F45BD502920CD45003DE332 /* Extensions.swift in Sources */,
@@ -1071,7 +1071,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Notes 365/Notes_365.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_ASSET_PATHS = "\"Notes 365/Preview Content\"";
 				DEVELOPMENT_TEAM = Z5MSV52AV7;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1092,7 +1092,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sarella.MyNotes.local;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -1110,10 +1110,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Notes 365/Notes_365.entitlements";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "3rd Party Mac Developer Application";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_ASSET_PATHS = "\"Notes 365/Preview Content\"";
-				DEVELOPMENT_TEAM = Z5MSV52AV7;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = Z5MSV52AV7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1132,9 +1134,11 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sarella.MyNotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "mac-app-store";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = macosx;
 				SUPPORTS_MACCATALYST = NO;

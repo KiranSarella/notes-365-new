@@ -161,12 +161,13 @@ class NotebooksListState: ObservableObject {
     func canAddNotebook() -> Bool {
 #if DEBUG
         return true
-#endif
+#else
         if isSubscribed {
             return true
         } else {
             return isNotebooksLimitExceeded == false
         }
+#endif
     }
     
     var isEmpty: Bool {

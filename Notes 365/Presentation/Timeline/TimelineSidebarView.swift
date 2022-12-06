@@ -16,7 +16,7 @@ struct TimelineSidebarView: View {
             // calendar type picker
             Picker("", selection: $calendarState.calenderType) {
                 ForEach(CalendarType.allCases, id: \.self) { calendarType in
-                    Text(calendarType.name)
+                    Text(calendarType.name).tag(calendarType)
                 }
             }
             .padding()
