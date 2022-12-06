@@ -11,26 +11,31 @@ import UniformTypeIdentifiers
 struct NotebooksSidebarView: View {
 
     @EnvironmentObject var usersState: NotebooksListState
-    @Binding var selectedUser: NotebookM?
+    @Binding var selectedNotebook: NotebookM?
     
     @State private var presentDeleteConfirmation = false
     @State private var presentPurchasesView = false
     
+//    @State private var title: String = "Notes 365"
+    
     var body: some View {
         
         if usersState.isEmpty {
-            
             AddNotesView()
                 .padding([.top], -100)
                 .environmentObject(usersState)
-            
         } else {
             VStack {
-                List(selection: $selectedUser) {
+                List(selection: $selectedNotebook) {
                     NotebooksListGroupView(notebooks: $usersState.usersDB.notes)
                 }
                 .listStyle(SidebarListStyle())
-                .navigationTitle(selectedUser?.name ?? "Notes 365")
+                .navigationTitle(usersState.navTitle)
+                .onChange(of: selectedNotebook) { newValue in
+                    if let newValue = newValue {
+                        usersState.navTitle = newValue.name
+                    }
+                }
                 /*
                  ** IMP
                  
@@ -65,7 +70,7 @@ struct NotebooksSidebarView: View {
             Group {
                 // insert below
                 Button(action: {
-                    if selectedUser == nil {
+                    if selectedNotebook == nil {
                         return
                     }
                     if usersState.canAddNotebook() == false {
@@ -73,7 +78,7 @@ struct NotebooksSidebarView: View {
                         self.presentPurchasesView.toggle()
                         return
                     }
-                    usersState.insertBelow(ref: selectedUser!.notebook)
+                    usersState.insertBelow(ref: selectedNotebook!.notebook)
                 }) {
                     //                Image(systemName: "arrow.down")
                     //                    .renderingMode(.original)
@@ -81,7 +86,7 @@ struct NotebooksSidebarView: View {
                 }
                 // insert inside
                 Button(action: {
-                    if selectedUser == nil {
+                    if selectedNotebook == nil {
                         return
                     }
                     // check free app limit
@@ -90,7 +95,7 @@ struct NotebooksSidebarView: View {
                         self.presentPurchasesView.toggle()
                         return
                     }
-                    usersState.insertInside(ref: selectedUser!.notebook)
+                    usersState.insertInside(ref: selectedNotebook!.notebook)
                 }) {
                     //                Image(systemName: "arrow.turn.down.right")
                     //                    .renderingMode(.original)
@@ -116,7 +121,7 @@ struct NotebooksSidebarView: View {
             Spacer()
             // trash
             Button(action: {
-                if selectedUser == nil {
+                if selectedNotebook == nil {
                     return
                 }
                 presentDeleteConfirmation = true
@@ -127,8 +132,8 @@ struct NotebooksSidebarView: View {
             .confirmationDialog("Are you sure?", isPresented: $presentDeleteConfirmation) {
                 Button("Delete", role: .destructive) {
                     DispatchQueue.main.async {
-                        usersState.deleteNotebook(ref: selectedUser!.notebook)
-                        selectedUser = nil
+                        usersState.deleteNotebook(ref: selectedNotebook!.notebook)
+                        selectedNotebook = nil
                     }
                 }
             } message: {
@@ -161,11 +166,8 @@ struct AddNotesView: View {
 
 
 struct NotebooksListGroupView: View {
-    
     @Binding var notebooks: [NotebookM]
-    
     var body: some View {
-        
         ForEach($notebooks, id: \.self) { $notebook in
             if notebook.containChildNotebooks {
                 DisclosureGroup(isExpanded: $notebook.isExpanded) {
@@ -216,6 +218,7 @@ struct RowView: View {
             }
             do {
                 try usersState.rename(for: notebook.notebook, newValue: name)
+                usersState.navTitle = name
             } catch NotebookBusinessError.alreadyExists {
                 showFileExistsAlert = true
                 isFocused = true

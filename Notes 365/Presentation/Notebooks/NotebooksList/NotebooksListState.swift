@@ -106,14 +106,13 @@ extension NotebookM: Equatable, Hashable {
 class NotebooksListState: ObservableObject {
     
     static let shared: NotebooksListState = NotebooksListState()
-    
     let notebookBusiness = NotebooksListBusiness.shared
-    
     @Published var usersDB: NotebooksHierarchy
-    
-    var userSelectionStateTwo: SelectedNotebookInfo?
+//    var userSelectionStateTwo: SelectedNotebookInfo?
+    @Published var navTitle = "Notes 365"
     
     var expandedIds = Set<String>()
+    
     
     var isNotebooksLimitExceeded: Bool {
         return notebookBusiness.isNotebooksLimitExceeded()
@@ -178,58 +177,58 @@ class NotebooksListState: ObservableObject {
         return PurchasesBusiness().isSubscribed
     }
     
-    func isSelected(userID: UUID) -> Bool {
-        guard let selectedUser = self.userSelectionStateTwo?.notebook else { return false }
-        
-        return selectedUser.id == userID
-    }
-    
-    
-    func deleteUser() {
-        
-        guard let selectedLevels = userSelectionStateTwo?.levels else {
-            return
-        }
-        guard let selectedIndex = userSelectionStateTwo?.index else {
-            return
-        }
-        
-        notebookBusiness.deleteNotebook(levels: selectedLevels, index: selectedIndex)
-        
-        
-        if selectedLevels.isEmpty {
-            // top level
-            // delete object
-            usersDB.notes.remove(at: selectedIndex)
-        } else {
-            
-            // remove top level, as we used it.
-            var baseLevel = selectedLevels.first!
-            var levels = selectedLevels
-            levels.removeFirst()
-            
-            // traverse to inner selected note
-            func getSelectedNotebookReference(notebook: inout NotebookM) {
-                
-                // base condition
-                if levels.count <= 0 {
-                    
-                    // reached to deeper level, so remove element
-                    notebook.children?.remove(at: selectedIndex)
-                    return
-                }
-                
-                baseLevel = levels.first!
-                levels.removeFirst()
-                
-                // next element
-                getSelectedNotebookReference(notebook: &notebook.children![baseLevel])
-            }
-            
-            // if selected level is inner level, then pass
-            getSelectedNotebookReference(notebook: &usersDB.notes[baseLevel])
-        }
-    }
+//    func isSelected(userID: UUID) -> Bool {
+//        guard let selectedUser = self.userSelectionStateTwo?.notebook else { return false }
+//
+//        return selectedUser.id == userID
+//    }
+//
+//
+//    func deleteUser() {
+//
+//        guard let selectedLevels = userSelectionStateTwo?.levels else {
+//            return
+//        }
+//        guard let selectedIndex = userSelectionStateTwo?.index else {
+//            return
+//        }
+//
+//        notebookBusiness.deleteNotebook(levels: selectedLevels, index: selectedIndex)
+//
+//
+//        if selectedLevels.isEmpty {
+//            // top level
+//            // delete object
+//            usersDB.notes.remove(at: selectedIndex)
+//        } else {
+//
+//            // remove top level, as we used it.
+//            var baseLevel = selectedLevels.first!
+//            var levels = selectedLevels
+//            levels.removeFirst()
+//
+//            // traverse to inner selected note
+//            func getSelectedNotebookReference(notebook: inout NotebookM) {
+//
+//                // base condition
+//                if levels.count <= 0 {
+//
+//                    // reached to deeper level, so remove element
+//                    notebook.children?.remove(at: selectedIndex)
+//                    return
+//                }
+//
+//                baseLevel = levels.first!
+//                levels.removeFirst()
+//
+//                // next element
+//                getSelectedNotebookReference(notebook: &notebook.children![baseLevel])
+//            }
+//
+//            // if selected level is inner level, then pass
+//            getSelectedNotebookReference(notebook: &usersDB.notes[baseLevel])
+//        }
+//    }
     
     func addFirstNotes() {
         let notebook = notebookBusiness.addFirstNotes()

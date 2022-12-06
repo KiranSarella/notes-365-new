@@ -74,12 +74,8 @@ struct ContentView: View {
                     TimelineSidebarView()
                         .environmentObject(calendarState)
                 case .noteBooks:
-                    NotebooksSidebarView(selectedUser: $selectedUser)
+                    NotebooksSidebarView(selectedNotebook: $selectedUser)
                         .environmentObject(usersState)
-                        .onChange(of: userSelectionState, perform: { newValue in
-                            usersState.userSelectionStateTwo = newValue
-                        })
-                        
                 }
             } else {
                 // no selection done

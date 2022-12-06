@@ -118,6 +118,12 @@ fileprivate struct DayGridView: View {
                     // check if month is selected month
                     if date.getMonth() == navigationDate.getMonth() {
                         ZStack {
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.blue, lineWidth: date.isSameDayAs(dayDate.date) ? 1 : 0)
+//                                .background(
+//                                    RoundedRectangle(cornerRadius: 8)
+//                                        .fill(date.isSameDayAs(dayDate.date) ? Color.blue : Color.clear)
+//                                )
                             Button {
                                 dayDate = DayDate(date: date)
                             } label: {
@@ -128,8 +134,7 @@ fileprivate struct DayGridView: View {
                                     
                             }
                             .buttonStyle(PlainButtonStyle())
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.blue, lineWidth: date.isSameDayAs(dayDate.date) ? 1 : 0)
+                                
                         }
                     } else {
                         Text("\(date.getDay())")
