@@ -240,6 +240,7 @@
 		9F498E042939E03B00FF4D17 /* EditorView.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = EditorView.md; sourceTree = "<group>"; };
 		9F8EE987293EB2A70021409E /* Markdownosaur.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Markdownosaur.swift; sourceTree = "<group>"; };
 		9F8EE989293EB3090021409E /* CloudDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudDataManager.swift; sourceTree = "<group>"; };
+		9F8EE98C293F4B7E0021409E /* Notes-365-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Notes-365-Info.plist"; sourceTree = SOURCE_ROOT; };
 		9FB6C69729275D0600C8EC76 /* FormatOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatOptionsView.swift; sourceTree = "<group>"; };
 		9FB6C69929275D5100C8EC76 /* FormatOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatOptions.swift; sourceTree = "<group>"; };
 		9FB6C69B29275E0300C8EC76 /* NotebookEditorState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookEditorState.swift; sourceTree = "<group>"; };
@@ -349,6 +350,7 @@
 		9F45BCA02920CAAE003DE332 /* Notes 365 */ = {
 			isa = PBXGroup;
 			children = (
+				9F8EE98C293F4B7E0021409E /* Notes-365-Info.plist */,
 				9F45BCA12920CAAE003DE332 /* Notes_365App.swift */,
 				9F45BDDF2923441C003DE332 /* Presentation */,
 				9F45BDD4292340B1003DE332 /* Business */,
@@ -1071,12 +1073,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Notes 365/Notes_365.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "\"Notes 365/Preview Content\"";
 				DEVELOPMENT_TEAM = Z5MSV52AV7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Notes-365-Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -1093,7 +1096,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.sarella.MyNotes;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sarella.MyNotes.local;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = macosx;
@@ -1112,13 +1115,14 @@
 				CODE_SIGN_ENTITLEMENTS = "Notes 365/Notes_365.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "3rd Party Mac Developer Application";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "\"Notes 365/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = Z5MSV52AV7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Notes-365-Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
