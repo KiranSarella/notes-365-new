@@ -15,17 +15,14 @@ struct PreferencesView: View {
     
     var body: some View {
         TabView {
-            
             ThemesListView()
                 .tabItem {
                     Label("Themes", systemImage: "paintbrush")
                 }
-            
             PurchasesView()
                 .tabItem {
                     Label("Purchases", systemImage: "cart")
                 }
-            
             FeedbackView()
                 .tabItem {
                     Label("Feedback", systemImage: "hand.thumbsup")

@@ -147,7 +147,7 @@ class NotebooksListState: ObservableObject {
             expandedIds.remove(id.uuidString)
         }
         
-        print(expandedIds)
+//        print(expandedIds)
     }
     
     func saveExpandedIds() {

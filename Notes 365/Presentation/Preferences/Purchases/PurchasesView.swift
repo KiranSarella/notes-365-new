@@ -9,13 +9,9 @@ import SwiftUI
 import StoreKit
 
 struct PurchasesView: View {
-    
     @Environment(\.openURL) private var openURL
-    
     @EnvironmentObject var store: Store
-    
     @StateObject private var purchasesState = PurchasesState()
-    
     @State private var errorTitle = ""
     @State private var isShowingError: Bool = false
     
@@ -38,71 +34,89 @@ struct PurchasesView: View {
         VStack {
             VStack {
                 if purchasesState.isPurchased {
-                    if let status = purchasesState.status, let product = purchasesState.product {
-                        StatusInfoView(product: product,
-                                       status: status)
+                    if let status = purchasesState.subscriptionStatus, let product = purchasesState.purchasedProduct {
+                        StatusInfoView(product: product, status: status)
+                    } else {
+                        Button("Retry") {
+                            Task {
+                                if let product = purchasesState.product {
+                                    purchasesState.isPurchased = (try? await store.isPurchased(product)) ?? false
+                                }
+                                // When this view appears, get the latest subscription status.
+                                await purchasesState.updateSubscriptionStatus()
+                            }
+                        }
                     }
                 }
                 else {
-                    // Products View
-                    Text("Get Full Access")
-                        .font(.title)
-                    HStack {
-                        Text("create unlimited number of notebooks.")
-                            .font(.body)
-                        Text("3 notebooks")
-                            .strikethrough()
-                            .font(.body)
-                            .fontWeight(.thin)
-                    }
-                    Group {
-                        if purchasesState.subscriptionsExists() {
-                            Text("\(purchasesState.product!.displayPrice) / \(purchasesState.product!.displayName)")
+                    if let product = purchasesState.product {
+                        // Products View
+                        Text("Get Full Access")
+                            .font(.title)
+                        HStack {
+                            Text("create unlimited number of notebooks.")
+                                .font(.body)
+                            Text("3 notebooks")
+                                .strikethrough()
+                                .font(.body)
+                                .fontWeight(.thin)
                         }
-                        Button {
-                            Task {
-                                
-                                do {
-                                    try await purchasesState.buy()
-                                } catch StoreError.failedVerification {
-                                    errorTitle = "Your purchase could not be verified by the App Store."
-                                    isShowingError = true
+                        Group {
+                            Text("\(product.displayPrice) / \(product.displayName)")
+                            Button {
+                                Task {
+                                    do {
+                                        try await purchasesState.buy()
+                                    } catch StoreError.failedVerification {
+                                        errorTitle = "Your purchase could not be verified by the App Store."
+                                        isShowingError = true
+                                    }
                                 }
+                            } label: {
+                                Text("Buy")
+                                    .padding()
+                                    .padding(.bottom, 60)
                             }
-                        } label: {
-                            Text("Buy")
-                                .padding()
-                                .padding(.bottom, 60)
-                        }
-                        // Restore
-                        Button {
-                            Task {
-                                //This call displays a system prompt that asks users to authenticate with their App Store credentials.
-                                //Call this function only in response to an explicit user action, such as tapping a button.
-                                try? await AppStore.sync()
-                            }
-                        } label: {
-                            Text("Restore Purchases")
-                                .foregroundColor(.blue)
+                            // Restore
+                            Button {
+                                Task {
+                                    //This call displays a system prompt that asks users to authenticate with their App Store credentials.
+                                    //Call this function only in response to an explicit user action, such as tapping a button.
+                                    try? await AppStore.sync()
+                                }
+                            } label: {
+                                Text("Restore Purchases")
+                                    .foregroundColor(.blue)
+                                
+                            }.buttonStyle(.plain)
                             
-                        }.buttonStyle(.plain)
-                        
-                    }.padding()
-                        .alert(isPresented: $isShowingError, content: {
-                        Alert(title: Text(errorTitle), message: nil, dismissButton: .default(Text("Okay")))
-                    })
+                        }.padding()
+                            .alert(isPresented: $isShowingError, content: {
+                                Alert(title: Text(errorTitle), message: nil, dismissButton: .default(Text("Okay")))
+                            })
+                    } else {
+                        // reload product description
+                        Button("Retry") {
+                            Task {
+                                if let product = purchasesState.product {
+                                    purchasesState.isPurchased = (try? await store.isPurchased(product)) ?? false
+                                }
+                                // When this view appears, get the latest subscription status.
+                                await purchasesState.updateSubscriptionStatus()
+                            }
+                        }
+                    }
                 }
             }
             .frame(minHeight: 300)
             .padding(40)
             .onAppear(perform: {
                 Task {
-                    if  purchasesState.subscriptionsExists() {
-                        purchasesState.isPurchased = (try? await store.isPurchased(purchasesState.product!)) ?? false
-                        //When this view appears, get the latest subscription status.
-                        await purchasesState.updateSubscriptionStatus()
+                    if let product = purchasesState.product {
+                        purchasesState.isPurchased = (try? await store.isPurchased(product)) ?? false
                     }
-                    
+                    // When this view appears, get the latest subscription status.
+                    await purchasesState.updateSubscriptionStatus()
                 }
             })
             .onChange(of: store.purchasedSubscriptions) { _ in
@@ -111,14 +125,10 @@ struct PurchasesView: View {
                     await purchasesState.updateSubscriptionStatus()
                 }
             }
-            
             Spacer()
-            
             // terms, privacy links
             HStack {
-                
                 Spacer()
-                
                 Button {
                     if let url = URL(string: "https://www.notes365.app/privacy") {
                         openURL(url)
@@ -126,28 +136,21 @@ struct PurchasesView: View {
                 } label: {
                     Text("Privacy Policy")
                         .padding()
-                    
                 }
-                
                 Button {
-                    
                     if let url = URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/") {
                         openURL(url)
                     }
-                    
                 } label: {
                     Text("Terms of Use")
                         .padding()
                 }
-                
-                
             }
             .padding()
 #if os(macOS)
             .buttonStyle(.link)
 #endif
         }
-        
     }
     
     

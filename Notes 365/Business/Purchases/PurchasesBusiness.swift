@@ -12,6 +12,10 @@ class PurchasesBusiness {
   
     var store: Store = Store.shared
     
+    func getSubscriptions() -> [Product] {
+        store.subscriptions
+    }
+    
     func subscriptionsExists() -> Bool {
         store.subscriptions.count > 0
     }

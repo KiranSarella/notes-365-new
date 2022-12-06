@@ -34,7 +34,7 @@ class Store: ObservableObject {
     
     @Published private(set) var nonConsumables: [Product]   // ex: new cars
     @Published private(set) var consumables: [Product]      // ex: new fuels
-    @Published private(set) var subscriptions: [Product]
+    @Published private(set) var subscriptions: [Product]    // auto-renewable
     @Published private(set) var nonRenewables: [Product]
     
     @Published private(set) var purchasedNonConsumables: [Product] = []

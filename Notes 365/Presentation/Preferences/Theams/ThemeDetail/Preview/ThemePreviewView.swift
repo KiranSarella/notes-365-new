@@ -75,8 +75,8 @@ struct ThemePreviewView: View {
                         }
                     }
                 }
-                .onHover { status in
-                    focusedOnPreview = status
+                .onHover { subscriptionStatus in
+                    focusedOnPreview = subscriptionStatus
                 }
             }
             Text("Preview")

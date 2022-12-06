@@ -8,14 +8,29 @@
 import SwiftUI
 import StoreKit
 
+@MainActor
 class PurchasesState: ObservableObject {
     
     var purchasesBusiness = PurchasesBusiness()
     
     @Published var isPurchased: Bool = false
+    @Published var purchasedProduct: Product?
+    @Published private(set) var subscriptionStatus: Product.SubscriptionInfo.Status?
     
-    @Published private(set) var status: Product.SubscriptionInfo.Status?
     @Published private(set) var product: Product?
+
+    init() {
+        let subscriptions = purchasesBusiness.getSubscriptions()
+        if let subscrition = subscriptions.first {
+            product = subscrition
+            
+            Task {
+                isPurchased = (try? await purchasesBusiness.store.isPurchased(subscrition)) ?? false
+            }
+        }
+    }
+    
+    
     
     func subscriptionsExists() -> Bool {
         purchasesBusiness.subscriptionsExists()
@@ -38,7 +53,7 @@ class PurchasesState: ObservableObject {
     
     @MainActor
     func updateSubscriptionStatus() async {
-        (status, product) = await purchasesBusiness.getupdatedSubscriptionStatus()
+        (subscriptionStatus, purchasedProduct) = await purchasesBusiness.getupdatedSubscriptionStatus()
     }
     
 }
