@@ -47,8 +47,7 @@ struct PurchasesView: View {
                             }
                         }
                     }
-                }
-                else {
+                } else {
                     if let product = purchasesState.product {
                         // Products View
                         Text("Get Full Access")
