@@ -40,7 +40,7 @@ final class NotebooksHierarchyTests: XCTestCase {
         
         let notebooks = [languages, patterns]
         
-        let result = UserHierarchy.constructHierarchy(notebooks: notebooks)
+        let result = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: [])
         
 //        dump(result)
         

@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct NotebookEditorView: View {
+    
+//    @Environment(\.scenePhase) var scenePhase
+    
     @Binding var notebookM: NotebookM?
     @StateObject private var editorState = NotebookEditorState()
     @FocusState private var isTextFieldFocused: Bool
@@ -104,6 +107,18 @@ struct NotebookEditorView: View {
         .onReceive(autoSaveTimer, perform: { _ in
             editorState.saveContentChanges()
         })
+//        .onChange(of: scenePhase) { phase in
+//            switch phase {
+//            case .background:
+//                print("App is in background")
+//            case .active:
+//                print("App is Active")
+//            case .inactive:
+//                print("App is Inactive")
+//            @unknown default:
+//                print("New App state not yet introduced")
+//            }
+//        }
     }
     
 }

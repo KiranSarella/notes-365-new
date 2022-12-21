@@ -23,6 +23,7 @@ struct Notes_365App: App {
             SidebarCommands()
         }
         .onChange(of: scenePhase) { phase in
+            // Doing this while setBaseVersion - in editor 
             //            if phase == .active {
             //                TimelineState.cleanOldBaseVersions()
             //            }

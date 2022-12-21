@@ -69,26 +69,32 @@ class VersionBusiness {
     }
     
     
-    
-    static func cleanOldBaseVersions() {
+    /*
+     
+     */
+    static func resetBaseVersionIfNeeded() {
         
-        let today = Date()
+        // TODO: Instead of saving base-version-date in user defaults, use date for the folder
+        // ex: base_version_20-07-2022
+        // clean up - except base_version_20-07-2022, remove all base_version_* folders
         
+        let today = Date.now
         if let oldBaseVersionDate = UserDefaults.standard.object(forKey: "base-version-date") as? Date {
             if oldBaseVersionDate.isSameDayAs(today) == false {
+                // reset if day changed
                 reset()
             }
         } else {
+            // reset - means create new base version
             reset()
         }
-        
         
         func reset() {
             // remove all files in `today_base_version`
             FilesHelper.shared.deleteFolder(path: "today_base_version")
-            
+            // recreate new directory
             FilesHelper.shared.createDirectory(folderName: "today_base_version")
-            
+            // save todays date
             UserDefaults.standard.setValue(today, forKey: "base-version-date")
         }
     }

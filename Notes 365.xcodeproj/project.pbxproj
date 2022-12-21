@@ -375,6 +375,8 @@
 			isa = PBXGroup;
 			children = (
 				9F45BCB32920CAB0003DE332 /* Notes_365Tests.swift */,
+				9F45BDE329238D29003DE332 /* NotebooksHierarchyTests.swift */,
+				9F45BDBD2920EA31003DE332 /* NotebooksBusinessTests.swift */,
 			);
 			path = "Notes 365Tests";
 			sourceTree = "<group>";
@@ -557,7 +559,6 @@
 		9F45BDD5292340DB003DE332 /* Notebooks */ = {
 			isa = PBXGroup;
 			children = (
-				9FEE09DE2923C24D003C070D /* __tests */,
 				9F45BDD929234150003DE332 /* Notebook.swift */,
 				9F45BD042920CCCE003DE332 /* NotebooksListBusiness.swift */,
 				9FB6C69F2927695000C8EC76 /* NotebookContentBusiness.swift */,
@@ -601,7 +602,6 @@
 		9F45BDE02923443C003DE332 /* Notebooks */ = {
 			isa = PBXGroup;
 			children = (
-				9F45BDE229238D03003DE332 /* __tests */,
 				9FB6C69429275BF900C8EC76 /* NotebooksList */,
 				9FB6C69629275C1500C8EC76 /* NotebookEditor */,
 			);
@@ -622,14 +622,6 @@
 				9F45BCE22920CCCE003DE332 /* MonthsTimeline */,
 			);
 			path = Timeline;
-			sourceTree = "<group>";
-		};
-		9F45BDE229238D03003DE332 /* __tests */ = {
-			isa = PBXGroup;
-			children = (
-				9F45BDE329238D29003DE332 /* NotebooksHierarchyTests.swift */,
-			);
-			path = __tests;
 			sourceTree = "<group>";
 		};
 		9FB6C69429275BF900C8EC76 /* NotebooksList */ = {
@@ -667,14 +659,6 @@
 				9F45BD452920CCCF003DE332 /* ScaleFontView.swift */,
 			);
 			path = Preview;
-			sourceTree = "<group>";
-		};
-		9FEE09DE2923C24D003C070D /* __tests */ = {
-			isa = PBXGroup;
-			children = (
-				9F45BDBD2920EA31003DE332 /* NotebooksBusinessTests.swift */,
-			);
-			path = __tests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

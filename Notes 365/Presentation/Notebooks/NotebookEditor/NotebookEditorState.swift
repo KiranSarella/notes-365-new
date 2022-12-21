@@ -18,6 +18,7 @@ class NotebookEditorState: ObservableObject {
     @Published var theme: MarkdownTheme
     @Published var showSymbols = false
     @Published var contentEdited = false
+    @Published var versionDate: Date = Date()
     
     unowned var notebook: Notebook!
     
@@ -72,7 +73,9 @@ class NotebookEditorState: ObservableObject {
     }
     
     func setBaseVersion(_ notebook: Notebook) {
-        VersionBusiness.cleanOldBaseVersions()
+        // reset base version folder on date changed
+        VersionBusiness.resetBaseVersionIfNeeded()
+        // if reset done, then recreate baseversion file
         if NotebookContentBusiness.isBaseVersionExists(fileName: notebook.id.uuidString) == false {
             // case 1: for new notes
             // case 2: for existing notes
@@ -81,10 +84,35 @@ class NotebookEditorState: ObservableObject {
     }
     
     func saveContentChanges() {
-//        print(#function, "########")
         if contentEdited {
             if let txt = self.getNewContent?() {
-                NotebookContentBusiness.saveContentChanges(notebook: notebook, content: txt)
+                
+                if versionDate.isSameDayAs(Date.now) {
+                    // same day
+                    NotebookContentBusiness.saveContentChanges(notebook: notebook, content: txt)
+                } else {
+                    // ** day changed **
+                    // reset baseContent
+                    loadContent()
+                    // create new baseversion
+                    setBaseVersion(notebook)
+                    // update version date
+                    versionDate = Date()
+                    // now save content
+                    NotebookContentBusiness.saveContentChanges(notebook: notebook, content: txt)
+                }
+                
+//                // TODO: check date
+//                if !appearDate.isSameDayAs(Date.now) {
+//                    // means - system date changed.
+//                    // delete existing base version content
+//                    VersionBusiness.cleanOldBaseVersions()
+//                    // create new base verion
+//                    createBaseVersion(for: <#T##String#>, with: <#T##String#>)
+//                    // notify changes
+//                    onVersionChange()
+//                }
+                
             }
         }
     }

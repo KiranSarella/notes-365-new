@@ -66,7 +66,7 @@ class NotebookContentBusiness {
     }
     
     static func saveContentChanges(notebook: Notebook, content: String) {
-        // TODO: check date
+       
         // if now == appear date; continue
         // else have to handle on appear process again; like - today_base_version..
         
