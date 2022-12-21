@@ -145,7 +145,7 @@ public class FilesHelper {
         do {
             // Read the file contents
             readString = try String(contentsOf: fileURL)
-            print(fileURL)
+//            print(fileURL)
         } catch let error as NSError {
             print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
         }
@@ -166,7 +166,7 @@ public class FilesHelper {
         do {
             // Read the file contents
             readString = try String(contentsOf: fileURL)
-            print(fileURL)
+//            print(fileURL)
         } catch let error as NSError {
             print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
         }

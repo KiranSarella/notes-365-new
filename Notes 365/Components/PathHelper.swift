@@ -16,7 +16,7 @@ func whereIsMySQLite() -> String? {
         .replacingOccurrences(of: "file://", with: "")
         .removingPercentEncoding
     
-    print(path ?? "Not found")
+//    print(path ?? "Not found")
     
     return path
 }

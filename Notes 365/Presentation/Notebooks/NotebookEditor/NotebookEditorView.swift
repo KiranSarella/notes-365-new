@@ -41,7 +41,7 @@ struct NotebookEditorView: View {
                         .onChange(of: isTextFieldFocused) { isFocused in
                             if isFocused {
                                 // began editing...
-                                print(isTextFieldFocused)
+//                                print(isTextFieldFocused)
                                 editorState.setBaseVersion(notebookM!.notebook)
                             } else {
                                 // ended editing...

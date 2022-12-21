@@ -89,9 +89,9 @@ class NotebookContentBusiness {
             VersionBusiness.shared.addOrUpdateToday(contentChanges: newContent, uuid: notebook.id, fileName: notebook.name, filePath: notebook.folderPath)
             // update notebook
             FilesHelper.shared.writeToFile(path: notebook.filePath, content: content)
-            print("------> saved to db ******")
+//            print("------> saved to db ******")
         } else {
-            print("content not edited *****")
+//            print("content not edited *****")
         }
     
     }
