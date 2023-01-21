@@ -30,13 +30,12 @@ class StringDiff {
                 let item = diffArr.insertions[counter]
                 switch item {
                     
-                case .insert(offset: let offset, element: let element, associatedWith: let associatedWith):
+                case .insert(offset: let offset, element: let element, associatedWith: _):
                     
                     if let temp = oldOffset, temp + 1 != offset {
                         outputStr += "\n"
                     }
-                    
-                    
+                    // ?
                     outputStr += "\n"
                     outputStr += element
                     

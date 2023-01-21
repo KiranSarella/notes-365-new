@@ -27,8 +27,8 @@ public class FilesHelper {
         
         return false
         
-        if DocumentsDirectory.iCloudDocumentsURL != nil { return true }
-        else { return false }
+//        if DocumentsDirectory.iCloudDocumentsURL != nil { return true }
+//        else { return false }
     }
     
     func getDocumentDiretoryURL() -> URL {
@@ -145,7 +145,7 @@ public class FilesHelper {
         do {
             // Read the file contents
             readString = try String(contentsOf: fileURL)
-//            print(fileURL)
+            print(fileURL)
         } catch let error as NSError {
             print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
         }

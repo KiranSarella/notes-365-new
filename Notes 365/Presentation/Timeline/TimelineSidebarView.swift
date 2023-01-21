@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TimelineSidebarView: View {
     
+    @Binding var calendarID: CalendarType.ID?
     @EnvironmentObject var calendarState: CalendarState
     
     var body: some View {
@@ -19,6 +20,10 @@ struct TimelineSidebarView: View {
                     Text(calendarType.name).tag(calendarType)
                 }
             }
+            .navigationTitle("Timeline")
+            .onChange(of: calendarState.calenderType, perform: { newValue in
+                calendarID = newValue.id
+            })
             .padding()
             
             HStack(alignment: .bottom) {
@@ -34,7 +39,7 @@ struct TimelineSidebarView: View {
             
             Spacer()
         }
-        .frame(width: 280)
+//        .frame(width: 280)
         .pickerStyle(SegmentedPickerStyle())
     }
 }

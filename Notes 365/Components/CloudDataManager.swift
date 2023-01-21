@@ -36,7 +36,9 @@ class CloudDataManager {
     static let shared = CloudDataManager() // Singleton
     
     struct DocumentsDirectory {
+        
         static let localDocumentsURL = FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: .userDomainMask).last!
+        
         static let iCloudDocumentsURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent("Documents")
     }
     

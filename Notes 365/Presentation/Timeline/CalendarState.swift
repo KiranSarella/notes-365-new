@@ -14,6 +14,9 @@ public struct DayDate {
 }
 
 extension DayDate: Equatable {}
+extension DayDate: Hashable {
+    
+}
 
 // MARK: - Week
 public struct WeekDate {

@@ -1,0 +1,97 @@
+//
+//  NotebooksBusinessTests.swift
+//  Notes 365Tests
+//
+//  Created by Kiran Sarella on 13/11/22.
+//
+
+import XCTest
+
+final class NotebooksListBusinessTests: XCTestCase {
+
+    var notebookListBusiness = NotebooksListBusiness.shared
+    
+    override func setUpWithError() throws {
+        // Put setup code here. This method is called before the invocation of each test method in the class.
+        
+//        notebookListBusiness.notebooks = []
+    }
+
+    override func tearDownWithError() throws {
+        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        
+//        notebookListBusiness.notebooks.removeAll()
+    }
+    
+    func testExample() throws {
+        // This is an example of a functional test case.
+        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        // Any test you write for XCTest can be annotated as throws and async.
+        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
+        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    }
+//
+//    func testGenerateNotebooksHashMap() throws {
+//
+//        let languages = Notebook(id: UUID(), name: "languages")
+//        let swift = Notebook(id: UUID(), name: "swift")
+//        let js = Notebook(id: UUID(), name: "js")
+//        languages.children = [swift, js]
+//
+//        let patterns = Notebook(id: UUID(), name: "Arch patterns")
+//        patterns.children = [
+//            Notebook(id: UUID(), name: "active record"),
+//            Notebook(id: UUID(), name: "data mapping")
+//        ]
+//
+//        let notebooks = [languages, patterns]
+//
+//        notebookBusiness.notebooks = notebooks
+//
+//        notebookBusiness.generateNotebooksHashMap()
+//
+//        XCTAssertEqual(notebookBusiness.notebooksHashMap.count, 6)
+//
+//    }
+//
+//    func testChangeViaHashMap() throws {
+//
+//        let languages = Notebook(id: UUID(), name: "languages")
+//        let swift = Notebook(id: UUID(), name: "swift")
+//        let js = Notebook(id: UUID(), name: "js")
+//        languages.friends = [swift, js]
+//
+//        let patterns = Notebook(id: UUID(), name: "Arch patterns")
+//        patterns.friends = [
+//            Notebook(id: UUID(), name: "active record"),
+//            Notebook(id: UUID(), name: "data mapping")
+//        ]
+//
+//        let notebooks = [languages, patterns]
+//
+//        notebookBusiness.notebooks = notebooks
+//
+//        notebookBusiness.generateNotebooksHashMap()
+//
+//        let _ = notebookBusiness.addNotebookInside(id: swift.id)
+//
+//        XCTAssertEqual(notebookBusiness.notebooksHashMap.count, 7)
+//
+//        XCTAssertEqual(swift.friends!.count, 1)
+//
+//    }
+//
+    
+    
+    func testNotebooksLimitExceeded() throws {
+        
+        
+//        notebookListBusiness.isNotebooksLimitExceeded()
+        
+        
+//        notebookBusiness.isNotebooksLimitExceeded(usersDB: &<#T##UserHierarchy#>)
+    }
+
+  
+
+}

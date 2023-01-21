@@ -194,16 +194,29 @@ struct RowView: View {
     @State private var showInvalidCharsAlert = false
     
     var body: some View {
-        TextField(text: $name) {
-            Text("Notebook")
-        }
+//        TextField(text: $name) {
+//            Text("Notebook")
+//        }
+        Text(name)
         .onAppear {
             name = notebook.name
         }
         .focused($isFocused)
         .contextMenu {
             RenameButton()
-            // ... your own custom actions
+            // insert below
+            Button(action: {
+                usersState.insertBelow(ref: notebook.notebook)
+            }) {
+                Text("Add Below")
+            }
+            // insert inside
+            Button(action: {
+                usersState.insertInside(ref: notebook.notebook)
+            }) {
+                Text("Add Inside")
+            }
+            
         }
         .renameAction { isFocused = true }
         .onChange(of: isFocused, perform: { newValue in

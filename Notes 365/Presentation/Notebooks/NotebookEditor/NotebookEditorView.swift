@@ -48,16 +48,19 @@ struct NotebookEditorView: View {
                                 //                            print(isTextFieldFocused)
                             }
                         }
+                        .onChange(of: editorState.contentEdited) { newValue in
+                            editorState.setBaseVersion(notebookM!.notebook)
+                        }
                     }
                 }
                 .onAppear(perform: {
                     editorState.notebook = notebookM!.notebook
                     editorState.loadContent()
                     
-                    editorView.textView.string = editorState.baseContent
+                    editorView.text = editorState.baseContent
                     
                     editorState.getNewContent = {
-                        return editorView.textView.string
+                        return editorView.text
                     }
                 })
                 .onDisappear(perform: {
@@ -102,7 +105,7 @@ struct NotebookEditorView: View {
             editorState.notebook = newValue.notebook
             
             editorState.loadContent()
-            editorView.textView.string = editorState.baseContent
+            editorView.text = editorState.baseContent
         }
         .onReceive(autoSaveTimer, perform: { _ in
             editorState.saveContentChanges()

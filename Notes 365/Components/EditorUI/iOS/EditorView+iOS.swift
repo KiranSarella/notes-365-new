@@ -11,6 +11,15 @@ import UIKit
 
 public class EditorView: UIView {
     
+    var text: String {
+        get {
+            return textView.text
+        }
+        set {
+            textView.text = newValue
+        }
+    }
+    
     var theme: MarkdownTheme = ThemeBusiness.generateBlackWhiteTheme()
     
     var editorType = EditorType.smart {

@@ -25,7 +25,7 @@ final class NotebooksHierarchyTests: XCTestCase {
         // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
     }
     
-    func testBasic() {
+    func testOneLevelNested() {
         
         let languages = Notebook(id: UUID(), name: "languages")
         let swift = Notebook(id: UUID(), name: "swift")
@@ -47,6 +47,67 @@ final class NotebooksHierarchyTests: XCTestCase {
         XCTAssertEqual(result.count, notebooks.count)
         XCTAssertEqual(result.first!.children!.count, notebooks.first!.children!.count)
     }
+    
+    func testTwoLevelNested() {
+        
+        let languages = Notebook(id: UUID(), name: "languages")
+        let swift = Notebook(id: UUID(), name: "swift")
+        let frameworks = [
+            Notebook(id: UUID(), name: "cloud kit"),
+            Notebook(id: UUID(), name: "combine")
+        ]
+        swift.children = frameworks
+        
+        let js = Notebook(id: UUID(), name: "js")
+        
+        languages.children = [swift, js]
+        
+        let patterns = Notebook(id: UUID(), name: "Arch patterns")
+        patterns.children = [
+            Notebook(id: UUID(), name: "active record"),
+            Notebook(id: UUID(), name: "data mapping")
+        ]
+        
+        let notebooks = [languages, patterns]
+        
+        let result = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: [])
+        
+        //        dump(result)
+        
+        XCTAssertEqual(result.count, notebooks.count)
+        XCTAssertEqual(result.first!.children!.count, notebooks.first!.children!.count)
+        
+        let resultSwift = result.first!.children![0]
+        
+        XCTAssertEqual(resultSwift.children!.count, notebooks.first!.children!.count)
+    }
+    
+    func testOneLevelNestedWithExpandedSet() {
+        
+        let languages = Notebook(id: UUID(), name: "languages")
+        let swift = Notebook(id: UUID(), name: "swift")
+        let js = Notebook(id: UUID(), name: "js")
+        languages.children = [swift, js]
+        
+        let patterns = Notebook(id: UUID(), name: "Arch patterns")
+        patterns.children = [
+            Notebook(id: UUID(), name: "active record"),
+            Notebook(id: UUID(), name: "data mapping")
+        ]
+        
+        let notebooks = [languages, patterns]
+        var expandedIds = Set<String>()
+        expandedIds.insert(languages.id.uuidString)
+        expandedIds.insert(swift.id.uuidString)
+        
+        let result = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
+        
+        XCTAssertTrue(result.first!.isExpanded)
+        XCTAssertFalse(result[1].isExpanded)
+        XCTAssertTrue(result.first!.children!.first!.isExpanded)
+        XCTAssertFalse(result.first!.children![1].isExpanded)
+    }
+
     
 //    func testNotebookReferenceWorking() {
 //

@@ -127,7 +127,10 @@ fileprivate struct DayGridView: View {
                             Button {
                                 dayDate = DayDate(date: date)
                             } label: {
-                                Text("\(date.getDay())")
+                                
+                                NavigationLink("\(date.getDay())", value: DayDate(date: date))
+                                
+//                                Text("\(date.getDay())")
                                     .padding(4)
                                     .font(.system(size: 10))
                                     .foregroundColor(isToday(date.getDay()) ? CalendarState.todayTint : .primary)
@@ -153,6 +156,9 @@ fileprivate struct DayGridView: View {
             dates = getCalenderDates(newValue)
         })
         .frame(height: 220)
+        .navigationDestination(for: DayDate.self) { newDate in
+            DayDetailView()
+        }
     }
     
     private func isToday(_ day: Int) -> Bool {

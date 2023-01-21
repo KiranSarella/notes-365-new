@@ -19,21 +19,23 @@ public enum NotebookBusinessError: Error {
 
 class NotebooksListBusiness {
     
-    static let shared = NotebooksListBusiness()
-    
-    var notebooks: [Notebook]!
+    static let shared = NotebooksListBusiness(dataManager: DataManager(environment: .local))
+    var dataManager: DataManager
+    var notebooks: [Notebook]
     
 //    var notebooksHashMap = [UUID: Notebook]()
     
     private let notebooksLimit = 3
+    let notebooksPath = "notebooks"
     
-    private init() {
+    init(dataManager: DataManager) {
         
-        if let notebooks = NotebooksListBusiness.retrieveObject() {
+        self.dataManager = dataManager
+        // no notebooks exists, create empty or base configuration
+        self.notebooks = [Notebook]()
+        
+        if let notebooks = retrieveNotebooks() {
             self.notebooks = notebooks
-        } else {
-            // no notebooks exists, create empty or base configuration
-            self.notebooks = [Notebook]()
         }
         
 //        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookChangeNotification(_:)), name: .notebookChangeNotification, object: nil)
@@ -69,30 +71,6 @@ class NotebooksListBusiness {
         return notebooks
     }
     
-//    func addFirstNotebook() -> Notebook {
-//        let note1 = Notebook(id: UUID(), name: "Notebook 1")
-//
-//        notebooks = [note1]
-//
-//        return note1
-//    }
-    
-//    func addNotebookInside(id: UUID) -> Notebook {
-//        // new notebook
-//        let newNotebook = Notebook(id: UUID(), name: "Notebook 2")
-//        // add to hierarchy
-//        if notebooksHashMap[id]?.children == nil {
-//            notebooksHashMap[id]?.children = [newNotebook]
-//        } else {
-//            notebooksHashMap[id]?.children?.append(newNotebook)
-//        }
-//        // update hashmap
-//        notebooksHashMap[newNotebook.id] = newNotebook
-//
-//        return newNotebook
-//    }
-    
-    
     func isNotebooksLimitExceeded() -> Bool {
         
         if notebooks.count >= notebooksLimit {
@@ -126,209 +104,47 @@ class NotebooksListBusiness {
         return notebooksCount >= notebooksLimit
     }
     
-   
     func generateFileName(atPath path: String) -> String {
-        
         var count = 1
         var fileName = "Notebook \(count)"
-        
-        while FilesHelper.shared.fileExists(atPath: path, fileName: fileName) {
+        while dataManager.itemExists(atPath: path + "/\(fileName).md") {
             count += 1
             fileName = "Notebook \(count)"
         }
-        
         return fileName
     }
     
-    func persistNotebooks() {
-        // persist
-        NotebooksListBusiness.persistObject(notebooks: notebooks)
+    private func createRequiredFoldersIfNotExists() {
+        if !dataManager.itemExists(atPath: "notebooks") {
+            // create notebooks folder
+            // create timeline folder
+            // create base/dummy notebook (for consistent top and later level implementations)
+            
+            dataManager.createFolder("notebooks")
+            dataManager.createFolder("timeline")
+            dataManager.createFolder("today_base_version")
+        }
     }
     
     // MARK: - Insert
     func addFirstNotes() -> Notebook {
         
-        // if no plist or notebooks folder exists, then create it
-        if FilesHelper.shared.folderExists(atPath: "notebooks") == false {
-            // create notebooks folder
-            // create timeline folder
-            // create base/dummy notebook (for consistent top and later level implementations)
-            
-            
-            FilesHelper.shared.createDirectory(folderName: "notebooks")
-            FilesHelper.shared.createDirectory(folderName: "timeline")
-            FilesHelper.shared.createDirectory(folderName: "today_base_version")
-        }
+        createRequiredFoldersIfNotExists()
         
         // create first notebook inside "/notesbooks"
         let firstBook = createNotebook(atPath: "notebooks")
         notebooks.append(firstBook)
-        // write content
-        FilesHelper.shared.writeToFile(fileName: firstBook.name, folderPath: "notebooks", content: "")
-        
-        // persist
+        // persist content
+        dataManager.writeToFile(content: "", fileName: firstBook.name, folderPath: "notebooks", ext: "md")
+        // persist hierarchy
         persistNotebooks()
         
         return firstBook
     }
     
-    /*
-     goto target level and insert a new notebook below the target index.
-     */
-    func insertUserBelowSelection(levels selectedLevels: [Int], index selectedIndex: Int) -> Notebook {
-        
-        if selectedLevels.isEmpty {
-            // top level
-            let path = "notebooks"
-            
-            let notebook = createNotebook(atPath: path)
-            notebooks.insert(notebook, at: selectedIndex + 1)
-            
-            FilesHelper.shared.writeToFile(fileName: notebook.name, folderPath: path, content: "")
-            
-            // persist
-            persistNotebooks()
-            
-            return notebook
-            
-        } else {
-            
-            var baseLevel = selectedLevels.first!
-            var levels = selectedLevels
-            levels.removeFirst()
-            
-            var newNotebook: Notebook!
-            
-            func getSelectedNotebookReference(notebook: Notebook) {
-                
-                // when referered to last level (ie selected notebook)
-                if levels.count <= 0 {
-                    
-                    // get path for all folders using level numbers
-                    let fullPath = getFolderNamesPath(levels: selectedLevels)
-                    newNotebook = createNotebook(atPath: fullPath)
-                    
-                    let insertIndex = selectedIndex + 1
-                    // check index out
-                    if let count = notebook.children?.count, count >= insertIndex {
-                        notebook.children?.insert(newNotebook, at: selectedIndex + 1)
-                    } else {
-                        notebook.children?.append(newNotebook)
-                    }
-                    
-                    FilesHelper.shared.writeToFile(fileName: newNotebook.name, folderPath: fullPath, content: "")
-                    
-                    return
-                }
-                
-                baseLevel = levels.first!
-                levels.removeFirst()
-                
-                // next element
-                getSelectedNotebookReference(notebook: notebook.children![baseLevel])
-            }
-            
-            getSelectedNotebookReference(notebook: notebooks[baseLevel])
-            
-            // persist
-            persistNotebooks()
-            
-            return newNotebook
-        }
-    }
-    
-    
-//    func insertInsideSelection(levels selectedLevels: [Int], index selectedIndex: Int) -> Notebook {
-//
-//
-//        if selectedLevels.isEmpty {
-//            // top level
-//            let selectedNotebook = notebooks[selectedIndex]
-//
-//            let fullPath = "notebooks" + "/" + "\(selectedNotebook.name)"
-//
-//            let notebook = createNotebook(atPath: fullPath)
-//
-//            if selectedNotebook.children == nil {
-//
-//                // create object
-//                notebooks[selectedIndex].children = [notebook]
-//                // create folder
-//                FilesHelper.shared.createDirectory(folderName: fullPath)
-//                // create file
-//                FilesHelper.shared.writeToFile(fileName: notebook.name, folderPath: fullPath, content: "")
-//            } else {
-//                // create object
-//                notebooks[selectedIndex].children?.append(notebook)
-//                // folder already exists
-//                FilesHelper.shared.writeToFile(fileName: notebook.name, folderPath: fullPath, content: "")
-//            }
-//            // persist
-//            NotebooksListBusiness.persistObject(notebooks: notebooks)
-//
-//            return notebook
-//
-//        } else {
-//
-//            var selectedLevels = selectedLevels
-//            selectedLevels.append(selectedIndex) // because selectedIndex is the last level
-//
-//            var baseLevel = selectedLevels.first!
-//
-//            var levels = selectedLevels
-//            levels.removeFirst() // remove base level
-//
-//            var newNotebook: Notebook!
-//
-//            // get selected Notebook reference (bcz we are using struct, we need use assignment)
-//            func getSelectedNotebookReference(notebook: Notebook) {
-//
-//                // base condition
-//                if levels.count <= 0 {
-//
-//                    // get path for all folders using level numbers
-//                    let fullPath = getFolderNamesPath(levels: selectedLevels)
-//                    newNotebook = createNotebook(atPath: fullPath)
-//
-//                    if notebook.children == nil {
-//                        // create object
-//                        notebook.children = [newNotebook]
-//                        // create folder
-//                        FilesHelper.shared.createDirectory(folderName: fullPath)
-//                        // create file
-//                        FilesHelper.shared.writeToFile(fileName: newNotebook.name, folderPath: fullPath, content: "")
-//                    } else {
-//                        // create object
-//                        notebook.children?.append(newNotebook)
-//                        // folder already exists
-//                        // create file
-//                        FilesHelper.shared.writeToFile(fileName: newNotebook.name, folderPath: fullPath, content: "")
-//                    }
-//
-//                    return
-//                }
-//
-//                // next level
-//                baseLevel = levels.first!
-//                levels.removeFirst()
-//
-//                // next element
-//                getSelectedNotebookReference(notebook: notebook.children![baseLevel])
-//
-//            }
-//
-//            getSelectedNotebookReference(notebook: notebooks[baseLevel])
-//
-//            // persist
-//            persistNotebooks()
-//
-//            return newNotebook
-//        }
-//    }
     
     // return - (newNotebook, parent, ref notebook Index)
-    func insertBelow(ref notebook: Notebook) -> (Notebook, Notebook?, Int) {
-        
+    func insertBelow(ref notebook: Notebook) -> (new: Notebook, parent: Notebook?, refIndex: Int) {
         if let parent = notebook.parent {
             // get index of current notebook
             let index = parent.children!.firstIndex(of: notebook)!
@@ -343,17 +159,16 @@ class NotebooksListBusiness {
             // create object
             notebooks.insert(newNotebook, at: index + 1)
             // create folder
-            FilesHelper.shared.createDirectory(folderName: fullPath)
+            dataManager.createFolder(fullPath)
             // create phycical file
-            FilesHelper.shared.writeToFile(fileName: newNotebook.name, folderPath: fullPath, content: "")
+            dataManager.writeToFile(content: "", fileName: newNotebook.name, folderPath: fullPath, ext: "md")
             // persist
-            NotebooksListBusiness.persistObject(notebooks: notebooks)
+            persistNotebooks()
             return (newNotebook, nil, index)
         }
     }
     
     func insertInside(ref notebook: Notebook, below index: Int? = nil) -> Notebook {
-        
         let fullPath = notebook.folderPath
         let newNotebook = createNotebook(atPath: fullPath)
         newNotebook.parent = notebook
@@ -366,17 +181,16 @@ class NotebooksListBusiness {
             // create object
             notebook.children = [newNotebook]
             // create folder
-            FilesHelper.shared.createDirectory(folderName: fullPath)
+            dataManager.createFolder(fullPath)
         } else {
             // create object
             notebook.children?.append(newNotebook)
             // ..folder already exists
         }
         // create phycical file
-        FilesHelper.shared.writeToFile(fileName: newNotebook.name, folderPath: fullPath, content: "")
-        
+        dataManager.writeToFile(content: "", fileName: newNotebook.name, folderPath: fullPath, ext: "md")
         // persist
-        NotebooksListBusiness.persistObject(notebooks: notebooks)
+        persistNotebooks()
         return newNotebook
     }
     
@@ -396,20 +210,20 @@ class NotebooksListBusiness {
         if let parent = notebook.parent {
             // delete folder if exists
             let folderPath = notebook.folderPath
-            FilesHelper.shared.deleteItem(at: folderPath)
+            dataManager.deleteItem(at: folderPath)
             // delete file.md
             let filePath = folderPath + ".md"
-            FilesHelper.shared.deleteItem(at: filePath)
+            dataManager.deleteItem(at: filePath)
             // delete notebook
             parent.children!.removeAll(where: { $0 == notebook })
         } else {
             // base level
             // delete folder if exists
             let folderPath = "notebooks" + "/" + notebook.name
-            FilesHelper.shared.deleteItem(at: folderPath)
+            dataManager.deleteItem(at: folderPath)
             // delete file.md
             let filePath = folderPath + ".md"
-            FilesHelper.shared.deleteItem(at: filePath)
+            dataManager.deleteItem(at: filePath)
             // delete notebook
             notebooks.removeAll(where: { $0 == notebook })
         }
@@ -425,17 +239,14 @@ class NotebooksListBusiness {
             // top level
             let path = "notebooks"
             let fileName = notebooks[selectedIndex].name
-            
             // delete file.md
-            FilesHelper.shared.deleteFile(fileName: fileName, path: path)
+            dataManager.deleteItem(at: path + "/\(fileName).md")
             // delete folder if exists
             let folderPath = path + "/" + fileName
-            FilesHelper.shared.deleteFolder(path: folderPath)
-            
+            dataManager.deleteItem(at: folderPath)
             // delete object
             notebooks.remove(at: selectedIndex)
         } else {
-            
             // remove top level, as we used it.
             var baseLevel = selectedLevels.first!
             var levels = selectedLevels
@@ -443,18 +254,15 @@ class NotebooksListBusiness {
             
             // traverse to inner selected note
             func getSelectedNotebookReference(notebook: Notebook) {
-                
                 // base condition
                 if levels.count <= 0 {
-                    
                     // file
                     let fullPath = getFolderNamesPath(levels: selectedLevels)
                     let fileName = notebook.children![selectedIndex].name
-                    FilesHelper.shared.deleteFile(fileName: fileName, path: fullPath)
+                    dataManager.deleteItem(at: fullPath + "/\(fileName).md")
                     // delete folder if exists
                     let folderPath = fullPath + "/" + fileName
-                    FilesHelper.shared.deleteFolder(path: folderPath)
-                    
+                    dataManager.deleteItem(at: folderPath)
                     // reached to deeper level, so remove element
                     notebook.children?.remove(at: selectedIndex)
                     
@@ -484,61 +292,30 @@ class NotebooksListBusiness {
         // check if already same file name exists
         let dirPath = notebook.directoryPath
         let newFilePath = dirPath + "/" + newValue + ".md"
+        let oldFilePath = dirPath + "/" + notebook.name + ".md"
         
-        if FilesHelper.shared.fileExists(atPath: newFilePath) {
+        if dataManager.itemExists(atPath: newFilePath) {
             throw NotebookBusinessError.alreadyExists
         }
         // rename file
-        FilesHelper.shared.renameFile(new: newValue, old: notebook.name, folderPath: notebook.directoryPath, ext: "md")
-        
+        dataManager.renameItem(from: oldFilePath, to: newFilePath)
         // rename folder if exists
         if notebook.containChildNotebooks {
+            let newFolderPath = dirPath + "/" + newValue
+            let oldFolderPath = dirPath + "/" + notebook.name
             // rename folder
-            FilesHelper.shared.renameFolder(new: newValue, old: notebook.name, folderPath: notebook.directoryPath)
+            dataManager.renameItem(from: oldFolderPath, to: newFolderPath)
         }
-        
         // store name
         notebook.name = newValue
-        
         persistNotebooks()
     }
-    
-//    func renameNotebook(levels selectedLevels: [Int], index selectedIndex: Int, editingFileName: String) throws {
-//
-//        // get folders path
-//        let path = NotebooksListState.shared.getFolderNamesPath(levels: selectedLevels)
-//
-//        // check if already same file name exists
-//        if FilesHelper.shared.fileExists(atPath: path, fileName: editingFileName) {
-//            
-//            throw NotebookBusinessError.rename
-//        }
-//
-//        guard let notebook = getNotebook(levels: selectedLevels, index: selectedIndex) else {
-//            throw NotebookBusinessError.invalidSelection
-//        }
-//
-//        // rename file
-//        FilesHelper.shared.renameFile(newFileName: editingFileName, oldFileName: notebook.name, filePath: path)
-//
-//        // rename folder if exists
-//        if notebook.containChildNotebooks {
-//            // rename folder
-//            FilesHelper.shared.renameFolder(new: editingFileName, old: notebook.name, folderPath: path)
-//        }
-//
-//        // store name
-//        notebook.name = editingFileName
-//
-//        persistNotebooks()
-//    }
-//
+
     // MARK: - GET
-    
     func getNotebook(levels selectedLevels: [Int], index selectedIndex: Int) -> Notebook? {
     
         // goto last level list
-        var notebooksList = notebooks
+        var notebooksList: [Notebook]? = notebooks
         for level in selectedLevels {
             notebooksList = notebooksList?[level].children
         }
@@ -547,31 +324,22 @@ class NotebooksListBusiness {
     }
     
     func getFolderNamesPath(levels: [Int]) -> String {
-        
-        var notebooksList = self.notebooks!
-        
+        var notebooksList = self.notebooks
         // base condition
         if levels.isEmpty {
             return "notebooks"
         }
-        
         var path = "notebooks"
-        
         for level in levels {
-            
             path.append("/")
             path.append(notebooksList[level].name)
-            
             if notebooksList[level].children != nil {
                 notebooksList = notebooksList[level].children!
             }
         }
-        
         return path
     }
     
-    
-   
     
 }
 
@@ -611,115 +379,17 @@ extension NotebooksListBusiness {
 
 
 
-//// MARK: - Persist Notebooks Hierarchy
-//extension NotebooksBusiness {
-//
-//    // It will save only notebooks list hierarchy to plist, not notebook content.
-//    func saveObject(users: [User]) {
-//
-//        do {
-//            // generate data
-//            let plistData = try PropertyListEncoder().encode(users)
-//
-//            // prepare path
-//            let DocumentDirURL = CloudDataManager.shared.getDocumentDiretoryURL()
-//            
-//            //            try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-//            let fileURL = DocumentDirURL.appendingPathComponent("notebooks-list").appendingPathExtension("plist")
-//
-//            // save file
-//            do {
-//                // Write to the file
-//                try plistData.write(to: fileURL)
-//            } catch let error as NSError {
-//                print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
-//            }
-//        } catch {
-//            print("Save Failed")
-//        }
-//    }
-//
-//    // retrives notebooks hierarcy from plist, not the notebook content.
-//    func retrieveObject() -> [User]? {
-//
-//        // prepare path
-//        //        let DocumentDirURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-//
-//        let DocumentDirURL = CloudDataManager.shared.getDocumentDiretoryURL()
-//
-//        let fileURL = DocumentDirURL.appendingPathComponent("notebooks-list").appendingPathExtension("plist")
-//
-//
-//        do {
-//            // Read the file contents
-//            let plistData = try Data(contentsOf: fileURL)
-//
-//            let notebooksList = try PropertyListDecoder().decode([User].self, from: plistData)
-//
-//            return notebooksList
-//
-//        } catch let error as NSError {
-//            print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
-//        }
-//
-//        return nil
-//    }
-//
-//}
-
-
 // MARK: - Persist Notebooks Hierarchy
 extension NotebooksListBusiness {
     
     // It will save only notebooks list hierarchy to plist, not notebook content.
-    static func persistObject(notebooks: [Notebook]) {
-        
-        do {
-            // generate data
-            let plistData = try PropertyListEncoder().encode(notebooks)
-            
-            // prepare path
-            let DocumentDirURL = CloudDataManager.shared.getDocumentDiretoryURL()
-            
-            //            try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let fileURL = DocumentDirURL.appendingPathComponent("notebooks-list").appendingPathExtension("plist")
-            
-            // save file
-            do {
-                // Write to the file
-                try plistData.write(to: fileURL)
-            } catch let error as NSError {
-                print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
-            }
-        } catch {
-            print("Save Failed")
-        }
+    func persistNotebooks() {
+        dataManager.persistNotebooks(notebooks)
     }
     
     // retrives notebooks hierarcy from plist, not the notebook content.
-    static func retrieveObject() -> [Notebook]? {
-        
-        // prepare path
-        //        let DocumentDirURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-        
-        let DocumentDirURL = CloudDataManager.shared.getDocumentDiretoryURL()
-        
-        let fileURL = DocumentDirURL.appendingPathComponent("notebooks-list").appendingPathExtension("plist")
-        
-        
-        do {
-            // Read the file contents
-            let plistData = try Data(contentsOf: fileURL)
-            
-            let notebooksList = try PropertyListDecoder().decode([Notebook].self, from: plistData)
-            
-            return notebooksList
-            
-        } catch let error as NSError {
-            print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
-        }
-        
-        return nil
+    func retrieveNotebooks() -> [Notebook]? {
+        dataManager.retrieveNotebooks()
     }
     
 }

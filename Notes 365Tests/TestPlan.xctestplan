@@ -1,0 +1,18 @@
+{
+  "configurations" : [
+    {
+      "id" : "DF33112C-B3E0-437E-BCBC-CDD1266CEB47",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+
+  ],
+  "version" : 1
+}

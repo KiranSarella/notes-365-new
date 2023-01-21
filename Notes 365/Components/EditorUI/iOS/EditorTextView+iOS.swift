@@ -7,21 +7,7 @@
 
 import Foundation
 
-#if !os(iOS)
-
-import AppKit
-
-class EditorTextView: NSTextView {
-    
-    
-    
-    override func paste(_ sender: Any?) {
-        pasteAsPlainText(sender)
-    }
-    
-}
-
-#else
+#if os(iOS)
 
 import UIKit
 
@@ -31,11 +17,8 @@ class EditorTextView: UITextView {
     
     override func paste(_ sender: Any?) {
         
-        
-        
 //        pasteAsPlainText(sender)
     }
-    
 }
 #endif
 
