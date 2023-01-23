@@ -193,6 +193,8 @@ struct RowView: View {
     @State private var showFileExistsAlert = false
     @State private var showInvalidCharsAlert = false
     
+    @State private var presentDeleteConfirmation = false
+    
     var body: some View {
 //        TextField(text: $name) {
 //            Text("Notebook")
@@ -217,6 +219,24 @@ struct RowView: View {
                 Text("Add Inside")
             }
             
+            // trash
+            Button(role: .destructive,
+                   action: {
+                presentDeleteConfirmation = true
+            }) {
+                Image(systemName: "trash")
+                    .renderingMode(.original)
+            }
+            .confirmationDialog("Are you sure?", isPresented: $presentDeleteConfirmation) {
+                Button("Delete", role: .destructive) {
+                    DispatchQueue.main.async {
+                        usersState.deleteNotebook(ref: notebook.notebook)
+//                        selectedNotebook = nil
+                    }
+                }
+            } message: {
+                Text("You cannot undo this action")
+            }
         }
         .renameAction { isFocused = true }
         .onChange(of: isFocused, perform: { newValue in

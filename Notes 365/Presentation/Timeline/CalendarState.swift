@@ -14,9 +14,7 @@ public struct DayDate {
 }
 
 extension DayDate: Equatable {}
-extension DayDate: Hashable {
-    
-}
+extension DayDate: Hashable {}
 
 // MARK: - Week
 public struct WeekDate {
@@ -33,6 +31,7 @@ public struct WeekDate {
 }
 
 extension WeekDate: Equatable {}
+extension WeekDate: Hashable {}
 
 // MARK: - Month
 public struct MonthDate {
@@ -51,6 +50,7 @@ public struct MonthDate {
 }
 
 extension MonthDate: Equatable {}
+extension MonthDate: Hashable {}
 
 
 class CalendarState: ObservableObject {

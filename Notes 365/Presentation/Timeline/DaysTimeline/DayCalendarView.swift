@@ -127,17 +127,13 @@ fileprivate struct DayGridView: View {
                             Button {
                                 dayDate = DayDate(date: date)
                             } label: {
-                                
                                 NavigationLink("\(date.getDay())", value: DayDate(date: date))
-                                
 //                                Text("\(date.getDay())")
                                     .padding(4)
                                     .font(.system(size: 10))
                                     .foregroundColor(isToday(date.getDay()) ? CalendarState.todayTint : .primary)
-                                    
                             }
                             .buttonStyle(PlainButtonStyle())
-                                
                         }
                     } else {
                         Text("\(date.getDay())")

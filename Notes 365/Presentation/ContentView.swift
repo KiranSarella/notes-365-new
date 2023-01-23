@@ -23,7 +23,7 @@ struct ContentView: View {
     
     @State var selectedCalenderType: CalendarType.ID? = CalendarType.day.id
     
-    @State var selectedCalender: CalendarType? = CalendarType.day
+    @State var selectedCalender: CalendarType = CalendarType.day
     
     @State var showDetail = false
     
@@ -77,10 +77,11 @@ struct ContentView: View {
             if let selectedMode = Mode.getMode(id: selectedModeID) {
                 switch selectedMode {
                 case .timeline:
-                    
+//
 //                    VStack {
 //
 //                        NavigationLink {
+//                            // destination view here
 //                            Text("Month detail....")
 //                        } label: {
 //                            Text("Month")
@@ -107,9 +108,9 @@ struct ContentView: View {
 //
 //                        Button {
 //                            selectedCalender = CalendarType.week
-//                            
+//
 //                            NavigationLink("day nav", value: selectedCalender)
-//                            
+//
 //                        } label: {
 //                            Text("Week")
 //                        }
@@ -123,6 +124,16 @@ struct ContentView: View {
 //                        print(newValue)
 //                    }
                     
+//                    Picker("", selection: $selectedCalender) {
+//                        ForEach(CalendarType.allCases, id: \.self) { calendarType in
+//                            Text(calendarType.name).tag(calendarType)
+//                        }
+//                    }
+//                    .onChange(of: selectedCalender, perform: { newValue in
+//                        print(newValue)
+//                    })
+//                    .pickerStyle(SegmentedPickerStyle())
+                    
                     TimelineSidebarView(calendarID: $selectedCalenderType)
                         .environmentObject(calendarState)
                 case .noteBooks:
@@ -134,6 +145,7 @@ struct ContentView: View {
                 Text("NOT SELECTED")
             }
         } detail: {
+            
             
             let selectedMode = Mode.getMode(id: selectedModeID ?? Mode.timeline.id)!
             switch selectedMode {
@@ -155,10 +167,10 @@ struct ContentView: View {
 //                }
                 
                
-                
+
 //                Text("Detail")
 //                    .navigationTitle(selectedMode.name)
-                
+//
 //                let calendarType = calendarState.calenderType
 //                switch calendarType {
 //                case .day:
@@ -173,6 +185,8 @@ struct ContentView: View {
                     .navigationTitle(selectedUser?.name ?? "")
             }
 
+            
+            
         }
         .onAppear {
             

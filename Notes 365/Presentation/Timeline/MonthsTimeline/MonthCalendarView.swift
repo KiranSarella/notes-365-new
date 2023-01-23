@@ -112,7 +112,8 @@ struct MonthGridView: View {
                             let monthStartDate = dateStr.toUTCDate(withFormat: "yyyy-MM-dd")!
                             monthDate = MonthDate(date: monthStartDate)
                         } label: {
-                            Text("\(monthSymbol)")
+//                            Text("\(monthSymbol)")
+                            NavigationLink("\(monthSymbol)", value: monthDate)
                                 .padding()
                                 .foregroundColor(isCurrentMonth(monthNumber) ? CalendarState.todayTint : .primary)
 //                                .font(.title3)
@@ -126,7 +127,11 @@ struct MonthGridView: View {
                 .buttonStyle(PlainButtonStyle())
             }
             Spacer()
-        }.frame(height: 220)
+        }
+        .frame(height: 220)
+        .navigationDestination(for: MonthDate.self) { newDate in
+            MonthDetailView()
+        }
     }
     
     func getMonthStartDate(for month: Int, year: String) -> Date {

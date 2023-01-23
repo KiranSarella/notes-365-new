@@ -166,12 +166,83 @@ struct WeekView: View {
         week == selectedWeek ? .blue : .clear
     }
     
+    var isValidSelection: Bool {
+        if week.weekDays.first!.getMonth() == navigationDate.getMonth() ||
+            week.weekDays.last!.getMonth() == navigationDate.getMonth() {
+
+//            let selectedDate = week.weekDays.first!
+//            weekDate = WeekDate(date: selectedDate)
+//            selectedWeek = week
+//
+            return true
+        }
+        
+        return false
+    }
+    
     var body: some View {
-        ZStack() {
+        
+        //
+        //            NavigationLink("\(week.weekNumber)", value: weekDate)
+        //
+        
+        if isValidSelection {
+            NavigationLink(value: weekDate) {
+                
+                ZStack() {
+                    
+                    HStack() {
+                        Text("\(week.weekNumber)")
+                        //                NavigationLink("\(week.weekNumber)", value: WeekDate(date: week.weekDays.first!))
+                            .frame(maxWidth: .infinity)
+                        //                    .font(.system(size: 10))
+                            .font(.system(size: 11, weight: .bold))
+                            .foregroundColor(Color.red)
+                        ForEach(week.weekDays, id: \.self) { date in
+                            if date.getMonth() == navigationDate.getMonth() {
+                                Text("\(date.getDay())")
+                                    .frame(maxWidth: .infinity)
+                                    .font(.system(size: 10))
+                                    .foregroundColor(week.isCurrentWeek() ? CalendarState.todayTint : .primary)
+                            } else {
+                                Text("\(date.getDay())")
+                                    .frame(maxWidth: .infinity)
+                                    .font(.system(size: 10))
+                                    .opacity(0.4)
+                            }
+                        }
+                    }
+                    //                .disabled(true)
+                    .padding(.init(top: 2, leading: 5, bottom: 2, trailing: 5))
+                    
+                    
+                    RoundedRectangle(cornerRadius: 8)
+                    //                .stroke(highlightColor(week), lineWidth: 1)
+                        .stroke(Color.blue, lineWidth: isSelectedWeek(week) ? 1 : 0)
+                        .frame(height: 30)
+                        .background(Color.red.opacity(0.01))
+                    //                    .onTapGesture {
+                    //                        // accept tap only when week belongs to current month
+                    //                        if week.weekDays.first!.getMonth() == navigationDate.getMonth() ||
+                    //                            week.weekDays.last!.getMonth() == navigationDate.getMonth() {
+                    //
+                    //                            let selectedDate = week.weekDays.first!
+                    //                            weekDate = WeekDate(date: selectedDate)
+                    //                            selectedWeek = week
+                    //                        }
+                    //                    }
+                }
+                
+            }
+            .navigationDestination(for: WeekDate.self) { newDate in
+                WeekDetailView()
+            }
+        } else {
             HStack() {
                 Text("\(week.weekNumber)")
+                //                NavigationLink("\(week.weekNumber)", value: WeekDate(date: week.weekDays.first!))
                     .frame(maxWidth: .infinity)
-//                    .font(.system(size: 10))
+                //                    .font(.system(size: 10))
                     .font(.system(size: 11, weight: .bold))
                     .foregroundColor(Color.red)
                 ForEach(week.weekDays, id: \.self) { date in
@@ -188,25 +259,12 @@ struct WeekView: View {
                     }
                 }
             }
+            //                .disabled(true)
             .padding(.init(top: 2, leading: 5, bottom: 2, trailing: 5))
-            RoundedRectangle(cornerRadius: 8)
-//                .stroke(highlightColor(week), lineWidth: 1)
-                .stroke(Color.blue, lineWidth: isSelectedWeek(week) ? 1 : 0)
-                .frame(height: 30)
-                .background(Color.red.opacity(0.01))
-                .onTapGesture {
-                    // accept tap only when week belongs to current month
-                    if week.weekDays.first!.getMonth() == navigationDate.getMonth() ||
-                        week.weekDays.last!.getMonth() == navigationDate.getMonth() {
-                        
-                        let selectedDate = week.weekDays.first!
-                        weekDate = WeekDate(date: selectedDate)
-                        
-                        selectedWeek = week
-                    }
-                }
             
         }
+        
+        
     }
 }
 

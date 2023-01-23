@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WeekDetailView: View {
     
+//    @Binding var weekDate: WeekDate
     @StateObject private var weekState = WeekDetailState()
     
     var body: some View {
