@@ -13,4 +13,9 @@
     
     
 
+## to fix navigation to work on both iOS, iPadOS:
+iOS - using navigation link and navigation destination in calender views
+iPad - using contentView - detail block
+
+
 

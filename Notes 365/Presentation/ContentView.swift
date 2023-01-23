@@ -23,7 +23,7 @@ struct ContentView: View {
     
     @State var selectedCalenderType: CalendarType.ID? = CalendarType.day.id
     
-    @State var selectedCalender: CalendarType = CalendarType.day
+    @State var selectedCalender: CalendarType? = CalendarType.day
     
     @State var showDetail = false
     
@@ -118,10 +118,32 @@ struct ContentView: View {
 //                    }
 //
 //
-//                    List(CalendarType.allCases, selection: $selectedCalenderType) { type in
+                    
+//                    Button {
+//                        calendarState.calenderType = CalendarType.day
+//                    } label: {
+//                        Text("day")
+//                    }
+//
+                   
+                    
+//                    List(CalendarType.allCases, selection: $selectedCalender) { type in
+//
 //                        Text(type.name)
-//                    }.onChange(of: selectedCalenderType) { newValue in
+//
+////                        Button {
+////                            calendarState.calenderType = type
+////                        } label: {
+////                            Text(type.name)
+////                        }
+//
+//                    }
+//                    .onChange(of: selectedCalender) { newValue in
 //                        print(newValue)
+//                        if newValue != nil {
+//                            calendarState.calenderType = newValue!
+//                        }
+//
 //                    }
                     
 //                    Picker("", selection: $selectedCalender) {
@@ -134,8 +156,11 @@ struct ContentView: View {
 //                    })
 //                    .pickerStyle(SegmentedPickerStyle())
                     
+
                     TimelineSidebarView(calendarID: $selectedCalenderType)
                         .environmentObject(calendarState)
+                    
+                   
                 case .noteBooks:
                     NotebooksSidebarView(selectedNotebook: $selectedUser)
                         .environmentObject(usersState)
@@ -146,50 +171,38 @@ struct ContentView: View {
             }
         } detail: {
             
-            
             let selectedMode = Mode.getMode(id: selectedModeID ?? Mode.timeline.id)!
             switch selectedMode {
             case .timeline:
-                
-                EmptyView()
-//
-//                if let calType = selectedCalender {
-//                    switch calType {
-//                    case .day:
-//                        Text("day 3 detail")
-//                    case .week:
-//                        Text("week 3 detail")
-//                        //                    WeekDetailView()
-//                    case .month:
-//                        Text("month 3 detail")
-//                        //                    MonthDetailView()
-//                    }
-//                }
-                
-               
-
-//                Text("Detail")
-//                    .navigationTitle(selectedMode.name)
-//
-//                let calendarType = calendarState.calenderType
-//                switch calendarType {
-//                case .day:
-//                    DayDetailView()
-//                case .week:
-//                    WeekDetailView()
-//                case .month:
-//                    MonthDetailView()
-//                }
+#if os(macOS)
+                let calendarType = calendarState.calenderType
+                switch calendarType {
+                case .day:
+                    DayDetailView()
+                case .week:
+                    WeekDetailView()
+                case .month:
+                    MonthDetailView()
+                }
+#else
+                if UIDevice.current.userInterfaceIdiom == .phone {
+                    EmptyView()
+                } else {
+                    let calendarType = calendarState.calenderType
+                    switch calendarType {
+                    case .day:
+                        DayDetailView()
+                    case .week:
+                        WeekDetailView()
+                    case .month:
+                        MonthDetailView()
+                    }
+                }
+#endif
             case .noteBooks:
                 NotebookEditorView(notebookM: $selectedUser)
                     .navigationTitle(selectedUser?.name ?? "")
             }
-
-            
-            
-        }
-        .onAppear {
-            
         }
     }
     
@@ -200,5 +213,18 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+struct DayDetailTest: View {
+    
+    @Binding var selectedCalender: CalendarType?
+    
+    var body: some View {
+        if let cal = selectedCalender {
+            Text(cal.name)
+        } else {
+            Text("SELECTION REQ...")
+        }
     }
 }

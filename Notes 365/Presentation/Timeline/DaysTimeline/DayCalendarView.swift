@@ -102,6 +102,7 @@ fileprivate struct DayGridView: View {
     @State private var dates: [Date] = []
     
     var body: some View {
+        
         VStack {
             LazyVGrid(columns: columns) {
                 // mon, tue,..
@@ -127,11 +128,25 @@ fileprivate struct DayGridView: View {
                             Button {
                                 dayDate = DayDate(date: date)
                             } label: {
-                                NavigationLink("\(date.getDay())", value: DayDate(date: date))
-//                                Text("\(date.getDay())")
+#if os(macOS)
+                                Text("\(date.getDay())")
                                     .padding(4)
                                     .font(.system(size: 10))
                                     .foregroundColor(isToday(date.getDay()) ? CalendarState.todayTint : .primary)
+#else
+                                if UIDevice.current.userInterfaceIdiom == .phone {
+                                    NavigationLink("\(date.getDay())", value: DayDate(date: date))
+                                        .padding(4)
+                                        .font(.system(size: 10))
+                                        .foregroundColor(isToday(date.getDay()) ? CalendarState.todayTint : .primary)
+                                } else {
+                                    Text("\(date.getDay())")
+                                        .padding(4)
+                                        .font(.system(size: 10))
+                                        .foregroundColor(isToday(date.getDay()) ? CalendarState.todayTint : .primary)
+                                }
+#endif
+                                
                             }
                             .buttonStyle(PlainButtonStyle())
                         }
@@ -154,6 +169,10 @@ fileprivate struct DayGridView: View {
         .frame(height: 220)
         .navigationDestination(for: DayDate.self) { newDate in
             DayDetailView()
+                .onAppear {
+                    dayDate = newDate
+                    CalendarState.shared.dayDate = dayDate
+                }
         }
     }
     

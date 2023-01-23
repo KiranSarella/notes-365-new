@@ -91,47 +91,114 @@ struct MonthHeaderView: View {
 
 struct MonthGridView: View {
     
-    var columns = Array(repeating: GridItem(), count: 3)
-    var monthSymbols = Calendar.current.shortMonthSymbols
     @Binding var monthDate: MonthDate
     @Binding var navigationDate: Date
 
+    var columns = Array(repeating: GridItem(), count: 3)
+    var monthSymbols = Calendar.current.shortMonthSymbols
+    
+    @State private var monthGridDates = [MonthGridDate]()
+    
     var body: some View {
         VStack {
             LazyVGrid(columns: columns) {
-                ForEach(monthSymbols.indices, id: \.self) { i in
-                    let monthSymbol = monthSymbols[i]
-                    let monthNumber = i + 1
+                ForEach(monthGridDates) { date in
                     ZStack {
                         Button {
-                            let year = navigationDate.string(withFormat: "YYYY")
-                            let month = monthNumber
-                            let day = 1
-                            // "yyyy-MM-dd"
-                            let dateStr = "\(year)-\(month)-\(day)"
-                            let monthStartDate = dateStr.toUTCDate(withFormat: "yyyy-MM-dd")!
-                            monthDate = MonthDate(date: monthStartDate)
+                            monthDate = date.monthDate
                         } label: {
-//                            Text("\(monthSymbol)")
-                            NavigationLink("\(monthSymbol)", value: monthDate)
+#if os(macOS)
+                            Text("\(date.monthSymbol)")
                                 .padding()
-                                .foregroundColor(isCurrentMonth(monthNumber) ? CalendarState.todayTint : .primary)
-//                                .font(.title3)
+                                .foregroundColor(date.isCurrentMonth ? CalendarState.todayTint : .primary)
+                            //                                .font(.title3)
+#else
+                            if UIDevice.current.userInterfaceIdiom == .phone {
+                                NavigationLink("\(date.monthSymbol)", value: date.monthDate)
+                                    .padding()
+                                    .foregroundColor(date.isCurrentMonth ? CalendarState.todayTint : .primary)
+                            } else {
+                                Text("\(date.monthSymbol)")
+                                    .padding()
+                                    .foregroundColor(date.isCurrentMonth ? CalendarState.todayTint : .primary)
+                            }
+#endif
                         }
-                        .buttonStyle(.plain)
                         RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.blue, lineWidth: isSelectedMonth(monthNumber) ? 1 : 0)
+                            .stroke(Color.blue, lineWidth: isSelectedMonth(date.monthNumber) ? 1 : 0)
                     }
-                    .buttonStyle(.plain)
                 }
-                .buttonStyle(PlainButtonStyle())
+                
+//                ForEach(monthSymbols.indices, id: \.self) { i in
+//                    let monthSymbol = monthSymbols[i]
+//                    let monthNumber = i + 1
+//                    ZStack {
+//                        Button {
+//                            let year = navigationDate.string(withFormat: "YYYY")
+//                            let month = monthNumber
+//                            let day = 1
+//                            // "yyyy-MM-dd"
+//                            let dateStr = "\(year)-\(month)-\(day)"
+//                            let monthStartDate = dateStr.toUTCDate(withFormat: "yyyy-MM-dd")!
+//                            monthDate = MonthDate(date: monthStartDate)
+//                        } label: {
+//#if os(macOS)
+//                            Text("\(monthSymbol)")
+//                                .padding()
+//                                .foregroundColor(isCurrentMonth(monthNumber) ? CalendarState.todayTint : .primary)
+////                                .font(.title3)
+//#else
+//                            if UIDevice.current.userInterfaceIdiom == .phone {
+//                                NavigationLink("\(monthSymbol)", value: monthDate)
+//                                    .padding()
+//                                    .foregroundColor(isCurrentMonth(monthNumber) ? CalendarState.todayTint : .primary)
+//                            } else {
+//                                Text("\(monthSymbol)")
+//                                    .padding()
+//                                    .foregroundColor(isCurrentMonth(monthNumber) ? CalendarState.todayTint : .primary)
+//                            }
+//#endif
+//                        }
+//                        .buttonStyle(.plain)
+//                        RoundedRectangle(cornerRadius: 8)
+//                            .stroke(Color.blue, lineWidth: isSelectedMonth(monthNumber) ? 1 : 0)
+//                    }
+//                }
+                
             }
+            .buttonStyle(PlainButtonStyle())
             Spacer()
         }
         .frame(height: 220)
         .navigationDestination(for: MonthDate.self) { newDate in
             MonthDetailView()
+                .onAppear {
+                    monthDate = newDate
+                }
         }
+        .onAppear {
+            refreshMonthGrid(navigationDate: navigationDate)
+        }
+        .onChange(of: navigationDate) { newValue in
+            refreshMonthGrid(navigationDate: newValue)
+        }
+    }
+    
+    func refreshMonthGrid(navigationDate: Date) {
+        var monthDatesList = [MonthGridDate]()
+        
+        let year = navigationDate.string(withFormat: "YYYY")
+        for monthIndex in monthSymbols.indices {
+            let monthSymbol = monthSymbols[monthIndex]
+            let month = monthIndex + 1
+            let day = 1
+            // "yyyy-MM-dd"
+            let dateStr = "\(year)-\(month)-\(day)"
+            let monthStartDate = dateStr.toUTCDate(withFormat: "yyyy-MM-dd")!
+            monthDatesList.append(MonthGridDate(date: monthStartDate, symbol: monthSymbol, number: month))
+        }
+        
+        monthGridDates = monthDatesList
     }
     
     func getMonthStartDate(for month: Int, year: String) -> Date {

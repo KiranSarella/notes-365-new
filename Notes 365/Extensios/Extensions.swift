@@ -129,6 +129,18 @@ public extension Date {
         }
         return dates
     }
+    
+    static func isCurrentMonth(_ date: Date) -> Bool {
+        // check same year
+        // check same month
+        let today = Date()
+        
+        if date.getYear() == today.getYear() && date.getMonth() == today.getMonth() {
+            return true
+        }
+        
+        return false
+    }
 }
 
 

@@ -34,17 +34,35 @@ extension WeekDate: Equatable {}
 extension WeekDate: Hashable {}
 
 // MARK: - Month
+public struct MonthGridDate: Identifiable {
+    
+    public var id = UUID()
+    
+    let monthNumber: Int
+    let monthSymbol: String
+    let monthDate: MonthDate
+    var isCurrentMonth = false
+    
+    init(date: Date, symbol: String, number: Int) {
+        
+        monthDate = MonthDate(date: date)
+        monthNumber = number
+        monthSymbol = symbol
+        isCurrentMonth = Date.isCurrentMonth(date)
+    }
+    
+}
+
+extension MonthGridDate: Equatable {}
+extension MonthGridDate: Hashable {}
+
 public struct MonthDate {
+
     let start: Date
     let end: Date
     
-//    var days:[Date] {
-//        return []
-//    }
-    
     init(date: Date) {
         (start, end) = date.getMonthStartEndDates()
-//        monthDate = MonthDate(start: start, end: end)
     }
     
 }

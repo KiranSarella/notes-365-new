@@ -36,6 +36,7 @@ struct DayDetailView: View {
                     Spacer()
                 }
             }
+            .navigationTitle(dayState.dayDate.date.formattedDate())
         }
         .onChange(of: dayState.dayDate) { newValue in
             Task {
