@@ -8,31 +8,7 @@
 import SwiftUI
 import Combine
 
-public struct Week: Hashable {
-    let weekNumber: Int
-    let weekDays: [Date]
-    
-    func isCurrentWeek() -> Bool {
-        // check same year
-        // check same month
-        // today should be in between weekdates
-        let today = Date()
-        
-        let start = self.weekDays.first!
-        let end = self.weekDays.last!
-        
-        if start.getYear() == today.getYear() &&
-            start.getMonth() == today.getMonth() {
-            // today should be in between that week dates
-            if today >= start && today <= end {
-                return true
-            }
-        }
-        
-        return false
-    }
-    
-}
+
 
 public struct DayChanges: Identifiable {
     public let id = UUID()

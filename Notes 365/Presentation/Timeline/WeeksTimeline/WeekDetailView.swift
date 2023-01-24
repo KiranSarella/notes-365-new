@@ -9,7 +9,6 @@ import SwiftUI
 
 struct WeekDetailView: View {
     
-//    @Binding var weekDate: WeekDate
     @StateObject private var weekState = WeekDetailState()
     
     var body: some View {
@@ -73,6 +72,7 @@ struct WeekDetailView: View {
         .onDisappear {
             weekState.generatorTask?.cancel()
         }
+        .navigationTitle(weekState.weekDate.start.formattedDate())
     }
     
     static func getWeekStartEndDates(date: Date) -> (Date, Date) {

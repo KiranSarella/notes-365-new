@@ -8,16 +8,42 @@
 import SwiftUI
 //import AttributedText
 
+public struct WeekGrid: Hashable {
+    let weekNumber: Int
+    let weekDays: [Date]
+    
+    func isCurrentWeek() -> Bool {
+        // check same year
+        // check same month
+        // today should be in between weekdates
+        let today = Date()
+        
+        let start = self.weekDays.first!
+        let end = self.weekDays.last!
+        
+        if start.getYear() == today.getYear() &&
+            start.getMonth() == today.getMonth() {
+            // today should be in between that week dates
+            if today >= start && today <= end {
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+}
+
 struct WeekCalendarView: View {
 
     @Binding var weekDate: WeekDate
     @State private var navigationDate: Date = Date()
-    @State private var selectedWeek: Week = getWeek(Date())
+    
+    @State private var selectedWeek: WeekGrid = getWeek(Date())
     
     var calendar = Calendar(identifier: .gregorian)
    
     var body: some View {
-        
         VStack {
             // current month, prev, next actions
             WeekHeaderView(weekDate: $weekDate,
@@ -48,7 +74,7 @@ struct WeekHeaderView: View {
     
     @Binding var weekDate: WeekDate
     @Binding var navigationDate: Date
-    @Binding var selectedWeek: Week
+    @Binding var selectedWeek: WeekGrid
     var calendar: Calendar
     
     var body: some View {
@@ -117,7 +143,7 @@ struct WeekGridView: View {
     
     @Binding var weekDate: WeekDate
     @Binding var navigationDate: Date
-    @Binding var selectedWeek: Week
+    @Binding var selectedWeek: WeekGrid
     
     var weekdaySymbols = [" "] + Calendar.current.shortWeekdaySymbols   // [" "] is required
     var calendar = Calendar(identifier: .gregorian)
@@ -154,15 +180,15 @@ struct WeekView: View {
     
     @Binding var weekDate: WeekDate
     @Binding var navigationDate: Date
-    @Binding var selectedWeek: Week
+    @Binding var selectedWeek: WeekGrid
     
-    var week: Week
+    var week: WeekGrid
     
-    private func isSelectedWeek(_ week: Week) -> Bool {
+    private func isSelectedWeek(_ week: WeekGrid) -> Bool {
         selectedWeek == week
     }
     
-    private func highlightColor(_ week: Week) -> Color {
+    private func highlightColor(_ week: WeekGrid) -> Color {
         week == selectedWeek ? .blue : .clear
     }
     
@@ -180,136 +206,127 @@ struct WeekView: View {
         return false
     }
     
+    fileprivate func weekGridRowView() -> some View {
+        return HStack() {
+            Text("\(week.weekNumber)")
+                .frame(maxWidth: .infinity)
+                .font(.system(size: 11, weight: .bold))
+                .foregroundColor(Color.red)
+            ForEach(week.weekDays, id: \.self) { date in
+                if date.getMonth() == navigationDate.getMonth() {
+                    Text("\(date.getDay())")
+                        .frame(maxWidth: .infinity)
+                        .font(.system(size: 10))
+                        .foregroundColor(week.isCurrentWeek() ? CalendarState.todayTint : .primary)
+                } else {
+                    Text("\(date.getDay())")
+                        .frame(maxWidth: .infinity)
+                        .font(.system(size: 10))
+                        .opacity(0.4)
+                }
+            }
+        }
+        .padding(.init(top: 2, leading: 5, bottom: 2, trailing: 5))
+    }
+    
     var body: some View {
         
-        //
-        //            NavigationLink("\(week.weekNumber)", value: weekDate)
-        //
-        
-        if isValidSelection {
-            NavigationLink(value: weekDate) {
-                
-                ZStack() {
-                    
-                    HStack() {
-                        Text("\(week.weekNumber)")
-                        //                NavigationLink("\(week.weekNumber)", value: WeekDate(date: week.weekDays.first!))
-                            .frame(maxWidth: .infinity)
-                        //                    .font(.system(size: 10))
-                            .font(.system(size: 11, weight: .bold))
-                            .foregroundColor(Color.red)
-                        ForEach(week.weekDays, id: \.self) { date in
-                            if date.getMonth() == navigationDate.getMonth() {
-                                Text("\(date.getDay())")
-                                    .frame(maxWidth: .infinity)
-                                    .font(.system(size: 10))
-                                    .foregroundColor(week.isCurrentWeek() ? CalendarState.todayTint : .primary)
-                            } else {
-                                Text("\(date.getDay())")
-                                    .frame(maxWidth: .infinity)
-                                    .font(.system(size: 10))
-                                    .opacity(0.4)
-                            }
-                        }
+#if os(macOS)
+        ZStack() {
+            weekGridRowView()
+            RoundedRectangle(cornerRadius: 8)
+            //                .stroke(highlightColor(week), lineWidth: 1)
+                .stroke(Color.blue, lineWidth: isSelectedWeek(week) ? 1 : 0)
+                .frame(height: 30)
+                .background(Color.red.opacity(0.01))
+                .onTapGesture {
+                    // accept tap only when week belongs to current month
+                    if week.weekDays.first!.getMonth() == navigationDate.getMonth() ||
+                        week.weekDays.last!.getMonth() == navigationDate.getMonth() {
+
+                        let selectedDate = week.weekDays.first!
+                        weekDate = WeekDate(date: selectedDate)
+                        selectedWeek = week
                     }
-                    //                .disabled(true)
-                    .padding(.init(top: 2, leading: 5, bottom: 2, trailing: 5))
-                    
-                    
-                    RoundedRectangle(cornerRadius: 8)
-                    //                .stroke(highlightColor(week), lineWidth: 1)
+                }
+        }
+#else
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            if isValidSelection {
+                NavigationLink(value: week) {
+                    ZStack() {
+                        weekGridRowView()
+                        RoundedRectangle(cornerRadius: 8)
                         .stroke(Color.blue, lineWidth: isSelectedWeek(week) ? 1 : 0)
                         .frame(height: 30)
                         .background(Color.red.opacity(0.01))
-                    //                    .onTapGesture {
-                    //                        // accept tap only when week belongs to current month
-                    //                        if week.weekDays.first!.getMonth() == navigationDate.getMonth() ||
-                    //                            week.weekDays.last!.getMonth() == navigationDate.getMonth() {
-                    //
-                    //                            let selectedDate = week.weekDays.first!
-                    //                            weekDate = WeekDate(date: selectedDate)
-                    //                            selectedWeek = week
-                    //                        }
-                    //                    }
+                    }
                 }
-                
-            }
-            .navigationDestination(for: WeekDate.self) { newDate in
-                WeekDetailView()
+                .navigationDestination(for: WeekGrid.self) { newDate in
+                    WeekDetailView()
+                        .onAppear {
+                            weekDate = WeekDate(date: newDate.weekDays.first!)
+                            selectedWeek = newDate
+                        }
+                }
+            } else {
+                weekGridRowView()
             }
         } else {
-            HStack() {
-                Text("\(week.weekNumber)")
-                //                NavigationLink("\(week.weekNumber)", value: WeekDate(date: week.weekDays.first!))
-                    .frame(maxWidth: .infinity)
-                //                    .font(.system(size: 10))
-                    .font(.system(size: 11, weight: .bold))
-                    .foregroundColor(Color.red)
-                ForEach(week.weekDays, id: \.self) { date in
-                    if date.getMonth() == navigationDate.getMonth() {
-                        Text("\(date.getDay())")
-                            .frame(maxWidth: .infinity)
-                            .font(.system(size: 10))
-                            .foregroundColor(week.isCurrentWeek() ? CalendarState.todayTint : .primary)
-                    } else {
-                        Text("\(date.getDay())")
-                            .frame(maxWidth: .infinity)
-                            .font(.system(size: 10))
-                            .opacity(0.4)
+            ZStack() {
+                weekGridRowView()
+                RoundedRectangle(cornerRadius: 8)
+                .stroke(Color.blue, lineWidth: isSelectedWeek(week) ? 1 : 0)
+                .frame(height: 30)
+                .background(Color.red.opacity(0.01))
+                .onTapGesture {
+                    // accept tap only when week belongs to current month
+                    if week.weekDays.first!.getMonth() == navigationDate.getMonth() ||
+                        week.weekDays.last!.getMonth() == navigationDate.getMonth() {
+
+                        let selectedDate = week.weekDays.first!
+                        weekDate = WeekDate(date: selectedDate)
+                        selectedWeek = week
                     }
                 }
             }
-            //                .disabled(true)
-            .padding(.init(top: 2, leading: 5, bottom: 2, trailing: 5))
-            
         }
-        
-        
+#endif
     }
+    
+    
 }
 
 
 
 
-func getWeekDates(_ inputDate: Date) -> [Week] {
-    
+func getWeekDates(_ inputDate: Date) -> [WeekGrid] {
     let calendar = Calendar.current
-    
     let calendarDates = getCalenderDates(forMonth: inputDate)
-    
-    
-    
-    var weeks = [Week]()
-    
+    var weeks = [WeekGrid]()
     for row in 0..<6 {
-        
         let startIndex = 7 * row
         let endIndex = startIndex + 7
-        
         // if first date is within that month then only take that week
         if calendarDates[startIndex].getMonth() > inputDate.getMonth() && calendarDates[startIndex].getYear() == inputDate.getYear() {
             break
         }
-        
         let dates = Array(calendarDates[startIndex..<endIndex])
-        
         let weekNumber = calendar.component(.weekOfYear, from: dates[3])
 //        let weekNumber = calendar.component(.weekOfYear, from: dates[0])
-        
-        weeks.append(Week(weekNumber: weekNumber, weekDays: dates))
+        weeks.append(WeekGrid(weekNumber: weekNumber, weekDays: dates))
     }
-    
     return weeks
 }
 
 
-func getWeek(_ inputDate: Date) -> Week {
+func getWeek(_ inputDate: Date) -> WeekGrid {
     
     let calendar = Calendar.current
     let calendarDates = getCalenderDates(forMonth: inputDate)
     let inputWeekNumber = calendar.component(.weekOfYear, from: inputDate)
     
-    var week: Week!
+    var week: WeekGrid!
     
     for row in 0..<6 {
         
@@ -321,7 +338,7 @@ func getWeek(_ inputDate: Date) -> Week {
         let weekNumber = calendar.component(.weekOfYear, from: dates[3])    // take center one as a weeknumber
         
         if weekNumber == inputWeekNumber {
-            week = Week(weekNumber: weekNumber, weekDays: dates)
+            week = WeekGrid(weekNumber: weekNumber, weekDays: dates)
             break
         }
     }
