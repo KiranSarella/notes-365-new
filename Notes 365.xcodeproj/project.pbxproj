@@ -11,6 +11,7 @@
 		9F09CEB229267FBC00609D99 /* VersionBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F09CEB029267FBC00609D99 /* VersionBusiness.swift */; };
 		9F09CEB4292684D700609D99 /* PathHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F09CEB3292684D700609D99 /* PathHelper.swift */; };
 		9F09CEB5292684D700609D99 /* PathHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F09CEB3292684D700609D99 /* PathHelper.swift */; };
+		9F14B491298A684F0079D23B /* ThemeDetailView+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B490298A684F0079D23B /* ThemeDetailView+iOS.swift */; };
 		9F188D812930E49F0078D413 /* MarkdownHeading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F188D802930E49F0078D413 /* MarkdownHeading.swift */; };
 		9F1AAE31292C940A00B4D254 /* FeedbackView+macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1AAE30292C940A00B4D254 /* FeedbackView+macOS.swift */; };
 		9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1AAE32292C94F800B4D254 /* FeedbackState.swift */; };
@@ -151,6 +152,7 @@
 /* Begin PBXFileReference section */
 		9F09CEB029267FBC00609D99 /* VersionBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionBusiness.swift; sourceTree = "<group>"; };
 		9F09CEB3292684D700609D99 /* PathHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathHelper.swift; sourceTree = "<group>"; };
+		9F14B490298A684F0079D23B /* ThemeDetailView+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThemeDetailView+iOS.swift"; sourceTree = "<group>"; };
 		9F188D802930E49F0078D413 /* MarkdownHeading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownHeading.swift; sourceTree = "<group>"; };
 		9F1AAE30292C940A00B4D254 /* FeedbackView+macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackView+macOS.swift"; sourceTree = "<group>"; };
 		9F1AAE32292C94F800B4D254 /* FeedbackState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackState.swift; sourceTree = "<group>"; };
@@ -301,6 +303,7 @@
 			isa = PBXGroup;
 			children = (
 				9F45BD3A2920CCCF003DE332 /* ThemeDetailView.swift */,
+				9F14B490298A684F0079D23B /* ThemeDetailView+iOS.swift */,
 				9F45BD342920CCCF003DE332 /* FontPicker.swift */,
 				9F45BD3C2920CCCF003DE332 /* ColorPickerWindow.swift */,
 				9F3DB0CF292E70BA00704860 /* ColorPickerWindowManager.swift */,
@@ -869,6 +872,7 @@
 				9FB6C6A52927936F00C8EC76 /* DayDetailState.swift in Sources */,
 				9F45BD5F2920CD8A003DE332 /* DayDetailView.swift in Sources */,
 				9F3DB0C6292E1D9200704860 /* ThemeBusiness.swift in Sources */,
+				9F14B491298A684F0079D23B /* ThemeDetailView+iOS.swift in Sources */,
 				9F45BD662920CDA9003DE332 /* NotesTitleView.swift in Sources */,
 				9F45BD812920CDE0003DE332 /* MarkdownAttributedString+iOS.swift in Sources */,
 				9FB6C6A3292791A200C8EC76 /* MonthDetailState.swift in Sources */,
@@ -1113,7 +1117,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
@@ -1121,8 +1125,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sarella.MyNotes.local;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -1159,7 +1163,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
@@ -1169,8 +1173,8 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "mac-app-store";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

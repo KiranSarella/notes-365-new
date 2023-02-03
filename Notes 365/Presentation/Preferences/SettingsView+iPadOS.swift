@@ -11,9 +11,10 @@ import SwiftUI
 
 struct SettingsView_iPadOS: View {
     
+    
+    
     public enum Setting: String, CaseIterable, Identifiable {
         case themes = "Themes"
-        case purchases = "Purchases"
         case feedback = "Feedback"
         
         public var id: String { self.name }
@@ -26,8 +27,6 @@ struct SettingsView_iPadOS: View {
             switch self {
             case .themes:
                 return "customized 1"
-            case .purchases:
-                return "yearly - 2020 april"
             case .feedback:
                 return ""
             }
@@ -37,8 +36,6 @@ struct SettingsView_iPadOS: View {
             switch self {
             case .themes:
                 return "paintbrush"
-            case .purchases:
-                return "cart"
             case .feedback:
                 return "hand.thumbsup"
             }
@@ -50,27 +47,21 @@ struct SettingsView_iPadOS: View {
         }
         
     }
+
+    @Binding var showModel: Bool
     
-//    enum Setting: Hashable, Identifiable {
-//        var id: ObjectIdentifier
-//
-//        case themes
-//        case purchases
-//        case feedback
-//    }
-//
-//    struct Setting: Hashable, Identifiable {
-//        let id = UUID()
-//        let name: String
-//        let image: String
-//        var description: String?
-//    }
-    
-//    @State private var options: [Setting] = []
-//
-//    @State private var selectedOption: Setting?
+    @StateObject private var themesListState = ThemesListState()
     
     @State private var selectedModeID: Mode.ID?
+    
+    @State private var selectedLightThemeID: MarkdownTheme.ID = UUID()
+    @State private var selectedDarkThemeID: MarkdownTheme.ID = UUID()
+    
+    
+    @State private var selectedThemeID: MarkdownTheme.ID?
+    @State private var selectedTheme: MarkdownTheme?
+    
+    @State private var showThemeDetail = false
     
     var body: some View {
         
@@ -96,9 +87,67 @@ struct SettingsView_iPadOS: View {
                 .navigationDestination(for: Setting.self) { option in
                     switch option {
                     case .themes:
-                        Text("inprogress")
-                    case .purchases:
-                        PurchasesView()
+                        
+                        List {
+                            Picker("Light", selection: $selectedLightThemeID) {
+                                ForEach(themesListState.themes) { theme in
+                                    Text(theme.themeName).tag(theme.id)
+                                }
+                            }
+                            Picker("Dark", selection: $selectedDarkThemeID) {
+                                ForEach(themesListState.themes) { theme in
+                                    Text(theme.themeName).tag(theme.id)
+                                }
+                            }
+                            
+                            Section("Themes") {
+                                ForEach(themesListState.themes, id:\.self) { theme in
+                                    
+//                                    Button {
+//                                        showThemeDetail = true
+//                                    } label: {
+//                                        
+//                                        HStack {
+//                                            Text(theme.themeName)
+//                                            Spacer()
+//                                            Image(systemName: "chevron.right")
+//                                                .foregroundColor(.gray)
+//                                                .fixedSize()
+//                                                .frame(width: 8, height: 8)
+//                                        }
+//                                        
+//                                    }
+
+                                    
+//                                    Button(theme.themeName) {
+//                                        showThemeDetail = true
+//                                    }
+                                    
+                                    NavigationLink {
+                                        ThemeDetailView_iOS()
+                                    } label: {
+                                        Text(theme.themeName)
+                                    }
+
+                                    
+//                                    NavigationLink(theme.themeName, value: selectedTheme)
+                                    
+//                                    Text(theme.themeName).tag(theme.id)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                                
+                            }
+//                            .sheet(isPresented: $showThemeDetail) {
+//                                ThemeDetailView_iOS(showThemeDetail: $showThemeDetail)
+//                            }
+//                            .navigationDestination(for: MarkdownTheme.self) { selectedTheme in
+//                                Text(selectedTheme.themeName)
+//                            }
+                            
+                        }
+                        .navigationTitle("Themes")
+                        
+                        
                     case .feedback:
                         FeedbackView_iPadOS()
                     }
@@ -106,8 +155,12 @@ struct SettingsView_iPadOS: View {
                 .navigationTitle("Settings")
                 .navigationBarTitleDisplayMode(.inline)
             }
+            .toolbar {
+                Button("Done") {
+                    showModel = false
+                }
+            }
         }
-        
         
         
 //        List(options, selection: $selectedOption) { option in
@@ -129,11 +182,11 @@ struct SettingsView_iPadOS: View {
     }
 }
 
-struct SettingsView_iPadOS_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsView_iPadOS()
-    }
-}
+//struct SettingsView_iPadOS_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SettingsView_iPadOS(showModel: <#Binding<Bool>#>)
+//    }
+//}
 
 
 #endif

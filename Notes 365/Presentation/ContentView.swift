@@ -13,7 +13,7 @@ struct ContentView: View {
     
     @State private var showSettings = false
     
-    @State private var selectedModeID: Mode.ID?// = Mode.timeline.id
+    @State private var selectedModeID: Mode.ID? = Mode.timeline.id
     // timeline related
     @ObservedObject var calendarState = CalendarState.shared
     // notebooks related
@@ -58,7 +58,7 @@ struct ContentView: View {
                 }
                 .padding(.horizontal)
                 .sheet(isPresented: $showSettings) {
-                    SettingsView_iPadOS()
+                    SettingsView_iPadOS(showModel: $showSettings)
                 }
                 
                 #endif

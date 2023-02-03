@@ -29,7 +29,7 @@ struct NotebooksSidebarView: View {
                 List(selection: $selectedNotebook) {
                     NotebooksListGroupView(notebooks: $usersState.usersDB.notes)
                 }
-                .listStyle(SidebarListStyle())
+//                .listStyle(SidebarListStyle())
                 .navigationTitle(usersState.navTitle)
                 .onChange(of: selectedNotebook) { newValue in
                     if let newValue = newValue {
@@ -51,11 +51,21 @@ struct NotebooksSidebarView: View {
                  }.disabled(true)
                  */
                 
+                #if os(macOS)
                 VStack {
                     getToolbarView()
                     Spacer()
                 }
                 .frame(height: 30)
+                #else
+                if UIDevice.current.userInterfaceIdiom == .pad {
+                    VStack {
+                        getToolbarView()
+                        Spacer()
+                    }
+                    .frame(height: 30)
+                }
+                #endif
             }
             .frame(minWidth: 280, maxWidth: 500)
             .onDisappear {
@@ -195,15 +205,38 @@ struct RowView: View {
     
     @State private var presentDeleteConfirmation = false
     
+    @State private var isEditing = false {
+        didSet {
+            isFocused = isEditing
+        }
+    }
+    
     var body: some View {
-//        TextField(text: $name) {
-//            Text("Notebook")
-//        }
-        Text(name)
+        HStack {
+            if isEditing {
+                TextField(text: $name) {
+                    Text("Notebook")
+                }
+                .focused($isFocused)
+            } else {
+                Text(name)
+            }
+        }
+        
         .onAppear {
             name = notebook.name
+//            isFocused = false
         }
-        .focused($isFocused)
+        .confirmationDialog("Are you sure?", isPresented: $presentDeleteConfirmation) {
+            Button("Delete", role: .destructive) {
+                DispatchQueue.main.async {
+                    usersState.deleteNotebook(ref: notebook.notebook)
+                    //                        selectedNotebook = nil
+                }
+            }
+        } message: {
+            Text("You cannot undo this action")
+        }
         .contextMenu {
             RenameButton()
             // insert below
@@ -224,22 +257,19 @@ struct RowView: View {
                    action: {
                 presentDeleteConfirmation = true
             }) {
-                Image(systemName: "trash")
-                    .renderingMode(.original)
-            }
-            .confirmationDialog("Are you sure?", isPresented: $presentDeleteConfirmation) {
-                Button("Delete", role: .destructive) {
-                    DispatchQueue.main.async {
-                        usersState.deleteNotebook(ref: notebook.notebook)
-//                        selectedNotebook = nil
-                    }
+                HStack {
+                    Text("Delete")
+                    Spacer()
+                    Image(systemName: "trash")
+                        .renderingMode(.original)
                 }
-            } message: {
-                Text("You cannot undo this action")
+                
             }
         }
-        .renameAction { isFocused = true }
-        .onChange(of: isFocused, perform: { newValue in
+        .renameAction {
+            isEditing = true
+        }
+        .onChange(of: isEditing, perform: { newValue in
             if newValue == false {
                 // on escape, reset content
                 name = notebook.name
@@ -247,17 +277,19 @@ struct RowView: View {
         })
         .onSubmit {
             if name == notebook.name {
+                isEditing = false
                 return
             }
             do {
                 try usersState.rename(for: notebook.notebook, newValue: name)
                 usersState.navTitle = name
+                isEditing = false
             } catch NotebookBusinessError.alreadyExists {
                 showFileExistsAlert = true
-                isFocused = true
+                isEditing = true
             } catch NotebookBusinessError.invalidCharacters {
                 showInvalidCharsAlert = true
-                isFocused = true
+                isEditing = true
             } catch {
 //                name = notebook.name
             }
