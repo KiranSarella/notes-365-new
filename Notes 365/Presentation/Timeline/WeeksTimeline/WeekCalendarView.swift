@@ -78,56 +78,18 @@ struct WeekHeaderView: View {
     var calendar: Calendar
     
     var body: some View {
-        HStack {
-            Text(navigationDate.string(withFormat: "MMMM, YYYY"))
-                .font(.system(size: 14, weight: Font.Weight.semibold, design: Font.Design.rounded))
-                .padding(.leading, 9)
-            Spacer()
-            // previous
-            Button {
-                guard let newDate = calendar.date(byAdding: .month, value: -1, to: navigationDate) else { return }
-                navigationDate = newDate
-            } label: {
-                Label(
-                    title: { Text("Previous") },
-                    icon: { Image(systemName: "chevron.left") }
-                )
-                    .labelStyle(IconOnlyLabelStyle())
-                //                        .padding(.horizontal)
-                    .frame(maxHeight: .infinity)
-            }
-            .buttonStyle(PlainButtonStyle())
-            // today
-            Button {
-                weekDate = WeekDate(date: Date())
-                navigationDate = Date()
-                selectedWeek = getWeek(weekDate.start)
-            } label: {
-                Label(
-                    title: { Text("Today") },
-                    icon: { Image(systemName: "smallcircle.fill.circle") }
-                )
-                    .labelStyle(IconOnlyLabelStyle())
-                    .frame(maxHeight: .infinity)
-                    .help("this week")
-//                    .foregroundColor(.green)
-            }
-            .buttonStyle(PlainButtonStyle())
-            // next
-            Button {
-                guard let newDate = calendar.date(byAdding: .month, value: 1, to: navigationDate) else { return }
-                navigationDate = newDate
-            } label: {
-                Label(
-                    title: { Text("Next") },
-                    icon: { Image(systemName: "chevron.right") }
-                )
-                    .labelStyle(IconOnlyLabelStyle())
-                    .padding(.trailing, 5)
-                    .frame(maxHeight: .infinity)
-            }
-            .buttonStyle(PlainButtonStyle())
-        }
+        
+        CalendarNavigatorView(label: navigationDate.string(withFormat: "MMMM, YYYY"), previous: {
+            guard let newDate = calendar.date(byAdding: .month, value: -1, to: navigationDate) else { return }
+            navigationDate = newDate
+        }, today: {
+            weekDate = WeekDate(date: Date())
+            navigationDate = Date()
+            selectedWeek = getWeek(weekDate.start)
+        }, next: {
+            guard let newDate = calendar.date(byAdding: .month, value: 1, to: navigationDate) else { return }
+            navigationDate = newDate
+        })
     }
     
 }
@@ -210,18 +172,18 @@ struct WeekView: View {
         return HStack() {
             Text("\(week.weekNumber)")
                 .frame(maxWidth: .infinity)
-                .font(.system(size: 11, weight: .bold))
+                .font(.system(size: 14, weight: .bold))
                 .foregroundColor(Color.red)
             ForEach(week.weekDays, id: \.self) { date in
                 if date.getMonth() == navigationDate.getMonth() {
                     Text("\(date.getDay())")
                         .frame(maxWidth: .infinity)
-                        .font(.system(size: 10))
+                        .font(.system(size: 12))
                         .foregroundColor(week.isCurrentWeek() ? CalendarState.todayTint : .primary)
                 } else {
                     Text("\(date.getDay())")
                         .frame(maxWidth: .infinity)
-                        .font(.system(size: 10))
+                        .font(.system(size: 12))
                         .opacity(0.4)
                 }
             }

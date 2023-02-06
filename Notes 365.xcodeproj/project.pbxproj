@@ -14,6 +14,7 @@
 		9F14B491298A684F0079D23B /* ThemeDetailView+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B490298A684F0079D23B /* ThemeDetailView+iOS.swift */; };
 		9F14B4AE298F98900079D23B /* FontPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B4AD298F98900079D23B /* FontPicker.swift */; };
 		9F14B4B02990D46D0079D23B /* ThemeDetailState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B4AF2990D46D0079D23B /* ThemeDetailState.swift */; };
+		9F14B4B2299168980079D23B /* CalendarNavigatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B4B1299168980079D23B /* CalendarNavigatorView.swift */; };
 		9F188D812930E49F0078D413 /* MarkdownHeading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F188D802930E49F0078D413 /* MarkdownHeading.swift */; };
 		9F1AAE31292C940A00B4D254 /* FeedbackView+macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1AAE30292C940A00B4D254 /* FeedbackView+macOS.swift */; };
 		9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1AAE32292C94F800B4D254 /* FeedbackState.swift */; };
@@ -156,6 +157,7 @@
 		9F14B490298A684F0079D23B /* ThemeDetailView+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThemeDetailView+iOS.swift"; sourceTree = "<group>"; };
 		9F14B4AD298F98900079D23B /* FontPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontPicker.swift; sourceTree = "<group>"; };
 		9F14B4AF2990D46D0079D23B /* ThemeDetailState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeDetailState.swift; sourceTree = "<group>"; };
+		9F14B4B1299168980079D23B /* CalendarNavigatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarNavigatorView.swift; sourceTree = "<group>"; };
 		9F188D802930E49F0078D413 /* MarkdownHeading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownHeading.swift; sourceTree = "<group>"; };
 		9F1AAE30292C940A00B4D254 /* FeedbackView+macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackView+macOS.swift"; sourceTree = "<group>"; };
 		9F1AAE32292C94F800B4D254 /* FeedbackState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackState.swift; sourceTree = "<group>"; };
@@ -644,6 +646,7 @@
 				9F45BCFA2920CCCE003DE332 /* NotesTitleView.swift */,
 				9F45BCD32920CCCE003DE332 /* CalendarType.swift */,
 				9F45BCFF2920CCCE003DE332 /* CalendarState.swift */,
+				9F14B4B1299168980079D23B /* CalendarNavigatorView.swift */,
 				9F45BCEA2920CCCE003DE332 /* DaysTimeline */,
 				9F45BCF02920CCCE003DE332 /* WeeksTimeline */,
 				9F45BCE22920CCCE003DE332 /* MonthsTimeline */,
@@ -874,6 +877,7 @@
 				9F45BD9C2920CE21003DE332 /* FileHelper.swift in Sources */,
 				9F45BD622920CD90003DE332 /* WeekDetailView.swift in Sources */,
 				9F45BD672920CDA9003DE332 /* TimelineSidebarView.swift in Sources */,
+				9F14B4B2299168980079D23B /* CalendarNavigatorView.swift in Sources */,
 				9FB6C6A52927936F00C8EC76 /* DayDetailState.swift in Sources */,
 				9F45BD5F2920CD8A003DE332 /* DayDetailView.swift in Sources */,
 				9F3DB0C6292E1D9200704860 /* ThemeBusiness.swift in Sources */,

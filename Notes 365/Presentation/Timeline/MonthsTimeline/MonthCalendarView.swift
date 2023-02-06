@@ -35,55 +35,17 @@ struct MonthHeaderView: View {
     var calendar = Calendar(identifier: .gregorian)
     
     var body: some View {
-        HStack {
-            Text(navigationDate.string(withFormat: "YYYY"))
-                .font(.system(size: 14, weight: Font.Weight.semibold, design: Font.Design.rounded))
-                .padding(.leading, 11)
-            Spacer()
-            // prev
-            Button {
-                guard let newDate = calendar.date(byAdding: .year, value: -1, to: navigationDate) else { return }
-                navigationDate = newDate
-            } label: {
-                Label(
-                    title: { Text("Previous") },
-                    icon: { Image(systemName: "chevron.left") }
-                )
-                .labelStyle(IconOnlyLabelStyle())
-                //                        .padding(.horizontal)
-                .frame(maxHeight: .infinity)
-            }
-            .buttonStyle(PlainButtonStyle())
-            // today
-            Button {
-                navigationDate = Date()
-                monthDate = MonthDate(date: navigationDate)
-            } label: {
-                Label(
-                    title: { Text("Today") },
-                    icon: { Image(systemName: "smallcircle.fill.circle") }
-                )
-                .labelStyle(IconOnlyLabelStyle())
-                //                        .padding(.horizontal)
-                .frame(maxHeight: .infinity)
-                .help("this month")
-            }
-            .buttonStyle(PlainButtonStyle())
-            // next
-            Button {
-                guard let newDate = calendar.date(byAdding: .year, value: 1, to: navigationDate) else { return }
-                navigationDate = newDate
-            } label: {
-                Label(
-                    title: { Text("Next") },
-                    icon: { Image(systemName: "chevron.right") }
-                )
-                .labelStyle(IconOnlyLabelStyle())
-                .padding(.trailing, 5)
-                .frame(maxHeight: .infinity)
-            }
-            .buttonStyle(PlainButtonStyle())
-        }
+        
+        CalendarNavigatorView(label: navigationDate.string(withFormat: "YYYY"), previous: {
+            guard let newDate = calendar.date(byAdding: .year, value: -1, to: navigationDate) else { return }
+            navigationDate = newDate
+        }, today: {
+            navigationDate = Date()
+            monthDate = MonthDate(date: navigationDate)
+        }, next: {
+            guard let newDate = calendar.date(byAdding: .year, value: 1, to: navigationDate) else { return }
+            navigationDate = newDate
+        })
         .frame(height: 60)
     }
 }
