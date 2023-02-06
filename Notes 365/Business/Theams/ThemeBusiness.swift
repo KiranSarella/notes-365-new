@@ -100,7 +100,7 @@ extension ThemeBusiness {
     
     static func generateBlackWhiteTheme() -> MarkdownTheme {
         var blackWhiteTheme = MarkdownTheme(id: UUID())
-        blackWhiteTheme.themeName = "Black&White"
+        blackWhiteTheme.themeName = "Basic"
         // leaving all to defaults
         return blackWhiteTheme
     }

@@ -38,7 +38,10 @@ struct ContentView: View {
                         Text(selectedMode.name)
                             .padding(.horizontal)
                     }
-                }.scrollDisabled(true)
+                }
+//                .scrollDisabled(true)
+                .navigationTitle("Notes 365")
+                
                 
                 #if os(iOS)
                 

@@ -13,6 +13,10 @@ struct NamedColor {
     let colorName: String
     let listName: String
     
+    var red: Double = 0
+    var green: Double = 0
+    var blue: Double = 0
+    
     var color: Color {
         if listName.lowercased() == "Dynamic".lowercased() {
             
@@ -40,6 +44,16 @@ struct NamedColor {
             return Color.primary
             #endif
         }
+    }
+    
+    func getColor() -> Color {
+        return Color(red: red, green: green, blue: blue)
+    }
+    
+    mutating func assignColor(component: (red: CGFloat, green: CGFloat, blue: CGFloat, opacity: CGFloat)) {
+        red = component.red
+        green = component.green
+        blue = component.blue
     }
 }
 

@@ -12,6 +12,8 @@
 		9F09CEB4292684D700609D99 /* PathHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F09CEB3292684D700609D99 /* PathHelper.swift */; };
 		9F09CEB5292684D700609D99 /* PathHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F09CEB3292684D700609D99 /* PathHelper.swift */; };
 		9F14B491298A684F0079D23B /* ThemeDetailView+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B490298A684F0079D23B /* ThemeDetailView+iOS.swift */; };
+		9F14B4AE298F98900079D23B /* FontPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B4AD298F98900079D23B /* FontPicker.swift */; };
+		9F14B4B02990D46D0079D23B /* ThemeDetailState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B4AF2990D46D0079D23B /* ThemeDetailState.swift */; };
 		9F188D812930E49F0078D413 /* MarkdownHeading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F188D802930E49F0078D413 /* MarkdownHeading.swift */; };
 		9F1AAE31292C940A00B4D254 /* FeedbackView+macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1AAE30292C940A00B4D254 /* FeedbackView+macOS.swift */; };
 		9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1AAE32292C94F800B4D254 /* FeedbackState.swift */; };
@@ -79,7 +81,6 @@
 		9F45BD9C2920CE21003DE332 /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCD72920CCCE003DE332 /* FileHelper.swift */; };
 		9F45BD9D2920CE21003DE332 /* AttributedString+StyledMarkdown+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCD82920CCCE003DE332 /* AttributedString+StyledMarkdown+iOS.swift */; };
 		9F45BD9E2920CE21003DE332 /* SpeechHelpr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCDC2920CCCE003DE332 /* SpeechHelpr.swift */; };
-		9F45BD9F2920CE2F003DE332 /* FontPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD342920CCCF003DE332 /* FontPicker.swift */; };
 		9F45BDA12920CE2F003DE332 /* PreferencesView+macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD352920CCCF003DE332 /* PreferencesView+macOS.swift */; };
 		9F45BDA32920CE36003DE332 /* ThemeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD3A2920CCCF003DE332 /* ThemeDetailView.swift */; };
 		9F45BDA42920CE41003DE332 /* ThemePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD3F2920CCCF003DE332 /* ThemePreviewView.swift */; };
@@ -153,6 +154,8 @@
 		9F09CEB029267FBC00609D99 /* VersionBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionBusiness.swift; sourceTree = "<group>"; };
 		9F09CEB3292684D700609D99 /* PathHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathHelper.swift; sourceTree = "<group>"; };
 		9F14B490298A684F0079D23B /* ThemeDetailView+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThemeDetailView+iOS.swift"; sourceTree = "<group>"; };
+		9F14B4AD298F98900079D23B /* FontPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontPicker.swift; sourceTree = "<group>"; };
+		9F14B4AF2990D46D0079D23B /* ThemeDetailState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeDetailState.swift; sourceTree = "<group>"; };
 		9F188D802930E49F0078D413 /* MarkdownHeading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownHeading.swift; sourceTree = "<group>"; };
 		9F1AAE30292C940A00B4D254 /* FeedbackView+macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackView+macOS.swift"; sourceTree = "<group>"; };
 		9F1AAE32292C94F800B4D254 /* FeedbackState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackState.swift; sourceTree = "<group>"; };
@@ -225,7 +228,7 @@
 		9F45BD2B2920CCCE003DE332 /* DirectoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryManager.swift; sourceTree = "<group>"; };
 		9F45BD2E2920CCCE003DE332 /* StringDiff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringDiff.swift; sourceTree = "<group>"; };
 		9F45BD302920CCCE003DE332 /* StringDiffTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringDiffTests.swift; sourceTree = "<group>"; };
-		9F45BD342920CCCF003DE332 /* FontPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontPicker.swift; sourceTree = "<group>"; };
+		9F45BD342920CCCF003DE332 /* FontPickerOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontPickerOld.swift; sourceTree = "<group>"; };
 		9F45BD352920CCCF003DE332 /* PreferencesView+macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreferencesView+macOS.swift"; sourceTree = "<group>"; };
 		9F45BD392920CCCF003DE332 /* PreviewContent.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PreviewContent.md; sourceTree = "<group>"; };
 		9F45BD3A2920CCCF003DE332 /* ThemeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeDetailView.swift; sourceTree = "<group>"; };
@@ -304,7 +307,9 @@
 			children = (
 				9F45BD3A2920CCCF003DE332 /* ThemeDetailView.swift */,
 				9F14B490298A684F0079D23B /* ThemeDetailView+iOS.swift */,
-				9F45BD342920CCCF003DE332 /* FontPicker.swift */,
+				9F14B4AF2990D46D0079D23B /* ThemeDetailState.swift */,
+				9F14B4AD298F98900079D23B /* FontPicker.swift */,
+				9F45BD342920CCCF003DE332 /* FontPickerOld.swift */,
 				9F45BD3C2920CCCF003DE332 /* ColorPickerWindow.swift */,
 				9F3DB0CF292E70BA00704860 /* ColorPickerWindowManager.swift */,
 				9F3DB0CD292E704D00704860 /* ColorPickerButton.swift */,
@@ -874,6 +879,7 @@
 				9F3DB0C6292E1D9200704860 /* ThemeBusiness.swift in Sources */,
 				9F14B491298A684F0079D23B /* ThemeDetailView+iOS.swift in Sources */,
 				9F45BD662920CDA9003DE332 /* NotesTitleView.swift in Sources */,
+				9F14B4AE298F98900079D23B /* FontPicker.swift in Sources */,
 				9F45BD812920CDE0003DE332 /* MarkdownAttributedString+iOS.swift in Sources */,
 				9FB6C6A3292791A200C8EC76 /* MonthDetailState.swift in Sources */,
 				9FB6C6A02927695000C8EC76 /* NotebookContentBusiness.swift in Sources */,
@@ -884,6 +890,7 @@
 				9F45BD962920CE00003DE332 /* CalendarType.swift in Sources */,
 				9F45BD792920CDE0003DE332 /* NotebookEditorView.swift in Sources */,
 				9F45BD922920CDED003DE332 /* StringDiff.swift in Sources */,
+				9F14B4B02990D46D0079D23B /* ThemeDetailState.swift in Sources */,
 				9FE9D0C6293485F5006CCC1E /* PurchasesState.swift in Sources */,
 				9F45BCA22920CAAE003DE332 /* Notes_365App.swift in Sources */,
 				9F45BD952920CDF9003DE332 /* AppState.swift in Sources */,
@@ -913,7 +920,6 @@
 				9FB21DF3295D89E000CFEDA8 /* DataManager.swift in Sources */,
 				9F45BD502920CD45003DE332 /* Extensions.swift in Sources */,
 				9F3DB0C2292DE09500704860 /* SettingsView+iPadOS.swift in Sources */,
-				9F45BD9F2920CE2F003DE332 /* FontPicker.swift in Sources */,
 				9F45BD642920CDA3003DE332 /* TimelineThree.swift in Sources */,
 				9F45BD862920CDE0003DE332 /* MarkdownTextStorage+iOS.swift in Sources */,
 				9F45BD772920CDE0003DE332 /* Helpers.swift in Sources */,

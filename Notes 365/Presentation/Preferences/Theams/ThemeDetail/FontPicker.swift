@@ -1,96 +1,85 @@
 //
 //  FontPicker.swift
+//  Notes 365
 //
-//  Created by : Tomoaki Yagishita on 2021/01/09
-//  © 2021  SmallDeskSoftware
+//  Created by Kiran Sarella on 05/02/23.
 //
-
-#if os(macOS)
 
 import SwiftUI
 
-class FontPickerDelegate {
-    var parent: FontPicker
-
-    init(_ parent: FontPicker) {
-        self.parent = parent
+/// A SwiftUI View based on the UIFontPickerViewController in UIKit
+public struct FontPicker {
+    
+    var configuration: UIFontPickerViewController.Configuration
+    var didPickFont: (UIFont) -> ()
+    var onCancel: (() -> Void)?
+    
+    /// Initializes the Font Picker View
+    /// - Parameter configuration: A configuration object - see UIFontPickerViewController.Configuration for details
+    /// - Parameter didPickFont: A completion handler determining what to do with the selected font.
+    public init(configuration: UIFontPickerViewController.Configuration = .init(), didPickFont: @escaping (UIFont) -> ()) {
+        self.configuration = configuration
+        self.didPickFont = didPickFont
     }
     
-    @objc
-    func changeFont(_ id: Any) {
-        parent.fontSelected()
+    /* internal - do not use this from outside */
+    init(configuration: UIFontPickerViewController.Configuration = .init(), didPickFont: @escaping (UIFont) -> (), onCancel: (() -> ())?) {
+        self.configuration = configuration
+        self.didPickFont = didPickFont
+        self.onCancel = onCancel
     }
-
 }
 
-public struct FontPicker: View {
-    let labelString: String
-    
-    @Binding var font: NSFont
-    @State var fontPickerDelegate: FontPickerDelegate? = nil
-    
-    var didChangeValue: (()->())?
-    
-    public init(_ label: String, selection: Binding<NSFont>, didChangeValue: (()->())? = nil) {
-        self.labelString = label
-        self._font = selection
-        self.didChangeValue = didChangeValue
+// MARK: - UIViewControllerRepresentable
+extension FontPicker: UIViewControllerRepresentable {
+    public func makeCoordinator() -> FontPicker.Coordinator {
+        Coordinator(onCancel: onCancel, didPickFont: didPickFont)
     }
     
-    func openFontPanel() {
-        if NSFontPanel.shared.isVisible {
-            NSFontPanel.shared.orderOut(nil)
-            return
+    public func makeUIViewController(context: Context) -> UIFontPickerViewController {
+        let controller = UIFontPickerViewController(configuration: configuration)
+        
+        controller.delegate = context.coordinator
+        return controller
+    }
+    
+    public func updateUIViewController(_ viewController: UIFontPickerViewController, context: Context) {
+        
+    }
+}
+
+// MARK: - Modifiers
+extension FontPicker {
+    
+    /// Enables the caller to know when a user has canceled their interaction with the font selection screen.
+    /// - Parameter handler: The function that is called if a user cancels the font selection screen
+    public func onCancel(_ handler: @escaping () -> ()) -> Self {
+        FontPicker(configuration: configuration, didPickFont: didPickFont, onCancel: handler)
+    }
+}
+
+// MARK: - Coordinator
+extension FontPicker {
+    public class Coordinator: NSObject, UIFontPickerViewControllerDelegate {
+        var onCancel: (() -> Void)?
+        var didPickFont: (UIFont) -> ()
+        
+        init(onCancel: (() -> Void)?, didPickFont: @escaping (UIFont) -> ()) {
+            self.onCancel = onCancel
+            self.didPickFont = didPickFont
         }
         
-        self.fontPickerDelegate = FontPickerDelegate(self)
-        NSFontManager.shared.target = self.fontPickerDelegate
-        NSFontPanel.shared.setPanelFont(self.font, isMultiple: false)
-        NSFontPanel.shared.orderBack(nil)
-    }
-    
-    public var body: some View {
-        HStack {
-            Text("\(font.displayName ?? "-") - \(Int(font.pointSize))")  // to improve tap area
-                .lineLimit(1)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 4)
-                .onTapGesture {
-                    openFontPanel()
-                }
+        public func fontPickerViewControllerDidCancel(_ viewController: UIFontPickerViewController) {
+            self.onCancel?()
+        }
+        
+        public func fontPickerViewControllerDidPickFont(_ viewController: UIFontPickerViewController) {
             
-            Spacer()
-            Button {
-                openFontPanel()
-            } label: {
-                Image(systemName: "chevron.down")
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 4)
-            }
-            .buttonStyle(.plain)
+            guard let fontDescriptor = viewController.selectedFontDescriptor else { return }
+            let uifont = UIFont(descriptor: fontDescriptor, size: 28.0)
+            self.didPickFont(uifont)
         }
-        .frame(width: 280)
-        .background(Color(NSColor.textBackgroundColor))
-        .cornerRadius(4)
-        .overlay(
-            RoundedRectangle(cornerRadius: 4)
-                .stroke(Color.gray, lineWidth: 1)
-                .brightness(0.2)
-        )
-        
-    }
-    
-    func fontSelected() {
-        self.font = NSFontPanel.shared.convert(self.font)
-        didChangeValue?()
-    }
-}
-
-struct FontPicker_Previews: PreviewProvider {
-    static var previews: some View {
-        FontPicker("font", selection: .constant(NSFont.systemFont(ofSize: 24)))
     }
 }
 
 
-#endif

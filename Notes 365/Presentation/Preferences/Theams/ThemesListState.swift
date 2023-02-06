@@ -22,6 +22,7 @@ class ThemesListState: ObservableObject {
         // get selected theme index
         selectedLightTheme = themeBusiness.fetchLightTheme() ?? themesList.first!
         selectedDarkTheme = themeBusiness.fetchDarkTheme() ?? themesList[1]
+        print(themesList)
     }
     
     func saveChanges(_ modifiedTheme: MarkdownTheme) {

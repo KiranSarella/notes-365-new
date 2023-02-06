@@ -7,10 +7,18 @@
 
 import SwiftUI
 
+// https://developer.apple.com/forums/thread/664922
+
 struct ThemeDetailView_iOS: View {
     
-    @State private var bodyColor = Color(.sRGB, red: 0.98, green: 0.9, blue: 0.2)
-    @State private var headingColor = Color.blue
+    @Environment(\.dismiss) var dismiss
+    
+    var theme: MarkdownTheme
+    
+    @StateObject var state = ThemeDetailState()
+    
+    var onThemeChange:((MarkdownTheme) -> ())
+    
     
     var body: some View {
         
@@ -18,27 +26,116 @@ struct ThemeDetailView_iOS: View {
             
             List {
                 // font name
+//
+//                NavigationLink {
+//                    FontPicker { value in
+//                        //                    print(value)
+//                        let newValue = UIFont(descriptor: value.fontDescriptor, size: 16)
+//                        fontName = value.familyName
+//                        font = Font(newValue)
+//                        //                            showFontPicker = false
+//                    } onCancel: {
+//                        //                            showFontPicker = false
+//                    }
+//                    .toolbar {
+//                        Button {
+//
+//                        } label: {
+//                            Text("Done")
+//                        }
+//                    }
+//                } label: {
+//
+//                    HStack {
+//                        Text("Font")
+//                        Spacer()
+//                        Text(fontName)
+//                            .font(font)
+//                    }
+//
+//
+//                }
+//                .navigationViewStyle(StackNavigationViewStyle())
+
                 HStack {
                     Text("Font")
                     Spacer()
-                    Text("helvitica")
+                    Button {
+                        state.showFontPicker = true
+                    } label: {
+                        Text(state.fontName)
+                            .font(state.font)
+                    }
+                    .buttonStyle(PlainButtonStyle())
                 }
                 // font size
-                Stepper("Font Size") {
-                    
-                } onDecrement: {
-                    
+                Stepper(value: $state.fontSize, in: state.range, step: state.step) {
+                    HStack {
+                        Text("Font Size")
+                        Spacer()
+                        Text("\(state.fontSize)")
+                    }
+                }
+                // color pickers
+                ColorPicker("Body", selection: $state.bodyColor, supportsOpacity: false)
+//                    .onChange(of: state.bodyColor) { newValue in
+//                        print(newValue.components)
+//                    }
+                
+                ColorPicker("Heading", selection: $state.headingColor, supportsOpacity: false)
+                ColorPicker("Bold, Italic, Strikthrough", selection: $state.boldColor, supportsOpacity: false)
+                ColorPicker("List", selection: $state.listColor, supportsOpacity: false)
+                ColorPicker("Source Code", selection: $state.codeColor, supportsOpacity: false)
+                ColorPicker("Block Quote", selection: $state.quoteColor, supportsOpacity: false)
+            }
+            .navigationTitle(theme.themeName)
+            .sheet(isPresented: $state.showFontPicker) {
+                NavigationStack {
+                    FontPicker { value in
+                        //                    print(value)
+                        let newValue = UIFont(descriptor: value.fontDescriptor, size: 16)
+                        state.fontName = value.familyName
+                        state.font = Font(newValue)
+                        state.showFontPicker = false
+                    } onCancel: {
+                        state.showFontPicker = false
+                    }
+                    .toolbar {
+                        Button {
+                            state.showFontPicker = false
+                        } label: {
+                            Text("Done")
+                        }
+                    }
+                }
+            }
+            .toolbar {
+                
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Text("Cancel")
+                    }
                 }
                 
-                // color pickers
-                ColorPicker("Body", selection: $bodyColor)
-                ColorPicker("Heading", selection: $headingColor)
-                ColorPicker("Bold, Italic, Strikthrough", selection: $headingColor)
-                ColorPicker("List", selection: $headingColor)
-                ColorPicker("Source Code", selection: $headingColor)
-                ColorPicker("Block Quote", selection: $headingColor)
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        // save theme
+                        state.updateChanges()
+                        onThemeChange(state.theme)
+                        dismiss()
+                    } label: {
+                        Text("Save")
+                    }
+                    
+                }
             }
-            .navigationTitle("Theme Name")
+        }
+        .onAppear {
+            
+            state.theme = theme
+            state.populateFields()
         }
     }
 }

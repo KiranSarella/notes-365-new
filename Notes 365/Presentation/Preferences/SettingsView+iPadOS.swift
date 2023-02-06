@@ -11,8 +11,6 @@ import SwiftUI
 
 struct SettingsView_iPadOS: View {
     
-    
-    
     public enum Setting: String, CaseIterable, Identifiable {
         case themes = "Themes"
         case feedback = "Feedback"
@@ -59,7 +57,7 @@ struct SettingsView_iPadOS: View {
     
     
     @State private var selectedThemeID: MarkdownTheme.ID?
-    @State private var selectedTheme: MarkdownTheme?
+    @State private var selectedTheme: MarkdownTheme?// = MarkdownTheme(id: UUID())
     
     @State private var showThemeDetail = false
     
@@ -94,19 +92,27 @@ struct SettingsView_iPadOS: View {
                                     Text(theme.themeName).tag(theme.id)
                                 }
                             }
+                            .tag(selectedLightThemeID)
+                            
                             Picker("Dark", selection: $selectedDarkThemeID) {
                                 ForEach(themesListState.themes) { theme in
                                     Text(theme.themeName).tag(theme.id)
                                 }
                             }
+                            .tag(selectedDarkThemeID)
                             
                             Section("Themes") {
                                 ForEach(themesListState.themes, id:\.self) { theme in
                                     
+//                                    Text(theme.themeName)
+                                    
 //                                    Button {
-//                                        showThemeDetail = true
+////                                        showThemeDetail = true
+//
+//                                        NavigationLink(theme.themeName, value: selectedTheme)
+//
 //                                    } label: {
-//                                        
+//
 //                                        HStack {
 //                                            Text(theme.themeName)
 //                                            Spacer()
@@ -115,37 +121,87 @@ struct SettingsView_iPadOS: View {
 //                                                .fixedSize()
 //                                                .frame(width: 8, height: 8)
 //                                        }
-//                                        
+//
 //                                    }
 
                                     
-//                                    Button(theme.themeName) {
-//                                        showThemeDetail = true
-//                                    }
-                                    
-                                    NavigationLink {
-                                        ThemeDetailView_iOS()
-                                    } label: {
-                                        Text(theme.themeName)
+                                    Button(theme.themeName) {
+                                        
+                                        selectedTheme = theme
+//                                        print(selectedTheme?.id, selectedTheme?.themeName)
+                                        showThemeDetail = true
+                                        
+                                       
+                                        
+//                                        selectedTheme = theme
+//                                        print(selectedTheme?.id, selectedTheme?.themeName)
                                     }
+                                    
+//                                    NavigationLink {
+//                                        ThemeDetailView_iOS(theme: theme, onThemeChange: { value in
+//                                            print(value)
+////                                            theme = value
+////                                            themesListState.saveChanges(value)
+//                                        }).tag(theme.id)
+//                                    } label: {
+//                                        Text(theme.themeName)
+//                                    }
 
                                     
 //                                    NavigationLink(theme.themeName, value: selectedTheme)
                                     
-//                                    Text(theme.themeName).tag(theme.id)
                                 }
                                 .buttonStyle(PlainButtonStyle())
                                 
                             }
-//                            .sheet(isPresented: $showThemeDetail) {
-//                                ThemeDetailView_iOS(showThemeDetail: $showThemeDetail)
-//                            }
-//                            .navigationDestination(for: MarkdownTheme.self) { selectedTheme in
-//                                Text(selectedTheme.themeName)
-//                            }
+                            
+
                             
                         }
+                        
                         .navigationTitle("Themes")
+//                        .listStyle(InsetGroupedListStyle())
+                        .onAppear {
+                            
+//                            selectedLightThemeID = themesListState.themes.first!.id
+//                            selectedDarkThemeID = themesListState.themes.first!.id
+                            
+//                            print(selectedLightThemeID)
+//                            selectedThemeID = ThemeState.shared.theme.id
+//                            selectedLightThemeID = themesListState.selectedLightTheme.id
+//                            selectedDarkThemeID = themesListState.selectedDarkTheme.id
+//                            print(selectedLightThemeID)
+//                            print(themesListState.themes)
+                        }
+                        .sheet(item: $selectedTheme, content: { theme in
+                            NavigationStack {
+                                ThemeDetailView_iOS(theme: theme, onThemeChange: { value in
+//                                    selectedTheme = value
+                                    themesListState.saveChanges(value)
+                                })
+                            }
+                        })
+//                        .sheet(isPresented: $showThemeDetail) {
+//
+//                            if selectedTheme == nil {
+////                               Text("invalid selection")
+//                            } else {
+//                                NavigationStack {
+//                                    ThemeDetailView_iOS(theme: selectedTheme, onThemeChange: { value in
+//                                        selectedTheme = value
+//                                        themesListState.saveChanges(value)
+//                                    })
+//                                }
+//                            }
+//                        }
+//                        .navigationDestination(for: MarkdownTheme.self) { selectedTheme in
+////                            Text(selectedTheme.themeName)
+//                            ThemeDetailView_iOS(theme: selectedTheme, onThemeChange: { value in
+//                                // print(value)
+////                                  theme = value
+//                                 themesListState.saveChanges(value)
+//                            })
+//                        }
                         
                         
                     case .feedback:
@@ -160,6 +216,17 @@ struct SettingsView_iPadOS: View {
                     showModel = false
                 }
             }
+            
+        }
+        .onAppear {
+            
+//            selectedTheme = ThemeState.shared.theme
+//
+//            showThemeDetail = true
+//            showThemeDetail = false
+//
+            
+//            selectedTheme = theme
         }
         
         
