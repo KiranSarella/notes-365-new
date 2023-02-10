@@ -116,12 +116,14 @@ extension ThemeBusiness {
         theme.blockQuoteColor = NamedColor(colorName: "Clover", listName: "Crayons")
         theme.listColor = NamedColor(colorName: "Strawberry", listName: "Crayons")
         
-        theme.h1Color = NamedColor(colorName: "Mint", listName: "System")
-        theme.h2Color = NamedColor(colorName: "Cyan", listName: "System")
-        theme.h3Color = NamedColor(colorName: "Cyan", listName: "System")
-        theme.h4Color = NamedColor(colorName: "Cyan", listName: "System")
-        theme.h5Color = NamedColor(colorName: "Cyan", listName: "System")
-        theme.h6Color = NamedColor(colorName: "Cyan", listName: "System")
+        theme.headingColor = NamedColor(colorName: "Mint", listName: "System")
+        
+//        theme.h1Color = NamedColor(colorName: "Mint", listName: "System")
+//        theme.h2Color = NamedColor(colorName: "Cyan", listName: "System")
+//        theme.h3Color = NamedColor(colorName: "Cyan", listName: "System")
+//        theme.h4Color = NamedColor(colorName: "Cyan", listName: "System")
+//        theme.h5Color = NamedColor(colorName: "Cyan", listName: "System")
+//        theme.h6Color = NamedColor(colorName: "Cyan", listName: "System")
         
         return theme
     }
@@ -137,12 +139,14 @@ extension ThemeBusiness {
         theme.blockQuoteColor = NamedColor(colorName: "Clover", listName: "Crayons")
         theme.listColor = NamedColor(colorName: "Strawberry", listName: "Crayons")
         
-        theme.h1Color = NamedColor(colorName: "Mint", listName: "System")
-        theme.h2Color = NamedColor(colorName: "Cyan", listName: "System")
-        theme.h3Color = NamedColor(colorName: "Cyan", listName: "System")
-        theme.h4Color = NamedColor(colorName: "Cyan", listName: "System")
-        theme.h5Color = NamedColor(colorName: "Cyan", listName: "System")
-        theme.h6Color = NamedColor(colorName: "Cyan", listName: "System")
+        theme.headingColor = NamedColor(colorName: "Mint", listName: "System")
+        
+//        theme.h1Color = NamedColor(colorName: "Mint", listName: "System")
+//        theme.h2Color = NamedColor(colorName: "Cyan", listName: "System")
+//        theme.h3Color = NamedColor(colorName: "Cyan", listName: "System")
+//        theme.h4Color = NamedColor(colorName: "Cyan", listName: "System")
+//        theme.h5Color = NamedColor(colorName: "Cyan", listName: "System")
+//        theme.h6Color = NamedColor(colorName: "Cyan", listName: "System")
         
         return theme
     }
@@ -160,12 +164,13 @@ extension ThemeBusiness {
         theme.listColor = NamedColor(colorName: "Fern", listName: "Crayons")
         
         theme.headingColor = NamedColor(colorName: "Orange", listName: "System")
-        theme.h1Color = NamedColor(colorName: "Orange", listName: "System")
-        theme.h2Color = NamedColor(colorName: "Orange", listName: "System")
-        theme.h3Color = NamedColor(colorName: "Orange", listName: "System")
-        theme.h4Color = NamedColor(colorName: "Orange", listName: "System")
-        theme.h5Color = NamedColor(colorName: "Orange", listName: "System")
-        theme.h6Color = NamedColor(colorName: "Orange", listName: "System")
+        
+//        theme.h1Color = NamedColor(colorName: "Orange", listName: "System")
+//        theme.h2Color = NamedColor(colorName: "Orange", listName: "System")
+//        theme.h3Color = NamedColor(colorName: "Orange", listName: "System")
+//        theme.h4Color = NamedColor(colorName: "Orange", listName: "System")
+//        theme.h5Color = NamedColor(colorName: "Orange", listName: "System")
+//        theme.h6Color = NamedColor(colorName: "Orange", listName: "System")
         
         return theme
     }

@@ -112,6 +112,23 @@ extension Notebook {
     }
     
     
+    var oldFilePath: String {
+        
+        // add self
+        var path: String = self.name + ".md"
+        // add parents
+        var parentRef = self.parent
+        while parentRef != nil {
+            path = parentRef!.name + "/" + path
+            parentRef = parentRef?.parent
+        }
+        // base path
+        path = "notebooks-old" + "/" + path
+        // return
+        return path
+    }
+    
+    
     var folderPath: String {
         
         // add self

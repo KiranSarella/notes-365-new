@@ -38,6 +38,18 @@ class NotebooksListBusiness {
             self.notebooks = notebooks
         }
         
+        // convert folder structure to flat structure
+//        convertToFlatStructure()
+        
+        if let isFlat = UserDefaults.standard.value(forKey: "flat-structure-status") as? Bool, isFlat == false {
+            // if false
+            convertToFlatStructure()
+        } else {
+            // if not set
+            convertToFlatStructure()
+        }
+
+        
 //        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookChangeNotification(_:)), name: .notebookChangeNotification, object: nil)
         
         // generate hash map
@@ -62,10 +74,49 @@ class NotebooksListBusiness {
 //                    traverse(notebooks: children)
 //                }
 //            }
-//        }w
+//        }
 //        // start traversing
 //        traverse(notebooks: notebooks)
 //    }
+    
+    func convertToFlatStructure() {
+
+        func traverse(notebooks: [Notebook]) {
+            // traverse and add each item to hash map
+            for notebook in notebooks {
+                // move to base folder
+                
+                let oldFolderPath = dataManager.basePathURL.appendingPathComponent(notebook.oldFilePath)
+                let newFolderPath = dataManager.basePathURL.appendingPathComponent("notebooks").appendingPathComponent(notebook.id.uuidString).appendingPathExtension("md")
+                
+                
+                do {
+                    try FileManager.default.moveItem(atPath: oldFolderPath.path, toPath: newFolderPath.path)
+                } catch let error as NSError {
+                    print("Ooops! Something went wrong: \(error)")
+                }
+                
+                // handle children
+                if let children = notebook.children {
+                    traverse(notebooks: children)
+                }
+            }
+        }
+        // rename existing
+        dataManager.renameItem(from: "notebooks", to: "notebooks-old")
+        // create new
+        let newFolderPath = dataManager.basePathURL.appendingPathComponent("notebooks")
+        try? FileManager.default.createDirectory(at: newFolderPath, withIntermediateDirectories: true)
+        // start traversing
+        traverse(notebooks: notebooks)
+        // set completion flag
+        UserDefaults.standard.set(true, forKey: "flat-structure-status")
+        
+        // for each item
+        // get its path
+        // move to /notebooks with id.md
+        
+    }
     
     func getNotebooks() -> [Notebook] {
         return notebooks

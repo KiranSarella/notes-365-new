@@ -20,13 +20,13 @@ struct MarkdownTheme: Identifiable, Hashable, Codable {
     // Heading
     var headingColor: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
     // h1...h6
-    var hColor: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
-    var h1Color: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
-    var h2Color: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
-    var h3Color: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
-    var h4Color: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
-    var h5Color: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
-    var h6Color: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
+//    var hColor: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
+//    var h1Color: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
+//    var h2Color: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
+//    var h3Color: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
+//    var h4Color: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
+//    var h5Color: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
+//    var h6Color: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
     // bold, italic, strikethrough
     var styleColor: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
     // inline code, code block
@@ -55,12 +55,12 @@ struct MarkdownTheme: Identifiable, Hashable, Codable {
         // heading
         headingColor = try container.decode(NamedColor.self, forKey: .headingColor)
         // h1...h6
-        h1Color = try container.decode(NamedColor.self, forKey: .h1Color)
-        h2Color = try container.decode(NamedColor.self, forKey: .h2Color)
-        h3Color = try container.decode(NamedColor.self, forKey: .h3Color)
-        h4Color = try container.decode(NamedColor.self, forKey: .h4Color)
-        h5Color = try container.decode(NamedColor.self, forKey: .h5Color)
-        h6Color = try container.decode(NamedColor.self, forKey: .h6Color)
+//        h1Color = try container.decode(NamedColor.self, forKey: .h1Color)
+//        h2Color = try container.decode(NamedColor.self, forKey: .h2Color)
+//        h3Color = try container.decode(NamedColor.self, forKey: .h3Color)
+//        h4Color = try container.decode(NamedColor.self, forKey: .h4Color)
+//        h5Color = try container.decode(NamedColor.self, forKey: .h5Color)
+//        h6Color = try container.decode(NamedColor.self, forKey: .h6Color)
         // bold, italic, strikethrough
         styleColor = try container.decode(NamedColor.self, forKey: .styleColor)
         // code
@@ -89,12 +89,12 @@ struct MarkdownTheme: Identifiable, Hashable, Codable {
         // heading
         headingColor = obj.headingColor
         // h1...h6
-        h1Color = obj.h1Color
-        h2Color = obj.h2Color
-        h3Color = obj.h3Color
-        h4Color = obj.h4Color
-        h5Color = obj.h5Color
-        h6Color = obj.h6Color
+//        h1Color = obj.h1Color
+//        h2Color = obj.h2Color
+//        h3Color = obj.h3Color
+//        h4Color = obj.h4Color
+//        h5Color = obj.h5Color
+//        h6Color = obj.h6Color
         // bold
         styleColor = obj.styleColor
         // code
@@ -141,12 +141,12 @@ extension MarkdownTheme  {
 //        try container.encode(headingFontName, forKey: .headingFontName)
         try container.encode(headingColor, forKey: .headingColor)
         // h1...h6
-        try container.encode(h1Color, forKey: .h1Color)
-        try container.encode(h2Color, forKey: .h2Color)
-        try container.encode(h3Color, forKey: .h3Color)
-        try container.encode(h4Color, forKey: .h4Color)
-        try container.encode(h5Color, forKey: .h5Color)
-        try container.encode(h6Color, forKey: .h6Color)
+//        try container.encode(h1Color, forKey: .h1Color)
+//        try container.encode(h2Color, forKey: .h2Color)
+//        try container.encode(h3Color, forKey: .h3Color)
+//        try container.encode(h4Color, forKey: .h4Color)
+//        try container.encode(h5Color, forKey: .h5Color)
+//        try container.encode(h6Color, forKey: .h6Color)
         // bold, italic, strikethrough
         try container.encode(styleColor, forKey: .styleColor)
         // code

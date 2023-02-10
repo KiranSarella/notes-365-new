@@ -1061,7 +1061,7 @@ extension EditorView {
                 let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 1))
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
                 // foreground color
-                innerAttributedString.addAttribute(.foregroundColor, value: theme.h1Color.uiColor, range: range)
+                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
             }
             
             // add id key
@@ -1089,7 +1089,7 @@ extension EditorView {
                 let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
                 let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 2))
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
-                innerAttributedString.addAttribute(.foregroundColor, value: theme.h2Color.uiColor, range: range)
+                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
             }
             
 //            innerAttributedString.addAttribute(NSAttributedString.Key.font,
@@ -1125,7 +1125,7 @@ extension EditorView {
                 let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
                 let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 3))
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
-                innerAttributedString.addAttribute(.foregroundColor, value: theme.h3Color.uiColor, range: range)
+                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
             }
             
 //            innerAttributedString.addAttribute(NSAttributedString.Key.font,
@@ -1162,7 +1162,7 @@ extension EditorView {
                 let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 4))
                 
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
-                innerAttributedString.addAttribute(.foregroundColor, value: theme.h4Color.uiColor, range: range)
+                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
             }
             
 //            innerAttributedString.addAttribute(NSAttributedString.Key.font,
@@ -1199,7 +1199,7 @@ extension EditorView {
                 let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 5))
                 
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
-                innerAttributedString.addAttribute(.foregroundColor, value: theme.h5Color.uiColor, range: range)
+                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
             }
             
             
@@ -1237,7 +1237,7 @@ extension EditorView {
                 let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 6))
                 
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
-                innerAttributedString.addAttribute(.foregroundColor, value: theme.h6Color.uiColor, range: range)
+                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
             }
             
 //            innerAttributedString.addAttribute(NSAttributedString.Key.font,
