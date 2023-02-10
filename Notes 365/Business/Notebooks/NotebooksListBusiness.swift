@@ -104,13 +104,21 @@ class NotebooksListBusiness {
         return notebooksCount >= notebooksLimit
     }
     
-    func generateFileName(atPath path: String) -> String {
+    func isAlreadyExists(fileName: String, in siblings: [Notebook]) -> Bool {
+        return siblings.contains(where: { $0.name == fileName })
+    }
+    
+    func generateFileName(at siblings: [Notebook]?) -> String {
         var count = 1
         var fileName = "Notebook \(count)"
-        while dataManager.itemExists(atPath: path + "/\(fileName).md") {
-            count += 1
-            fileName = "Notebook \(count)"
+        
+        if let siblings = siblings {
+            while isAlreadyExists(fileName: fileName, in: siblings) {
+                count += 1
+                fileName = "Notebook \(count)"
+            }
         }
+        
         return fileName
     }
     
@@ -132,10 +140,10 @@ class NotebooksListBusiness {
         createRequiredFoldersIfNotExists()
         
         // create first notebook inside "/notesbooks"
-        let firstBook = createNotebook(atPath: "notebooks")
+        let firstBook = createNotebook(parent: nil)
         notebooks.append(firstBook)
         // persist content
-        dataManager.writeToFile(content: "", fileName: firstBook.name, folderPath: "notebooks", ext: "md")
+        dataManager.writeToFile(content: "", fileName: firstBook.id.uuidString, folderPath: "notebooks", ext: "md")
         // persist hierarchy
         persistNotebooks()
         
@@ -153,15 +161,15 @@ class NotebooksListBusiness {
         } else {
             // base level
             let fullPath = "notebooks"
-            let newNotebook = createNotebook(atPath: fullPath)
+            let newNotebook = createNotebook(parent: notebook.parent)
             // get index of current notebook
             let index = notebooks.firstIndex(of: notebook)!
             // create object
             notebooks.insert(newNotebook, at: index + 1)
-            // create folder
-            dataManager.createFolder(fullPath)
+//            // create folder
+//            dataManager.createFolder(fullPath)
             // create phycical file
-            dataManager.writeToFile(content: "", fileName: newNotebook.name, folderPath: fullPath, ext: "md")
+            dataManager.writeToFile(content: "", fileName: newNotebook.id.uuidString, folderPath: fullPath, ext: "md")
             // persist
             persistNotebooks()
             return (newNotebook, nil, index)
@@ -169,8 +177,10 @@ class NotebooksListBusiness {
     }
     
     func insertInside(ref notebook: Notebook, below index: Int? = nil) -> Notebook {
-        let fullPath = notebook.folderPath
-        let newNotebook = createNotebook(atPath: fullPath)
+        let fullPath = "notebooks"
+        let newNotebook = createNotebook(parent: notebook)
+        
+//        let newNotebook = createNotebook(atPath: fullPath)
         newNotebook.parent = notebook
         
         if let index = index {
@@ -181,14 +191,14 @@ class NotebooksListBusiness {
             // create object
             notebook.children = [newNotebook]
             // create folder
-            dataManager.createFolder(fullPath)
+//            dataManager.createFolder(fullPath)
         } else {
             // create object
             notebook.children?.append(newNotebook)
             // ..folder already exists
         }
         // create phycical file
-        dataManager.writeToFile(content: "", fileName: newNotebook.name, folderPath: fullPath, ext: "md")
+        dataManager.writeToFile(content: "", fileName: newNotebook.id.uuidString, folderPath: fullPath, ext: "md")
         // persist
         persistNotebooks()
         return newNotebook
@@ -196,116 +206,72 @@ class NotebooksListBusiness {
     
     
     // MARK: - Create
-    func createNotebook(atPath path: String) -> Notebook {
+    func createNotebook(parent: Notebook?) -> Notebook {
         
         // generate non existed file name at that level
-        let fileName = generateFileName(atPath: path)
+        var fileName = ""
+        if let parent = parent {
+            fileName = generateFileName(at: parent.children)
+        } else {
+            fileName = generateFileName(at: notebooks)
+        }
         
         return Notebook(id: UUID(), name: fileName)
     }
     
     // MARK: - Delete
     func deleteNotebook(ref notebook: Notebook) {
-        
+        let filePath = "notebooks/" + notebook.id.uuidString + ".md"
         if let parent = notebook.parent {
-            // delete folder if exists
-            let folderPath = notebook.folderPath
-            dataManager.deleteItem(at: folderPath)
             // delete file.md
-            let filePath = folderPath + ".md"
+            
             dataManager.deleteItem(at: filePath)
             // delete notebook
             parent.children!.removeAll(where: { $0 == notebook })
         } else {
-            // base level
-            // delete folder if exists
-            let folderPath = "notebooks" + "/" + notebook.name
-            dataManager.deleteItem(at: folderPath)
-            // delete file.md
-            let filePath = folderPath + ".md"
             dataManager.deleteItem(at: filePath)
             // delete notebook
             notebooks.removeAll(where: { $0 == notebook })
         }
-        
         // persist
         persistNotebooks()
     }
     
-    
-    func deleteNotebook(levels selectedLevels: [Int], index selectedIndex: Int) {
-        
-        if selectedLevels.isEmpty {
-            // top level
-            let path = "notebooks"
-            let fileName = notebooks[selectedIndex].name
-            // delete file.md
-            dataManager.deleteItem(at: path + "/\(fileName).md")
-            // delete folder if exists
-            let folderPath = path + "/" + fileName
-            dataManager.deleteItem(at: folderPath)
-            // delete object
-            notebooks.remove(at: selectedIndex)
-        } else {
-            // remove top level, as we used it.
-            var baseLevel = selectedLevels.first!
-            var levels = selectedLevels
-            levels.removeFirst()
-            
-            // traverse to inner selected note
-            func getSelectedNotebookReference(notebook: Notebook) {
-                // base condition
-                if levels.count <= 0 {
-                    // file
-                    let fullPath = getFolderNamesPath(levels: selectedLevels)
-                    let fileName = notebook.children![selectedIndex].name
-                    dataManager.deleteItem(at: fullPath + "/\(fileName).md")
-                    // delete folder if exists
-                    let folderPath = fullPath + "/" + fileName
-                    dataManager.deleteItem(at: folderPath)
-                    // reached to deeper level, so remove element
-                    notebook.children?.remove(at: selectedIndex)
-                    
-                    return
-                }
-                
-                baseLevel = levels.first!
-                levels.removeFirst()
-                
-                // next element
-                getSelectedNotebookReference(notebook: notebook.children![baseLevel])
-            }
-            
-            // if selected level is inner level, then pass
-            getSelectedNotebookReference(notebook: notebooks[baseLevel])
-        }
-        
-        // persist
-        persistNotebooks()
-    }
-  
     func rename(for notebook: Notebook, newValue: String) throws {
         // validate characters
         if newValue.contains(":") {
             throw NotebookBusinessError.invalidCharacters
         }
         // check if already same file name exists
-        let dirPath = notebook.directoryPath
-        let newFilePath = dirPath + "/" + newValue + ".md"
-        let oldFilePath = dirPath + "/" + notebook.name + ".md"
+        if let parent = notebook.parent {
+            if let children = parent.children {
+                if isAlreadyExists(fileName: newValue, in: children) {
+                    throw NotebookBusinessError.alreadyExists
+                }
+            }
+        } else {
+            if isAlreadyExists(fileName: newValue, in: notebooks) {
+                throw NotebookBusinessError.alreadyExists
+            }
+        }
         
-        if dataManager.itemExists(atPath: newFilePath) {
-            throw NotebookBusinessError.alreadyExists
-        }
-        // rename file
-        dataManager.renameItem(from: oldFilePath, to: newFilePath)
-        // rename folder if exists
-        if notebook.containChildNotebooks {
-            let newFolderPath = dirPath + "/" + newValue
-            let oldFolderPath = dirPath + "/" + notebook.name
-            // rename folder
-            dataManager.renameItem(from: oldFolderPath, to: newFolderPath)
-        }
+        
+//        let dirPath = notebook.directoryPath
+//        let newFilePath = dirPath + "/" + newValue + ".md"
+//        let oldFilePath = dirPath + "/" + notebook.name + ".md"
+        
+//        if dataManager.itemExists(atPath: newFilePath) {
+//            throw NotebookBusinessError.alreadyExists
+//        }
+//        // rename file
+////        dataManager.renameItem(from: oldFilePath, to: newFilePath)
+//        // rename folder if exists
+//        if notebook.containChildNotebooks {
+//            let newFolderPath = dirPath + "/" + newValue
+//            let oldFolderPath = dirPath + "/" + notebook.name
+//            // rename folder
+//            dataManager.renameItem(from: oldFolderPath, to: newFolderPath)
+//        }
         // store name
         notebook.name = newValue
         persistNotebooks()
@@ -324,20 +290,23 @@ class NotebooksListBusiness {
     }
     
     func getFolderNamesPath(levels: [Int]) -> String {
-        var notebooksList = self.notebooks
-        // base condition
-        if levels.isEmpty {
-            return "notebooks"
-        }
-        var path = "notebooks"
-        for level in levels {
-            path.append("/")
-            path.append(notebooksList[level].name)
-            if notebooksList[level].children != nil {
-                notebooksList = notebooksList[level].children!
-            }
-        }
-        return path
+        
+        return "notebooks"
+        
+//        var notebooksList = self.notebooks
+//        // base condition
+//        if levels.isEmpty {
+//            return "notebooks"
+//        }
+//        var path = "notebooks"
+//        for level in levels {
+//            path.append("/")
+//            path.append(notebooksList[level].name)
+//            if notebooksList[level].children != nil {
+//                notebooksList = notebooksList[level].children!
+//            }
+//        }
+//        return path
     }
     
     

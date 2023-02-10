@@ -173,7 +173,7 @@ extension EditorView: EditorViewDelegate {
         
         // refresh font again
         self.textView.font = theme.font
-        self.textView.textColor = UIColor(theme.bodyColor.color)
+        self.textView.textColor = theme.bodyColor.uiColor
         
         
     }

@@ -44,14 +44,19 @@ struct EditorUI: UIViewRepresentable {
         editorView.editorType = .smart
         editorView.textView.delegate = context.coordinator
         editorView.textView.font = theme.font
-        editorView.textView.textColor = UIColor(theme.bodyColor.color)
+        editorView.textView.textColor = theme.bodyColor.uiColor
+        
+        
         let paragraphStyle = NSMutableParagraphStyle()
         //            paragraphStyle.minimumLineHeight = 10
         paragraphStyle.lineSpacing = 10
 //        editorView.textView.defaultParagraphStyle = paragraphStyle
-        editorView.textView.text = text
+        
         
         editorView.textView.textStorage.addAttributes([NSAttributedString.Key.paragraphStyle: paragraphStyle], range: NSRange())
+        editorView.textView.text = text
+        
+    
         
         return editorView
         

@@ -94,22 +94,26 @@ extension Notebook {
     }
     
     var filePath: String {
-        // add self
-        var path: String = self.name + ".md"
-        // add parents
-        var parentRef = self.parent
-        while parentRef != nil {
-            path = parentRef!.name + "/" + path
-            parentRef = parentRef?.parent
-        }
-        // base path
-        path = "notebooks" + "/" + path
-        // return
-        return path
+        
+        return "notebooks" + "/" + self.id.uuidString + ".md"
+        
+//        // add self
+//        var path: String = self.name + ".md"
+//        // add parents
+//        var parentRef = self.parent
+//        while parentRef != nil {
+//            path = parentRef!.name + "/" + path
+//            parentRef = parentRef?.parent
+//        }
+//        // base path
+//        path = "notebooks" + "/" + path
+//        // return
+//        return path
     }
     
     
     var folderPath: String {
+        
         // add self
         var path: String = self.name
         // add parents
@@ -150,9 +154,7 @@ extension Notebook {
 extension Notebook {
     
     func loadContent() -> String {
-        
-        let fullPath = self.folderPath + ".md"
-//        print(fullPath)
+        let fullPath = "notebooks/" + self.id.uuidString + ".md"
         return FilesHelper.shared.readFile(from: fullPath) ?? ""
     }
 }

@@ -18,12 +18,10 @@ class NotebookContentBusiness {
     
     static func loadContent(for notebook: Notebook) -> String {
         
+//        let folderPath = notebook.folderPath
+        let folderPath = "notebooks"
         
-        let folderPath = notebook.folderPath
-        
-        //        print(folderPath, contentStr)
-        
-        return FilesHelper.shared.readFile(fileName: notebook.name, folderPath: folderPath) ?? ""
+        return FilesHelper.shared.readFile(fileName: notebook.id.uuidString, folderPath: folderPath) ?? ""
     }
     
     static func loadContent(selection: SelectedNotebookInfo) -> String {
@@ -33,11 +31,13 @@ class NotebookContentBusiness {
         // read data from file
         guard let notebook = NotebooksListState.shared.getNotebook(levels: selection.levels, index: selection.index) else { return "" }
         
-        let folderPath = NotebooksListState.shared.getFolderNamesPath(levels: selection.levels)
+        let folderPath = "notebooks"
+        
+//        let folderPath = NotebooksListState.shared.getFolderNamesPath(levels: selection.levels)
         
 //        print(folderPath, contentStr)
         
-        return FilesHelper.shared.readFile(fileName: notebook.name, folderPath: folderPath) ?? ""
+        return FilesHelper.shared.readFile(fileName: notebook.id.uuidString, folderPath: folderPath) ?? ""
     }
     
     // diff

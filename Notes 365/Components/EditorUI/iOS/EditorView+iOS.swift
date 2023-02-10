@@ -351,7 +351,7 @@ extension EditorView: NSTextStorageDelegate {
 //
 //        print("after:", bodyFont.fontDescriptor.symbolicTraits, extendedRange)
 //
-        textStorage.addAttribute(.foregroundColor, value: UIColor(theme.bodyColor.color), range: extendedRange)
+        textStorage.addAttribute(.foregroundColor, value: theme.bodyColor.uiColor, range: extendedRange)
 
         
 //        textStorage.enumerateAttributes(in: extendedRange) { attribureKeys, range, pointer in
@@ -474,7 +474,7 @@ extension EditorView {
                 let newFont = UIFont(descriptor: newFontDesc!, size: font.pointSize)
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
 //                // foreground color
-//                innerAttributedString.addAttribute(.foregroundColor, value: UIColor(theme.h1Color.color), range: range)
+//                innerAttributedString.addAttribute(.foregroundColor, value: theme.h1Color.uiColor, range: range)
             }
             
             
@@ -483,7 +483,7 @@ extension EditorView {
 //                                               range: styleRange)
             
             innerAttributedString.addAttribute(.foregroundColor,
-                                               value: UIColor(theme.styleColor.color), range: styleRange)
+                                               value: theme.styleColor.uiColor, range: styleRange)
             
             // markdown
             let startRange = NSRange(location: match!.range.location, length: regExCharLenght)
@@ -540,13 +540,13 @@ extension EditorView {
 //                (  .apply(newTraits: .italicTrait)
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
                 //                // foreground color
-                //                innerAttributedString.addAttribute(.foregroundColor, value: UIColor(theme.h1Color.color), range: range)
+                //                innerAttributedString.addAttribute(.foregroundColor, value: theme.h1Color.uiColor, range: range)
             }
             
             
             // color
             innerAttributedString.addAttribute(.foregroundColor,
-                                               value: UIColor(theme.styleColor.color), range: styleRange)
+                                               value: theme.styleColor.uiColor, range: styleRange)
             
             // markdown
             let regExCharLenght = 1
@@ -605,12 +605,12 @@ extension EditorView {
                 let newFont = UIFont(descriptor: newFontDesc!, size: font.pointSize)
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
                 //                // foreground color
-                //                innerAttributedString.addAttribute(.foregroundColor, value: UIColor(theme.h1Color.color), range: range)
+                //                innerAttributedString.addAttribute(.foregroundColor, value: theme.h1Color.uiColor, range: range)
             }
             
             // color
             innerAttributedString.addAttribute(.foregroundColor,
-                                               value: UIColor(theme.styleColor.color), range: styleRange)
+                                               value: theme.styleColor.uiColor, range: styleRange)
             
             // markdown
             let regExCharLenght = 3
@@ -667,7 +667,7 @@ extension EditorView {
             match, flags, stop in
             // text color
             innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
-                                               value:  UIColor(theme.styleColor.color),
+                                               value:  theme.styleColor.uiColor,
                                                     range: NSRange(location: match!.range.location + 2, length: match!.range.length - 4))
             // strikethrough line
             innerAttributedString.addAttribute(NSAttributedString.Key.strikethroughStyle,
@@ -675,7 +675,7 @@ extension EditorView {
                                                     range: NSRange(location: match!.range.location + 2, length: match!.range.length - 4))
             // line color
             innerAttributedString.addAttribute(.strikethroughColor,
-                                               value:  UIColor(theme.styleColor.color),
+                                               value:  theme.styleColor.uiColor,
                                                     range: NSRange(location: match!.range.location + 2, length: match!.range.length - 4))
             
             // add id key
@@ -712,13 +712,13 @@ extension EditorView {
             match, flags, stop in
             
 //            innerAttributedString.addAttribute(.foregroundColor,
-//                                               value:  UIColor(theme.linkColor.color),
+//                                               value:  theme.linkColor.uiColor,
 //                                                    range: NSRange(location: match!.range.location, length: match!.range.length))
 //            innerAttributedString.addAttribute(.underlineStyle,
 //                                                    value:  NSUnderlineStyle.single.rawValue,
 //                                                    range: NSRange(location: match!.range.location, length: match!.range.length))
 //            innerAttributedString.addAttribute(.underlineColor,
-//                                                    value:  UIColor(theme.linkColor.color),
+//                                                    value:  theme.linkColor.uiColor,
 //                                                    range: NSRange(location: match!.range.location, length: match!.range.length))
             innerAttributedString.addAttribute(.link, value: NSURL(string: "http://notes365.app")!, range: match!.range)
             
@@ -766,7 +766,7 @@ extension EditorView {
             
             // foreground
             innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
-                                               value:  UIColor(theme.codeColor.color),
+                                               value:  theme.codeColor.uiColor,
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
             
             
@@ -810,7 +810,7 @@ extension EditorView {
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
             
             innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
-                                               value:  UIColor(theme.listColor.color),
+                                               value:  theme.listColor.uiColor,
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
             
             
@@ -844,7 +844,7 @@ extension EditorView {
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
             
             innerAttributedString.addAttribute(.foregroundColor,
-                                               value: UIColor(theme.listColor.color),
+                                               value: theme.listColor.uiColor,
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
             
             
@@ -876,7 +876,7 @@ extension EditorView {
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
             
             innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
-                                               value: UIColor(theme.listColor.color),
+                                               value: theme.listColor.uiColor,
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
             
             
@@ -945,7 +945,7 @@ extension EditorView {
 //                let newFont = font.apply(newTraits: .monoSpace, newPointSize: CGFloat(theme.font.pointSize - 2))
 //                innerAttributedString.addAttribute(.font, value: newFont, range: range)
 //                // foreground color
-//                innerAttributedString.addAttribute(.foregroundColor, value: UIColor(theme.codeColor.color), range: range)
+//                innerAttributedString.addAttribute(.foregroundColor, value: theme.codeColor.uiColor, range: range)
 //            }
 //
 ////            var font = UIFont(name: theme.codeFontName, size: CGFloat(theme.bodyFontSize - 2))
@@ -956,7 +956,7 @@ extension EditorView {
 ////                                                    range: NSRange(location: match!.range.location, length: match!.range.length))
 ////
 ////            innerAttributedString.addAttribute(.foregroundColor,
-////                                               value:  UIColor(theme.codeBlockColor),
+////                                               value:  theme.codeBlockColor),
 ////                                                    range: NSRange(location: match!.range.location, length: match!.range.length))
 //
 //            let regExCharLenght = 3
@@ -1005,7 +1005,7 @@ extension EditorView {
                                                 range: NSRange(location: match!.range.location, length: match!.range.length))
             
             innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
-                                               value:  UIColor(theme.blockQuoteColor.color),
+                                               value:  theme.blockQuoteColor.uiColor,
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
             
             
@@ -1061,7 +1061,7 @@ extension EditorView {
                 let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 1))
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
                 // foreground color
-                innerAttributedString.addAttribute(.foregroundColor, value: UIColor(theme.h1Color.color), range: range)
+                innerAttributedString.addAttribute(.foregroundColor, value: theme.h1Color.uiColor, range: range)
             }
             
             // add id key
@@ -1089,7 +1089,7 @@ extension EditorView {
                 let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
                 let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 2))
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
-                innerAttributedString.addAttribute(.foregroundColor, value: UIColor(theme.h2Color.color), range: range)
+                innerAttributedString.addAttribute(.foregroundColor, value: theme.h2Color.uiColor, range: range)
             }
             
 //            innerAttributedString.addAttribute(NSAttributedString.Key.font,
@@ -1125,7 +1125,7 @@ extension EditorView {
                 let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
                 let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 3))
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
-                innerAttributedString.addAttribute(.foregroundColor, value: UIColor(theme.h3Color.color), range: range)
+                innerAttributedString.addAttribute(.foregroundColor, value: theme.h3Color.uiColor, range: range)
             }
             
 //            innerAttributedString.addAttribute(NSAttributedString.Key.font,
@@ -1162,7 +1162,7 @@ extension EditorView {
                 let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 4))
                 
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
-                innerAttributedString.addAttribute(.foregroundColor, value: UIColor(theme.h4Color.color), range: range)
+                innerAttributedString.addAttribute(.foregroundColor, value: theme.h4Color.uiColor, range: range)
             }
             
 //            innerAttributedString.addAttribute(NSAttributedString.Key.font,
@@ -1199,7 +1199,7 @@ extension EditorView {
                 let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 5))
                 
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
-                innerAttributedString.addAttribute(.foregroundColor, value: UIColor(theme.h5Color.color), range: range)
+                innerAttributedString.addAttribute(.foregroundColor, value: theme.h5Color.uiColor, range: range)
             }
             
             
@@ -1237,7 +1237,7 @@ extension EditorView {
                 let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 6))
                 
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
-                innerAttributedString.addAttribute(.foregroundColor, value: UIColor(theme.h6Color.color), range: range)
+                innerAttributedString.addAttribute(.foregroundColor, value: theme.h6Color.uiColor, range: range)
             }
             
 //            innerAttributedString.addAttribute(NSAttributedString.Key.font,

@@ -30,7 +30,7 @@ struct NotebooksSidebarView: View {
                     NotebooksListGroupView(notebooks: $usersState.usersDB.notes)
                 }
 //                .listStyle(SidebarListStyle())
-                .navigationTitle(usersState.navTitle)
+                .navigationTitle("Notebooks")
                 .onChange(of: selectedNotebook) { newValue in
                     if let newValue = newValue {
                         usersState.navTitle = newValue.name

@@ -46,6 +46,10 @@ struct NamedColor {
         }
     }
     
+    var uiColor: UIColor {
+        UIColor(red: red, green: green, blue: blue, alpha: 1)
+    }
+    
     func getColor() -> Color {
         return Color(red: red, green: green, blue: blue)
     }

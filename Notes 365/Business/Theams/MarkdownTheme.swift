@@ -20,6 +20,7 @@ struct MarkdownTheme: Identifiable, Hashable, Codable {
     // Heading
     var headingColor: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
     // h1...h6
+    var hColor: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
     var h1Color: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
     var h2Color: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
     var h3Color: NamedColor = NamedColor(colorName: "primary", listName: "dynamic")
