@@ -4,9 +4,6 @@
 //
 //  Created by Kiran Sarella on 12/04/22.
 //
-
-#if os(iOS)
-
 import UIKit
 
 public class EditorView: UIView {
@@ -61,10 +58,6 @@ public class EditorView: UIView {
         textView = EditorTextView(frame: self.bounds, textContainer: textContainer)
         textView.delegate = self
         
-//        textView.text = "dummmmmmm"
-//        textView.layoutManager.textStorage?.setAttributedString(NSAttributedString(string: "dummmm set attr"))
-//        textStorage.setAttributedString(NSAttributedString(string: "storage set attr"))
-        
         // add textView to scrollView
 
         textView.translatesAutoresizingMaskIntoConstraints = false
@@ -118,9 +111,9 @@ extension EditorView {
     func configureTextContainer() {
         
         textContainer.lineFragmentPadding = 20  // margin padding
-//        self.textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        self.textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         
-//        self.layoutManager.addTextContainer(self.textContainer)
+        self.layoutManager.addTextContainer(self.textContainer)
         
 //        let contentSize = self.scrollview.contentSize
 //        self.textContainer.containerSize = CGSize(width: contentSize.width, height: CGFloat.greatestFiniteMagnitude)
@@ -190,12 +183,22 @@ extension EditorView {
         
         layoutManager.delegate =  self
         textContainer.replaceLayoutManager(layoutManager)
+        
+//        // scroll to cursor rect
+//        if let cursorRange = textView.selectedRanges.first?.rangeValue {
+//            textView.scrollRangeToVisible(cursorRange)
+//        }
     }
     
     func switchToMarkdownEditorMode() {
         
         layoutManager.delegate = nil
         textContainer.replaceLayoutManager(layoutManager)
+        
+//        // scroll to cursor rect
+//        if let cursorRange = textView.selectedRanges.first?.rangeValue {
+//            textView.scrollRangeToVisible(cursorRange)
+//        }
     }
 }
 
@@ -470,8 +473,8 @@ extension EditorView {
             innerAttributedString.enumerateAttribute(.font, in: styleRange, options: []) { value, range, stop in
                 guard let font = value as? UIFont else { return }
                 // bold
-                let newFontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: newFontDesc!, size: font.pointSize)
+                let newFontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold) ?? font.fontDescriptor
+                let newFont = UIFont(descriptor: newFontDesc, size: font.pointSize)
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
 //                // foreground color
 //                innerAttributedString.addAttribute(.foregroundColor, value: theme.h1Color.uiColor, range: range)
@@ -535,8 +538,8 @@ extension EditorView {
             innerAttributedString.enumerateAttribute(.font, in: styleRange, options: []) { value, range, stop in
                 guard let font = value as? UIFont else { return }
                 // bold
-                let newFontDesc = font.fontDescriptor.withSymbolicTraits(.traitItalic)
-                let newFont = UIFont(descriptor: newFontDesc!, size: font.pointSize)
+                let newFontDesc = font.fontDescriptor.withSymbolicTraits(.traitItalic) ?? font.fontDescriptor
+                let newFont = UIFont(descriptor: newFontDesc, size: font.pointSize)
 //                (  .apply(newTraits: .italicTrait)
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
                 //                // foreground color
@@ -601,8 +604,8 @@ extension EditorView {
             innerAttributedString.enumerateAttribute(.font, in: styleRange, options: []) { value, range, stop in
                 guard let font = value as? UIFont else { return }
                 // bold
-                let newFontDesc = font.fontDescriptor.withSymbolicTraits([.traitBold, .traitItalic])
-                let newFont = UIFont(descriptor: newFontDesc!, size: font.pointSize)
+                let newFontDesc = font.fontDescriptor.withSymbolicTraits([.traitBold, .traitItalic]) ?? font.fontDescriptor
+                let newFont = UIFont(descriptor: newFontDesc, size: font.pointSize)
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
                 //                // foreground color
                 //                innerAttributedString.addAttribute(.foregroundColor, value: theme.h1Color.uiColor, range: range)
@@ -1336,5 +1339,3 @@ extension EditorView: NSLayoutManagerDelegate {
     }
     
 }
-
-#endif

@@ -37,11 +37,7 @@ struct NotesTitleView: View {
             .padding(.vertical, 6)
             Spacer()
         }
-        #if os(macOS)
-        .background(colorScheme == .light ? Color(NSColor.windowBackgroundColor) : Color(nsColor: NSColor.darkGray))
-        #elseif os(iOS)
         .background(colorScheme == .light ? Color(UIColor.systemBackground) : Color(UIColor.darkGray))
-        #endif
         .cornerRadius(4)
     }
 }

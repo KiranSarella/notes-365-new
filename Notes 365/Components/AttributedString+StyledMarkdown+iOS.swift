@@ -2,8 +2,6 @@
 //  Created by Frank Rausch on 2021-11-15.
 //
 
-#if os(iOS)
-
 import UIKit
 
 fileprivate enum MarkdownStyledBlock: Equatable {
@@ -216,5 +214,3 @@ fileprivate let codeParagraphStyle: NSParagraphStyle = {
     paragraphStyle.headIndent = 20
     return paragraphStyle
 }()
-
-#endif

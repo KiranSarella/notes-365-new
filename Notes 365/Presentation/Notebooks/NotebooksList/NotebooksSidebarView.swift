@@ -51,13 +51,6 @@ struct NotebooksSidebarView: View {
                  }.disabled(true)
                  */
                 
-                #if os(macOS)
-                VStack {
-                    getToolbarView()
-                    Spacer()
-                }
-                .frame(height: 30)
-                #else
                 if UIDevice.current.userInterfaceIdiom == .pad {
                     VStack {
                         getToolbarView()
@@ -65,7 +58,6 @@ struct NotebooksSidebarView: View {
                     }
                     .frame(height: 30)
                 }
-                #endif
             }
             .frame(minWidth: 280, maxWidth: 500)
             .onDisappear {

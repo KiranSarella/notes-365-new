@@ -100,9 +100,7 @@ struct NotebookEditorView: View {
                         }
                 }
                 .pickerStyle(SegmentedPickerStyle())
-#if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
-#endif
             }
         }
         .onAppear {

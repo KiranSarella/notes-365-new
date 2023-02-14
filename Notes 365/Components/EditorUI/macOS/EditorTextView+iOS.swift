@@ -6,16 +6,16 @@
 //
 
 import Foundation
+import UIKit
 
-#if os(macOS)
-
-import AppKit
-
-class EditorTextView: NSTextView {
+class EditorTextView: UITextView {
+    
+    var smartLayoutManagerDelegate: SmartLayoutManagerDelegate!
     
     override func paste(_ sender: Any?) {
-        pasteAsPlainText(sender)
+        
+//        pasteAsPlainText(sender)
     }
 }
-#endif
+
 

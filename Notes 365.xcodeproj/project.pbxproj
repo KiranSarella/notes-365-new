@@ -54,16 +54,11 @@
 		9F45BD732920CDE0003DE332 /* SmartTextStorage+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD0E2920CCCE003DE332 /* SmartTextStorage+iOS.swift */; };
 		9F45BD772920CDE0003DE332 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD142920CCCE003DE332 /* Helpers.swift */; };
 		9F45BD792920CDE0003DE332 /* NotebookEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD242920CCCE003DE332 /* NotebookEditorView.swift */; };
-		9F45BD7A2920CDE0003DE332 /* EditorViewDelegate+macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD162920CCCE003DE332 /* EditorViewDelegate+macOS.swift */; };
 		9F45BD7B2920CDE0003DE332 /* SmartLayoutManagerDelegate+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD1C2920CCCE003DE332 /* SmartLayoutManagerDelegate+iOS.swift */; };
-		9F45BD7D2920CDE0003DE332 /* EditorTextView+macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD0C2920CCCE003DE332 /* EditorTextView+macOS.swift */; };
 		9F45BD7F2920CDE0003DE332 /* NotebooksSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD252920CCCE003DE332 /* NotebooksSidebarView.swift */; };
 		9F45BD802920CDE0003DE332 /* ViewerUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD192920CCCE003DE332 /* ViewerUI.swift */; };
 		9F45BD812920CDE0003DE332 /* MarkdownAttributedString+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD0B2920CCCE003DE332 /* MarkdownAttributedString+iOS.swift */; };
 		9F45BD822920CDE0003DE332 /* MarkdownLayoutManagerDelegate+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD182920CCCE003DE332 /* MarkdownLayoutManagerDelegate+iOS.swift */; };
-		9F45BD832920CDE0003DE332 /* EditorUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD0F2920CCCE003DE332 /* EditorUI.swift */; };
-		9F45BD842920CDE0003DE332 /* EditorView+macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD1E2920CCCE003DE332 /* EditorView+macOS.swift */; };
-		9F45BD852920CDE0003DE332 /* EditorUI+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD1A2920CCCE003DE332 /* EditorUI+iOS.swift */; };
 		9F45BD862920CDE0003DE332 /* MarkdownTextStorage+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD222920CCCE003DE332 /* MarkdownTextStorage+iOS.swift */; };
 		9F45BD892920CDE0003DE332 /* EditorViewDelegate+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD172920CCCE003DE332 /* EditorViewDelegate+iOS.swift */; };
 		9F45BD8B2920CDE0003DE332 /* EditorView+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD102920CCCE003DE332 /* EditorView+iOS.swift */; };
@@ -103,7 +98,7 @@
 		9F45BDE429238D29003DE332 /* NotebooksHierarchyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BDE329238D29003DE332 /* NotebooksHierarchyTests.swift */; };
 		9F57BAE7299688BC0076FD9D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F57BAE6299688BC0076FD9D /* Constants.swift */; };
 		9F7D291D299A7C1500B37F51 /* NoteDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D291C299A7C1500B37F51 /* NoteDocument.swift */; };
-		9F8EE988293EB2A70021409E /* Markdownosaur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8EE987293EB2A70021409E /* Markdownosaur.swift */; };
+		9F7D291F299BABAC00B37F51 /* EditorUI+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D291E299BABAC00B37F51 /* EditorUI+iOS.swift */; };
 		9F8EE98A293EB3090021409E /* CloudDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8EE989293EB3090021409E /* CloudDataManager.swift */; };
 		9F8EE98B293EB32D0021409E /* CloudDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8EE989293EB3090021409E /* CloudDataManager.swift */; };
 		9FB21DE72954B70600CFEDA8 /* PurchasesBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE9D0C72934862F006CCC1E /* PurchasesBusiness.swift */; };
@@ -200,19 +195,14 @@
 		9F45BD042920CCCE003DE332 /* NotebooksListBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListBusiness.swift; sourceTree = "<group>"; };
 		9F45BD062920CCCE003DE332 /* SelectedNotebookInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedNotebookInfo.swift; sourceTree = "<group>"; };
 		9F45BD0B2920CCCE003DE332 /* MarkdownAttributedString+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MarkdownAttributedString+iOS.swift"; sourceTree = "<group>"; };
-		9F45BD0C2920CCCE003DE332 /* EditorTextView+macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorTextView+macOS.swift"; sourceTree = "<group>"; };
 		9F45BD0E2920CCCE003DE332 /* SmartTextStorage+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SmartTextStorage+iOS.swift"; sourceTree = "<group>"; };
-		9F45BD0F2920CCCE003DE332 /* EditorUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorUI.swift; sourceTree = "<group>"; };
 		9F45BD102920CCCE003DE332 /* EditorView+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorView+iOS.swift"; sourceTree = "<group>"; };
 		9F45BD142920CCCE003DE332 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		9F45BD152920CCCE003DE332 /* MarkdownPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownPattern.swift; sourceTree = "<group>"; };
-		9F45BD162920CCCE003DE332 /* EditorViewDelegate+macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewDelegate+macOS.swift"; sourceTree = "<group>"; };
 		9F45BD172920CCCE003DE332 /* EditorViewDelegate+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewDelegate+iOS.swift"; sourceTree = "<group>"; };
 		9F45BD182920CCCE003DE332 /* MarkdownLayoutManagerDelegate+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MarkdownLayoutManagerDelegate+iOS.swift"; sourceTree = "<group>"; };
 		9F45BD192920CCCE003DE332 /* ViewerUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewerUI.swift; sourceTree = "<group>"; };
-		9F45BD1A2920CCCE003DE332 /* EditorUI+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorUI+iOS.swift"; sourceTree = "<group>"; };
 		9F45BD1C2920CCCE003DE332 /* SmartLayoutManagerDelegate+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SmartLayoutManagerDelegate+iOS.swift"; sourceTree = "<group>"; };
-		9F45BD1E2920CCCE003DE332 /* EditorView+macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorView+macOS.swift"; sourceTree = "<group>"; };
 		9F45BD222920CCCE003DE332 /* MarkdownTextStorage+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MarkdownTextStorage+iOS.swift"; sourceTree = "<group>"; };
 		9F45BD242920CCCE003DE332 /* NotebookEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookEditorView.swift; sourceTree = "<group>"; };
 		9F45BD252920CCCE003DE332 /* NotebooksSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksSidebarView.swift; sourceTree = "<group>"; };
@@ -244,7 +234,7 @@
 		9F498E042939E03B00FF4D17 /* EditorView.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = EditorView.md; sourceTree = "<group>"; };
 		9F57BAE6299688BC0076FD9D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9F7D291C299A7C1500B37F51 /* NoteDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDocument.swift; sourceTree = "<group>"; };
-		9F8EE987293EB2A70021409E /* Markdownosaur.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Markdownosaur.swift; sourceTree = "<group>"; };
+		9F7D291E299BABAC00B37F51 /* EditorUI+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EditorUI+iOS.swift"; sourceTree = "<group>"; };
 		9F8EE989293EB3090021409E /* CloudDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudDataManager.swift; sourceTree = "<group>"; };
 		9F8EE98C293F4B7E0021409E /* Notes-365-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Notes-365-Info.plist"; sourceTree = SOURCE_ROOT; };
 		9FB21DEB295C92CE00CFEDA8 /* TestingBehaviour.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TestingBehaviour.md; sourceTree = "<group>"; };
@@ -414,7 +404,6 @@
 				9F45BD2F2920CCCE003DE332 /* __tests */,
 				9F45BD492920CCCF003DE332 /* In-app */,
 				9F45BD2E2920CCCE003DE332 /* StringDiff.swift */,
-				9F8EE987293EB2A70021409E /* Markdownosaur.swift */,
 				9F8EE989293EB3090021409E /* CloudDataManager.swift */,
 				9FB21DF2295D89E000CFEDA8 /* DataManager.swift */,
 				9F45BDC72920FD34003DE332 /* PlistHelper.swift */,
@@ -539,12 +528,10 @@
 		9F45BDB82920E1D4003DE332 /* macOS */ = {
 			isa = PBXGroup;
 			children = (
-				9F45BD0C2920CCCE003DE332 /* EditorTextView+macOS.swift */,
-				9F45BD0F2920CCCE003DE332 /* EditorUI.swift */,
-				9F45BD1A2920CCCE003DE332 /* EditorUI+iOS.swift */,
-				9F45BD1E2920CCCE003DE332 /* EditorView+macOS.swift */,
+				9FB40280297A4551000DF922 /* EditorTextView+iOS.swift */,
+				9F7D291E299BABAC00B37F51 /* EditorUI+iOS.swift */,
 				9F45BD102920CCCE003DE332 /* EditorView+iOS.swift */,
-				9F45BD162920CCCE003DE332 /* EditorViewDelegate+macOS.swift */,
+				9F45BD172920CCCE003DE332 /* EditorViewDelegate+iOS.swift */,
 			);
 			path = macOS;
 			sourceTree = "<group>";
@@ -552,8 +539,6 @@
 		9F45BDB92920E1DB003DE332 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				9FB40280297A4551000DF922 /* EditorTextView+iOS.swift */,
-				9F45BD172920CCCE003DE332 /* EditorViewDelegate+iOS.swift */,
 				9F45BD0B2920CCCE003DE332 /* MarkdownAttributedString+iOS.swift */,
 				9F45BD0E2920CCCE003DE332 /* SmartTextStorage+iOS.swift */,
 			);
@@ -849,14 +834,12 @@
 				9F45BD892920CDE0003DE332 /* EditorViewDelegate+iOS.swift in Sources */,
 				9F45BDAB2920CE52003DE332 /* ThemesListView.swift in Sources */,
 				9F45BD7B2920CDE0003DE332 /* SmartLayoutManagerDelegate+iOS.swift in Sources */,
-				9F45BD7A2920CDE0003DE332 /* EditorViewDelegate+macOS.swift in Sources */,
 				9F45BD532920CD5E003DE332 /* MonthDetailView.swift in Sources */,
 				9F45BD712920CDE0003DE332 /* MarkdownPattern.swift in Sources */,
 				9F45BCA42920CAAE003DE332 /* ContentView.swift in Sources */,
 				9F45BD602920CD8A003DE332 /* DayCalendarView.swift in Sources */,
 				9F45BD732920CDE0003DE332 /* SmartTextStorage+iOS.swift in Sources */,
 				9F45BDA42920CE41003DE332 /* ThemePreviewView.swift in Sources */,
-				9F45BD852920CDE0003DE332 /* EditorUI+iOS.swift in Sources */,
 				9F45BD9C2920CE21003DE332 /* FileHelper.swift in Sources */,
 				9F7D291D299A7C1500B37F51 /* NoteDocument.swift in Sources */,
 				9F45BD622920CD90003DE332 /* WeekDetailView.swift in Sources */,
@@ -882,8 +865,6 @@
 				9F45BCA22920CAAE003DE332 /* Notes_365App.swift in Sources */,
 				9F45BD952920CDF9003DE332 /* AppState.swift in Sources */,
 				9F45BD9E2920CE21003DE332 /* SpeechHelpr.swift in Sources */,
-				9F45BD7D2920CDE0003DE332 /* EditorTextView+macOS.swift in Sources */,
-				9F45BD832920CDE0003DE332 /* EditorUI.swift in Sources */,
 				9FB6C69829275D0600C8EC76 /* FormatOptionsView.swift in Sources */,
 				9F45BD932920CDF9003DE332 /* Mode.swift in Sources */,
 				9F45BDAD2920CE5A003DE332 /* PurchasesView.swift in Sources */,
@@ -897,11 +878,9 @@
 				9FB6C6A929279BEC00C8EC76 /* TimelineBusiness.swift in Sources */,
 				9F45BDC82920FD34003DE332 /* PlistHelper.swift in Sources */,
 				9F45BD6C2920CDCB003DE332 /* NotebooksListBusiness.swift in Sources */,
-				9F8EE988293EB2A70021409E /* Markdownosaur.swift in Sources */,
 				9F8EE98A293EB3090021409E /* CloudDataManager.swift in Sources */,
 				9F45BD542920CD5E003DE332 /* MonthCalendarView.swift in Sources */,
 				9F3DB0C4292DF82300704860 /* FeedbackView+iPadOS.swift in Sources */,
-				9F45BD842920CDE0003DE332 /* EditorView+macOS.swift in Sources */,
 				9F188D812930E49F0078D413 /* MarkdownHeading.swift in Sources */,
 				9FE9D0CD2934C134006CCC1E /* StoreHelper.swift in Sources */,
 				9FB21DF3295D89E000CFEDA8 /* DataManager.swift in Sources */,
@@ -916,6 +895,7 @@
 				9F3DB0CC292E340200704860 /* ThemeState.swift in Sources */,
 				9F3DB0D0292E70BA00704860 /* ColorPickerWindowManager.swift in Sources */,
 				9F57BAE7299688BC0076FD9D /* Constants.swift in Sources */,
+				9F7D291F299BABAC00B37F51 /* EditorUI+iOS.swift in Sources */,
 				9FB6C69A29275D5100C8EC76 /* FormatOptions.swift in Sources */,
 				9FB6C69E2927615700C8EC76 /* SpeechState.swift in Sources */,
 			);

@@ -5,11 +5,7 @@
 //  Created by Kiran Sarella on 16/04/22.
 //
 
-#if os(iOS)
-
 import UIKit
-
-
 
 protocol EditorViewDelegate {
 
@@ -290,4 +286,3 @@ extension EditorView: EditorViewDelegate {
 }
 
 
-#endif
