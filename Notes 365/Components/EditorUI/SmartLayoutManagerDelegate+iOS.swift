@@ -5,11 +5,8 @@
 //  Created by Kiran Sarella on 13/04/22.
 //
 
-#if os(iOS)
-
 import Foundation
 import UIKit
-
 
 class SmartLayoutManagerDelegate: NSObject, NSLayoutManagerDelegate {
     
@@ -113,5 +110,3 @@ class SmartLayoutManagerDelegateTwo: NSObject, NSLayoutManagerDelegate {
     }
     
 }
-
-#endif

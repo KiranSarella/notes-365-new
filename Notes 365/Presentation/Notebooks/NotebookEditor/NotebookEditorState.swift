@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
+@MainActor
 class NotebookEditorState: ObservableObject {
     
     let notebookBusiness = NotebookContentBusiness.shared
@@ -45,10 +46,13 @@ class NotebookEditorState: ObservableObject {
             }
     }
     
-    func loadContent() {
+    func loadContent() async {
         baseContent = ""
         isFetchingData = true
-        self.baseContent = notebook.loadContent()
+//        self.baseContent = notebook.loadContent()
+        
+        self.baseContent = await notebook.readDocument() ?? ""
+        
         isFetchingData = false
         contentEdited = false
     }
@@ -93,13 +97,18 @@ class NotebookEditorState: ObservableObject {
                 } else {
                     // ** day changed **
                     // reset baseContent
-                    loadContent()
-                    // create new baseversion
-                    setBaseVersion(notebook)
-                    // update version date
-                    versionDate = Date()
-                    // now save content
-                    NotebookContentBusiness.saveContentChanges(notebook: notebook, content: txt)
+                    
+                    DispatchQueue.main.async {
+                        Task {
+                            await self.loadContent()
+                            // create new baseversion
+                            self.setBaseVersion(self.notebook)
+                            // update version date
+                            self.versionDate = Date()
+                            // now save content
+                            await self.notebook.saveDocument(with: txt)
+                        }
+                    }
                 }
                 
 //                // TODO: check date

@@ -41,7 +41,6 @@ struct ThemesListView: View {
                 }
                 .padding()
                 .onChange(of: selectedLightThemeID) { newValue in
-                    
                     themesListState.saveLightTheme(newValue)
                 }
                 .onChange(of: selectedDarkThemeID) { newValue in

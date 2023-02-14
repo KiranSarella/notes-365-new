@@ -26,11 +26,12 @@ struct NotebookEditorView: View {
                 VStack(alignment: .leading) {
                     // formatting bar view
                     FormattingOptionsView(editorView: $editorView, contentEdited: $editorState.contentEdited)
-                        .frame(height: 40)
+//                        .frame(height: 40)
                         .padding(.horizontal)
                         .backgroundStyle(.regularMaterial)
                         .background(.background)
-                        .padding(.bottom, -7)
+//                        .padding(.bottom, -7)
+//                        .padding(.bottom, -7)
                     
                     if editorState.isFetchingData {
                         Text("loading..")
@@ -55,17 +56,30 @@ struct NotebookEditorView: View {
                 }
                 .onAppear(perform: {
                     editorState.notebook = notebookM!.notebook
-                    editorState.loadContent()
                     
-                    editorView.text = editorState.baseContent
-                    
-                    editorState.getNewContent = {
-                        return editorView.text
+                    DispatchQueue.main.async {
+                        
+                        Task {
+                            await editorState.loadContent()
+                            editorView.text = editorState.baseContent
+                            editorState.getNewContent = {
+                                return editorView.text
+                            }
+                        }
+                        
                     }
+                    
+                   
+                    
+                   
                 })
                 .onDisappear(perform: {
                     isTextFieldFocused = false
                     editorState.saveContentChanges()
+                    
+                    Task {
+                        await editorState.notebook.closeDocument()
+                    }
                 })
                 .onChange(of: editorState.theme, perform: { newValue in
                     editorView.updateTheme(theme: editorState.theme)
@@ -104,8 +118,13 @@ struct NotebookEditorView: View {
             guard let newValue = newValue else { return }
             editorState.notebook = newValue.notebook
             
-            editorState.loadContent()
-            editorView.text = editorState.baseContent
+            DispatchQueue.main.async {
+                Task {
+                    await editorState.loadContent()
+                    editorView.text = editorState.baseContent
+                }
+            }
+            
         }
         .onReceive(autoSaveTimer, perform: { _ in
             editorState.saveContentChanges()

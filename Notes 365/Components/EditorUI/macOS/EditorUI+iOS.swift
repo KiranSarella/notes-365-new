@@ -66,9 +66,9 @@ struct EditorUI: UIViewRepresentable {
     }
     
     func updateUIView(_ editorView: EditorView, context: Context) {
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 10
-        editorView.textView.textStorage.addAttributes([NSAttributedString.Key.paragraphStyle: paragraphStyle], range: editorView.textView.textStorage.fullRange())
+//        let paragraphStyle = NSMutableParagraphStyle()
+//        paragraphStyle.lineSpacing = 10
+//        editorView.textView.textStorage.addAttributes([NSAttributedString.Key.paragraphStyle: paragraphStyle], range: editorView.textView.textStorage.fullRange())
     }
     
     typealias NSViewType = EditorView

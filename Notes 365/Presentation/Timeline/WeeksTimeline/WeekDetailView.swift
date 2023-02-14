@@ -120,9 +120,18 @@ struct WeekSectionView: View {
         VStack {
             HStack {
                 Spacer()
-                Text(weekTimeline.date.formatted(date: .complete, time: .omitted))
-                    .padding(.horizontal)
-                    .font(.largeTitle)
+                
+                if UIDevice.current.userInterfaceIdiom == .phone {
+                    Text(weekTimeline.date.formatted(date: .abbreviated, time: .omitted))
+                        .padding(.horizontal)
+                        .font(.largeTitle)
+                } else {
+                    Text(weekTimeline.date.formatted(date: .complete, time: .omitted))
+                        .padding(.horizontal)
+                        .font(.largeTitle)
+                }
+                
+                
             }
             .padding(.top, 30)
         }

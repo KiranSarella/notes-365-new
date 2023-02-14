@@ -26,7 +26,8 @@ class NotebooksListBusiness {
 //    var notebooksHashMap = [UUID: Notebook]()
     
     private let notebooksLimit = 3
-    let notebooksPath = "notebooks"
+    
+    let notebooksPath = Constants.notebooksPath
     
     init(dataManager: DataManager) {
         
@@ -41,13 +42,14 @@ class NotebooksListBusiness {
         // convert folder structure to flat structure
 //        convertToFlatStructure()
         
-        if let isFlat = UserDefaults.standard.value(forKey: "flat-structure-status") as? Bool, isFlat == false {
-            // if false
-            convertToFlatStructure()
-        } else {
-            // if not set
+        print(dataManager.basePathURL)
+        
+        // if new folder not exits and contains notebooks - means old version structure
+        if !FileManager.default.fileExists(atPath: dataManager.basePathURL.appendingPathComponent(notebooksPath).path())
+            && notebooks.count > 0 {
             convertToFlatStructure()
         }
+        
 
         
 //        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookChangeNotification(_:)), name: .notebookChangeNotification, object: nil)
@@ -81,17 +83,18 @@ class NotebooksListBusiness {
     
     func convertToFlatStructure() {
 
+        print(#function)
+        
         func traverse(notebooks: [Notebook]) {
             // traverse and add each item to hash map
             for notebook in notebooks {
                 // move to base folder
                 
-                let oldFolderPath = dataManager.basePathURL.appendingPathComponent(notebook.oldFilePath)
-                let newFolderPath = dataManager.basePathURL.appendingPathComponent("notebooks").appendingPathComponent(notebook.id.uuidString).appendingPathExtension("md")
-                
+                let oldFolderPath = dataManager.basePathURL.appendingPathComponent(Constants.notebooksPathOld).appendingPathComponent(notebook.oldFilePath)
+                let newFolderPath = dataManager.basePathURL.appendingPathComponent(notebooksPath).appendingPathComponent(notebook.id.uuidString).appendingPathExtension("md")
                 
                 do {
-                    try FileManager.default.moveItem(atPath: oldFolderPath.path, toPath: newFolderPath.path)
+                    try FileManager.default.moveItem(atPath: oldFolderPath.path, toPath: newFolderPath.path())
                 } catch let error as NSError {
                     print("Ooops! Something went wrong: \(error)")
                 }
@@ -102,15 +105,11 @@ class NotebooksListBusiness {
                 }
             }
         }
-        // rename existing
-        dataManager.renameItem(from: "notebooks", to: "notebooks-old")
         // create new
-        let newFolderPath = dataManager.basePathURL.appendingPathComponent("notebooks")
+        let newFolderPath = dataManager.basePathURL.appendingPathComponent(notebooksPath)
         try? FileManager.default.createDirectory(at: newFolderPath, withIntermediateDirectories: true)
         // start traversing
         traverse(notebooks: notebooks)
-        // set completion flag
-        UserDefaults.standard.set(true, forKey: "flat-structure-status")
         
         // for each item
         // get its path
@@ -174,14 +173,14 @@ class NotebooksListBusiness {
     }
     
     private func createRequiredFoldersIfNotExists() {
-        if !dataManager.itemExists(atPath: "notebooks") {
+        if !dataManager.itemExists(atPath: notebooksPath) {
             // create notebooks folder
             // create timeline folder
             // create base/dummy notebook (for consistent top and later level implementations)
             
-            dataManager.createFolder("notebooks")
-            dataManager.createFolder("timeline")
-            dataManager.createFolder("today_base_version")
+            dataManager.createFolder(Constants.notebooksPath)
+            dataManager.createFolder(Constants.timelinePath)
+            dataManager.createFolder(Constants.baseVersionPath)
         }
     }
     
@@ -194,7 +193,7 @@ class NotebooksListBusiness {
         let firstBook = createNotebook(parent: nil)
         notebooks.append(firstBook)
         // persist content
-        dataManager.writeToFile(content: "", fileName: firstBook.id.uuidString, folderPath: "notebooks", ext: "md")
+        dataManager.writeToFile(content: "", fileName: firstBook.id.uuidString, folderPath: notebooksPath, ext: "md")
         // persist hierarchy
         persistNotebooks()
         
@@ -211,7 +210,7 @@ class NotebooksListBusiness {
             return (childNote, parent, index)
         } else {
             // base level
-            let fullPath = "notebooks"
+            let fullPath = notebooksPath
             let newNotebook = createNotebook(parent: notebook.parent)
             // get index of current notebook
             let index = notebooks.firstIndex(of: notebook)!
@@ -228,7 +227,7 @@ class NotebooksListBusiness {
     }
     
     func insertInside(ref notebook: Notebook, below index: Int? = nil) -> Notebook {
-        let fullPath = "notebooks"
+        let fullPath = notebooksPath
         let newNotebook = createNotebook(parent: notebook)
         
 //        let newNotebook = createNotebook(atPath: fullPath)
@@ -272,7 +271,7 @@ class NotebooksListBusiness {
     
     // MARK: - Delete
     func deleteNotebook(ref notebook: Notebook) {
-        let filePath = "notebooks/" + notebook.id.uuidString + ".md"
+        let filePath = notebooksPath + "/" + notebook.id.uuidString + ".md"
         if let parent = notebook.parent {
             // delete file.md
             
@@ -341,9 +340,9 @@ class NotebooksListBusiness {
     }
     
     func getFolderNamesPath(levels: [Int]) -> String {
-        
-        return "notebooks"
-        
+
+        return notebooksPath
+//
 //        var notebooksList = self.notebooks
 //        // base condition
 //        if levels.isEmpty {
@@ -390,7 +389,7 @@ extension NotebooksListBusiness {
     func prepareFolderPaths(fullPaths: inout [UUID: String]) {
         
         for notebook in notebooks {
-            prepareFolderPaths(notebook: notebook, path: "notebooks", fullPaths: &fullPaths)
+            prepareFolderPaths(notebook: notebook, path: notebooksPath, fullPaths: &fullPaths)
         }
     }
     

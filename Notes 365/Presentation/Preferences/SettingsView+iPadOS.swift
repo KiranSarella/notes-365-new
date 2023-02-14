@@ -158,7 +158,12 @@ struct SettingsView_iPadOS: View {
 
                             
                         }
-                        
+                        .onChange(of: selectedLightThemeID) { newValue in
+                            themesListState.saveLightTheme(newValue)
+                        }
+                        .onChange(of: selectedDarkThemeID) { newValue in
+                            themesListState.saveDarkTheme(newValue)
+                        }
                         .navigationTitle("Themes")
 //                        .listStyle(InsetGroupedListStyle())
                         .onAppear {
@@ -219,6 +224,9 @@ struct SettingsView_iPadOS: View {
             
         }
         .onAppear {
+            
+            selectedLightThemeID = themesListState.selectedLightTheme.id
+            selectedDarkThemeID = themesListState.selectedDarkTheme.id
             
 //            selectedTheme = ThemeState.shared.theme
 //

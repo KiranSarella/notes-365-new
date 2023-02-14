@@ -128,7 +128,7 @@ extension DataManager {
             // generate data
             let plistData = try PropertyListEncoder().encode(notebooks)
             // prepare path
-            let fileURL = basePathURL.appendingPathComponent("notebooks-list").appendingPathExtension("plist")
+            let fileURL = basePathURL.appendingPathComponent(Constants.notebooksListPath).appendingPathExtension("plist")
             // save file
             do {
                 // Write to the file
@@ -143,7 +143,7 @@ extension DataManager {
     
     // retrives notebooks hierarcy from plist, not the notebook content.
     func retrieveNotebooks() -> [Notebook]? {
-        let fileURL = basePathURL.appendingPathComponent("notebooks-list").appendingPathExtension("plist")
+        let fileURL = basePathURL.appendingPathComponent(Constants.notebooksListPath).appendingPathExtension("plist")
         do {
             // Read the file contents
             let plistData = try Data(contentsOf: fileURL)

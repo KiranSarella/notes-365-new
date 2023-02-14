@@ -118,7 +118,7 @@ extension EditorView {
     func configureTextContainer() {
         
         textContainer.lineFragmentPadding = 20  // margin padding
-//        self.textView.textContainerInset = CGSize(width: 40, height: 40)
+//        self.textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         
 //        self.layoutManager.addTextContainer(self.textContainer)
         
@@ -266,9 +266,9 @@ extension EditorView: NSTextStorageDelegate {
             var symbolicTraits = font.fontDescriptor.symbolicTraits
             symbolicTraits.remove([.traitBold, .traitItalic])
             
-            let fontDescriptor = font.fontDescriptor.withSymbolicTraits(symbolicTraits)
+            let fontDesc = font.fontDescriptor.withSymbolicTraits(symbolicTraits)
 //            print(fontDescriptor, range)
-            let newFont = UIFont(descriptor: fontDescriptor!, size: CGFloat(theme.font.pointSize))
+            let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: CGFloat(theme.font.pointSize))
             textStorage.addAttribute(.font, value: newFont, range: range)
             
 //            let attrSubStr = textStorage.attributedSubstring(from: range)
@@ -1058,7 +1058,7 @@ extension EditorView {
                 // bold
                 
                 let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 1))
+                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 1))
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
                 // foreground color
                 innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
@@ -1087,7 +1087,7 @@ extension EditorView {
                 guard let font = value as? UIFont else { return }
                 
                 let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 2))
+                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 2))
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
                 innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
             }
@@ -1123,7 +1123,7 @@ extension EditorView {
                 guard let font = value as? UIFont else { return }
                 
                 let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 3))
+                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 3))
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
                 innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
             }
@@ -1159,7 +1159,7 @@ extension EditorView {
                 guard let font = value as? UIFont else { return }
                 
                 let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 4))
+                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 4))
                 
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
                 innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
@@ -1196,7 +1196,7 @@ extension EditorView {
                 guard let font = value as? UIFont else { return }
                 
                 let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 5))
+                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 5))
                 
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
                 innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
@@ -1234,7 +1234,7 @@ extension EditorView {
                 guard let font = value as? UIFont else { return }
                 
                 let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 6))
+                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 6))
                 
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
                 innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)

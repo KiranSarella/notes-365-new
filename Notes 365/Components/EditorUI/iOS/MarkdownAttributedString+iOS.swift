@@ -5,8 +5,6 @@
 //  Created by Kiran Sarella on 03/07/22.
 //
 
-#if os(iOS)
-
 import Foundation
 import UIKit
 
@@ -271,7 +269,7 @@ class MarkdownAttriburedString {
         
         var italicFont = theme.font
         let fontDesc = italicFont.fontDescriptor.withSymbolicTraits([.traitItalic, .traitBold])
-        italicFont = UIFont(descriptor: fontDesc!, size: italicFont.pointSize)
+        italicFont = UIFont(descriptor: fontDesc ?? italicFont.fontDescriptor, size: italicFont.pointSize)
 //        italicFont = italicFont.apply(newTraits: [.italic, .bold])
         
         let regex = try! NSRegularExpression(pattern: pattern, options: [])
@@ -574,134 +572,135 @@ class MarkdownAttriburedString {
     }
     
     func processCodeBlock(extendedRange: NSRange, textStorage innerAttributedString: NSMutableAttributedString) {
-        
+        // in macOS, the below code is working
     }
-    
-//    func processCodeBlock(extendedRange: NSRange, textStorage innerAttributedString: NSMutableAttributedString) {
-//
-//
-//        let paragraphStyle = NSMutableParagraphStyle()
-//        //        paragraphStyle.minimumLineHeight = 10
-//        paragraphStyle.lineSpacing = 10
-//
-//        let globalBlock = NSTextBlock()
-//        globalBlock.setWidth(140, type: .absoluteValueType, for: .padding, edge: .minX)
-//        globalBlock.setContentWidth(100, type: .percentageValueType)
-//
-//        let paddingTextCodeBlock = NSTextBlock()
-//        paddingTextCodeBlock.setContentWidth(80, type: .percentageValueType)
-//        //        paddingTextCodeBlock.setWidth(30, type: .absoluteValueType, for: .padding)
-//        paddingTextCodeBlock.setBorderColor(.gray)
-//        paddingTextCodeBlock.setWidth(1, type: .absoluteValueType, for: .border)
-//        //        paddingTextCodeBlock.setWidth(20, type: .absoluteValueType, for: .padding, edge: .minX)
-//        paddingTextCodeBlock.backgroundColor = UIColor.lightGray
-//
-//
-//        let textCodeBlock = NSTextBlock()
-//        textCodeBlock.setWidth(30, type: .absoluteValueType, for: .padding)
-//        textCodeBlock.backgroundColor = UIColor.lightGray
-//        //        textCodeBlock.setWidth(20, type: .absoluteValueType, for: .margin)
-//        textCodeBlock.setContentWidth(60, type: .percentageValueType)
-//
-//
-//        //        let codeBlock = TweetTextBlock()
-//
-//        paragraphStyle.textBlocks = [globalBlock, paddingTextCodeBlock]
-//
-//        //        paragraphStyle.textBlocks = [codeBlock]
-//
-//        let pattern = MarkdownPattern.codeBlock.rawValue
-//
-//        let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
-//
-//        regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
-//            match, flags, stop in
-//
-//            let range = NSRange(location: match!.range.location, length: match!.range.length)
-//
-//            innerAttributedString.enumerateAttribute(.font, in: range, options: []) { value, range, stop in
-//                guard let font = value as? UIFont else { return }
-//
-//                /*
-//                 // remove traits
-//                 let fontDescriptor = font.fontDescriptor
-//                 var traits = fontDescriptor.symbolicTraits
-//                 if traits.contains(.italic) {
-//                 traits = traits.remove(.italic)!
-//                 }
-//                 if traits.contains(.bold) {
-//                 traits = traits.remove(.bold)!
-//                 }
-//                 let fontDesc = fontDescriptor.withSymbolicTraits(traits)
-//                 // add traits
-//                 guard let font2 = UIFont(descriptor: fontDesc, size: CGFloat(theme.font.pointSize - 2)) else { return }
-//
-//                 let newFont = font2.apply(newTraits: .monoSpace, newPointSize: CGFloat(theme.font.pointSize - 2))
-//                 // remove existing traits
-//
-//                 */
-//
-//                // bold
-//                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitMonoSpace)
-//                let newFont = UIFont(descriptor: fontDesc!, size: CGFloat(theme.font.pointSize - 2))
-//
-////                let newFont = font.apply(newTraits: .monoSpace, newPointSize: CGFloat(theme.font.pointSize - 2))
-//                innerAttributedString.addAttribute(.font, value: newFont, range: range)
-//                // foreground color
-//                innerAttributedString.addAttribute(.foregroundColor, value: theme.codeColor.uiColor, range: range)
-//            }
-//
-//            //            var font = UIFont(name: theme.codeFontName, size: CGFloat(theme.bodyFontSize - 2))
-//            ////            font = font.apply(newTraits: .expanded)
-//            //
-//            //            innerAttributedString.addAttribute(.font,
-//            //                                                    value:  font,
-//            //                                                    range: NSRange(location: match!.range.location, length: match!.range.length))
-//            //
-//            //            innerAttributedString.addAttribute(.foregroundColor,
-//            //                                               value:  theme.codeBlockColor),
-//            //                                                    range: NSRange(location: match!.range.location, length: match!.range.length))
-//
-//
-//            let regExCharLenght = 3
-//            let backPadding = 0
-//            // markdown
-//            let startRange = NSRange(location: match!.range.location, length: regExCharLenght)
-//            let endRange = NSRange(location: match!.range.location + match!.range.length - regExCharLenght - backPadding , length: regExCharLenght)
-//            // add id key
-//            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
-//                                               value: 0,
-//                                               range: startRange)
-//
-//            // add id key
-//            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
-//                                               value: 0,
-//                                               range: endRange)
-//
-//            // add id key
-//            innerAttributedString.addAttribute(NSAttributedString.Key.font,
-//                                               value: UIFont.systemFont(ofSize: 0.1),
-//                                               range: startRange)
-//
-//            // add id key
-//            innerAttributedString.addAttribute(NSAttributedString.Key.font,
-//                                               value: UIFont.systemFont(ofSize: 0.1),
-//                                               range: endRange)
-//
-//
-//            let info: [String: Any] = [
-//                "range": NSRange(location: match!.range.location, length: match!.range.length),
-//                "type": "codeblock"
-//            ]
-//            // info
-//            innerAttributedString.addAttribute(NSAttributedString.Key.markdownInfo,
-//                                               value: info,
-//                                               range: NSRange(location: match!.range.location, length: match!.range.length))
-//
-//            innerAttributedString.addAttribute(.markdownRange, value: MarkdownPattern.codeBlock, range: match!.range)
-//        }
-//    }
-//
+    /*
+    func processCodeBlock(extendedRange: NSRange, textStorage innerAttributedString: NSMutableAttributedString) {
+
+
+        let paragraphStyle = NSMutableParagraphStyle()
+        //        paragraphStyle.minimumLineHeight = 10
+        paragraphStyle.lineSpacing = 10
+
+        let globalBlock = NSTextBlock()
+        globalBlock.setWidth(140, type: .absoluteValueType, for: .padding, edge: .minX)
+        globalBlock.setContentWidth(100, type: .percentageValueType)
+
+        let paddingTextCodeBlock = NSTextBlock()
+        paddingTextCodeBlock.setContentWidth(80, type: .percentageValueType)
+        //        paddingTextCodeBlock.setWidth(30, type: .absoluteValueType, for: .padding)
+        paddingTextCodeBlock.setBorderColor(.gray)
+        paddingTextCodeBlock.setWidth(1, type: .absoluteValueType, for: .border)
+        //        paddingTextCodeBlock.setWidth(20, type: .absoluteValueType, for: .padding, edge: .minX)
+        paddingTextCodeBlock.backgroundColor = UIColor.lightGray
+
+
+        let textCodeBlock = NSTextBlock()
+        textCodeBlock.setWidth(30, type: .absoluteValueType, for: .padding)
+        textCodeBlock.backgroundColor = UIColor.lightGray
+        //        textCodeBlock.setWidth(20, type: .absoluteValueType, for: .margin)
+        textCodeBlock.setContentWidth(60, type: .percentageValueType)
+
+
+        //        let codeBlock = TweetTextBlock()
+
+        paragraphStyle.textBlocks = [globalBlock, paddingTextCodeBlock]
+
+        //        paragraphStyle.textBlocks = [codeBlock]
+
+        let pattern = MarkdownPattern.codeBlock.rawValue
+
+        let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
+
+        regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
+            match, flags, stop in
+
+            let range = NSRange(location: match!.range.location, length: match!.range.length)
+
+            innerAttributedString.enumerateAttribute(.font, in: range, options: []) { value, range, stop in
+                guard let font = value as? UIFont else { return }
+
+                /*
+                 // remove traits
+                 let fontDescriptor = font.fontDescriptor
+                 var traits = fontDescriptor.symbolicTraits
+                 if traits.contains(.italic) {
+                 traits = traits.remove(.italic)!
+                 }
+                 if traits.contains(.bold) {
+                 traits = traits.remove(.bold)!
+                 }
+                 let fontDesc = fontDescriptor.withSymbolicTraits(traits)
+                 // add traits
+                 guard let font2 = UIFont(descriptor: fontDesc, size: CGFloat(theme.font.pointSize - 2)) else { return }
+
+                 let newFont = font2.apply(newTraits: .monoSpace, newPointSize: CGFloat(theme.font.pointSize - 2))
+                 // remove existing traits
+
+                 */
+
+                // bold
+                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitMonoSpace)
+                let newFont = UIFont(descriptor: fontDesc!, size: CGFloat(theme.font.pointSize - 2))
+
+//                let newFont = font.apply(newTraits: .monoSpace, newPointSize: CGFloat(theme.font.pointSize - 2))
+                innerAttributedString.addAttribute(.font, value: newFont, range: range)
+                // foreground color
+                innerAttributedString.addAttribute(.foregroundColor, value: theme.codeColor.uiColor, range: range)
+            }
+
+            //            var font = UIFont(name: theme.codeFontName, size: CGFloat(theme.bodyFontSize - 2))
+            ////            font = font.apply(newTraits: .expanded)
+            //
+            //            innerAttributedString.addAttribute(.font,
+            //                                                    value:  font,
+            //                                                    range: NSRange(location: match!.range.location, length: match!.range.length))
+            //
+            //            innerAttributedString.addAttribute(.foregroundColor,
+            //                                               value:  theme.codeBlockColor),
+            //                                                    range: NSRange(location: match!.range.location, length: match!.range.length))
+
+
+            let regExCharLenght = 3
+            let backPadding = 0
+            // markdown
+            let startRange = NSRange(location: match!.range.location, length: regExCharLenght)
+            let endRange = NSRange(location: match!.range.location + match!.range.length - regExCharLenght - backPadding , length: regExCharLenght)
+            // add id key
+            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
+                                               value: 0,
+                                               range: startRange)
+
+            // add id key
+            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
+                                               value: 0,
+                                               range: endRange)
+
+            // add id key
+            innerAttributedString.addAttribute(NSAttributedString.Key.font,
+                                               value: UIFont.systemFont(ofSize: 0.1),
+                                               range: startRange)
+
+            // add id key
+            innerAttributedString.addAttribute(NSAttributedString.Key.font,
+                                               value: UIFont.systemFont(ofSize: 0.1),
+                                               range: endRange)
+
+
+            let info: [String: Any] = [
+                "range": NSRange(location: match!.range.location, length: match!.range.length),
+                "type": "codeblock"
+            ]
+            // info
+            innerAttributedString.addAttribute(NSAttributedString.Key.markdownInfo,
+                                               value: info,
+                                               range: NSRange(location: match!.range.location, length: match!.range.length))
+
+            innerAttributedString.addAttribute(.markdownRange, value: MarkdownPattern.codeBlock, range: match!.range)
+        }
+    }
+     */
+
     func processBlockQuote(extendedRange: NSRange, textStorage innerAttributedString: NSMutableAttributedString) {
         
         let pattern = MarkdownPattern.blockQuote.rawValue
@@ -781,7 +780,7 @@ class MarkdownAttriburedString {
                 guard let font = value as? UIFont else { return }
                 // bold
                 let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 1))
+                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 1))
                 
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
                 // foreground color
@@ -816,7 +815,7 @@ class MarkdownAttriburedString {
                 guard let font = value as? UIFont else { return }
                 
                 let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 2))
+                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 2))
                 
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
                 innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
@@ -849,7 +848,7 @@ class MarkdownAttriburedString {
                 guard let font = value as? UIFont else { return }
                 
                 let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 3))
+                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 3))
                 
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
                 innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
@@ -891,7 +890,7 @@ class MarkdownAttriburedString {
                 guard let font = value as? UIFont else { return }
                 
                 let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 4))
+                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 4))
                 
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
                 innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
@@ -933,7 +932,7 @@ class MarkdownAttriburedString {
                 guard let font = value as? UIFont else { return }
                 
                 let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 5))
+                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 5))
                 
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
                 innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
@@ -976,7 +975,7 @@ class MarkdownAttriburedString {
                 guard let font = value as? UIFont else { return }
                 
                 let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: fontDesc!, size: getHeadingFontSize(level: 6))
+                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 6))
                 
                 innerAttributedString.addAttribute(.font, value: newFont, range: range)
                 innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
@@ -1014,5 +1013,3 @@ class MarkdownAttriburedString {
         return heading.getHeadingFontSize(baseFontSize: theme.font.pointSize)
     }
 }
-
-#endif

@@ -192,6 +192,7 @@ struct FormattingOptionsView: View {
                     .padding([.leading, .trailing], 5)
                 }.padding([.leading], 40)
             }
+            .frame(height: 40)
             
         }
         

@@ -11,58 +11,41 @@ class NotebookContentBusiness {
     
     static let shared = NotebookContentBusiness()
     
+    static let notebooksPath = Constants.notebooksPath
+    static let baseVersionPath = Constants.baseVersionPath
+    
     private init() {
         
-        
     }
     
-    static func loadContent(for notebook: Notebook) -> String {
-        
-//        let folderPath = notebook.folderPath
-        let folderPath = "notebooks"
-        
-        return FilesHelper.shared.readFile(fileName: notebook.id.uuidString, folderPath: folderPath) ?? ""
-    }
+//    static func loadContent(for notebook: Notebook) -> String {
+//        return notebook.readDocument() ?? ""
+////        return FilesHelper.shared.readFile(fileName: notebook.id.uuidString, folderPath: notebooksPath) ?? ""
+//    }
     
     static func loadContent(selection: SelectedNotebookInfo) -> String {
-        
-        
-        
         // read data from file
         guard let notebook = NotebooksListState.shared.getNotebook(levels: selection.levels, index: selection.index) else { return "" }
-        
-        let folderPath = "notebooks"
-        
-//        let folderPath = NotebooksListState.shared.getFolderNamesPath(levels: selection.levels)
-        
-//        print(folderPath, contentStr)
-        
-        return FilesHelper.shared.readFile(fileName: notebook.id.uuidString, folderPath: folderPath) ?? ""
+        return FilesHelper.shared.readFile(fileName: notebook.id.uuidString, folderPath: notebooksPath) ?? ""
     }
     
     // diff
     static func getChanges(old: String, new: String) -> String {
-        
         return StringDiff.getChanges(old: old, new: new)
     }
     
-    
-    
     // MARK: - base version
-    
     static func createBaseVersion(for fileName: String, with content: String) {
         
-        FilesHelper.shared.writeToFile(fileName: fileName, folderPath: "today_base_version", content: content)
+        FilesHelper.shared.writeToFile(fileName: fileName, folderPath: baseVersionPath, content: content)
     }
     
     static func isBaseVersionExists(fileName: String) -> Bool {
-        let folderPath = "today_base_version"
-        return FilesHelper.shared.fileExists(atPath: folderPath, fileName: fileName)
+        return FilesHelper.shared.fileExists(atPath: baseVersionPath, fileName: fileName)
     }
     
     static func getBaseVersion(for fileName: String) -> String? {
-        
-        return FilesHelper.shared.readFile(fileName: fileName, folderPath: "today_base_version")
+        return FilesHelper.shared.readFile(fileName: fileName, folderPath: baseVersionPath)
     }
     
     static func saveContentChanges(notebook: Notebook, content: String) {
@@ -88,7 +71,12 @@ class NotebookContentBusiness {
             // update version
             VersionBusiness.shared.addOrUpdateToday(contentChanges: newContent, uuid: notebook.id, fileName: notebook.name, filePath: notebook.folderPath)
             // update notebook
-            FilesHelper.shared.writeToFile(path: notebook.filePath, content: content)
+            
+            Task {
+                await notebook.saveDocument(with: content)
+            }
+            
+//            FilesHelper.shared.writeToFile(path: notebooksPath + "/" + notebook.filePath, content: content)
 //            print("------> saved to db ******")
         } else {
 //            print("content not edited *****")

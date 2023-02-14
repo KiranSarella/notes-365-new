@@ -5,13 +5,13 @@
 //  Created by Kiran Sarella on 15/04/22.
 //
 
-#if os(iOS)
-
 import Foundation
 import UIKit
 import SwiftUI
 
 public class MarkdownTextStorage: NSTextStorage {
+    
+    let baseFontSize: CGFloat = 16
     
     var innerAttributedString = NSMutableAttributedString()
     
@@ -126,12 +126,14 @@ public class MarkdownTextStorage: NSTextStorage {
         //        removeAttribute(NSAttributedString.Key.font, range: <#T##NSRange#>)
         
         // cursor is moving to end
-        removeAttribute(NSAttributedString.Key.font, range: editedRange)
-        removeAttribute(NSAttributedString.Key.markdown, range: editedRange)
-        removeAttribute(NSAttributedString.Key.foregroundColor, range: editedRange)
-        removeAttribute(NSAttributedString.Key.strikethroughColor, range: editedRange)
-        removeAttribute(NSAttributedString.Key.strikethroughStyle, range: editedRange)
-        
+        removeAttribute(.font, range: editedRange)
+        removeAttribute(.markdown, range: editedRange)
+        removeAttribute(.foregroundColor, range: editedRange)
+        removeAttribute(.strikethroughColor, range: editedRange)
+        removeAttribute(.strikethroughStyle, range: editedRange)
+        removeAttribute(.underlineColor, range: editedRange)
+        removeAttribute(.underlineStyle, range: editedRange)
+        removeAttribute(.paragraphStyle, range: editedRange)
         
         //        removeAttribute(NSAttributedString.Key.foregroundColor, range: editedRange)
         
@@ -176,7 +178,7 @@ public class MarkdownTextStorage: NSTextStorage {
             let styleRange = NSRange(location: match!.range.location, length: match!.range.length - padding)
             
             self.innerAttributedString.addAttribute(NSAttributedString.Key.font,
-                                                    value: UIFont.boldSystemFont(ofSize: 18),
+                                                    value: UIFont.boldSystemFont(ofSize: baseFontSize),
                                                     range: styleRange)
             
             let info: [String: Any] = [
@@ -196,7 +198,7 @@ public class MarkdownTextStorage: NSTextStorage {
         // *italic*
         let pattern = MarkdownPattern.italic.rawValue
         
-        let italicFont = UIFont.italicSystemFont(ofSize: 18)
+        let italicFont = UIFont.italicSystemFont(ofSize: baseFontSize)
         
         
         let regex = try! NSRegularExpression(pattern: pattern, options: [])
@@ -367,11 +369,11 @@ public class MarkdownTextStorage: NSTextStorage {
             
             
             self.innerAttributedString.addAttribute(NSAttributedString.Key.font,
-                                                    value:  UIFont.systemFont(ofSize: 20, weight: .thin),
+                                                    value:  UIFont.systemFont(ofSize: baseFontSize, weight: .regular),
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
             
             self.innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
-                                                    value:  UIColor.orange,
+                                                    value:  UIColor.label,
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
             
             
@@ -399,11 +401,11 @@ public class MarkdownTextStorage: NSTextStorage {
             
             
             self.innerAttributedString.addAttribute(NSAttributedString.Key.font,
-                                                    value:  UIFont.systemFont(ofSize: 20, weight: .thin),
+                                                    value:  UIFont.systemFont(ofSize: baseFontSize, weight: .thin),
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
             
             self.innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
-                                                    value:  UIColor.orange,
+                                                    value:  UIColor.label,
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
             
             
@@ -431,7 +433,7 @@ public class MarkdownTextStorage: NSTextStorage {
             
             
             self.innerAttributedString.addAttribute(NSAttributedString.Key.font,
-                                                    value:  UIFont.systemFont(ofSize: 20, weight: .thin),
+                                                    value:  UIFont.systemFont(ofSize: baseFontSize, weight: .thin),
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
             
             self.innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
@@ -463,12 +465,17 @@ public class MarkdownTextStorage: NSTextStorage {
             
             
             self.innerAttributedString.addAttribute(NSAttributedString.Key.font,
-                                                    value:  UIFont.systemFont(ofSize: 20, weight: .thin),
+                                                    value:  UIFont.systemFont(ofSize: baseFontSize, weight: .medium),
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
             
             self.innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
                                                     value:  #colorLiteral(red: 0, green: 0.46, blue: 0.89, alpha: 1),
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
+            
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.headIndent = 20
+            
+            self.innerAttributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: NSRange(location: match!.range.location, length: match!.range.length))
             
             
             let info: [String: Any] = [
@@ -494,7 +501,7 @@ public class MarkdownTextStorage: NSTextStorage {
             
             
             self.innerAttributedString.addAttribute(NSAttributedString.Key.font,
-                                                    value:  UIFont.systemFont(ofSize: 20, weight: .semibold),
+                                                    value:  UIFont.systemFont(ofSize: baseFontSize, weight: .semibold),
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
             
             self.innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
@@ -528,7 +535,7 @@ public class MarkdownTextStorage: NSTextStorage {
         regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
             self.innerAttributedString.addAttribute(NSAttributedString.Key.font,
-                                                    value: UIFont.boldSystemFont(ofSize: 32),
+                                                    value: UIFont.boldSystemFont(ofSize: getHeadingFontSize(level: 1)),
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
             
             let info: [String: Any] = [
@@ -552,7 +559,7 @@ public class MarkdownTextStorage: NSTextStorage {
         regex2.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
             self.innerAttributedString.addAttribute(NSAttributedString.Key.font,
-                                                    value: UIFont.boldSystemFont(ofSize: 28),
+                                                    value: UIFont.boldSystemFont(ofSize: getHeadingFontSize(level: 2)),
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
         }
         
@@ -563,7 +570,7 @@ public class MarkdownTextStorage: NSTextStorage {
         regex3.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
             self.innerAttributedString.addAttribute(NSAttributedString.Key.font,
-                                                    value: UIFont.boldSystemFont(ofSize: 24),
+                                                    value: UIFont.boldSystemFont(ofSize: getHeadingFontSize(level: 3)),
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
         }
         
@@ -574,7 +581,7 @@ public class MarkdownTextStorage: NSTextStorage {
         regex4.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
             self.innerAttributedString.addAttribute(NSAttributedString.Key.font,
-                                                    value: UIFont.boldSystemFont(ofSize: 20),
+                                                    value: UIFont.boldSystemFont(ofSize: getHeadingFontSize(level: 4)),
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
         }
         
@@ -585,7 +592,7 @@ public class MarkdownTextStorage: NSTextStorage {
         regex5.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
             self.innerAttributedString.addAttribute(NSAttributedString.Key.font,
-                                                    value: UIFont.boldSystemFont(ofSize: 18),
+                                                    value: UIFont.boldSystemFont(ofSize: getHeadingFontSize(level: 5)),
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
         }
         
@@ -596,12 +603,16 @@ public class MarkdownTextStorage: NSTextStorage {
         regex6.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
             self.innerAttributedString.addAttribute(NSAttributedString.Key.font,
-                                                    value: UIFont.boldSystemFont(ofSize: 16),
+                                                    value: UIFont.boldSystemFont(ofSize: getHeadingFontSize(level: 6)),
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
         }
         
     }
     
+    
+    func getHeadingFontSize(level: CGFloat) -> CGFloat {
+        let fontSize: CGFloat = baseFontSize + (baseFontSize * 0.8) - (level * 2)
+        //        print(level, fontSize)
+        return fontSize
+    }
 }
-
-#endif

@@ -18,6 +18,8 @@ class Notebook: Identifiable, Codable {
     var children: [Notebook]?
     unowned var parent: Notebook?
     
+    var document: NoteDocument?
+    
     init(id: UUID, name: String) {
         self.id = id
         self.name = name
@@ -44,6 +46,39 @@ class Notebook: Identifiable, Codable {
     
     var containChildNotebooks: Bool {
         children != nil ? true : false
+    }
+    
+   
+    
+    var fileURL: URL {
+        let path = Constants.notebooksPath + "/" + filePath
+        let basePathUrl = DataManager(environment: .local).basePathURL
+        let fileURL = basePathUrl.appendingPathComponent(path)
+        return fileURL
+    }
+    
+    func readDocument() async -> String? {
+        document = await NoteDocument(fileURL: fileURL)
+        await document?.open()
+        return await document?.content
+    }
+    
+    func updateDocument(with content: String) {
+        guard let document = document else { return }
+        document.updateChangeCount(.done)
+    }
+    
+    func saveDocument(with content: String) async {
+        guard let document = document else { return }
+        await document.setContentChanges(newContent: content)
+        
+        let status = await document.save(to: fileURL, for: .forOverwriting)
+        print(status)
+    }
+    
+    func closeDocument() async {
+        guard let document = document else { return }
+        await document.close()
     }
     
 }
@@ -95,20 +130,7 @@ extension Notebook {
     
     var filePath: String {
         
-        return "notebooks" + "/" + self.id.uuidString + ".md"
-        
-//        // add self
-//        var path: String = self.name + ".md"
-//        // add parents
-//        var parentRef = self.parent
-//        while parentRef != nil {
-//            path = parentRef!.name + "/" + path
-//            parentRef = parentRef?.parent
-//        }
-//        // base path
-//        path = "notebooks" + "/" + path
-//        // return
-//        return path
+        return self.id.uuidString + ".md"
     }
     
     
@@ -122,8 +144,6 @@ extension Notebook {
             path = parentRef!.name + "/" + path
             parentRef = parentRef?.parent
         }
-        // base path
-        path = "notebooks-old" + "/" + path
         // return
         return path
     }
@@ -139,39 +159,35 @@ extension Notebook {
             path = parentRef!.name + "/" + path
             parentRef = parentRef?.parent
         }
-        // base path
-        path = "notebooks" + "/" + path
         // return
         return path
     }
     
     
-    var directoryPath: String {
-        
-        // add parents
-        var parentRef = self.parent
-        if parentRef == nil {
-            return "notebooks"
-        } else {
-            var path = parentRef!.name
-            parentRef = parentRef!.parent
-            while parentRef != nil {
-                path = parentRef!.name + "/" + path
-                parentRef = parentRef?.parent
-            }
-            // base path
-            path = "notebooks" + "/" + path
-            // return
-            return path
-        }
-    }
+//    var directoryPath: String {
+//
+//        // add parents
+//        var parentRef = self.parent
+//        if parentRef == nil {
+//            return ""
+//        } else {
+//            var path = parentRef!.name
+//            parentRef = parentRef!.parent
+//            while parentRef != nil {
+//                path = parentRef!.name + "/" + path
+//                parentRef = parentRef?.parent
+//            }
+//            // return
+//            return path
+//        }
+//    }
 }
 
 
 extension Notebook {
     
     func loadContent() -> String {
-        let fullPath = "notebooks/" + self.id.uuidString + ".md"
+        let fullPath = Constants.notebooksPath + "/" + self.id.uuidString + ".md"
         return FilesHelper.shared.readFile(from: fullPath) ?? ""
     }
 }
