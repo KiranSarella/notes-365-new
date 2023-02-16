@@ -32,6 +32,8 @@ class NotebookEditorState: ObservableObject {
     var cancellableTheme: Cancellable!
     var cancellableTimer: Cancellable?
     
+    var cloudService: CloudService!
+    
     init() {
         theme = ThemeState.shared.theme
         observeThemeChanges()
@@ -47,6 +49,16 @@ class NotebookEditorState: ObservableObject {
     }
     
     func loadContent() async {
+        
+        cloudService = CloudService(cloudDirectory: "Documents/\(Constants.notebooksPath)" , cloudSyncFileName: notebook.filePath)
+        
+        cloudService.cloudContentDidUpdate = { [weak self] in
+            
+            DispatchQueue.main.async {
+                self?.baseContent = self?.cloudService.cloudContent ?? ""
+            }
+        }
+        
         baseContent = ""
         isFetchingData = true
 //        self.baseContent = notebook.loadContent()
@@ -93,6 +105,7 @@ class NotebookEditorState: ObservableObject {
                 
                 if versionDate.isSameDayAs(Date.now) {
                     // same day
+                    cloudService.updateUpdateDate()
                     NotebookContentBusiness.saveContentChanges(notebook: notebook, content: txt)
                 } else {
                     // ** day changed **

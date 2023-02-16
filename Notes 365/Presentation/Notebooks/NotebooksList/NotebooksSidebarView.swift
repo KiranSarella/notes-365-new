@@ -12,11 +12,7 @@ struct NotebooksSidebarView: View {
 
     @EnvironmentObject var usersState: NotebooksListState
     @Binding var selectedNotebook: NotebookM?
-    
     @State private var presentDeleteConfirmation = false
-    @State private var presentPurchasesView = false
-    
-//    @State private var title: String = "Notes 365"
     
     var body: some View {
         
@@ -75,11 +71,6 @@ struct NotebooksSidebarView: View {
                     if selectedNotebook == nil {
                         return
                     }
-                    if usersState.canAddNotebook() == false {
-                        // show purchase window
-                        self.presentPurchasesView.toggle()
-                        return
-                    }
                     usersState.insertBelow(ref: selectedNotebook!.notebook)
                 }) {
                     //                Image(systemName: "arrow.down")
@@ -91,12 +82,6 @@ struct NotebooksSidebarView: View {
                     if selectedNotebook == nil {
                         return
                     }
-                    // check free app limit
-                    if usersState.canAddNotebook() == false {
-                        // show purchase window
-                        self.presentPurchasesView.toggle()
-                        return
-                    }
                     usersState.insertInside(ref: selectedNotebook!.notebook)
                 }) {
                     //                Image(systemName: "arrow.turn.down.right")
@@ -104,21 +89,6 @@ struct NotebooksSidebarView: View {
                     Text("Add Inside")
                 }
             }
-            .sheet(isPresented: $presentPurchasesView, content: {
-                VStack {
-                    HStack {
-                        Spacer()
-                        Button {
-                            self.presentPurchasesView.toggle()
-                        } label: {
-                            Text("Close")
-                        }
-                        .padding()
-                    }
-                    .buttonStyle(.plain)
-                    PurchasesView()
-                }
-            })
             .buttonStyle(.bordered)
             Spacer()
             // trash

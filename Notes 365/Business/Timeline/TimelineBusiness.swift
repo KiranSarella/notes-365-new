@@ -11,6 +11,9 @@ class TimelineBusiness {
     
     static let shared = TimelineBusiness()
     
+//    let basePathURL: URL
+    let timelinePath = Constants.timelinePath
+    
     private init() {
         
     }
@@ -18,7 +21,7 @@ class TimelineBusiness {
     func readDayMetaData(dayDate: DayDate) -> String? {
             
         let today = dayDate.date
-        let timelinePath = "timeline/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
+        let timelinePath = "\(timelinePath)/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
         let metadataFilePath = timelinePath + "/" + "metadata"
         
         if FilesHelper.shared.fileExists(atPath: metadataFilePath) == false {
@@ -30,7 +33,7 @@ class TimelineBusiness {
     
     func readDayMetaData(date: Date) async -> String? {
         
-        let timelinePath = "timeline/\(date.getYear())/\(date.getMonth())/\(date.getDay())"
+        let timelinePath = "\(timelinePath)/\(date.getYear())/\(date.getMonth())/\(date.getDay())"
         let metadataFilePath = timelinePath + "/" + "metadata"
         
         if FilesHelper.shared.fileExists(atPath: metadataFilePath) == false {
@@ -40,17 +43,13 @@ class TimelineBusiness {
         return await FilesHelper.shared.readBinaryFileAsync(fileName: "metadata", folderPath: timelinePath)!
     }
     
-//    func dynamicFolderPath(uuid: UUID) -> String? {
-//        return DirectoryManager.shared.fullPaths[uuid]
-//    }
-    
     func readContent(today: Date, fileName: String) async -> String? {
-        let folderPath = "timeline/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
+        let folderPath = "\(timelinePath)/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
         return await FilesHelper.shared.readFileAsync(fileName: fileName, folderPath: folderPath)
     }
     
     func timelineExists(day: Date) -> Bool {
-        let dayFolderPath = "timeline/\(day.getYear())/\(day.getMonth())/\(day.getDay())"
+        let dayFolderPath = "\(timelinePath)/\(day.getYear())/\(day.getMonth())/\(day.getDay())"
         return FilesHelper.shared.folderExists(atPath: dayFolderPath)
     }
 }

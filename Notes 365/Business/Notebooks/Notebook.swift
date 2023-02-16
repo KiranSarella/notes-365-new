@@ -52,12 +52,20 @@ class Notebook: Identifiable, Codable {
     
     var fileURL: URL {
         let path = Constants.notebooksPath + "/" + filePath
-        let basePathUrl = DataManager(environment: .local).basePathURL
+        let basePathUrl = DataManager(environment: .cloud).basePathURL
         let fileURL = basePathUrl.appendingPathComponent(path)
+        print(fileURL)
         return fileURL
     }
     
+    
+}
+
+// MARK: - UIDocument operations
+extension Notebook {
+    
     func readDocument() async -> String? {
+        print(#function)
         document = await NoteDocument(fileURL: fileURL)
         await document?.open()
         return await document?.content
@@ -69,19 +77,22 @@ class Notebook: Identifiable, Codable {
     }
     
     func saveDocument(with content: String) async {
+        print(#function)
         guard let document = document else { return }
-        await document.setContentChanges(newContent: content)
         
+        await document.setContentChanges(newContent: content)
         let status = await document.save(to: fileURL, for: .forOverwriting)
         print(status)
     }
     
     func closeDocument() async {
+        print(#function)
         guard let document = document else { return }
         await document.close()
     }
     
 }
+
 
 extension Notebook: Equatable, Hashable {
     static func == (lhs: Notebook, rhs: Notebook) -> Bool {

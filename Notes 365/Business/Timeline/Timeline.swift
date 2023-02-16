@@ -8,7 +8,7 @@
 import Foundation
 
 
-public struct TimelineThree: Identifiable {
+public struct Timeline: Identifiable {
     public let id: UUID = UUID()
     var fileUUID: UUID
     var fileName: String
@@ -19,11 +19,11 @@ public struct TimelineThree: Identifiable {
     var isNotebookExists = true
 }
 
-extension TimelineThree: Equatable {
+extension Timeline: Equatable {
     
 }
 
-extension TimelineThree {
+extension Timeline {
     
     mutating func updateWithTheme(theme: MarkdownTheme) async {
         

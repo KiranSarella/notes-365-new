@@ -174,10 +174,6 @@ class NotebooksListState: ObservableObject {
         usersDB.notes.count == 0
     }
     
-    var isSubscribed: Bool {
-        return PurchasesBusiness().isSubscribed
-    }
-    
     func addFirstNotes() {
         let notebook = notebookBusiness.addFirstNotes()
         usersDB.notes.append(NotebookM(notebook: notebook))

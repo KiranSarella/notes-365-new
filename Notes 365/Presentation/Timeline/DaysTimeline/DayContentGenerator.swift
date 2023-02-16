@@ -9,7 +9,7 @@ import Foundation
 
 
 struct DayContentGenerator: AsyncSequence, AsyncIteratorProtocol {
-    typealias Element = TimelineThree
+    typealias Element = Timeline
     var linesIterator: IndexingIterator<Array<String>>
     var today: Date
     var theme: MarkdownTheme
@@ -37,14 +37,14 @@ struct DayContentGenerator: AsyncSequence, AsyncIteratorProtocol {
         self
     }
     
-    func prepareContent(for line: String) async -> TimelineThree? {
+    func prepareContent(for line: String) async -> Timeline? {
         
         let words = line.components(separatedBy: "\t")
         let uuid =  UUID(uuidString: words[0])!
         let fileName = words[2]
         let filePath = words[3]
         
-        var timeline = TimelineThree(fileUUID: uuid, fileName: fileName, filePath: filePath)
+        var timeline = Timeline(fileUUID: uuid, fileName: fileName, filePath: filePath)
         
 //        // try to get dynamic notebook path if exists
 //        if let dynamicFilePath = TimelineBusiness.shared.dynamicFolderPath(uuid: uuid) {

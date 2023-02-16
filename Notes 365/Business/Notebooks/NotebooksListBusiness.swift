@@ -19,7 +19,7 @@ public enum NotebookBusinessError: Error {
 
 class NotebooksListBusiness {
     
-    static let shared = NotebooksListBusiness(dataManager: DataManager(environment: .local))
+    static let shared = NotebooksListBusiness(dataManager: DataManager(environment: .cloud))
     var dataManager: DataManager
     var notebooks: [Notebook]
     
@@ -45,7 +45,7 @@ class NotebooksListBusiness {
         print(dataManager.basePathURL)
         
         // if new folder not exits and contains notebooks - means old version structure
-        if !FileManager.default.fileExists(atPath: dataManager.basePathURL.appendingPathComponent(notebooksPath).path())
+        if !FileManager.default.fileExists(atPath: dataManager.basePathURL.appendingPathComponent(notebooksPath).path(percentEncoded: false))
             && notebooks.count > 0 {
             convertToFlatStructure()
         }
@@ -94,7 +94,7 @@ class NotebooksListBusiness {
                 let newFolderPath = dataManager.basePathURL.appendingPathComponent(notebooksPath).appendingPathComponent(notebook.id.uuidString).appendingPathExtension("md")
                 
                 do {
-                    try FileManager.default.moveItem(atPath: oldFolderPath.path, toPath: newFolderPath.path())
+                    try FileManager.default.moveItem(atPath: oldFolderPath.path, toPath: newFolderPath.path(percentEncoded: false))
                 } catch let error as NSError {
                     print("Ooops! Something went wrong: \(error)")
                 }

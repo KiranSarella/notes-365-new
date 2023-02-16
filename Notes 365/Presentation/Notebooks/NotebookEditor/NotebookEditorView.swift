@@ -56,9 +56,7 @@ struct NotebookEditorView: View {
                 }
                 .onAppear(perform: {
                     editorState.notebook = notebookM!.notebook
-                    
                     DispatchQueue.main.async {
-                        
                         Task {
                             await editorState.loadContent()
                             editorView.text = editorState.baseContent
@@ -66,12 +64,7 @@ struct NotebookEditorView: View {
                                 return editorView.text
                             }
                         }
-                        
                     }
-                    
-                   
-                    
-                   
                 })
                 .onDisappear(perform: {
                     isTextFieldFocused = false
@@ -124,6 +117,9 @@ struct NotebookEditorView: View {
             }
             
         }
+        .onChange(of: editorState.baseContent, perform: { newValue in
+            editorView.text = newValue
+        })
         .onReceive(autoSaveTimer, perform: { _ in
             editorState.saveContentChanges()
         })

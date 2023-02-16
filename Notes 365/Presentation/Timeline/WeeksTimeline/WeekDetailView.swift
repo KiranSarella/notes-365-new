@@ -142,7 +142,7 @@ struct WeekSectionView: View {
 
 fileprivate struct DayTimelineTwoView: View {
     
-    @Binding var timelineList: [TimelineThree]
+    @Binding var timelineList: [Timeline]
     @Binding var theme: MarkdownTheme
     
     var body: some View {

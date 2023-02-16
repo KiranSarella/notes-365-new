@@ -24,16 +24,12 @@ public class FilesHelper {
     }
     
     func isCloudEnabled() -> Bool {
-        
-        return false
-        
-//        if DocumentsDirectory.iCloudDocumentsURL != nil { return true }
-//        else { return false }
+         FileManager.default.ubiquityIdentityToken != nil
     }
     
     func getDocumentDiretoryURL() -> URL {
 //        print(DocumentsDirectory.localDocumentsURL.path)
-        return DocumentsDirectory.localDocumentsURL
+//        return DocumentsDirectory.localDocumentsURL
         
         if isCloudEnabled()  {
             return DocumentsDirectory.iCloudDocumentsURL!
@@ -182,8 +178,7 @@ public class FilesHelper {
             .appendingPathComponent(folderPath)
             .appendingPathComponent(fileName)
             .appendingPathExtension("md")
-        
-
+        print(fileURL.path(percentEncoded: false))
         do {
             
             let fileHandle = try FileHandle(forReadingFrom: fileURL)

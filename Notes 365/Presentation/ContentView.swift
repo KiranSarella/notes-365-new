@@ -39,7 +39,6 @@ struct ContentView: View {
                             .padding(.horizontal)
                     }
                 }
-//                .scrollDisabled(true)
                 .navigationTitle("Notes 365")
                 
                 
@@ -80,90 +79,8 @@ struct ContentView: View {
             if let selectedMode = Mode.getMode(id: selectedModeID) {
                 switch selectedMode {
                 case .timeline:
-//
-//                    VStack {
-//
-//                        NavigationLink {
-//                            // destination view here
-//                            Text("Month detail....")
-//                        } label: {
-//                            Text("Month")
-//                        }
-//
-//                        Button {
-//                            selectedCalenderType = CalendarType.day.id
-//                            selectedCalender = .day
-//                        } label: {
-//                            NavigationLink("day nav", value: selectedCalender)
-//                        }
-//                        .navigationDestination(for: CalendarType.self) { calType in
-//                            switch calType {
-//                            case .day:
-//                                Text("day detail")
-//                            case .week:
-//                                Text("week detail")
-//                                //                    WeekDetailView()
-//                            case .month:
-//                                Text("month detail")
-//                                //                    MonthDetailView()
-//                            }
-//                        }
-//
-//                        Button {
-//                            selectedCalender = CalendarType.week
-//
-//                            NavigationLink("day nav", value: selectedCalender)
-//
-//                        } label: {
-//                            Text("Week")
-//                        }
-//
-//                    }
-//
-//
-                    
-//                    Button {
-//                        calendarState.calenderType = CalendarType.day
-//                    } label: {
-//                        Text("day")
-//                    }
-//
-                   
-                    
-//                    List(CalendarType.allCases, selection: $selectedCalender) { type in
-//
-//                        Text(type.name)
-//
-////                        Button {
-////                            calendarState.calenderType = type
-////                        } label: {
-////                            Text(type.name)
-////                        }
-//
-//                    }
-//                    .onChange(of: selectedCalender) { newValue in
-//                        print(newValue)
-//                        if newValue != nil {
-//                            calendarState.calenderType = newValue!
-//                        }
-//
-//                    }
-                    
-//                    Picker("", selection: $selectedCalender) {
-//                        ForEach(CalendarType.allCases, id: \.self) { calendarType in
-//                            Text(calendarType.name).tag(calendarType)
-//                        }
-//                    }
-//                    .onChange(of: selectedCalender, perform: { newValue in
-//                        print(newValue)
-//                    })
-//                    .pickerStyle(SegmentedPickerStyle())
-                    
-
                     TimelineSidebarView(calendarID: $selectedCalenderType)
                         .environmentObject(calendarState)
-                    
-                   
                 case .noteBooks:
                     NotebooksSidebarView(selectedNotebook: $selectedUser)
                         .environmentObject(usersState)
@@ -177,17 +94,6 @@ struct ContentView: View {
             let selectedMode = Mode.getMode(id: selectedModeID ?? Mode.timeline.id)!
             switch selectedMode {
             case .timeline:
-#if os(macOS)
-                let calendarType = calendarState.calenderType
-                switch calendarType {
-                case .day:
-                    DayDetailView()
-                case .week:
-                    WeekDetailView()
-                case .month:
-                    MonthDetailView()
-                }
-#else
                 if UIDevice.current.userInterfaceIdiom == .phone {
                     EmptyView()
                 } else {
@@ -201,7 +107,6 @@ struct ContentView: View {
                         MonthDetailView()
                     }
                 }
-#endif
             case .noteBooks:
                 NotebookEditorView(notebookM: $selectedUser)
                     .navigationTitle(selectedUser?.name ?? "")

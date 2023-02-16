@@ -13,7 +13,7 @@ import Combine
 public struct DayChanges: Identifiable {
     public let id = UUID()
     
-    var notes = [TimelineThree]()
+    var notes = [Timeline]()
     let date: Date
     let metadata: String
 }

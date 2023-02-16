@@ -77,7 +77,7 @@ class DayDetailState: ObservableObject {
     
     @Published var dayDate: DayDate = DayDate(date: CalendarState.shared.selectedDate)
     @Published var currentState = CurrentState.loading
-    @Published var timelineList = [TimelineThree]()
+    @Published var timelineList = [Timeline]()
     @Published var searchInput: String = ""
     @Published var theme: MarkdownTheme = ThemeState.shared.theme
     @Published var generatorTask: Task<(), Never>?

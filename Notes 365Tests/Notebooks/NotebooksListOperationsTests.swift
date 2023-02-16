@@ -45,7 +45,7 @@ final class NotebooksListOperationsTests: XCTestCase {
     
     func testAddingFirstNotebook() throws {
         
-        XCTAssertTrue(FileManager.default.fileExists(atPath: basePathURL.path()))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: basePathURL.path(percentEncoded: false)))
         
         let notebook = notebooksListBusiness.addFirstNotes()
         

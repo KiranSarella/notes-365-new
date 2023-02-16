@@ -10,7 +10,7 @@ import SwiftUI
 struct NotesTitleView: View {
     @Environment(\.colorScheme) var colorScheme
     
-    var noteChange: TimelineThree
+    var noteChange: Timeline
     
     func getAbsolutePath() -> String {
         var components = noteChange.filePath.components(separatedBy: "/")

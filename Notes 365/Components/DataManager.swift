@@ -7,6 +7,12 @@
 
 import Foundation
 
+enum EnvironmentType {
+    case cloud
+    case local
+    case custom(URL)
+}
+
 enum DataEnvironment {
     case local
     case cloud
@@ -17,12 +23,80 @@ enum DataEnvironment {
         case .local:
             return FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: .userDomainMask).last!
         case .cloud:
-            return(FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent("Documents"))!
+            // Request iCloud token
+            let token = FileManager.default.ubiquityIdentityToken
+            if token == nil {
+                print("iCloud (Drive) is not available")
+                return FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: .userDomainMask).last!
+            } else {
+                print("iCloud (Drive) is available")
+                return(FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent("Documents"))!
+            }
         case .customPath(let url):
             return url
         }
     }
 }
+
+class ChooseEnvironment {
+    
+    // based on preferences
+    // if cloud, then intereact with cloud service and get its url or respective error
+    // or if local, then get it from local filemanager
+    // or if test env/user provided/custom url, use it to initialize.
+    
+    var isConfigured: Bool {
+        EnvironmentState.shared.basePathURL != nil
+    }
+    
+    init() {
+        
+    }
+    
+    func setEnviromment(with environmentType: EnvironmentType) throws {
+        
+        let environmentState = EnvironmentState.shared
+        
+        switch environmentType {
+        case .cloud:
+            // if cloud, then intereact with cloud service and get its url or respective error
+            let cloudService = CloudServiceTwo()
+            let value = cloudService.getCloudPath()
+            switch value {
+            case .success(let url):
+                environmentState.setBasePath(url: url)
+            case .failure(let error):
+                throw error
+            }
+            
+            break
+        case .local:
+            // if local, then get it from local filemanager
+            let localURL = FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: .userDomainMask).last!
+            environmentState.setBasePath(url: localURL)
+            break
+        case .custom(let url):
+            // if test env/user provided/custom url, use it to initialize.
+            environmentState.setBasePath(url: url)
+            break
+        }
+        
+    }
+    
+}
+
+class EnvironmentState {
+    
+    static let shared = EnvironmentState()
+    
+    private(set) var basePathURL: URL! = nil
+    
+    func setBasePath(url: URL) {
+        basePathURL = url
+    }
+    
+}
+
 
 class DataManager {
     

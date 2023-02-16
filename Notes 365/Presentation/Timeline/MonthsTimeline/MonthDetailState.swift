@@ -10,7 +10,7 @@ import Combine
 
 public struct MonthTimelineThree: Identifiable {
     let day: Int
-    var notes = [TimelineThree]()
+    var notes = [Timeline]()
     public let id: UUID
     let month: Int
     let year: Int
