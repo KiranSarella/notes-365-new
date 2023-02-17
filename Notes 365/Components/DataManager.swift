@@ -13,31 +13,6 @@ enum EnvironmentType {
     case custom(URL)
 }
 
-enum DataEnvironment {
-    case local
-    case cloud
-    case customPath(URL)
-    
-    var baseURL: URL {
-        switch self {
-        case .local:
-            return FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: .userDomainMask).last!
-        case .cloud:
-            // Request iCloud token
-            let token = FileManager.default.ubiquityIdentityToken
-            if token == nil {
-                print("iCloud (Drive) is not available")
-                return FileManager.default.urls(for: FileManager.SearchPathDirectory.documentDirectory, in: .userDomainMask).last!
-            } else {
-                print("iCloud (Drive) is available")
-                return(FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent("Documents"))!
-            }
-        case .customPath(let url):
-            return url
-        }
-    }
-}
-
 class ChooseEnvironment {
     
     // based on preferences
@@ -99,19 +74,11 @@ class EnvironmentState {
 
 
 class DataManager {
-    
-    private var environment: DataEnvironment {
-        didSet {
-            basePathURL = environment.baseURL
-            print(basePathURL)
-        }
-    }
-    
+  
     var basePathURL: URL
     
-    init(environment: DataEnvironment) {
-        self.environment = environment
-        basePathURL = environment.baseURL
+    init(path baseURL: URL) {
+        basePathURL = baseURL
     }
     
 }

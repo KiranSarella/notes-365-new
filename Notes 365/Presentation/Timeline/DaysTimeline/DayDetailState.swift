@@ -73,7 +73,7 @@ enum SpeechState {
 
 class DayDetailState: ObservableObject {
     
-    let timelineBusiness = TimelineBusiness.shared
+    let timelineBusiness = TimelineBusiness(path: EnvironmentState.shared.basePathURL)
     
     @Published var dayDate: DayDate = DayDate(date: CalendarState.shared.selectedDate)
     @Published var currentState = CurrentState.loading

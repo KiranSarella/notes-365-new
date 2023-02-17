@@ -7,15 +7,41 @@
 
 import Foundation
 
-final class CloudServiceTwo {
-    enum CloudError: Error {
-        case cloudSyncDisabled
-        case cloudDisabled
-        case couldNotAccessCloud
-        case cloudFileDoesNotExist
-        case couldNotReadContent
-        case unknown(Error)
+public enum CloudError: Error {
+    case cloudSyncDisabled
+    case cloudDisabled
+    case couldNotAccessCloud
+    case cloudFileDoesNotExist
+    case couldNotReadContent
+    case unknown(Error)
+    
+    var description: String {
+        
+        switch self {
+        case .cloudSyncDisabled:
+            return "iCloud sync disabled"
+        case .cloudDisabled:
+            return "iCloud disabled, please enable to continue"
+        case .couldNotAccessCloud:
+            return "icould not access iCloud"
+        case .cloudFileDoesNotExist:
+            return "icloud file does not exist"
+        case .couldNotReadContent:
+            return "icloud not reach content"
+        case .unknown(let error):
+            return error.localizedDescription
+        }
     }
+}
+
+extension CloudError: LocalizedError {
+    public var errorDescription: String? {
+        return NSLocalizedString(self.description, comment: "")
+    }
+}
+
+final class CloudServiceTwo {
+    
     
     var cloudDirectory: String
     

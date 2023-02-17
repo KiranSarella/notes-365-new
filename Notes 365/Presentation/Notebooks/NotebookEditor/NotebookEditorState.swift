@@ -69,20 +69,6 @@ class NotebookEditorState: ObservableObject {
         contentEdited = false
     }
     
-//    func loadContent(notebookInfo: SelectedNotebookInfo) {
-//
-//        contentStr = ""
-//
-//        txt = ""
-//
-//        isFetchingData = true
-//
-//        self.contentStr = NotebookContentBusiness.loadContent(selection: notebookInfo)
-//        self.txt = self.contentStr
-//
-//        isFetchingData = false
-//    }
-    
     // diff
     func getChanges(old: String, new: String) -> String {
         return NotebookContentBusiness.getChanges(old: old, new: new)

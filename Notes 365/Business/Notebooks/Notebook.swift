@@ -52,7 +52,7 @@ class Notebook: Identifiable, Codable {
     
     var fileURL: URL {
         let path = Constants.notebooksPath + "/" + filePath
-        let basePathUrl = DataManager(environment: .cloud).basePathURL
+        let basePathUrl = EnvironmentState.shared.basePathURL!
         let fileURL = basePathUrl.appendingPathComponent(path)
         print(fileURL)
         return fileURL

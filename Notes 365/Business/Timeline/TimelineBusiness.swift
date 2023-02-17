@@ -9,14 +9,28 @@ import Foundation
 
 class TimelineBusiness {
     
-    static let shared = TimelineBusiness()
+//    static let shared = TimelineBusiness()
     
-//    let basePathURL: URL
+//    private static var _instance: TimelineBusiness!
+//
+//    static func shared(basePath: URL) -> TimelineBusiness {
+//        if _instance == nil {
+//            _instance = TimelineBusiness(basePathURL: basePath)
+//        }
+//        return _instance
+//    }
+    
+    var basePathURL: URL
+    
     let timelinePath = Constants.timelinePath
     
-    private init() {
-        
+    init(path basePathURL: URL) {
+        self.basePathURL = basePathURL
     }
+    
+//    private init() {
+//
+//    }
     
     func readDayMetaData(dayDate: DayDate) -> String? {
             

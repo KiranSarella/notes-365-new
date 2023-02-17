@@ -17,18 +17,7 @@ class NotebookContentBusiness {
     private init() {
         
     }
-    
-//    static func loadContent(for notebook: Notebook) -> String {
-//        return notebook.readDocument() ?? ""
-////        return FilesHelper.shared.readFile(fileName: notebook.id.uuidString, folderPath: notebooksPath) ?? ""
-//    }
-    
-    static func loadContent(selection: SelectedNotebookInfo) -> String {
-        // read data from file
-        guard let notebook = NotebooksListState.shared.getNotebook(levels: selection.levels, index: selection.index) else { return "" }
-        return FilesHelper.shared.readFile(fileName: notebook.id.uuidString, folderPath: notebooksPath) ?? ""
-    }
-    
+
     // diff
     static func getChanges(old: String, new: String) -> String {
         return StringDiff.getChanges(old: old, new: new)

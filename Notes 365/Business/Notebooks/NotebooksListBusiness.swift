@@ -19,8 +19,14 @@ public enum NotebookBusinessError: Error {
 
 class NotebooksListBusiness {
     
-    static let shared = NotebooksListBusiness(dataManager: DataManager(environment: .cloud))
-    var dataManager: DataManager
+//    static let shared = NotebooksListBusiness(dataManager: DataManager(environment: .cloud))
+    
+    private static var _shared: NotebooksListBusiness!
+    
+    var basePathURL: URL
+    
+    var dataManager: DataManager!
+    
     var notebooks: [Notebook]
     
 //    var notebooksHashMap = [UUID: Notebook]()
@@ -29,9 +35,16 @@ class NotebooksListBusiness {
     
     let notebooksPath = Constants.notebooksPath
     
-    init(dataManager: DataManager) {
-        
-        self.dataManager = dataManager
+    static func shared(path basePath: URL) -> NotebooksListBusiness {
+        if _shared == nil {
+            _shared = NotebooksListBusiness(basePath)
+        }
+        return _shared
+    }
+    
+    init(_ basePathURL: URL) {
+        self.basePathURL = basePathURL
+        self.dataManager = DataManager(path: basePathURL)
         // no notebooks exists, create empty or base configuration
         self.notebooks = [Notebook]()
         

@@ -7,6 +7,22 @@
 
 import SwiftUI
 
+
+struct MonthDetailWrapperView: View {
+    
+    var body: some View {
+    
+        // if url exists, load actual view
+        // else block with alert
+        
+        if EnvironmentState.shared.basePathURL != nil {
+            Text("Please enable iCloud.")
+        } else {
+            MonthDetailView()
+        }
+    }
+}
+
 struct MonthDetailView: View {
     
    @StateObject private var monthState = MonthDetailState()

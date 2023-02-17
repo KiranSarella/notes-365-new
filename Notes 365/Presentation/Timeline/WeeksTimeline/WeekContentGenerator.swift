@@ -17,7 +17,7 @@ struct WeekContentGenerator: AsyncSequence, AsyncIteratorProtocol {
         var contentExistingDates = [Date]()
         
         for day in days {
-            if TimelineBusiness.shared.timelineExists(day: day) {
+            if TimelineBusiness(path: EnvironmentState.shared.basePathURL).timelineExists(day: day) {
                 contentExistingDates.append(day)
             }
         }
@@ -46,7 +46,7 @@ struct WeekContentGenerator: AsyncSequence, AsyncIteratorProtocol {
     
     func fetchDayMetadata(for date: Date) async -> DayChanges? {
         
-        let metadata = await TimelineBusiness.shared.readDayMetaData(date: date)!
+        guard let metadata = await TimelineBusiness(path: EnvironmentState.shared.basePathURL).readDayMetaData(date: date) else { return nil }
         
         if Task.isCancelled {
             return nil

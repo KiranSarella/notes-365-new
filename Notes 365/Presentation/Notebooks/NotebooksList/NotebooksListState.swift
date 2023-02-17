@@ -106,9 +106,8 @@ extension NotebookM: Equatable, Hashable {
 class NotebooksListState: ObservableObject {
     
     static let shared: NotebooksListState = NotebooksListState()
-    let notebookBusiness = NotebooksListBusiness.shared
+    let notebookBusiness = NotebooksListBusiness.shared(path: EnvironmentState.shared.basePathURL)
     @Published var usersDB: NotebooksHierarchy
-//    var userSelectionStateTwo: SelectedNotebookInfo?
     @Published var navTitle = "Notes 365"
     
     var expandedIds = Set<String>()
@@ -234,24 +233,6 @@ class NotebooksListState: ObservableObject {
             noteM.name = newValue
         }
     }
-    
-//    func renameNotebook(editingFileName: String) throws {
-//
-//        guard let selectedLevels = userSelectionStateTwo?.levels else {
-//            return
-//        }
-//        guard let selectedIndex = userSelectionStateTwo?.index else {
-//            return
-//        }
-//
-//        try notebookBusiness.renameNotebook(levels: selectedLevels, index: selectedIndex, editingFileName: editingFileName)
-//
-//        // update model
-//        getNotebookReference(levels: selectedLevels, index: selectedIndex) { refNotebook in
-//            refNotebook.name = editingFileName
-//        }
-//
-//    }
     
     // MARK: -
     

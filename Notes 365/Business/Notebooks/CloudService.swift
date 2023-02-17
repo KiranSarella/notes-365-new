@@ -8,14 +8,14 @@
 import Foundation
 
 final class CloudService {
-    enum CloudError: Error {
-        case cloudSyncDisabled
-        case cloudDisabled
-        case couldNotAccessCloud
-        case cloudFileDoesNotExist
-        case couldNotReadContent
-        case unknown(Error)
-    }
+//    enum CloudError: Error {
+//        case cloudSyncDisabled
+//        case cloudDisabled
+//        case couldNotAccessCloud
+//        case cloudFileDoesNotExist
+//        case couldNotReadContent
+//        case unknown(Error)
+//    }
 
     var cloudDirectory: String
     var cloudSyncFileName: String

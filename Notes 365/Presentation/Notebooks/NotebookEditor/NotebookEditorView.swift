@@ -34,7 +34,17 @@ struct NotebookEditorView: View {
 //                        .padding(.bottom, -7)
                     
                     if editorState.isFetchingData {
-                        Text("loading..")
+                        
+                        Spacer()
+                        HStack(alignment: .center) {
+                            Spacer()
+                            Text("loading..")
+                                .foregroundColor(.gray)
+                                .padding()
+                            Spacer()
+                        }
+                        Spacer()
+                        
                     } else {
                         EditorUI(theme: editorState.theme, text: editorState.baseContent, editorView: $editorView, contentEdited: $editorState.contentEdited)
                         .font(Font.body)

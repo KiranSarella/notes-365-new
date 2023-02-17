@@ -179,6 +179,7 @@ struct RowView: View {
                 TextField(text: $name) {
                     Text("Notebook")
                 }
+                .background(Color.white)
                 .focused($isFocused)
             } else {
                 Text(name)
