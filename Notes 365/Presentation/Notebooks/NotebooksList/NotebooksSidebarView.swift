@@ -16,21 +16,27 @@ struct NotebooksSidebarView: View {
     
     var body: some View {
         
-        if usersState.isEmpty {
+        if usersState.isSearching == false && usersState.isEmpty {
             AddNotesView()
                 .padding([.top], -100)
                 .environmentObject(usersState)
         } else {
             VStack {
-                List(selection: $selectedNotebook) {
-                    NotebooksListGroupView(notebooks: $usersState.usersDB.notes)
-                }
+//                List(selection: $selectedNotebook) {
+//                    NotebooksListGroupView(notebooks: $usersState.usersDB.notes)
+//                }
+                SearchedListView(selectedNotebook: $selectedNotebook)
+                
 //                .listStyle(SidebarListStyle())
                 .navigationTitle("Notebooks")
                 .onChange(of: selectedNotebook) { newValue in
                     if let newValue = newValue {
                         usersState.navTitle = newValue.name
                     }
+                }
+                .searchable(text: $usersState.searchText)
+                .onChange(of: usersState.searchText) { newValue in
+                    selectedNotebook = nil
                 }
                 /*
                  ** IMP
@@ -119,6 +125,29 @@ struct NotebooksSidebarView: View {
     
 }
 
+struct SearchedListView: View {
+    
+    @Environment(\.isSearching) private var isSearching
+    @Binding var selectedNotebook: NotebookM?
+    @EnvironmentObject var usersState: NotebooksListState
+    
+    var body: some View {
+        List(selection: $selectedNotebook) {
+            NotebooksListGroupView(notebooks: $usersState.usersDB.notes)
+        }
+        .onChange(of: isSearching) { newValue in
+            usersState.isSearching = newValue
+            print("isSearching, ", newValue)
+            selectedNotebook = nil
+            if newValue {
+                usersState.takeBackup()
+            } else {
+                usersState.restoreBackup()
+            }
+        }
+    }
+}
+
 struct AddNotesView: View {
     @EnvironmentObject var usersState: NotebooksListState
     
@@ -138,17 +167,35 @@ struct AddNotesView: View {
 
 
 struct NotebooksListGroupView: View {
+    @EnvironmentObject var usersState: NotebooksListState
     @Binding var notebooks: [NotebookM]
     var body: some View {
         ForEach($notebooks, id: \.self) { $notebook in
-            if notebook.containChildNotebooks {
-                DisclosureGroup(isExpanded: $notebook.isExpanded) {
-                    NotebooksListGroupView(notebooks: $notebook.children.unwrap()!)
-                } label: {
-                    RowView(notebook: $notebook)
+            if usersState.isSearching {
+                // filters
+                if notebook.canShow {
+                    if notebook.containChildNotebooks {
+                        DisclosureGroup(isExpanded: $notebook.isExpanded) {
+                            NotebooksListGroupView(notebooks: $notebook.children.unwrap()!)
+                        } label: {
+                            RowView(notebook: $notebook)
+                        }
+                    } else {
+                        RowView(notebook: $notebook)
+                    }
                 }
             } else {
-                RowView(notebook: $notebook)
+                // normal
+                if notebook.containChildNotebooks {
+                    DisclosureGroup(isExpanded: $notebook.isExpanded) {
+                        NotebooksListGroupView(notebooks: $notebook.children.unwrap()!)
+                    } label: {
+                        RowView(notebook: $notebook)
+                    }//.opacity(notebook.canShow ? 1 : 0)
+                } else {
+                    RowView(notebook: $notebook)
+                       // .opacity(notebook.canShow ? 1 : 0)
+                }
             }
         }
     }

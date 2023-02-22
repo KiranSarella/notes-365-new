@@ -31,7 +31,7 @@ class NotebooksListBusiness {
     
 //    var notebooksHashMap = [UUID: Notebook]()
     
-    private let notebooksLimit = 3
+//    private let notebooksLimit = 3
     
     let notebooksPath = Constants.notebooksPath
     
@@ -134,38 +134,38 @@ class NotebooksListBusiness {
         return notebooks
     }
     
-    func isNotebooksLimitExceeded() -> Bool {
-        
-        if notebooks.count >= notebooksLimit {
-            return true
-        }
-        
-        func countChilds(for notebook: Notebook) -> Int {
-            // base condition
-            if notebook.children == nil {
-                return 0 // no children
-            }
-            
-            var childrenCount = 0   // current notebook count
-            
-            for notebook in notebook.children! {
-                childrenCount += 1  // count current notebook
-                childrenCount += countChilds(for: notebook)
-            }
-            
-            return childrenCount
-        }
-        
-        var notebooksCount = 0
-        
-        for notebook in notebooks {
-            // count deep until limit exceeds
-            notebooksCount += 1    // count current notebook
-            notebooksCount += countChilds(for: notebook)
-        }
-        
-        return notebooksCount >= notebooksLimit
-    }
+//    func isNotebooksLimitExceeded() -> Bool {
+//
+//        if notebooks.count >= notebooksLimit {
+//            return true
+//        }
+//
+//        func countChilds(for notebook: Notebook) -> Int {
+//            // base condition
+//            if notebook.children == nil {
+//                return 0 // no children
+//            }
+//
+//            var childrenCount = 0   // current notebook count
+//
+//            for notebook in notebook.children! {
+//                childrenCount += 1  // count current notebook
+//                childrenCount += countChilds(for: notebook)
+//            }
+//
+//            return childrenCount
+//        }
+//
+//        var notebooksCount = 0
+//
+//        for notebook in notebooks {
+//            // count deep until limit exceeds
+//            notebooksCount += 1    // count current notebook
+//            notebooksCount += countChilds(for: notebook)
+//        }
+//
+//        return notebooksCount >= notebooksLimit
+//    }
     
     func isAlreadyExists(fileName: String, in siblings: [Notebook]) -> Bool {
         return siblings.contains(where: { $0.name == fileName })

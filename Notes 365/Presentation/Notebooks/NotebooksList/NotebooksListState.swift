@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 /// because Publisher will not triggering change events with array (that too nested array in this case), we moved array to a struct.
 struct NotebooksHierarchy {
@@ -89,6 +90,7 @@ struct NotebookM: Identifiable {
         return result
     }
     
+    var canShow = true
 }
 
 extension NotebookM: Equatable, Hashable {
@@ -109,12 +111,36 @@ class NotebooksListState: ObservableObject {
     let notebookBusiness = NotebooksListBusiness.shared(path: EnvironmentState.shared.basePathURL)
     @Published var usersDB: NotebooksHierarchy
     @Published var navTitle = "Notes 365"
+    @Published var searchText: String = ""
+    
+    var subscription: Set<AnyCancellable> = []
     
     var expandedIds = Set<String>()
     
+    @Published var isSearching = false
     
-    var isNotebooksLimitExceeded: Bool {
-        return notebookBusiness.isNotebooksLimitExceeded()
+    private var backupNotebooks = [NotebookM]()
+    private var backupExpandedIds = Set<String>()
+    
+    
+//    var isNotebooksLimitExceeded: Bool {
+//        return notebookBusiness.isNotebooksLimitExceeded()
+//    }
+    
+    func takeBackup() {
+        print(#function)
+        backupNotebooks = usersDB.notes
+        backupExpandedIds = expandedIds
+    }
+    
+    func restoreBackup() {
+        print(#function)
+        // restore
+        usersDB.notes = backupNotebooks
+        expandedIds = backupExpandedIds
+        // clean
+        backupNotebooks.removeAll()
+        backupExpandedIds.removeAll()
     }
     
     init() {
@@ -130,6 +156,8 @@ class NotebooksListState: ObservableObject {
         
         // observe after initial hierarcy is constructed
         NotificationCenter.default.addObserver(self, selector: #selector(listenExpandCollapseNotification(_:)), name: .ExpandCollapseNotification, object: nil)
+        
+        setupSearchText()
     }
 
     @objc func listenExpandCollapseNotification(_ sender: Notification) {
@@ -149,9 +177,83 @@ class NotebooksListState: ObservableObject {
 //        print(expandedIds)
     }
     
+    func setupSearchText() {
+        
+        $searchText
+//            .map({ (string) -> String? in
+//                if string.count < 2 {
+//                    self.usersDB.notes = []
+//                    return nil
+//                }
+//                return string
+//            })
+            .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
+            .receive(on: RunLoop.main)
+            .compactMap{ $0 }
+            .sink { status in
+                print(status)
+            } receiveValue: { [self] (searchField) in
+                searchItems(searchField)
+            }.store(in: &subscription)
+    }
+    
     func saveExpandedIds() {
         UserDefaults.standard.set(Array(expandedIds), forKey: "notes365.expandedIds")
     }
+    
+    func searchItems(_ text: String) {
+        
+        if isSearching == false {
+            return
+        }
+        
+        if text.count == 0 || text.count == 0 {
+            usersDB.notes = backupNotebooks
+        } else {
+//            usersDB.notes = backupNotebooks.filter { note in
+//                return note.name.lowercased().contains(text.lowercased())
+//            }
+            
+            func canAddNotebook(note: inout NotebookM) -> Bool {
+                
+                // go deep first, if deep return true, then mark current as true
+                // if deep is false, then check current name condition
+                
+                // check nested items
+                var childStatus = Set<Bool>()
+                if note.children != nil {
+                    let count = note.children!.count
+                    for i in 0..<count {
+                        let canAdd = canAddNotebook(note: &note.children![i])
+                        childStatus.insert(canAdd)
+                    }
+                }
+                if childStatus.contains(true) {
+                    note.canShow = true
+                } else {
+                    if note.name.lowercased().contains(text.lowercased()) {
+                        note.canShow = true
+                    } else {
+                        note.canShow = false
+                    }
+                }
+                return note.canShow
+            }
+            
+            var notebooksList = usersDB.notes
+            for i in 0..<notebooksList.count {
+                _ = canAddNotebook(note: &notebooksList[i])
+                print("checked \(i)")
+            }
+            print("NEW LIST")
+            usersDB.notes = notebooksList
+        }
+        
+        
+    }
+    
+    
+    
     
 //    func fetchExpandedIds() {
 //        expandedIds = UserDefaults.standard.object(forKey: "notes365.expandedIds") as? Set<UUID> ?? Set<UUID>()
