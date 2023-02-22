@@ -121,12 +121,7 @@ class NotebooksListState: ObservableObject {
     
     private var backupNotebooks = [NotebookM]()
     private var backupExpandedIds = Set<String>()
-    
-    
-//    var isNotebooksLimitExceeded: Bool {
-//        return notebookBusiness.isNotebooksLimitExceeded()
-//    }
-    
+  
     func takeBackup() {
         print(#function)
         backupNotebooks = usersDB.notes
@@ -241,6 +236,8 @@ class NotebooksListState: ObservableObject {
             }
             
             var notebooksList = usersDB.notes
+            var expandedIds = Set<String>()
+            
             for i in 0..<notebooksList.count {
                 _ = canAddNotebook(note: &notebooksList[i])
                 print("checked \(i)")

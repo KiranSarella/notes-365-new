@@ -35,9 +35,9 @@ struct NotebooksSidebarView: View {
                     }
                 }
                 .searchable(text: $usersState.searchText)
-                .onChange(of: usersState.searchText) { newValue in
-                    selectedNotebook = nil
-                }
+//                .onChange(of: usersState.searchText) { newValue in
+//                    selectedNotebook = nil
+//                }
                 /*
                  ** IMP
                  
@@ -138,7 +138,7 @@ struct SearchedListView: View {
         .onChange(of: isSearching) { newValue in
             usersState.isSearching = newValue
             print("isSearching, ", newValue)
-            selectedNotebook = nil
+//            selectedNotebook = nil
             if newValue {
                 usersState.takeBackup()
             } else {

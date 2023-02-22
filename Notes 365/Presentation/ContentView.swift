@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentWrapperView: View {
     
-    var chooseEnv = ChooseEnvironment()
+    @StateObject var chooseEnv = ChooseEnvironment()
     
     @State private var didError = false
     @State private var errorDetail: Error?
@@ -36,10 +36,10 @@ struct ContentWrapperView: View {
                     .task {
                         do {
                             try chooseEnv.setEnviromment(with: .cloud)
-                            
+                            // todo:
                             // async sync icloud data on first time
-                            
-                            
+                            // do any operations
+                            chooseEnv.enableConfigured()
                         } catch let error {
                             errorDetail = error
                             didError = true

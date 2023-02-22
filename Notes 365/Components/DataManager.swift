@@ -13,19 +13,27 @@ enum EnvironmentType {
     case custom(URL)
 }
 
-class ChooseEnvironment {
+class ChooseEnvironment: ObservableObject {
     
     // based on preferences
     // if cloud, then intereact with cloud service and get its url or respective error
     // or if local, then get it from local filemanager
     // or if test env/user provided/custom url, use it to initialize.
     
-    var isConfigured: Bool {
-        EnvironmentState.shared.basePathURL != nil
-    }
+    @Published var isConfigured: Bool = false
+    
+//    var isConfigured: Bool {
+//        EnvironmentState.shared.basePathURL != nil
+//    }
     
     init() {
         
+    }
+    
+    func enableConfigured() {
+        DispatchQueue.main.async {
+            self.isConfigured = true
+        }
     }
     
     func setEnviromment(with environmentType: EnvironmentType) throws {
