@@ -35,6 +35,8 @@ class NotebooksListBusiness {
     
     let notebooksPath = Constants.notebooksPath
     
+    let cloudService = CloudService(cloudDirectory: "Documents", cloudSyncFileName: "notebooks-list.plist")
+    
     static func shared(path basePath: URL) -> NotebooksListBusiness {
         if _shared == nil {
             _shared = NotebooksListBusiness(basePath)
@@ -55,7 +57,7 @@ class NotebooksListBusiness {
         // convert folder structure to flat structure
 //        convertToFlatStructure()
         
-        print(dataManager.basePathURL)
+        print(dataManager.basePathURL.path(percentEncoded: false))
         
         // if new folder not exits and contains notebooks - means old version structure
         if !FileManager.default.fileExists(atPath: dataManager.basePathURL.appendingPathComponent(notebooksPath).path(percentEncoded: false))
@@ -63,7 +65,9 @@ class NotebooksListBusiness {
             convertToFlatStructure()
         }
         
+        cloudService.cloudContentDidUpdate = {
 
+        }
         
 //        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookChangeNotification(_:)), name: .notebookChangeNotification, object: nil)
         
@@ -195,6 +199,11 @@ class NotebooksListBusiness {
             dataManager.createFolder(Constants.timelinePath)
             dataManager.createFolder(Constants.baseVersionPath)
         }
+    }
+    
+    func observeFileChanges() {
+        
+        
     }
     
     // MARK: - Insert

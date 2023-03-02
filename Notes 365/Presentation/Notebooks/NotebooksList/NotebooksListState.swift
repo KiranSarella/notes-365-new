@@ -153,6 +153,20 @@ class NotebooksListState: ObservableObject {
         NotificationCenter.default.addObserver(self, selector: #selector(listenExpandCollapseNotification(_:)), name: .ExpandCollapseNotification, object: nil)
         
         setupSearchText()
+        
+        // observe plist file changes
+    }
+    
+    func initialFetch() {
+        // get saved expandedIds
+        if let expandedList = UserDefaults.standard.object(forKey: "notes365.expandedIds") as? [String] {
+            expandedIds = Set(expandedList)
+        }
+        
+        // create notesHierarchy with actual notebook objects
+        let notebooks = notebookBusiness.getNotebooks()
+        let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
+        usersDB = NotebooksHierarchy(notes: notesList)
     }
 
     @objc func listenExpandCollapseNotification(_ sender: Notification) {

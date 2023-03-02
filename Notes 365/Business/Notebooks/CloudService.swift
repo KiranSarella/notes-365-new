@@ -34,7 +34,7 @@ final class CloudService {
     private var cloudUrl: URL? {
         FileManager.default
             .url(forUbiquityContainerIdentifier: nil)?
-            .appendingPathComponent(cloudDirectory)
+            .appendingPathComponent(cloudDirectory, isDirectory: true)
             .appendingPathComponent(cloudSyncFileName)
     }
     private var lastSyncDate: Date?
@@ -49,7 +49,7 @@ final class CloudService {
         
         downloadFile()
         observeCloudFile()
-        print("Cloud URL: \(cloudUrl!)")
+        print("Cloud URL: \(cloudUrl!.path(percentEncoded: false))")
     }
 
     deinit {
@@ -94,7 +94,13 @@ final class CloudService {
         iCloudQuery.start()
 
         if let cloudUrl = cloudUrl {
-            try? FileManager.default.startDownloadingUbiquitousItem(at: cloudUrl)
+            print(cloudUrl.path(percentEncoded: false))
+            do {
+                try FileManager.default.startDownloadingUbiquitousItem(at: cloudUrl)
+            } catch let error {
+                print(error)
+            }
+
         }
     }
 }

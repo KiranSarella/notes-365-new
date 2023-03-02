@@ -9,15 +9,27 @@ import Foundation
 
 class NotebookContentBusiness {
     
-    static let shared = NotebookContentBusiness()
-    
     static let notebooksPath = Constants.notebooksPath
     static let baseVersionPath = Constants.baseVersionPath
     
-    private init() {
+    var notebook: Notebook
+//    var cloudService: CloudService
+    var cloudContentDidUpdate: ((String) -> ())?
+    
+    init(notebook: Notebook) {
+        print("##Note-OPEN: \(notebook.name) \(notebook.filePath)")
+        self.notebook = notebook
+//        self.cloudService = CloudService(cloudDirectory: "Documents/notebooks-flat", cloudSyncFileName: notebook.filePath)
         
+//        self.cloudService.cloudContentDidUpdate = { [weak self] in
+//            self?.cloudContentDidUpdate?(self?.cloudService.cloudContent ?? "")
+//        }
     }
 
+    deinit {
+        print("##Note-CLOSING: \(notebook.name) \(notebook.filePath)")
+    }
+    
     // diff
     static func getChanges(old: String, new: String) -> String {
         return StringDiff.getChanges(old: old, new: new)
@@ -37,8 +49,10 @@ class NotebookContentBusiness {
         return FilesHelper.shared.readFile(fileName: fileName, folderPath: baseVersionPath)
     }
     
-    static func saveContentChanges(notebook: Notebook, content: String) {
-       
+    func saveContentChanges(content: String) {
+        print(#function)
+//        cloudService.updateUpdateDate()
+        
         // if now == appear date; continue
         // else have to handle on appear process again; like - today_base_version..
         

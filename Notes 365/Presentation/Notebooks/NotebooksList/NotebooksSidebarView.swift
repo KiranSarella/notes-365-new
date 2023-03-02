@@ -14,6 +14,7 @@ struct NotebooksSidebarView: View {
     @Binding var selectedNotebook: NotebookM?
     @State private var presentDeleteConfirmation = false
     
+    
     var body: some View {
         
         if usersState.isSearching == false && usersState.isEmpty {

@@ -20,6 +20,8 @@ struct EditorUI: UIViewRepresentable {
         editorView.textView.delegate = context.coordinator
         editorView.textView.font = theme.font
         editorView.textView.textColor = theme.bodyColor.uiColor
+        editorView.textView.keyboardDismissMode = .interactive
+        
         
         let paragraphStyle = NSMutableParagraphStyle()
         //            paragraphStyle.minimumLineHeight = 10

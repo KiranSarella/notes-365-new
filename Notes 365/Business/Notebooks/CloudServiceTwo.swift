@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 public enum CloudError: Error {
     case cloudSyncDisabled
     case cloudDisabled
@@ -68,6 +69,47 @@ final class CloudServiceTwo {
         guard let cloudUrl = cloudUrl else { return .failure(.couldNotAccessCloud) }
         
         return .success(cloudUrl)
+    }
+    
+    /*
+     
+     1. if local documents is empty, then
+     2. check if cloud contains plist file
+        - if so, download plist, /notebooks, /timesheets //msg: checking cloud storage
+        - else create empty folders (already logic exists)
+     
+     ## downloading files
+     //msg: downloading cloud files
+     can we show progress?
+     
+     ** imp: we cannot separatly access local cloud and actual cloud - they both are same.
+     so.. easy and automatic seems
+     
+     
+     */
+    
+    func downloadDocumentsContentFromCloud() {
+        
+        print(#function)
+        
+        var cloudUrl: URL? {
+            FileManager.default
+                .url(forUbiquityContainerIdentifier: nil)?
+                .appendingPathComponent("Documents/notebooks-list.plist", isDirectory: false)
+        }
+        
+        guard let cloudUrl = cloudUrl else { return }
+        print(cloudUrl.path(percentEncoded: false))
+        // prepare plist url
+        do {
+            try FileManager.default.startDownloadingUbiquitousItem(at: cloudUrl)
+            print("startDownloadingUbiquitousItem")
+//            print("isDownloading: \(isDownloading)")
+            
+        } catch let error as NSError {
+            print("Unresolved error \(error), \(error.userInfo)")
+        }//do catch
+        
     }
     
 }

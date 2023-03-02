@@ -32,14 +32,20 @@ struct ContentWrapperView: View {
                 }
                 .padding()
             } else {
-                Text("Loading..")
+                Text("iCloud Sync..")
                     .task {
                         do {
                             try chooseEnv.setEnviromment(with: .cloud)
                             // todo:
                             // async sync icloud data on first time
-                            // do any operations
-                            chooseEnv.enableConfigured()
+                            
+                            chooseEnv.downloaodCloudDocuments(completion: {
+                                
+                                // do any operations
+                                chooseEnv.enableConfigured()
+                            })
+                            
+                            
                         } catch let error {
                             errorDetail = error
                             didError = true
@@ -85,6 +91,8 @@ struct ContentView: View {
     
     @State var showDetail = false
     
+    @StateObject private var editorState = NotebookEditorState()
+    
     var body: some View {
         NavigationSplitView {
             // navigation headings
@@ -100,18 +108,36 @@ struct ContentView: View {
                 Spacer()
                 // show settings option
                 HStack {
-                    Button {
-                        showSettings = true
-                    } label: {
-                        HStack(spacing: 0) {
-                            Image(systemName: "gearshape")
-                            Text("Settings")
-                                .padding(.horizontal)
-                        }.padding(.horizontal)
+                    VStack {
+                        
+                        Button {
+                            showSettings = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "arrow.triangle.2.circlepath")
+                                Text("iCloud Sync")
+                                    .padding(.horizontal, 6)
+                            }.padding(4)
+                            Spacer()
+                        }
+                        .help("Sync with iCloud")
+                        
+                        Button {
+                            showSettings = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "gearshape")
+                                Text("Settings")
+                                    .padding(.horizontal, 6)
+                            }.padding(4)
+                            Spacer()
+                        }
+                        .help("Settings")
                     }
                     Spacer()
                 }
-                .padding(.horizontal)
+                
+                .padding()
                 .sheet(isPresented: $showSettings) {
                     SettingsView_iPadOS(showModel: $showSettings)
                 }
@@ -158,7 +184,7 @@ struct ContentView: View {
                     }
                 }
             case .noteBooks:
-                NotebookEditorView(notebookM: $selectedUser)
+                NotebookEditorView(notebookM: $selectedUser, editorState: editorState)
                     .navigationTitle(selectedUser?.name ?? "")
             }
         }

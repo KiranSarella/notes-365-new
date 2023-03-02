@@ -15,6 +15,9 @@
 		9F14B4AE298F98900079D23B /* FontPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B4AD298F98900079D23B /* FontPicker.swift */; };
 		9F14B4B02990D46D0079D23B /* ThemeDetailState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B4AF2990D46D0079D23B /* ThemeDetailState.swift */; };
 		9F14B4B2299168980079D23B /* CalendarNavigatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B4B1299168980079D23B /* CalendarNavigatorView.swift */; };
+		9F1687CC29AD0E7F0085A0CA /* InitialCloudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1687CB29AD0E7F0085A0CA /* InitialCloudSync.swift */; };
+		9F1687CE29ADC2020085A0CA /* PlistDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1687CD29ADC2020085A0CA /* PlistDocument.swift */; };
+		9F1687D029AE21B20085A0CA /* NotebooksChangeMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1687CF29AE21B20085A0CA /* NotebooksChangeMonitor.swift */; };
 		9F188D812930E49F0078D413 /* MarkdownHeading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F188D802930E49F0078D413 /* MarkdownHeading.swift */; };
 		9F1AAE31292C940A00B4D254 /* FeedbackView+macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1AAE30292C940A00B4D254 /* FeedbackView+macOS.swift */; };
 		9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1AAE32292C94F800B4D254 /* FeedbackState.swift */; };
@@ -93,7 +96,7 @@
 		9F45BDDB29234150003DE332 /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BDD929234150003DE332 /* Notebook.swift */; };
 		9F45BDE429238D29003DE332 /* NotebooksHierarchyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BDE329238D29003DE332 /* NotebooksHierarchyTests.swift */; };
 		9F57BAE7299688BC0076FD9D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F57BAE6299688BC0076FD9D /* Constants.swift */; };
-		9F7D291D299A7C1500B37F51 /* NoteDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D291C299A7C1500B37F51 /* NoteDocument.swift */; };
+		9F7D291D299A7C1500B37F51 /* MarkdownDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D291C299A7C1500B37F51 /* MarkdownDocument.swift */; };
 		9F7D291F299BABAC00B37F51 /* EditorUI+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D291E299BABAC00B37F51 /* EditorUI+iOS.swift */; };
 		9F7D2922299CF2AF00B37F51 /* CloudService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D2921299CF2AF00B37F51 /* CloudService.swift */; };
 		9F7D2924299EB9D700B37F51 /* MainBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D2923299EB9D700B37F51 /* MainBusiness.swift */; };
@@ -145,6 +148,9 @@
 		9F14B4AD298F98900079D23B /* FontPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontPicker.swift; sourceTree = "<group>"; };
 		9F14B4AF2990D46D0079D23B /* ThemeDetailState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeDetailState.swift; sourceTree = "<group>"; };
 		9F14B4B1299168980079D23B /* CalendarNavigatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarNavigatorView.swift; sourceTree = "<group>"; };
+		9F1687CB29AD0E7F0085A0CA /* InitialCloudSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialCloudSync.swift; sourceTree = "<group>"; };
+		9F1687CD29ADC2020085A0CA /* PlistDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlistDocument.swift; sourceTree = "<group>"; };
+		9F1687CF29AE21B20085A0CA /* NotebooksChangeMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksChangeMonitor.swift; sourceTree = "<group>"; };
 		9F188D802930E49F0078D413 /* MarkdownHeading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownHeading.swift; sourceTree = "<group>"; };
 		9F1AAE30292C940A00B4D254 /* FeedbackView+macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackView+macOS.swift"; sourceTree = "<group>"; };
 		9F1AAE32292C94F800B4D254 /* FeedbackState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackState.swift; sourceTree = "<group>"; };
@@ -226,7 +232,7 @@
 		9F45BDE329238D29003DE332 /* NotebooksHierarchyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksHierarchyTests.swift; sourceTree = "<group>"; };
 		9F498E042939E03B00FF4D17 /* EditorView.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = EditorView.md; sourceTree = "<group>"; };
 		9F57BAE6299688BC0076FD9D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		9F7D291C299A7C1500B37F51 /* NoteDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDocument.swift; sourceTree = "<group>"; };
+		9F7D291C299A7C1500B37F51 /* MarkdownDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownDocument.swift; sourceTree = "<group>"; };
 		9F7D291E299BABAC00B37F51 /* EditorUI+iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EditorUI+iOS.swift"; sourceTree = "<group>"; };
 		9F7D2920299CB7C000B37F51 /* Notes 365Debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Notes 365Debug.entitlements"; sourceTree = "<group>"; };
 		9F7D2921299CF2AF00B37F51 /* CloudService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudService.swift; sourceTree = "<group>"; };
@@ -531,9 +537,12 @@
 			isa = PBXGroup;
 			children = (
 				9F45BDD929234150003DE332 /* Notebook.swift */,
-				9F7D291C299A7C1500B37F51 /* NoteDocument.swift */,
+				9F7D291C299A7C1500B37F51 /* MarkdownDocument.swift */,
+				9F1687CD29ADC2020085A0CA /* PlistDocument.swift */,
 				9F7D2921299CF2AF00B37F51 /* CloudService.swift */,
 				9F7D2925299EC27E00B37F51 /* CloudServiceTwo.swift */,
+				9F1687CB29AD0E7F0085A0CA /* InitialCloudSync.swift */,
+				9F1687CF29AE21B20085A0CA /* NotebooksChangeMonitor.swift */,
 				9F45BD042920CCCE003DE332 /* NotebooksListBusiness.swift */,
 				9FB6C69F2927695000C8EC76 /* NotebookContentBusiness.swift */,
 				9F09CEB029267FBC00609D99 /* VersionBusiness.swift */,
@@ -772,6 +781,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F1687CC29AD0E7F0085A0CA /* InitialCloudSync.swift in Sources */,
 				9F45BD9D2920CE21003DE332 /* AttributedString+StyledMarkdown+iOS.swift in Sources */,
 				9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */,
 				9FB6C69C29275E0300C8EC76 /* NotebookEditorState.swift in Sources */,
@@ -803,7 +813,7 @@
 				9F45BD732920CDE0003DE332 /* SmartTextStorage+iOS.swift in Sources */,
 				9F45BDA42920CE41003DE332 /* ThemePreviewView.swift in Sources */,
 				9F45BD9C2920CE21003DE332 /* FileHelper.swift in Sources */,
-				9F7D291D299A7C1500B37F51 /* NoteDocument.swift in Sources */,
+				9F7D291D299A7C1500B37F51 /* MarkdownDocument.swift in Sources */,
 				9F45BD622920CD90003DE332 /* WeekDetailView.swift in Sources */,
 				9F45BD672920CDA9003DE332 /* TimelineSidebarView.swift in Sources */,
 				9F14B4B2299168980079D23B /* CalendarNavigatorView.swift in Sources */,
@@ -828,6 +838,7 @@
 				9F45BD9E2920CE21003DE332 /* SpeechHelpr.swift in Sources */,
 				9FB6C69829275D0600C8EC76 /* FormatOptionsView.swift in Sources */,
 				9F45BD932920CDF9003DE332 /* Mode.swift in Sources */,
+				9F1687CE29ADC2020085A0CA /* PlistDocument.swift in Sources */,
 				9F45BDA62920CE41003DE332 /* NamedSystemColor.swift in Sources */,
 				9F1AAE31292C940A00B4D254 /* FeedbackView+macOS.swift in Sources */,
 				9F45BD7F2920CDE0003DE332 /* NotebooksSidebarView.swift in Sources */,
@@ -854,6 +865,7 @@
 				9F3DB0CC292E340200704860 /* ThemeState.swift in Sources */,
 				9F3DB0D0292E70BA00704860 /* ColorPickerWindowManager.swift in Sources */,
 				9F57BAE7299688BC0076FD9D /* Constants.swift in Sources */,
+				9F1687D029AE21B20085A0CA /* NotebooksChangeMonitor.swift in Sources */,
 				9F7D291F299BABAC00B37F51 /* EditorUI+iOS.swift in Sources */,
 				9FB6C69A29275D5100C8EC76 /* FormatOptions.swift in Sources */,
 				9F7D2924299EB9D700B37F51 /* MainBusiness.swift in Sources */,

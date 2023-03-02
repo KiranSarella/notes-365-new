@@ -5,7 +5,7 @@
 //  Created by Kiran Sarella on 15/11/22.
 //
 
-import Foundation
+import UIKit
 
 class Notebook: Identifiable, Codable {
     
@@ -18,7 +18,9 @@ class Notebook: Identifiable, Codable {
     var children: [Notebook]?
     unowned var parent: Notebook?
     
-    var document: NoteDocument?
+    var document: MarkdownDocument?
+    
+    var newContentAvailalble: (()->())?
     
     init(id: UUID, name: String) {
         self.id = id
@@ -58,6 +60,11 @@ class Notebook: Identifiable, Codable {
         return fileURL
     }
     
+    private var notificationObserver: Any?
+    
+    deinit {
+        removeDocumentChangeNotification()
+    }
     
 }
 
@@ -66,10 +73,20 @@ extension Notebook {
     
     func readDocument() async -> String? {
         print(#function)
-        document = await NoteDocument(fileURL: fileURL)
-        await document?.open()
-        return await document?.content
+        document = await MarkdownDocument(fileURL: fileURL)
+        guard let document = document else { return nil }
+        let isOpened = await document.open()
+        if isOpened {
+            
+        } else {
+            print("Failed to open the file \(fileURL.path(percentEncoded: false))")
+        }
+        await print(document.documentState)
+        registerDocumentChangeNotification()
+        observeContentChanges()
+        return await document.content
     }
+    
     
     func updateDocument(with content: String) {
         guard let document = document else { return }
@@ -79,18 +96,64 @@ extension Notebook {
     func saveDocument(with content: String) async {
         print(#function)
         guard let document = document else { return }
-        
         await document.setContentChanges(newContent: content)
-        let status = await document.save(to: fileURL, for: .forOverwriting)
-        print(status)
+        await document.updateChangeCount(.done)
+//        let status = await document.save(to: fileURL, for: .forOverwriting)
+//        print(status)
     }
     
     func closeDocument() async {
         print(#function)
-        guard let document = document else { return }
-        await document.close()
+        self.removeContentChangesObserver()
+        self.removeDocumentChangeNotification()
+        
+//        guard let document = document else { return }
+        await document?.close()
+        self.removeDocumentChangeNotification()
+        document = nil
     }
     
+    
+    // MARK: - Document Notfications
+    func observeContentChanges() {
+        document?.newContentAvailalble = {
+            self.newContentAvailalble?()
+        }
+    }
+    
+    func removeContentChangesObserver() {
+        document?.newContentAvailalble = nil
+    }
+    
+    
+    func registerDocumentChangeNotification() {
+        
+        guard let document = document else { return }
+        
+        notificationObserver = NotificationCenter.default.addObserver(forName: UIDocument.stateChangedNotification, object: document, queue: nil) { notification in
+            
+            print("UIDocument.stateChangedNotification")
+            print(document.documentState)
+            
+            
+//            if document.documentState == UIDocument.State.progressAvailable
+//                || document.documentState == UIDocument.State.editingDisabled
+//                || document.documentState == UIDocument.State.normal {
+//
+//                self.newContentAvailalble?()
+//            }
+//
+        }
+
+    }
+    
+    func removeDocumentChangeNotification() {
+        print(#function)
+        if let notificationObserver = notificationObserver {
+            NotificationCenter.default.removeObserver(notificationObserver, name: UIDocument.stateChangedNotification, object: document)
+        }
+        
+    }
 }
 
 
@@ -197,8 +260,8 @@ extension Notebook {
 
 extension Notebook {
     
-    func loadContent() -> String {
-        let fullPath = Constants.notebooksPath + "/" + self.id.uuidString + ".md"
-        return FilesHelper.shared.readFile(from: fullPath) ?? ""
-    }
+//    func loadContent() -> String {
+//        let fullPath = Constants.notebooksPath + "/" + self.id.uuidString + ".md"
+//        return FilesHelper.shared.readFile(from: fullPath) ?? ""
+//    }
 }

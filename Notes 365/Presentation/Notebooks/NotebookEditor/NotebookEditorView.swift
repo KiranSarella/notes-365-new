@@ -12,11 +12,11 @@ struct NotebookEditorView: View {
 //    @Environment(\.scenePhase) var scenePhase
     
     @Binding var notebookM: NotebookM?
-    @StateObject private var editorState = NotebookEditorState()
+    @ObservedObject var editorState: NotebookEditorState
     @FocusState private var isTextFieldFocused: Bool
     @State private var editorView = EditorView()
 
-    private let autoSaveTimer = Timer.publish(every: 60, on: .main, in: .common).autoconnect() // 1 min
+    private let autoSaveTimer = Timer.publish(every: 5, on: .main, in: .common).autoconnect() // 1 min
     
     var body: some View {
         VStack {
@@ -49,6 +49,7 @@ struct NotebookEditorView: View {
                         EditorUI(theme: editorState.theme, text: editorState.baseContent, editorView: $editorView, contentEdited: $editorState.contentEdited)
                         .font(Font.body)
                         .focused($isTextFieldFocused)
+//                        .scrollDismissesKeyboard(.interactively)
                         .onChange(of: isTextFieldFocused) { isFocused in
                             if isFocused {
                                 // began editing...
@@ -60,28 +61,29 @@ struct NotebookEditorView: View {
                             }
                         }
                         .onChange(of: editorState.contentEdited) { newValue in
-                            editorState.setBaseVersion(notebookM!.notebook)
+                            editorState.setBaseVersion(notebookM!.notebook) // ?
                         }
                     }
                 }
                 .onAppear(perform: {
-                    editorState.notebook = notebookM!.notebook
-                    DispatchQueue.main.async {
-                        Task {
-                            await editorState.loadContent()
-                            editorView.text = editorState.baseContent
-                            editorState.getNewContent = {
-                                return editorView.text
-                            }
-                        }
-                    }
+//                    if notebookM != nil {
+//                        DispatchQueue.main.async {
+//                            Task {
+//                                await editorState.loadContent(for: notebookM!.notebook)
+//                                editorView.text = editorState.baseContent
+//                                editorState.getNewContent = {
+//                                    return editorView.text
+//                                }
+//                            }
+//                        }
+//                    }
                 })
                 .onDisappear(perform: {
                     isTextFieldFocused = false
                     editorState.saveContentChanges()
-                    
                     Task {
                         await editorState.notebook.closeDocument()
+                        self.autoSaveTimer.upstream.connect().cancel()
                     }
                 })
                 .onChange(of: editorState.theme, perform: { newValue in
@@ -117,12 +119,14 @@ struct NotebookEditorView: View {
             isTextFieldFocused = false
             
             guard let newValue = newValue else { return }
-            editorState.notebook = newValue.notebook
             
             DispatchQueue.main.async {
                 Task {
-                    await editorState.loadContent()
+                    await editorState.loadContent(for: newValue.notebook)
                     editorView.text = editorState.baseContent
+                    editorState.getNewContent = {
+                        return editorView.text
+                    }
                 }
             }
             
@@ -131,6 +135,7 @@ struct NotebookEditorView: View {
             editorView.text = newValue
         })
         .onReceive(autoSaveTimer, perform: { _ in
+            print("auto Save Timer")
             editorState.saveContentChanges()
         })
 //        .onChange(of: scenePhase) { phase in

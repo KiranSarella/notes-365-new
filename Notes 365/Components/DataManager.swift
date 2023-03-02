@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 enum EnvironmentType {
     case cloud
     case local
@@ -26,6 +27,14 @@ class ChooseEnvironment: ObservableObject {
 //        EnvironmentState.shared.basePathURL != nil
 //    }
     
+    var cloudService: CloudServiceTwo!
+    
+//    var cloudDocumentSync: iCloud = iCloud.sharedCloud
+    
+//    var cloudServiceOld = CloudService(cloudDirectory: "Documents", cloudSyncFileName: "notebooks-list.plist")
+    
+    let cloudSync = InitialCloudSync()
+    
     init() {
         
     }
@@ -43,10 +52,11 @@ class ChooseEnvironment: ObservableObject {
         switch environmentType {
         case .cloud:
             // if cloud, then intereact with cloud service and get its url or respective error
-            let cloudService = CloudServiceTwo()
+            cloudService = CloudServiceTwo()
             let value = cloudService.getCloudPath()
             switch value {
             case .success(let url):
+                print(url.path(percentEncoded: false))
                 environmentState.setBasePath(url: url)
             case .failure(let error):
                 throw error
@@ -65,6 +75,24 @@ class ChooseEnvironment: ObservableObject {
         }
         
     }
+    
+    func downloaodCloudDocuments(completion:  @escaping (()->())) {
+        cloudSync.syncCompletionHandler = {
+            completion()
+        }
+        cloudSync.syncInitialData()
+    }
+    
+    
+//    func downloaodCloudDocuments() async {
+//        return await withCheckedContinuation { continution in
+//            cloudSync.syncInitialData()
+//
+//            cloudSync.syncCompletionHandler = {
+//                continution.resume()
+//            }
+//        }
+//    }
     
 }
 

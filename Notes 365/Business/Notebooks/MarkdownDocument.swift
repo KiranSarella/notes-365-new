@@ -7,13 +7,16 @@
 
 import UIKit
 
-class NoteDocument: UIDocument {
+class MarkdownDocument: UIDocument {
     
     var content: String = ""
+    
+    var newContentAvailalble: (()->())?
     
     func setContentChanges(newContent: String) {
         content = newContent
     }
+    
     
     // MARK: - write
 //    override func save(to url: URL, for saveOperation: UIDocument.SaveOperation) async -> Bool {
@@ -33,6 +36,7 @@ class NoteDocument: UIDocument {
     
     
     override func contents(forType typeName: String) throws -> Any {
+        print(#function)
         let data = content.data(using: .utf8)!
         return data
     }
@@ -52,9 +56,11 @@ class NoteDocument: UIDocument {
 //    }
     
     override func load(fromContents contents: Any, ofType typeName: String?) throws {
+        print(#function)
         if let data = contents as? Data {
             content = String(data: data, encoding: .utf8) ?? ""
             print(content)
+            newContentAvailalble?()
         }
     }
     

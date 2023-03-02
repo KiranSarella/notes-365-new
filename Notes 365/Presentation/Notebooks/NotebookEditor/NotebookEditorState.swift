@@ -12,16 +12,19 @@ import Combine
 @MainActor
 class NotebookEditorState: ObservableObject {
     
-    let notebookBusiness = NotebookContentBusiness.shared
+    var notebookBusiness: NotebookContentBusiness?
+    
     @Published var isFetchingData = true
     @Published var baseContent: String = ""
     @Published var editorType = EditorType.smart
     @Published var theme: MarkdownTheme
     @Published var showSymbols = false
-    @Published var contentEdited = false
+    var contentEdited = false
+    var contentEditedDate: Date? = Date()
+    var lastSavedDate: Date = Date()
     @Published var versionDate: Date = Date()
     
-    unowned var notebook: Notebook!
+    unowned private(set) var notebook: Notebook!
     
     var getNotebook: (()->(Notebook?))?
     
@@ -32,12 +35,10 @@ class NotebookEditorState: ObservableObject {
     var cancellableTheme: Cancellable!
     var cancellableTimer: Cancellable?
     
-    var cloudService: CloudService!
-    
     init() {
+        
         theme = ThemeState.shared.theme
         observeThemeChanges()
-//        observeAutoSaveTimer()
     }
     
     func observeThemeChanges() {
@@ -48,16 +49,25 @@ class NotebookEditorState: ObservableObject {
             }
     }
     
-    func loadContent() async {
+    func loadContent(for notebook: Notebook) async {
+        print("##Note-loadContent")
+        self.notebook = notebook
+        notebookBusiness = NotebookContentBusiness(notebook: notebook)
+//        notebookBusiness?.cloudContentDidUpdate = { [weak self] newContent in
+//            DispatchQueue.main.async {
+//                self?.baseContent = newContent
+//            }
+//        }
         
-        cloudService = CloudService(cloudDirectory: "Documents/\(Constants.notebooksPath)" , cloudSyncFileName: notebook.filePath)
-        
-        cloudService.cloudContentDidUpdate = { [weak self] in
-            
-            DispatchQueue.main.async {
-                self?.baseContent = self?.cloudService.cloudContent ?? ""
+        self.notebook.newContentAvailalble = { [weak self] in
+            print("newContentAvailalble called")
+            if let content = self?.notebook.document?.content {
+                DispatchQueue.main.async {
+                    self?.baseContent = content
+                }
             }
         }
+        
         
         baseContent = ""
         isFetchingData = true
@@ -67,7 +77,9 @@ class NotebookEditorState: ObservableObject {
         
         isFetchingData = false
         contentEdited = false
+        contentEditedDate = nil
     }
+    
     
     // diff
     func getChanges(old: String, new: String) -> String {
@@ -86,26 +98,39 @@ class NotebookEditorState: ObservableObject {
     }
     
     func saveContentChanges() {
-        if contentEdited {
+        
+        if self.notebook != nil {
+            if self.notebook.document?.documentState == .progressAvailable
+                || self.notebook.document?.documentState == .editingDisabled {
+                return
+            }
+        }
+        print("contentEdited: \(contentEdited)")
+        
+        guard let contentEditedDate = contentEditedDate else { return }
+        if contentEditedDate >= lastSavedDate {
+//            contentEdited = false
             if let txt = self.getNewContent?() {
                 
                 if versionDate.isSameDayAs(Date.now) {
                     // same day
-                    cloudService.updateUpdateDate()
-                    NotebookContentBusiness.saveContentChanges(notebook: notebook, content: txt)
+                    lastSavedDate = Date()
+                    notebookBusiness?.saveContentChanges(content: txt)
                 } else {
                     // ** day changed **
                     // reset baseContent
                     
                     DispatchQueue.main.async {
                         Task {
-                            await self.loadContent()
+                            await self.loadContent(for: self.notebook)
                             // create new baseversion
                             self.setBaseVersion(self.notebook)
                             // update version date
                             self.versionDate = Date()
                             // now save content
-                            await self.notebook.saveDocument(with: txt)
+                            self.lastSavedDate = Date()
+                            self.notebookBusiness?.saveContentChanges(content: txt)
+//                            await self.notebook.saveDocument(with: txt)
                         }
                     }
                 }
