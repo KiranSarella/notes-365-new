@@ -20,6 +20,8 @@ class Notebook: Identifiable, Codable {
     
     var document: MarkdownDocument?
     
+    var isResolvingConflicts = false
+    
     var newContentAvailalble: (()->())?
     
     init(id: UUID, name: String) {
@@ -143,6 +145,29 @@ extension Notebook {
 //                self.newContentAvailalble?()
 //            }
 //
+            
+            if document.documentState == UIDocument.State.inConflict {
+                if self.isResolvingConflicts {
+                    return
+                }
+                
+                self.isResolvingConflicts = true
+                if let conflictVersions = NSFileVersion.unresolvedConflictVersionsOfItem(at: self.fileURL) {
+                    print(conflictVersions.count)
+                    
+                    do {
+                        let success = try NSFileVersion.removeOtherVersionsOfItem(at:  self.fileURL)
+                        
+                    } catch let error as NSError {
+                        print(error)
+                    }
+                    
+                    for i in 0..<conflictVersions.count {
+                        conflictVersions[i].isResolved = true
+                    }
+                }
+                self.isResolvingConflicts = false
+            }
         }
 
     }
