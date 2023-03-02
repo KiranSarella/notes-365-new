@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct NotebookEditorView: View {
     
@@ -16,7 +17,11 @@ struct NotebookEditorView: View {
     @FocusState private var isTextFieldFocused: Bool
     @State private var editorView = EditorView()
 
-    private let autoSaveTimer = Timer.publish(every: 5, on: .main, in: .common).autoconnect() // 1 min
+    @State var autoSaveTimer: Timer.TimerPublisher = Timer.publish(every: 5, on: .main, in: .common)
+    @State var connectedTimer: Cancellable? = nil
+    
+    
+//    private let autoSaveTimer = Timer.publish(every: 5, on: .main, in: .common).autoconnect() // 1 min
     
     var body: some View {
         VStack {
@@ -25,7 +30,7 @@ struct NotebookEditorView: View {
             } else {
                 VStack(alignment: .leading) {
                     // formatting bar view
-                    FormattingOptionsView(editorView: $editorView, contentEdited: $editorState.contentEdited)
+                    FormattingOptionsView(editorView: $editorView, contentEditedDate: $editorState.contentEditedDate)
 //                        .frame(height: 40)
                         .padding(.horizontal)
                         .backgroundStyle(.regularMaterial)
@@ -46,23 +51,9 @@ struct NotebookEditorView: View {
                         Spacer()
                         
                     } else {
-                        EditorUI(theme: editorState.theme, text: editorState.baseContent, editorView: $editorView, contentEdited: $editorState.contentEdited)
+                        EditorUI(theme: editorState.theme, text: editorState.baseContent, editorView: $editorView, contentEditedDate: $editorState.contentEditedDate)
                         .font(Font.body)
                         .focused($isTextFieldFocused)
-//                        .scrollDismissesKeyboard(.interactively)
-                        .onChange(of: isTextFieldFocused) { isFocused in
-                            if isFocused {
-                                // began editing...
-//                                print(isTextFieldFocused)
-                                editorState.setBaseVersion(notebookM!.notebook)
-                            } else {
-                                // ended editing...
-                                //                            print(isTextFieldFocused)
-                            }
-                        }
-                        .onChange(of: editorState.contentEdited) { newValue in
-                            editorState.setBaseVersion(notebookM!.notebook) // ?
-                        }
                     }
                 }
                 .onAppear(perform: {
@@ -77,14 +68,15 @@ struct NotebookEditorView: View {
 //                            }
 //                        }
 //                    }
+                    self.instantiateTimer()
                 })
                 .onDisappear(perform: {
                     isTextFieldFocused = false
                     editorState.saveContentChanges()
                     Task {
                         await editorState.notebook.closeDocument()
-                        self.autoSaveTimer.upstream.connect().cancel()
                     }
+                    self.cancelTimer()
                 })
                 .onChange(of: editorState.theme, perform: { newValue in
                     editorView.updateTheme(theme: editorState.theme)
@@ -114,10 +106,13 @@ struct NotebookEditorView: View {
             }
         }
         .onChange(of: notebookM) { newValue in
+            // existing notebook steps
             // save existing changes if required
             editorState.saveContentChanges()
             isTextFieldFocused = false
+            editorState.baseVersionCreated = false
             
+            // new notebook steps
             guard let newValue = newValue else { return }
             
             DispatchQueue.main.async {
@@ -130,6 +125,9 @@ struct NotebookEditorView: View {
                 }
             }
             
+            // base version verifiation on every time notebook editor appear
+            // usefull if new day entered.
+            editorState.configBaseVersionIfNecessary(newValue.notebook)
         }
         .onChange(of: editorState.baseContent, perform: { newValue in
             editorView.text = newValue
@@ -152,5 +150,15 @@ struct NotebookEditorView: View {
 //        }
     }
     
+    func instantiateTimer() {
+        self.autoSaveTimer = Timer.publish(every: 5, on: .main, in: .common)
+        self.connectedTimer = self.autoSaveTimer.connect()
+        return
+    }
+    
+    func cancelTimer() {
+        self.connectedTimer?.cancel()
+        return
+    }
 }
 

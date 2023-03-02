@@ -19,9 +19,10 @@ class NotebookEditorState: ObservableObject {
     @Published var editorType = EditorType.smart
     @Published var theme: MarkdownTheme
     @Published var showSymbols = false
-    var contentEdited = false
+//    var contentEdited = false
     var contentEditedDate: Date? = Date()
     var lastSavedDate: Date = Date()
+    var baseVersionCreated = false
     @Published var versionDate: Date = Date()
     
     unowned private(set) var notebook: Notebook!
@@ -76,7 +77,6 @@ class NotebookEditorState: ObservableObject {
         self.baseContent = await notebook.readDocument() ?? ""
         
         isFetchingData = false
-        contentEdited = false
         contentEditedDate = nil
     }
     
@@ -86,7 +86,7 @@ class NotebookEditorState: ObservableObject {
         return NotebookContentBusiness.getChanges(old: old, new: new)
     }
     
-    func setBaseVersion(_ notebook: Notebook) {
+    func configBaseVersionIfNecessary(_ notebook: Notebook) {
         // reset base version folder on date changed
         VersionBusiness.resetBaseVersionIfNeeded()
         // if reset done, then recreate baseversion file
@@ -94,37 +94,48 @@ class NotebookEditorState: ObservableObject {
             // case 1: for new notes
             // case 2: for existing notes
             NotebookContentBusiness.createBaseVersion(for: notebook.id.uuidString, with: self.baseContent)
+            baseVersionCreated = true
+        } else {
+            baseVersionCreated = true
         }
     }
     
+    
+    
     func saveContentChanges() {
-        
+        print("saveContentChanges")
         if self.notebook != nil {
             if self.notebook.document?.documentState == .progressAvailable
                 || self.notebook.document?.documentState == .editingDisabled {
+                print("return due to: \(self.notebook.document?.documentState)")
                 return
             }
         }
-        print("contentEdited: \(contentEdited)")
-        
         guard let contentEditedDate = contentEditedDate else { return }
+        print("contentEditedDate: \(contentEditedDate)")
+        print("last savedDate: \(lastSavedDate)")
         if contentEditedDate >= lastSavedDate {
+            
 //            contentEdited = false
             if let txt = self.getNewContent?() {
                 
-                if versionDate.isSameDayAs(Date.now) {
+//                notebookBusiness?.saveContentChanges(content: txt)
+//                self.lastSavedDate = Date()
+                
+                if versionDate.isSameDayAs(Date.now) && baseVersionCreated {
+                    print("IN SAME DAY")
                     // same day
                     lastSavedDate = Date()
                     notebookBusiness?.saveContentChanges(content: txt)
                 } else {
                     // ** day changed **
                     // reset baseContent
-                    
+                    print("DAY CHANGED")
                     DispatchQueue.main.async {
                         Task {
                             await self.loadContent(for: self.notebook)
                             // create new baseversion
-                            self.setBaseVersion(self.notebook)
+                            self.configBaseVersionIfNecessary(self.notebook)
                             // update version date
                             self.versionDate = Date()
                             // now save content
@@ -134,6 +145,7 @@ class NotebookEditorState: ObservableObject {
                         }
                     }
                 }
+                
                 
 //                // TODO: check date
 //                if !appearDate.isSameDayAs(Date.now) {

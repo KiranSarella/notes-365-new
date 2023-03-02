@@ -76,6 +76,8 @@ class NotebookContentBusiness {
             // update notebook
             
             Task {
+                print("SAVING CONTENT:")
+                print(content)
                 await notebook.saveDocument(with: content)
             }
             

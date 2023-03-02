@@ -12,7 +12,7 @@ struct EditorUI: UIViewRepresentable {
     let theme: MarkdownTheme
     let text: String
     @Binding var editorView: EditorView
-    @Binding var contentEdited: Bool
+    @Binding var contentEditedDate: Date?
     
     func makeUIView(context: Context) -> EditorView {
         editorView.theme = theme
@@ -60,6 +60,11 @@ class EditorUICoordinator: NSObject {
 extension EditorUICoordinator: UITextViewDelegate {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        parent.contentEdited = true
+        parent.contentEditedDate = Date()
     }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        parent.contentEditedDate = Date()
+    }
+    
 }
