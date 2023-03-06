@@ -10,40 +10,20 @@ import SwiftUI
 
 struct NamedColor {
     
-    let colorName: String
-    let listName: String
-    
     var red: Double = 0
     var green: Double = 0
     var blue: Double = 0
+
+    init(red: Double, green: Double, blue: Double) {
+        self.red = red
+        self.green = green
+        self.blue = blue
+    }
     
-    var color: Color {
-        if listName.lowercased() == "Dynamic".lowercased() {
-            
-            if colorName.lowercased() == "Secondary".lowercased() {
-                return Color.secondary
-            } else {
-                return Color.primary
-            }
-            
-            //            return Color(colorName)
-        } else if listName.lowercased() == "System".lowercased() {
-            return NamedSystemColor(rawValue: colorName.lowercased())!.color
-        } else {
-            
-            #if os(macOS)
-            func getColorsList(name: String) -> NSColorList? {
-                return NSColorList.availableColorLists.first { colorList in
-                    colorList.name?.lowercased() == name.lowercased()
-                }
-            }
-            
-            guard let colorsList = getColorsList(name: listName) else { return Color.primary }
-            return Color(colorsList.color(withKey: colorName)!)
-            #elseif os(iOS)
-            return Color.primary
-            #endif
-        }
+    init(hex: Int) {
+        self.red = Double((hex & 0xff0000) >> 16) / 255.0
+        self.green = Double((hex & 0xff00) >> 8) / 255.0
+        self.blue = Double((hex & 0xff) >> 0) / 255.0
     }
     
     var uiColor: UIColor {

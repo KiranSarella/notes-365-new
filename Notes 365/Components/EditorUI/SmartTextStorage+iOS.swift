@@ -16,6 +16,8 @@ extension NSAttributedString.Key {
     static let defaultAttrubures = NSAttributedString.Key(rawValue: "default-attributes")
 }
 
+
+/*
 public class SmartTextStorage: NSTextStorage {
     
     let baseFontSize: CGFloat = 16
@@ -823,6 +825,8 @@ public class SmartTextStorage: NSTextStorage {
         return fontSize
     }
 }
+*/
+
 
 /*
 

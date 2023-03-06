@@ -17,7 +17,7 @@ public class EditorView: UIView {
         }
     }
     
-    var theme: MarkdownTheme = ThemeBusiness.generateBlackWhiteTheme()
+    var theme: MarkdownTheme = ThemeBusiness.generateBasicLightTheme()
     
     var editorType = EditorType.smart {
         didSet {
@@ -36,8 +36,8 @@ public class EditorView: UIView {
 //    public private(set) lazy var markdownStorage = MarkdownTextStorage()
     
     public private(set) lazy var layoutManager = NSLayoutManager()
-    private lazy var smartLayoutManagerDelegate = SmartLayoutManagerDelegate(textView: textView)
-    private lazy var markdownlayoutManagerDelegate = MarkdownLayoutManagerDelegate(textView: textView)
+//    private lazy var smartLayoutManagerDelegate = SmartLayoutManagerDelegate(textView: textView)
+//    private lazy var markdownlayoutManagerDelegate = MarkdownLayoutManagerDelegate(textView: textView)
     
     public private(set) lazy var textContainer = NSTextContainer()
     public private(set) var textView: UITextView!
@@ -160,7 +160,7 @@ extension EditorView {
 //        self.layoutManager.textStorage = textStorage
         // replaceTextStorage(textStorage)  // this is imp. routne assign will not work
         self.layoutManager.textStorage?.delegate = self
-        self.layoutManager.delegate =  smartLayoutManagerDelegate
+//        self.layoutManager.delegate =  smartLayoutManagerDelegate
     }
     
     
@@ -485,18 +485,19 @@ extension EditorView {
 //                                               value: boldFont,
 //                                               range: styleRange)
             
+            // update text color
             innerAttributedString.addAttribute(.foregroundColor,
                                                value: theme.styleColor.uiColor, range: styleRange)
             
-            // markdown
+            // get markdown symbol start,end ranges
             let startRange = NSRange(location: match!.range.location, length: regExCharLenght)
             let endRange = NSRange(location: match!.range.location + match!.range.length - regExCharLenght - backPadding , length: regExCharLenght)
-            // add id key
+            // mark char as markdown start symbol, used to show/hide in layout delegate
             innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
                                                value: 0,
                                                range: startRange)
             
-            // add id key
+            // mark char as markdown end symbol, used to show/hide in layout delegate
             innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
                                                value: 0,
                                                range: endRange)

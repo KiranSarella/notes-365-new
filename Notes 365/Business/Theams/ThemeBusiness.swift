@@ -95,82 +95,68 @@ class ThemeBusiness {
 extension ThemeBusiness {
     
     static func getDefaultTheams() -> [MarkdownTheme] {
-        return [generateBlackWhiteTheme(), generateColorTheme(), generateCustomized1Theme(), generateCustomized2Theme()]
+        return [generateBasicLightTheme(),
+                generateBasicDarkTheme(),
+                generateCustomizedLightTheme(),
+                generateCustomizedDarkTheme()]
     }
     
-    static func generateBlackWhiteTheme() -> MarkdownTheme {
-        var blackWhiteTheme = MarkdownTheme(id: UUID())
-        blackWhiteTheme.themeName = "Basic"
-        // leaving all to defaults
-        return blackWhiteTheme
+    static func generateBasicLightTheme() -> MarkdownTheme {
+        var theme = MarkdownTheme(id: UUID())
+        theme.themeName = "Basic-light"
+//        theme.fontSize = 16
+        theme.bodyColor = NamedColor(red: 1, green: 1, blue: 1)
+        theme.styleColor = NamedColor(red: 1, green: 1, blue: 1)
+        theme.codeColor = NamedColor(red: 1, green: 1, blue: 1)
+        theme.blockQuoteColor = NamedColor(red: 1, green: 1, blue: 1)
+        theme.listColor = NamedColor(red: 1, green: 1, blue: 1)
+        theme.headingColor = NamedColor(red: 1, green: 1, blue: 1)
+        return theme
     }
     
-    static func generateColorTheme() -> MarkdownTheme {
+    static func generateBasicDarkTheme() -> MarkdownTheme {
         
         // apple markdown
         var theme = MarkdownTheme(id: UUID())
-        theme.themeName = "Color"
-        theme.bodyColor = NamedColor(colorName: "Primary", listName: "Dynamic")
-        theme.styleColor = NamedColor(colorName: "purple", listName: "System")
-        theme.codeColor = NamedColor(colorName: "blue", listName: "System")
-        theme.blockQuoteColor = NamedColor(colorName: "Clover", listName: "Crayons")
-        theme.listColor = NamedColor(colorName: "Strawberry", listName: "Crayons")
-        
-        theme.headingColor = NamedColor(colorName: "Mint", listName: "System")
-        
-//        theme.h1Color = NamedColor(colorName: "Mint", listName: "System")
-//        theme.h2Color = NamedColor(colorName: "Cyan", listName: "System")
-//        theme.h3Color = NamedColor(colorName: "Cyan", listName: "System")
-//        theme.h4Color = NamedColor(colorName: "Cyan", listName: "System")
-//        theme.h5Color = NamedColor(colorName: "Cyan", listName: "System")
-//        theme.h6Color = NamedColor(colorName: "Cyan", listName: "System")
+        theme.themeName = "Basic-dark"
+//        theme.fontSize = 16
+        theme.bodyColor = NamedColor(red: 0, green: 0, blue: 0)
+        theme.styleColor = NamedColor(red: 0, green: 0, blue: 0)
+        theme.codeColor = NamedColor(red: 0, green: 0, blue: 0)
+        theme.blockQuoteColor = NamedColor(red: 0, green: 0, blue: 0)
+        theme.listColor = NamedColor(red: 0, green: 0, blue: 0)
+        theme.headingColor = NamedColor(red: 0, green: 0, blue: 0)
         
         return theme
     }
     
-    static func generateCustomized1Theme() -> MarkdownTheme {
+    static func generateCustomizedLightTheme() -> MarkdownTheme {
         var theme = MarkdownTheme(id: UUID())
-        theme.themeName = "Customized1"
+        theme.themeName = "Customized-light"
         theme.fontName = "Courier New Bold"
         theme.fontSize = 16
-        theme.bodyColor = NamedColor(colorName: "Secondary", listName: "Dynamic")
-        theme.styleColor = NamedColor(colorName: "purple", listName: "System")
-        theme.codeColor = NamedColor(colorName: "blue", listName: "System")
-        theme.blockQuoteColor = NamedColor(colorName: "Clover", listName: "Crayons")
-        theme.listColor = NamedColor(colorName: "Strawberry", listName: "Crayons")
-        
-        theme.headingColor = NamedColor(colorName: "Mint", listName: "System")
-        
-//        theme.h1Color = NamedColor(colorName: "Mint", listName: "System")
-//        theme.h2Color = NamedColor(colorName: "Cyan", listName: "System")
-//        theme.h3Color = NamedColor(colorName: "Cyan", listName: "System")
-//        theme.h4Color = NamedColor(colorName: "Cyan", listName: "System")
-//        theme.h5Color = NamedColor(colorName: "Cyan", listName: "System")
-//        theme.h6Color = NamedColor(colorName: "Cyan", listName: "System")
+        theme.bodyColor = NamedColor(hex: 0x000000)
+        theme.styleColor = NamedColor(hex: 0xbf5af2)
+        theme.codeColor = NamedColor(hex: 0xc0c0c0)
+        theme.blockQuoteColor = NamedColor(hex: 0x009192)
+        theme.listColor = NamedColor(hex: 0x941651)
+        theme.headingColor = NamedColor(hex: 0x0096ff)
         
         return theme
     }
     
-    static func generateCustomized2Theme() -> MarkdownTheme {
+    static func generateCustomizedDarkTheme() -> MarkdownTheme {
         // Orchid theme
         var theme = MarkdownTheme(id: UUID())
-        theme.themeName = "Customized2"
+        theme.themeName = "Customized-dark"
         theme.fontName = "Comic Sans MS"
         theme.fontSize = 16
-        theme.bodyColor = NamedColor(colorName: "Fern", listName: "Crayons")
-        theme.styleColor = NamedColor(colorName: "Green", listName: "System")
-        theme.codeColor = NamedColor(colorName: "Fern", listName: "Crayons")
-        theme.blockQuoteColor = NamedColor(colorName: "Fern", listName: "Crayons")
-        theme.listColor = NamedColor(colorName: "Fern", listName: "Crayons")
-        
-        theme.headingColor = NamedColor(colorName: "Orange", listName: "System")
-        
-//        theme.h1Color = NamedColor(colorName: "Orange", listName: "System")
-//        theme.h2Color = NamedColor(colorName: "Orange", listName: "System")
-//        theme.h3Color = NamedColor(colorName: "Orange", listName: "System")
-//        theme.h4Color = NamedColor(colorName: "Orange", listName: "System")
-//        theme.h5Color = NamedColor(colorName: "Orange", listName: "System")
-//        theme.h6Color = NamedColor(colorName: "Orange", listName: "System")
+        theme.bodyColor = NamedColor(hex: 0xffffff)
+        theme.styleColor = NamedColor(hex: 0xffd60a)
+        theme.codeColor = NamedColor(hex: 0x0096ff)
+        theme.blockQuoteColor = NamedColor(hex: 0x4e8f00)
+        theme.listColor = NamedColor(hex: 0xff2f92)
+        theme.headingColor = NamedColor(hex: 0xff9f0a)
         
         return theme
     }

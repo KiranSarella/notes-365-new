@@ -181,13 +181,13 @@ struct ThemeDetailView: View {
                             var newTheme: MarkdownTheme!
                             
                             if theme.themeName == "Black&White" {
-                                newTheme = ThemeBusiness.generateBlackWhiteTheme()
+                                newTheme = ThemeBusiness.generateBasicLightTheme()
                             } else if theme.themeName == "Color" {
-                                newTheme = ThemeBusiness.generateColorTheme()
+                                newTheme = ThemeBusiness.generateBasicDarkTheme()
                             } else if theme.themeName == "Customized1" {
-                                newTheme = ThemeBusiness.generateCustomized1Theme()
+                                newTheme = ThemeBusiness.generateCustomizedLightTheme()
                             } else if theme.themeName == "Customized2" {
-                                newTheme = ThemeBusiness.generateCustomized2Theme()
+                                newTheme = ThemeBusiness.generateCustomizedDarkTheme()
                             }
                             // use same id
                             newTheme.id = theme.id

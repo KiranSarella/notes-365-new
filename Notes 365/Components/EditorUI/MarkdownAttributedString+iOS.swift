@@ -8,6 +8,8 @@
 import Foundation
 import UIKit
 
+// using for view only - timeline
+//  bcz of paragraph issue -- forgot the actual reason?
 class MarkdownAttriburedString {
     
     var theme: MarkdownTheme

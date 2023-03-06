@@ -10,7 +10,7 @@ import UIKit
 
 class EditorTextView: UITextView {
     
-    var smartLayoutManagerDelegate: SmartLayoutManagerDelegate!
+//    var smartLayoutManagerDelegate: SmartLayoutManagerDelegate!
     
     override func paste(_ sender: Any?) {
         

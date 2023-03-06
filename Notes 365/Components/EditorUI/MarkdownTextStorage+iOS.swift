@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import SwiftUI
 
+/*
 public class MarkdownTextStorage: NSTextStorage {
     
     let baseFontSize: CGFloat = 16
@@ -616,3 +617,4 @@ public class MarkdownTextStorage: NSTextStorage {
         return fontSize
     }
 }
+*/

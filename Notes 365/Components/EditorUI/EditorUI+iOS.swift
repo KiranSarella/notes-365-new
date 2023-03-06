@@ -67,4 +67,8 @@ extension EditorUICoordinator: UITextViewDelegate {
         parent.contentEditedDate = Date()
     }
     
+    func textViewDidChangeSelection(_ textView: UITextView) {
+        
+    }
+    
 }

@@ -194,18 +194,6 @@ class NotebooksListState: ObservableObject {
 //        expandedIds = UserDefaults.standard.object(forKey: "notes365.expandedIds") as? Set<UUID> ?? Set<UUID>()
 //    }
     
-    func canAddNotebook() -> Bool {
-#if DEBUG
-        return true
-#else
-        if isSubscribed {
-            return true
-        } else {
-            return isNotebooksLimitExceeded == false
-        }
-#endif
-    }
-    
     var isEmpty: Bool {
         usersDB.notes.count == 0
     }

@@ -9,17 +9,17 @@
 import Foundation
 import UIKit
 
-
-class MarkdownLayoutManagerDelegate: NSObject, NSLayoutManagerDelegate {
-    
-    var textView: UITextView
-    
-    init(textView: UITextView) {
-        
-        self.textView = textView
-        
-        super.init()
-    }
-    
-    
-}
+//
+//class MarkdownLayoutManagerDelegate: NSObject, NSLayoutManagerDelegate {
+//
+//    var textView: UITextView
+//
+//    init(textView: UITextView) {
+//
+//        self.textView = textView
+//        
+//        super.init()
+//    }
+//
+//
+//}
