@@ -172,7 +172,7 @@ struct ContentView: View {
                     TimelineSidebarView(calendarID: $selectedCalenderType)
                         .environmentObject(calendarState)
                 case .noteBooks:
-                    NotebooksListView(selectedNotebook: $selectedUser)
+                    NotebooksListView(icloudSyncing: $icloudSyncing, selectedNotebook: $selectedUser)
                         .environmentObject(notebooksListState)
 //                        .onAppear {
 //                            Task {

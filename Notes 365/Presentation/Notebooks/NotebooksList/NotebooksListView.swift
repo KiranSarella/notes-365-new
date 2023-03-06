@@ -10,6 +10,7 @@ import UniformTypeIdentifiers
 
 struct NotebooksListView: View {
 
+    @Binding var icloudSyncing: Bool
     @EnvironmentObject var usersState: NotebooksListState
     @Binding var selectedNotebook: NotebookM?
     @State private var presentDeleteConfirmation = false
@@ -18,57 +19,70 @@ struct NotebooksListView: View {
         
 //        Text("Loading..")
 //            .opacity(usersState.isLoaded ? 0 : 1)
-        
-        if usersState.isSearching == false && usersState.isEmpty {
-            AddNotesView()
-                .padding([.top], -100)
-                .environmentObject(usersState)
-        } else {
-            VStack {
-//                List(selection: $selectedNotebook) {
-//                    NotebooksListGroupView(notebooks: $usersState.usersDB.notes)
-//                }
-                SearchedListView(selectedNotebook: $selectedNotebook)
-                
-//                .listStyle(SidebarListStyle())
-                .navigationTitle("Notebooks")
-                .onChange(of: selectedNotebook) { newValue in
-                    if let newValue = newValue {
-                        usersState.navTitle = newValue.name
+        VStack {
+            if usersState.isSearching == false && usersState.isEmpty {
+                AddNotesView()
+                    .padding([.top], -100)
+                    .environmentObject(usersState)
+            } else {
+                VStack {
+                    //                List(selection: $selectedNotebook) {
+                    //                    NotebooksListGroupView(notebooks: $usersState.usersDB.notes)
+                    //                }
+                    SearchedListView(selectedNotebook: $selectedNotebook)
+                    
+                    //                .listStyle(SidebarListStyle())
+                        .navigationTitle("Notebooks")
+                        .onChange(of: selectedNotebook) { newValue in
+                            if let newValue = newValue {
+                                usersState.navTitle = newValue.name
+                            }
+                        }
+                        .searchable(text: $usersState.searchText)
+                    //                .onChange(of: usersState.searchText) { newValue in
+                    //                    selectedNotebook = nil
+                    //                }
+                    /*
+                     ** IMP
+                     
+                     .listStyle(SidebarListStyle())
+                     
+                     this is required to show disclosureGroup when first item have no childs.
+                     and only working with SidebarListStyle.
+                     
+                     DisclosureGroup(isExpanded: .constant(true)) {
+                     ListGroupView(notebooks: $usersState.usersDB.notes)
+                     } label: {
+                     
+                     }.disabled(true)
+                     */
+                    
+                    if UIDevice.current.userInterfaceIdiom == .pad {
+                        VStack {
+                            getToolbarView()
+                            Spacer()
+                        }
+                        .frame(height: 30)
                     }
                 }
-                .searchable(text: $usersState.searchText)
-//                .onChange(of: usersState.searchText) { newValue in
-//                    selectedNotebook = nil
-//                }
-                /*
-                 ** IMP
-                 
-                 .listStyle(SidebarListStyle())
-                 
-                 this is required to show disclosureGroup when first item have no childs.
-                 and only working with SidebarListStyle.
-                 
-                 DisclosureGroup(isExpanded: .constant(true)) {
-                    ListGroupView(notebooks: $usersState.usersDB.notes)
-                 } label: {
-                 
-                 }.disabled(true)
-                 */
-                
-                if UIDevice.current.userInterfaceIdiom == .pad {
-                    VStack {
-                        getToolbarView()
-                        Spacer()
-                    }
-                    .frame(height: 30)
+                .frame(minWidth: 280, maxWidth: 500)
+                .onDisappear {
+                    usersState.saveExpandedIds()
                 }
             }
-            .frame(minWidth: 280, maxWidth: 500)
-            .onDisappear {
-                usersState.saveExpandedIds()
+            
+        }
+        .onChange(of: icloudSyncing) { newValue in
+            if newValue == true {
+                // before sync start
+                selectedNotebook = nil
+            } else {
+                // after sync
+                usersState.reloadNotebooksList()
             }
         }
+        
+        
     }
     
     func getToolbarView() -> some View {

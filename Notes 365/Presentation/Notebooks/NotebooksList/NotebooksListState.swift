@@ -174,7 +174,17 @@ class NotebooksListState: ObservableObject {
         usersDB = NotebooksHierarchy(notes: notesList)
     }
 
-
+    func reloadNotebooksList() {
+        usersDB.notes.removeAll()
+        notebookBusiness.reloadNotebooksList {
+            // create notesHierarchy with actual notebook objects
+            let notebooks = notebookBusiness.getNotebooks()
+            let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
+            usersDB = NotebooksHierarchy(notes: notesList)
+        }
+    }
+    
+    
     func saveExpandedIds() {
         UserDefaults.standard.set(Array(expandedIds), forKey: "notes365.expandedIds")
     }

@@ -142,6 +142,17 @@ class NotebooksListBusiness {
         
     }
     
+    func reloadNotebooksList(completion:()->()) {
+        self.notebooks = [Notebook]()
+        
+        if let notebooks = retrieveNotebooks() {
+            self.notebooks = notebooks
+            completion()
+        } else {
+            completion()
+        }
+    }
+    
     func getNotebooks() -> [Notebook] {
         return notebooks
     }
