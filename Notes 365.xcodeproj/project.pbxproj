@@ -57,7 +57,7 @@
 		9F45BD772920CDE0003DE332 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD142920CCCE003DE332 /* Helpers.swift */; };
 		9F45BD792920CDE0003DE332 /* NotebookEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD242920CCCE003DE332 /* NotebookEditorView.swift */; };
 		9F45BD7B2920CDE0003DE332 /* SmartLayoutManagerDelegate+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD1C2920CCCE003DE332 /* SmartLayoutManagerDelegate+iOS.swift */; };
-		9F45BD7F2920CDE0003DE332 /* NotebooksSidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD252920CCCE003DE332 /* NotebooksSidebarView.swift */; };
+		9F45BD7F2920CDE0003DE332 /* NotebooksListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD252920CCCE003DE332 /* NotebooksListView.swift */; };
 		9F45BD802920CDE0003DE332 /* ViewerUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD192920CCCE003DE332 /* ViewerUI.swift */; };
 		9F45BD812920CDE0003DE332 /* MarkdownAttributedString+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD0B2920CCCE003DE332 /* MarkdownAttributedString+iOS.swift */; };
 		9F45BD822920CDE0003DE332 /* MarkdownLayoutManagerDelegate+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD182920CCCE003DE332 /* MarkdownLayoutManagerDelegate+iOS.swift */; };
@@ -206,7 +206,7 @@
 		9F45BD1C2920CCCE003DE332 /* SmartLayoutManagerDelegate+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SmartLayoutManagerDelegate+iOS.swift"; sourceTree = "<group>"; };
 		9F45BD222920CCCE003DE332 /* MarkdownTextStorage+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MarkdownTextStorage+iOS.swift"; sourceTree = "<group>"; };
 		9F45BD242920CCCE003DE332 /* NotebookEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookEditorView.swift; sourceTree = "<group>"; };
-		9F45BD252920CCCE003DE332 /* NotebooksSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksSidebarView.swift; sourceTree = "<group>"; };
+		9F45BD252920CCCE003DE332 /* NotebooksListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListView.swift; sourceTree = "<group>"; };
 		9F45BD292920CCCE003DE332 /* NotebooksListState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListState.swift; sourceTree = "<group>"; };
 		9F45BD2E2920CCCE003DE332 /* StringDiff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringDiff.swift; sourceTree = "<group>"; };
 		9F45BD302920CCCE003DE332 /* StringDiffTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringDiffTests.swift; sourceTree = "<group>"; };
@@ -611,7 +611,7 @@
 		9FB6C69429275BF900C8EC76 /* NotebooksList */ = {
 			isa = PBXGroup;
 			children = (
-				9F45BD252920CCCE003DE332 /* NotebooksSidebarView.swift */,
+				9F45BD252920CCCE003DE332 /* NotebooksListView.swift */,
 				9F45BD292920CCCE003DE332 /* NotebooksListState.swift */,
 			);
 			path = NotebooksList;
@@ -841,7 +841,7 @@
 				9F1687CE29ADC2020085A0CA /* PlistDocument.swift in Sources */,
 				9F45BDA62920CE41003DE332 /* NamedSystemColor.swift in Sources */,
 				9F1AAE31292C940A00B4D254 /* FeedbackView+macOS.swift in Sources */,
-				9F45BD7F2920CDE0003DE332 /* NotebooksSidebarView.swift in Sources */,
+				9F45BD7F2920CDE0003DE332 /* NotebooksListView.swift in Sources */,
 				9FB40281297A4551000DF922 /* EditorTextView+iOS.swift in Sources */,
 				9F45BDA12920CE2F003DE332 /* PreferencesView+macOS.swift in Sources */,
 				9F45BD802920CDE0003DE332 /* ViewerUI.swift in Sources */,

@@ -8,14 +8,16 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-struct NotebooksSidebarView: View {
+struct NotebooksListView: View {
 
     @EnvironmentObject var usersState: NotebooksListState
     @Binding var selectedNotebook: NotebookM?
     @State private var presentDeleteConfirmation = false
     
-    
     var body: some View {
+        
+//        Text("Loading..")
+//            .opacity(usersState.isLoaded ? 0 : 1)
         
         if usersState.isSearching == false && usersState.isEmpty {
             AddNotesView()

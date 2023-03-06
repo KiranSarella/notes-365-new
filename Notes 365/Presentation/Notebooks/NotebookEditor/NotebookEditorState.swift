@@ -60,21 +60,21 @@ class NotebookEditorState: ObservableObject {
 //            }
 //        }
         
-        self.notebook.newContentAvailalble = { [weak self] in
-            print("newContentAvailalble called")
-            if let content = self?.notebook.document?.content {
-                DispatchQueue.main.async {
-                    self?.baseContent = content
-                }
-            }
-        }
+//        self.notebook.newContentAvailalble = { [weak self] in
+//            print("newContentAvailalble called")
+//            if let content = self?.notebook.document?.content {
+//                DispatchQueue.main.async {
+//                    self?.baseContent = content
+//                }
+//            }
+//        }
         
         
         baseContent = ""
         isFetchingData = true
-//        self.baseContent = notebook.loadContent()
+        self.baseContent = notebook.loadContent()
         
-        self.baseContent = await notebook.readDocument() ?? ""
+//        self.baseContent = await notebook.readDocument() ?? ""
         
         isFetchingData = false
         contentEditedDate = nil
@@ -104,13 +104,13 @@ class NotebookEditorState: ObservableObject {
     
     func saveContentChanges() {
         print("saveContentChanges")
-        if self.notebook != nil {
-            if self.notebook.document?.documentState == .progressAvailable
-                || self.notebook.document?.documentState == .editingDisabled {
-                print("return due to: \(self.notebook.document?.documentState)")
-                return
-            }
-        }
+//        if self.notebook != nil {
+//            if self.notebook.document?.documentState == .progressAvailable
+//                || self.notebook.document?.documentState == .editingDisabled {
+//                print("return due to: \(self.notebook.document?.documentState)")
+//                return
+//            }
+//        }
         guard let contentEditedDate = contentEditedDate else { return }
         print("contentEditedDate: \(contentEditedDate)")
         print("last savedDate: \(lastSavedDate)")

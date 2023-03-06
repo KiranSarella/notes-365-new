@@ -5,7 +5,7 @@
 //  Created by Kiran Sarella on 11/11/22.
 //
 
-import Foundation
+import UIKit
 
 extension  Notification.Name {
     public static let notebookChangeNotification = Notification.Name("NotebookChangeNotification")
@@ -27,7 +27,14 @@ class NotebooksListBusiness {
     
     var dataManager: DataManager!
     
+//    var document: PlistDocument?
+//    var newContentAvailalble: (()->())?
+//    private var notificationObserver: Any?
+//    var isResolvingConflicts = false
+//
     var notebooks: [Notebook]
+    
+    
     
 //    var notebooksHashMap = [UUID: Notebook]()
     
@@ -35,7 +42,7 @@ class NotebooksListBusiness {
     
     let notebooksPath = Constants.notebooksPath
     
-    let cloudService = CloudService(cloudDirectory: "Documents", cloudSyncFileName: "notebooks-list.plist")
+//    let cloudService = CloudService(cloudDirectory: "Documents", cloudSyncFileName: "notebooks-list.plist")
     
     static func shared(path basePath: URL) -> NotebooksListBusiness {
         if _shared == nil {
@@ -46,6 +53,7 @@ class NotebooksListBusiness {
     
     init(_ basePathURL: URL) {
         self.basePathURL = basePathURL
+        
         self.dataManager = DataManager(path: basePathURL)
         // no notebooks exists, create empty or base configuration
         self.notebooks = [Notebook]()
@@ -65,9 +73,9 @@ class NotebooksListBusiness {
             convertToFlatStructure()
         }
         
-        cloudService.cloudContentDidUpdate = {
-
-        }
+//        cloudService.cloudContentDidUpdate = {
+//
+//        }
         
 //        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookChangeNotification(_:)), name: .notebookChangeNotification, object: nil)
         
@@ -137,39 +145,6 @@ class NotebooksListBusiness {
     func getNotebooks() -> [Notebook] {
         return notebooks
     }
-    
-//    func isNotebooksLimitExceeded() -> Bool {
-//
-//        if notebooks.count >= notebooksLimit {
-//            return true
-//        }
-//
-//        func countChilds(for notebook: Notebook) -> Int {
-//            // base condition
-//            if notebook.children == nil {
-//                return 0 // no children
-//            }
-//
-//            var childrenCount = 0   // current notebook count
-//
-//            for notebook in notebook.children! {
-//                childrenCount += 1  // count current notebook
-//                childrenCount += countChilds(for: notebook)
-//            }
-//
-//            return childrenCount
-//        }
-//
-//        var notebooksCount = 0
-//
-//        for notebook in notebooks {
-//            // count deep until limit exceeds
-//            notebooksCount += 1    // count current notebook
-//            notebooksCount += countChilds(for: notebook)
-//        }
-//
-//        return notebooksCount >= notebooksLimit
-//    }
     
     func isAlreadyExists(fileName: String, in siblings: [Notebook]) -> Bool {
         return siblings.contains(where: { $0.name == fileName })
@@ -425,12 +400,169 @@ extension NotebooksListBusiness {
     
     // It will save only notebooks list hierarchy to plist, not notebook content.
     func persistNotebooks() {
+//        Task {
+//            await saveDocument(with: notebooks)
+//        }
+        
         dataManager.persistNotebooks(notebooks)
     }
     
     // retrives notebooks hierarcy from plist, not the notebook content.
     func retrieveNotebooks() -> [Notebook]? {
-        dataManager.retrieveNotebooks()
+        
+        let plistURL = basePathURL.appending(path: Constants.notebooksListPath).appendingPathExtension("plist")
+        
+        do {
+            // Read the file contents
+            let plistData = try Data(contentsOf: plistURL)
+            let notebooksList = try PropertyListDecoder().decode([Notebook].self, from: plistData)
+            return notebooksList
+        } catch let error as NSError {
+            print("Failed reading from URL: \(plistURL), Error: " + error.localizedDescription)
+        }
+        return nil
     }
     
 }
+
+/*
+// MARK: - UIDocument operations
+extension NotebooksListBusiness {
+    
+    func readDocument() async -> [Notebook]? {
+        print(#function)
+        let plistURL = basePathURL.appending(path: Constants.notebooksListPath).appendingPathExtension("plist")
+        document = await PlistDocument(fileURL: plistURL)
+        guard let document = document else { return nil }
+        let isOpened = await document.open()
+        if isOpened {
+
+        } else {
+            print("Failed to open the file \(plistURL.path(percentEncoded: false))")
+        }
+        await print(document.documentState)
+        registerDocumentChangeNotification()
+        observeContentChanges()
+        let plistData = await document.content
+        do {
+            // Read the file contents
+            let notebooksList = try PropertyListDecoder().decode([Notebook].self, from: plistData)
+            
+            self.notebooks = notebooksList
+            
+            return notebooksList
+        } catch let error as NSError {
+            print("Decode Error: " + error.localizedDescription)
+        }
+        return nil
+    }
+
+
+//    func updateDocument(with content: String) {
+//        guard let document = document else { return }
+//        document.updateChangeCount(.done)
+//    }
+
+    func saveDocument(with content: [Notebook]) async {
+        print(#function)
+        guard let document = document else { return }
+        do {
+            let plistData = try PropertyListEncoder().encode(content)
+            await document.setContentChanges(newContent: plistData)
+            await document.updateChangeCount(.done)
+        } catch let error {
+            print(error)
+        }
+    }
+
+    func closeDocument() async {
+        print(#function)
+        self.removeContentChangesObserver()
+        self.removeDocumentChangeNotification()
+
+        //        guard let document = document else { return }
+        await document?.close()
+        self.removeDocumentChangeNotification()
+        document = nil
+    }
+
+
+    // MARK: - Document Notfications
+    func observeContentChanges() {
+        document?.newContentAvailalble = {
+            print("document?.newContentAvailalble")
+            Task {
+                guard let document = self.document else { return }
+                let plistData = await document.content
+                do {
+                    // Read the file contents
+                    let notebooksList = try PropertyListDecoder().decode([Notebook].self, from: plistData)
+                    self.notebooks = notebooksList
+                } catch let error as NSError {
+                    print("decode Error: " + error.localizedDescription)
+                }
+                self.newContentAvailalble?()
+            }
+        }
+    }
+
+    func removeContentChangesObserver() {
+        document?.newContentAvailalble = nil
+    }
+
+
+    func registerDocumentChangeNotification() {
+
+        guard let document = document else { return }
+
+        notificationObserver = NotificationCenter.default.addObserver(forName: UIDocument.stateChangedNotification, object: document, queue: nil) { notification in
+
+            print("UIDocument.stateChangedNotification")
+            print(document.documentState)
+
+
+            //            if document.documentState == UIDocument.State.progressAvailable
+            //                || document.documentState == UIDocument.State.editingDisabled
+            //                || document.documentState == UIDocument.State.normal {
+            //
+            //                self.newContentAvailalble?()
+            //            }
+            //
+
+            if document.documentState == UIDocument.State.inConflict {
+                if self.isResolvingConflicts {
+                    return
+                }
+
+                self.isResolvingConflicts = true
+                if let conflictVersions = NSFileVersion.unresolvedConflictVersionsOfItem(at: self.basePathURL) {
+                    print(conflictVersions.count)
+
+                    do {
+                        let success = try NSFileVersion.removeOtherVersionsOfItem(at:  self.basePathURL)
+
+                    } catch let error as NSError {
+                        print(error)
+                    }
+
+                    for i in 0..<conflictVersions.count {
+                        conflictVersions[i].isResolved = true
+                    }
+                }
+                self.isResolvingConflicts = false
+            }
+        }
+
+    }
+
+    func removeDocumentChangeNotification() {
+        print(#function)
+        if let notificationObserver = notificationObserver {
+            NotificationCenter.default.removeObserver(notificationObserver, name: UIDocument.stateChangedNotification, object: document)
+        }
+
+    }
+}
+
+
+*/

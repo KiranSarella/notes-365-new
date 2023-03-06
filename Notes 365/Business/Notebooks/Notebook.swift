@@ -18,11 +18,10 @@ class Notebook: Identifiable, Codable {
     var children: [Notebook]?
     unowned var parent: Notebook?
     
-    var document: MarkdownDocument?
-    
+//    var document: MarkdownDocument?
     var isResolvingConflicts = false
-    
     var newContentAvailalble: (()->())?
+    private var notificationObserver: Any?
     
     init(id: UUID, name: String) {
         self.id = id
@@ -62,14 +61,9 @@ class Notebook: Identifiable, Codable {
         return fileURL
     }
     
-    private var notificationObserver: Any?
-    
-    deinit {
-        removeDocumentChangeNotification()
-    }
-    
 }
 
+/*
 // MARK: - UIDocument operations
 extension Notebook {
     
@@ -180,7 +174,7 @@ extension Notebook {
         
     }
 }
-
+*/
 
 extension Notebook: Equatable, Hashable {
     static func == (lhs: Notebook, rhs: Notebook) -> Bool {
@@ -285,8 +279,23 @@ extension Notebook {
 
 extension Notebook {
     
-//    func loadContent() -> String {
-//        let fullPath = Constants.notebooksPath + "/" + self.id.uuidString + ".md"
-//        return FilesHelper.shared.readFile(from: fullPath) ?? ""
-//    }
+    func loadContent() -> String {
+        do {
+            print(fileURL)
+            // Read the file contents
+            return try String(contentsOf: fileURL)
+        } catch let error as NSError {
+            print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
+            return ""
+        }
+    }
+    
+    func saveContent(content: String) {
+        do {
+            // Write to the file
+            try content.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
+        } catch let error as NSError {
+            print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
+        }
+    }
 }

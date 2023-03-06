@@ -73,9 +73,9 @@ struct NotebookEditorView: View {
                 .onDisappear(perform: {
                     isTextFieldFocused = false
                     editorState.saveContentChanges()
-                    Task {
-                        await editorState.notebook.closeDocument()
-                    }
+//                    Task {
+//                        await editorState.notebook.closeDocument()
+//                    }
                     self.cancelTimer()
                 })
                 .onChange(of: editorState.theme, perform: { newValue in

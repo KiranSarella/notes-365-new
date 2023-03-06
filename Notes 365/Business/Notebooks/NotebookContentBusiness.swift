@@ -75,16 +75,18 @@ class NotebookContentBusiness {
             VersionBusiness.shared.addOrUpdateToday(contentChanges: newContent, uuid: notebook.id, fileName: notebook.name, filePath: notebook.folderPath)
             // update notebook
             
-            Task {
-                print("SAVING CONTENT:")
-                print(content)
-                await notebook.saveDocument(with: content)
-            }
+//            Task {
+//                print("SAVING CONTENT:")
+//                print(content)
+//                await notebook.saveDocument(with: content)
+//            }
+            
+            notebook.saveContent(content: content)
             
 //            FilesHelper.shared.writeToFile(path: notebooksPath + "/" + notebook.filePath, content: content)
-//            print("------> saved to db ******")
+            print("------> saved to db ******")
         } else {
-//            print("content not edited *****")
+            print("content not edited *****")
         }
     
     }

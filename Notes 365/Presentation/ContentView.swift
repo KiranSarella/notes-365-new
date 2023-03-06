@@ -67,6 +67,7 @@ struct ContentWrapperView: View {
             
         } else {
             ContentView()
+                .environmentObject(chooseEnv)
         }
     }
 }
@@ -76,14 +77,17 @@ struct ContentView: View {
     
     @Environment(\.colorScheme) private var colorScheme
     
+    @EnvironmentObject var chooseEnv: ChooseEnvironment
+    
     @State private var showSettings = false
+    @State private var icloudSyncing = false
     
     @State private var selectedModeID: Mode.ID? = Mode.timeline.id
     // timeline related
     @ObservedObject var calendarState = CalendarState.shared
     // notebooks related
     @State private var selectedUser: NotebookM?
-    @ObservedObject var usersState = NotebooksListState.shared
+    @ObservedObject var notebooksListState = NotebooksListState.shared
     
     @State var selectedCalenderType: CalendarType.ID? = CalendarType.day.id
     
@@ -111,12 +115,21 @@ struct ContentView: View {
                     VStack {
                         
                         Button {
-                            showSettings = true
+                            // do sync
+                            icloudSyncing = true
+                            chooseEnv.downloaodCloudDocuments(completion: {
+                                // do any operations
+                                icloudSyncing = false
+                            })
                         } label: {
                             HStack {
                                 Image(systemName: "arrow.triangle.2.circlepath")
                                 Text("iCloud Sync")
                                     .padding(.horizontal, 6)
+                                
+                                ProgressView()
+                                    .opacity(icloudSyncing ? 1 : 0)
+                                
                             }.padding(4)
                             Spacer()
                         }
@@ -159,8 +172,13 @@ struct ContentView: View {
                     TimelineSidebarView(calendarID: $selectedCalenderType)
                         .environmentObject(calendarState)
                 case .noteBooks:
-                    NotebooksSidebarView(selectedNotebook: $selectedUser)
-                        .environmentObject(usersState)
+                    NotebooksListView(selectedNotebook: $selectedUser)
+                        .environmentObject(notebooksListState)
+//                        .onAppear {
+//                            Task {
+//                                await notebooksListState.loadData()
+//                            }
+//                        }
                 }
             } else {
                 // no selection done
