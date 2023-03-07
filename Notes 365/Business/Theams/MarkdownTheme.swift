@@ -137,4 +137,17 @@ extension MarkdownTheme {
     }
 }
 
-
+//extension MarkdownTheme {
+//    
+//    mutating func reset(with theme: MarkdownTheme) {
+//        
+//        self.fontName = theme.fontName
+//        self.fontSize = theme.fontSize
+//        self.bodyColor = theme.bodyColor
+//        self.styleColor = theme.styleColor
+//        self.codeColor = theme.codeColor
+//        self.blockQuoteColor = theme.blockQuoteColor
+//        self.listColor = theme.listColor
+//        self.headingColor = theme.headingColor
+//    }
+//}

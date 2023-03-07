@@ -119,7 +119,15 @@ struct ThemeDetailView_iOS: View {
                     }
                 }
                 
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    
+                    Button {
+                        // save theme
+                        state.resetTheme()
+                    } label: {
+                        Text("Reset")
+                    }
+                    
                     Button {
                         // save theme
                         state.updateChanges()

@@ -6,10 +6,10 @@
 //
 
 import Foundation
-//import AppKit
 
 class ThemeBusiness {
     
+    private let themeVersionKey = "theme_version"
     private let themeManagerKey = "theme_manager_ud"
     private let themeLightKey = "theme_light"
     private let themeDarkKey = "theme_dark"
@@ -20,8 +20,6 @@ class ThemeBusiness {
      get any already stored themes and selected theme from storage
      otherwise
      configure default themes and select default theme.
-     
-     
      */
     
     func getThemes() -> [MarkdownTheme] {
@@ -40,23 +38,32 @@ class ThemeBusiness {
     }
     
     func getDarkTheme() -> MarkdownTheme {
-        return fetchDarkTheme() ?? getThemes().first!
+        return fetchDarkTheme() ?? getThemes()[1]
     }
     
     // MARK: - Persist Themes List
     func getStoredThemes() -> [MarkdownTheme]? {
-        if let data = UserDefaults.standard.value(forKey: themeManagerKey) as? Data {
-            if let obj = try? PropertyListDecoder().decode([MarkdownTheme].self, from: data) {
-                return obj
+        if let version = UserDefaults.standard.value(forKey: themeVersionKey) as? Int, version == 2 {
+            if let data = UserDefaults.standard.value(forKey: themeManagerKey) as? Data {
+                if let obj = try? PropertyListDecoder().decode([MarkdownTheme].self, from: data) {
+                    return obj
+                }
             }
+        } else {
+            // old version, so
+            // clear old saved themes
+            clearSavedThemes()
+            // set theme version
+            UserDefaults.standard.set(2, forKey: themeVersionKey)
         }
-        
         return nil
     }
     
-//    func clearSavedThemes() {
-//        UserDefaults.standard.removeObject(forKey: themeManagerKey)
-//    }
+    func clearSavedThemes() {
+        UserDefaults.standard.removeObject(forKey: themeManagerKey)
+        UserDefaults.standard.removeObject(forKey: themeLightKey)
+        UserDefaults.standard.removeObject(forKey: themeDarkKey)
+    }
     
     func saveThemes(themes: [MarkdownTheme]) {
         UserDefaults.standard.set(try? PropertyListEncoder().encode(themes), forKey: themeManagerKey)
@@ -105,12 +112,13 @@ extension ThemeBusiness {
         var theme = MarkdownTheme(id: UUID())
         theme.themeName = "Basic-light"
 //        theme.fontSize = 16
-        theme.bodyColor = NamedColor(red: 1, green: 1, blue: 1)
-        theme.styleColor = NamedColor(red: 1, green: 1, blue: 1)
-        theme.codeColor = NamedColor(red: 1, green: 1, blue: 1)
-        theme.blockQuoteColor = NamedColor(red: 1, green: 1, blue: 1)
-        theme.listColor = NamedColor(red: 1, green: 1, blue: 1)
-        theme.headingColor = NamedColor(red: 1, green: 1, blue: 1)
+        theme.bodyColor = NamedColor(red: 0, green: 0, blue: 0)
+        theme.styleColor = NamedColor(red: 0, green: 0, blue: 0)
+        theme.codeColor = NamedColor(red: 0, green: 0, blue: 0)
+        theme.blockQuoteColor = NamedColor(red: 0, green: 0, blue: 0)
+        theme.listColor = NamedColor(red: 0, green: 0, blue: 0)
+        theme.headingColor = NamedColor(red: 0, green: 0, blue: 0)
+        
         return theme
     }
     
@@ -120,12 +128,12 @@ extension ThemeBusiness {
         var theme = MarkdownTheme(id: UUID())
         theme.themeName = "Basic-dark"
 //        theme.fontSize = 16
-        theme.bodyColor = NamedColor(red: 0, green: 0, blue: 0)
-        theme.styleColor = NamedColor(red: 0, green: 0, blue: 0)
-        theme.codeColor = NamedColor(red: 0, green: 0, blue: 0)
-        theme.blockQuoteColor = NamedColor(red: 0, green: 0, blue: 0)
-        theme.listColor = NamedColor(red: 0, green: 0, blue: 0)
-        theme.headingColor = NamedColor(red: 0, green: 0, blue: 0)
+        theme.bodyColor = NamedColor(red: 1, green: 1, blue: 1)
+        theme.styleColor = NamedColor(red: 1, green: 1, blue: 1)
+        theme.codeColor = NamedColor(red: 1, green: 1, blue: 1)
+        theme.blockQuoteColor = NamedColor(red: 1, green: 1, blue: 1)
+        theme.listColor = NamedColor(red: 1, green: 1, blue: 1)
+        theme.headingColor = NamedColor(red: 1, green: 1, blue: 1)
         
         return theme
     }
@@ -137,9 +145,9 @@ extension ThemeBusiness {
         theme.fontSize = 16
         theme.bodyColor = NamedColor(hex: 0x000000)
         theme.styleColor = NamedColor(hex: 0xbf5af2)
-        theme.codeColor = NamedColor(hex: 0xc0c0c0)
+        theme.codeColor = NamedColor(hex: 0x797979)
         theme.blockQuoteColor = NamedColor(hex: 0x009192)
-        theme.listColor = NamedColor(hex: 0x941651)
+        theme.listColor = NamedColor(hex: 0xff2600)
         theme.headingColor = NamedColor(hex: 0x0096ff)
         
         return theme

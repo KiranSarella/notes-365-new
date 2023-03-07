@@ -54,5 +54,31 @@ class ThemeDetailState: ObservableObject {
         theme.codeColor.assignColor(component: codeColor.components)
         theme.blockQuoteColor.assignColor(component: quoteColor.components)
     }
+ 
+    func reset(with theme: MarkdownTheme) {
+        fontName = theme.fontName
+        fontSize = Int(theme.fontSize)
+        font = Font.custom(fontName, size: CGFloat(fontSize))
+        
+        bodyColor = theme.bodyColor.getColor()
+        headingColor = theme.headingColor.getColor()
+        boldColor = theme.styleColor.getColor()
+        listColor = theme.listColor.getColor()
+        codeColor = theme.codeColor.getColor()
+        quoteColor = theme.blockQuoteColor.getColor()
+    }
+    
+    func resetTheme() {
+        
+        if theme.themeName == "Basic-light" {
+            reset(with: ThemeBusiness.generateBasicLightTheme())
+        } else if theme.themeName == "Basic-dark" {
+            reset(with: ThemeBusiness.generateBasicDarkTheme())
+        } else if theme.themeName == "Customized-light" {
+            reset(with: ThemeBusiness.generateCustomizedLightTheme())
+        } else if theme.themeName == "Customized-dark" {
+            reset(with: ThemeBusiness.generateCustomizedDarkTheme())
+        }
+    }
     
 }
