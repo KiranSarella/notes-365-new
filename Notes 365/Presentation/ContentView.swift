@@ -161,6 +161,12 @@ struct ContentView: View {
                 .background(.regularMaterial)
                 .onAppear {
                     ThemeState.shared.colorScheme = colorScheme
+//                    // do sync
+//                    icloudSyncing = true
+//                    chooseEnv.downloaodCloudDocuments(completion: {
+//                        // do any operations
+//                        icloudSyncing = false
+//                    })
                 }
                 .onChange(of: colorScheme) { newValue in
                     ThemeState.shared.colorScheme = newValue

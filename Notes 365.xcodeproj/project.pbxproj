@@ -19,7 +19,6 @@
 		9F1687CE29ADC2020085A0CA /* PlistDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1687CD29ADC2020085A0CA /* PlistDocument.swift */; };
 		9F1687D029AE21B20085A0CA /* NotebooksChangeMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1687CF29AE21B20085A0CA /* NotebooksChangeMonitor.swift */; };
 		9F188D812930E49F0078D413 /* MarkdownHeading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F188D802930E49F0078D413 /* MarkdownHeading.swift */; };
-		9F1AAE31292C940A00B4D254 /* FeedbackView+macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1AAE30292C940A00B4D254 /* FeedbackView+macOS.swift */; };
 		9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1AAE32292C94F800B4D254 /* FeedbackState.swift */; };
 		9F1AAE34292CA89E00B4D254 /* PreviewContent.md in Resources */ = {isa = PBXBuildFile; fileRef = 9F45BD392920CCCF003DE332 /* PreviewContent.md */; };
 		9F3DB0C2292DE09500704860 /* SettingsView+iPadOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3DB0C1292DE09500704860 /* SettingsView+iPadOS.swift */; };
@@ -102,6 +101,7 @@
 		9F7D2926299EC27E00B37F51 /* CloudServiceTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D2925299EC27E00B37F51 /* CloudServiceTwo.swift */; };
 		9F8EE98A293EB3090021409E /* CloudDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8EE989293EB3090021409E /* CloudDataManager.swift */; };
 		9F8EE98B293EB32D0021409E /* CloudDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8EE989293EB3090021409E /* CloudDataManager.swift */; };
+		9F92CF0529B7525500B8D3C4 /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F92CF0429B7525500B8D3C4 /* MailView.swift */; };
 		9FB21DE82954B71B00CFEDA8 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD4E2920CCCF003DE332 /* Store.swift */; };
 		9FB21DE92954B72300CFEDA8 /* StoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE9D0CC2934C134006CCC1E /* StoreHelper.swift */; };
 		9FB21DEA2954B8B200CFEDA8 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCDE2920CCCE003DE332 /* Extensions.swift */; };
@@ -151,7 +151,6 @@
 		9F1687CD29ADC2020085A0CA /* PlistDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlistDocument.swift; sourceTree = "<group>"; };
 		9F1687CF29AE21B20085A0CA /* NotebooksChangeMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksChangeMonitor.swift; sourceTree = "<group>"; };
 		9F188D802930E49F0078D413 /* MarkdownHeading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownHeading.swift; sourceTree = "<group>"; };
-		9F1AAE30292C940A00B4D254 /* FeedbackView+macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackView+macOS.swift"; sourceTree = "<group>"; };
 		9F1AAE32292C94F800B4D254 /* FeedbackState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackState.swift; sourceTree = "<group>"; };
 		9F3DB0C1292DE09500704860 /* SettingsView+iPadOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsView+iPadOS.swift"; sourceTree = "<group>"; };
 		9F3DB0C3292DF82300704860 /* FeedbackView+iPadOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackView+iPadOS.swift"; sourceTree = "<group>"; };
@@ -238,6 +237,7 @@
 		9F7D2925299EC27E00B37F51 /* CloudServiceTwo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudServiceTwo.swift; sourceTree = "<group>"; };
 		9F8EE989293EB3090021409E /* CloudDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudDataManager.swift; sourceTree = "<group>"; };
 		9F8EE98C293F4B7E0021409E /* Notes-365-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Notes-365-Info.plist"; sourceTree = SOURCE_ROOT; };
+		9F92CF0429B7525500B8D3C4 /* MailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailView.swift; sourceTree = "<group>"; };
 		9FB21DEB295C92CE00CFEDA8 /* TestingBehaviour.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TestingBehaviour.md; sourceTree = "<group>"; };
 		9FB21DEE295CA38E00CFEDA8 /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
 		9FB21DF0295D720E00CFEDA8 /* NotebooksListOperationsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListOperationsTests.swift; sourceTree = "<group>"; };
@@ -315,9 +315,9 @@
 		9F1AAE2F292C93E000B4D254 /* Feedback */ = {
 			isa = PBXGroup;
 			children = (
-				9F1AAE30292C940A00B4D254 /* FeedbackView+macOS.swift */,
 				9F3DB0C3292DF82300704860 /* FeedbackView+iPadOS.swift */,
 				9F1AAE32292C94F800B4D254 /* FeedbackState.swift */,
+				9F92CF0429B7525500B8D3C4 /* MailView.swift */,
 			);
 			path = Feedback;
 			sourceTree = "<group>";
@@ -779,6 +779,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F1687CC29AD0E7F0085A0CA /* InitialCloudSync.swift in Sources */,
+				9F92CF0529B7525500B8D3C4 /* MailView.swift in Sources */,
 				9F45BD9D2920CE21003DE332 /* AttributedString+StyledMarkdown+iOS.swift in Sources */,
 				9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */,
 				9FB6C69C29275E0300C8EC76 /* NotebookEditorState.swift in Sources */,
@@ -836,7 +837,6 @@
 				9FB6C69829275D0600C8EC76 /* FormatOptionsView.swift in Sources */,
 				9F45BD932920CDF9003DE332 /* Mode.swift in Sources */,
 				9F1687CE29ADC2020085A0CA /* PlistDocument.swift in Sources */,
-				9F1AAE31292C940A00B4D254 /* FeedbackView+macOS.swift in Sources */,
 				9F45BD7F2920CDE0003DE332 /* NotebooksListView.swift in Sources */,
 				9FB40281297A4551000DF922 /* EditorTextView+iOS.swift in Sources */,
 				9F45BDA12920CE2F003DE332 /* PreferencesView+macOS.swift in Sources */,

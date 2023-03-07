@@ -135,6 +135,8 @@ extension EditorView {
         
 //        textView.autoresizingMask = [.width]
         
+        
+//        self.textView
 //        self.textView.allowsUndo = true
 //        self.textView.usesFindPanel = true
 //        self.textView.usesFindBar = true
@@ -1278,9 +1280,23 @@ extension EditorView: NSLayoutManagerDelegate {
     public func layoutManager(_ layoutManager: NSLayoutManager, shouldGenerateGlyphs glyphs: UnsafePointer<CGGlyph>, properties props: UnsafePointer<NSLayoutManager.GlyphProperty>, characterIndexes charIndexes: UnsafePointer<Int>, font aFont: UIFont, forGlyphRange glyphRange: NSRange) -> Int {
         
 //        print(#function)
-        
-        
 //
+//        print(glyphRange)
+//
+//        print(textView.selectedRange)
+//
+//        let lineRange = (textStorage.string as NSString).lineRange(for: textView.selectedRange)
+//        print("lineRange", lineRange)
+////
+//
+//        print("NSIntersectsRect", NSIntersectionRange(glyphRange, lineRange))
+//        print(glyphRange.intersection(textView.selectedRange))
+//        print(textView.selectedRange.intersection(glyphRange))
+//
+//
+//        let isIntersected = (glyphRange.intersection(lineRange)?.length ?? 0) > 0
+//        print("is intersected: ", isIntersected)
+        
 //        if let info = textView.textStorage?.attribute(.markdownInfo, at: charIndexes.pointee, effectiveRange: nil) as? [String: Any] {
 //            print(info)
 //            if info["type"] as! String == "codeblock" {
@@ -1298,6 +1314,7 @@ extension EditorView: NSLayoutManagerDelegate {
 //
         var mutableGlymphRange = glyphRange
         
+        
         for index in 0..<glyphRange.length {
             
             let charPtr = charIndexes[index]
@@ -1312,6 +1329,7 @@ extension EditorView: NSLayoutManagerDelegate {
 //            print("isMarkdown", isMarkdown)
             
             if isMarkdown {
+                // hide symbol
                 controlCharProps?[index] = .null
             }
             

@@ -30,7 +30,7 @@ struct ThemesListView: View {
                 VStack {
                     Picker("Light", selection: $selectedLightThemeID) {
                         ForEach(themesListState.themes) { theme in
-                            Text(theme.themeName).tag(theme.id)
+                            Text(theme.themeName).lineLimit(1).tag(theme.id)
                         }
                     }
                     Picker("Dark", selection: $selectedDarkThemeID) {

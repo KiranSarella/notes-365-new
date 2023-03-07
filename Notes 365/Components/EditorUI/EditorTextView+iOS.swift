@@ -12,10 +12,10 @@ class EditorTextView: UITextView {
     
 //    var smartLayoutManagerDelegate: SmartLayoutManagerDelegate!
     
-    override func paste(_ sender: Any?) {
-        
-//        pasteAsPlainText(sender)
-    }
+//    override func paste(_ sender: Any?) {
+//
+////        pasteAsPlainText(sender)
+//    }
 }
 
 
