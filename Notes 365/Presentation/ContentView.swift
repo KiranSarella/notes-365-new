@@ -99,6 +99,18 @@ struct ContentView: View {
     
     @StateObject private var editorState = NotebookEditorState()
     
+    var bottomViewBackgroundColor: Color {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return Color(uiColor: UIColor.systemGroupedBackground)
+        } else if UIDevice.current.userInterfaceIdiom == .pad {
+            return Color(uiColor: UIColor.secondarySystemBackground)
+        } else if UIDevice.current.userInterfaceIdiom == .mac  {
+            return Color(uiColor: UIColor.secondarySystemGroupedBackground)
+        }
+        
+        return Color(uiColor: UIColor.systemGroupedBackground)
+    }
+    
     var body: some View {
         NavigationSplitView {
             // navigation headings
@@ -112,7 +124,7 @@ struct ContentView: View {
                 }
                 .navigationTitle("Notes 365")
                 Spacer()
-                // show settings option
+                // bottom view - settings option
                 HStack {
                     VStack {
                         
@@ -151,26 +163,25 @@ struct ContentView: View {
                     }
                     Spacer()
                 }
-                
                 .padding()
                 .sheet(isPresented: $showSettings) {
                     SettingsView_iPadOS(showModel: $showSettings)
                 }
             }
-            .frame(minWidth: 160)
-                .background(.regularMaterial)
-                .onAppear {
-                    ThemeState.shared.colorScheme = colorScheme
+            .frame(minWidth: 180)
+            .background(bottomViewBackgroundColor)
+            .onAppear {
+                ThemeState.shared.colorScheme = colorScheme
 //                    // do sync
 //                    icloudSyncing = true
 //                    chooseEnv.downloaodCloudDocuments(completion: {
 //                        // do any operations
 //                        icloudSyncing = false
 //                    })
-                }
-                .onChange(of: colorScheme) { newValue in
-                    ThemeState.shared.colorScheme = newValue
-                }
+            }
+            .onChange(of: colorScheme) { newValue in
+                ThemeState.shared.colorScheme = newValue
+            }
             
         } content: {
             // calender and notebooks list
