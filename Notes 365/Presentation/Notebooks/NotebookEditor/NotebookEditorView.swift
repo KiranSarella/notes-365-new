@@ -81,7 +81,6 @@ struct NotebookEditorView: View {
                 .onChange(of: editorState.theme, perform: { newValue in
                     editorView.updateTheme(theme: editorState.theme)
                 })
-                .navigationTitle(notebookM?.name ?? "")
                 .toolbar {
                     Toggle("Mode", isOn: $editorState.showSymbols)
                         .toggleStyle(.switch)
@@ -100,6 +99,7 @@ struct NotebookEditorView: View {
                 .navigationBarTitleDisplayMode(.inline)
             }
         }
+//        .navigationTitle(notebookM?.name ?? "")
         .onAppear {
             editorState.getNotebook = {
                 return notebookM?.notebook

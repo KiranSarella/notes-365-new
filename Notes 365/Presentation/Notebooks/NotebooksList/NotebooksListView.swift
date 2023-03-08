@@ -34,11 +34,11 @@ struct NotebooksListView: View {
                     
                     //                .listStyle(SidebarListStyle())
                         .navigationTitle("Notebooks")
-                        .onChange(of: selectedNotebook) { newValue in
-                            if let newValue = newValue {
-                                usersState.navTitle = newValue.name
-                            }
-                        }
+//                        .onChange(of: selectedNotebook) { newValue in
+//                            if let newValue = newValue {
+//                                usersState.navTitle = newValue.name
+//                            }
+//                        }
                         .searchable(text: $usersState.searchText)
                     //                .onChange(of: usersState.searchText) { newValue in
                     //                    selectedNotebook = nil
@@ -265,7 +265,7 @@ struct RowView: View {
                 TextField(text: $name) {
                     Text("Notebook")
                 }
-                .background(Color.white)
+                .background(Color.gray)
                 .focused($isFocused)
             } else {
                 Text(name)
@@ -335,7 +335,7 @@ struct RowView: View {
             }
             do {
                 try usersState.rename(for: notebook.notebook, newValue: name)
-                usersState.navTitle = name
+//                usersState.navTitle = name
                 isEditing = false
             } catch NotebookBusinessError.alreadyExists {
                 showFileExistsAlert = true

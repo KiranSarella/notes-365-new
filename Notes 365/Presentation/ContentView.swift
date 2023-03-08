@@ -211,7 +211,7 @@ struct ContentView: View {
                 }
             case .noteBooks:
                 NotebookEditorView(notebookM: $selectedUser, editorState: editorState)
-                    .navigationTitle(selectedUser?.name ?? "")
+//                    .navigationTitle(selectedUser?.name ?? "")
             }
         }
     }

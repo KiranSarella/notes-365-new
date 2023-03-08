@@ -110,7 +110,6 @@ class NotebooksListState: ObservableObject {
     static let shared: NotebooksListState = NotebooksListState()
     let notebookBusiness = NotebooksListBusiness.shared(path: EnvironmentState.shared.basePathURL)
     @Published var usersDB: NotebooksHierarchy
-    @Published var navTitle = "Notes 365"
     @Published var searchText: String = ""
     
     var subscription: Set<AnyCancellable> = []

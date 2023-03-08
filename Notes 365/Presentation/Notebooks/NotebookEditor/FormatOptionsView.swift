@@ -45,7 +45,8 @@ struct FormattingOptionsView: View {
                                 .help("Strikethrough")
                         }
                     }
-                    .padding([.leading, .trailing], 10)
+                    .frame(width: 40, height: 44)
+//                    .padding([.leading, .trailing], 2)
                 }
                 // H1,.. H6
                 HStack {
@@ -93,7 +94,8 @@ struct FormattingOptionsView: View {
                                 .help("Heading 6")
                         }
                     }
-                    .padding([.leading, .trailing], 10)
+                    .frame(width: 40, height: 44)
+//                    .padding([.leading, .trailing], 10)
                 }.padding([.leading], 40)
                 //            HStack {
                 //
@@ -130,7 +132,7 @@ struct FormattingOptionsView: View {
                         } label: {
                             Image("inline_code")
                                 .resizable()
-                                .frame(width: 20, height: 20)
+                                .frame(width: 26, height: 26)
                                 .help("Inline Code")
                         }
                         // code
@@ -150,7 +152,8 @@ struct FormattingOptionsView: View {
                                 .help("Quote Block")
                         }
                     }
-                    .padding([.leading, .trailing], 10)
+                    .frame(width: 40, height: 44)
+//                    .padding([.leading, .trailing], 10)
                 }.padding([.leading], 40)
                 //            HStack {
                 //
