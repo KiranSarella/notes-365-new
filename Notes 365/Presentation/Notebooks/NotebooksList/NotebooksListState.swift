@@ -442,9 +442,11 @@ extension NotebooksListState {
                 }
                 if childStatus.contains(true) {
                     note.canShow = true
+                    note.isExpanded = true
                 } else {
                     if note.name.lowercased().contains(text.lowercased()) {
                         note.canShow = true
+                        note.isExpanded = true
                     } else {
                         note.canShow = false
                     }
@@ -453,7 +455,7 @@ extension NotebooksListState {
             }
             
             var notebooksList = usersDB.notes
-            var expandedIds = Set<String>()
+//            var expandedIds = Set<String>()
             
             for i in 0..<notebooksList.count {
                 _ = canAddNotebook(note: &notebooksList[i])

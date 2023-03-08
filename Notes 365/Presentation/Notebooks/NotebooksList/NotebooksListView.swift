@@ -86,6 +86,18 @@ struct NotebooksListView: View {
         
     }
     
+    var disableActions: Bool {
+        if usersState.isSearching {
+            return true
+        }
+        
+        if selectedNotebook == nil {
+            return true
+        }
+        
+        return false
+    }
+    
     func getToolbarView() -> some View {
         // tool bar
         HStack(alignment: .center, spacing: 20) {
@@ -136,7 +148,7 @@ struct NotebooksListView: View {
                 Text("You cannot undo this action")
             }
         }
-        .disabled(selectedNotebook == nil ? true : false)
+        .disabled(disableActions)
         .buttonStyle(PlainButtonStyle())
         .backgroundStyle(.bar)
         .padding()
@@ -239,6 +251,14 @@ struct RowView: View {
         }
     }
     
+    var disableActions: Bool {
+        if usersState.isSearching {
+            return true
+        }
+       
+        return false
+    }
+    
     var body: some View {
         HStack {
             if isEditing {
@@ -267,33 +287,37 @@ struct RowView: View {
             Text("You cannot undo this action")
         }
         .contextMenu {
-            RenameButton()
-            // insert below
-            Button(action: {
-                usersState.insertBelow(ref: notebook.notebook)
-            }) {
-                Text("Add Below")
-            }
-            // insert inside
-            Button(action: {
-                usersState.insertInside(ref: notebook.notebook)
-            }) {
-                Text("Add Inside")
-            }
             
-            // trash
-            Button(role: .destructive,
-                   action: {
-                presentDeleteConfirmation = true
-            }) {
-                HStack {
-                    Text("Delete")
-                    Spacer()
-                    Image(systemName: "trash")
-                        .renderingMode(.original)
+            Group {
+                RenameButton()
+                // insert below
+                Button(action: {
+                    usersState.insertBelow(ref: notebook.notebook)
+                }) {
+                    Text("Add Below")
+                }
+                // insert inside
+                Button(action: {
+                    usersState.insertInside(ref: notebook.notebook)
+                }) {
+                    Text("Add Inside")
                 }
                 
+                // trash
+                Button(role: .destructive,
+                       action: {
+                    presentDeleteConfirmation = true
+                }) {
+                    HStack {
+                        Text("Delete")
+                        Spacer()
+                        Image(systemName: "trash")
+                            .renderingMode(.original)
+                    }
+                    
+                }
             }
+            .disabled(disableActions)
         }
         .renameAction {
             isEditing = true
