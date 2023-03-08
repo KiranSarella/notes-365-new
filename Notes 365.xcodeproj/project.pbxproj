@@ -72,7 +72,6 @@
 		9F45BD9D2920CE21003DE332 /* AttributedString+StyledMarkdown+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCD82920CCCE003DE332 /* AttributedString+StyledMarkdown+iOS.swift */; };
 		9F45BD9E2920CE21003DE332 /* SpeechHelpr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCDC2920CCCE003DE332 /* SpeechHelpr.swift */; };
 		9F45BDA12920CE2F003DE332 /* PreferencesView+macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD352920CCCF003DE332 /* PreferencesView+macOS.swift */; };
-		9F45BDA32920CE36003DE332 /* ThemeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD3A2920CCCF003DE332 /* ThemeDetailView.swift */; };
 		9F45BDA42920CE41003DE332 /* ThemePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD3F2920CCCF003DE332 /* ThemePreviewView.swift */; };
 		9F45BDA52920CE41003DE332 /* ColorPickerWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD3C2920CCCF003DE332 /* ColorPickerWindow.swift */; };
 		9F45BDA82920CE41003DE332 /* MarkdownTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD402920CCCF003DE332 /* MarkdownTheme.swift */; };
@@ -211,7 +210,6 @@
 		9F45BD342920CCCF003DE332 /* FontPickerOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontPickerOld.swift; sourceTree = "<group>"; };
 		9F45BD352920CCCF003DE332 /* PreferencesView+macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreferencesView+macOS.swift"; sourceTree = "<group>"; };
 		9F45BD392920CCCF003DE332 /* PreviewContent.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PreviewContent.md; sourceTree = "<group>"; };
-		9F45BD3A2920CCCF003DE332 /* ThemeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeDetailView.swift; sourceTree = "<group>"; };
 		9F45BD3C2920CCCF003DE332 /* ColorPickerWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerWindow.swift; sourceTree = "<group>"; };
 		9F45BD3F2920CCCF003DE332 /* ThemePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePreviewView.swift; sourceTree = "<group>"; };
 		9F45BD402920CCCF003DE332 /* MarkdownTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownTheme.swift; sourceTree = "<group>"; };
@@ -288,7 +286,6 @@
 		9F188D822930E5E80078D413 /* ThemeDetail */ = {
 			isa = PBXGroup;
 			children = (
-				9F45BD3A2920CCCF003DE332 /* ThemeDetailView.swift */,
 				9F14B490298A684F0079D23B /* ThemeDetailView+iOS.swift */,
 				9F14B4AF2990D46D0079D23B /* ThemeDetailState.swift */,
 				9F14B4AD298F98900079D23B /* FontPicker.swift */,
@@ -784,7 +781,6 @@
 				9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */,
 				9FB6C69C29275E0300C8EC76 /* NotebookEditorState.swift in Sources */,
 				9F3DB0CA292E23D900704860 /* ThemesListState.swift in Sources */,
-				9F45BDA32920CE36003DE332 /* ThemeDetailView.swift in Sources */,
 				9F45BD5A2920CD65003DE332 /* MotivationView.swift in Sources */,
 				9F45BD5B2920CD65003DE332 /* MotivationQuestions.swift in Sources */,
 				9F09CEB4292684D700609D99 /* PathHelper.swift in Sources */,

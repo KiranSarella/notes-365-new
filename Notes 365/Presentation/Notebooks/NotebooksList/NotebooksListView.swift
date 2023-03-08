@@ -30,6 +30,7 @@ struct NotebooksListView: View {
                     //                    NotebooksListGroupView(notebooks: $usersState.usersDB.notes)
                     //                }
                     SearchedListView(selectedNotebook: $selectedNotebook)
+                        
                     
                     //                .listStyle(SidebarListStyle())
                         .navigationTitle("Notebooks")
@@ -62,7 +63,7 @@ struct NotebooksListView: View {
                             getToolbarView()
                             Spacer()
                         }
-                        .frame(height: 30)
+                        .frame(height: 40)
                     }
                 }
                 .frame(minWidth: 280, maxWidth: 500)
@@ -135,9 +136,10 @@ struct NotebooksListView: View {
                 Text("You cannot undo this action")
             }
         }
+        .disabled(selectedNotebook == nil ? true : false)
         .buttonStyle(PlainButtonStyle())
         .backgroundStyle(.bar)
-        .padding(.horizontal)
+        .padding()
     }
     
 }

@@ -29,16 +29,33 @@ class ThemeBusiness {
         } else {
             let defaultThemes = ThemeBusiness.getDefaultTheams()
             saveThemes(themes: defaultThemes)
+            saveLightTheme(id: defaultThemes[0].id.uuidString)
+            saveDarkTheme(id: defaultThemes[1].id.uuidString)
             return defaultThemes
         }
     }
     
     func getLightTheme() -> MarkdownTheme {
-        return fetchLightTheme() ?? getThemes().first!
+        
+        let themes = getThemes()
+        if let id = fetchLightTheme() {
+            if let theme = themes.first(where: { $0.id.uuidString == id }) {
+                return theme
+            }
+        }
+        // if no saved key exits, return default theme
+        return themes[0]
     }
     
     func getDarkTheme() -> MarkdownTheme {
-        return fetchDarkTheme() ?? getThemes()[1]
+        let themes = getThemes()
+        if let id = fetchDarkTheme() {
+            if let theme = themes.first(where: { $0.id.uuidString == id }) {
+                return theme
+            }
+        }
+        // if no saved key exits, return default theme
+        return themes[1]
     }
     
     // MARK: - Persist Themes List
@@ -69,29 +86,25 @@ class ThemeBusiness {
         UserDefaults.standard.set(try? PropertyListEncoder().encode(themes), forKey: themeManagerKey)
     }
     
-    func saveLightTheme(theme: MarkdownTheme) {
-        UserDefaults.standard.set(try? PropertyListEncoder().encode(theme), forKey: themeLightKey)
+    func saveLightTheme(id: String) {
+        UserDefaults.standard.set(id, forKey: themeLightKey)
     }
     
-    func saveDarkTheme(theme: MarkdownTheme) {
-        UserDefaults.standard.set(try? PropertyListEncoder().encode(theme), forKey: themeDarkKey)
+    func saveDarkTheme(id: String) {
+        UserDefaults.standard.set(id, forKey: themeDarkKey)
     }
     
-    func fetchLightTheme() -> MarkdownTheme? {
-        if let data = UserDefaults.standard.value(forKey: themeLightKey) as? Data {
-            if let obj = try? PropertyListDecoder().decode(MarkdownTheme.self, from: data) {
-                return obj
-            }
+    private func fetchLightTheme() -> String? {
+        if let data = UserDefaults.standard.value(forKey: themeLightKey) as? String {
+            return data
         }
         
         return nil
     }
     
-    func fetchDarkTheme() -> MarkdownTheme?   {
-        if let data = UserDefaults.standard.value(forKey: themeDarkKey) as? Data {
-            if let obj = try? PropertyListDecoder().decode(MarkdownTheme.self, from: data) {
-                return obj
-            }
+    private func fetchDarkTheme() -> String?   {
+        if let data = UserDefaults.standard.value(forKey: themeDarkKey) as? String {
+            return data
         }
         
         return nil

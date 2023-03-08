@@ -20,8 +20,8 @@ class ThemesListState: ObservableObject {
         let themesList = themeBusiness.getThemes()
         themes = themesList
         // get selected theme index
-        selectedLightTheme = themeBusiness.fetchLightTheme() ?? themesList.first!
-        selectedDarkTheme = themeBusiness.fetchDarkTheme() ?? themesList[1]
+        selectedLightTheme = themeBusiness.getLightTheme()
+        selectedDarkTheme = themeBusiness.getDarkTheme()
         print(themesList)
     }
     
@@ -45,17 +45,16 @@ class ThemesListState: ObservableObject {
     }
     
     func saveLightTheme(_ newValueID: UUID) {
-        
         if let newValue = themes.first(where: { $0.id == newValueID }) {
             ThemeState.shared.themeChanged(for: .light, newValue: newValue)
-            themeBusiness.saveLightTheme(theme: newValue)
+            themeBusiness.saveLightTheme(id: newValue.id.uuidString)
         }
     }
     
     func saveDarkTheme(_ newValueID: UUID) {
         if let newValue = themes.first(where: { $0.id == newValueID }) {
             ThemeState.shared.themeChanged(for: .dark, newValue: newValue)
-            themeBusiness.saveDarkTheme(theme: newValue)
+            themeBusiness.saveDarkTheme(id: newValue.id.uuidString)
         }
     }
     

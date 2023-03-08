@@ -7,7 +7,7 @@
 
 import SwiftUI
 import MessageUI
-
+// https://gist.github.com/EnesKaraosman/5cb43dca8317b864c754b4b44753ac63
 // https://stackoverflow.com/questions/56784722/swiftui-send-email
 public struct MailView: UIViewControllerRepresentable {
     
