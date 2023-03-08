@@ -14,29 +14,37 @@ struct DayDetailView: View {
     var body: some View {
         VStack(spacing: 0) {
             List {
+//                Text(dayState.dayDate.date.formattedDate())
+//                    .fontWeight(.thin)
                 ForEach($dayState.timelineList) { $noteChange in
                     VStack {
                         // notebook heading view
                         NotesTitleView(noteChange: noteChange)
+                            .listRowSeparator(.hidden)
                         HStack {
                             Text(noteChange.attriburedString!)
+                                .listRowSeparator(.hidden)
                                 .padding()
                                 .textSelection(.enabled)
                                 .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
                             Spacer()
                         }
                     }
+                    .listRowSeparator(.hidden)
                 }
                 HStack {
                     Spacer()
                     Text(dayState.currentState.message)
+                        .listStyle(PlainListStyle())
                         .fontWeight(.ultraLight)
                         .foregroundColor(.gray)
                    
                     Spacer()
                 }
             }
-            .navigationTitle(dayState.dayDate.date.formattedDate())
+            .listStyle(PlainListStyle())
+            
+//            .navigationTitle(dayState.dayDate.date.formattedDate())
         }
         .onChange(of: dayState.dayDate) { newValue in
             Task {

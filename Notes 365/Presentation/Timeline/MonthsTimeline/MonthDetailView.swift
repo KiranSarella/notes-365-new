@@ -33,14 +33,17 @@ struct MonthDetailView: View {
                 ForEach($monthState.monthTimelineList, id: \.id) { $dayTimeline in
                     // for each day
                     MonthSectionView(date: monthState.monthDate.start, dayTimeline: $dayTimeline, theme: $monthState.theme)
+                        .listRowSeparator(.hidden)
                 }
                 HStack {
                     Spacer()
                     Text(monthState.currentState.message)
+                        .listRowSeparator(.hidden)
                         .fontWeight(.ultraLight)
                         .foregroundColor(.gray)
                     Spacer()
                 }
+                .listRowSeparator(.hidden)
 //                // motivation question
 //                HStack {
 //                    Spacer()
@@ -55,6 +58,7 @@ struct MonthDetailView: View {
 //                }
 //                .padding()
             }
+            .listStyle(PlainListStyle())
             .onAppear {
                 monthState.readMonthData(monthDate: monthState.monthDate)
             }
@@ -125,11 +129,13 @@ struct MonthSectionView: View {
                 
                 if UIDevice.current.userInterfaceIdiom == .phone {
                     Text(dayTimeline.date.formatted(date: .abbreviated, time: .omitted))
+                        .listRowSeparator(.hidden)
                         .padding(.horizontal)
                         .font(.largeTitle)
                         .padding(.top, 30)
                 } else {
                     Text(dayTimeline.date.formatted(date: .complete, time: .omitted))
+                        .listRowSeparator(.hidden)
                         .padding(.horizontal)
                         .font(.largeTitle)
                         .padding(.top, 30)
@@ -154,6 +160,7 @@ fileprivate struct DayTimelineTwoView: View {
                 NotesTitleView(noteChange: noteChange)
                 HStack {
                     Text(noteChange.attriburedString!)
+                        .listRowSeparator(.hidden)
                         .padding()
                         .textSelection(.enabled)
                         .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working

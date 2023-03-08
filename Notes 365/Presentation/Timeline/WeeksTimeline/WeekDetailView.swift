@@ -16,14 +16,17 @@ struct WeekDetailView: View {
             List {
                 ForEach($weekState.weekTimelineList) { $weekTimeline in
                     WeekSectionView(weekTimeline: $weekTimeline, theme: $weekState.theme)
+                        .listRowSeparator(.hidden)
                 }
                 HStack {
                     Spacer()
                     Text(weekState.currentState.message)
+                        .listRowSeparator(.hidden)
                         .fontWeight(.ultraLight)
                         .foregroundColor(.gray)
                     Spacer()
                 }
+                .listRowSeparator(.hidden)
 //                // motivation question
 //                HStack {
 //                    Spacer()
@@ -38,6 +41,7 @@ struct WeekDetailView: View {
 //                }
 //                .padding()
             }
+            .listStyle(PlainListStyle())
         }
         .onChange(of: weekState.weekDate, perform: { newValue in
             Task {
@@ -72,7 +76,7 @@ struct WeekDetailView: View {
         .onDisappear {
             weekState.generatorTask?.cancel()
         }
-        .navigationTitle(weekState.weekDate.start.formattedDate())
+//        .navigationTitle(weekState.weekDate.start.formattedDate())
     }
     
     static func getWeekStartEndDates(date: Date) -> (Date, Date) {
@@ -123,10 +127,12 @@ struct WeekSectionView: View {
                 
                 if UIDevice.current.userInterfaceIdiom == .phone {
                     Text(weekTimeline.date.formatted(date: .abbreviated, time: .omitted))
+                        .listRowSeparator(.hidden)
                         .padding(.horizontal)
                         .font(.largeTitle)
                 } else {
                     Text(weekTimeline.date.formatted(date: .complete, time: .omitted))
+                        .listRowSeparator(.hidden)
                         .padding(.horizontal)
                         .font(.largeTitle)
                 }
@@ -149,8 +155,10 @@ fileprivate struct DayTimelineTwoView: View {
         ForEach($timelineList) { $noteChange in
             VStack {
                 NotesTitleView(noteChange: noteChange)
+                    .listRowSeparator(.hidden)
                 HStack {
                     Text(noteChange.attriburedString!)
+                        .listRowSeparator(.hidden)
                         .padding()
                         .textSelection(.enabled)
                         .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working

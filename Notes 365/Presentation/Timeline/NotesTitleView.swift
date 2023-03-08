@@ -25,6 +25,7 @@ struct NotesTitleView: View {
         HStack {
             VStack(alignment: .leading) {
                 Text(noteChange.fileName.capitalized)
+                    .listRowSeparator(.hidden)
 //                    .strikethrough(noteChange.isNotebookExists ? false : true)
                     .font(.title)
                     .foregroundColor(.primary)
@@ -33,11 +34,12 @@ struct NotesTitleView: View {
                     .font(.footnote)
                     .foregroundColor(.secondary)
             }
+            .listStyle(PlainListStyle())
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
             Spacer()
         }
-        .background(colorScheme == .light ? Color(UIColor.systemBackground) : Color(UIColor.darkGray))
+        .background(colorScheme == .light ? Color.gray.opacity(0.2) : Color(UIColor.darkGray))
         .cornerRadius(4)
     }
 }
