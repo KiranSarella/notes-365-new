@@ -432,7 +432,7 @@ class MarkdownAttriburedString {
             
             // font
             innerAttributedString.addAttribute(.font,
-                                               value:  theme.font.withSize(theme.font.pointSize - 2),
+                                               value:  UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: UIFont.Weight.medium),
                                                range: NSRange(location: match!.range.location, length: match!.range.length))
             
             // foreground
@@ -474,6 +474,58 @@ class MarkdownAttriburedString {
         }
     }
     
+    func processCodeBlock(extendedRange: NSRange, textStorage innerAttributedString: NSMutableAttributedString) {
+        
+        let pattern = MarkdownPattern.codeBlock.rawValue
+        
+        let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
+        
+        regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
+            match, flags, stop in
+            
+            // font
+            innerAttributedString.addAttribute(.font,
+                                               value:  UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: UIFont.Weight.medium),
+                                               range: NSRange(location: match!.range.location, length: match!.range.length))
+            
+            // foreground
+            innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
+                                               value: theme.codeColor.uiColor,
+                                               range: NSRange(location: match!.range.location, length: match!.range.length))
+            
+            
+            // add id key
+            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
+                                               value: 0,
+                                               range: NSRange(location: match!.range.location, length: 3))
+            
+            // add id key
+            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
+                                               value: 0,
+                                               range: NSRange(location: match!.range.location + match!.range.length - 3, length: 3))
+            
+            // add id key
+            innerAttributedString.addAttribute(NSAttributedString.Key.font,
+                                               value: UIFont.systemFont(ofSize: 0.1),
+                                               range: NSRange(location: match!.range.location, length: 3))
+            
+            // add id key
+            innerAttributedString.addAttribute(NSAttributedString.Key.font,
+                                               value: UIFont.systemFont(ofSize: 0.1),
+                                               range: NSRange(location: match!.range.location + match!.range.length - 3, length: 3))
+            
+            let info: [String: Any] = [
+                "range": NSRange(location: match!.range.location, length: match!.range.length),
+                "type": "codeblock"
+            ]
+            // info
+            innerAttributedString.addAttribute(NSAttributedString.Key.markdownInfo,
+                                               value: info,
+                                               range: NSRange(location: match!.range.location, length: match!.range.length))
+            
+            innerAttributedString.addAttribute(.markdownRange, value: MarkdownPattern.inlineCode, range: match!.range)
+        }
+    }
     
     func processOrderedList(extendedRange: NSRange, textStorage innerAttributedString: NSMutableAttributedString) {
         
@@ -573,9 +625,7 @@ class MarkdownAttriburedString {
         }
     }
     
-    func processCodeBlock(extendedRange: NSRange, textStorage innerAttributedString: NSMutableAttributedString) {
-        // in macOS, the below code is working
-    }
+    
     /*
     func processCodeBlock(extendedRange: NSRange, textStorage innerAttributedString: NSMutableAttributedString) {
 

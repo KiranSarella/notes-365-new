@@ -39,14 +39,14 @@ struct ContentWrapperView: View {
                             // todo:
                             // async sync icloud data on first time
                             
-//                            chooseEnv.downloaodCloudDocuments(completion: {
+                            chooseEnv.downloaodCloudDocuments(completion: {
+
+                                // do any operations
+                                chooseEnv.enableConfigured()
+                            })
 //
-//                                // do any operations
-//                                chooseEnv.enableConfigured()
-//                            })
-                            
-                            // do any operations
-                            chooseEnv.enableConfigured()
+//                            // do any operations
+//                            chooseEnv.enableConfigured()
                             
                         } catch let error {
                             errorDetail = error

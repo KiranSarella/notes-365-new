@@ -23,6 +23,8 @@ struct EditorUI: UIViewRepresentable {
         editorView.textView.keyboardDismissMode = .interactive
         // line height
         // https://developer.apple.com/forums/thread/711814
+        // or using layout manager (need to try)
+        // https://stackoverflow.com/questions/3760924/set-line-height-in-uitextview
         var attributes = [NSAttributedString.Key: Any]()
         let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
 //        paragraphStyle.lineHeightMultiple = 1.1

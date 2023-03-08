@@ -38,9 +38,8 @@ public enum MarkdownPattern: String {
     case checkList = #"(^[[:blank:]]*?- )\[([ Xx])\] "#
     
     case inlineCode = #"\B`([^\s])(.*?)`(\B)(?=( |\b|$|\s))"#
-    case codeBlock = #"^`{3}([^\s])([\w]*)\n([\S\s]+?)\n^`{3}$"#
-        
-    // ^`{3}([\w]*)\n([\S\s]+?)\n`{3}$
+//    case codeBlock = #"^`{3}([^\s])([\w]*)\n([\S\s]+?)\n^`{3}$"#
+    case codeBlock = #"`{3}([\w]*)\n([\S\s]+?)\n`{3}"#
     
     case blockQuote = #"^(\>)([^\s])(.*)"#
 //    case blockQuote = #"\n(\>)(.*)"#

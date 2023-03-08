@@ -30,7 +30,7 @@ struct NotebooksListView: View {
                     //                    NotebooksListGroupView(notebooks: $usersState.usersDB.notes)
                     //                }
                     SearchedListView(selectedNotebook: $selectedNotebook)
-                        
+                        .listStyle(PlainListStyle())
                     
                     //                .listStyle(SidebarListStyle())
                         .navigationTitle("Notebooks")

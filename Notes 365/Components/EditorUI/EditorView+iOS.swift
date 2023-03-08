@@ -260,10 +260,20 @@ extension EditorView: NSTextStorageDelegate {
         
 //        print("editedRange", editedRange, "delta", delta, "editedMask", editedMask)
         
-        let extendedRange = (textStorage.string as NSString).paragraphRange(for: editedRange)
+        var extendedRange = (textStorage.string as NSString).paragraphRange(for: editedRange)
+        
+//        if extendedRange.length < 500 {
+//            let loc = max(extendedRange.location - 300, 0)
+//            let len = extendedRange.length + loc
+//            extendedRange = NSRange(location: loc, length: len)
+//        }
+        
+//        let extendedRange = textStorage.fullRange()
         
 //        print("extendedRange", extendedRange)
         
+        
+        /*
         // remove bold, italic traits
         textStorage.enumerateAttribute(.font, in: extendedRange, options: []) { value, range, stop in
             guard let font = value as? UIFont else { return }
@@ -332,7 +342,9 @@ extension EditorView: NSTextStorageDelegate {
 //            textStorage.addAttribute(.foregroundColor, value: UIColor.textColor, range: range)
         }
         
-//        textStorage.removeAttribute(.font, range: extendedRange)
+        */
+        
+        textStorage.removeAttribute(.font, range: extendedRange)
         textStorage.removeAttribute(.markdown, range: extendedRange)
         textStorage.removeAttribute(.markdownRange, range: extendedRange)
         textStorage.removeAttribute(.foregroundColor, range: extendedRange)
@@ -352,7 +364,7 @@ extension EditorView: NSTextStorageDelegate {
 ////        let fontDescirptor = bodyFont.fontDescriptor.withSymbolicTraits(.classSansSerif)
 ////        print("after-desc:", fontDescirptor.symbolicTraits, extendedRange)
 ////        bodyFont = UIFont(descriptor: fontDescirptor, size: CGFloat(theme.bodyFontSize))!
-//        textStorage.addAttribute(.font, value: bodyFont, range: extendedRange)
+        textStorage.addAttribute(.font, value: theme.font, range: extendedRange)
 //
 //        print("after:", bodyFont.fontDescriptor.symbolicTraits, extendedRange)
 //
@@ -767,7 +779,7 @@ extension EditorView {
             
             // font
             innerAttributedString.addAttribute(.font,
-                                               value:  theme.font.withSize(theme.font.pointSize - 2),
+                                               value:  UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: UIFont.Weight.medium),
                                                range: NSRange(location: match!.range.location, length: match!.range.length))
             
             // foreground
@@ -800,6 +812,49 @@ extension EditorView {
         }
     }
     
+    func processCodeBlock(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
+        
+        let pattern = MarkdownPattern.codeBlock.rawValue
+        
+        let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
+        
+        regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
+            match, flags, stop in
+            
+            // font
+            innerAttributedString.addAttribute(.font,
+                                               value:  UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: UIFont.Weight.medium),
+                                               range: NSRange(location: match!.range.location, length: match!.range.length))
+            
+            // foreground
+            innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
+                                               value:  theme.codeColor.uiColor,
+                                               range: NSRange(location: match!.range.location, length: match!.range.length))
+            
+            
+            // add id key
+            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
+                                               value: 0,
+                                               range: NSRange(location: match!.range.location, length: 3))
+            
+            // add id key
+            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
+                                               value: 0,
+                                               range: NSRange(location: match!.range.location + match!.range.length - 3 , length: 3))
+            
+            
+            let info: [String: Any] = [
+                "range": NSRange(location: match!.range.location, length: match!.range.length),
+                "type": "codeblock"
+            ]
+            // info
+            innerAttributedString.addAttribute(NSAttributedString.Key.markdownInfo,
+                                               value: info,
+                                               range: NSRange(location: match!.range.location, length: match!.range.length))
+            
+            innerAttributedString.addAttribute(.markdownRange, value: MarkdownPattern.inlineCode, range: match!.range)
+        }
+    }
     
     func processOrderedList(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
         
@@ -899,9 +954,7 @@ extension EditorView {
         }
     }
     
-    func processCodeBlock(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        
-    }
+    
     
 //    func processCodeBlock(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
 //
