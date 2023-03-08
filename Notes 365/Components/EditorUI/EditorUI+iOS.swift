@@ -21,22 +21,22 @@ struct EditorUI: UIViewRepresentable {
         editorView.textView.font = theme.font
         editorView.textView.textColor = theme.bodyColor.uiColor
         editorView.textView.keyboardDismissMode = .interactive
-        
-        
-        let paragraphStyle = NSMutableParagraphStyle()
-        //            paragraphStyle.minimumLineHeight = 10
+        // line height
+        // https://developer.apple.com/forums/thread/711814
+        var attributes = [NSAttributedString.Key: Any]()
+        let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+//        paragraphStyle.lineHeightMultiple = 1.1
         paragraphStyle.lineSpacing = 10
-//        editorView.textView.defaultParagraphStyle = paragraphStyle
+        attributes[NSAttributedString.Key.paragraphStyle] = paragraphStyle
+        editorView.textView.typingAttributes = attributes
+        // set content
         editorView.textView.text = text
-        editorView.textView.textStorage.addAttributes([NSAttributedString.Key.paragraphStyle: paragraphStyle], range: editorView.textView.textStorage.fullRange())
 
         return editorView
     }
     
     func updateUIView(_ editorView: EditorView, context: Context) {
-//        let paragraphStyle = NSMutableParagraphStyle()
-//        paragraphStyle.lineSpacing = 10
-//        editorView.textView.textStorage.addAttributes([NSAttributedString.Key.paragraphStyle: paragraphStyle], range: editorView.textView.textStorage.fullRange())
+
     }
     
     typealias NSViewType = EditorView
