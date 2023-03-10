@@ -156,8 +156,8 @@ extension ThemeBusiness {
     static func generateCustomizedLightTheme() -> MarkdownTheme {
         var theme = MarkdownTheme(id: UUID())
         theme.themeName = "Customized-light"
-        theme.fontName = "Chalkboard"
-        theme.fontSize = 16
+        theme.fontName = "Noteworthy"
+        theme.fontSize = 18
         theme.bodyColor = NamedColor(hex: 0x000000)
         theme.styleColor = NamedColor(hex: 0xbf5af2)
         theme.codeColor = NamedColor(hex: 0x797979)
@@ -172,8 +172,8 @@ extension ThemeBusiness {
         // Orchid theme
         var theme = MarkdownTheme(id: UUID())
         theme.themeName = "Customized-dark"
-        theme.fontName = "Comic Sans MS"
-        theme.fontSize = 16
+        theme.fontName = "ChalkboardSE-Light"
+        theme.fontSize = 18
         theme.bodyColor = NamedColor(hex: 0xffffff)
         theme.styleColor = NamedColor(hex: 0xffd60a)
         theme.codeColor = NamedColor(hex: 0x0096ff)
