@@ -15,7 +15,7 @@ struct NotebooksHierarchy {
     var notes: [NotebookM]
     
     static func constructHierarchy(notebooks: [Notebook], expandedIds: Set<String>) -> [NotebookM] {
-        print(#function)
+//        print(#function)
         var noteList = [NotebookM]()
         
         for notebook in notebooks {
@@ -358,13 +358,13 @@ class NotebooksListState: ObservableObject {
 extension NotebooksListState {
     
     func takeBackup() {
-        print(#function)
+//        print(#function)
         backupNotebooks = usersDB.notes
         backupExpandedIds = expandedIds
     }
     
     func restoreBackup() {
-        print(#function)
+//        print(#function)
         // restore
         usersDB.notes = backupNotebooks
         expandedIds = backupExpandedIds
@@ -404,7 +404,7 @@ extension NotebooksListState {
             .receive(on: RunLoop.main)
             .compactMap{ $0 }
             .sink { status in
-                print(status)
+//                print(status)
             } receiveValue: { [self] (searchField) in
                 searchItems(searchField)
             }.store(in: &subscription)
@@ -458,9 +458,9 @@ extension NotebooksListState {
             
             for i in 0..<notebooksList.count {
                 _ = canAddNotebook(note: &notebooksList[i])
-                print("checked \(i)")
+//                print("checked \(i)")
             }
-            print("NEW LIST")
+//            print("NEW LIST")
             usersDB.notes = notebooksList
         }
         

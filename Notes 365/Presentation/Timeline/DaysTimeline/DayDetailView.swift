@@ -14,8 +14,6 @@ struct DayDetailView: View {
     var body: some View {
         VStack(spacing: 0) {
             List {
-//                Text(dayState.dayDate.date.formattedDate())
-//                    .fontWeight(.thin)
                 ForEach($dayState.timelineList) { $noteChange in
                     VStack {
                         // notebook heading view
@@ -29,18 +27,20 @@ struct DayDetailView: View {
                                 .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
                             Spacer()
                         }
+                        .listRowSeparator(.hidden)
                     }
                     .listRowSeparator(.hidden)
                 }
                 HStack {
                     Spacer()
                     Text(dayState.currentState.message)
-                        .listStyle(PlainListStyle())
+                        .listRowSeparator(.hidden)
                         .fontWeight(.ultraLight)
                         .foregroundColor(.gray)
                    
                     Spacer()
                 }
+                .listRowSeparator(.hidden)
             }
             .listStyle(PlainListStyle())
             

@@ -168,7 +168,7 @@ struct SearchedListView: View {
         }
         .onChange(of: isSearching) { newValue in
             usersState.isSearching = newValue
-            print("isSearching, ", newValue)
+//            print("isSearching, ", newValue)
 //            selectedNotebook = nil
             if newValue {
                 usersState.takeBackup()

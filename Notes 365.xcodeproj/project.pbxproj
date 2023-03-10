@@ -78,9 +78,6 @@
 		9F45BDA92920CE52003DE332 /* ScaleFontView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD452920CCCF003DE332 /* ScaleFontView.swift */; };
 		9F45BDAA2920CE52003DE332 /* NamedColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD462920CCCF003DE332 /* NamedColor.swift */; };
 		9F45BDAB2920CE52003DE332 /* ThemesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD472920CCCF003DE332 /* ThemesListView.swift */; };
-		9F45BDAE2920CE5A003DE332 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD4E2920CCCF003DE332 /* Store.swift */; };
-		9F45BDAF2920CE5A003DE332 /* StatusInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD4C2920CCCF003DE332 /* StatusInfoView.swift */; };
-		9F45BDB02920CE63003DE332 /* Products.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9F45BD4A2920CCCF003DE332 /* Products.plist */; };
 		9F45BDBA2920E73C003DE332 /* StringDiffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD302920CCCE003DE332 /* StringDiffTests.swift */; };
 		9F45BDBB2920E824003DE332 /* StringDiff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD2E2920CCCE003DE332 /* StringDiff.swift */; };
 		9F45BDBE2920EA31003DE332 /* NotebooksListBusinessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BDBD2920EA31003DE332 /* NotebooksListBusinessTests.swift */; };
@@ -101,8 +98,6 @@
 		9F8EE98A293EB3090021409E /* CloudDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8EE989293EB3090021409E /* CloudDataManager.swift */; };
 		9F8EE98B293EB32D0021409E /* CloudDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8EE989293EB3090021409E /* CloudDataManager.swift */; };
 		9F92CF0529B7525500B8D3C4 /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F92CF0429B7525500B8D3C4 /* MailView.swift */; };
-		9FB21DE82954B71B00CFEDA8 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD4E2920CCCF003DE332 /* Store.swift */; };
-		9FB21DE92954B72300CFEDA8 /* StoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE9D0CC2934C134006CCC1E /* StoreHelper.swift */; };
 		9FB21DEA2954B8B200CFEDA8 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCDE2920CCCE003DE332 /* Extensions.swift */; };
 		9FB21DF1295D720E00CFEDA8 /* NotebooksListOperationsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB21DF0295D720E00CFEDA8 /* NotebooksListOperationsTests.swift */; };
 		9FB21DF3295D89E000CFEDA8 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB21DF2295D89E000CFEDA8 /* DataManager.swift */; };
@@ -119,7 +114,6 @@
 		9FB6C6A929279BEC00C8EC76 /* TimelineBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB6C6A829279BEC00C8EC76 /* TimelineBusiness.swift */; };
 		9FE9D0C129347BFB006CCC1E /* MemoryTechniques.md in Resources */ = {isa = PBXBuildFile; fileRef = 9FE9D0C029347BFB006CCC1E /* MemoryTechniques.md */; };
 		9FE9D0C329347FFA006CCC1E /* CodingDocument.md in Resources */ = {isa = PBXBuildFile; fileRef = 9FE9D0C229347FFA006CCC1E /* CodingDocument.md */; };
-		9FE9D0CD2934C134006CCC1E /* StoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE9D0CC2934C134006CCC1E /* StoreHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -750,7 +744,6 @@
 				9F45BCAA2920CAB0003DE332 /* Preview Assets.xcassets in Resources */,
 				9F1AAE34292CA89E00B4D254 /* PreviewContent.md in Resources */,
 				9F45BCA62920CAB0003DE332 /* Assets.xcassets in Resources */,
-				9F45BDB02920CE63003DE332 /* Products.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -787,11 +780,9 @@
 				9F7D2926299EC27E00B37F51 /* CloudServiceTwo.swift in Sources */,
 				9F3DB0CE292E704D00704860 /* ColorPickerButton.swift in Sources */,
 				9F45BD682920CDAF003DE332 /* CalendarState.swift in Sources */,
-				9F45BDAE2920CE5A003DE332 /* Store.swift in Sources */,
 				9FB6C6A72927939E00C8EC76 /* WeekDetailState.swift in Sources */,
 				9F45BD5E2920CD85003DE332 /* DayContentGenerator.swift in Sources */,
 				9F45BD632920CD90003DE332 /* WeekCalendarView.swift in Sources */,
-				9F45BDAF2920CE5A003DE332 /* StatusInfoView.swift in Sources */,
 				9F45BDA92920CE52003DE332 /* ScaleFontView.swift in Sources */,
 				9F45BDDA29234150003DE332 /* Notebook.swift in Sources */,
 				9F45BDA52920CE41003DE332 /* ColorPickerWindow.swift in Sources */,
@@ -845,7 +836,6 @@
 				9F45BD542920CD5E003DE332 /* MonthCalendarView.swift in Sources */,
 				9F3DB0C4292DF82300704860 /* FeedbackView+iPadOS.swift in Sources */,
 				9F188D812930E49F0078D413 /* MarkdownHeading.swift in Sources */,
-				9FE9D0CD2934C134006CCC1E /* StoreHelper.swift in Sources */,
 				9FB21DF3295D89E000CFEDA8 /* DataManager.swift in Sources */,
 				9F45BD502920CD45003DE332 /* Extensions.swift in Sources */,
 				9F3DB0C2292DE09500704860 /* SettingsView+iPadOS.swift in Sources */,
@@ -873,7 +863,6 @@
 				9FB21DEA2954B8B200CFEDA8 /* Extensions.swift in Sources */,
 				9FB21DF1295D720E00CFEDA8 /* NotebooksListOperationsTests.swift in Sources */,
 				9F45BCB42920CAB0003DE332 /* Notes_365Tests.swift in Sources */,
-				9FB21DE92954B72300CFEDA8 /* StoreHelper.swift in Sources */,
 				9F09CEB5292684D700609D99 /* PathHelper.swift in Sources */,
 				9F45BDC92920FD34003DE332 /* PlistHelper.swift in Sources */,
 				9F45BDBB2920E824003DE332 /* StringDiff.swift in Sources */,
@@ -882,7 +871,6 @@
 				9FB21DF4295DBE5900CFEDA8 /* DataManager.swift in Sources */,
 				9F45BDBE2920EA31003DE332 /* NotebooksListBusinessTests.swift in Sources */,
 				9F45BDD329226BD9003DE332 /* NotebooksListState.swift in Sources */,
-				9FB21DE82954B71B00CFEDA8 /* Store.swift in Sources */,
 				9F8EE98B293EB32D0021409E /* CloudDataManager.swift in Sources */,
 				9F45BDE429238D29003DE332 /* NotebooksHierarchyTests.swift in Sources */,
 				9F45BDBA2920E73C003DE332 /* StringDiffTests.swift in Sources */,
@@ -1034,7 +1022,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Notes 365/Notes 365Debug.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 15;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Notes 365/Preview Content\"";
 				DEVELOPMENT_TEAM = Z5MSV52AV7;
@@ -1057,7 +1045,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sarella.MyNotes.local;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -1078,12 +1066,14 @@
 				CODE_SIGN_ENTITLEMENTS = "Notes 365/Notes_365.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "3rd Party Mac Developer Application";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 15;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Notes 365/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Z5MSV52AV7;
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = Z5MSV52AV7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1103,11 +1093,12 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sarella.MyNotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "notes365-iOS-adhoc-production";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "notes365-iOS-appstore-production";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "mac-app-store";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;

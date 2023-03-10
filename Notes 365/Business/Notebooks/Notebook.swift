@@ -57,7 +57,7 @@ class Notebook: Identifiable, Codable {
         let path = Constants.notebooksPath + "/" + filePath
         let basePathUrl = EnvironmentState.shared.basePathURL!
         let fileURL = basePathUrl.appendingPathComponent(path)
-        print(fileURL)
+//        print(fileURL)
         return fileURL
     }
     
@@ -281,7 +281,7 @@ extension Notebook {
     
     func loadContent() -> String {
         do {
-            print(fileURL)
+//            print(fileURL)
             // Read the file contents
             return try String(contentsOf: fileURL)
         } catch let error as NSError {

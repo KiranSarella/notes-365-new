@@ -22,7 +22,7 @@ class ThemesListState: ObservableObject {
         // get selected theme index
         selectedLightTheme = themeBusiness.getLightTheme()
         selectedDarkTheme = themeBusiness.getDarkTheme()
-        print(themesList)
+//        print(themesList)
     }
     
     func saveChanges(_ modifiedTheme: MarkdownTheme) {

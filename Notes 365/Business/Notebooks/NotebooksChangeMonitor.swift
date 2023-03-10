@@ -32,11 +32,11 @@ class NotebooksChangeMonitor {
     }
     
     @objc func metadataQueryDidUpdate(_ notification: NSNotification) {
-        print(#function)
+//        print(#function)
         
         guard let metadataQuery = notification.object as? NSMetadataQuery else { return }
         
-        print("Results count: \(metadataQuery.resultCount)")
+//        print("Results count: \(metadataQuery.resultCount)")
         
         
         

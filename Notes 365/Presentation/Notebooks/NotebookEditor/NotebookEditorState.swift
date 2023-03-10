@@ -51,7 +51,7 @@ class NotebookEditorState: ObservableObject {
     }
     
     func loadContent(for notebook: Notebook) async {
-        print("##Note-loadContent")
+//        print("##Note-loadContent")
         self.notebook = notebook
         notebookBusiness = NotebookContentBusiness(notebook: notebook)
 //        notebookBusiness?.cloudContentDidUpdate = { [weak self] newContent in
@@ -103,7 +103,7 @@ class NotebookEditorState: ObservableObject {
     
     
     func saveContentChanges() {
-        print("saveContentChanges")
+//        print("saveContentChanges")
 //        if self.notebook != nil {
 //            if self.notebook.document?.documentState == .progressAvailable
 //                || self.notebook.document?.documentState == .editingDisabled {
@@ -112,8 +112,8 @@ class NotebookEditorState: ObservableObject {
 //            }
 //        }
         guard let contentEditedDate = contentEditedDate else { return }
-        print("contentEditedDate: \(contentEditedDate)")
-        print("last savedDate: \(lastSavedDate)")
+//        print("contentEditedDate: \(contentEditedDate)")
+//        print("last savedDate: \(lastSavedDate)")
         if contentEditedDate >= lastSavedDate {
             
 //            contentEdited = false
@@ -123,14 +123,14 @@ class NotebookEditorState: ObservableObject {
 //                self.lastSavedDate = Date()
                 
                 if versionDate.isSameDayAs(Date.now) && baseVersionCreated {
-                    print("IN SAME DAY")
+//                    print("IN SAME DAY")
                     // same day
                     lastSavedDate = Date()
                     notebookBusiness?.saveContentChanges(content: txt)
                 } else {
                     // ** day changed **
                     // reset baseContent
-                    print("DAY CHANGED")
+//                    print("DAY CHANGED")
                     DispatchQueue.main.async {
                         Task {
                             await self.loadContent(for: self.notebook)

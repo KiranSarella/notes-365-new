@@ -178,7 +178,7 @@ public class FilesHelper {
             .appendingPathComponent(folderPath)
             .appendingPathComponent(fileName)
             .appendingPathExtension("md")
-        print(fileURL.path(percentEncoded: false))
+//        print(fileURL.path(percentEncoded: false))
         do {
             
             let fileHandle = try FileHandle(forReadingFrom: fileURL)

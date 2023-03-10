@@ -15,6 +15,8 @@ struct ContentWrapperView: View {
     @State private var errorDetail: Error?
     @State private var showRefresh = false
     
+    @State private var statusMessage = "Loading.."
+    
     var body: some View {
         
         // do initial checks and configurations
@@ -32,39 +34,57 @@ struct ContentWrapperView: View {
                 }
                 .padding()
             } else {
-                Text("iCloud Sync..")
-                    .task {
-                        do {
-                            try chooseEnv.setEnviromment(with: .cloud)
-                            // todo:
-                            // async sync icloud data on first time
+                
+                HStack {
+                    Text(statusMessage)
+                }
+                .task {
+                    do {
+                        statusMessage = "checking iCloud settings"
+                        try chooseEnv.setEnviromment(with: .cloud)
+                        statusMessage = "moving existing data to iCloud"
+                        await chooseEnv.checkOldDataSync()
+                        
+                        // old data compatability
+                        /*
+                         if cloud folder is empty
+                         - new - first time user
+                         - new - new device - have to pull from cloud
+                         - local might contain old data
+                         
+                         copy from local to cloud folder and while doing convert to new folder structures.
+                         */
+                        
+                        //                            await chooseEnv.downloaodCloudDocuments()
+                        
+                        statusMessage = "iCloud sync.."
+                        chooseEnv.downloaodCloudDocuments(completion: {
                             
-                            chooseEnv.downloaodCloudDocuments(completion: {
-
-                                // do any operations
-                                chooseEnv.enableConfigured()
-                            })
-//
-//                            // do any operations
-//                            chooseEnv.enableConfigured()
-                            
-                        } catch let error {
-                            errorDetail = error
-                            didError = true
-                        }
+                            // do any operations
+                            chooseEnv.enableConfigured()
+                        })
+                        //
+                        //                            // do any operations
+                        //                            chooseEnv.enableConfigured()
+                        
+                    } catch let error {
+                        errorDetail = error
+                        didError = true
                     }
-                    .alert(
-                        "iCloud",
-                        isPresented: $didError,
-                        presenting: errorDetail
-                    ) { details in
-                        Button("OK") {
-                            // Handle the retry action.
-                            showRefresh = true
-                        }
-                    } message: { error in
-                        Text(error.localizedDescription)
+                }
+                .alert(
+                    "iCloud",
+                    isPresented: $didError,
+                    presenting: errorDetail
+                ) { details in
+                    Button("OK") {
+                        // Handle the retry action.
+                        showRefresh = true
                     }
+                } message: { error in
+                    Text(error.localizedDescription)
+                }
+               
             }
             
         } else {

@@ -24,7 +24,7 @@ public enum CloudError: Error {
         case .cloudDisabled:
             return "iCloud disabled, please enable to continue"
         case .couldNotAccessCloud:
-            return "icould not access iCloud"
+            return "could not access iCloud"
         case .cloudFileDoesNotExist:
             return "icloud file does not exist"
         case .couldNotReadContent:

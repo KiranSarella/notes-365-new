@@ -17,7 +17,7 @@ class NotebookContentBusiness {
     var cloudContentDidUpdate: ((String) -> ())?
     
     init(notebook: Notebook) {
-        print("##Note-OPEN: \(notebook.name) \(notebook.filePath)")
+//        print("##Note-OPEN: \(notebook.name) \(notebook.filePath)")
         self.notebook = notebook
 //        self.cloudService = CloudService(cloudDirectory: "Documents/notebooks-flat", cloudSyncFileName: notebook.filePath)
         
@@ -27,7 +27,7 @@ class NotebookContentBusiness {
     }
 
     deinit {
-        print("##Note-CLOSING: \(notebook.name) \(notebook.filePath)")
+//        print("##Note-CLOSING: \(notebook.name) \(notebook.filePath)")
     }
     
     // diff
@@ -50,7 +50,7 @@ class NotebookContentBusiness {
     }
     
     func saveContentChanges(content: String) {
-        print(#function)
+//        print(#function)
 //        cloudService.updateUpdateDate()
         
         // if now == appear date; continue
@@ -84,9 +84,9 @@ class NotebookContentBusiness {
             notebook.saveContent(content: content)
             
 //            FilesHelper.shared.writeToFile(path: notebooksPath + "/" + notebook.filePath, content: content)
-            print("------> saved to db ******")
+//            print("------> saved to db ******")
         } else {
-            print("content not edited *****")
+//            print("content not edited *****")
         }
     
     }

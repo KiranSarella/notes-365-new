@@ -62,20 +62,12 @@ class NotebooksListBusiness {
             self.notebooks = notebooks
         }
         
-        // convert folder structure to flat structure
-//        convertToFlatStructure()
-        
-        print(dataManager.basePathURL.path(percentEncoded: false))
-        
         // if new folder not exits and contains notebooks - means old version structure
-        if !FileManager.default.fileExists(atPath: dataManager.basePathURL.appendingPathComponent(notebooksPath).path(percentEncoded: false))
-            && notebooks.count > 0 {
-            convertToFlatStructure()
-        }
-        
-//        cloudService.cloudContentDidUpdate = {
-//
+//        let flatNotebooksPath = dataManager.basePathURL.appendingPathComponent(notebooksPath).path(percentEncoded: false)
+//        if !FileManager.default.fileExists(atPath: flatNotebooksPath) && notebooks.count > 0 {
+//            convertToFlatStructure()
 //        }
+
         
 //        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookChangeNotification(_:)), name: .notebookChangeNotification, object: nil)
         

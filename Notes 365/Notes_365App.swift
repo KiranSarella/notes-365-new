@@ -12,12 +12,12 @@ struct Notes_365App: App {
     
     @Environment(\.scenePhase) private var scenePhase
     
-    var store: Store = Store.shared
+//    var store: Store = Store.shared
     
     var body: some Scene {
         WindowGroup {
             ContentWrapperView()
-                .environmentObject(store)
+//                .environmentObject(store)
         }
         .commands {
             SidebarCommands()

@@ -133,7 +133,7 @@ struct NotebookEditorView: View {
             editorView.text = newValue
         })
         .onReceive(autoSaveTimer, perform: { _ in
-            print("auto Save Timer")
+//            print("auto Save Timer")
             editorState.saveContentChanges()
         })
 //        .onChange(of: scenePhase) { phase in
