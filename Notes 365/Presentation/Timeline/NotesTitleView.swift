@@ -25,12 +25,14 @@ struct NotesTitleView: View {
         HStack {
             VStack(alignment: .leading) {
                 Text(noteChange.fileName.capitalized)
+                    .lineLimit(1)
                     .listRowSeparator(.hidden)
 //                    .strikethrough(noteChange.isNotebookExists ? false : true)
                     .font(.title)
                     .foregroundColor(.primary)
 //                Text(noteChange.filePath)
                 Text(getAbsolutePath())
+                    .lineLimit(1)
                     .font(.footnote)
                     .foregroundColor(.secondary)
             }

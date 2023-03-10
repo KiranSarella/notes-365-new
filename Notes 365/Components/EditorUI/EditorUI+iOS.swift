@@ -30,6 +30,7 @@ struct EditorUI: UIViewRepresentable {
 //        paragraphStyle.lineHeightMultiple = 1.1
         paragraphStyle.lineSpacing = 10
         attributes[NSAttributedString.Key.paragraphStyle] = paragraphStyle
+        attributes[NSAttributedString.Key.font] = theme.font
         editorView.textView.typingAttributes = attributes
         // set content
         editorView.textView.text = text

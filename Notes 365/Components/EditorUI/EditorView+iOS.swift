@@ -395,7 +395,7 @@ extension EditorView: NSTextStorageDelegate {
         
         
         processInlineCode(extendedRange: extendedRange, textStorage: textStorage)
-        processCodeBlock(extendedRange: textStorage.fullRange(), textStorage: textStorage)
+        processCodeBlock(extendedRange: extendedRange, textStorage: textStorage)
         
         
         // treat non `.markdownRange` as body
