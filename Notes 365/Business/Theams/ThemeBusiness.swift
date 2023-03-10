@@ -124,6 +124,7 @@ extension ThemeBusiness {
     static func generateBasicLightTheme() -> MarkdownTheme {
         var theme = MarkdownTheme(id: UUID())
         theme.themeName = "Basic-light"
+        theme.fontName = "Helvetica"
 //        theme.fontSize = 16
         theme.bodyColor = NamedColor(red: 0, green: 0, blue: 0)
         theme.styleColor = NamedColor(red: 0, green: 0, blue: 0)
@@ -140,6 +141,7 @@ extension ThemeBusiness {
         // apple markdown
         var theme = MarkdownTheme(id: UUID())
         theme.themeName = "Basic-dark"
+        theme.fontName = "Helvetica"
 //        theme.fontSize = 16
         theme.bodyColor = NamedColor(red: 1, green: 1, blue: 1)
         theme.styleColor = NamedColor(red: 1, green: 1, blue: 1)
@@ -154,14 +156,14 @@ extension ThemeBusiness {
     static func generateCustomizedLightTheme() -> MarkdownTheme {
         var theme = MarkdownTheme(id: UUID())
         theme.themeName = "Customized-light"
-        theme.fontName = "Courier New Bold"
+        theme.fontName = "Chalkboard"
         theme.fontSize = 16
         theme.bodyColor = NamedColor(hex: 0x000000)
         theme.styleColor = NamedColor(hex: 0xbf5af2)
         theme.codeColor = NamedColor(hex: 0x797979)
         theme.blockQuoteColor = NamedColor(hex: 0x009192)
         theme.listColor = NamedColor(hex: 0xff2600)
-        theme.headingColor = NamedColor(hex: 0x0096ff)
+        theme.headingColor = NamedColor(hex: 0xff9200)
         
         return theme
     }

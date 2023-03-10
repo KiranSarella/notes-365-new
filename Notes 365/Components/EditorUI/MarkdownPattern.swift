@@ -37,9 +37,13 @@ public enum MarkdownPattern: String {
 //    case checkList = #"(^[[:blank:]]?- )\[([ Xx])\] (.*)"#
     case checkList = #"(^[[:blank:]]*?- )\[([ Xx])\] "#
     
-    case inlineCode = #"\B`([^\s])(.*?)`(\B)(?=( |\b|$|\s))"#
+    // this will detect only inline
+    // https://regexr.com/3cad6
+    case inlineCode = #"(?=`)`(?!`)[^`]*(?=`)`(?!`)"#
+//    case inlineCode = #"\B`([^\s])(.*?)`(\B)(?=( |\b|$|\s))"#
 //    case codeBlock = #"^`{3}([^\s])([\w]*)\n([\S\s]+?)\n^`{3}$"#
-    case codeBlock = #"`{3}([\w]*)\n([\S\s]+?)\n`{3}"#
+    case codeBlock = #"^`{3}([\w]*)\n([\S\s]+?)\n`{3}$"#
+//    case codeBlock = #"^(`{3}.*[\n\r][^]*?^`{3})$"#
     
     case blockQuote = #"^(\>)([^\s])(.*)"#
 //    case blockQuote = #"\n(\>)(.*)"#

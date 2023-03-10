@@ -79,7 +79,7 @@ class NotebooksListBusiness {
 //        print(#function)
 //    }
     
-//    func generateNotebooksHashMap() {
+//    func generateNotebooksHashMap() {#imageLiteral(resourceName: "simulator_screenshot_899493EC-342E-4D8C-A23B-D930A1022ECD.png")
 //        // clean
 //        notebooksHashMap.removeAll()
 //

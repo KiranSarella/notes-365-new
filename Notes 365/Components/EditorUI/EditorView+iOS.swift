@@ -260,7 +260,7 @@ extension EditorView: NSTextStorageDelegate {
         
 //        print("editedRange", editedRange, "delta", delta, "editedMask", editedMask)
         
-        var extendedRange = (textStorage.string as NSString).paragraphRange(for: editedRange)
+        let extendedRange = (textStorage.string as NSString).paragraphRange(for: editedRange)
         
 //        if extendedRange.length < 500 {
 //            let loc = max(extendedRange.location - 300, 0)
@@ -344,7 +344,8 @@ extension EditorView: NSTextStorageDelegate {
         
         */
         
-        textStorage.removeAttribute(.font, range: extendedRange)
+        // FIXIT: - ** if enabled, telugu font will not work. if disabled, code block and below lines font issue.
+//        textStorage.removeAttribute(.font, range: extendedRange)
         textStorage.removeAttribute(.markdown, range: extendedRange)
         textStorage.removeAttribute(.markdownRange, range: extendedRange)
         textStorage.removeAttribute(.foregroundColor, range: extendedRange)
@@ -364,7 +365,10 @@ extension EditorView: NSTextStorageDelegate {
 ////        let fontDescirptor = bodyFont.fontDescriptor.withSymbolicTraits(.classSansSerif)
 ////        print("after-desc:", fontDescirptor.symbolicTraits, extendedRange)
 ////        bodyFont = UIFont(descriptor: fontDescirptor, size: CGFloat(theme.bodyFontSize))!
-        textStorage.addAttribute(.font, value: theme.font, range: extendedRange)
+        ///
+    
+        // FIXIT: - ** if enabled, telugu font will not work. if disabled, code block and below lines font
+//        textStorage.addAttribute(.font, value: theme.font, range: extendedRange)
 //
 //        print("after:", bodyFont.fontDescriptor.symbolicTraits, extendedRange)
 //
@@ -391,7 +395,7 @@ extension EditorView: NSTextStorageDelegate {
         
         
         processInlineCode(extendedRange: extendedRange, textStorage: textStorage)
-        processCodeBlock(extendedRange: extendedRange, textStorage: textStorage)
+        processCodeBlock(extendedRange: textStorage.fullRange(), textStorage: textStorage)
         
         
         // treat non `.markdownRange` as body
@@ -776,16 +780,18 @@ extension EditorView {
         
         regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
+            let font = UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: UIFont.Weight.medium)
+            let textRange = NSRange(location: match!.range.location + 1, length: match!.range.length - 2)
             
             // font
             innerAttributedString.addAttribute(.font,
-                                               value:  UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: UIFont.Weight.medium),
-                                               range: NSRange(location: match!.range.location, length: match!.range.length))
+                                               value: font,
+                                               range: textRange)
             
             // foreground
             innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
                                                value:  theme.codeColor.uiColor,
-                                                    range: NSRange(location: match!.range.location, length: match!.range.length))
+                                                    range: textRange)
             
             
             // add id key
@@ -821,15 +827,17 @@ extension EditorView {
         regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
             
+            let font = UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: UIFont.Weight.medium)
+            let textRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 6)
             // font
             innerAttributedString.addAttribute(.font,
-                                               value:  UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: UIFont.Weight.medium),
-                                               range: NSRange(location: match!.range.location, length: match!.range.length))
+                                               value: font,
+                                               range: textRange)
             
             // foreground
             innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
                                                value:  theme.codeColor.uiColor,
-                                               range: NSRange(location: match!.range.location, length: match!.range.length))
+                                               range: textRange)
             
             
             // add id key

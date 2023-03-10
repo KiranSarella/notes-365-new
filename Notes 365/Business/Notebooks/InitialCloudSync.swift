@@ -19,6 +19,8 @@ final class InitialCloudSync {
     var timerMax = 2
     
     var syncCompletionHandler: (()->())?
+    var isSyncCalled = false
+    
     
     func syncInitialData() {
         // query
@@ -45,11 +47,23 @@ final class InitialCloudSync {
         // gathering error ?
         metadataQuery.enableUpdates()
         metadataQuery.start()
+        
+        // start gather time limit
+        DispatchQueue.main.asyncAfter(deadline: .now() + 20) {
+            // your code here
+            if self.isSyncCalled {
+                // all ok.
+            } else {
+                // gathering not happend.
+                self.metadataQuery.stop()
+                self.metadataQuery.disableUpdates()
+                self.syncCompletionHandler?()
+            }
+        }
     }
     
     @objc func metadataQueryDidStartGathering(_ notification: NSNotification) {
 //        print(#function)
-        
         
     }
     
@@ -70,7 +84,7 @@ final class InitialCloudSync {
     
     @objc func metadataQueryDidFinishGathering(_ notification: NSNotification) {
 //        print(#function)
-        
+        isSyncCalled = true
         guard let metadataQuery = notification.object as? NSMetadataQuery else { return }
         // pause updates till all results are processed
         metadataQuery.stop()

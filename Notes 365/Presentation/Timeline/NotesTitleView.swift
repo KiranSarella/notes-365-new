@@ -14,9 +14,9 @@ struct NotesTitleView: View {
     
     func getAbsolutePath() -> String {
         var components = noteChange.filePath.components(separatedBy: "/")
-        if components.count > 0 {
-            components.removeFirst()
-        }
+//        if components.count > 0 {
+//            components.removeFirst()
+//        }
         // https://www.compart.com/en/unicode/U+203A
         return components.joined(separator: "  \u{203A}   ")
     }
