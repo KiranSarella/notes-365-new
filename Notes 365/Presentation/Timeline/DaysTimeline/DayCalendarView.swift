@@ -82,7 +82,7 @@ fileprivate struct DayGridView: View {
                     if date.getMonth() == navigationDate.getMonth() {
                         ZStack {
                             RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.blue, lineWidth: date.isSameDayAs(dayDate.date) ? 1 : 0)
+                                .stroke(Color.accentColor, lineWidth: date.isSameDayAs(dayDate.date) ? 1 : 0)
 //                                .background(
 //                                    RoundedRectangle(cornerRadius: 8)
 //                                        .fill(date.isSameDayAs(dayDate.date) ? Color.blue : Color.clear)

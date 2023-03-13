@@ -151,7 +151,7 @@ struct WeekView: View {
     }
     
     private func highlightColor(_ week: WeekGrid) -> Color {
-        week == selectedWeek ? .blue : .clear
+        week == selectedWeek ? .accentColor : .clear
     }
     
     var isValidSelection: Bool {
@@ -198,7 +198,7 @@ struct WeekView: View {
             weekGridRowView()
             RoundedRectangle(cornerRadius: 8)
             //                .stroke(highlightColor(week), lineWidth: 1)
-                .stroke(Color.blue, lineWidth: isSelectedWeek(week) ? 1 : 0)
+                .stroke(Color.accentColor, lineWidth: isSelectedWeek(week) ? 1 : 0)
                 .frame(height: 30)
                 .background(Color.red.opacity(0.01))
                 .onTapGesture {
@@ -219,7 +219,7 @@ struct WeekView: View {
                     ZStack() {
                         weekGridRowView()
                         RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.blue, lineWidth: isSelectedWeek(week) ? 1 : 0)
+                        .stroke(Color.accentColor, lineWidth: isSelectedWeek(week) ? 1 : 0)
                         .frame(height: 30)
                         .background(Color.red.opacity(0.01))
                     }
@@ -238,7 +238,7 @@ struct WeekView: View {
             ZStack() {
                 weekGridRowView()
                 RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.blue, lineWidth: isSelectedWeek(week) ? 1 : 0)
+                .stroke(Color.accentColor, lineWidth: isSelectedWeek(week) ? 1 : 0)
                 .frame(height: 30)
                 .background(Color.red.opacity(0.01))
                 .onTapGesture {

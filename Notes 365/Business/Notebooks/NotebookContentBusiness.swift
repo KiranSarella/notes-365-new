@@ -37,7 +37,8 @@ class NotebookContentBusiness {
     
     // MARK: - base version
     static func createBaseVersion(for fileName: String, with content: String) {
-        
+        print(#function)
+        print(fileName, content)
         FilesHelper.shared.writeToFile(fileName: fileName, folderPath: baseVersionPath, content: content)
     }
     

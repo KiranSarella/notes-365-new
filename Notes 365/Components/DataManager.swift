@@ -58,7 +58,7 @@ class ChooseEnvironment: ObservableObject {
             let value = cloudService.getCloudPath()
             switch value {
             case .success(let url):
-//                print(url.path(percentEncoded: false))
+                print(url.path(percentEncoded: false))
                 environmentState.setBasePath(url: url)
             case .failure(let error):
                 throw error

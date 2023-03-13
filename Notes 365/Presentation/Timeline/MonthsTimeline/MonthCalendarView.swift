@@ -87,7 +87,7 @@ struct MonthGridView: View {
 #endif
                         }
                         RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.blue, lineWidth: isSelectedMonth(date.monthNumber) ? 1 : 0)
+                            .stroke(Color.accentColor, lineWidth: isSelectedMonth(date.monthNumber) ? 1 : 0)
                     }
                 }
                 

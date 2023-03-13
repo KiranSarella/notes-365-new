@@ -43,7 +43,9 @@ struct ContentWrapperView: View {
                         statusMessage = "checking iCloud settings"
                         try chooseEnv.setEnviromment(with: .cloud)
                         statusMessage = "moving existing data to iCloud"
-                        await chooseEnv.checkOldDataSync()
+                        if UIDevice.current.userInterfaceIdiom == .mac {
+                            await chooseEnv.checkOldDataSync()
+                        }
                         
                         // old data compatability
                         /*
@@ -58,14 +60,12 @@ struct ContentWrapperView: View {
                         //                            await chooseEnv.downloaodCloudDocuments()
                         
                         statusMessage = "iCloud sync.."
-                        chooseEnv.downloaodCloudDocuments(completion: {
-                            
-                            // do any operations
-                            chooseEnv.enableConfigured()
-                        })
-                        //
-                        //                            // do any operations
-                        //                            chooseEnv.enableConfigured()
+//                        chooseEnv.downloaodCloudDocuments(completion: {
+//                            // do any operations
+//                            chooseEnv.enableConfigured()
+//                        })
+                        // do any operations
+                        chooseEnv.enableConfigured()
                         
                     } catch let error {
                         errorDetail = error

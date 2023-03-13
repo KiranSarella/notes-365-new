@@ -156,7 +156,7 @@ extension ThemeBusiness {
     static func generateCustomizedLightTheme() -> MarkdownTheme {
         var theme = MarkdownTheme(id: UUID())
         theme.themeName = "Customized-light"
-        theme.fontName = "Noteworthy"
+        theme.fontName = "Helvetica"
         theme.fontSize = 18
         theme.bodyColor = NamedColor(hex: 0x000000)
         theme.styleColor = NamedColor(hex: 0xbf5af2)

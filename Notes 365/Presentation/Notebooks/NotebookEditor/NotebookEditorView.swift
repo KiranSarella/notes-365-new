@@ -111,6 +111,7 @@ struct NotebookEditorView: View {
             editorState.saveContentChanges()
             isTextFieldFocused = false
             editorState.baseVersionCreated = false
+            editorState.showSymbols = false
             
             // new notebook steps
             guard let newValue = newValue else { return }
@@ -122,12 +123,13 @@ struct NotebookEditorView: View {
                     editorState.getNewContent = {
                         return editorView.text
                     }
+                    
+                    // base version verifiation on every time notebook editor appear
+                    // usefull if new day entered.
+                    editorState.configBaseVersionIfNecessary(newValue.notebook)
                 }
             }
             
-            // base version verifiation on every time notebook editor appear
-            // usefull if new day entered.
-            editorState.configBaseVersionIfNecessary(newValue.notebook)
         }
         .onChange(of: editorState.baseContent, perform: { newValue in
             editorView.text = newValue

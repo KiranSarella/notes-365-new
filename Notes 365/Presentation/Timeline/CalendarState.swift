@@ -152,7 +152,7 @@ class CalendarState: ObservableObject {
         monthDate = MonthDate(date: Date())
     }
     
-    static let todayTint = Color.blue
+    static let todayTint = Color.accentColor
 }
 
 extension Date {
