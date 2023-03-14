@@ -129,6 +129,11 @@ extension MarkdownTheme  {
 import UIKit
 extension MarkdownTheme {
     var font: UIFont {
+        
+//        return UIFont.systemFont(ofSize: CGFloat(self.fontSize))
+//        return UIFont.preferredFont(forTextStyle: .body)
+//        return UIFont.preferredFont(forTextStyle: .body, compatibleWith: .current)
+        
         if self.fontName == "system" {
             return UIFont.systemFont(ofSize: CGFloat(self.fontSize))
         } else {

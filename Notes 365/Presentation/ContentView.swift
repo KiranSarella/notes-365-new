@@ -57,15 +57,13 @@ struct ContentWrapperView: View {
                          copy from local to cloud folder and while doing convert to new folder structures.
                          */
                         
-                        //                            await chooseEnv.downloaodCloudDocuments()
-                        
                         statusMessage = "iCloud sync.."
-//                        chooseEnv.downloaodCloudDocuments(completion: {
-//                            // do any operations
-//                            chooseEnv.enableConfigured()
-//                        })
+                        chooseEnv.downloaodCloudDocuments(completion: {
+                            // do any operations
+                            chooseEnv.enableConfigured()
+                        })
                         // do any operations
-                        chooseEnv.enableConfigured()
+//                        chooseEnv.enableConfigured()
                         
                     } catch let error {
                         errorDetail = error

@@ -220,130 +220,24 @@ extension EditorView: UITextViewDelegate {
     public func textViewDidChangeSelection(_ textView: UITextView) {
     
     }
-    
-    
-//    public func textViewDidChangeSelection(_ notification: Notification) {
-////        print(#function)
-////        print(textView.selectedRange())
-//
-//    }
 }
 
 extension EditorView: NSTextStorageDelegate {
     
+    public func textStorage(_ textStorage: NSTextStorage, willProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
+        
+        var extendedRange = (textStorage.string as NSString).paragraphRange(for: editedRange)
+        
+        textStorage.addAttribute(.font, value: theme.font, range: extendedRange)
+    }
+    
     public func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
      
-//        if editedMask.contains(.editedAttributes) {
-////            print("editedAttributes")
-//        }
-//        if editedMask.contains(.editedCharacters) == false {
-////            print("editedCharacters")
-//            return
-//        }
-        
-//        // get editedCharacter
-//        if delta == 1 {
-//            let charRange = (textStorage.string as NSString).rangeOfComposedCharacterSequence(at: editedRange.location)
-////            print(charRange)
-//            let editedChar = (textStorage.string as NSString).substring(with: charRange)
-////            print(editedChar)
-//
-////            if editedChar == "*" {
-////
-////            }
-//
-//            if let fontAttr = textStorage.attribute(.font, at: editedRange.location, effectiveRange: nil) {
-//                print(fontAttr)
-//            }
-//
-//        }
-        
 //        print("editedRange", editedRange, "delta", delta, "editedMask", editedMask)
+   
+        var extendedRange = (textStorage.string as NSString).paragraphRange(for: editedRange)
         
-        let extendedRange = (textStorage.string as NSString).paragraphRange(for: editedRange)
-        
-//        if extendedRange.length < 500 {
-//            let loc = max(extendedRange.location - 300, 0)
-//            let len = extendedRange.length + loc
-//            extendedRange = NSRange(location: loc, length: len)
-//        }
-        
-//        let extendedRange = textStorage.fullRange()
-        
-//        print("extendedRange", extendedRange)
-        
-        
-        /*
-        // remove bold, italic traits
-        textStorage.enumerateAttribute(.font, in: extendedRange, options: []) { value, range, stop in
-            guard let font = value as? UIFont else { return }
-            
-            var symbolicTraits = font.fontDescriptor.symbolicTraits
-            symbolicTraits.remove([.traitBold, .traitItalic])
-            
-            let fontDesc = font.fontDescriptor.withSymbolicTraits(symbolicTraits)
-//            print(fontDescriptor, range)
-            let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: CGFloat(theme.font.pointSize))
-            textStorage.addAttribute(.font, value: newFont, range: range)
-            
-//            let attrSubStr = textStorage.attributedSubstring(from: range)
-//            print(attrSubStr.string)
-            
-//            if let language = NSLinguisticTagger.dominantLanguage(for: attrSubStr.string) {
-//                print("language", attrSubStr.string, language)
-//                if language == "en" {
-//                    let bodyFont = UIFont(name: theme.bodyFontName, size: CGFloat(theme.bodyFontSize))!
-//                    textStorage.addAttribute(.font, value: bodyFont, range: range)
-//                }
-//            } else {
-//                print("language", attrSubStr.string, "Unknown language")
-////                let bodyFont = UIFont(name: theme.bodyFontName, size: CGFloat(theme.bodyFontSize))!
-////                textStorage.addAttribute(.font, value: bodyFont, range: range)
-//            }
-            
-//            let bodyFont = UIFont(name: theme.bodyFontName, size: CGFloat(theme.bodyFontSize))!
-//            textStorage.addAttribute(.font, value: bodyFont, range: range)
-            
-//            print("classDescription", fontDescriptor.classDescription)
-//            fontDescriptor.classDescription
-
-//            print("matchingFontDescriptor", fontDescriptor.matchingFontDescriptor(withMandatoryKeys: [.family]))
-
-//            if font.fontName.contains(theme.bodyFontName) ||
-//                font.fontName.contains(theme.codeFontName) ||
-//                font.fontName.contains(theme.blockQuoteFontName) ||
-//                font.fontName.contains(theme.headingFontName)
-//            {
-//                let bodyFont = UIFont(name: theme.bodyFontName, size: CGFloat(theme.bodyFontSize))!
-////                fontDescriptor = bodyFont.fontDescriptor.withSymbolicTraits(symbolicTraits)
-////                fontDescriptor = fontDescriptor.withFamily(bodyFont.familyName!)
-//
-//                textStorage.addAttribute(.font, value: bodyFont, range: range)
-//            }
-
-
-
-//            fontDescriptor = fontDescriptor.withFamily(bodyFont.familyName!)
-//            print(bodyFont.familyName!)
-
-//            fontDescriptor = fontDescriptor.withFamily(bodyFont?.familyName ?? UIFont.systemFont(ofSize: 14).familyName!)
-//            fontDescriptor = fontDescriptor.withFamily(UIFont.systemFont(ofSize: 14).familyName!)
-
-//            let newFont = UIFont(descriptor: fontDescriptor, size: CGFloat(theme.bodyFontSize))!
-//
-////            let newFont = font.apply(newTraits: symbolicTraits, newPointSize: theme.bodyFontSize)
-//            textStorage.addAttribute(.font, value: newFont, range: range)
-
-//            print("after:", newFont.fontDescriptor.symbolicTraits, range)
-//            print(newFont.fontDescriptor)
-//
-//            let newFont = font.apply(newTraits: .bold, newPointSize: getHeadingFontSize(level: 1))
-//            innerAttributedString.addAttribute(.font, value: newFont, range: range)
-//            textStorage.addAttribute(.foregroundColor, value: UIColor.textColor, range: range)
-        }
-        
-        */
-        
+//        textStorage.setAttributes([:], range: extendedRange)
         // FIXIT: - ** if enabled, telugu font will not work. if disabled, code block and below lines font issue.
 //        textStorage.removeAttribute(.font, range: extendedRange)
         textStorage.removeAttribute(.markdown, range: extendedRange)
@@ -353,23 +247,19 @@ extension EditorView: NSTextStorageDelegate {
         textStorage.removeAttribute(.underlineColor, range: extendedRange)
         textStorage.removeAttribute(.underlineStyle, range: extendedRange)
         
-//        textStorage.enumerateAttributes(in: extendedRange) { attribureKeys, range, pointer in
-//            print(attribureKeys, range)
-//        }
-
-        
         textStorage.addAttribute(.markdownRange, value: MarkdownPattern.body, range: extendedRange)
         
-//        var bodyFont = UIFont(name: theme.bodyFontName, size: CGFloat(theme.bodyFontSize))!
-//        print("before:", bodyFont.fontDescriptor.symbolicTraits, extendedRange)
-////        let fontDescirptor = bodyFont.fontDescriptor.withSymbolicTraits(.classSansSerif)
-////        print("after-desc:", fontDescirptor.symbolicTraits, extendedRange)
-////        bodyFont = UIFont(descriptor: fontDescirptor, size: CGFloat(theme.bodyFontSize))!
-        ///
-    
         // FIXIT: - ** if enabled, telugu font will not work. if disabled, code block and below lines font
 //        textStorage.addAttribute(.font, value: theme.font, range: extendedRange)
-//
+
+        
+//        let font = textStorage.attribute(.font, at: 0, effectiveRange: &extendedRange)
+//        print(font)
+////        textStorage.addAttribute(.font, value: theme.font, range: extendedRange)
+//        let font2 = textStorage.attribute(.font, at: 0, effectiveRange: &extendedRange)
+//        print(font2)
+        
+        
 //        print("after:", bodyFont.fontDescriptor.symbolicTraits, extendedRange)
 //
         textStorage.addAttribute(.foregroundColor, value: theme.bodyColor.uiColor, range: extendedRange)
