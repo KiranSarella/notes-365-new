@@ -39,7 +39,11 @@ public enum MarkdownPattern: String {
     
     // this will detect only inline
     // https://regexr.com/3cad6
-    case inlineCode = #"(?=`)`(?!`)[^`]*(?=`)`(?!`)"#
+//    case inlineCode = #"(?=`)`(?!`)[^`]*(?=`)`(?!`)"#
+    
+    
+    case inlineCode = #"\B`([^\s])(.*?[^`])`(\B)"#
+//    case inlineCode = #"\B`([^\s])(.*?[^`])`(\B)(?=( |\b|$|\s))"#
 //    case inlineCode = #"\B`([^\s])(.*?)`(\B)(?=( |\b|$|\s))"#
 //    case codeBlock = #"^`{3}([^\s])([\w]*)\n([\S\s]+?)\n^`{3}$"#
     case codeBlock = #"^`{3}([\w]*)\n([\S\s]+?)\n`{3}$"#

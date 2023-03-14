@@ -285,7 +285,13 @@ extension EditorView: NSTextStorageDelegate {
         
         
         processInlineCode(extendedRange: extendedRange, textStorage: textStorage)
-        processCodeBlock(extendedRange: extendedRange, textStorage: textStorage)
+        
+        let fullRange = textStorage.fullRange()
+        if fullRange.length > 0 {
+            processCodeBlock(extendedRange: textStorage.fullRange(), textStorage: textStorage)
+        }
+        
+        
         
         
         // treat non `.markdownRange` as body
@@ -719,6 +725,10 @@ extension EditorView {
             
             let font = UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: UIFont.Weight.medium)
             let textRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 6)
+            
+            // remove all existing attributes
+            innerAttributedString.setAttributes([:], range: textRange)
+            
             // font
             innerAttributedString.addAttribute(.font,
                                                value: font,
