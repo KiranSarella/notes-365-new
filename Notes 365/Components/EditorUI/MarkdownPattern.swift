@@ -45,9 +45,12 @@ public enum MarkdownPattern: String {
     case inlineCode = #"\B`([^\s])(.*?[^`])`(\B)"#
 //    case inlineCode = #"\B`([^\s])(.*?[^`])`(\B)(?=( |\b|$|\s))"#
 //    case inlineCode = #"\B`([^\s])(.*?)`(\B)(?=( |\b|$|\s))"#
+    
+    
 //    case codeBlock = #"^`{3}([^\s])([\w]*)\n([\S\s]+?)\n^`{3}$"#
     case codeBlock = #"^`{3}([\w]*)\n([\S\s]+?)\n`{3}$"#
 //    case codeBlock = #"^(`{3}.*[\n\r][^]*?^`{3})$"#
+    case codeBlockBalanceChecker = #"^`{3}$"#
     
     case blockQuote = #"^(\>)([^\s])(.*)"#
 //    case blockQuote = #"\n(\>)(.*)"#

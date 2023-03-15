@@ -192,6 +192,15 @@ struct AddNotesView: View {
             }.padding()
             Text("add your first notebook")
                 .font(Font.subheadline)
+            
+//            Text("or")
+//                .font(Font.callout)
+//
+//            Button {
+//
+//            } label: {
+//                Text("Sync from iCloud")
+//            }.padding()
         }
     }
 }

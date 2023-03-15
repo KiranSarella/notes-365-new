@@ -714,11 +714,39 @@ extension EditorView {
         }
     }
     
+    func canPocessCodeBlock(_ extendedRange: NSRange, _ innerAttributedString: NSTextStorage) -> (Int, Bool) {
+        
+        let pattern = MarkdownPattern.codeBlockBalanceChecker.rawValue
+        let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
+        
+        let numberOfMatches = regex.numberOfMatches(in: innerAttributedString.string, range: extendedRange)
+        print(numberOfMatches)
+        if numberOfMatches == 0 {
+            return (numberOfMatches, false)
+        }
+        
+        return (numberOfMatches, numberOfMatches.isMultiple(of: 2))
+        
+//        return false
+    }
+    
     func processCodeBlock(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
         
-        let pattern = MarkdownPattern.codeBlock.rawValue
+        // continue if balanced only, else skip
+        let (count, canProceed) = canPocessCodeBlock(extendedRange, textStorage)
         
+        if canProceed == false {
+            return
+        }
+        
+        let pattern = MarkdownPattern.codeBlock.rawValue
         let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
+        // pairs count shoud match half of total single symbols
+        let pairsCount = regex.numberOfMatches(in: innerAttributedString.string, range: extendedRange)
+        print(pairsCount)
+        if pairsCount != (count / 2) {
+            return
+        }
         
         regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
