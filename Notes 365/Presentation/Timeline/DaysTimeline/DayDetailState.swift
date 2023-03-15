@@ -49,7 +49,7 @@ enum CurrentState {
         case .data:
             return ""
         case .empty:
-            return "(empty)"
+            return "No notes were added/updated on the given day(s)"
         }
     }
 }

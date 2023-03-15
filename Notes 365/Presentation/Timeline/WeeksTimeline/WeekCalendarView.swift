@@ -192,27 +192,6 @@ struct WeekView: View {
     }
     
     var body: some View {
-        
-#if os(macOS)
-        ZStack() {
-            weekGridRowView()
-            RoundedRectangle(cornerRadius: 8)
-            //                .stroke(highlightColor(week), lineWidth: 1)
-                .stroke(Color.accentColor, lineWidth: isSelectedWeek(week) ? 1 : 0)
-                .frame(height: 30)
-                .background(Color.red.opacity(0.01))
-                .onTapGesture {
-                    // accept tap only when week belongs to current month
-                    if week.weekDays.first!.getMonth() == navigationDate.getMonth() ||
-                        week.weekDays.last!.getMonth() == navigationDate.getMonth() {
-
-                        let selectedDate = week.weekDays.first!
-                        weekDate = WeekDate(date: selectedDate)
-                        selectedWeek = week
-                    }
-                }
-        }
-#else
         if UIDevice.current.userInterfaceIdiom == .phone {
             if isValidSelection {
                 NavigationLink(value: week) {
@@ -253,10 +232,8 @@ struct WeekView: View {
                 }
             }
         }
-#endif
+        
     }
-    
-    
 }
 
 

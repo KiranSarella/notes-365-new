@@ -69,12 +69,6 @@ struct MonthGridView: View {
                         Button {
                             monthDate = date.monthDate
                         } label: {
-#if os(macOS)
-                            Text("\(date.monthSymbol)")
-                                .padding()
-                                .foregroundColor(date.isCurrentMonth ? CalendarState.todayTint : .primary)
-                            //                                .font(.title3)
-#else
                             if UIDevice.current.userInterfaceIdiom == .phone {
                                 NavigationLink("\(date.monthSymbol)", value: date.monthDate)
                                     .padding()
@@ -84,7 +78,6 @@ struct MonthGridView: View {
                                     .padding()
                                     .foregroundColor(date.isCurrentMonth ? CalendarState.todayTint : .primary)
                             }
-#endif
                         }
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(Color.accentColor, lineWidth: isSelectedMonth(date.monthNumber) ? 1 : 0)

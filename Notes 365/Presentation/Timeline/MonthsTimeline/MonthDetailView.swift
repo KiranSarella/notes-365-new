@@ -126,7 +126,6 @@ struct MonthSectionView: View {
         VStack {
             HStack {
                 Spacer()
-                
                 if UIDevice.current.userInterfaceIdiom == .phone {
                     Text(dayTimeline.date.formatted(date: .abbreviated, time: .omitted))
                         .listRowSeparator(.hidden)
@@ -140,8 +139,6 @@ struct MonthSectionView: View {
                         .font(.largeTitle)
                         .padding(.top, 30)
                 }
-                
-                
             }
             
             DayTimelineTwoView(timelineList: $dayTimeline.notes, theme: $theme)

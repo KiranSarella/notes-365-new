@@ -43,10 +43,9 @@ struct ContentWrapperView: View {
                         statusMessage = "checking iCloud settings"
                         try chooseEnv.setEnviromment(with: .cloud)
                         statusMessage = "moving existing data to iCloud"
-                        if UIDevice.current.userInterfaceIdiom == .mac {
-                            await chooseEnv.checkOldDataSync()
-                        }
-                        
+#if targetEnvironment(macCatalyst)
+                        await chooseEnv.checkOldDataSync()
+#endif
                         // old data compatability
                         /*
                          if cloud folder is empty
@@ -122,8 +121,6 @@ struct ContentView: View {
             return Color(uiColor: UIColor.systemGroupedBackground)
         } else if UIDevice.current.userInterfaceIdiom == .pad {
             return Color(uiColor: UIColor.secondarySystemBackground)
-        } else if UIDevice.current.userInterfaceIdiom == .mac  {
-            return Color(uiColor: UIColor.secondarySystemGroupedBackground)
         }
         
         return Color(uiColor: UIColor.systemGroupedBackground)

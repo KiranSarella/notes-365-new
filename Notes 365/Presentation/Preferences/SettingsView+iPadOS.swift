@@ -217,11 +217,12 @@ struct SettingsView_iPadOS: View {
                 .navigationBarTitleDisplayMode(.inline)
             }
             .toolbar {
-                Button("Done") {
+                #if targetEnvironment(macCatalyst)
+                Button("Close") {
                     showModel = false
                 }
+                #endif
             }
-            
         }
         .onAppear {
             
