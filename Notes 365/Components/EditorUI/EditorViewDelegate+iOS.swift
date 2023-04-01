@@ -15,8 +15,10 @@ protocol EditorViewDelegate {
 
 extension EditorView: EditorViewDelegate {
     
-    func findLogicRandD() {
+    func findAction() {
         
+        
+        textView.findInteraction?.presentFindNavigator(showingReplace: false)
         
         //        self.textView.usesFindBar = true
         
@@ -29,6 +31,8 @@ extension EditorView: EditorViewDelegate {
         
         //        self.textView.showFindIndicator(for: selectedRange)
     }
+    
+    
     
     func markBold() {
 

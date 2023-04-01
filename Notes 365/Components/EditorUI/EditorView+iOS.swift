@@ -135,6 +135,7 @@ extension EditorView {
         
 //        textView.autoresizingMask = [.width]
         
+        self.textView.isFindInteractionEnabled = true
         
 //        self.textView
 //        self.textView.allowsUndo = true

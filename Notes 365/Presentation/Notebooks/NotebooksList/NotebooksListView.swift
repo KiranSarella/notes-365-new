@@ -24,6 +24,10 @@ struct NotebooksListView: View {
                 AddNotesView()
                     .padding([.top], -100)
                     .environmentObject(usersState)
+                    .onAppear {
+                        // try again
+                        usersState.reloadNotebooksList()
+                    }
             } else {
                 VStack {
                     //                List(selection: $selectedNotebook) {

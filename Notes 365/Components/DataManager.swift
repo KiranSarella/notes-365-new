@@ -99,7 +99,7 @@ class ChooseEnvironment: ObservableObject {
     func checkOldDataSync() async {
         return await withCheckedContinuation({ continuation in
             guard let cloudURL = environmentState.basePathURL else { return continuation.resume() }
-//            print(cloudURL)
+            print(cloudURL)
             // step 1:
             // if cloud folder is empty - continue work else return
             let plistURL = cloudURL.appending(path: Constants.notebooksListPath).appendingPathExtension("plist")

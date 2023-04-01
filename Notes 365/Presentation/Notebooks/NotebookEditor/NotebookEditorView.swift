@@ -82,6 +82,14 @@ struct NotebookEditorView: View {
                     editorView.updateTheme(theme: editorState.theme)
                 })
                 .toolbar {
+                    
+                    Button {
+                        editorView.findAction()
+                    } label: {
+                        Image(systemName: "magnifyingglass")
+                    }
+
+                    
                     Toggle("Mode", isOn: $editorState.showSymbols)
                         .toggleStyle(.switch)
                         .help(editorState.showSymbols == false ? "Show Symbols" : "Hide Symbols")
