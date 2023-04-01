@@ -88,7 +88,7 @@ struct NotebookEditorView: View {
                     } label: {
                         Image(systemName: "magnifyingglass")
                     }
-
+                    .foregroundColor(.primary)
                     
                     Toggle("Mode", isOn: $editorState.showSymbols)
                         .toggleStyle(.switch)
