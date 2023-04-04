@@ -54,7 +54,7 @@ class Notebook: Identifiable, Codable {
    
     
     var fileURL: URL {
-        let path = Constants.notebooksPath + "/" + filePath
+        let path = Constants.notebooksFolderName + "/" + filePath
         let basePathUrl = EnvironmentState.shared.basePathURL!
         let fileURL = basePathUrl.appendingPathComponent(path)
 //        print(fileURL)

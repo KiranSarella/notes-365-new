@@ -82,18 +82,18 @@ class NotebookEditorState: ObservableObject {
     
     
     // diff
-    func getChanges(old: String, new: String) -> String {
-        return NotebookContentBusiness.getChanges(old: old, new: new)
-    }
+//    func getChanges(old: String, new: String) -> String {
+//        return NotebookContentBusiness.getChanges(old: old, new: new)
+//    }
     
     func configBaseVersionIfNecessary(_ notebook: Notebook) {
         // reset base version folder on date changed
         VersionBusiness.resetBaseVersionIfNeeded()
         // if reset done, then recreate baseversion file
-        if NotebookContentBusiness.isBaseVersionExists(fileName: notebook.id.uuidString) == false {
+        if VersionBusiness.isBaseVersionExists(fileName: notebook.id.uuidString) == false {
             // case 1: for new notes
             // case 2: for existing notes
-            NotebookContentBusiness.createBaseVersion(for: notebook.id.uuidString, with: self.baseContent)
+            VersionBusiness.createBaseVersion(for: notebook.id.uuidString, with: self.baseContent)
             baseVersionCreated = true
         } else {
             baseVersionCreated = true

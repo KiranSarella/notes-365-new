@@ -40,7 +40,7 @@ class NotebooksListBusiness {
     
 //    private let notebooksLimit = 3
     
-    let notebooksPath = Constants.notebooksPath
+    let notebooksPath = Constants.notebooksFolderName
     
 //    let cloudService = CloudService(cloudDirectory: "Documents", cloudSyncFileName: "notebooks-list.plist")
     
@@ -107,7 +107,7 @@ class NotebooksListBusiness {
             for notebook in notebooks {
                 // move to base folder
                 
-                let oldFolderPath = dataManager.basePathURL.appendingPathComponent(Constants.notebooksPathOld).appendingPathComponent(notebook.oldFilePath)
+                let oldFolderPath = dataManager.basePathURL.appendingPathComponent(Constants.notebooksFolderNameOld).appendingPathComponent(notebook.oldFilePath)
                 let newFolderPath = dataManager.basePathURL.appendingPathComponent(notebooksPath).appendingPathComponent(notebook.id.uuidString).appendingPathExtension("md")
                 
                 do {
@@ -173,9 +173,9 @@ class NotebooksListBusiness {
             // create timeline folder
             // create base/dummy notebook (for consistent top and later level implementations)
             
-            dataManager.createFolder(Constants.notebooksPath)
-            dataManager.createFolder(Constants.timelinePath)
-            dataManager.createFolder(Constants.baseVersionPath)
+            dataManager.createFolder(Constants.notebooksFolderName)
+            dataManager.createFolder(Constants.timelineFolderName)
+            dataManager.createFolder(Constants.todayBaseVersionFolderName)
         }
     }
     
@@ -413,7 +413,7 @@ extension NotebooksListBusiness {
     // retrives notebooks hierarcy from plist, not the notebook content.
     func retrieveNotebooks() -> [Notebook]? {
         
-        let plistURL = basePathURL.appending(path: Constants.notebooksListPath).appendingPathExtension("plist")
+        let plistURL = basePathURL.appending(path: Constants.notebooksPListName).appendingPathExtension("plist")
         
         do {
             // Read the file contents

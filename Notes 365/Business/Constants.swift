@@ -9,9 +9,9 @@ import Foundation
 
 class Constants {
     
-    static let notebooksPathOld = "notebooks"
-    static let notebooksPath = "notebooks-flat"
-    static let timelinePath = "timeline"
-    static let baseVersionPath = "today_base_version"
-    static let notebooksListPath = "notebooks-list"
+    static let notebooksFolderNameOld = "notebooks"
+    static let notebooksFolderName = "notebooks-flat"
+    static let timelineFolderName = "timeline"
+    static let todayBaseVersionFolderName = "today_base_version"
+    static let notebooksPListName = "notebooks-list"
 }

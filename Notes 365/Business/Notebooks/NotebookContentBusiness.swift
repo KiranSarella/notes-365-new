@@ -7,10 +7,17 @@
 
 import Foundation
 
+/*
+ 
+ purpose: notebook + timeline handling
+ 
+ */
+
+
 class NotebookContentBusiness {
     
-    static let notebooksPath = Constants.notebooksPath
-    static let baseVersionPath = Constants.baseVersionPath
+    static let notebooksPath = Constants.notebooksFolderName
+    static let baseVersionPath = Constants.todayBaseVersionFolderName
     
     var notebook: Notebook
 //    var cloudService: CloudService
@@ -30,25 +37,8 @@ class NotebookContentBusiness {
 //        print("##Note-CLOSING: \(notebook.name) \(notebook.filePath)")
     }
     
-    // diff
-    static func getChanges(old: String, new: String) -> String {
-        return StringDiff.getChanges(old: old, new: new)
-    }
-    
-    // MARK: - base version
-    static func createBaseVersion(for fileName: String, with content: String) {
-//        print(#function)
-//        print(fileName, content)
-        FilesHelper.shared.writeToFile(fileName: fileName, folderPath: baseVersionPath, content: content)
-    }
-    
-    static func isBaseVersionExists(fileName: String) -> Bool {
-        return FilesHelper.shared.fileExists(atPath: baseVersionPath, fileName: fileName)
-    }
-    
-    static func getBaseVersion(for fileName: String) -> String? {
-        return FilesHelper.shared.readFile(fileName: fileName, folderPath: baseVersionPath)
-    }
+
+
     
     func saveContentChanges(content: String) {
 //        print(#function)
@@ -61,12 +51,12 @@ class NotebookContentBusiness {
         // base version will be created on appear, so assuming it will exists
         // but when we stay on same notebook while day changed, then?
         guard
-            let baseVersion = NotebookContentBusiness.getBaseVersion(for: notebook.id.uuidString)
+            let baseVersion = VersionBusiness.getBaseVersion(for: notebook.id.uuidString)
         else { return }
         
         // track changes using diff algs
         // get new changes
-        let newContent = NotebookContentBusiness.getChanges(old: baseVersion, new: content)
+        let newContent = StringDiff.getChanges(old: baseVersion, new: content)
         
         // 1. update today version content
         // 2. update notebook content

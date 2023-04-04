@@ -102,7 +102,7 @@ class ChooseEnvironment: ObservableObject {
             print(cloudURL)
             // step 1:
             // if cloud folder is empty - continue work else return
-            let plistURL = cloudURL.appending(path: Constants.notebooksListPath).appendingPathExtension("plist")
+            let plistURL = cloudURL.appending(path: Constants.notebooksPListName).appendingPathExtension("plist")
             
             if FileManager.default.fileExists(atPath: plistURL.path(percentEncoded: false)) {
                 // items already exists.
@@ -126,7 +126,7 @@ class ChooseEnvironment: ObservableObject {
             // get notebooks list for paths
             func retrieveNotebooks() -> [Notebook]? {
                 
-                let localPlistURL = localURL.appending(path: Constants.notebooksListPath).appendingPathExtension("plist")
+                let localPlistURL = localURL.appending(path: Constants.notebooksPListName).appendingPathExtension("plist")
                 
                 do {
                     // Read the file contents
@@ -184,8 +184,8 @@ class ChooseEnvironment: ObservableObject {
                 for notebook in notebooks {
                     // move to base folder
                     
-                    let oldFolderPath = localPath.appendingPathComponent(Constants.notebooksPathOld).appendingPathComponent(notebook.oldFilePath)
-                    let newFolderPath = cloudPath.appendingPathComponent(Constants.notebooksPath).appendingPathComponent(notebook.id.uuidString).appendingPathExtension("md")
+                    let oldFolderPath = localPath.appendingPathComponent(Constants.notebooksFolderNameOld).appendingPathComponent(notebook.oldFilePath)
+                    let newFolderPath = cloudPath.appendingPathComponent(Constants.notebooksFolderName).appendingPathComponent(notebook.id.uuidString).appendingPathExtension("md")
                     
                     do {
                         try FileManager.default.copyItem(at: oldFolderPath, to: newFolderPath)
@@ -200,7 +200,7 @@ class ChooseEnvironment: ObservableObject {
                 }
             }
             // create new
-            let newFolderPath = cloudPath.appendingPathComponent(Constants.notebooksPath)
+            let newFolderPath = cloudPath.appendingPathComponent(Constants.notebooksFolderName)
             try? FileManager.default.createDirectory(at: newFolderPath, withIntermediateDirectories: true)
             // start traversing
             traverse(notebooks: notebooks)
@@ -329,7 +329,7 @@ extension DataManager {
             // generate data
             let plistData = try PropertyListEncoder().encode(notebooks)
             // prepare path
-            let fileURL = basePathURL.appendingPathComponent(Constants.notebooksListPath).appendingPathExtension("plist")
+            let fileURL = basePathURL.appendingPathComponent(Constants.notebooksPListName).appendingPathExtension("plist")
             // save file
             do {
                 // Write to the file
@@ -344,7 +344,7 @@ extension DataManager {
     
     // retrives notebooks hierarcy from plist, not the notebook content.
     func retrieveNotebooks() -> [Notebook]? {
-        let fileURL = basePathURL.appendingPathComponent(Constants.notebooksListPath).appendingPathExtension("plist")
+        let fileURL = basePathURL.appendingPathComponent(Constants.notebooksPListName).appendingPathExtension("plist")
         do {
             // Read the file contents
             let plistData = try Data(contentsOf: fileURL)

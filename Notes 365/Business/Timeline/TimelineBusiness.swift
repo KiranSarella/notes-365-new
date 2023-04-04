@@ -22,7 +22,7 @@ class TimelineBusiness {
     
     var basePathURL: URL
     
-    let timelinePath = Constants.timelinePath
+    let timelinePath = Constants.timelineFolderName
     
     init(path basePathURL: URL) {
         self.basePathURL = basePathURL

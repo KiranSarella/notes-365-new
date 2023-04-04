@@ -8,7 +8,11 @@
 import Foundation
 
 class VersionBusiness {
+    
     static let shared = VersionBusiness()
+    
+    static let baseVersionPath = Constants.todayBaseVersionFolderName
+    
     private init() {}
     
     /*
@@ -109,6 +113,23 @@ class VersionBusiness {
         return indexFileUrl.path
     }
 
+    
+    // MARK: - base version
+    static func createBaseVersion(for fileName: String, with content: String) {
+        //        print(#function)
+        //        print(fileName, content)
+        FilesHelper.shared.writeToFile(fileName: fileName, folderPath: baseVersionPath, content: content)
+        
+        
+    }
+    
+    static func isBaseVersionExists(fileName: String) -> Bool {
+        return FilesHelper.shared.fileExists(atPath: baseVersionPath, fileName: fileName)
+    }
+    
+    static func getBaseVersion(for fileName: String) -> String? {
+        return FilesHelper.shared.readFile(fileName: fileName, folderPath: baseVersionPath)
+    }
 }
 
 

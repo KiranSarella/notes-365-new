@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		9F09CEB129267FBC00609D99 /* VersionBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F09CEB029267FBC00609D99 /* VersionBusiness.swift */; };
 		9F09CEB229267FBC00609D99 /* VersionBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F09CEB029267FBC00609D99 /* VersionBusiness.swift */; };
-		9F09CEB4292684D700609D99 /* PathHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F09CEB3292684D700609D99 /* PathHelper.swift */; };
-		9F09CEB5292684D700609D99 /* PathHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F09CEB3292684D700609D99 /* PathHelper.swift */; };
 		9F14B491298A684F0079D23B /* ThemeDetailView+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B490298A684F0079D23B /* ThemeDetailView+iOS.swift */; };
 		9F14B4AE298F98900079D23B /* FontPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B4AD298F98900079D23B /* FontPicker.swift */; };
 		9F14B4B02990D46D0079D23B /* ThemeDetailState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B4AF2990D46D0079D23B /* ThemeDetailState.swift */; };
@@ -83,8 +81,6 @@
 		9F45BDBE2920EA31003DE332 /* NotebooksListBusinessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BDBD2920EA31003DE332 /* NotebooksListBusinessTests.swift */; };
 		9F45BDBF2920EB14003DE332 /* NotebooksListBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD042920CCCE003DE332 /* NotebooksListBusiness.swift */; };
 		9F45BDC62920EBC3003DE332 /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCD72920CCCE003DE332 /* FileHelper.swift */; };
-		9F45BDC82920FD34003DE332 /* PlistHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BDC72920FD34003DE332 /* PlistHelper.swift */; };
-		9F45BDC92920FD34003DE332 /* PlistHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BDC72920FD34003DE332 /* PlistHelper.swift */; };
 		9F45BDD329226BD9003DE332 /* NotebooksListState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD292920CCCE003DE332 /* NotebooksListState.swift */; };
 		9F45BDDA29234150003DE332 /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BDD929234150003DE332 /* Notebook.swift */; };
 		9F45BDDB29234150003DE332 /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BDD929234150003DE332 /* Notebook.swift */; };
@@ -135,7 +131,6 @@
 
 /* Begin PBXFileReference section */
 		9F09CEB029267FBC00609D99 /* VersionBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionBusiness.swift; sourceTree = "<group>"; };
-		9F09CEB3292684D700609D99 /* PathHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathHelper.swift; sourceTree = "<group>"; };
 		9F14B490298A684F0079D23B /* ThemeDetailView+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThemeDetailView+iOS.swift"; sourceTree = "<group>"; };
 		9F14B4AD298F98900079D23B /* FontPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontPicker.swift; sourceTree = "<group>"; };
 		9F14B4AF2990D46D0079D23B /* ThemeDetailState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeDetailState.swift; sourceTree = "<group>"; };
@@ -215,7 +210,6 @@
 		9F45BD4C2920CCCF003DE332 /* StatusInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusInfoView.swift; sourceTree = "<group>"; };
 		9F45BD4E2920CCCF003DE332 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		9F45BDBD2920EA31003DE332 /* NotebooksListBusinessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListBusinessTests.swift; sourceTree = "<group>"; };
-		9F45BDC72920FD34003DE332 /* PlistHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlistHelper.swift; sourceTree = "<group>"; };
 		9F45BDCA29214D48003DE332 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		9F45BDD929234150003DE332 /* Notebook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notebook.swift; sourceTree = "<group>"; };
 		9F45BDE329238D29003DE332 /* NotebooksHierarchyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksHierarchyTests.swift; sourceTree = "<group>"; };
@@ -230,6 +224,7 @@
 		9F8EE989293EB3090021409E /* CloudDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudDataManager.swift; sourceTree = "<group>"; };
 		9F8EE98C293F4B7E0021409E /* Notes-365-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Notes-365-Info.plist"; sourceTree = SOURCE_ROOT; };
 		9F92CF0429B7525500B8D3C4 /* MailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailView.swift; sourceTree = "<group>"; };
+		9FB0A47129D9246D0093FBD2 /* architecture-decissions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "architecture-decissions.md"; sourceTree = "<group>"; };
 		9FB21DEB295C92CE00CFEDA8 /* TestingBehaviour.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TestingBehaviour.md; sourceTree = "<group>"; };
 		9FB21DEE295CA38E00CFEDA8 /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
 		9FB21DF0295D720E00CFEDA8 /* NotebooksListOperationsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListOperationsTests.swift; sourceTree = "<group>"; };
@@ -340,6 +335,8 @@
 				9F8EE98C293F4B7E0021409E /* Notes-365-Info.plist */,
 				9F45BCA12920CAAE003DE332 /* Notes_365App.swift */,
 				9FB21DEB295C92CE00CFEDA8 /* TestingBehaviour.md */,
+				9FB0A47129D9246D0093FBD2 /* architecture-decissions.md */,
+				9FB0A47429DBD6830093FBD2 /* Features */,
 				9F45BDDF2923441C003DE332 /* Presentation */,
 				9F45BDD4292340B1003DE332 /* Business */,
 				9F45BCD62920CCCE003DE332 /* Components */,
@@ -386,14 +383,9 @@
 				9F45BD2F2920CCCE003DE332 /* __tests */,
 				9F45BD492920CCCF003DE332 /* In-app */,
 				9F45BD2E2920CCCE003DE332 /* StringDiff.swift */,
-				9F8EE989293EB3090021409E /* CloudDataManager.swift */,
-				9FB21DF2295D89E000CFEDA8 /* DataManager.swift */,
-				9F45BDC72920FD34003DE332 /* PlistHelper.swift */,
 				9F45BD0A2920CCCE003DE332 /* EditorUI */,
-				9F45BCD72920CCCE003DE332 /* FileHelper.swift */,
 				9F45BCD82920CCCE003DE332 /* AttributedString+StyledMarkdown+iOS.swift */,
 				9F45BCDC2920CCCE003DE332 /* SpeechHelpr.swift */,
-				9F09CEB3292684D700609D99 /* PathHelper.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -514,7 +506,9 @@
 			children = (
 				9F57BAE6299688BC0076FD9D /* Constants.swift */,
 				9F7D2923299EB9D700B37F51 /* MainBusiness.swift */,
+				9FB0A47329DB22940093FBD2 /* Storage */,
 				9F45BDD5292340DB003DE332 /* Notebooks */,
+				9FB0A47229DB1F090093FBD2 /* TodayVersion */,
 				9F45BDDC292343B2003DE332 /* Timeline */,
 				9F45BD382920CCCF003DE332 /* Theams */,
 			);
@@ -524,16 +518,11 @@
 		9F45BDD5292340DB003DE332 /* Notebooks */ = {
 			isa = PBXGroup;
 			children = (
-				9F45BDD929234150003DE332 /* Notebook.swift */,
 				9F7D291C299A7C1500B37F51 /* MarkdownDocument.swift */,
+				9F45BDD929234150003DE332 /* Notebook.swift */,
 				9F1687CD29ADC2020085A0CA /* PlistDocument.swift */,
-				9F7D2921299CF2AF00B37F51 /* CloudService.swift */,
-				9F7D2925299EC27E00B37F51 /* CloudServiceTwo.swift */,
-				9F1687CB29AD0E7F0085A0CA /* InitialCloudSync.swift */,
-				9F1687CF29AE21B20085A0CA /* NotebooksChangeMonitor.swift */,
 				9F45BD042920CCCE003DE332 /* NotebooksListBusiness.swift */,
 				9FB6C69F2927695000C8EC76 /* NotebookContentBusiness.swift */,
-				9F09CEB029267FBC00609D99 /* VersionBusiness.swift */,
 				9F45BDCA29214D48003DE332 /* README.md */,
 			);
 			path = Notebooks;
@@ -586,6 +575,43 @@
 				9F45BCE22920CCCE003DE332 /* MonthsTimeline */,
 			);
 			path = Timeline;
+			sourceTree = "<group>";
+		};
+		9FB0A47229DB1F090093FBD2 /* TodayVersion */ = {
+			isa = PBXGroup;
+			children = (
+				9F09CEB029267FBC00609D99 /* VersionBusiness.swift */,
+			);
+			path = TodayVersion;
+			sourceTree = "<group>";
+		};
+		9FB0A47329DB22940093FBD2 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				9F45BCD72920CCCE003DE332 /* FileHelper.swift */,
+				9F8EE989293EB3090021409E /* CloudDataManager.swift */,
+				9FB21DF2295D89E000CFEDA8 /* DataManager.swift */,
+				9F7D2921299CF2AF00B37F51 /* CloudService.swift */,
+				9F7D2925299EC27E00B37F51 /* CloudServiceTwo.swift */,
+				9F1687CB29AD0E7F0085A0CA /* InitialCloudSync.swift */,
+				9F1687CF29AE21B20085A0CA /* NotebooksChangeMonitor.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		9FB0A47429DBD6830093FBD2 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				9FB0A47529DBD6930093FBD2 /* Notebooks */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		9FB0A47529DBD6930093FBD2 /* Notebooks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Notebooks;
 			sourceTree = "<group>";
 		};
 		9FB21DEF295D71C100CFEDA8 /* Notebooks */ = {
@@ -776,7 +802,6 @@
 				9F3DB0CA292E23D900704860 /* ThemesListState.swift in Sources */,
 				9F45BD5A2920CD65003DE332 /* MotivationView.swift in Sources */,
 				9F45BD5B2920CD65003DE332 /* MotivationQuestions.swift in Sources */,
-				9F09CEB4292684D700609D99 /* PathHelper.swift in Sources */,
 				9F7D2926299EC27E00B37F51 /* CloudServiceTwo.swift in Sources */,
 				9F3DB0CE292E704D00704860 /* ColorPickerButton.swift in Sources */,
 				9F45BD682920CDAF003DE332 /* CalendarState.swift in Sources */,
@@ -830,7 +855,6 @@
 				9F45BD802920CDE0003DE332 /* ViewerUI.swift in Sources */,
 				9F45BD8B2920CDE0003DE332 /* EditorView+iOS.swift in Sources */,
 				9FB6C6A929279BEC00C8EC76 /* TimelineBusiness.swift in Sources */,
-				9F45BDC82920FD34003DE332 /* PlistHelper.swift in Sources */,
 				9F45BD6C2920CDCB003DE332 /* NotebooksListBusiness.swift in Sources */,
 				9F8EE98A293EB3090021409E /* CloudDataManager.swift in Sources */,
 				9F45BD542920CD5E003DE332 /* MonthCalendarView.swift in Sources */,
@@ -863,8 +887,6 @@
 				9FB21DEA2954B8B200CFEDA8 /* Extensions.swift in Sources */,
 				9FB21DF1295D720E00CFEDA8 /* NotebooksListOperationsTests.swift in Sources */,
 				9F45BCB42920CAB0003DE332 /* Notes_365Tests.swift in Sources */,
-				9F09CEB5292684D700609D99 /* PathHelper.swift in Sources */,
-				9F45BDC92920FD34003DE332 /* PlistHelper.swift in Sources */,
 				9F45BDBB2920E824003DE332 /* StringDiff.swift in Sources */,
 				9F45BDDB29234150003DE332 /* Notebook.swift in Sources */,
 				9F45BDBF2920EB14003DE332 /* NotebooksListBusiness.swift in Sources */,
