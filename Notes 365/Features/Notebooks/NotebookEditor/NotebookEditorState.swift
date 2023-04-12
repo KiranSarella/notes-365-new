@@ -16,9 +16,9 @@ class NotebookEditorState: ObservableObject {
     
     @Published var isFetchingData = true
     @Published var baseContent: String = ""
-    @Published var editorType = EditorType.smart
+//    @Published var editorType = EditorType.smart
     @Published var theme: MarkdownTheme
-    @Published var showSymbols = false
+//    @Published var showSymbols = false
 //    var contentEdited = false
     var contentEditedDate: Date? = Date()
     var lastSavedDate: Date = Date()
@@ -31,6 +31,7 @@ class NotebookEditorState: ObservableObject {
     
     var getNewContent: (() async -> (String))? = nil
     
+    var getTextHandler:(() -> String)?
     
     
 //    let autoSaveTimer = Timer.publish(every: 60, on: .main, in: .common).autoconnect() // 1 min

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EditorUI: UIViewRepresentable {
+struct EditorViewUI: UIViewRepresentable {
     
     let theme: MarkdownTheme
     let text: String
@@ -45,7 +45,7 @@ struct EditorUI: UIViewRepresentable {
     typealias NSViewType = EditorView
 }
 
-extension EditorUI {
+extension EditorViewUI {
     func makeCoordinator() -> EditorUICoordinator {
         return EditorUICoordinator(self)
     }
@@ -53,8 +53,8 @@ extension EditorUI {
 
 // Define View Modifiers
 class EditorUICoordinator: NSObject {
-    var parent: EditorUI
-    init(_ parent: EditorUI) {
+    var parent: EditorViewUI
+    init(_ parent: EditorViewUI) {
         self.parent = parent
     }
 }
