@@ -12,7 +12,7 @@ import Combine
 //@MainActor
 class NotebookEditorState: ObservableObject {
     
-    var notebookBusiness: NotebookContentBusiness?
+    var notebookBusiness = NotebookContentBusiness()
     
     @Published var isFetchingData = true
     @Published var baseContent: String = ""
@@ -52,14 +52,13 @@ class NotebookEditorState: ObservableObject {
             }
     }
     
-    func setupNewNotebook() {
-        
+    func setupNewNotebook(_ notebook: Notebook) {
         self.notebook = notebook
-        self.notebookBusiness = NotebookContentBusiness(notebook: self.notebook)
     }
     
     @MainActor
     func loadContent(for notebook: Notebook) async {
+        setupNewNotebook(notebook)
         self.isFetchingData = true
         let content = await self.notebook.loadContent() ?? ""
         self.baseContent = content
@@ -107,7 +106,7 @@ class NotebookEditorState: ObservableObject {
 //                    print("IN SAME DAY")
                     // same day
                     lastSavedDate = Date()
-                    notebookBusiness?.saveContentChanges(content: txt)
+                    notebookBusiness.saveContentChanges(content: txt, notebook: notebook)
                 } else {
                     // ** day changed **
                     // reset baseContent
@@ -121,7 +120,7 @@ class NotebookEditorState: ObservableObject {
                             self.versionDate = Date()
                             // now save content
                             self.lastSavedDate = Date()
-                            self.notebookBusiness?.saveContentChanges(content: txt)
+                    self.notebookBusiness.saveContentChanges(content: txt, notebook: notebook)
 //                            await self.notebook.saveDocument(with: txt)
 //                        }
 //                    }

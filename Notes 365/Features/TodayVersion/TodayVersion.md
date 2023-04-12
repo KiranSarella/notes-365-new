@@ -7,3 +7,8 @@
 - on notebook open, create base version for that day
 
 
+## version
+- set base version
+- calculate changes - diff
+- 
+

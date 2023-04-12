@@ -28,7 +28,7 @@ extension MonthTimelineThree {
 
 @MainActor class MonthDetailState: ObservableObject {
     
-    let timelineBusiness = TimelineBusiness(path: EnvironmentState.shared.basePathURL)
+//    let timelineBusiness = TimelineBusiness(path: EnvironmentState.shared.basePathURL)
     
     @Published var monthDate: MonthDate
     @Published var currentState = CurrentState.loading

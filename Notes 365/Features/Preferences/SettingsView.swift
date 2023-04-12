@@ -5,7 +5,6 @@
 //  Created by Kiran Sarella on 23/11/22.
 //
 
-#if os(iOS)
 
 import SwiftUI
 
@@ -265,4 +264,3 @@ struct SettingsView_iPadOS: View {
 //}
 
 
-#endif

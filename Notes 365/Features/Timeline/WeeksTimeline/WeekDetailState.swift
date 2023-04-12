@@ -20,7 +20,7 @@ public struct DayChanges: Identifiable {
 
 @MainActor class WeekDetailState: ObservableObject {
     
-    let timelineBusiness = TimelineBusiness(path: EnvironmentState.shared.basePathURL)
+//    let timelineBusiness = TimelineBusiness(path: EnvironmentState.shared.basePathURL)
     
     @Published var weekDate: WeekDate
     @Published var currentState = CurrentState.loading
