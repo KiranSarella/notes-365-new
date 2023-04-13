@@ -65,21 +65,24 @@ class NotebookEditorState: ObservableObject {
         self.baseContent = content
         self.isFetchingData = false
         self.contentEditedDate = nil
+        
+        let info = ["id": notebook.id.uuidString]
+        NotificationCenter.default.post(name: Notification.Name.notebookLoaded, object: nil, userInfo: info)
     }
     
-    func configBaseVersionIfNecessary(_ notebook: Notebook) {
-        // reset base version folder on date changed
-        VersionBusiness.resetBaseVersionIfNeeded()
-        // if reset done, then recreate baseversion file
-        if VersionBusiness.isBaseVersionExists(fileName: notebook.id.uuidString) == false {
-            // case 1: for new notes
-            // case 2: for existing notes
-            VersionBusiness.createBaseVersion(for: notebook.id.uuidString, with: self.baseContent)
-            baseVersionCreated = true
-        } else {
-            baseVersionCreated = true
-        }
-    }
+//    func configBaseVersionIfNecessary(_ notebook: Notebook) {
+//        // reset base version folder on date changed
+//        TodayVersionBusiness.resetBaseVersionIfNeeded()
+//        // if reset done, then recreate baseversion file
+//        if TodayVersionBusiness.isBaseVersionExists(fileName: notebook.id.uuidString) == false {
+//            // case 1: for new notes
+//            // case 2: for existing notes
+//            TodayVersionBusiness.createBaseVersion(for: notebook.id.uuidString, with: self.baseContent)
+//            baseVersionCreated = true
+//        } else {
+//            baseVersionCreated = true
+//        }
+//    }
     
     
     
@@ -116,7 +119,7 @@ class NotebookEditorState: ObservableObject {
 //                        Task {
                             await self.loadContent(for: self.notebook)
                             // create new baseversion
-                            self.configBaseVersionIfNecessary(self.notebook)
+//                            self.configBaseVersionIfNecessary(self.notebook)
                             // update version date
                             self.versionDate = Date()
                             // now save content

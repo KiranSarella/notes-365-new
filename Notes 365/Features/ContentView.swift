@@ -40,6 +40,7 @@ struct ContentWrapperView: View {
                 }
                 .task {
                     do {
+                        
                         statusMessage = "checking iCloud settings"
                         try chooseEnv.setEnviromment(with: .cloud)
                         statusMessage = "moving existing data to iCloud"
@@ -63,6 +64,9 @@ struct ContentWrapperView: View {
                         })
                         // do any operations
 //                        chooseEnv.enableConfigured()
+                        
+                        // clean base version
+                        TodayVersionBusiness.cleanBaseVersionIfNeeded()
                         
                     } catch let error {
                         errorDetail = error
@@ -105,7 +109,7 @@ struct ContentView: View {
     // timeline related
     @ObservedObject var calendarState = CalendarState.shared
     // notebooks related
-    @State private var selectedUser: NotebookM?
+    @State private var selectedNotebookM: NotebookM?
     @ObservedObject var notebooksListState = NotebooksListState.shared
     
     @State var selectedCalenderType: CalendarType.ID? = CalendarType.day.id
@@ -115,6 +119,7 @@ struct ContentView: View {
     @State var showDetail = false
     
     @StateObject private var editorState = NotebookEditorState()
+    
     
     var bottomViewBackgroundColor: Color {
         if UIDevice.current.userInterfaceIdiom == .phone {
@@ -206,7 +211,7 @@ struct ContentView: View {
                     TimelineSidebarView(calendarID: $selectedCalenderType)
                         .environmentObject(calendarState)
                 case .noteBooks:
-                    NotebooksListView(icloudSyncing: $icloudSyncing, selectedNotebook: $selectedUser)
+                    NotebooksListView(icloudSyncing: $icloudSyncing, selectedNotebook: $selectedNotebookM)
                         .environmentObject(notebooksListState)
 //                        .onAppear {
 //                            Task {
@@ -236,7 +241,14 @@ struct ContentView: View {
                     }
                 }
             case .noteBooks:
-                NotebookEditorView(notebookM: $selectedUser, editorState: editorState)
+                
+                if selectedNotebookM != nil {
+                    NotebookEditorView(notebookM: Binding($selectedNotebookM)!, editorState: editorState)
+                } else {
+                    Text("No notebook selected")
+                }
+                
+                
 //                    .navigationTitle(selectedUser?.name ?? "")
             }
         }

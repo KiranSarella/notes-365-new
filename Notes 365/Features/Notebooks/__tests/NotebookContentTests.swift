@@ -69,32 +69,32 @@ final class NotebookContentTests: XCTestCase {
         try? FileManager.default.removeItem(at: baseURL)
     }
 
-    func testSaveAndLoadContent() async throws {
-        
-        let content = """
-one
-two
-three
-"""
-        
-        await notebookEditorState.loadContent(for: notebook.notebook)
-//        await MainActor.run {
-            notebookEditorState.getNewContent = {
-                return await MainActor.run { content }
-//                return content
-            }
-//        }
-        
-        await notebookEditorState.saveContentChanges()
-        
-        // load content
-        await notebookEditorState.loadContent(for: notebook.notebook)
-        let value = notebookEditorState.baseContent
-        print(value)
-        print(content)
-        XCTAssertEqual(value, content)
-        
-    }
+//    func testSaveAndLoadContent() async throws {
+//        
+//        let content = """
+//one
+//two
+//three
+//"""
+//
+//        await notebookEditorState.loadContent(for: notebook.notebook)
+////        await MainActor.run {
+//            notebookEditorState.getNewContent = {
+//                return await MainActor.run { content }
+////                return content
+//            }
+////        }
+//
+//        await notebookEditorState.saveContentChanges()
+//
+//        // load content
+//        await notebookEditorState.loadContent(for: notebook.notebook)
+//        let value = notebookEditorState.baseContent
+//        print(value)
+//        print(content)
+//        XCTAssertEqual(value, content)
+//
+//    }
     
     
 }

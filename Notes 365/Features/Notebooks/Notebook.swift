@@ -222,7 +222,6 @@ extension Notebook {
     }
     
     var filePath: String {
-        
         return self.id.uuidString + ".md"
     }
     
@@ -291,7 +290,6 @@ extension Notebook {
 //    }
     
     nonisolated func loadContent() async -> String? {
-        
         do {
             let fileHandle = try FileHandle(forReadingFrom: fileURL)
             guard
@@ -304,15 +302,6 @@ extension Notebook {
             print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
             return nil
         }
-        
-//        do {
-//            //            print(fileURL)
-//            // Read the file contents
-//            return try String(contentsOf: fileURL)
-//        } catch let error as NSError {
-//            print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
-//            return ""
-//        }
     }
     
     func saveContent(content: String) {

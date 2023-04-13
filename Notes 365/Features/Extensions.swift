@@ -235,3 +235,17 @@ extension Color {
         self.init(.sRGB, red: red, green: green, blue: blue, opacity: opacity)
     }
 }
+
+extension FileManager {
+    
+    func removeAllItems(at path: URL) throws {
+        // get all item names
+        let items = try FileManager.default.contentsOfDirectory(atPath: path.path(percentEncoded:false))
+        for item in items {
+            // prepare path for each item
+            let itemPath = path.appendingPathComponent(item, conformingTo: .item)
+            // remove item
+            try FileManager.default.removeItem(at: itemPath)
+        }
+    }
+}

@@ -33,3 +33,17 @@ iPad - using contentView - detail block
 
 
 
+# Inputs
+notebook updated/saved notification with new content and path 
+
+# Operations
+#### notebook updated/saved notication
+- get base version content from /todaysVersion
+- get updated version content from - notification
+- do string diff.
+- save notechanges in to timeline path
+
+# Outputs
+- notechanges will be saved to timeline path
+
+
