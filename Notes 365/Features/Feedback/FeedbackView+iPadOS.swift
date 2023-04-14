@@ -15,6 +15,10 @@ struct FeedbackView_iPadOS: View {
     @State private var result: Result<MFMailComposeResult, Error>? = nil
     @State private var isShowingMailView = false
     
+    var canSendMail: Bool {
+        MFMailComposeViewController.canSendMail()
+    }
+    
     var body: some View {
         
         VStack {
@@ -40,23 +44,20 @@ struct FeedbackView_iPadOS: View {
                 HStack {
                     Spacer()
                     Button {
-                        
-                        if MFMailComposeViewController.canSendMail() {
+                        if canSendMail {
                             self.isShowingMailView.toggle()
-                        } else {
-                            
                         }
                     } label: {
                         Text("send")
                     }
-                    .disabled(!MFMailComposeViewController.canSendMail())
+                    .disabled(!canSendMail)
                 }
                 HStack {
                     Spacer()
                     Text("Can't send emails from this device")
+                        .opacity(canSendMail ? 0 : 1)
                         .fontWeight(.ultraLight)
                 }
-                
                 .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
                 Spacer()
             }
