@@ -8,40 +8,52 @@
 import Foundation
 
 extension Notification.Name {
-    public static let notebookChanges = Notification.Name("com.notes365.notebookChanges")
+    public static let notebookContentUpdated = Notification.Name("com.notes365.notebookContentUpdated")
 }
 
 class TimelineCreatorBusiness {
     
     init() {
-        
         registerNotebookChangesNotification()
     }
     
     deinit {
-        
         removeNotebookChangesNotification()
     }
     
     func registerNotebookChangesNotification() {
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookChangesNotification(_:)), name: Notification.Name.notebookChanges, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookChangesNotification(_:)), name: Notification.Name.notebookContentUpdated, object: nil)
     }
     
     func removeNotebookChangesNotification() {
-        NotificationCenter.default.removeObserver(self, name: Notification.Name.notebookChanges, object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.notebookContentUpdated, object: nil)
     }
     
     @objc func handleNotebookChangesNotification(_ notification: Notification) {
-        print(notification.userInfo)
+        guard
+            let uuid = notification.userInfo?["id"] as? String,
+            let notebookName = notification.userInfo?["notebookName"] as? String,
+            let notebookPath = notification.userInfo?["notebookPath"] as? String
+        else { return }
         
-        // get new content
-        // ask todayVersion object to get baseversion
+        Task {
+            // get updated content from notebook business
+            guard let content = await NotebookContentBusiness.loadContent(id: uuid) else { return }
+            // ask todayVersion object to get baseversion
+            let baseVersion = TodayVersionBusiness.getBaseVersion(for: uuid) ?? ""
+            // do string diff
+            // save to timeline path
+            let noteChanges = StringDiff.getChanges(old: baseVersion, new: content)
+            
+            let today = Date()
+            let timelinePath = "timeline/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
+            
+            // save noteChanges
+            save(noteChanges: noteChanges, to: timelinePath, uuid: uuid)
+            // save metadata
+            saveMetadata(timelinePath: timelinePath, uuid: uuid, notebookName: notebookName, notebookPath: notebookPath)
+        }
         
-        // do string diff
-        // save to timeline path
-        
-        // handle meta data
         
     }
     
@@ -51,24 +63,21 @@ class TimelineCreatorBusiness {
      3. prepare metadata line
      4. add new metadata line
      */
-    func addOrUpdateToday(contentChanges: String, uuid: UUID, fileName: String, filePath: String) {
-        let today = Date()
-        let timelinePath = "timeline/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
-        
-        // save content
-        saveContent(timelinePath: timelinePath, uuid: uuid, content: contentChanges)
-        
-        // save metadata
-        saveMetadata(timelinePath: timelinePath, uuid: uuid, fileName: fileName, filePath: filePath)
-    }
+//    func addOrUpdateToday(contentChanges: String, uuid: UUID, fileName: String, filePath: String) {
+//        let today = Date()
+//        let timelinePath = "timeline/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
+//
+//        // save content
+//        saveContent(timelinePath: timelinePath, uuid: uuid, content: contentChanges)
+//
+//        // save metadata
+//        saveMetadata(timelinePath: timelinePath, uuid: uuid, fileName: fileName, filePath: filePath)
+//    }
     
-    func saveContent(timelinePath: String, uuid: UUID, content: String) {
-        
+    func save(noteChanges: String, to timelinePath: String, uuid: String) {
         guard let basePathURL = EnvironmentState.shared.basePathURL else { return }
-        
         let folderURL = basePathURL.appendingPathComponent(timelinePath)
-        let fileURL = folderURL.appendingPathComponent(uuid.uuidString).appendingPathExtension("md")
-        
+        let fileURL = folderURL.appendingPathComponent(uuid).appendingPathExtension("md")
         do {
             // create intermediate folders if not exists
             if FileManager.default.fileExists(atPath: folderURL.path) == false {
@@ -79,13 +88,13 @@ class TimelineCreatorBusiness {
                 }
             }
             // Write to the file
-            try content.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
+            try noteChanges.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
         } catch let error as NSError {
             print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
         }
     }
     
-    func saveMetadata(timelinePath: String, uuid: UUID, fileName: String, filePath: String) {
+    func saveMetadata(timelinePath: String, uuid: String, notebookName: String, notebookPath: String) {
         
         let metadataFilePath = timelinePath + "/" + "metadata"
         var metadata: String = ""
@@ -112,7 +121,7 @@ class TimelineCreatorBusiness {
             for i in 0..<lines.count {
                 let line = lines[i]
                 let words = line.components(separatedBy: "\t")
-                if words.first == uuid.uuidString {
+                if words.first == uuid {
                     searchIndex = i
                     break
                 }
@@ -132,11 +141,10 @@ class TimelineCreatorBusiness {
             }
         }
         // add this file metadata to this object
-        let metadataLine =  "\(uuid.uuidString)\t\(Date.now)\t\(fileName)\t\(filePath)\n"
+        let metadataLine =  "\(uuid)\t\(Date.now)\t\(notebookName)\t\(notebookPath)\n"
         metadata = metadata.appending(metadataLine)
         
         let fileURL = basePathURL.appendingPathComponent(timelinePath).appendingPathComponent("metadata")
-        
         do {
             // Write to the file
             try metadata.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)

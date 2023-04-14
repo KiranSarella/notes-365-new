@@ -8,7 +8,7 @@
 import Foundation
 
 extension Notification.Name {
-    public static let notebookLoaded = Notification.Name("com.notes365.notebookLoaded")
+    public static let notebookContentLoaded = Notification.Name("com.notes365.notebookContentLoaded")
 }
 
 class TodayVersionBusiness {
@@ -31,21 +31,19 @@ class TodayVersionBusiness {
     
     func registerNotebookLoadedNotification() {
         
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookLoadedNotification(_:)), name: Notification.Name.notebookLoaded, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookLoadedNotification(_:)), name: Notification.Name.notebookContentLoaded, object: nil)
     }
     
     func removeNotebookLoadedNotification() {
-        NotificationCenter.default.removeObserver(self, name: Notification.Name.notebookLoaded, object: nil)
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.notebookContentLoaded, object: nil)
     }
     
     @objc func handleNotebookLoadedNotification(_ notification: Notification) {
-        print(notification.userInfo)
         // get filename from userInfo
         guard let uuid = notification.userInfo?["id"] as? String else { return }
-        
         Task {
             // ask NotebookBusiness object for content
-            guard let content = await NotebookContentBusiness().loadContent(id: uuid) else { return }
+            let content = await NotebookContentBusiness.loadContent(id: uuid) ?? ""
             // create base version
             TodayVersionBusiness.createBaseVersionIfNotExists(for: uuid, with: content)
         }

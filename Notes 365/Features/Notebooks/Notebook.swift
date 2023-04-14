@@ -240,9 +240,7 @@ extension Notebook {
         return path
     }
     
-    
     var folderPath: String {
-        
         // add self
         var path: String = self.name
         // add parents

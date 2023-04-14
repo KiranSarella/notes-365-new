@@ -19,6 +19,7 @@ class NotebookContentBusiness {
     static let notebooksPath = Constants.notebooksFolderName
     static let baseVersionPath = Constants.todayBaseVersionFolderName
     
+    /*
     func saveContentChanges(content: String, notebook: Notebook) {
 //        print(#function)
 //        cloudService.updateUpdateDate()
@@ -57,9 +58,24 @@ class NotebookContentBusiness {
         }
     
     }
+    */
     
     
-    func loadContent(id: String) async -> String? {
+    func saveContentChanges(content: String, notebook: Notebook) {
+        
+        notebook.saveContent(content: content)
+        
+        // if required - send notification after some delay
+        let info = [
+            "id": notebook.id.uuidString,
+            "notebookName": notebook.name,
+            "notebookPath": notebook.folderPath
+        ]
+        NotificationCenter.default.post(name: Notification.Name.notebookContentUpdated, object: nil, userInfo: info)
+    }
+    
+    
+    static func loadContent(id: String) async -> String? {
         
         let filePath = id + ".md"
         
