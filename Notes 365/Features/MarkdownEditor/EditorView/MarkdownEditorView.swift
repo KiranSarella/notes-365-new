@@ -68,7 +68,7 @@ struct MarkdownEditorView: View {
             }
             .foregroundColor(.primary)
             
-            Toggle("Mode", isOn: $showSymbols)
+            Toggle("", isOn: $showSymbols)
                 .toggleStyle(.switch)
                 .help(showSymbols == false ? "Show Symbols" : "Hide Symbols")
                 .onChange(of: showSymbols) { newValue in

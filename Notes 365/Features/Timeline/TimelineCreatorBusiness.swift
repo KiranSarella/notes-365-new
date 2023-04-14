@@ -45,6 +45,10 @@ class TimelineCreatorBusiness {
             // save to timeline path
             let noteChanges = StringDiff.getChanges(old: baseVersion, new: content)
             
+            if noteChanges.count == 0 {
+                return
+            }
+            
             let today = Date()
             let timelinePath = "timeline/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
             
