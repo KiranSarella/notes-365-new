@@ -53,17 +53,21 @@ struct NotebookEditorView: View {
         }
 //        .navigationTitle(notebookM?.name ?? "")
         .onAppear {
-            editorState.getNotebook = {
-                return notebookM.notebook
+            Task {
+                // new notebook steps
+                await editorState.loadContent(for: notebookM.notebook)
+                editorState.getNewContent = {
+                    return await MainActor.run {
+                        editorState.getTextHandler!()
+                    }
+                }
             }
         }
         .onChange(of: notebookM) { newValue in
-            
             Task {
                 // existing notebook steps
                 // save existing changes if required
                 await editorState.saveContentChanges()
-                editorState.baseVersionCreated = false
                 
                 // new notebook steps
                 await editorState.loadContent(for: newValue.notebook)
@@ -72,9 +76,6 @@ struct NotebookEditorView: View {
                         editorState.getTextHandler!()
                     }
                 }
-                // base version verifiation on every time notebook editor appear
-                // usefull if new day entered.
-//                editorState.configBaseVersionIfNecessary(newValue.notebook)
             }
         }
         .onReceive(autoSaveTimer, perform: { _ in

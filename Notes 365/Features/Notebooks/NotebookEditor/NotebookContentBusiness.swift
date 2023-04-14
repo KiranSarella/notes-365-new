@@ -19,53 +19,11 @@ class NotebookContentBusiness {
     static let notebooksPath = Constants.notebooksFolderName
     static let baseVersionPath = Constants.todayBaseVersionFolderName
     
-    /*
     func saveContentChanges(content: String, notebook: Notebook) {
-//        print(#function)
-//        cloudService.updateUpdateDate()
-        
-        // if now == appear date; continue
-        // else have to handle on appear process again; like - today_base_version..
-        
-        // compare with snapshot version
-        // base version will be created on appear, so assuming it will exists
-        // but when we stay on same notebook while day changed, then?
-        guard
-            let baseVersion = TodayVersionBusiness.getBaseVersion(for: notebook.id.uuidString)
-        else { return }
-        
-        // track changes using diff algs
-        // get new changes
-        let newContent = StringDiff.getChanges(old: baseVersion, new: content)
-        
-        // 1. update today version content
-        // 2. update notebook content
-        if newContent.count > 0 {
-            // get / create Timeline object for a day
-            // update version
-//            TodayVersionBusiness.shared.addOrUpdateToday(contentChanges: newContent, uuid: notebook.id, fileName: notebook.name, filePath: notebook.folderPath)
-            // update notebook
-            
-//            Task {
-//                print("SAVING CONTENT:")
-//                print(content)
-//                await notebook.saveDocument(with: content)
-//            }
-            
-            notebook.saveContent(content: content)
-        } else {
-//            print("content not edited *****")
-        }
-    
-    }
-    */
-    
-    
-    func saveContentChanges(content: String, notebook: Notebook) {
-        
+        // write updated content to file
         notebook.saveContent(content: content)
-        
-        // if required - send notification after some delay
+        // send notification
+        // TODO: send notification after some delay - based on result.
         let info = [
             "id": notebook.id.uuidString,
             "notebookName": notebook.name,
@@ -74,11 +32,8 @@ class NotebookContentBusiness {
         NotificationCenter.default.post(name: Notification.Name.notebookContentUpdated, object: nil, userInfo: info)
     }
     
-    
     static func loadContent(id: String) async -> String? {
-        
         let filePath = id + ".md"
-        
         var fileURL: URL {
             let path = Constants.notebooksFolderName + "/" + filePath
             let basePathUrl = EnvironmentState.shared.basePathURL!
