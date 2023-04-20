@@ -45,6 +45,8 @@ final class InitialCloudSync {
         NotificationCenter.default.addObserver(self, selector: #selector(metadataQueryDidFinishGathering(_:)), name: .NSMetadataQueryDidFinishGathering, object: metadataQuery)
         
         // gathering error ?
+        
+        
         metadataQuery.enableUpdates()
         metadataQuery.start()
         
@@ -68,7 +70,7 @@ final class InitialCloudSync {
     }
     
     @objc func metadataQueryDidUpdate(_ notification: NSNotification) {
-//        print(#function)
+        print(#function)
         
         guard let metadataQuery = notification.object as? NSMetadataQuery else { return }
         
@@ -83,7 +85,7 @@ final class InitialCloudSync {
     }
     
     @objc func metadataQueryDidFinishGathering(_ notification: NSNotification) {
-//        print(#function)
+        print(#function)
         isSyncCalled = true
         guard let metadataQuery = notification.object as? NSMetadataQuery else { return }
         // pause updates till all results are processed
@@ -91,14 +93,14 @@ final class InitialCloudSync {
         
         guard let results = metadataQuery.results as? [NSMetadataItem] else { return }
         
-//        print("Results count: \(metadataQuery.resultCount)")
+        print("Results count: \(metadataQuery.resultCount)")
         
         for item in results {
             guard let itemURL = item.value(forAttribute: NSMetadataItemURLKey) as? URL else { return }
-//            print(itemURL.path(percentEncoded: false))
+            print(itemURL.path(percentEncoded: false))
             // download status
             guard let downloadStatus = item.value(forAttribute: NSMetadataUbiquitousItemDownloadingStatusKey) as? String else { return }
-//            print(downloadStatus)
+            print(downloadStatus)
             
             if downloadStatus == NSMetadataUbiquitousItemDownloadingStatusCurrent {
                 // there is a local version of this item and it is the most up-to-date version known to this device.
@@ -163,7 +165,7 @@ final class InitialCloudSync {
     func downloadFile(_ cloudUrl: URL, item: NSMetadataItem) {
 //        print(#function)
         notDownloadedItems.append(item)
-//        print(cloudUrl.path(percentEncoded: false))
+        print(cloudUrl.path(percentEncoded: false))
         do {
             try FileManager.default.startDownloadingUbiquitousItem(at: cloudUrl)
         } catch let error {

@@ -58,6 +58,7 @@ struct ContentWrapperView: View {
                          */
                         
                         statusMessage = "iCloud sync.."
+                        
                         chooseEnv.downloaodCloudDocuments(completion: {
                             // do any operations
                             chooseEnv.enableConfigured()
@@ -120,6 +121,8 @@ struct ContentView: View {
     
     @StateObject private var editorState = NotebookEditorState()
     
+    private var todayVersionSync = TodayVersionSync(basePathURL: EnvironmentState.shared.basePathURL)
+    
     
     var bottomViewBackgroundColor: Color {
         if UIDevice.current.userInterfaceIdiom == .phone {
@@ -147,7 +150,6 @@ struct ContentView: View {
                 // bottom view - settings option
                 HStack {
                     VStack {
-                        
                         Button {
                             // do sync
                             icloudSyncing = true

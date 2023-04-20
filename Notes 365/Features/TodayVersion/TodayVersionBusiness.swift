@@ -20,17 +20,14 @@ class TodayVersionBusiness {
     }
     
     init() {
-        
         registerNotebookLoadedNotification()
     }
     
     deinit {
-        
         removeNotebookLoadedNotification()
     }
     
     func registerNotebookLoadedNotification() {
-        
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookLoadedNotification(_:)), name: Notification.Name.notebookContentLoaded, object: nil)
     }
     
@@ -81,6 +78,8 @@ class TodayVersionBusiness {
         if FileManager.default.fileExists(atPath: fileURL.path(percentEncoded: false)) {
             return
         }
+        // check if file exists in the server, if so, force download
+        
         
         do {
             // create intermediate folders if not exists

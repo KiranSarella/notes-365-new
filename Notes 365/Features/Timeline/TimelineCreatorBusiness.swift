@@ -61,23 +61,6 @@ class TimelineCreatorBusiness {
         
     }
     
-    /*
-     1. save changes to today's version
-     2. remove existing metadata line
-     3. prepare metadata line
-     4. add new metadata line
-     */
-//    func addOrUpdateToday(contentChanges: String, uuid: UUID, fileName: String, filePath: String) {
-//        let today = Date()
-//        let timelinePath = "timeline/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
-//
-//        // save content
-//        saveContent(timelinePath: timelinePath, uuid: uuid, content: contentChanges)
-//
-//        // save metadata
-//        saveMetadata(timelinePath: timelinePath, uuid: uuid, fileName: fileName, filePath: filePath)
-//    }
-    
     func save(noteChanges: String, to timelinePath: String, uuid: String) {
         guard let basePathURL = EnvironmentState.shared.basePathURL else { return }
         let folderURL = basePathURL.appendingPathComponent(timelinePath)

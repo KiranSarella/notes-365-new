@@ -26,10 +26,17 @@ how to know if base version file is todays or old one? - that was synced from iC
 - based on user defaults sync date.
 - need to do icloud sync user defaults also.
 
-in d2:
-case 1. if sync done, and later date check done, this is remove all sync files, because they don't know if that sycned files are todays or old once.
-solution: 
-maitain folder /2022-04-02 for system date, on every app foreground/launch - remove all folders except that system date folder.
+
+# iCloud Sync Steps
+- on app launch force fetch/sync /today-base-version folder files
+    - using metadataQuery get added, removed, updated items and do the same actions manually.
 
 
- 
+### When to sync?
+1. ~~on app launch~~ - not required
+2. 
+    
+
+
+https://stackoverflow.com/questions/49066409/nsmetadataquery-by-folders-ios
+
