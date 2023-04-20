@@ -102,8 +102,8 @@
 		9FB0A48529DE8DEF0093FBD2 /* NamedColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD462920CCCF003DE332 /* NamedColor.swift */; };
 		9FB0A48629DE8E030093FBD2 /* ThemeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3DB0CB292E340200704860 /* ThemeState.swift */; };
 		9FB0A48729DE8E150093FBD2 /* ThemeBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3DB0C5292E1D9200704860 /* ThemeBusiness.swift */; };
-		9FB21DF3295D89E000CFEDA8 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB21DF2295D89E000CFEDA8 /* DataManager.swift */; };
-		9FB21DF4295DBE5900CFEDA8 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB21DF2295D89E000CFEDA8 /* DataManager.swift */; };
+		9FB21DF3295D89E000CFEDA8 /* ChooseEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB21DF2295D89E000CFEDA8 /* ChooseEnvironment.swift */; };
+		9FB21DF4295DBE5900CFEDA8 /* ChooseEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB21DF2295D89E000CFEDA8 /* ChooseEnvironment.swift */; };
 		9FB6C69829275D0600C8EC76 /* FormatOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB6C69729275D0600C8EC76 /* FormatOptionsView.swift */; };
 		9FB6C69A29275D5100C8EC76 /* FormatOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB6C69929275D5100C8EC76 /* FormatOptions.swift */; };
 		9FB6C69C29275E0300C8EC76 /* NotebookEditorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB6C69B29275E0300C8EC76 /* NotebookEditorState.swift */; };
@@ -227,7 +227,7 @@
 		9FB0A47F29DD873E0093FBD2 /* NotebookContentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentTests.swift; sourceTree = "<group>"; };
 		9FB0A48C29DF13360093FBD2 /* timeline.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = timeline.md; sourceTree = "<group>"; };
 		9FB21DEE295CA38E00CFEDA8 /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
-		9FB21DF2295D89E000CFEDA8 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		9FB21DF2295D89E000CFEDA8 /* ChooseEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseEnvironment.swift; sourceTree = "<group>"; };
 		9FB40282297B9F60000DF922 /* markdown-regex.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "markdown-regex.md"; sourceTree = "<group>"; };
 		9FB6C69729275D0600C8EC76 /* FormatOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatOptionsView.swift; sourceTree = "<group>"; };
 		9FB6C69929275D5100C8EC76 /* FormatOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatOptions.swift; sourceTree = "<group>"; };
@@ -487,7 +487,7 @@
 			isa = PBXGroup;
 			children = (
 				9F8EE989293EB3090021409E /* CloudDataManager.swift */,
-				9FB21DF2295D89E000CFEDA8 /* DataManager.swift */,
+				9FB21DF2295D89E000CFEDA8 /* ChooseEnvironment.swift */,
 				9F7D2921299CF2AF00B37F51 /* CloudService.swift */,
 				9F7D2925299EC27E00B37F51 /* CloudServiceTwo.swift */,
 				9F1687CB29AD0E7F0085A0CA /* InitialCloudSync.swift */,
@@ -834,7 +834,7 @@
 				9F3DB0C4292DF82300704860 /* FeedbackView+iPadOS.swift in Sources */,
 				9F188D812930E49F0078D413 /* MarkdownHeading.swift in Sources */,
 				9F93E15029E6A2AC00210E99 /* MarkdownEditorView.swift in Sources */,
-				9FB21DF3295D89E000CFEDA8 /* DataManager.swift in Sources */,
+				9FB21DF3295D89E000CFEDA8 /* ChooseEnvironment.swift in Sources */,
 				9F45BD502920CD45003DE332 /* Extensions.swift in Sources */,
 				9F3DB0C2292DE09500704860 /* SettingsView.swift in Sources */,
 				9F45BD642920CDA3003DE332 /* Timeline.swift in Sources */,
@@ -874,7 +874,7 @@
 				9F45BDDB29234150003DE332 /* Notebook.swift in Sources */,
 				9FB0A48529DE8DEF0093FBD2 /* NamedColor.swift in Sources */,
 				9F45BDBF2920EB14003DE332 /* NotebooksListBusiness.swift in Sources */,
-				9FB21DF4295DBE5900CFEDA8 /* DataManager.swift in Sources */,
+				9FB21DF4295DBE5900CFEDA8 /* ChooseEnvironment.swift in Sources */,
 				9F45BDD329226BD9003DE332 /* NotebooksListState.swift in Sources */,
 				9FA7BE2A29F0FFA000CB5D6F /* Extensions.swift in Sources */,
 				9F8EE98B293EB32D0021409E /* CloudDataManager.swift in Sources */,

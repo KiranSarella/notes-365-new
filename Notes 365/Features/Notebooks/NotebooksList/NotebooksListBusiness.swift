@@ -25,8 +25,6 @@ class NotebooksListBusiness {
     
     var basePathURL: URL
     
-    var dataManager: DataManager!
-    
 //    var document: PlistDocument?
 //    var newContentAvailalble: (()->())?
 //    private var notificationObserver: Any?
@@ -54,16 +52,12 @@ class NotebooksListBusiness {
     init(_ basePathURL: URL) {
         self.basePathURL = basePathURL
         
-        self.dataManager = DataManager(path: basePathURL)
-        
-        
         if let notebooks = retrieveNotebooks() {
             self.notebooks = notebooks
         } else {
             // no notebooks exists, create empty or base configuration
             self.notebooks = [Notebook]()
         }
-            
         
         // if new folder not exits and contains notebooks - means old version structure
 //        let flatNotebooksPath = dataManager.basePathURL.appendingPathComponent(notebooksPath).path(percentEncoded: false)
@@ -110,8 +104,8 @@ class NotebooksListBusiness {
             for notebook in notebooks {
                 // move to base folder
                 
-                let oldFolderPath = dataManager.basePathURL.appendingPathComponent(Constants.notebooksFolderNameOld).appendingPathComponent(notebook.oldFilePath)
-                let newFolderPath = dataManager.basePathURL.appendingPathComponent(notebooksPath).appendingPathComponent(notebook.id.uuidString).appendingPathExtension("md")
+                let oldFolderPath = basePathURL.appendingPathComponent(Constants.notebooksFolderNameOld).appendingPathComponent(notebook.oldFilePath)
+                let newFolderPath = basePathURL.appendingPathComponent(notebooksPath).appendingPathComponent(notebook.id.uuidString).appendingPathExtension("md")
                 
                 do {
                     try FileManager.default.moveItem(atPath: oldFolderPath.path, toPath: newFolderPath.path(percentEncoded: false))
@@ -126,7 +120,7 @@ class NotebooksListBusiness {
             }
         }
         // create new
-        let newFolderPath = dataManager.basePathURL.appendingPathComponent(notebooksPath)
+        let newFolderPath = basePathURL.appendingPathComponent(notebooksPath)
         try? FileManager.default.createDirectory(at: newFolderPath, withIntermediateDirectories: true)
         // start traversing
         traverse(notebooks: notebooks)
@@ -171,7 +165,7 @@ class NotebooksListBusiness {
     }
     
     private func createRequiredFoldersIfNotExists() {
-        if !dataManager.itemExists(atPath: notebooksPath) {
+        if !itemExists(atPath: notebooksPath) {
             // create notebooks folder
             // create timeline folder
             // create base/dummy notebook (for consistent top and later level implementations)
@@ -180,6 +174,12 @@ class NotebooksListBusiness {
             createFolder(Constants.timelineFolderName)
             createFolder(Constants.todayBaseVersionFolderName)
         }
+    }
+    
+    // both folder and file
+    private func itemExists(atPath path: String) -> Bool {
+        let itemURL = basePathURL.appendingPathComponent(path, isDirectory: false)
+        return FileManager.default.fileExists(atPath: itemURL.path)
     }
     
     private func createFolder(_ folderName: String) {
@@ -211,7 +211,7 @@ class NotebooksListBusiness {
         let firstBook = createNotebook(parent: nil)
         notebooks.append(firstBook)
         // persist content
-        dataManager.writeToFile(content: "", fileName: firstBook.id.uuidString, folderPath: notebooksPath, ext: "md")
+        writeToFile(content: "", fileName: firstBook.id.uuidString, folderPath: notebooksPath, ext: "md")
         // persist hierarchy
         persistNotebooks()
         
@@ -237,7 +237,7 @@ class NotebooksListBusiness {
 //            // create folder
 //            dataManager.createFolder(fullPath)
             // create phycical file
-            dataManager.writeToFile(content: "", fileName: newNotebook.id.uuidString, folderPath: fullPath, ext: "md")
+            writeToFile(content: "", fileName: newNotebook.id.uuidString, folderPath: fullPath, ext: "md")
             // persist
             persistNotebooks()
             return (newNotebook, nil, index)
@@ -266,12 +266,29 @@ class NotebooksListBusiness {
             // ..folder already exists
         }
         // create phycical file
-        dataManager.writeToFile(content: "", fileName: newNotebook.id.uuidString, folderPath: fullPath, ext: "md")
+        writeToFile(content: "", fileName: newNotebook.id.uuidString, folderPath: fullPath, ext: "md")
         // persist
         persistNotebooks()
         return newNotebook
     }
     
+    // create/update file with content
+    private func writeToFile(content: String, fileName: String, folderPath: String, ext: String) {
+
+        let folderURL = basePathURL.appendingPathComponent(folderPath)
+        let fileURL = folderURL.appendingPathComponent(fileName).appendingPathExtension(ext)
+
+        do {
+            // create intermediate folders if not exists
+            if itemExists(atPath: folderPath) == false {
+                createFolder(folderPath)
+            }
+            // Write to the file
+            try content.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
+        } catch let error as NSError {
+            print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
+        }
+    }
     
     // MARK: - Create
     func createNotebook(parent: Notebook?) -> Notebook {
@@ -292,17 +309,27 @@ class NotebooksListBusiness {
         let filePath = notebooksPath + "/" + notebook.id.uuidString + ".md"
         if let parent = notebook.parent {
             // delete file.md
-            
-            dataManager.deleteItem(at: filePath)
+            deleteItem(at: filePath)
             // delete notebook
             parent.children!.removeAll(where: { $0 == notebook })
         } else {
-            dataManager.deleteItem(at: filePath)
+            deleteItem(at: filePath)
             // delete notebook
             notebooks.removeAll(where: { $0 == notebook })
         }
         // persist
         persistNotebooks()
+    }
+    
+    private func deleteItem(at path: String) {
+
+        let directoryURL = basePathURL.appendingPathComponent(path, isDirectory: true)
+
+        do {
+            try FileManager.default.removeItem(at: directoryURL)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
     func rename(for notebook: Notebook, newValue: String) throws {
@@ -425,7 +452,21 @@ extension NotebooksListBusiness {
 //            await saveDocument(with: notebooks)
 //        }
         
-        dataManager.persistNotebooks(notebooks)
+        do {
+            // generate data
+            let plistData = try PropertyListEncoder().encode(notebooks)
+            // prepare path
+            let fileURL = basePathURL.appendingPathComponent(Constants.notebooksPListName).appendingPathExtension("plist")
+            // save file
+            do {
+                // Write to the file
+                try plistData.write(to: fileURL)
+            } catch let error as NSError {
+                print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
+            }
+        } catch {
+            print("Save Failed")
+        }
     }
     
     // retrives notebooks hierarcy from plist, not the notebook content.
