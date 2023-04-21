@@ -14,6 +14,7 @@ struct NotebooksListView: View {
     @EnvironmentObject var usersState: NotebooksListState
     @Binding var selectedNotebook: NotebookM?
     @State private var presentDeleteConfirmation = false
+    @State private var deletingNotebook: NotebookM?
     
     var body: some View {
         
@@ -77,9 +78,13 @@ struct NotebooksListView: View {
             }
             
         }
+        .onAppear {
+            usersState.reloadNotebooksList()
+        }
         .onChange(of: icloudSyncing) { newValue in
             if newValue == true {
                 // before sync start
+                selectedNotebook = nil
                 selectedNotebook = nil
             } else {
                 // after sync
@@ -95,10 +100,17 @@ struct NotebooksListView: View {
             return true
         }
         
+//        if deletingNotebook == nil {
+//            return true
+//        } else {
+//            return false
+//        }
+        
         if selectedNotebook == nil {
             return true
         }
         
+       
         return false
     }
     
@@ -136,26 +148,39 @@ struct NotebooksListView: View {
                 if selectedNotebook == nil {
                     return
                 }
-                presentDeleteConfirmation = true
+                deletingNotebook = selectedNotebook
+                
+                Task {
+                    await MainActor.run {
+                        selectedNotebook = nil
+                        presentDeleteConfirmation = true
+                    }
+                }
+                
+                
             }) {
                 Image(systemName: "trash")
                     .renderingMode(.original)
-            }
-            .confirmationDialog("Are you sure?", isPresented: $presentDeleteConfirmation) {
-                Button("Delete", role: .destructive) {
-                    DispatchQueue.main.async {
-                        usersState.deleteNotebook(ref: selectedNotebook!.notebook)
-                        selectedNotebook = nil
-                    }
-                }
-            } message: {
-                Text("You cannot undo this action")
             }
         }
         .disabled(disableActions)
         .buttonStyle(PlainButtonStyle())
         .backgroundStyle(.bar)
         .padding()
+        .confirmationDialog("Are you sure?", isPresented: $presentDeleteConfirmation) {
+            
+            Button("Delete", role: .destructive) {
+                //                    DispatchQueue.main.async {
+                //
+                //                    }
+                guard let temp = deletingNotebook else { return }
+                //                        presentDeleteConfirmation = false
+                usersState.deleteNotebook(ref: temp.notebook)
+                deletingNotebook = nil
+            }
+        } message: {
+            Text("You cannot undo this action")
+        }
     }
     
 }

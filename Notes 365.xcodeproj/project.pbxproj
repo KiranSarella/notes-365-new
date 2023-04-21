@@ -88,6 +88,8 @@
 		9F93E15329E7DA2700210E99 /* TimelineCreatorBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93E15129E7DA2700210E99 /* TimelineCreatorBusiness.swift */; };
 		9F93E15529ED0D0F00210E99 /* TodayVersionSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93E15429ED0D0F00210E99 /* TodayVersionSync.swift */; };
 		9F93E15629ED0D0F00210E99 /* TodayVersionSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93E15429ED0D0F00210E99 /* TodayVersionSync.swift */; };
+		9F9DBF7229F122E80088B0CA /* NotebooksListSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9DBF7129F122E80088B0CA /* NotebooksListSync.swift */; };
+		9F9DBF7329F122E80088B0CA /* NotebooksListSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9DBF7129F122E80088B0CA /* NotebooksListSync.swift */; };
 		9FA7BE2A29F0FFA000CB5D6F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCDE2920CCCE003DE332 /* Extensions.swift */; };
 		9FA7BE2C29F1024000CB5D6F /* TimelineSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA7BE2B29F1024000CB5D6F /* TimelineSync.swift */; };
 		9FA7BE2D29F1024000CB5D6F /* TimelineSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA7BE2B29F1024000CB5D6F /* TimelineSync.swift */; };
@@ -221,6 +223,7 @@
 		9F93E15129E7DA2700210E99 /* TimelineCreatorBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineCreatorBusiness.swift; sourceTree = "<group>"; };
 		9F93E15429ED0D0F00210E99 /* TodayVersionSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayVersionSync.swift; sourceTree = "<group>"; };
 		9F93E15829EE620900210E99 /* Release Notes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Release Notes.md"; sourceTree = "<group>"; };
+		9F9DBF7129F122E80088B0CA /* NotebooksListSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListSync.swift; sourceTree = "<group>"; };
 		9FA7BE2B29F1024000CB5D6F /* TimelineSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineSync.swift; sourceTree = "<group>"; };
 		9FB0A47129D9246D0093FBD2 /* architecture-decissions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "architecture-decissions.md"; sourceTree = "<group>"; };
 		9FB0A47A29DD26580093FBD2 /* NotebooksListTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListTests.swift; sourceTree = "<group>"; };
@@ -521,6 +524,9 @@
 			children = (
 				9F45BDCA29214D48003DE332 /* notebooks.md */,
 				9F45BDD929234150003DE332 /* Notebook.swift */,
+				9F45BD042920CCCE003DE332 /* NotebooksListBusiness.swift */,
+				9FB6C69F2927695000C8EC76 /* NotebookContentBusiness.swift */,
+				9F9DBF7129F122E80088B0CA /* NotebooksListSync.swift */,
 				9FB6C69429275BF900C8EC76 /* NotebooksList */,
 				9FB6C69629275C1500C8EC76 /* NotebookEditor */,
 				9FB0A47829DBDAC00093FBD2 /* __tests */,
@@ -606,7 +612,6 @@
 				9F1687CD29ADC2020085A0CA /* PlistDocument.swift */,
 				9F45BD252920CCCE003DE332 /* NotebooksListView.swift */,
 				9F45BD292920CCCE003DE332 /* NotebooksListState.swift */,
-				9F45BD042920CCCE003DE332 /* NotebooksListBusiness.swift */,
 			);
 			path = NotebooksList;
 			sourceTree = "<group>";
@@ -618,7 +623,6 @@
 				9F7D291C299A7C1500B37F51 /* MarkdownDocument.swift */,
 				9F45BD242920CCCE003DE332 /* NotebookEditorView.swift */,
 				9FB6C69B29275E0300C8EC76 /* NotebookEditorState.swift */,
-				9FB6C69F2927695000C8EC76 /* NotebookContentBusiness.swift */,
 			);
 			path = NotebookEditor;
 			sourceTree = "<group>";
@@ -776,6 +780,7 @@
 				9F1687CC29AD0E7F0085A0CA /* InitialCloudSync.swift in Sources */,
 				9F92CF0529B7525500B8D3C4 /* MailView.swift in Sources */,
 				9F93E15229E7DA2700210E99 /* TimelineCreatorBusiness.swift in Sources */,
+				9F9DBF7229F122E80088B0CA /* NotebooksListSync.swift in Sources */,
 				9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */,
 				9FB6C69C29275E0300C8EC76 /* NotebookEditorState.swift in Sources */,
 				9F3DB0CA292E23D900704860 /* ThemesListState.swift in Sources */,
@@ -875,6 +880,7 @@
 				9FB0A48529DE8DEF0093FBD2 /* NamedColor.swift in Sources */,
 				9F45BDBF2920EB14003DE332 /* NotebooksListBusiness.swift in Sources */,
 				9FB21DF4295DBE5900CFEDA8 /* ChooseEnvironment.swift in Sources */,
+				9F9DBF7329F122E80088B0CA /* NotebooksListSync.swift in Sources */,
 				9F45BDD329226BD9003DE332 /* NotebooksListState.swift in Sources */,
 				9FA7BE2A29F0FFA000CB5D6F /* Extensions.swift in Sources */,
 				9F8EE98B293EB32D0021409E /* CloudDataManager.swift in Sources */,

@@ -177,13 +177,26 @@ class NotebooksListState: ObservableObject {
     }
 
     func reloadNotebooksList() {
-        notesHierarchy.notes.removeAll()
-        notebookBusiness.reloadNotebooksList {
-            // create notesHierarchy with actual notebook objects
-            let notebooks = notebookBusiness.getNotebooks()
-            let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
-            notesHierarchy = NotebooksHierarchy(notes: notesList)
+//        notesHierarchy.notes.removeAll()
+//        notebookBusiness.reloadNotebooksList {
+//            // create notesHierarchy with actual notebook objects
+//            let notebooks = notebookBusiness.getNotebooks()
+//            let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
+//            notesHierarchy = NotebooksHierarchy(notes: notesList)
+//        }
+        
+        
+        notebookBusiness.reloadNotebooksListIfRequired { reloaded in
+            if reloaded {
+                // clear
+                notesHierarchy.notes.removeAll()
+                // create notesHierarchy with actual notebook objects
+                let notebooks = notebookBusiness.getNotebooks()
+                let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
+                notesHierarchy = NotebooksHierarchy(notes: notesList)
+            }
         }
+        
     }
     
     

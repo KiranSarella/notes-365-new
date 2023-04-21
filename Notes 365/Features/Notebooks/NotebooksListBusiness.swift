@@ -30,6 +30,8 @@ class NotebooksListBusiness {
 //    private var notificationObserver: Any?
 //    var isResolvingConflicts = false
 //
+    
+    var syncDate: Date = Date()
     var notebooks = [Notebook]()
     
     
@@ -54,9 +56,11 @@ class NotebooksListBusiness {
         
         if let notebooks = retrieveNotebooks() {
             self.notebooks = notebooks
+            syncDate = Date()
         } else {
             // no notebooks exists, create empty or base configuration
             self.notebooks = [Notebook]()
+            syncDate = Date()
         }
         
         // if new folder not exits and contains notebooks - means old version structure
@@ -131,13 +135,50 @@ class NotebooksListBusiness {
         
     }
     
+    func reloadNotebooksListIfRequired(completion:(Bool)->()) {
+        
+        // get modifiedDate of the physical file
+        let plistURL = basePathURL.appending(path: Constants.notebooksPListName).appendingPathExtension("plist")
+        
+        if let modifiedDate = fileModificationDate(url: plistURL) {
+            if modifiedDate > syncDate {
+                // reload data
+                if let notebooks = retrieveNotebooks() {
+                    self.notebooks = notebooks
+                    syncDate = Date()
+                    completion(true)
+                } else {
+                    self.notebooks = [Notebook]()
+                    syncDate = Date()
+                    completion(true)
+                }
+            } else {
+                // no new data exits
+                completion(false)
+            }
+        } else {
+            completion(false)
+        }
+    }
+    
+    func fileModificationDate(url: URL) -> Date? {
+        do {
+            let attr = try FileManager.default.attributesOfItem(atPath: url.path(percentEncoded: false))
+            return attr[FileAttributeKey.modificationDate] as? Date
+        } catch {
+            return nil
+        }
+    }
+    
     func reloadNotebooksList(completion:()->()) {
-        self.notebooks = [Notebook]()
         
         if let notebooks = retrieveNotebooks() {
             self.notebooks = notebooks
+            syncDate = Date()
             completion()
         } else {
+            self.notebooks = [Notebook]()
+            syncDate = Date()
             completion()
         }
     }
@@ -195,11 +236,6 @@ class NotebooksListBusiness {
                 print(error.localizedDescription)
             }
         }
-    }
-    
-    func observeFileChanges() {
-        
-        
     }
     
     // MARK: - Insert
@@ -451,6 +487,8 @@ extension NotebooksListBusiness {
 //        Task {
 //            await saveDocument(with: notebooks)
 //        }
+        
+        syncDate = Date()
         
         do {
             // generate data

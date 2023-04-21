@@ -8,10 +8,18 @@
 import SwiftUI
 import Combine
 
+//struct NotebookEditorWrapperView: View {
+//    
+//    var body: some View {
+//        
+//        
+//    }
+//}
+
 struct NotebookEditorView: View {
     
 //        @Environment(\.scenePhase) var scenePhase
-    @Binding var notebookM: NotebookM
+    var notebookM: NotebookM
     @ObservedObject var editorState: NotebookEditorState
 
     @State var autoSaveTimer: Timer.TimerPublisher = Timer.publish(every: 5, on: .main, in: .common)
@@ -61,6 +69,11 @@ struct NotebookEditorView: View {
                         editorState.getTextHandler!()
                     }
                 }
+            }
+        }
+        .onDisappear {
+            Task {
+                await editorState.saveContentChanges()
             }
         }
         .onChange(of: notebookM) { newValue in

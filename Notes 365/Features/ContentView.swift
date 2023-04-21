@@ -121,8 +121,11 @@ struct ContentView: View {
     
     @StateObject private var editorState = NotebookEditorState()
     
-    private var todayVersionSync = TodayVersionSync(basePathURL: EnvironmentState.shared.basePathURL)
+    private var notebooksListSync = NotebooksListSync(basePathURL: EnvironmentState.shared.basePathURL)
     private var timelineSync = TimelineSync(basePathURL: EnvironmentState.shared.basePathURL)
+    private var todayVersionSync = TodayVersionSync(basePathURL: EnvironmentState.shared.basePathURL)
+    
+    
     
     var bottomViewBackgroundColor: Color {
         if UIDevice.current.userInterfaceIdiom == .phone {
@@ -152,11 +155,14 @@ struct ContentView: View {
                     VStack {
                         Button {
                             // do sync
-                            icloudSyncing = true
-                            chooseEnv.downloaodCloudDocuments(completion: {
-                                // do any operations
-                                icloudSyncing = false
-                            })
+                            notebooksListSync.initialGatheringSync()
+                            
+                            
+//                            icloudSyncing = true
+//                            chooseEnv.downloaodCloudDocuments(completion: {
+//                                // do any operations
+//                                icloudSyncing = false
+//                            })
                         } label: {
                             HStack {
                                 Image(systemName: "arrow.triangle.2.circlepath")
@@ -200,6 +206,14 @@ struct ContentView: View {
 //                        // do any operations
 //                        icloudSyncing = false
 //                    })
+                
+                notebooksListSync.isSyncingStarted = {
+                    self.icloudSyncing = true
+                }
+                
+                notebooksListSync.isSyncingCompleted = {
+                    self.icloudSyncing = false
+                }
             }
             .onChange(of: colorScheme) { newValue in
                 ThemeState.shared.colorScheme = newValue
@@ -245,7 +259,11 @@ struct ContentView: View {
             case .noteBooks:
                 
                 if selectedNotebookM != nil {
-                    NotebookEditorView(notebookM: Binding($selectedNotebookM)!, editorState: editorState)
+//                    NotebookEditorView(notebookM: Binding($selectedNotebookM)!, editorState: editorState)
+                    NotebookEditorView(notebookM: selectedNotebookM!, editorState: editorState)
+                    
+//                    Text("selected \(selectedNotebookM!.name)")
+                    
                 } else {
                     Text("No notebook selected")
                 }
