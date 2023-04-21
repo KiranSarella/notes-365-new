@@ -121,6 +121,10 @@ class NotebooksListState: ObservableObject {
     
     @Published var isSearching = false
     
+    @Published var presentDeleteConfirmation = false
+    @Published var deletingNotebook: NotebookM?
+    
+    
     private var backupNotebooks = [NotebookM]()
     private var backupExpandedIds = Set<String>()
     

@@ -13,8 +13,8 @@ struct NotebooksListView: View {
     @Binding var icloudSyncing: Bool
     @EnvironmentObject var usersState: NotebooksListState
     @Binding var selectedNotebook: NotebookM?
-    @State private var presentDeleteConfirmation = false
-    @State private var deletingNotebook: NotebookM?
+//    @State private var presentDeleteConfirmation = false
+//    @State private var deletingNotebook: NotebookM?
     
     var body: some View {
         
@@ -91,7 +91,12 @@ struct NotebooksListView: View {
                 usersState.reloadNotebooksList()
             }
         }
-        
+        .onChange(of: usersState.deletingNotebook) { newValue in
+            if newValue != nil {
+                // if deleting a note, de-select it before deleting
+                selectedNotebook = nil
+            }
+        }
         
     }
     
@@ -100,16 +105,9 @@ struct NotebooksListView: View {
             return true
         }
         
-//        if deletingNotebook == nil {
-//            return true
-//        } else {
-//            return false
-//        }
-        
         if selectedNotebook == nil {
             return true
         }
-        
        
         return false
     }
@@ -148,16 +146,8 @@ struct NotebooksListView: View {
                 if selectedNotebook == nil {
                     return
                 }
-                deletingNotebook = selectedNotebook
-                
-                Task {
-                    await MainActor.run {
-                        selectedNotebook = nil
-                        presentDeleteConfirmation = true
-                    }
-                }
-                
-                
+                usersState.deletingNotebook = selectedNotebook
+                usersState.presentDeleteConfirmation = true
             }) {
                 Image(systemName: "trash")
                     .renderingMode(.original)
@@ -167,16 +157,11 @@ struct NotebooksListView: View {
         .buttonStyle(PlainButtonStyle())
         .backgroundStyle(.bar)
         .padding()
-        .confirmationDialog("Are you sure?", isPresented: $presentDeleteConfirmation) {
-            
+        .confirmationDialog("Are you sure?", isPresented: $usersState.presentDeleteConfirmation) {
             Button("Delete", role: .destructive) {
-                //                    DispatchQueue.main.async {
-                //
-                //                    }
-                guard let temp = deletingNotebook else { return }
-                //                        presentDeleteConfirmation = false
+                guard let temp = usersState.deletingNotebook else { return }
                 usersState.deleteNotebook(ref: temp.notebook)
-                deletingNotebook = nil
+                usersState.deletingNotebook = nil
             }
         } message: {
             Text("You cannot undo this action")
@@ -281,8 +266,6 @@ struct RowView: View {
     @State private var showFileExistsAlert = false
     @State private var showInvalidCharsAlert = false
     
-    @State private var presentDeleteConfirmation = false
-    
     @State private var isEditing = false {
         didSet {
             isFocused = isEditing
@@ -314,16 +297,6 @@ struct RowView: View {
             name = notebook.name
 //            isFocused = false
         }
-        .confirmationDialog("Are you sure?", isPresented: $presentDeleteConfirmation) {
-            Button("Delete", role: .destructive) {
-                DispatchQueue.main.async {
-                    usersState.deleteNotebook(ref: notebook.notebook)
-                    //                        selectedNotebook = nil
-                }
-            }
-        } message: {
-            Text("You cannot undo this action")
-        }
         .contextMenu {
             
             Group {
@@ -340,11 +313,10 @@ struct RowView: View {
                 }) {
                     Text("Add Inside")
                 }
-                
                 // trash
-                Button(role: .destructive,
-                       action: {
-                    presentDeleteConfirmation = true
+                Button(role: .destructive, action: {
+                    usersState.deletingNotebook = notebook
+                    usersState.presentDeleteConfirmation = true
                 }) {
                     HStack {
                         Text("Delete")
