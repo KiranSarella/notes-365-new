@@ -106,6 +106,9 @@ struct ContentView: View {
     @State private var showSettings = false
     @State private var icloudSyncing = false
     
+//    @State private var notesListSyncing = false
+//    @State private var notesContentSyncing = false
+    
     @State private var selectedModeID: Mode.ID? = Mode.timeline.id
     // timeline related
     @ObservedObject var calendarState = CalendarState.shared
@@ -124,8 +127,7 @@ struct ContentView: View {
     private var notebooksListSync = NotebooksListSync(basePathURL: EnvironmentState.shared.basePathURL)
     private var timelineSync = TimelineSync(basePathURL: EnvironmentState.shared.basePathURL)
     private var todayVersionSync = TodayVersionSync(basePathURL: EnvironmentState.shared.basePathURL)
-    
-    
+    private var notebooksContentSync = NotebooksContentSync(basePathURL: EnvironmentState.shared.basePathURL)
     
     var bottomViewBackgroundColor: Color {
         if UIDevice.current.userInterfaceIdiom == .phone {
@@ -156,13 +158,7 @@ struct ContentView: View {
                         Button {
                             // do sync
                             notebooksListSync.initialGatheringSync()
-                            
-                            
-//                            icloudSyncing = true
-//                            chooseEnv.downloaodCloudDocuments(completion: {
-//                                // do any operations
-//                                icloudSyncing = false
-//                            })
+                            notebooksContentSync.initialGatheringSync()
                         } label: {
                             HStack {
                                 Image(systemName: "arrow.triangle.2.circlepath")
@@ -214,6 +210,16 @@ struct ContentView: View {
                 notebooksListSync.isSyncingCompleted = {
                     self.icloudSyncing = false
                 }
+                
+//                notebooksContentSync.isSyncingStarted = {
+//                    if self.icloudSyncing == false {
+//                        self.icloudSyncing = true
+//                    }
+//                }
+//
+//                notebooksContentSync.isSyncingCompleted = {
+//
+//                }
             }
             .onChange(of: colorScheme) { newValue in
                 ThemeState.shared.colorScheme = newValue

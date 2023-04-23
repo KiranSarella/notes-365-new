@@ -93,6 +93,8 @@
 		9FA7BE2A29F0FFA000CB5D6F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCDE2920CCCE003DE332 /* Extensions.swift */; };
 		9FA7BE2C29F1024000CB5D6F /* TimelineSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA7BE2B29F1024000CB5D6F /* TimelineSync.swift */; };
 		9FA7BE2D29F1024000CB5D6F /* TimelineSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA7BE2B29F1024000CB5D6F /* TimelineSync.swift */; };
+		9FA7E34C29F299A0007AB408 /* NotebooksContentSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA7E34B29F299A0007AB408 /* NotebooksContentSync.swift */; };
+		9FA7E34D29F299A0007AB408 /* NotebooksContentSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA7E34B29F299A0007AB408 /* NotebooksContentSync.swift */; };
 		9FB0A47B29DD26580093FBD2 /* NotebooksListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0A47A29DD26580093FBD2 /* NotebooksListTests.swift */; };
 		9FB0A47D29DD27470093FBD2 /* CloudServiceTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D2925299EC27E00B37F51 /* CloudServiceTwo.swift */; };
 		9FB0A47E29DD274F0093FBD2 /* InitialCloudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1687CB29AD0E7F0085A0CA /* InitialCloudSync.swift */; };
@@ -225,6 +227,7 @@
 		9F93E15829EE620900210E99 /* Release Notes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Release Notes.md"; sourceTree = "<group>"; };
 		9F9DBF7129F122E80088B0CA /* NotebooksListSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListSync.swift; sourceTree = "<group>"; };
 		9FA7BE2B29F1024000CB5D6F /* TimelineSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineSync.swift; sourceTree = "<group>"; };
+		9FA7E34B29F299A0007AB408 /* NotebooksContentSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksContentSync.swift; sourceTree = "<group>"; };
 		9FB0A47129D9246D0093FBD2 /* architecture-decissions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "architecture-decissions.md"; sourceTree = "<group>"; };
 		9FB0A47A29DD26580093FBD2 /* NotebooksListTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListTests.swift; sourceTree = "<group>"; };
 		9FB0A47F29DD873E0093FBD2 /* NotebookContentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentTests.swift; sourceTree = "<group>"; };
@@ -527,6 +530,7 @@
 				9F45BD042920CCCE003DE332 /* NotebooksListBusiness.swift */,
 				9FB6C69F2927695000C8EC76 /* NotebookContentBusiness.swift */,
 				9F9DBF7129F122E80088B0CA /* NotebooksListSync.swift */,
+				9FA7E34B29F299A0007AB408 /* NotebooksContentSync.swift */,
 				9FB6C69429275BF900C8EC76 /* NotebooksList */,
 				9FB6C69629275C1500C8EC76 /* NotebookEditor */,
 				9FB0A47829DBDAC00093FBD2 /* __tests */,
@@ -816,6 +820,7 @@
 				9F14B4AE298F98900079D23B /* FontPicker.swift in Sources */,
 				9F45BD812920CDE0003DE332 /* MarkdownAttributedString+iOS.swift in Sources */,
 				9FB6C6A3292791A200C8EC76 /* MonthDetailState.swift in Sources */,
+				9FA7E34C29F299A0007AB408 /* NotebooksContentSync.swift in Sources */,
 				9FB6C6A02927695000C8EC76 /* NotebookContentBusiness.swift in Sources */,
 				9F45BDAA2920CE52003DE332 /* NamedColor.swift in Sources */,
 				9F45BDA82920CE41003DE332 /* MarkdownTheme.swift in Sources */,
@@ -885,6 +890,7 @@
 				9FA7BE2A29F0FFA000CB5D6F /* Extensions.swift in Sources */,
 				9F8EE98B293EB32D0021409E /* CloudDataManager.swift in Sources */,
 				9FB0A48129DE7E390093FBD2 /* NotebookEditorState.swift in Sources */,
+				9FA7E34D29F299A0007AB408 /* NotebooksContentSync.swift in Sources */,
 				9FB0A48429DE8DD90093FBD2 /* MarkdownTheme.swift in Sources */,
 				9F45BDBA2920E73C003DE332 /* StringDiffTests.swift in Sources */,
 			);
