@@ -69,11 +69,11 @@ class TimelineSync {
     //    }
     
     @objc func metadataQueryDidStartGathering(_ notification: NSNotification) {
-        print(#function)
-        
-        print("isStarted", metadataQuery.isStarted,
-              "isGathering", metadataQuery.isGathering,
-              "isStopped", metadataQuery.isStopped)
+//        print(#function)
+//
+//        print("isStarted", metadataQuery.isStarted,
+//              "isGathering", metadataQuery.isGathering,
+//              "isStopped", metadataQuery.isStopped)
     }
     
     @objc func metadataQueryGatheringProgress(_ notification: NSNotification) {
@@ -81,7 +81,7 @@ class TimelineSync {
     }
     
     @objc func metadataQueryDidFinishGathering(_ notification: NSNotification) {
-        print(#function)
+//        print(#function)
         handleMetadataQueryResult(notification)
     }
     
@@ -96,7 +96,7 @@ class TimelineSync {
         
         guard let results = metadataQuery.results as? [NSMetadataItem] else { return }
         
-        print("Results count: \(metadataQuery.resultCount)")
+//        print("Results count: \(metadataQuery.resultCount)")
         
         let changedMetadataItems = notification.userInfo?[NSMetadataQueryUpdateChangedItemsKey] as? [NSMetadataItem]
         
@@ -104,16 +104,16 @@ class TimelineSync {
         
         let addedMetadataItems = notification.userInfo?[NSMetadataQueryUpdateAddedItemsKey] as? [NSMetadataItem]
         
-        print("changedMetadataItems", changedMetadataItems,
-              "removedMetadataItems", removedMetadataItems,
-              "addedMetadataItems", addedMetadataItems)
+//        print("changedMetadataItems", changedMetadataItems,
+//              "removedMetadataItems", removedMetadataItems,
+//              "addedMetadataItems", addedMetadataItems)
         
         for item in results {
             guard let itemURL = item.value(forAttribute: NSMetadataItemURLKey) as? URL else { return }
-            print(itemURL.path(percentEncoded: false))
+//            print(itemURL.path(percentEncoded: false))
             // download status
             guard let downloadStatus = item.value(forAttribute: NSMetadataUbiquitousItemDownloadingStatusKey) as? String else { return }
-            print(downloadStatus)
+//            print(downloadStatus)
             
             
             if downloadStatus == NSMetadataUbiquitousItemDownloadingStatusCurrent {
@@ -141,15 +141,15 @@ class TimelineSync {
             }
         }
         metadataQuery.enableUpdates()
-        print("isStarted", metadataQuery.isStarted,
-              "isGathering", metadataQuery.isGathering,
-              "isStopped", metadataQuery.isStopped)
+//        print("isStarted", metadataQuery.isStarted,
+//              "isGathering", metadataQuery.isGathering,
+//              "isStopped", metadataQuery.isStopped)
         
         //        startMonitoringChanges()
     }
     
     func downloadFile(_ cloudUrl: URL, item: NSMetadataItem) {
-        print(#function)
+//        print(#function)
         notDownloadedItems.append(item)
         //        print(cloudUrl.path(percentEncoded: false))
         do {

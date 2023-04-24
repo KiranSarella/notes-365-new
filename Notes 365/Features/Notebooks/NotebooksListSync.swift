@@ -55,11 +55,11 @@ class NotebooksListSync {
     }
     
     @objc func metadataQueryDidStartGathering(_ notification: NSNotification) {
-        print(#function)
-        
-        print("isStarted", metadataQuery.isStarted,
-              "isGathering", metadataQuery.isGathering,
-              "isStopped", metadataQuery.isStopped)
+//        print(#function)
+//
+//        print("isStarted", metadataQuery.isStarted,
+//              "isGathering", metadataQuery.isGathering,
+//              "isStopped", metadataQuery.isStopped)
     }
     
     @objc func metadataQueryGatheringProgress(_ notification: NSNotification) {
@@ -67,7 +67,7 @@ class NotebooksListSync {
     }
     
     @objc func metadataQueryDidFinishGathering(_ notification: NSNotification) {
-        print(#function)
+//        print(#function)
         metadataQuery.stop()
         handleMetadataQueryResult(notification)
     }
@@ -84,7 +84,7 @@ class NotebooksListSync {
         
         guard let results = metadataQuery.results as? [NSMetadataItem] else { return }
         
-        print("Results count: \(metadataQuery.resultCount)")
+//        print("Results count: \(metadataQuery.resultCount)")
         
         let changedMetadataItems = notification.userInfo?[NSMetadataQueryUpdateChangedItemsKey] as? [NSMetadataItem]
         
@@ -92,16 +92,16 @@ class NotebooksListSync {
         
         let addedMetadataItems = notification.userInfo?[NSMetadataQueryUpdateAddedItemsKey] as? [NSMetadataItem]
         
-        print("changedMetadataItems", changedMetadataItems,
-              "removedMetadataItems", removedMetadataItems,
-              "addedMetadataItems", addedMetadataItems)
+//        print("changedMetadataItems", changedMetadataItems,
+//              "removedMetadataItems", removedMetadataItems,
+//              "addedMetadataItems", addedMetadataItems)
         
         for item in results {
             guard let itemURL = item.value(forAttribute: NSMetadataItemURLKey) as? URL else { return }
-            print(itemURL.path(percentEncoded: false))
+//            print(itemURL.path(percentEncoded: false))
             // download status
             guard let downloadStatus = item.value(forAttribute: NSMetadataUbiquitousItemDownloadingStatusKey) as? String else { return }
-            print(downloadStatus)
+//            print(downloadStatus)
             
             if downloadStatus == NSMetadataUbiquitousItemDownloadingStatusCurrent {
                 // there is a local version of this item and it is the most up-to-date version known to this device.
@@ -129,9 +129,9 @@ class NotebooksListSync {
         }
 //        metadataQuery.enableUpdates()
 //        isSyncingCompleted?()
-        print("isStarted", metadataQuery.isStarted,
-              "isGathering", metadataQuery.isGathering,
-              "isStopped", metadataQuery.isStopped)
+//        print("isStarted", metadataQuery.isStarted,
+//              "isGathering", metadataQuery.isGathering,
+//              "isStopped", metadataQuery.isStopped)
         
         // wait for some time, bcz moveItem is not async and no completion status given
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
