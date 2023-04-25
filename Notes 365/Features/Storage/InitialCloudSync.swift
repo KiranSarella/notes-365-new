@@ -70,7 +70,7 @@ final class InitialCloudSync {
     }
     
     @objc func metadataQueryDidUpdate(_ notification: NSNotification) {
-        print(#function)
+//        print(#function)
         
         guard let metadataQuery = notification.object as? NSMetadataQuery else { return }
         

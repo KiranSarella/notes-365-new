@@ -162,7 +162,7 @@ class TimelineSync {
     
     
     @objc func metadataQueryDidUpdate(_ notification: NSNotification) {
-        print(#function)
+//        print(#function)
         handleMetadataQueryResult(notification)
     }
     

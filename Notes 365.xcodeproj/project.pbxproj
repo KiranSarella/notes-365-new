@@ -149,6 +149,7 @@
 		9F1687CF29AE21B20085A0CA /* NotebooksChangeMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksChangeMonitor.swift; sourceTree = "<group>"; };
 		9F188D802930E49F0078D413 /* MarkdownHeading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownHeading.swift; sourceTree = "<group>"; };
 		9F1AAE32292C94F800B4D254 /* FeedbackState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackState.swift; sourceTree = "<group>"; };
+		9F39F31E29F7BF6F00044DDB /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
 		9F3DB0C1292DE09500704860 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		9F3DB0C3292DF82300704860 /* FeedbackView+iPadOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackView+iPadOS.swift"; sourceTree = "<group>"; };
 		9F3DB0C5292E1D9200704860 /* ThemeBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeBusiness.swift; sourceTree = "<group>"; };
@@ -329,6 +330,7 @@
 				9FB0A47429DBD6830093FBD2 /* Features */,
 				9F45BCA52920CAB0003DE332 /* Assets.xcassets */,
 				9F45BCA72920CAB0003DE332 /* Notes_365.entitlements */,
+				9F39F31E29F7BF6F00044DDB /* TestPlan.xctestplan */,
 				9F93E15829EE620900210E99 /* Release Notes.md */,
 				9F45BCA82920CAB0003DE332 /* Preview Content */,
 			);

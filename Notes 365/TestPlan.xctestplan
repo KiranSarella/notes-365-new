@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "708CEFD2-415E-4B82-BC55-0F27C9E316D2",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Notes 365.xcodeproj",
+        "identifier" : "9F45BCAE2920CAB0003DE332",
+        "name" : "Notes 365Tests"
+      }
+    }
+  ],
+  "version" : 1
+}
