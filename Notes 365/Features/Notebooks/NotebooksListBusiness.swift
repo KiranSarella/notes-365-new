@@ -21,8 +21,8 @@ class NotebooksListBusiness {
     
     var basePathURL: URL
     
-    var syncDate: Date = Date()
-    var notebooks = [Notebook]()
+    private var syncDate: Date = Date()
+    private(set) var notebooks = [Notebook]()
     
     let notebooksPath = Constants.notebooksFolderName
     
@@ -37,41 +37,6 @@ class NotebooksListBusiness {
             self.notebooks = [Notebook]()
             syncDate = Date()
         }
-    }
-    
-    func convertToFlatStructure() {
-        print(#function)
-        
-        func traverse(notebooks: [Notebook]) {
-            // traverse and add each item to hash map
-            for notebook in notebooks {
-                // move to base folder
-                
-                let oldFolderPath = basePathURL.appendingPathComponent(Constants.notebooksFolderNameOld).appendingPathComponent(notebook.oldFilePath)
-                let newFolderPath = basePathURL.appendingPathComponent(notebooksPath).appendingPathComponent(notebook.id.uuidString).appendingPathExtension("md")
-                
-                do {
-                    try FileManager.default.moveItem(atPath: oldFolderPath.path, toPath: newFolderPath.path(percentEncoded: false))
-                } catch let error as NSError {
-                    print("Ooops! Something went wrong: \(error)")
-                }
-                
-                // handle children
-                if let children = notebook.children {
-                    traverse(notebooks: children)
-                }
-            }
-        }
-        // create new
-        let newFolderPath = basePathURL.appendingPathComponent(notebooksPath)
-        try? FileManager.default.createDirectory(at: newFolderPath, withIntermediateDirectories: true)
-        // start traversing
-        traverse(notebooks: notebooks)
-        
-        // for each item
-        // get its path
-        // move to /notebooks with id.md
-        
     }
     
     func reloadNotebooksListIfRequired(completion:(Bool)->()) {

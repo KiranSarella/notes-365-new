@@ -22,6 +22,15 @@
 
 ## business logic examples
 - crud operations
+- loosely coupled with other objects/layers
+- no reference types? so, how to pass ref. types
+- no state dependency on other object(s)
+
+usecase: notebooks list storage in business
+- ref. types, if ref is given other objects can alter original structure
+- don't trust other objects
+ 
+
 
 
 
