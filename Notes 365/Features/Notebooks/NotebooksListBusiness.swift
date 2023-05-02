@@ -19,37 +19,12 @@ public enum NotebookBusinessError: Error {
 
 class NotebooksListBusiness {
     
-//    static let shared = NotebooksListBusiness(dataManager: DataManager(environment: .cloud))
-    
-//    private static var _shared: NotebooksListBusiness!
-    
     var basePathURL: URL
-    
-//    var document: PlistDocument?
-//    var newContentAvailalble: (()->())?
-//    private var notificationObserver: Any?
-//    var isResolvingConflicts = false
-//
     
     var syncDate: Date = Date()
     var notebooks = [Notebook]()
     
-    
-    
-//    var notebooksHashMap = [UUID: Notebook]()
-    
-//    private let notebooksLimit = 3
-    
     let notebooksPath = Constants.notebooksFolderName
-    
-//    let cloudService = CloudService(cloudDirectory: "Documents", cloudSyncFileName: "notebooks-list.plist")
-    
-//    static func shared(path basePath: URL) -> NotebooksListBusiness {
-//        if _shared == nil {
-//            _shared = NotebooksListBusiness(basePath)
-//        }
-//        return _shared
-//    }
     
     init(_ basePathURL: URL) {
         self.basePathURL = basePathURL
@@ -62,45 +37,9 @@ class NotebooksListBusiness {
             self.notebooks = [Notebook]()
             syncDate = Date()
         }
-        
-        // if new folder not exits and contains notebooks - means old version structure
-//        let flatNotebooksPath = dataManager.basePathURL.appendingPathComponent(notebooksPath).path(percentEncoded: false)
-//        if !FileManager.default.fileExists(atPath: flatNotebooksPath) && notebooks.count > 0 {
-//            convertToFlatStructure()
-//        }
-
-        
-//        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookChangeNotification(_:)), name: .notebookChangeNotification, object: nil)
-        
-        // generate hash map
-//        generateNotebooksHashMap()
     }
     
-//    @objc func handleNotebookChangeNotification(_ sender: Notification) {
-//        print(#function)
-//    }
-    
-//    func generateNotebooksHashMap() {#imageLiteral(resourceName: "simulator_screenshot_899493EC-342E-4D8C-A23B-D930A1022ECD.png")
-//        // clean
-//        notebooksHashMap.removeAll()
-//
-//        func traverse(notebooks: [Notebook]) {
-//            // traverse and add each item to hash map
-//            for notebook in notebooks {
-//                // insert
-//                notebooksHashMap[notebook.id] = notebook
-//                // handle children
-//                if let children = notebook.children {
-//                    traverse(notebooks: children)
-//                }
-//            }
-//        }
-//        // start traversing
-//        traverse(notebooks: notebooks)
-//    }
-    
     func convertToFlatStructure() {
-
         print(#function)
         
         func traverse(notebooks: [Notebook]) {
@@ -386,23 +325,6 @@ class NotebooksListBusiness {
             }
         }
         
-        
-//        let dirPath = notebook.directoryPath
-//        let newFilePath = dirPath + "/" + newValue + ".md"
-//        let oldFilePath = dirPath + "/" + notebook.name + ".md"
-        
-//        if dataManager.itemExists(atPath: newFilePath) {
-//            throw NotebookBusinessError.alreadyExists
-//        }
-//        // rename file
-////        dataManager.renameItem(from: oldFilePath, to: newFilePath)
-//        // rename folder if exists
-//        if notebook.containChildNotebooks {
-//            let newFolderPath = dirPath + "/" + newValue
-//            let oldFolderPath = dirPath + "/" + notebook.name
-//            // rename folder
-//            dataManager.renameItem(from: oldFolderPath, to: newFolderPath)
-//        }
         // store name
         notebook.name = newValue
         persistNotebooks()
@@ -421,23 +343,7 @@ class NotebooksListBusiness {
     }
     
     func getFolderNamesPath(levels: [Int]) -> String {
-
-        return notebooksPath
-//
-//        var notebooksList = self.notebooks
-//        // base condition
-//        if levels.isEmpty {
-//            return "notebooks"
-//        }
-//        var path = "notebooks"
-//        for level in levels {
-//            path.append("/")
-//            path.append(notebooksList[level].name)
-//            if notebooksList[level].children != nil {
-//                notebooksList = notebooksList[level].children!
-//            }
-//        }
-//        return path
+        notebooksPath
     }
     
     
@@ -524,145 +430,3 @@ extension NotebooksListBusiness {
     }
     
 }
-
-/*
-// MARK: - UIDocument operations
-extension NotebooksListBusiness {
-    
-    func readDocument() async -> [Notebook]? {
-        print(#function)
-        let plistURL = basePathURL.appending(path: Constants.notebooksListPath).appendingPathExtension("plist")
-        document = await PlistDocument(fileURL: plistURL)
-        guard let document = document else { return nil }
-        let isOpened = await document.open()
-        if isOpened {
-
-        } else {
-            print("Failed to open the file \(plistURL.path(percentEncoded: false))")
-        }
-        await print(document.documentState)
-        registerDocumentChangeNotification()
-        observeContentChanges()
-        let plistData = await document.content
-        do {
-            // Read the file contents
-            let notebooksList = try PropertyListDecoder().decode([Notebook].self, from: plistData)
-            
-            self.notebooks = notebooksList
-            
-            return notebooksList
-        } catch let error as NSError {
-            print("Decode Error: " + error.localizedDescription)
-        }
-        return nil
-    }
-
-
-//    func updateDocument(with content: String) {
-//        guard let document = document else { return }
-//        document.updateChangeCount(.done)
-//    }
-
-    func saveDocument(with content: [Notebook]) async {
-        print(#function)
-        guard let document = document else { return }
-        do {
-            let plistData = try PropertyListEncoder().encode(content)
-            await document.setContentChanges(newContent: plistData)
-            await document.updateChangeCount(.done)
-        } catch let error {
-            print(error)
-        }
-    }
-
-    func closeDocument() async {
-        print(#function)
-        self.removeContentChangesObserver()
-        self.removeDocumentChangeNotification()
-
-        //        guard let document = document else { return }
-        await document?.close()
-        self.removeDocumentChangeNotification()
-        document = nil
-    }
-
-
-    // MARK: - Document Notfications
-    func observeContentChanges() {
-        document?.newContentAvailalble = {
-            print("document?.newContentAvailalble")
-            Task {
-                guard let document = self.document else { return }
-                let plistData = await document.content
-                do {
-                    // Read the file contents
-                    let notebooksList = try PropertyListDecoder().decode([Notebook].self, from: plistData)
-                    self.notebooks = notebooksList
-                } catch let error as NSError {
-                    print("decode Error: " + error.localizedDescription)
-                }
-                self.newContentAvailalble?()
-            }
-        }
-    }
-
-    func removeContentChangesObserver() {
-        document?.newContentAvailalble = nil
-    }
-
-
-    func registerDocumentChangeNotification() {
-
-        guard let document = document else { return }
-
-        notificationObserver = NotificationCenter.default.addObserver(forName: UIDocument.stateChangedNotification, object: document, queue: nil) { notification in
-
-            print("UIDocument.stateChangedNotification")
-            print(document.documentState)
-
-
-            //            if document.documentState == UIDocument.State.progressAvailable
-            //                || document.documentState == UIDocument.State.editingDisabled
-            //                || document.documentState == UIDocument.State.normal {
-            //
-            //                self.newContentAvailalble?()
-            //            }
-            //
-
-            if document.documentState == UIDocument.State.inConflict {
-                if self.isResolvingConflicts {
-                    return
-                }
-
-                self.isResolvingConflicts = true
-                if let conflictVersions = NSFileVersion.unresolvedConflictVersionsOfItem(at: self.basePathURL) {
-                    print(conflictVersions.count)
-
-                    do {
-                        let success = try NSFileVersion.removeOtherVersionsOfItem(at:  self.basePathURL)
-
-                    } catch let error as NSError {
-                        print(error)
-                    }
-
-                    for i in 0..<conflictVersions.count {
-                        conflictVersions[i].isResolved = true
-                    }
-                }
-                self.isResolvingConflicts = false
-            }
-        }
-
-    }
-
-    func removeDocumentChangeNotification() {
-        print(#function)
-        if let notificationObserver = notificationObserver {
-            NotificationCenter.default.removeObserver(notificationObserver, name: UIDocument.stateChangedNotification, object: document)
-        }
-
-    }
-}
-
-
-*/

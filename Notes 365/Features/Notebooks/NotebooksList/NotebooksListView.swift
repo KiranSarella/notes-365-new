@@ -180,6 +180,10 @@ struct SearchedListView: View {
         List(selection: $selectedNotebook) {
             NotebooksListGroupView(notebooks: $usersState.notesHierarchy.notes)
         }
+        .toolbar {
+            EditButton()
+        }
+        
         .onChange(of: isSearching) { newValue in
             usersState.isSearching = newValue
 //            print("isSearching, ", newValue)
@@ -191,6 +195,7 @@ struct SearchedListView: View {
             }
         }
     }
+    
 }
 
 struct AddNotesView: View {
@@ -252,8 +257,15 @@ struct NotebooksListGroupView: View {
                 }
             }
         }
+        .onMove(perform: move)
     }
     
+    
+    func move(from source: IndexSet, to destination: Int) {
+        print(#function)
+        //        users.move(fromOffsets: source, toOffset: destination)
+        
+    }
 }
 
 
