@@ -63,7 +63,7 @@ struct NotebookEditorView: View {
         .onAppear {
             Task {
                 // new notebook steps
-                await editorState.loadContent(for: notebookM.notebook)
+                await editorState.loadContent(for: notebookM.notebookRef)
                 editorState.getNewContent = {
                     return await MainActor.run {
                         editorState.getTextHandler!()
@@ -83,7 +83,7 @@ struct NotebookEditorView: View {
                 await editorState.saveContentChanges()
                 
                 // new notebook steps
-                await editorState.loadContent(for: newValue.notebook)
+                await editorState.loadContent(for: newValue.notebookRef)
                 editorState.getNewContent = {
                     return await MainActor.run {
                         editorState.getTextHandler!()

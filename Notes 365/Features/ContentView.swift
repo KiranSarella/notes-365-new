@@ -99,6 +99,7 @@ struct ContentWrapperView: View {
 
 struct ContentView: View {
     
+    @Environment(\.scenePhase) private var scenePhase
     @Environment(\.colorScheme) private var colorScheme
     
     @EnvironmentObject var chooseEnv: ChooseEnvironment
@@ -223,6 +224,18 @@ struct ContentView: View {
             }
             .onChange(of: colorScheme) { newValue in
                 ThemeState.shared.colorScheme = newValue
+            }
+            .onChange(of: scenePhase) { newPhase in
+                if newPhase == .active {
+//                    print("Active")
+                    // do sync
+                    notebooksListSync.initialGatheringSync()
+                    notebooksContentSync.initialGatheringSync()
+                } else if newPhase == .inactive {
+//                    print("Inactive")
+                } else if newPhase == .background {
+//                    print("Background")
+                }
             }
             
         } content: {

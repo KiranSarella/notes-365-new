@@ -57,7 +57,7 @@ struct NotebookM: Identifiable {
     var id: UUID
     var name: String {
         didSet {
-            notebook.name = self.name
+            notebookRef.name = self.name
         }
     }
     var children: [NotebookM]? = nil
@@ -69,12 +69,12 @@ struct NotebookM: Identifiable {
         }
     }
     
-    private(set) var notebook: Notebook
+    private(set) var notebookRef: Notebook
     
     init(notebook: Notebook) {
         self.id = notebook.id
         self.name = notebook.name
-        self.notebook = notebook
+        self.notebookRef = notebook
     }
 
     var containChildNotebooks: Bool {
@@ -98,7 +98,7 @@ extension NotebookM: Equatable, Hashable {
     static func == (lhs: NotebookM, rhs: NotebookM) -> Bool {
         return lhs.id == rhs.id && lhs.name == rhs.name
     }
-    
+
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
@@ -108,26 +108,25 @@ extension NotebookM: Equatable, Hashable {
 class NotebooksListState: ObservableObject {
     
     static let shared: NotebooksListState = NotebooksListState()
-//    let notebookBusiness = NotebooksListBusiness.shared(path: EnvironmentState.shared.basePathURL)
     
     let notebookBusiness = NotebooksListBusiness(EnvironmentState.shared.basePathURL)
     
-    @Published var notesHierarchy: NotebooksHierarchy
-    @Published var searchText: String = ""
-    
     var subscription: Set<AnyCancellable> = []
-    
     var expandedIds = Set<String>()
     
+    private var notebooks = [Notebook]()
+    @Published var notesHierarchy: NotebooksHierarchy
+    
+    @Published var searchText: String = ""
     @Published var isSearching = false
     
     @Published var presentDeleteConfirmation = false
     @Published var deletingNotebook: NotebookM?
     
-    var notebooks = [Notebook]()
-    
     private var backupNotebooks = [NotebookM]()
     private var backupExpandedIds = Set<String>()
+    
+    let notebooksPath = Constants.notebooksFolderName
     
 //    @Published var isLoaded = false
     
@@ -138,7 +137,7 @@ class NotebooksListState: ObservableObject {
         }
         
         // create notesHierarchy with actual notebook objects
-        let notebooks = notebookBusiness.getNotebooks()
+        notebooks = notebookBusiness.retrieveNotebooks() ?? []
         let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
         notesHierarchy = NotebooksHierarchy(notes: notesList)
         
@@ -146,8 +145,6 @@ class NotebooksListState: ObservableObject {
         NotificationCenter.default.addObserver(self, selector: #selector(listenExpandCollapseNotification(_:)), name: .ExpandCollapseNotification, object: nil)
         
         setupSearchText()
-        
-        // observe plist file changes
     }
     
     @MainActor
@@ -176,34 +173,22 @@ class NotebooksListState: ObservableObject {
         }
         
         // create notesHierarchy with actual notebook objects
-        let notebooks = notebookBusiness.getNotebooks()
+        notebooks = notebookBusiness.retrieveNotebooks() ?? []
         let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
         notesHierarchy = NotebooksHierarchy(notes: notesList)
     }
 
     func reloadNotebooksList() {
-//        notesHierarchy.notes.removeAll()
-//        notebookBusiness.reloadNotebooksList {
-//            // create notesHierarchy with actual notebook objects
-//            let notebooks = notebookBusiness.getNotebooks()
-//            let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
-//            notesHierarchy = NotebooksHierarchy(notes: notesList)
-//        }
-        
-        
-        notebookBusiness.reloadNotebooksListIfRequired { reloaded in
-            if reloaded {
-                // clear
-                notesHierarchy.notes.removeAll()
-                // create notesHierarchy with actual notebook objects
-                let notebooks = notebookBusiness.getNotebooks()
-                let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
-                notesHierarchy = NotebooksHierarchy(notes: notesList)
-            }
+        // if notebooks is empty, try to reload on demand
+        if notebooks.count == 0 || notebookBusiness.isReloadRequired() {
+            // clear
+            notesHierarchy.notes.removeAll()
+            // create notesHierarchy with actual notebook objects
+            notebooks = notebookBusiness.retrieveNotebooks() ?? []
+            let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
+            notesHierarchy = NotebooksHierarchy(notes: notesList)
         }
-        
     }
-    
     
     func saveExpandedIds() {
         UserDefaults.standard.set(Array(expandedIds), forKey: "notes365.expandedIds")
@@ -219,13 +204,19 @@ class NotebooksListState: ObservableObject {
     }
     
     func addFirstNotes() {
-        let notebook = notebookBusiness.addFirstNotes()
+        let notebook = createNotebook(parent: nil)
+        // create file
+        notebookBusiness.addFirst(notebook: notebook)
+        // add to heirarchy
+        notebooks.append(notebook)
         notesHierarchy.notes.append(NotebookM(notebook: notebook))
+        // persist hierarchy
+        notebookBusiness.persist(notebooks: notebooks)
     }
     
     func insertBelow(ref notebook: Notebook) {
         // create actual notebook
-        let (childNotebook, parent, index) = notebookBusiness.insertBelow(ref: notebook)
+        let (childNotebook, parent, index) = insertBelow(notebook: notebook)
         // create state notebook object
         let notebookM = NotebookM(notebook: childNotebook)
         // insert in hierachy
@@ -237,11 +228,34 @@ class NotebooksListState: ObservableObject {
                 noteM.children!.insert(notebookM, at: index + 1)
             }
         }
+        // persist
+        notebookBusiness.persist(notebooks: notebooks)
+    }
+    
+    // return - (newNotebook, parent, ref notebook Index)
+    private func insertBelow(notebook: Notebook) -> (new: Notebook, parent: Notebook?, refIndex: Int) {
+        if let parent = notebook.parent {
+            // get index of current notebook
+            let index = parent.children!.firstIndex(of: notebook)!
+            let childNote = insertInside(notebook: parent, below: index)
+            return (childNote, parent, index)
+        } else {
+            // base level
+            let fullPath = notebooksPath
+            let newNotebook = createNotebook(parent: notebook.parent)
+            // get index of current notebook
+            let index = notebooks.firstIndex(of: notebook)!
+            // create object
+            notebooks.insert(newNotebook, at: index + 1)
+            // create phycical file
+            notebookBusiness.insertBelow(notebook: newNotebook)
+            return (newNotebook, nil, index)
+        }
     }
     
     func insertInside(ref notebook: Notebook) {
         // create actual notebook in the storage and hierarchy
-        let childNotebook = notebookBusiness.insertInside(ref: notebook)
+        let childNotebook = insertInside(notebook: notebook)
         // create state notebook object
         let notebookM = NotebookM(notebook: childNotebook)
         // insert in hierachy
@@ -252,37 +266,161 @@ class NotebooksListState: ObservableObject {
                 noteM.children!.append(notebookM)
             }
         }
+        // persist
+        notebookBusiness.persist(notebooks: notebooks)
     }
     
+    private func insertInside(notebook: Notebook, below index: Int? = nil) -> Notebook {
+        let fullPath = notebooksPath
+        let newNotebook = createNotebook(parent: notebook)
+        
+        //        let newNotebook = createNotebook(atPath: fullPath)
+        newNotebook.parent = notebook
+        
+        if let index = index {
+            // create object
+            notebook.children?.insert(newNotebook, at: index + 1)
+            // ..folder already exists
+        } else if notebook.children == nil {
+            // create object
+            notebook.children = [newNotebook]
+            // create folder
+            //            dataManager.createFolder(fullPath)
+        } else {
+            // create object
+            notebook.children?.append(newNotebook)
+            // ..folder already exists
+        }
+        // create phycical file
+        notebookBusiness.insertInside(notebook: newNotebook)
+        return newNotebook
+    }
+    
+    func createNotebook(parent: Notebook?) -> Notebook {
+        
+        // generate non existed file name at that level
+        var fileName = ""
+        if let parent = parent {
+            fileName = generateFileName(at: parent.children)
+        } else {
+            fileName = generateFileName(at: notebooks)
+        }
+        
+        return Notebook(id: UUID(), name: fileName)
+    }
+    
+    private func getNotebook(levels selectedLevels: [Int], index selectedIndex: Int) -> Notebook? {
+        
+        // goto last level list
+        var notebooksList: [Notebook]? = notebooks
+        for level in selectedLevels {
+            notebooksList = notebooksList?[level].children
+        }
+        // get notebook from last list
+        return notebooksList?[selectedIndex]
+    }
+    
+    
     func deleteNotebook(ref notebook: Notebook) {
-        
-        notebookBusiness.deleteNotebook(ref: notebook)
-        
+        // delete from hierarchy
         if let parent = notebook.parent {
+            // delete notebook ref
+            parent.children!.removeAll(where: { $0 == notebook })
             // delete in hierachy
             getNotebookReferenceForPath(uuidPath: parent.uuidPath) { noteM in
                 noteM.children!.removeAll(where: { $0.id == notebook.id })
             }
         } else {
             // base level
+            // delete notebook ref
+            notebooks.removeAll(where: { $0 == notebook })
             // delete object
             notesHierarchy.notes.removeAll(where: { $0.id == notebook.id })
         }
+        // delete physical file
+        notebookBusiness.deleteNotebook(notebook: notebook)
+        // persist
+        notebookBusiness.persist(notebooks: notebooks)
     }
     
+//    func deleteNotebook(ref notebook: Notebook) {
+//
+//        notebookBusiness.deleteNotebook(ref: notebook)
+//
+//        if let parent = notebook.parent {
+//            // delete in hierachy
+//            getNotebookReferenceForPath(uuidPath: parent.uuidPath) { noteM in
+//                noteM.children!.removeAll(where: { $0.id == notebook.id })
+//            }
+//        } else {
+//            // base level
+//            // delete object
+//            notesHierarchy.notes.removeAll(where: { $0.id == notebook.id })
+//        }
+//    }
+    
+    
     func rename(for notebook: Notebook, newValue: String) throws {
-        
-        try notebookBusiness.rename(for: notebook, newValue: newValue)
+        // validate characters
+        if newValue.contains(":") {
+            throw NotebookBusinessError.invalidCharacters
+        }
+        // check if already same file name exists
+        if let parent = notebook.parent {
+            if let children = parent.children {
+                if isAlreadyExists(fileName: newValue, in: children) {
+                    throw NotebookBusinessError.alreadyExists
+                }
+            }
+        } else {
+            if isAlreadyExists(fileName: newValue, in: notebooks) {
+                throw NotebookBusinessError.alreadyExists
+            }
+        }
+        // store name
+        notebook.name = newValue
         // update model
         getNotebookReferenceForPath(uuidPath: notebook.uuidPath) { noteM in
             noteM.name = newValue
         }
+        // persist changes
+        notebookBusiness.persist(notebooks: notebooks)
+    }
+    
+    func move(notebooksM: inout [NotebookM], from source: IndexSet, to destination: Int) {
+        // move references
+        if notebooksM.first?.notebookRef.parent?.children != nil {
+            notebooksM.first?.notebookRef.parent?.children?.move(fromOffsets: source, toOffset: destination)
+        } else {
+            self.notebooks.move(fromOffsets: source, toOffset: destination)
+        }
+        // move structs
+        notebooksM.move(fromOffsets: source, toOffset: destination)
+        
+        // persist refernce list
+        notebookBusiness.persist(notebooks: self.notebooks)
+    }
+    
+    private func isAlreadyExists(fileName: String, in siblings: [Notebook]) -> Bool {
+        return siblings.contains(where: { $0.name == fileName })
+    }
+    
+    private func generateFileName(at siblings: [Notebook]?) -> String {
+        var count = 1
+        var fileName = "Notebook \(count)"
+        if let siblings = siblings {
+            while isAlreadyExists(fileName: fileName, in: siblings) {
+                count += 1
+                fileName = "Notebook \(count)"
+            }
+        }
+        return fileName
     }
     
     // MARK: -
     
     func getFolderNamesPath(levels: [Int]) -> String {
-        notebookBusiness.getFolderNamesPath(levels: levels)
+        notebooksPath
     }
     
     func getNotebookReferenceForPath(uuidPath: [UUID], completion: ((inout NotebookM) -> ())) {

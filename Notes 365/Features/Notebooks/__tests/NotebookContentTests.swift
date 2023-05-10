@@ -55,7 +55,7 @@ final class NotebookContentTests: XCTestCase {
     override func tearDownWithError() throws {
      
         // remove notebook
-        notebooksListState.deleteNotebook(ref: notebook.notebook)
+        notebooksListState.deleteNotebook(ref: notebook.notebookRef)
         notebook = nil
 //
         

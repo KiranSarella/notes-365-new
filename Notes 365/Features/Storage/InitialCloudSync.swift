@@ -85,7 +85,7 @@ final class InitialCloudSync {
     }
     
     @objc func metadataQueryDidFinishGathering(_ notification: NSNotification) {
-        print(#function)
+//        print(#function)
         isSyncCalled = true
         guard let metadataQuery = notification.object as? NSMetadataQuery else { return }
         // pause updates till all results are processed

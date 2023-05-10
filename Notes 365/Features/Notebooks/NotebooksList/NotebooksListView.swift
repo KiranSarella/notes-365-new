@@ -37,7 +37,7 @@ struct NotebooksListView: View {
                     SearchedListView(selectedNotebook: $selectedNotebook)
                         .listStyle(PlainListStyle())
                     
-                    //                .listStyle(SidebarListStyle())
+//                                    .listStyle(SidebarListStyle())
                         .navigationTitle("Notebooks")
 //                        .onChange(of: selectedNotebook) { newValue in
 //                            if let newValue = newValue {
@@ -121,7 +121,7 @@ struct NotebooksListView: View {
                     if selectedNotebook == nil {
                         return
                     }
-                    usersState.insertBelow(ref: selectedNotebook!.notebook)
+                    usersState.insertBelow(ref: selectedNotebook!.notebookRef)
                 }) {
                     //                Image(systemName: "arrow.down")
                     //                    .renderingMode(.original)
@@ -132,7 +132,7 @@ struct NotebooksListView: View {
                     if selectedNotebook == nil {
                         return
                     }
-                    usersState.insertInside(ref: selectedNotebook!.notebook)
+                    usersState.insertInside(ref: selectedNotebook!.notebookRef)
                 }) {
                     //                Image(systemName: "arrow.turn.down.right")
                     //                    .renderingMode(.original)
@@ -160,7 +160,7 @@ struct NotebooksListView: View {
         .confirmationDialog("Are you sure?", isPresented: $usersState.presentDeleteConfirmation) {
             Button("Delete", role: .destructive) {
                 guard let temp = usersState.deletingNotebook else { return }
-                usersState.deleteNotebook(ref: temp.notebook)
+                usersState.deleteNotebook(ref: temp.notebookRef)
                 usersState.deletingNotebook = nil
             }
         } message: {
@@ -178,6 +178,7 @@ struct SearchedListView: View {
     
     var body: some View {
         List(selection: $selectedNotebook) {
+//        ScrollView(showsIndicators: false) {
             NotebooksListGroupView(notebooks: $usersState.notesHierarchy.notes)
         }
         .toolbar {
@@ -212,6 +213,20 @@ struct AddNotesView: View {
             Text("add your first notebook")
                 .font(Font.subheadline)
             
+            
+//            VStack {
+//                Text("Instead use refresh, if already exits on iCloud")
+//                Button {
+//                    // get plist on demand
+//                    usersState.initialFetch()
+//                } label: {
+//                    Text("refresh")
+//                }
+//            }
+//            .padding(10)
+            
+
+            
 //            Text("or")
 //                .font(Font.callout)
 //
@@ -228,6 +243,7 @@ struct AddNotesView: View {
 struct NotebooksListGroupView: View {
     @EnvironmentObject var usersState: NotebooksListState
     @Binding var notebooks: [NotebookM]
+    @State private var isTargeted: Bool = true
     var body: some View {
         ForEach($notebooks, id: \.self) { $notebook in
             if usersState.isSearching {
@@ -250,21 +266,86 @@ struct NotebooksListGroupView: View {
                         NotebooksListGroupView(notebooks: $notebook.children.unwrap()!)
                     } label: {
                         RowView(notebook: $notebook)
-                    }//.opacity(notebook.canShow ? 1 : 0)
+                    }
                 } else {
                     RowView(notebook: $notebook)
+//                        .opacity(isDragging && draggedItem == notebook ? 0.2 : 1.0)
+//                        .foregroundColor(isDragging && draggedItem == notebook ? .red : .orange)
+//                        .onDrag({
+//                            makeItemProvider(user: notebook)
+//                        }, preview: {
+//                            Text("Drag it-3r : \(notebook.name)")
+//                                .background(Color.orange)
+//                                .frame(width: 200, height: 30)
+//                        })
+//                        .onDrop(of: [.plainText], delegate: makeDropDelegate(user: notebook) )
                        // .opacity(notebook.canShow ? 1 : 0)
                 }
             }
         }
-        .onMove(perform: move)
+        .onMove(perform: move) 
+//        .onDrop(of: [.text], isTargeted: $isTargeted, perform: { providers in
+//            print("ON DROP")
+//            return true
+//        })
+        
+        
+//        .onInsert(of: [UTType.text]) { pos, prov in
+//            print("\n-----> ignoring insert in model1")
+//        }
     }
     
+    @State private var operationTag = 1
+    @State private var draggedItem: NotebookM?
+    @State private var isDragging = false
+    @State private var isCustomPreview = true
+    
+    
+    private func makeDropDelegate(user: NotebookM) -> DropDelegate {
+//        print("makeDropDelegate \(user.name)")
+        let operation: DropOperation
+        switch operationTag {
+        case 1:
+            operation = .move
+        default:
+            operation = .copy
+        }
+        return CommonDropDelegate(
+            currentItem: user,
+            operation: operation,
+            items: $notebooks,
+            draggedItem: $draggedItem,
+            onEntered: { _ in
+                print("Drop entered - \(user.name)")
+                withAnimation { isDragging = true }
+            },
+            onExit: {
+                print("drop exit")
+                withAnimation { isDragging = false }
+            },
+            onPerform: {
+                print("drop -onPerform")
+                withAnimation { isDragging = false }
+            }
+        )
+    }
+    
+    private func makeItemProvider(user: NotebookM) -> NSItemProvider {
+        print(#function)
+        print(user.name)
+        isDragging = true
+        draggedItem = user
+        return NSItemProvider(object: user.id.uuidString as NSItemProviderWriting)
+    }
     
     func move(from source: IndexSet, to destination: Int) {
-        print(#function)
-        //        users.move(fromOffsets: source, toOffset: destination)
+        print(#function, source, destination)
         
+//        notebooks.move(fromOffsets: source, toOffset: destination)
+//
+//        notebooks.first?.notebook.parent?.children?.move(fromOffsets: source, toOffset: destination)
+//
+        usersState.move(notebooksM: &notebooks, from: source, to: destination)
     }
 }
 
@@ -301,27 +382,25 @@ struct RowView: View {
                 .background(Color.gray)
                 .focused($isFocused)
             } else {
-                Text(name)
+                Text(notebook.name)
             }
         }
-        
         .onAppear {
             name = notebook.name
 //            isFocused = false
         }
         .contextMenu {
-            
             Group {
                 RenameButton()
                 // insert below
                 Button(action: {
-                    usersState.insertBelow(ref: notebook.notebook)
+                    usersState.insertBelow(ref: notebook.notebookRef)
                 }) {
                     Text("Add Below")
                 }
                 // insert inside
                 Button(action: {
-                    usersState.insertInside(ref: notebook.notebook)
+                    usersState.insertInside(ref: notebook.notebookRef)
                 }) {
                     Text("Add Inside")
                 }
@@ -336,7 +415,6 @@ struct RowView: View {
                         Image(systemName: "trash")
                             .renderingMode(.original)
                     }
-                    
                 }
             }
             .disabled(disableActions)
@@ -356,7 +434,7 @@ struct RowView: View {
                 return
             }
             do {
-                try usersState.rename(for: notebook.notebook, newValue: name)
+                try usersState.rename(for: notebook.notebookRef, newValue: name)
 //                usersState.navTitle = name
                 isEditing = false
             } catch NotebookBusinessError.alreadyExists {

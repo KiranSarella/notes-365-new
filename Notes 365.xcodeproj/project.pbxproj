@@ -117,6 +117,7 @@
 		9FB6C6A52927936F00C8EC76 /* DayDetailState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB6C6A42927936F00C8EC76 /* DayDetailState.swift */; };
 		9FB6C6A72927939E00C8EC76 /* WeekDetailState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB6C6A62927939E00C8EC76 /* WeekDetailState.swift */; };
 		9FB6C6A929279BEC00C8EC76 /* TimelineBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB6C6A829279BEC00C8EC76 /* TimelineBusiness.swift */; };
+		9FBB0B492A0913B300F407AF /* CommonDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FBB0B482A0913B300F407AF /* CommonDropDelegate.swift */; };
 		9FE9D0C129347BFB006CCC1E /* MemoryTechniques.md in Resources */ = {isa = PBXBuildFile; fileRef = 9FE9D0C029347BFB006CCC1E /* MemoryTechniques.md */; };
 		9FE9D0C329347FFA006CCC1E /* CodingDocument.md in Resources */ = {isa = PBXBuildFile; fileRef = 9FE9D0C229347FFA006CCC1E /* CodingDocument.md */; };
 /* End PBXBuildFile section */
@@ -211,6 +212,7 @@
 		9F45BDE329238D29003DE332 /* NotebooksHierarchyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksHierarchyTests.swift; sourceTree = "<group>"; };
 		9F498E042939E03B00FF4D17 /* NotebookEditor.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = NotebookEditor.md; sourceTree = "<group>"; };
 		9F57BAE6299688BC0076FD9D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		9F6CA8DD2A041D27009061A0 /* ReorderLIst.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReorderLIst.md; sourceTree = "<group>"; };
 		9F7D291C299A7C1500B37F51 /* MarkdownDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownDocument.swift; sourceTree = "<group>"; };
 		9F7D291E299BABAC00B37F51 /* EditorViewUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorViewUI.swift; sourceTree = "<group>"; };
 		9F7D2920299CB7C000B37F51 /* Notes 365Debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Notes 365Debug.entitlements"; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 		9FB6C6A42927936F00C8EC76 /* DayDetailState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayDetailState.swift; sourceTree = "<group>"; };
 		9FB6C6A62927939E00C8EC76 /* WeekDetailState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDetailState.swift; sourceTree = "<group>"; };
 		9FB6C6A829279BEC00C8EC76 /* TimelineBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineBusiness.swift; sourceTree = "<group>"; };
+		9FBB0B482A0913B300F407AF /* CommonDropDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonDropDelegate.swift; sourceTree = "<group>"; };
 		9FE9D0C029347BFB006CCC1E /* MemoryTechniques.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MemoryTechniques.md; sourceTree = "<group>"; };
 		9FE9D0C229347FFA006CCC1E /* CodingDocument.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CodingDocument.md; sourceTree = "<group>"; };
 		9FE9D0C429348012006CCC1E /* Preview.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Preview.md; sourceTree = "<group>"; };
@@ -529,8 +532,8 @@
 			children = (
 				9F45BDCA29214D48003DE332 /* notebooks.md */,
 				9F45BDD929234150003DE332 /* Notebook.swift */,
-				9F45BD042920CCCE003DE332 /* NotebooksListBusiness.swift */,
 				9FB6C69F2927695000C8EC76 /* NotebookContentBusiness.swift */,
+				9F45BD042920CCCE003DE332 /* NotebooksListBusiness.swift */,
 				9F9DBF7129F122E80088B0CA /* NotebooksListSync.swift */,
 				9FA7E34B29F299A0007AB408 /* NotebooksContentSync.swift */,
 				9FB6C69429275BF900C8EC76 /* NotebooksList */,
@@ -617,6 +620,8 @@
 			children = (
 				9F1687CD29ADC2020085A0CA /* PlistDocument.swift */,
 				9F45BD252920CCCE003DE332 /* NotebooksListView.swift */,
+				9FBB0B482A0913B300F407AF /* CommonDropDelegate.swift */,
+				9F6CA8DD2A041D27009061A0 /* ReorderLIst.md */,
 				9F45BD292920CCCE003DE332 /* NotebooksListState.swift */,
 			);
 			path = NotebooksList;
@@ -855,6 +860,7 @@
 				9F3DB0CC292E340200704860 /* ThemeState.swift in Sources */,
 				9F3DB0D0292E70BA00704860 /* ColorPickerWindowManager.swift in Sources */,
 				9F57BAE7299688BC0076FD9D /* Constants.swift in Sources */,
+				9FBB0B492A0913B300F407AF /* CommonDropDelegate.swift in Sources */,
 				9F1687D029AE21B20085A0CA /* NotebooksChangeMonitor.swift in Sources */,
 				9F7D291F299BABAC00B37F51 /* EditorViewUI.swift in Sources */,
 				9FB6C69A29275D5100C8EC76 /* FormatOptions.swift in Sources */,

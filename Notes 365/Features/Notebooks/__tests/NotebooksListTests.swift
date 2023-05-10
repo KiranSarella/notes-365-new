@@ -66,7 +66,7 @@ final class NotebooksListTests: XCTestCase {
     
     func testAddNotebookBelow() throws {
         notebooksListState.addFirstNotes()
-        guard let selectedNotebook = notebooksListState.notesHierarchy.notes.first?.notebook else {
+        guard let selectedNotebook = notebooksListState.notesHierarchy.notes.first?.notebookRef else {
             XCTFail("first notebook should exists")
             return
         }
@@ -81,7 +81,7 @@ final class NotebooksListTests: XCTestCase {
     
     func testAddNotebookInside() throws {
         notebooksListState.addFirstNotes()
-        guard let selectedNotebook = notebooksListState.notesHierarchy.notes.first?.notebook else {
+        guard let selectedNotebook = notebooksListState.notesHierarchy.notes.first?.notebookRef else {
             XCTFail("first notebook should exists")
             return
         }
@@ -97,13 +97,13 @@ final class NotebooksListTests: XCTestCase {
     
     func testAddNotebookBelowNested() throws {
         notebooksListState.addFirstNotes()
-        guard let selectedNotebook = notebooksListState.notesHierarchy.notes.first?.notebook else {
+        guard let selectedNotebook = notebooksListState.notesHierarchy.notes.first?.notebookRef else {
             XCTFail("first notebook should exists")
             return
         }
         notebooksListState.insertInside(ref: selectedNotebook)
         
-        guard let nestedNotebook = notebooksListState.notesHierarchy.notes.first?.children?.first?.notebook else {
+        guard let nestedNotebook = notebooksListState.notesHierarchy.notes.first?.children?.first?.notebookRef else {
             XCTFail("just aaded nested notebook should exists")
             return
         }
@@ -116,13 +116,13 @@ final class NotebooksListTests: XCTestCase {
     
     func testAddNotebookInsideNested() throws {
         notebooksListState.addFirstNotes()
-        guard let selectedNotebook = notebooksListState.notesHierarchy.notes.first?.notebook else {
+        guard let selectedNotebook = notebooksListState.notesHierarchy.notes.first?.notebookRef else {
             XCTFail("first notebook should exists")
             return
         }
         notebooksListState.insertInside(ref: selectedNotebook)
         
-        guard let nestedNotebook = notebooksListState.notesHierarchy.notes.first?.children?.first?.notebook else {
+        guard let nestedNotebook = notebooksListState.notesHierarchy.notes.first?.children?.first?.notebookRef else {
             XCTFail("just aaded nested notebook should exists")
             return
         }
@@ -138,7 +138,7 @@ final class NotebooksListTests: XCTestCase {
     func testRemoveFirstNotebook() throws {
         notebooksListState.addFirstNotes()
         
-        guard let selectedNotebook = notebooksListState.notesHierarchy.notes.first?.notebook else {
+        guard let selectedNotebook = notebooksListState.notesHierarchy.notes.first?.notebookRef else {
             XCTFail("first notebook should exists")
             return
         }
@@ -150,7 +150,7 @@ final class NotebooksListTests: XCTestCase {
     func testRemoveSameLevelNotebooks() throws {
         notebooksListState.addFirstNotes()
         
-        guard let selectedNotebook = notebooksListState.notesHierarchy.notes.first?.notebook else {
+        guard let selectedNotebook = notebooksListState.notesHierarchy.notes.first?.notebookRef else {
             XCTFail("first notebook should exists")
             return
         }
@@ -162,14 +162,14 @@ final class NotebooksListTests: XCTestCase {
         notebooksListState.deleteNotebook(ref: selectedNotebook)
         
         // 2
-        guard let selectedNotebook = notebooksListState.notesHierarchy.notes.first?.notebook else {
+        guard let selectedNotebook = notebooksListState.notesHierarchy.notes.first?.notebookRef else {
             XCTFail("notebook should exists")
             return
         }
         notebooksListState.deleteNotebook(ref: selectedNotebook)
         
         // 3
-        guard let selectedNotebook = notebooksListState.notesHierarchy.notes.first?.notebook else {
+        guard let selectedNotebook = notebooksListState.notesHierarchy.notes.first?.notebookRef else {
             XCTFail("notebook should exists")
             return
         }
@@ -181,7 +181,7 @@ final class NotebooksListTests: XCTestCase {
     func testRemoveNestedLevelNotebooks() throws {
         notebooksListState.addFirstNotes()
         
-        guard let selectedNotebook = notebooksListState.notesHierarchy.notes.first?.notebook else {
+        guard let selectedNotebook = notebooksListState.notesHierarchy.notes.first?.notebookRef else {
             XCTFail("first notebook should exists")
             return
         }

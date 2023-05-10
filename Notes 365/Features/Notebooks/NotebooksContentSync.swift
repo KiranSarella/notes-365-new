@@ -65,7 +65,7 @@ class NotebooksContentSync {
     }
     
     @objc func metadataQueryDidFinishGathering(_ notification: NSNotification) {
-        print(#function)
+//        print(#function)
         metadataQuery.stop()
         handleMetadataQueryResult(notification)
     }
