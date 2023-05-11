@@ -172,6 +172,7 @@ struct NotebooksListView: View {
 
 struct SearchedListView: View {
     
+    @Environment(\.editMode) private var editMode
     @Environment(\.isSearching) private var isSearching
     @Binding var selectedNotebook: NotebookM?
     @EnvironmentObject var usersState: NotebooksListState
@@ -184,8 +185,13 @@ struct SearchedListView: View {
         .toolbar {
             EditButton()
         }
-        
         .onChange(of: isSearching) { newValue in
+            // on search active
+            if newValue {
+                // end editMode
+                editMode?.wrappedValue = .inactive
+            }
+            
             usersState.isSearching = newValue
 //            print("isSearching, ", newValue)
 //            selectedNotebook = nil
@@ -194,6 +200,12 @@ struct SearchedListView: View {
             } else {
                 usersState.restoreBackup()
             }
+        }
+        .onChange(of: editMode?.wrappedValue) { newValue in
+            selectedNotebook = nil
+//            if newValue == .active {
+//
+//            }
         }
     }
     
