@@ -225,18 +225,19 @@ struct ContentView: View {
             .onChange(of: colorScheme) { newValue in
                 ThemeState.shared.colorScheme = newValue
             }
-            .onChange(of: scenePhase) { newPhase in
-                if newPhase == .active {
-//                    print("Active")
-                    // do sync
-                    notebooksListSync.initialGatheringSync()
-                    notebooksContentSync.initialGatheringSync()
-                } else if newPhase == .inactive {
-//                    print("Inactive")
-                } else if newPhase == .background {
-//                    print("Background")
-                }
-            }
+            // issue - seleted notebooks is cleared every time on app appear.
+//            .onChange(of: scenePhase) { newPhase in
+//                if newPhase == .active {
+////                    print("Active")
+//                    // do sync
+//                    notebooksListSync.initialGatheringSync()
+//                    notebooksContentSync.initialGatheringSync()
+//                } else if newPhase == .inactive {
+////                    print("Inactive")
+//                } else if newPhase == .background {
+////                    print("Background")
+//                }
+//            }
             
         } content: {
             // calender and notebooks list
