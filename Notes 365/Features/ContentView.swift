@@ -43,10 +43,10 @@ struct ContentWrapperView: View {
                         
                         statusMessage = "checking iCloud settings"
                         try chooseEnv.setEnviromment(with: .cloud)
-                        statusMessage = "moving existing data to iCloud"
-#if targetEnvironment(macCatalyst)
-                        await chooseEnv.checkOldDataSync()
-#endif
+//                        statusMessage = "moving existing data to iCloud"
+//#if targetEnvironment(macCatalyst)
+//                        await chooseEnv.checkOldDataSync()
+//#endif
                         // old data compatability
                         /*
                          if cloud folder is empty
