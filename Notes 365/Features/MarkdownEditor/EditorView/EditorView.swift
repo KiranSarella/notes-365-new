@@ -8,6 +8,8 @@ import UIKit
 
 public class EditorView: UIView {
     
+    var fileName: String = ""
+    
     var text: String {
         get {
             return textView.text
@@ -59,7 +61,6 @@ public class EditorView: UIView {
         textView.delegate = self
         
         // add textView to scrollView
-
         textView.translatesAutoresizingMaskIntoConstraints = false
         // add scroll view to Base View
         addSubview(textView)
@@ -136,6 +137,7 @@ extension EditorView {
 //        textView.autoresizingMask = [.width]
         
         self.textView.isFindInteractionEnabled = true
+        
         
 //        self.textView
 //        self.textView.allowsUndo = true

@@ -18,7 +18,6 @@ import Combine
 
 struct NotebookEditorView: View {
     
-//        @Environment(\.scenePhase) var scenePhase
     var notebookM: NotebookM
     @ObservedObject var editorState: NotebookEditorState
 
@@ -39,7 +38,7 @@ struct NotebookEditorView: View {
                 }
                 Spacer()
             } else {
-                MarkdownEditorView(contentEditedDate: $editorState.contentEditedDate, theme: $editorState.theme, baseContent: $editorState.baseContent, handler: { getText in
+                MarkdownEditorView(fileName: notebookM.name, contentEditedDate: $editorState.contentEditedDate, theme: $editorState.theme, baseContent: $editorState.baseContent, handler: { getText in
                     // attach ref.
                     editorState.getTextHandler = getText
                 })
@@ -47,14 +46,9 @@ struct NotebookEditorView: View {
                     self.instantiateTimer()
                 })
                 .onDisappear(perform: {
-                    
                     Task {
                         await editorState.saveContentChanges()
                     }
-                    
-                    //                    Task {
-                    //                        await editorState.notebook.closeDocument()
-                    //                    }
                     self.cancelTimer()
                 })
             }
@@ -96,18 +90,6 @@ struct NotebookEditorView: View {
                 await editorState.saveContentChanges()
             }
         })
-//        .onChange(of: scenePhase) { phase in
-//            switch phase {
-//            case .background:
-//                print("App is in background")
-//            case .active:
-//                print("App is Active")
-//            case .inactive:
-//                print("App is Inactive")
-//            @unknown default:
-//                print("New App state not yet introduced")
-//            }
-//        }
     }
     
     

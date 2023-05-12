@@ -279,11 +279,8 @@ struct ContentView: View {
             case .noteBooks:
                 
                 if selectedNotebookM != nil {
-//                    NotebookEditorView(notebookM: Binding($selectedNotebookM)!, editorState: editorState)
+                    // ** binding won't work here.
                     NotebookEditorView(notebookM: selectedNotebookM!, editorState: editorState)
-                    
-//                    Text("selected \(selectedNotebookM!.name)")
-                    
                 } else {
                     Text("No notebook selected")
                 }

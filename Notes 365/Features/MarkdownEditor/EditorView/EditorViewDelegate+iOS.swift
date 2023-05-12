@@ -24,6 +24,86 @@ protocol EditorViewDelegate {
 
 extension EditorView: EditorViewDelegate {
     
+//    func printAction() {
+//     
+//        let printInfo = UIPrintInfo(dictionary: nil)
+//        printInfo.jobName = "sample"
+//        printInfo.outputType = .general
+//        
+//        let printController = UIPrintInteractionController.sharedPrintController()!
+//        printController.printInfo = printInfo
+//        printController.showsNumberOfCopies = false
+//        
+//        printController.printingItem = imageURL
+//        
+//        printController.presentAnimated(true, completionHandler: nil)
+//        
+//    }
+    
+    // https://www.hackingwithswift.com/example-code/uikit/how-to-render-an-nsattributedstring-to-a-pdf
+    func generatePDFData() -> Data? {
+        print(#function)
+
+//        let formatterView = textView.viewPrintFormatter()
+        
+        var pdfTheme = ThemeBusiness().getLightTheme()
+        pdfTheme.fontSize = pdfTheme.fontSize * 0.6
+        let attrStrGen = MarkdownAttriburedString(theme: pdfTheme)
+        let attrStr = attrStrGen.getAttriburedString(forMarkdown: self.text)
+        
+        let printFormatter = UISimpleTextPrintFormatter(attributedText: attrStr)
+        let renderer = UIPrintPageRenderer()
+        renderer.addPrintFormatter(printFormatter, startingAtPageAt: 0)
+        // A4 size
+        let pageSize = CGSize(width: 595.2, height: 841.8)
+
+        // Use this to get US Letter size instead
+        // let pageSize = CGSize(width: 612, height: 792)
+
+        let padding: CGFloat = 40 // 72
+        // create some sensible margins
+        let pageMargins = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
+
+        // calculate the printable rect from the above two
+        let printableRect = CGRect(x: pageMargins.left, y: pageMargins.top, width: pageSize.width - pageMargins.left - pageMargins.right, height: pageSize.height - pageMargins.top - pageMargins.bottom)
+
+        // and here's the overall paper rectangle
+        let paperRect = CGRect(x: 0, y: 0, width: pageSize.width, height: pageSize.height)
+        renderer.setValue(NSValue(cgRect: paperRect), forKey: "paperRect")
+        renderer.setValue(NSValue(cgRect: printableRect), forKey: "printableRect")
+        let pdfData = NSMutableData()
+
+        UIGraphicsBeginPDFContextToData(pdfData, paperRect, nil)
+        renderer.prepare(forDrawingPages: NSMakeRange(0, renderer.numberOfPages))
+        let bounds = UIGraphicsGetPDFContextBounds()
+
+        for i in 0  ..< renderer.numberOfPages {
+            UIGraphicsBeginPDFPage()
+
+            renderer.drawPage(at: i, in: bounds)
+        }
+
+        UIGraphicsEndPDFContext()
+        
+        return pdfData as Data
+        
+        
+//        do {
+//
+//            let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+//            let documentsDirectory = urls[0]
+//            let fileUrl = documentsDirectory
+//                .appending(path: "exportedItems")
+//                .appending(path: "\(fileName).pdf")
+//            print(fileUrl)
+//            try pdfData.write(to: fileUrl)
+//            return fileUrl
+//        } catch {
+//            print(error.localizedDescription)
+//            return nil
+//        }
+    }
+    
     func findAction() {
         
         
