@@ -123,8 +123,8 @@ class NotebooksListState: ObservableObject {
     @Published var presentDeleteConfirmation = false
     @Published var deletingNotebook: NotebookM?
     
-    private var backupNotebooks = [NotebookM]()
-    private var backupExpandedIds = Set<String>()
+//    private var backupNotebooks = [NotebookM]()
+//    private var backupExpandedIds = Set<String>()
     
     let notebooksPath = Constants.notebooksFolderName
     
@@ -516,21 +516,21 @@ class NotebooksListState: ObservableObject {
 // MARK: - Notebooks Filter
 extension NotebooksListState {
     
-    func takeBackup() {
-//        print(#function)
-        backupNotebooks = notesHierarchy.notes
-        backupExpandedIds = expandedIds
-    }
-    
-    func restoreBackup() {
-//        print(#function)
-        // restore
-        notesHierarchy.notes = backupNotebooks
-        expandedIds = backupExpandedIds
-        // clean
-        backupNotebooks.removeAll()
-        backupExpandedIds.removeAll()
-    }
+//    func takeBackup() {
+////        print(#function)
+////        backupNotebooks = notesHierarchy.notes
+//        backupExpandedIds = expandedIds
+//    }
+//
+//    func restoreBackup() {
+////        print(#function)
+//        // restore
+////        notesHierarchy.notes = backupNotebooks
+//        expandedIds = backupExpandedIds
+//        // clean
+////        backupNotebooks.removeAll()
+//        backupExpandedIds.removeAll()
+//    }
     
     @objc func listenExpandCollapseNotification(_ sender: Notification) {
         guard let userInfo = sender.userInfo else { return }
@@ -578,7 +578,7 @@ extension NotebooksListState {
         }
         
         if text.count == 0 || text.count == 0 {
-            notesHierarchy.notes = backupNotebooks
+//            notesHierarchy.notes = backupNotebooks
         } else {
             //            usersDB.notes = backupNotebooks.filter { note in
             //                return note.name.lowercased().contains(text.lowercased())
@@ -599,7 +599,7 @@ extension NotebooksListState {
                     }
                 }
                 if childStatus.contains(true) {
-                    note.canShow = true
+                    note.canShow = false
                     note.isExpanded = true
                 } else {
                     if note.name.lowercased().contains(text.lowercased()) {
@@ -607,8 +607,14 @@ extension NotebooksListState {
                         note.isExpanded = true
                     } else {
                         note.canShow = false
+                        note.isExpanded = false
                     }
                 }
+                
+                if note.isExpanded {
+                    return true
+                }
+                
                 return note.canShow
             }
             

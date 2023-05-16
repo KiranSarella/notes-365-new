@@ -13,6 +13,7 @@ struct NotebooksListView: View {
     @Binding var icloudSyncing: Bool
     @EnvironmentObject var usersState: NotebooksListState
     @Binding var selectedNotebook: NotebookM?
+    @Environment(\.isSearching) private var isSearching
 //    @State private var presentDeleteConfirmation = false
 //    @State private var deletingNotebook: NotebookM?
     
@@ -79,6 +80,9 @@ struct NotebooksListView: View {
             
         }
         .onAppear {
+            if isSearching {
+                return
+            }
             usersState.reloadNotebooksList()
         }
         .onChange(of: icloudSyncing) { newValue in
@@ -101,9 +105,6 @@ struct NotebooksListView: View {
     }
     
     var disableActions: Bool {
-        if usersState.isSearching {
-            return true
-        }
         
         if selectedNotebook == nil {
             return true
@@ -195,11 +196,11 @@ struct SearchedListView: View {
             usersState.isSearching = newValue
 //            print("isSearching, ", newValue)
 //            selectedNotebook = nil
-            if newValue {
-                usersState.takeBackup()
-            } else {
-                usersState.restoreBackup()
-            }
+//            if newValue {
+//                usersState.takeBackup()
+//            } else {
+//                usersState.restoreBackup()
+//            }
         }
         .onChange(of: editMode?.wrappedValue) { newValue in
             selectedNotebook = nil
@@ -258,19 +259,25 @@ struct NotebooksListGroupView: View {
     @State private var isTargeted: Bool = true
     var body: some View {
         ForEach($notebooks, id: \.self) { $notebook in
-            if usersState.isSearching {
+            if usersState.isSearching && !usersState.searchText.isEmpty {
                 // filters
-                if notebook.canShow {
+//                if notebook.canShow {
                     if notebook.containChildNotebooks {
                         DisclosureGroup(isExpanded: $notebook.isExpanded) {
                             NotebooksListGroupView(notebooks: $notebook.children.unwrap()!)
+//                                .foregroundColor(notebook.canShow ? .primary : .gray)
+//                                .opacity(notebook.canShow ? 1 : 0.3)
                         } label: {
                             RowView(notebook: $notebook)
+//                                .foregroundColor(notebook.canShow ? .primary : .gray)
+                                .opacity(notebook.canShow ? 1 : 0.4)
                         }
                     } else {
                         RowView(notebook: $notebook)
+//                            .foregroundColor(notebook.canShow ? .primary : .gray)
+                            .opacity(notebook.canShow ? 1 : 0.3)
                     }
-                }
+//                }
             } else {
                 // normal
                 if notebook.containChildNotebooks {
@@ -378,10 +385,6 @@ struct RowView: View {
     }
     
     var disableActions: Bool {
-        if usersState.isSearching {
-            return true
-        }
-       
         return false
     }
     
