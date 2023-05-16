@@ -67,7 +67,7 @@ class MarkdownAttriburedString {
         processInlineCode(extendedRange: fullRange, textStorage: attrStr)
         processCodeBlock(extendedRange: fullRange, textStorage: attrStr)
         
-        
+        processHttp(extendedRange: fullRange, textStorage: attrStr)
         
         return attrStr
         
@@ -121,6 +121,7 @@ class MarkdownAttriburedString {
         processInlineCode(extendedRange: fullRange, textStorage: attrStr)
         processCodeBlock(extendedRange: fullRange, textStorage: attrStr)
         
+        processHttp(extendedRange: fullRange, textStorage: attrStr)
         
         
         return attrStr
@@ -383,6 +384,38 @@ class MarkdownAttriburedString {
                                                range: NSRange(location: match!.range.location + 1, length: match!.range.length - 1))
             
             innerAttributedString.addAttribute(.markdownRange, value: MarkdownPattern.strikethrough, range: match!.range)
+        }
+    }
+    
+    func processHttp(extendedRange: NSRange, textStorage innerAttributedString: NSMutableAttributedString) {
+        
+        let pattern = MarkdownPattern.url
+        
+        var boldFont = theme.font
+        //        let fontDesc = boldFont.fontDescriptor.withSymbolicTraits(.traitBold)
+//        boldFont = UIFont.boldSystemFont(ofSize: boldFont.pointSize)
+        //        boldFont = boldFont.apply(newTraits: .bold)
+        
+        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        
+        //        print(innerAttributedString.string.substring(with: extendedRange))
+        
+        regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
+            match, flags, stop in
+            
+            let regExCharLenght = 0
+            //            let frontPadding = 0
+            let backPadding = 0
+            let styleRange = NSRange(location: match!.range.location + regExCharLenght, length: match!.range.length - (2 * regExCharLenght) - backPadding)
+            
+            
+            innerAttributedString.addAttribute(.font,
+                                               value: boldFont,
+                                               range: styleRange)
+            
+            innerAttributedString.addAttribute(.foregroundColor,
+                                               value: theme.blockQuoteColor.uiColor, range: styleRange)
+            
         }
     }
     

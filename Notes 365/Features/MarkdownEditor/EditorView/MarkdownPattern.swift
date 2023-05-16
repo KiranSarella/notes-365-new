@@ -60,6 +60,11 @@ public enum MarkdownPattern: String {
     case horizontalRule = #"\n-{5,}"#
 }
 
+extension MarkdownPattern {
+    // https://stackoverflow.com/a/73117746/2098686
+    static let url = #"((https?:\/\/|ftp:\/\/|www\.)\S+\.[^()\n ]+((?:\([^)]*\))|[^.,;:?!"'\n\)\]<* ])+)"#
+//    static let url = "(?i)https?://(?:www\\.)?\\S+(?:/|\\b)"
+}
 
 class EditorSettings {
     static let lineSpacing: CGFloat = 10
