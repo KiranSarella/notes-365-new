@@ -183,6 +183,7 @@ struct SearchedListView: View {
 //        ScrollView(showsIndicators: false) {
             NotebooksListGroupView(notebooks: $usersState.notesHierarchy.notes)
         }
+        .scrollDismissesKeyboard(.interactively)
         .toolbar {
             EditButton()
         }

@@ -20,6 +20,16 @@ class TimelineSync {
         //        startMonitoringChanges()
     }
     
+    private func stopMonitoring() {
+        metadataQuery.stop()
+        metadataQuery.disableUpdates()
+    }
+    
+    func restartGathering() {
+        stopMonitoring()
+        initialGatheringSync()
+    }
+    
     func initialGatheringSync() {
         
         // https://stackoverflow.com/questions/49066409/nsmetadataquery-by-folders-ios

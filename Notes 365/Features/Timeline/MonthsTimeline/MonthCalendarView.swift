@@ -83,43 +83,6 @@ struct MonthGridView: View {
                             .stroke(Color.accentColor, lineWidth: isSelectedMonth(date.monthNumber) ? 1 : 0)
                     }
                 }
-                
-//                ForEach(monthSymbols.indices, id: \.self) { i in
-//                    let monthSymbol = monthSymbols[i]
-//                    let monthNumber = i + 1
-//                    ZStack {
-//                        Button {
-//                            let year = navigationDate.string(withFormat: "YYYY")
-//                            let month = monthNumber
-//                            let day = 1
-//                            // "yyyy-MM-dd"
-//                            let dateStr = "\(year)-\(month)-\(day)"
-//                            let monthStartDate = dateStr.toUTCDate(withFormat: "yyyy-MM-dd")!
-//                            monthDate = MonthDate(date: monthStartDate)
-//                        } label: {
-//#if os(macOS)
-//                            Text("\(monthSymbol)")
-//                                .padding()
-//                                .foregroundColor(isCurrentMonth(monthNumber) ? CalendarState.todayTint : .primary)
-////                                .font(.title3)
-//#else
-//                            if UIDevice.current.userInterfaceIdiom == .phone {
-//                                NavigationLink("\(monthSymbol)", value: monthDate)
-//                                    .padding()
-//                                    .foregroundColor(isCurrentMonth(monthNumber) ? CalendarState.todayTint : .primary)
-//                            } else {
-//                                Text("\(monthSymbol)")
-//                                    .padding()
-//                                    .foregroundColor(isCurrentMonth(monthNumber) ? CalendarState.todayTint : .primary)
-//                            }
-//#endif
-//                        }
-//                        .buttonStyle(.plain)
-//                        RoundedRectangle(cornerRadius: 8)
-//                            .stroke(Color.blue, lineWidth: isSelectedMonth(monthNumber) ? 1 : 0)
-//                    }
-//                }
-                
             }
             .buttonStyle(PlainButtonStyle())
             Spacer()

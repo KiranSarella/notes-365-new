@@ -158,8 +158,15 @@ struct ContentView: View {
                     VStack {
                         Button {
                             // do sync
+                            // plist
                             notebooksListSync.initialGatheringSync()
+                            // notebooks
                             notebooksContentSync.initialGatheringSync()
+                            // timeline
+                            timelineSync.initialGatheringSync()
+                            // today base version
+                            todayVersionSync.initialGatheringSync()
+                            
                         } label: {
                             HStack {
                                 Image(systemName: "arrow.triangle.2.circlepath")

@@ -90,12 +90,6 @@ fileprivate struct DayGridView: View {
                             Button {
                                 dayDate = DayDate(date: date)
                             } label: {
-#if os(macOS)
-                                Text("\(date.getDay())")
-                                    .padding(4)
-                                    .font(.system(size: 12))
-                                    .foregroundColor(isToday(date.getDay()) ? CalendarState.todayTint : .primary)
-#else
                                 if UIDevice.current.userInterfaceIdiom == .phone {
                                     NavigationLink("\(date.getDay())", value: DayDate(date: date))
                                         .padding(4)
@@ -107,8 +101,6 @@ fileprivate struct DayGridView: View {
                                         .font(.system(size: 12))
                                         .foregroundColor(isToday(date.getDay()) ? CalendarState.todayTint : .primary)
                                 }
-#endif
-                                
                             }
                             .buttonStyle(PlainButtonStyle())
                         }
@@ -172,6 +164,7 @@ func getCalenderDates(_ inputDate: Date) -> [Date] {
         dates.append(nextDate)
     }
     
+    print("dates count", dates.count)
     return dates
 }
 
