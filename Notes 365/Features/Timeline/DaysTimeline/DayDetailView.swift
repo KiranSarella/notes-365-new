@@ -8,7 +8,28 @@
 import SwiftUI
 import Foundation
 
+
+struct DayDetailView2: View {
+    
+    var dayItem: DayDateItem
+//    @EnvironmentObject var dayState: DayCalendarState
+    
+    var body: some View {
+        
+        Text("\(dayItem.date.string(withFormat: "mm-dd-yyyy"))")
+            .onDisappear {
+//                dayState.selectedDayItem = dayItem
+                NotificationCenter.default.post(name: NSNotification.Name("daydetailview"), object: nil, userInfo: ["date": dayItem.date])
+            }
+            .onAppear {
+                NotificationCenter.default.post(name: NSNotification.Name("daydetailview"), object: nil, userInfo: ["date": dayItem.date])
+            }
+    }
+}
+
 struct DayDetailView: View {
+    
+    var dayItem: DayDateItem?
     @StateObject private var dayState = DayDetailState()
 
     var body: some View {
@@ -73,6 +94,11 @@ struct DayDetailView: View {
             }
         }
         .onAppear {
+            
+            if let date = dayItem?.date {
+                CalendarState.shared.selectedDate = date
+            }
+            
             dayState.readDayData(dayDate: dayState.dayDate)
         }
         .onDisappear {

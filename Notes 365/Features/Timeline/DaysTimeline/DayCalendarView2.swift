@@ -16,12 +16,14 @@ struct DayCalendarView2: View {
         VStack {
             // current month, prev, next actions
             HeaderView()
+                .padding(.bottom)
                 .environmentObject(dayState)
+
             // grid view 7 x 7
             // 7 columns
             // titles: sun, mon...
             // detail rows: 6
-            DayGridView()
+            DayGridView(dayDate: $dayDate)
                 .environmentObject(dayState)
         }
         .padding()
@@ -55,8 +57,10 @@ fileprivate struct DayGridView: View {
     var weekdaySymbols = Calendar.current.shortWeekdaySymbols
     
     @EnvironmentObject var dayState: DayCalendarState
-    
+    @Binding var dayDate: DayDate
    
+    @State private var displayCounter: Int = 0
+    
     var body: some View {
         
         VStack {
@@ -78,18 +82,50 @@ fileprivate struct DayGridView: View {
                         }
                         dayState.selectedDate = dayItem.date
                     } label: {
-                        DayGridItem(dayItem: dayItem, isSelected: dayState.isSelected(dayItem))
+//                        DayGridItem(dayItem: dayItem, isSelected: dayState.isSelected(dayItem))
+                        if UIDevice.current.userInterfaceIdiom == .phone {
+//                            NavigationLink(value: dayState.selectedDayItem) {
+//                                DayGridItem(dayItem: dayItem, isSelected: dayState.isSelected(dayItem))
+//                            }
+                            NavigationLink(value: dayItem) {
+                                DayGridItem(dayItem: dayItem, isSelected: dayState.isSelected(dayItem))
+                            }
+                        } else {
+                            DayGridItem(dayItem: dayItem, isSelected: dayState.isSelected(dayItem))
+                        }
                     }
-
                 }.buttonStyle(PlainButtonStyle())
                 Spacer()
             }
             Spacer()
         }
-        .onAppear(perform: {
-//            dates = getCalenderDates(navigationDate)
-        })
         .frame(height: 220)
+        .onChange(of: dayState.selectedDate, perform: { newValue in
+            // update for detail view
+            dayDate = DayDate(date: newValue)
+            CalendarState.shared.dayDate = dayDate
+        })
+        .navigationDestination(for: DayDateItem.self) { newDate in
+            DayDetailView(dayItem: newDate)
+//            DestinationView(input: newDate, emp: $dayState.selectedDayItem) {
+//                DayDetailView2(dayItem: newDate)
+//            }
+            
+//            DayDetailView2(dayItem: newDate)
+//                .onAppear {
+//                    displayCounter += 1
+//                }
+//                .environmentObject(dayState)
+//                .onDisappear {
+//                    dayState.selectedDate = newDate.date
+//                }
+////                .onAppear {
+//
+//
+////                    dayDate = DayDate(date: newDate.date)
+////                    CalendarState.shared.dayDate = dayDate
+//                }
+        }
     }
     
 }
@@ -110,15 +146,37 @@ struct DayGridItem: View {
     }
     
     var body: some View {
-        Text("  \(dayItem.day)  ")
-            .font(.system(size: 14))
-            .padding([.horizontal], 2)
-            .padding([.vertical], 4)
-            .foregroundColor(textColor)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.accentColor, lineWidth: isSelected ? 1 : 0)
-                    .frame(width: 26, height: 26)
-            )
+//        HStack(alignment: .center) {
+            Text("\(dayItem.day)")
+                .font(.system(size: 14))
+                .padding([.horizontal], 2)
+                .padding([.vertical], 6)
+                .foregroundColor(textColor)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.accentColor, lineWidth: isSelected ? 1 : 0)
+                        .frame(width: 26, height: 26)
+                )
+//        }
+        
     }
+}
+
+struct DestinationView<Content: View>: View {
+    
+    @Binding var employee: DayDateItem?
+    let content: () -> Content
+    
+    init(input: DayDateItem, emp: Binding<DayDateItem?>, @ViewBuilder content: @escaping () -> Content) {
+        _employee = emp
+        
+        self.content = content
+        print(input)
+//        employee = input
+    }
+    
+    var body: some View {
+        self.content()
+    }
+    
 }

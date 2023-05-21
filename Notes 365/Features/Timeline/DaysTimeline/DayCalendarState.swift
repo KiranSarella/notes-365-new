@@ -25,6 +25,7 @@ struct DayDateItem: Identifiable {
     }
 }
 
+extension DayDateItem: Hashable {}
 
 class DayCalendarState: ObservableObject {
     
@@ -32,16 +33,31 @@ class DayCalendarState: ObservableObject {
     @Published var dayitems = [DayDateItem]()
     @Published var selectedDate: Date
     
+    @Published var selectedDayItem: DayDateItem?
+    
     private(set) var displayingDate: Date
     
+    var displayCounte: Int = 0
     
     private var calendar = Calendar.current
     
     init() {
         displayingDate = Date()
         selectedDate = displayingDate
+//        selectedDayItem = displayingDate
         
         updateDisplay()
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("daydetailview"), object: nil, queue: nil) { notification in
+            if let userInfo = notification.userInfo {
+                if let date = userInfo["date"] as? Date {
+                    print(date)
+//                    DispatchQueue.main.async {
+                        self.selectedDate = date
+//                    }
+                }
+            }
+        }
     }
     
     func setDisplayDate(_ newDate: Date) {
@@ -54,6 +70,7 @@ class DayCalendarState: ObservableObject {
         if !dayItem.canShow {
             return false
         }
+        
         
         return dayItem.date.isSameDayAs(selectedDate)
     }
@@ -93,8 +110,6 @@ class DayCalendarState: ObservableObject {
             nextDate = Calendar.current.date(byAdding: .day, value: 1, to: nextDate)!
             dates.append(nextDate)
         }
-        
-        print("dates count", dates.count)
         return dates
     }
     

@@ -9,7 +9,8 @@ import Foundation
 import SwiftUI
 
 // MARK: - Day
-public struct DayDate {
+public struct DayDate: Identifiable {
+    public let id = UUID()
     let date: Date
 }
 
@@ -140,6 +141,8 @@ class CalendarState: ObservableObject {
     @Published var dayDate: DayDate
     @Published var weekDate: WeekDate
     @Published var monthDate: MonthDate
+    
+    @Published var dayDateItem: DayDateItem.ID = DayDateItem(date: Date.now, canShow: true).id
     
     var navigationDate: Date = Date()
     

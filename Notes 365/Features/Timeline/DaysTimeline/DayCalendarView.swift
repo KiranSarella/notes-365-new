@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/*
 struct DayCalendarView: View {
 
     @Binding var dayDate: DayDate
@@ -142,29 +143,29 @@ fileprivate struct DayGridView: View {
         return false
     }
 }
+*/
 
 
-
-func getCalenderDates(_ inputDate: Date) -> [Date] {
-    
-    guard
-        let monthInterval = Calendar.current.dateInterval(of: .month, for: inputDate),
-        let monthFirstWeek = Calendar.current.dateInterval(of: .weekOfMonth, for: monthInterval.start)
-    else { fatalError() }
-    
-    let startDate = monthFirstWeek.start
-    let endDate = Calendar.current.date(byAdding: .day, value: 41, to: monthFirstWeek.start)!
-    
-    var nextDate = startDate
-    
-    var dates = [startDate]
-    
-    while nextDate < endDate {
-        nextDate = Calendar.current.date(byAdding: .day, value: 1, to: nextDate)!
-        dates.append(nextDate)
-    }
-    
-    print("dates count", dates.count)
-    return dates
-}
+//func getCalenderDates(_ inputDate: Date) -> [Date] {
+//    
+//    guard
+//        let monthInterval = Calendar.current.dateInterval(of: .month, for: inputDate),
+//        let monthFirstWeek = Calendar.current.dateInterval(of: .weekOfMonth, for: monthInterval.start)
+//    else { fatalError() }
+//    
+//    let startDate = monthFirstWeek.start
+//    let endDate = Calendar.current.date(byAdding: .day, value: 41, to: monthFirstWeek.start)!
+//    
+//    var nextDate = startDate
+//    
+//    var dates = [startDate]
+//    
+//    while nextDate < endDate {
+//        nextDate = Calendar.current.date(byAdding: .day, value: 1, to: nextDate)!
+//        dates.append(nextDate)
+//    }
+//    
+//    print("dates count", dates.count)
+//    return dates
+//}
 

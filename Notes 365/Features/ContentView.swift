@@ -270,19 +270,22 @@ struct ContentView: View {
             let selectedMode = Mode.getMode(id: selectedModeID ?? Mode.timeline.id)!
             switch selectedMode {
             case .timeline:
-                if UIDevice.current.userInterfaceIdiom == .phone {
-                    EmptyView()
-                } else {
+//                if UIDevice.current.userInterfaceIdiom == .phone {
+//                    EmptyView()
+//                } else {
                     let calendarType = calendarState.calenderType
                     switch calendarType {
                     case .day:
+                        
+//                        Text("\(calendarState.dayDate.date.string(format: "mm-dd-yy"))")
+//                        NotebookEditorView(notebookM: selectedNotebookM!, editorState: editorState)
                         DayDetailView()
                     case .week:
                         WeekDetailView()
                     case .month:
                         MonthDetailView()
                     }
-                }
+//                }
             case .noteBooks:
                 
                 if selectedNotebookM != nil {
