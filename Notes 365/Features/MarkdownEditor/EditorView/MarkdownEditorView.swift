@@ -84,6 +84,17 @@ struct MarkdownEditorView: View {
             // menu options
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
+                    
+                    Button {
+                        editorView.findAction()
+                    } label: {
+                        HStack {
+                            Text("Find & Replace")
+                            // Image(systemName: "magnifyingglass")
+                        }
+                    }
+                    .foregroundColor(.primary)
+                    
                     Button {
                         if let pdfData = editorView.generatePDFData() {
                             pdfFileData = PDFFile(data: pdfData)
@@ -96,15 +107,6 @@ struct MarkdownEditorView: View {
                     }
                     .foregroundColor(.primary)
                     
-                    Button {
-                        editorView.findAction()
-                    } label: {
-                        HStack {
-                            Text("Find & Replace")
-                            // Image(systemName: "magnifyingglass")
-                        }
-                    }
-                    .foregroundColor(.primary)
                 } label: {
                     Image(systemName: "ellipsis.circle")
                 }

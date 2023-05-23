@@ -36,6 +36,7 @@ struct NotebooksListView: View {
                     //                    NotebooksListGroupView(notebooks: $usersState.usersDB.notes)
                     //                }
                     SearchedListView(selectedNotebook: $selectedNotebook)
+                        .padding(.bottom, 20)
                         .listStyle(PlainListStyle())
                     
 //                                    .listStyle(SidebarListStyle())
@@ -73,12 +74,22 @@ struct NotebooksListView: View {
                     }
                 }
                 .frame(minWidth: 280, maxWidth: 500)
+                .confirmationDialog("Are you sure?", isPresented: $usersState.presentDeleteConfirmation) {
+                    Button("Delete", role: .destructive) {
+                        guard let temp = usersState.deletingNotebook else { return }
+                        usersState.deleteNotebook(ref: temp.notebookRef)
+                        usersState.deletingNotebook = nil
+                    }
+                } message: {
+                    Text("You cannot undo this action")
+                }
                 .onDisappear {
                     usersState.saveExpandedIds()
                 }
             }
             
         }
+        
         .onAppear {
             if isSearching {
                 return
@@ -158,15 +169,7 @@ struct NotebooksListView: View {
         .buttonStyle(PlainButtonStyle())
         .backgroundStyle(.bar)
         .padding()
-        .confirmationDialog("Are you sure?", isPresented: $usersState.presentDeleteConfirmation) {
-            Button("Delete", role: .destructive) {
-                guard let temp = usersState.deletingNotebook else { return }
-                usersState.deleteNotebook(ref: temp.notebookRef)
-                usersState.deletingNotebook = nil
-            }
-        } message: {
-            Text("You cannot undo this action")
-        }
+        
     }
     
 }
