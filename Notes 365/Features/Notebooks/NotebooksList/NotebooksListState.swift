@@ -119,6 +119,7 @@ class NotebooksListState: ObservableObject {
     
     @Published var searchText: String = ""
     @Published var isSearching = false
+    @Published var searchResultCount: Int = 0
     
     @Published var presentDeleteConfirmation = false
     @Published var deletingNotebook: NotebookM?
@@ -552,14 +553,15 @@ extension NotebooksListState {
     func setupSearchText() {
         
         $searchText
-        //            .map({ (string) -> String? in
-        //                if string.count < 2 {
-        //                    self.usersDB.notes = []
-        //                    return nil
-        //                }
-        //                return string
-        //            })
-            .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
+            .map({ (string) -> String? in
+                if string.count < 2 {
+//                    self.usersDB.notes = []
+                    self.searchResultCount = 0
+                    return nil
+                }
+                return string
+            })
+            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
             .receive(on: RunLoop.main)
             .compactMap{ $0 }
             .sink { status in
@@ -569,7 +571,9 @@ extension NotebooksListState {
             }.store(in: &subscription)
     }
     
-    
+    var activeSearch: Bool {
+        isSearching && searchText.count > 1
+    }
     
     func searchItems(_ text: String) {
         
@@ -577,12 +581,15 @@ extension NotebooksListState {
             return
         }
         
-        if text.count == 0 || text.count == 0 {
+        if text.count == 0 {
 //            notesHierarchy.notes = backupNotebooks
+            searchResultCount = 0
         } else {
             //            usersDB.notes = backupNotebooks.filter { note in
             //                return note.name.lowercased().contains(text.lowercased())
             //            }
+            
+            var resultsCount = 0
             
             func canAddNotebook(note: inout NotebookM) -> Bool {
                 
@@ -605,6 +612,8 @@ extension NotebooksListState {
                     if note.name.lowercased().contains(text.lowercased()) {
                         note.canShow = true
                         note.isExpanded = true
+                        
+                        resultsCount += 1
                     } else {
                         note.canShow = false
                         note.isExpanded = false
@@ -627,6 +636,7 @@ extension NotebooksListState {
             }
 //            print("NEW LIST")
             notesHierarchy.notes = notebooksList
+            searchResultCount = resultsCount
         }
         
         

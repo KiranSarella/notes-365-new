@@ -631,9 +631,9 @@
 			children = (
 				9F1687CD29ADC2020085A0CA /* PlistDocument.swift */,
 				9F45BD252920CCCE003DE332 /* NotebooksListView.swift */,
+				9F45BD292920CCCE003DE332 /* NotebooksListState.swift */,
 				9FBB0B482A0913B300F407AF /* CommonDropDelegate.swift */,
 				9F6CA8DD2A041D27009061A0 /* ReorderLIst.md */,
-				9F45BD292920CCCE003DE332 /* NotebooksListState.swift */,
 			);
 			path = NotebooksList;
 			sourceTree = "<group>";

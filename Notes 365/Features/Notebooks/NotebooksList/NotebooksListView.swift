@@ -38,6 +38,7 @@ struct NotebooksListView: View {
                     SearchedListView(selectedNotebook: $selectedNotebook)
                         .padding(.bottom, 20)
                         .listStyle(PlainListStyle())
+                        .autocorrectionDisabled()
                     
 //                                    .listStyle(SidebarListStyle())
                         .navigationTitle("Notebooks")
@@ -182,7 +183,12 @@ struct SearchedListView: View {
     @EnvironmentObject var usersState: NotebooksListState
     
     var body: some View {
+        if usersState.activeSearch {
+            Text("Results: \(usersState.searchResultCount)")
+                    .font(.caption)
+        }
         List(selection: $selectedNotebook) {
+            
 //        ScrollView(showsIndicators: false) {
             NotebooksListGroupView(notebooks: $usersState.notesHierarchy.notes)
         }
@@ -263,7 +269,7 @@ struct NotebooksListGroupView: View {
     @State private var isTargeted: Bool = true
     var body: some View {
         ForEach($notebooks, id: \.self) { $notebook in
-            if usersState.isSearching && !usersState.searchText.isEmpty {
+            if usersState.activeSearch {
                 // filters
 //                if notebook.canShow {
                     if notebook.containChildNotebooks {
