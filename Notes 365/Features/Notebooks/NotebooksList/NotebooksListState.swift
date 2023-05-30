@@ -110,6 +110,7 @@ class NotebooksListState: ObservableObject {
     static let shared: NotebooksListState = NotebooksListState()
     
     let notebookBusiness = NotebooksListBusiness(EnvironmentState.shared.basePathURL)
+    let recentNotebooks = RecentNotebooksList(EnvironmentState.shared.basePathURL)
     
     var subscription: Set<AnyCancellable> = []
     var expandedIds = Set<String>()
@@ -120,6 +121,8 @@ class NotebooksListState: ObservableObject {
     @Published var searchText: String = ""
     @Published var isSearching = false
     @Published var searchResultCount: Int = 0
+    
+    @Published var isShowingRecent = false
     
     @Published var presentDeleteConfirmation = false
     @Published var deletingNotebook: NotebookM?
@@ -189,6 +192,9 @@ class NotebooksListState: ObservableObject {
             let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
             notesHierarchy = NotebooksHierarchy(notes: notesList)
         }
+        
+        // refresh recent list
+        recentNotebooks.populateData()
     }
     
     func saveExpandedIds() {
@@ -517,22 +523,6 @@ class NotebooksListState: ObservableObject {
 // MARK: - Notebooks Filter
 extension NotebooksListState {
     
-//    func takeBackup() {
-////        print(#function)
-////        backupNotebooks = notesHierarchy.notes
-//        backupExpandedIds = expandedIds
-//    }
-//
-//    func restoreBackup() {
-////        print(#function)
-//        // restore
-////        notesHierarchy.notes = backupNotebooks
-//        expandedIds = backupExpandedIds
-//        // clean
-////        backupNotebooks.removeAll()
-//        backupExpandedIds.removeAll()
-//    }
-    
     @objc func listenExpandCollapseNotification(_ sender: Notification) {
         guard let userInfo = sender.userInfo else { return }
         
@@ -572,7 +562,7 @@ extension NotebooksListState {
     }
     
     var activeSearch: Bool {
-        isSearching && searchText.count > 1
+        (isSearching && searchText.count > 1) || isShowingRecent
     }
     
     func searchItems(_ text: String) {
@@ -638,9 +628,83 @@ extension NotebooksListState {
             notesHierarchy.notes = notebooksList
             searchResultCount = resultsCount
         }
-        
-        
     }
     
     
+}
+
+// MARK: - recent notebooks list
+extension NotebooksListState {
+    
+    var recentButtonIcon: String {
+        isShowingRecent ? "clock.fill" : "clock"
+    }
+    
+    func showHideRecentlyModified() {
+        if isShowingRecent {
+            hideRecentlyModified()
+        } else {
+            showRecentlyModified()
+        }
+    }
+    
+    func hideRecentlyModified() {
+        isShowingRecent = false
+    }
+    
+    func showRecentlyModified() {
+        
+        let recentItems = recentNotebooks.items
+        
+        var resultsCount = 0
+        
+        func canAddNotebook(note: inout NotebookM) -> Bool {
+            
+            // go deep first, if deep return true, then mark current as true
+            // if deep is false, then check current name condition
+            
+            // check nested items
+            var childStatus = Set<Bool>()
+            if note.children != nil {
+                let count = note.children!.count
+                for i in 0..<count {
+                    let canAdd = canAddNotebook(note: &note.children![i])
+                    childStatus.insert(canAdd)
+                }
+            }
+            if childStatus.contains(true) {
+                note.canShow = false
+                note.isExpanded = true
+            } else {
+                if recentItems.contains(note.id.uuidString) {
+                    note.canShow = true
+                    note.isExpanded = true
+                    
+                    resultsCount += 1
+                } else {
+                    note.canShow = false
+                    note.isExpanded = false
+                }
+            }
+            
+            if note.isExpanded {
+                return true
+            }
+            
+            return note.canShow
+        }
+        
+        var notebooksList = notesHierarchy.notes
+//            var expandedIds = Set<String>()
+        
+        for i in 0..<notebooksList.count {
+            _ = canAddNotebook(note: &notebooksList[i])
+//                print("checked \(i)")
+        }
+//            print("NEW LIST")
+        notesHierarchy.notes = notebooksList
+        searchResultCount = resultsCount
+        
+        isShowingRecent = true
+    }
 }

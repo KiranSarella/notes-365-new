@@ -186,6 +186,7 @@ struct SearchedListView: View {
         if usersState.activeSearch {
             Text("Results: \(usersState.searchResultCount)")
                     .font(.caption)
+                    .padding(2)
         }
         List(selection: $selectedNotebook) {
             
@@ -194,6 +195,13 @@ struct SearchedListView: View {
         }
         .scrollDismissesKeyboard(.interactively)
         .toolbar {
+            
+            Button {
+                usersState.showHideRecentlyModified()
+            } label: {
+                Image(systemName: usersState.recentButtonIcon)
+            }
+            
             EditButton()
         }
         .onChange(of: isSearching) { newValue in
@@ -201,6 +209,7 @@ struct SearchedListView: View {
             if newValue {
                 // end editMode
                 editMode?.wrappedValue = .inactive
+                usersState.isShowingRecent = false
             }
             
             usersState.isSearching = newValue
