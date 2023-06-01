@@ -189,9 +189,49 @@ struct SearchedListView: View {
                     .padding(2)
         }
         List(selection: $selectedNotebook) {
-            
-//        ScrollView(showsIndicators: false) {
             NotebooksListGroupView(notebooks: $usersState.notesHierarchy.notes)
+            
+            Section {
+                DisclosureGroup {
+                    Text("Note 1")
+                    Text("Note 2")
+                } label: {
+                    HStack {
+                        Image(systemName: "trash")
+                        Text("Recently Deleted")
+                            .font(.subheadline)
+                            .fontWeight(.bold)
+                            .foregroundColor(.gray)
+                    }
+                }
+                .tint(.gray)
+//                .disclosureGroupStyle(MyDisclosureStyle)
+                
+            }
+            
+//            Section {
+//                DisclosureGroup {
+//                    Text("Note 1")
+//                } label: {
+//                    Text("Recently Deleted")
+//                        .fontWeight(.bold)
+//                        .foregroundColor(.gray)
+//                        .padding(.top, 14)
+//                }
+//            } header: {
+//                Text("Recently Deleted")
+//                    .fontWeight(.bold)
+//
+//            }
+
+            
+            
+//            DisclosureGroup("recently deleted") {
+//                Text("Note 1")
+//            }
+//            Section("Recently Deleted") {
+//                Text("Note 1")
+//            }
         }
         .scrollDismissesKeyboard(.interactively)
         .toolbar {
@@ -229,6 +269,32 @@ struct SearchedListView: View {
         }
     }
     
+}
+
+struct MyDisclosureStyle: DisclosureGroupStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        VStack {
+            Button {
+                withAnimation {
+                    configuration.isExpanded.toggle()
+                }
+            } label: {
+                HStack(alignment: .firstTextBaseline) {
+                    configuration.label
+                    Spacer()
+                    Text(configuration.isExpanded ? "hide" : "show")
+                        .foregroundColor(.accentColor)
+                        .font(.caption.lowercaseSmallCaps())
+                        .animation(nil, value: configuration.isExpanded)
+                }
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            if configuration.isExpanded {
+                configuration.content
+            }
+        }
+    }
 }
 
 struct AddNotesView: View {
@@ -417,6 +483,23 @@ struct RowView: View {
                 .focused($isFocused)
             } else {
                 Text(notebook.name)
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+//                            store.delete(message)
+                            
+                            usersState.deletingNotebook = notebook
+                            
+                            guard let temp = usersState.deletingNotebook else { return }
+                            usersState.deleteNotebook(ref: notebook.notebookRef)
+                            usersState.deletingNotebook = nil
+                            
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+//                        Button { store.flag(message) } label: {
+//                            Label("Flag", systemImage: "flag")
+//                        }
+                    }
             }
         }
         .onAppear {
