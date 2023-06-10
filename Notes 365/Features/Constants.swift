@@ -15,4 +15,5 @@ class Constants {
     static let todayBaseVersionFolderName = "today_base_version"
     static let notebooksPListName = "notebooks-list"
     static let recentPListName = "recent-list"
+    static let deletedNotebooksPListName = "deleted-notebooks-list"
 }

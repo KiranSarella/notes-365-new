@@ -11,6 +11,7 @@ import UniformTypeIdentifiers
 struct MarkdownEditorView: View {
     
     var fileName: String
+    var isDeleted: Bool
     @StateObject var markdownEditorState = MarkdownEditorViewState()
     @FocusState private var isTextFieldFocused: Bool
     @State private var editorView = EditorView()
@@ -36,8 +37,9 @@ struct MarkdownEditorView: View {
                 .padding(.horizontal)
                 .backgroundStyle(.regularMaterial)
                 .background(.background)
+                .disabled(isDeleted)
             
-            EditorViewUI(theme: theme, text: baseContent, editorView: $editorView, contentEditedDate: $contentEditedDate)
+            EditorViewUI(theme: theme, text: baseContent, editorView: $editorView, contentEditedDate: $contentEditedDate, isEditable: !isDeleted)
                 .font(Font.body)
                 .focused($isTextFieldFocused)
         }

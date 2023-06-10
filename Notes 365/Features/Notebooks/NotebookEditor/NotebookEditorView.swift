@@ -38,7 +38,7 @@ struct NotebookEditorView: View {
                 }
                 Spacer()
             } else {
-                MarkdownEditorView(fileName: notebookM.name, contentEditedDate: $editorState.contentEditedDate, theme: $editorState.theme, baseContent: $editorState.baseContent, handler: { getText in
+                MarkdownEditorView(fileName: notebookM.name, isDeleted: notebookM.isDeleted, contentEditedDate: $editorState.contentEditedDate, theme: $editorState.theme, baseContent: $editorState.baseContent, handler: { getText in
                     // attach ref.
                     editorState.getTextHandler = getText
                 })

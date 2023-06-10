@@ -173,6 +173,9 @@ class NotebooksListBusiness {
         let filePath = notebooksPath + "/" + notebook.id.uuidString + ".md"
         // delete file.md
         deleteItem(at: filePath)
+        
+        // if contains child notebooks (and nested childs), delete all them recursively
+        
     }
     
     private func deleteItem(at path: String) {
@@ -216,6 +219,55 @@ extension NotebooksListBusiness {
     func retrieveNotebooks() -> [Notebook]? {
         
         let plistURL = basePathURL.appending(path: Constants.notebooksPListName).appendingPathExtension("plist")
+        
+        do {
+            // Read the file contents
+            let plistData = try Data(contentsOf: plistURL)
+            let notebooksList = try PropertyListDecoder().decode([Notebook].self, from: plistData)
+            return notebooksList
+        } catch let error as NSError {
+            print("Failed reading from URL: \(plistURL), Error: " + error.localizedDescription)
+        }
+        return nil
+    }
+    
+}
+
+// MARK: - Recently Deleted
+extension NotebooksListBusiness {
+    
+    func restore(notebook: Notebook) {
+        // if parent is not nil, reach its root parent, then restore this parent.
+        
+        
+        
+    }
+    
+    // It will save only notebooks list hierarchy to plist, not notebook content.
+    func persistDeleted(notebooks: [Notebook]) {
+        syncDate = Date()
+        
+        do {
+            // generate data
+            let plistData = try PropertyListEncoder().encode(notebooks)
+            // prepare path
+            let fileURL = basePathURL.appendingPathComponent(Constants.deletedNotebooksPListName).appendingPathExtension("plist")
+            // save file
+            do {
+                // Write to the file
+                try plistData.write(to: fileURL)
+            } catch let error as NSError {
+                print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
+            }
+        } catch {
+            print("Save Failed")
+        }
+    }
+    
+    // retrives notebooks hierarcy from plist, not the notebook content.
+    func retrieveDeletedNotebooks() -> [Notebook]? {
+        
+        let plistURL = basePathURL.appending(path: Constants.deletedNotebooksPListName).appendingPathExtension("plist")
         
         do {
             // Read the file contents

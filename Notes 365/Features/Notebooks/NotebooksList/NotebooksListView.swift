@@ -160,7 +160,11 @@ struct NotebooksListView: View {
                     return
                 }
                 usersState.deletingNotebook = selectedNotebook
-                usersState.presentDeleteConfirmation = true
+//                usersState.presentDeleteConfirmation = true
+                guard let temp = usersState.deletingNotebook else { return }
+                usersState.deleteNotebookNew(ref: temp.notebookRef)
+                usersState.deletingNotebook = nil
+                
             }) {
                 Image(systemName: "trash")
                     .renderingMode(.original)
@@ -193,8 +197,11 @@ struct SearchedListView: View {
             
             Section {
                 DisclosureGroup {
-                    Text("Note 1")
-                    Text("Note 2")
+                    
+                    NotebooksListGroupView(notebooks: $usersState.notesHierarchy.deletedNotes)
+                    
+//                    Text("Note 1")
+//                    Text("Note 2")
                 } label: {
                     HStack {
                         Image(systemName: "trash")
@@ -202,6 +209,7 @@ struct SearchedListView: View {
                             .font(.subheadline)
                             .fontWeight(.bold)
                             .foregroundColor(.gray)
+                        
                     }
                 }
                 .tint(.gray)
@@ -490,7 +498,7 @@ struct RowView: View {
                             usersState.deletingNotebook = notebook
                             
                             guard let temp = usersState.deletingNotebook else { return }
-                            usersState.deleteNotebook(ref: notebook.notebookRef)
+                            usersState.deleteNotebookNew(ref: notebook.notebookRef)
                             usersState.deletingNotebook = nil
                             
                         } label: {
@@ -507,34 +515,77 @@ struct RowView: View {
 //            isFocused = false
         }
         .contextMenu {
-            Group {
-                RenameButton()
-                // insert below
-                Button(action: {
-                    usersState.insertBelow(ref: notebook.notebookRef)
-                }) {
-                    Text("Add Below")
-                }
-                // insert inside
-                Button(action: {
-                    usersState.insertInside(ref: notebook.notebookRef)
-                }) {
-                    Text("Add Inside")
-                }
-                // trash
-                Button(role: .destructive, action: {
-                    usersState.deletingNotebook = notebook
-                    usersState.presentDeleteConfirmation = true
-                }) {
-                    HStack {
-                        Text("Delete")
-                        Spacer()
-                        Image(systemName: "trash")
-                            .renderingMode(.original)
+            
+            if notebook.isDeleted {
+                Group {
+                    // restore
+                    Button(action: {
+//                        usersState.insertBelow(ref: notebook.notebookRef)
+                    }) {
+                        Label("Restore", image: "arrow.uturn.backward")
+//                        HStack {
+//                            Text("Restore")
+//                            Spacer()
+//                            Image(systemName: "arrow.uturn.backward")
+//                                .renderingMode(.original)
+//                        }
+                    }
+                    
+                    // trash
+                    Button(role: .destructive, action: {
+                        usersState.deletingNotebook = notebook
+    //                    usersState.presentDeleteConfirmation = true
+                        
+                        usersState.deleteNotebookNew(ref: notebook.notebookRef)
+                        usersState.deletingNotebook = nil
+                        
+                    }) {
+                        HStack {
+                            Text("Delete")
+                            Spacer()
+                            Image(systemName: "trash")
+                                .renderingMode(.original)
+                        }
                     }
                 }
+                .disabled(disableActions)
+            } else {
+                Group {
+                    RenameButton()
+                    // insert below
+                    Button(action: {
+                        usersState.insertBelow(ref: notebook.notebookRef)
+                    }) {
+                        Text("Add Below")
+                    }
+                    // insert inside
+                    Button(action: {
+                        usersState.insertInside(ref: notebook.notebookRef)
+                    }) {
+                        Text("Add Inside")
+                    }
+                    // trash
+                    Button(role: .destructive, action: {
+                        usersState.deletingNotebook = notebook
+    //                    usersState.presentDeleteConfirmation = true
+                        
+                        
+                        usersState.deleteNotebookNew(ref: notebook.notebookRef)
+                        usersState.deletingNotebook = nil
+                        
+                    }) {
+                        HStack {
+                            Text("Delete")
+                            Spacer()
+                            Image(systemName: "trash")
+                                .renderingMode(.original)
+                        }
+                    }
+                }
+                .disabled(disableActions)
             }
-            .disabled(disableActions)
+            
+            
         }
         .renameAction {
             isEditing = true

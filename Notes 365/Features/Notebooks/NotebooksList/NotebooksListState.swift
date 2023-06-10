@@ -13,8 +13,9 @@ import Combine
 struct NotebooksHierarchy {
     
     var notes: [NotebookM]
+    var deletedNotes: [NotebookM] = []
     
-    static func constructHierarchy(notebooks: [Notebook], expandedIds: Set<String>) -> [NotebookM] {
+    static func constructHierarchy(notebooks: [Notebook], expandedIds: Set<String>, isDeleted: Bool = false) -> [NotebookM] {
 //        print(#function)
         var noteList = [NotebookM]()
         
@@ -29,9 +30,10 @@ struct NotebooksHierarchy {
             // - create notebookM
             var note = NotebookM(notebook: notebook)
             note.isExpanded = expandedIds.contains(note.id.uuidString)
+            note.isDeleted = isDeleted
             
             if let children = notebook.children {
-                note.children = constructHierarchy(notebooks: children, expandedIds: expandedIds)
+                note.children = constructHierarchy(notebooks: children, expandedIds: expandedIds, isDeleted: isDeleted)
             }
             
             noteList.append(note)
@@ -39,6 +41,7 @@ struct NotebooksHierarchy {
         
         return noteList
     }
+    
 }
 
 
@@ -68,6 +71,8 @@ struct NotebookM: Identifiable {
             NotificationCenter.default.post(name: .ExpandCollapseNotification, object: nil, userInfo: info)
         }
     }
+    
+    var isDeleted = false
     
     private(set) var notebookRef: Notebook
     
@@ -116,6 +121,8 @@ class NotebooksListState: ObservableObject {
     var expandedIds = Set<String>()
     
     private var notebooks = [Notebook]()
+    private var deletedNotebooks = [Notebook]()
+    
     @Published var notesHierarchy: NotebooksHierarchy
     
     @Published var searchText: String = ""
@@ -145,6 +152,11 @@ class NotebooksListState: ObservableObject {
         let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
         notesHierarchy = NotebooksHierarchy(notes: notesList)
         
+        // construct deleted notebooks list
+        deletedNotebooks = notebookBusiness.retrieveDeletedNotebooks() ?? []
+        let deletednotesList = NotebooksHierarchy.constructHierarchy(notebooks: deletedNotebooks, expandedIds: expandedIds, isDeleted: true)
+        notesHierarchy.deletedNotes = deletednotesList
+                
         // observe after initial hierarcy is constructed
         NotificationCenter.default.addObserver(self, selector: #selector(listenExpandCollapseNotification(_:)), name: .ExpandCollapseNotification, object: nil)
         
@@ -350,21 +362,33 @@ class NotebooksListState: ObservableObject {
         notebookBusiness.persist(notebooks: notebooks)
     }
     
-//    func deleteNotebook(ref notebook: Notebook) {
-//
-//        notebookBusiness.deleteNotebook(ref: notebook)
-//
-//        if let parent = notebook.parent {
-//            // delete in hierachy
-//            getNotebookReferenceForPath(uuidPath: parent.uuidPath) { noteM in
-//                noteM.children!.removeAll(where: { $0.id == notebook.id })
-//            }
-//        } else {
-//            // base level
-//            // delete object
-//            notesHierarchy.notes.removeAll(where: { $0.id == notebook.id })
-//        }
-//    }
+    func deleteNotebookNew(ref notebook: Notebook) {
+        // delete from hierarchy
+        if let parent = notebook.parent {
+            // delete notebook ref
+            parent.children!.removeAll(where: { $0 == notebook })
+            // delete in hierachy
+            getNotebookReferenceForPath(uuidPath: parent.uuidPath) { noteM in
+                noteM.children!.removeAll(where: { $0.id == notebook.id })
+            }
+        } else {
+            // base level
+            // delete notebook ref
+            notebooks.removeAll(where: { $0 == notebook })
+            // delete object
+            notesHierarchy.notes.removeAll(where: { $0.id == notebook.id })
+        }
+        // add to deleted list
+        deletedNotebooks.insert(notebook, at: 0)
+        
+        // reconstruct list
+        let deletedNotesList = NotebooksHierarchy.constructHierarchy(notebooks: deletedNotebooks, expandedIds: expandedIds)
+        notesHierarchy.deletedNotes = deletedNotesList
+        
+        // persist
+        notebookBusiness.persist(notebooks: notebooks)
+        notebookBusiness.persistDeleted(notebooks: deletedNotebooks)
+    }
     
     
     func rename(for notebook: Notebook, newValue: String) throws {

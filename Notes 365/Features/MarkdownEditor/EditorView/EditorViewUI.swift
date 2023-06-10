@@ -13,6 +13,7 @@ struct EditorViewUI: UIViewRepresentable {
     let text: String
     @Binding var editorView: EditorView
     @Binding var contentEditedDate: Date?
+    let isEditable: Bool
     
     func makeUIView(context: Context) -> EditorView {
         editorView.theme = theme
@@ -35,6 +36,8 @@ struct EditorViewUI: UIViewRepresentable {
         // set content
         editorView.textView.text = text
 
+        editorView.textView.isEditable = isEditable
+        
         return editorView
     }
     
