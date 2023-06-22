@@ -106,6 +106,21 @@ extension Notebook {
         return uuids.reversed()
     }
     
+    var path: [String] {
+        
+        var uuids = [String]()
+        // add self
+        uuids.append(self.id.uuidString)
+        // add parents
+        var parentRef = self.parent
+        while parentRef != nil {
+            uuids.append(parentRef!.id.uuidString)
+            parentRef = parentRef?.parent
+        }
+        
+        return uuids.reversed()
+    }
+    
     var filePath: String {
         return self.id.uuidString + ".md"
     }

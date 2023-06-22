@@ -121,7 +121,10 @@ class NotebooksListState: ObservableObject {
     var expandedIds = Set<String>()
     
     private var notebooks = [Notebook]()
+    private var deletedNotebookRestorePaths = [String: [String]]()
     private var deletedNotebooks = [Notebook]()
+    
+    var deletedNotes = DeletedNotebooks()
     
     @Published var notesHierarchy: NotebooksHierarchy
     
@@ -153,10 +156,12 @@ class NotebooksListState: ObservableObject {
         notesHierarchy = NotebooksHierarchy(notes: notesList)
         
         // construct deleted notebooks list
-        deletedNotebooks = notebookBusiness.retrieveDeletedNotebooks() ?? []
-        let deletednotesList = NotebooksHierarchy.constructHierarchy(notebooks: deletedNotebooks, expandedIds: expandedIds, isDeleted: true)
-        notesHierarchy.deletedNotes = deletednotesList
-                
+        if let deletedNotesData = notebookBusiness.retrieveDeletedNotebooks() {
+            deletedNotes = deletedNotesData
+            let deletednotesList = NotebooksHierarchy.constructHierarchy(notebooks: deletedNotebooks, expandedIds: expandedIds, isDeleted: true)
+            notesHierarchy.deletedNotes = deletednotesList
+        }
+        
         // observe after initial hierarcy is constructed
         NotificationCenter.default.addObserver(self, selector: #selector(listenExpandCollapseNotification(_:)), name: .ExpandCollapseNotification, object: nil)
         
@@ -380,6 +385,8 @@ class NotebooksListState: ObservableObject {
         }
         // add to deleted list
         deletedNotebooks.insert(notebook, at: 0)
+        // save restore path
+        deletedNotebookRestorePaths[notebook.id.uuidString] = notebook.path
         
         // reconstruct list
         let deletedNotesList = NotebooksHierarchy.constructHierarchy(notebooks: deletedNotebooks, expandedIds: expandedIds)
@@ -387,7 +394,8 @@ class NotebooksListState: ObservableObject {
         
         // persist
         notebookBusiness.persist(notebooks: notebooks)
-        notebookBusiness.persistDeleted(notebooks: deletedNotebooks)
+//        notebookBusiness.persistDeleted(notebooks: deletedNotebooks)
+//        notebookBusiness.persistDeletedRestorePath(notebooks: deletedNotebookRestorePaths)
     }
     
     
@@ -730,5 +738,46 @@ extension NotebooksListState {
         searchResultCount = resultsCount
         
         isShowingRecent = true
+    }
+}
+
+// MARK: Deleted Notebooks
+
+extension NotebooksListState {
+    
+    func restore(notebook:  Notebook, in notebooks: inout [Notebook], at path: [String], sibling: String?) {
+        // if parent is not nil, reach its root parent, then restore this parent.
+        // get parent ref to insert
+        
+        if path.count == 0 && sibling != nil {
+            // base level
+            guard let siblingIndex = notebooks.firstIndex(where: { $0.id.uuidString == sibling! }) else { return }
+            notebooks.insert(notebook, at: siblingIndex + 1)
+        }
+        
+        
+        var ref: Notebook
+        guard let baseRef = notebooks.first(where: { $0.id.uuidString == path[0] }) else { return }
+        ref = baseRef
+        
+        if path.count >= 2 {
+            for i in 1..<path.count {
+                let id = path[i]
+                guard let baseRef = ref.children?.first(where: { $0.id.uuidString == path[0] }) else { return }
+                ref = baseRef
+            }
+        }
+        
+        if let sibling = sibling {
+            let siblingIndex = ref
+        }
+        
+        if let output = NotebooksHierarchy.constructHierarchy(notebooks: [notebook], expandedIds: []).first {
+            
+            notesHierarchy.notes
+            
+        }
+        
+        
     }
 }

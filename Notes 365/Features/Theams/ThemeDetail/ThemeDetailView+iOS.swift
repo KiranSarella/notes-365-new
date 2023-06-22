@@ -148,8 +148,12 @@ struct ThemeDetailView_iOS: View {
     }
 }
 
-//struct ThemeDetailView_iOS_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ThemeDetailView_iOS()
-//    }
+struct ThemeDetailView_iOS_Previews: PreviewProvider {
+    static var previews: some View {
+        ThemeDetailView_iOS(theme: ThemeBusiness.generateBasicDarkTheme(), onThemeChange: {_ in })
+    }
+}
+
+//#Preview {
+//    ThemeDetailView_iOS(theme: ThemeBusiness.generateBasicDarkTheme(), onThemeChange: {_ in })
 //}

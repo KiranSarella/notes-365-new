@@ -203,3 +203,7 @@ struct FormattingOptionsView: View {
     }
     
 }
+
+#Preview {
+    FormattingOptionsView(editorView: Binding.constant(EditorView()) , contentEditedDate: Binding.constant(Date()))
+}

@@ -231,20 +231,50 @@ extension NotebooksListBusiness {
         return nil
     }
     
+    
 }
 
 // MARK: - Recently Deleted
+class DeletedNotebooks: Codable {
+    var notebooks: [Notebook] = []
+    var paths: [String: [String]] = [:]
+    var siblings: [String: String] = [:]
+    
+}
+
 extension NotebooksListBusiness {
     
-    func restore(notebook: Notebook) {
+    func restore(notebook:  Notebook, in notebooks: inout [Notebook], at path: [String], sibling: String?) {
         // if parent is not nil, reach its root parent, then restore this parent.
+        // get parent ref to insert
+        
+        if path.count == 0 && sibling != nil {
+            // base level
+            guard let siblingIndex = notebooks.firstIndex(where: { $0.id.uuidString == sibling! }) else { return }
+            notebooks.insert(notebook, at: siblingIndex + 1)
+        }
         
         
+        var ref: Notebook
+        guard let baseRef = notebooks.first(where: { $0.id.uuidString == path[0] }) else { return }
+        ref = baseRef
+        
+        if path.count >= 2 {
+            for i in 1..<path.count {
+                let id = path[i]
+                guard let baseRef = ref.children?.first(where: { $0.id.uuidString == path[0] }) else { return }
+                ref = baseRef
+            }
+        }
+        
+        if let sibling = sibling {
+            let siblingIndex = ref
+        }
         
     }
     
     // It will save only notebooks list hierarchy to plist, not notebook content.
-    func persistDeleted(notebooks: [Notebook]) {
+    func persistDeleted(notebooks: DeletedNotebooks) {
         syncDate = Date()
         
         do {
@@ -265,19 +295,18 @@ extension NotebooksListBusiness {
     }
     
     // retrives notebooks hierarcy from plist, not the notebook content.
-    func retrieveDeletedNotebooks() -> [Notebook]? {
+    func retrieveDeletedNotebooks() -> DeletedNotebooks? {
         
         let plistURL = basePathURL.appending(path: Constants.deletedNotebooksPListName).appendingPathExtension("plist")
         
         do {
             // Read the file contents
             let plistData = try Data(contentsOf: plistURL)
-            let notebooksList = try PropertyListDecoder().decode([Notebook].self, from: plistData)
+            let notebooksList = try PropertyListDecoder().decode(DeletedNotebooks.self, from: plistData)
             return notebooksList
         } catch let error as NSError {
             print("Failed reading from URL: \(plistURL), Error: " + error.localizedDescription)
         }
         return nil
     }
-    
 }
