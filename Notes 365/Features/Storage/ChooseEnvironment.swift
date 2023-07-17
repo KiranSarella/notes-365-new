@@ -193,8 +193,10 @@ class ChooseEnvironment: ObservableObject {
                         print("Ooops! Something went wrong: \(error)")
                     }
                     
-                    // handle children
-                    traverse(notebooks: notebook.children)
+                    if notebook.containChildNotebooks {
+                        // handle children
+                        traverse(notebooks: notebook.children!)
+                    }
                 }
             }
             // create new

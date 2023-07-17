@@ -150,7 +150,7 @@ class NotebooksListState {
     private func insertBelow(notebook: Notebook) -> (new: Notebook, parent: Notebook?, refIndex: Int) {
         if let parent = notebook.parent {
             // get index of current notebook
-            let index = parent.children.firstIndex(of: notebook)!
+            let index = parent.children!.firstIndex(of: notebook)!
             let childNote = insertInside(notebook: parent, below: index)
             return (childNote, parent, index)
         } else {
@@ -183,7 +183,7 @@ class NotebooksListState {
         
         if let index = index {
             // create object
-            notebook.children.insert(newNotebook, at: index + 1)
+            notebook.children!.insert(newNotebook, at: index + 1)
             // ..folder already exists
         } else if notebook.children == nil {
             // create object
@@ -192,7 +192,7 @@ class NotebooksListState {
             //            dataManager.createFolder(fullPath)
         } else {
             // create object
-            notebook.children.append(newNotebook)
+            notebook.children?.append(newNotebook)
             // ..folder already exists
         }
         // create phycical file
@@ -229,7 +229,7 @@ class NotebooksListState {
         // delete from hierarchy
         if let parent = notebook.parent {
             // delete notebook ref
-            parent.children.removeAll(where: { $0 == notebook })
+            parent.children?.removeAll(where: { $0 == notebook })
         } else {
             // base level
             // delete notebook ref
@@ -247,7 +247,7 @@ class NotebooksListState {
         // delete from hierarchy
         if let parent = notebook.parent {
             // delete notebook ref
-            parent.children.removeAll(where: { $0 == notebook })
+            parent.children?.removeAll(where: { $0 == notebook })
         } else {
             // base level
             // delete notebook ref
@@ -278,7 +278,7 @@ class NotebooksListState {
         }
         // check if already same file name exists
         if let parent = notebook.parent {
-            if isAlreadyExists(fileName: newValue, in: parent.children) {
+            if isAlreadyExists(fileName: newValue, in: parent.children!) {
                 throw NotebookBusinessError.alreadyExists
             }
         } else {
@@ -547,7 +547,7 @@ extension NotebooksListState {
         if path.count >= 2 {
             for i in 1..<path.count {
                 let id = path[i]
-                guard let baseRef = ref.children.first(where: { $0.id.uuidString == path[0] }) else { return }
+                guard let baseRef = ref.children?.first(where: { $0.id.uuidString == path[0] }) else { return }
                 ref = baseRef
             }
         }

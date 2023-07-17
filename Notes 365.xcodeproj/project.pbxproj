@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C2B92ED2A6547BD00E7FA59 /* NotebooksListView copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2B92EC2A6547A300E7FA59 /* NotebooksListView copy.swift */; };
 		5C3BFEE62A25D2C100EF572F /* RecentListSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3BFEE52A25D2C100EF572F /* RecentListSync.swift */; };
 		5CA77C112A24A2660030EFB2 /* RecentNotebooksList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA77C102A24A2660030EFB2 /* RecentNotebooksList.swift */; };
 		5CA77C162A24AE220030EFB2 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C152A24AE220030EFB2 /* Collections */; };
@@ -148,6 +149,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5C2B92EC2A6547A300E7FA59 /* NotebooksListView copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotebooksListView copy.swift"; sourceTree = "<group>"; };
 		5C3BFEE52A25D2C100EF572F /* RecentListSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentListSync.swift; sourceTree = "<group>"; };
 		5CA77C102A24A2660030EFB2 /* RecentNotebooksList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentNotebooksList.swift; sourceTree = "<group>"; };
 		5CE055DA2A17C5D3009EB4EA /* DayCalendarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCalendarState.swift; sourceTree = "<group>"; };
@@ -650,6 +652,7 @@
 			children = (
 				9F1687CD29ADC2020085A0CA /* PlistDocument.swift */,
 				9F45BD252920CCCE003DE332 /* NotebooksListView.swift */,
+				5C2B92EC2A6547A300E7FA59 /* NotebooksListView copy.swift */,
 				9F45BD292920CCCE003DE332 /* NotebooksListState.swift */,
 				5C3BFEE42A25D2A500EF572F /* RecentList */,
 				9FBB0B482A0913B300F407AF /* CommonDropDelegate.swift */,
@@ -855,6 +858,7 @@
 				9F45BD622920CD90003DE332 /* WeekDetailView.swift in Sources */,
 				9F45BD672920CDA9003DE332 /* TimelineSidebarView.swift in Sources */,
 				9F14B4B2299168980079D23B /* CalendarNavigatorView.swift in Sources */,
+				5C2B92ED2A6547BD00E7FA59 /* NotebooksListView copy.swift in Sources */,
 				9FB6C6A52927936F00C8EC76 /* DayDetailState.swift in Sources */,
 				9F93E15529ED0D0F00210E99 /* TodayVersionSync.swift in Sources */,
 				9F45BD5F2920CD8A003DE332 /* DayDetailView.swift in Sources */,

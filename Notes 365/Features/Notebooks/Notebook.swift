@@ -9,14 +9,17 @@ import SwiftUI
 
 @Observable
 class Notebook: Identifiable, Codable {
-    
+//    var id: Self { self }
     var id: UUID = UUID()
     var name: String = "" {
         didSet {
             NotificationCenter.default.post(name: .notebookChangeNotification, object: nil)
         }
     }
-    var children: [Notebook] = []
+    
+//    var child: [Notebook]? = nil
+    
+    var children: [Notebook]? = nil
     
     unowned var parent: Notebook? = nil
     
@@ -44,17 +47,26 @@ class Notebook: Identifiable, Codable {
         
         self.init(id: id, name: name)
         
-        let listChildren = try? container.decode([Notebook].self, forKey: .friends)
-        children = listChildren ?? []
-        
-        // set parent reference
-        for child in children {
-            child.parent = self
+        let nested = try? container.decode([Notebook].self, forKey: .friends)
+        print(nested)
+        if nested != nil && nested!.isEmpty == false {
+            children = nested
         }
+        
+        if let children = children {
+            // set parent reference
+            for child in children {
+                child.parent = self
+            }
+        }
+        
     }
     
     var containChildNotebooks: Bool {
-        return children.count != 0
+        
+        guard let children = children, children.count > 0 else { return false }
+        
+        return true
     }
     
     var fileURL: URL {
@@ -76,6 +88,7 @@ extension Notebook: Equatable, Hashable {
         hasher.combine(id)
     }
 }
+
 
 extension Notebook {
 
