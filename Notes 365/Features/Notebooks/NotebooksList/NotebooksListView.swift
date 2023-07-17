@@ -11,8 +11,8 @@ import UniformTypeIdentifiers
 struct NotebooksListView: View {
 
     @Binding var icloudSyncing: Bool
-    @EnvironmentObject var usersState: NotebooksListState
-    @Binding var selectedNotebook: NotebookM?
+    @Bindable var usersState: NotebooksListState
+    @Binding var selectedNotebook: Notebook.ID?
     @Environment(\.isSearching) private var isSearching
 //    @State private var presentDeleteConfirmation = false
 //    @State private var deletingNotebook: NotebookM?
@@ -23,9 +23,8 @@ struct NotebooksListView: View {
 //            .opacity(usersState.isLoaded ? 0 : 1)
         VStack {
             if usersState.isSearching == false && usersState.isEmpty {
-                AddNotesView()
+                AddNotesView(usersState: usersState)
                     .padding([.top], -100)
-                    .environmentObject(usersState)
                     .onAppear {
                         // try again
                         usersState.reloadNotebooksList()
@@ -35,7 +34,7 @@ struct NotebooksListView: View {
                     //                List(selection: $selectedNotebook) {
                     //                    NotebooksListGroupView(notebooks: $usersState.usersDB.notes)
                     //                }
-                    SearchedListView(selectedNotebook: $selectedNotebook)
+                    SearchedListView(selectedNotebook: $selectedNotebook, usersState: usersState)
                         .padding(.bottom, 20)
                         .listStyle(PlainListStyle())
                         .autocorrectionDisabled()
@@ -68,7 +67,7 @@ struct NotebooksListView: View {
                     
                     if UIDevice.current.userInterfaceIdiom == .pad {
                         VStack {
-                            getToolbarView()
+//                            getToolbarView()
                             Spacer()
                         }
                         .frame(height: 40)
@@ -78,7 +77,7 @@ struct NotebooksListView: View {
                 .confirmationDialog("Are you sure?", isPresented: $usersState.presentDeleteConfirmation) {
                     Button("Delete", role: .destructive) {
                         guard let temp = usersState.deletingNotebook else { return }
-                        usersState.deleteNotebook(ref: temp.notebookRef)
+                        usersState.deleteNotebook(ref: temp)
                         usersState.deletingNotebook = nil
                     }
                 } message: {
@@ -97,7 +96,7 @@ struct NotebooksListView: View {
             }
             usersState.reloadNotebooksList()
         }
-        .onChange(of: icloudSyncing) { newValue in
+        .onChange(of: icloudSyncing, { oldValue, newValue in
             if newValue == true {
                 // before sync start
                 selectedNotebook = nil
@@ -106,13 +105,13 @@ struct NotebooksListView: View {
                 // after sync
                 usersState.reloadNotebooksList()
             }
-        }
-        .onChange(of: usersState.deletingNotebook) { newValue in
+        })
+        .onChange(of: usersState.deletingNotebook, { oldValue, newValue in
             if newValue != nil {
                 // if deleting a note, de-select it before deleting
                 selectedNotebook = nil
             }
-        }
+        })
         
     }
     
@@ -125,57 +124,57 @@ struct NotebooksListView: View {
         return false
     }
     
-    func getToolbarView() -> some View {
-        // tool bar
-        HStack(alignment: .center, spacing: 20) {
-            Group {
-                // insert below
-                Button(action: {
-                    if selectedNotebook == nil {
-                        return
-                    }
-                    usersState.insertBelow(ref: selectedNotebook!.notebookRef)
-                }) {
-                    //                Image(systemName: "arrow.down")
-                    //                    .renderingMode(.original)
-                    Text("Add Below")
-                }
-                // insert inside
-                Button(action: {
-                    if selectedNotebook == nil {
-                        return
-                    }
-                    usersState.insertInside(ref: selectedNotebook!.notebookRef)
-                }) {
-                    //                Image(systemName: "arrow.turn.down.right")
-                    //                    .renderingMode(.original)
-                    Text("Add Inside")
-                }
-            }
-            .buttonStyle(.bordered)
-            Spacer()
-            // trash
-            Button(action: {
-                if selectedNotebook == nil {
-                    return
-                }
-                usersState.deletingNotebook = selectedNotebook
-//                usersState.presentDeleteConfirmation = true
-                guard let temp = usersState.deletingNotebook else { return }
-                usersState.deleteNotebookNew(ref: temp.notebookRef)
-                usersState.deletingNotebook = nil
-                
-            }) {
-                Image(systemName: "trash")
-                    .renderingMode(.original)
-            }
-        }
-        .disabled(disableActions)
-        .buttonStyle(PlainButtonStyle())
-        .backgroundStyle(.bar)
-        .padding()
-        
-    }
+//    func getToolbarView() -> some View {
+//        // tool bar
+//        HStack(alignment: .center, spacing: 20) {
+//            Group {
+//                // insert below
+//                Button(action: {
+//                    if selectedNotebook == nil {
+//                        return
+//                    }
+//                    usersState.insertBelow(ref: selectedNotebook!)
+//                }) {
+//                    //                Image(systemName: "arrow.down")
+//                    //                    .renderingMode(.original)
+//                    Text("Add Below")
+//                }
+//                // insert inside
+//                Button(action: {
+//                    if selectedNotebook == nil {
+//                        return
+//                    }
+//                    usersState.insertInside(ref: selectedNotebook)
+//                }) {
+//                    //                Image(systemName: "arrow.turn.down.right")
+//                    //                    .renderingMode(.original)
+//                    Text("Add Inside")
+//                }
+//            }
+//            .buttonStyle(.bordered)
+//            Spacer()
+//            // trash
+//            Button(action: {
+//                if selectedNotebook == nil {
+//                    return
+//                }
+//                usersState.deletingNotebook = selectedNotebook
+////                usersState.presentDeleteConfirmation = true
+//                guard let temp = usersState.deletingNotebook else { return }
+//                usersState.deleteNotebookNew(ref: temp)
+//                usersState.deletingNotebook = nil
+//                
+//            }) {
+//                Image(systemName: "trash")
+//                    .renderingMode(.original)
+//            }
+//        }
+//        .disabled(disableActions)
+//        .buttonStyle(PlainButtonStyle())
+//        .backgroundStyle(.bar)
+//        .padding()
+//        
+//    }
     
 }
 
@@ -183,8 +182,8 @@ struct SearchedListView: View {
     
     @Environment(\.editMode) private var editMode
     @Environment(\.isSearching) private var isSearching
-    @Binding var selectedNotebook: NotebookM?
-    @EnvironmentObject var usersState: NotebooksListState
+    @Binding var selectedNotebook: Notebook.ID?
+    @Bindable var usersState: NotebooksListState
     
     var body: some View {
         if usersState.activeSearch {
@@ -193,29 +192,29 @@ struct SearchedListView: View {
                     .padding(2)
         }
         List(selection: $selectedNotebook) {
-            NotebooksListGroupView(notebooks: $usersState.notesHierarchy.notes)
+            NotebooksListGroupView(usersState: usersState, notebooks: $usersState.notebooks)
             
-            Section {
-                DisclosureGroup {
-                    
-                    NotebooksListGroupView(notebooks: $usersState.notesHierarchy.deletedNotes)
-                    
-//                    Text("Note 1")
-//                    Text("Note 2")
-                } label: {
-                    HStack {
-                        Image(systemName: "trash")
-                        Text("Recently Deleted")
-                            .font(.subheadline)
-                            .fontWeight(.bold)
-                            .foregroundColor(.gray)
-                        
-                    }
-                }
-                .tint(.gray)
-//                .disclosureGroupStyle(MyDisclosureStyle)
-                
-            }
+//            Section {
+//                DisclosureGroup {
+//                    
+//                    NotebooksListGroupView(notebooks: $usersState.notebooks)
+//                    
+////                    Text("Note 1")
+////                    Text("Note 2")
+//                } label: {
+//                    HStack {
+//                        Image(systemName: "trash")
+//                        Text("Recently Deleted")
+//                            .font(.subheadline)
+//                            .fontWeight(.bold)
+//                            .foregroundColor(.gray)
+//                        
+//                    }
+//                }
+//                .tint(.gray)
+////                .disclosureGroupStyle(MyDisclosureStyle)
+//                
+//            }
             
 //            Section {
 //                DisclosureGroup {
@@ -306,7 +305,7 @@ struct MyDisclosureStyle: DisclosureGroupStyle {
 }
 
 struct AddNotesView: View {
-    @EnvironmentObject var usersState: NotebooksListState
+    @Bindable var usersState: NotebooksListState
     
     var body: some View {
         VStack(alignment: .center) {
@@ -346,54 +345,57 @@ struct AddNotesView: View {
 }
 
 
+struct MyTableRow: View {
+    
+    @Bindable var usersState: NotebooksListState
+    @Binding var notebook: Notebook
+    
+    var body: some View {
+        
+        // normal
+        if notebook.containChildNotebooks {
+            DisclosureGroup(isExpanded: $notebook.isExpanded) {
+                NotebooksListGroupView(usersState: usersState, notebooks: $notebook.children)
+            } label: {
+                RowView(usersState: usersState, notebook: $notebook)
+            }
+        } else {
+            RowView(usersState: usersState, notebook: $notebook)
+        }
+    }
+}
+
 struct NotebooksListGroupView: View {
-    @EnvironmentObject var usersState: NotebooksListState
-    @Binding var notebooks: [NotebookM]
+    @Bindable var usersState: NotebooksListState
+    @Binding var notebooks: [Notebook]
     @State private var isTargeted: Bool = true
     var body: some View {
-        ForEach($notebooks, id: \.self) { $notebook in
-            if usersState.activeSearch {
-                // filters
-//                if notebook.canShow {
-                    if notebook.containChildNotebooks {
-                        DisclosureGroup(isExpanded: $notebook.isExpanded) {
-                            NotebooksListGroupView(notebooks: $notebook.children.unwrap()!)
-//                                .foregroundColor(notebook.canShow ? .primary : .gray)
-//                                .opacity(notebook.canShow ? 1 : 0.3)
-                        } label: {
-                            RowView(notebook: $notebook)
-//                                .foregroundColor(notebook.canShow ? .primary : .gray)
-                                .opacity(notebook.canShow ? 1 : 0.4)
-                        }
-                    } else {
-                        RowView(notebook: $notebook)
-//                            .foregroundColor(notebook.canShow ? .primary : .gray)
-                            .opacity(notebook.canShow ? 1 : 0.3)
-                    }
+        ForEach($notebooks) { $notebook in
+            
+//            Text(notebook.name)
+            MyTableRow(usersState: usersState, notebook: $notebook)
+            
+            // normal
+//            if notebook.containChildNotebooks {
+//                DisclosureGroup(isExpanded: $notebook.isExpanded) {
+//                    NotebooksListGroupView(usersState: usersState, notebooks: $notebook.children)
+//                } label: {
+//                    RowView(usersState: usersState, notebook: $notebook)
 //                }
-            } else {
-                // normal
-                if notebook.containChildNotebooks {
-                    DisclosureGroup(isExpanded: $notebook.isExpanded) {
-                        NotebooksListGroupView(notebooks: $notebook.children.unwrap()!)
-                    } label: {
-                        RowView(notebook: $notebook)
-                    }
-                } else {
-                    RowView(notebook: $notebook)
-//                        .opacity(isDragging && draggedItem == notebook ? 0.2 : 1.0)
-//                        .foregroundColor(isDragging && draggedItem == notebook ? .red : .orange)
-//                        .onDrag({
-//                            makeItemProvider(user: notebook)
-//                        }, preview: {
-//                            Text("Drag it-3r : \(notebook.name)")
-//                                .background(Color.orange)
-//                                .frame(width: 200, height: 30)
-//                        })
-//                        .onDrop(of: [.plainText], delegate: makeDropDelegate(user: notebook) )
-                       // .opacity(notebook.canShow ? 1 : 0)
-                }
-            }
+//            } else {
+//                RowView(notebook: $notebook)
+////                        .opacity(isDragging && draggedItem == notebook ? 0.2 : 1.0)
+////                        .foregroundColor(isDragging && draggedItem == notebook ? .red : .orange)
+////                        .onDrag({
+////                            makeItemProvider(user: notebook)
+////                        }, preview: {
+////                            Text("Drag it-3r : \(notebook.name)")
+////                                .background(Color.orange)
+////                                .frame(width: 200, height: 30)
+////                        })
+////                        .onDrop(of: [.plainText], delegate: makeDropDelegate(user: notebook) )
+//                   // .opacity(notebook.canShow ? 1 : 0)
+//            }
         }
         .onMove(perform: move) 
 //        .onDrop(of: [.text], isTargeted: $isTargeted, perform: { providers in
@@ -408,12 +410,12 @@ struct NotebooksListGroupView: View {
     }
     
     @State private var operationTag = 1
-    @State private var draggedItem: NotebookM?
+    @State private var draggedItem: Notebook?
     @State private var isDragging = false
     @State private var isCustomPreview = true
     
     
-    private func makeDropDelegate(user: NotebookM) -> DropDelegate {
+    private func makeDropDelegate(user: Notebook) -> DropDelegate {
 //        print("makeDropDelegate \(user.name)")
         let operation: DropOperation
         switch operationTag {
@@ -442,7 +444,7 @@ struct NotebooksListGroupView: View {
         )
     }
     
-    private func makeItemProvider(user: NotebookM) -> NSItemProvider {
+    private func makeItemProvider(user: Notebook) -> NSItemProvider {
         print(#function)
         print(user.name)
         isDragging = true
@@ -457,14 +459,14 @@ struct NotebooksListGroupView: View {
 //
 //        notebooks.first?.notebook.parent?.children?.move(fromOffsets: source, toOffset: destination)
 //
-        usersState.move(notebooksM: &notebooks, from: source, to: destination)
+//        usersState.move(notebooksM: &notebooks, from: source, to: destination)
     }
 }
 
 
 struct RowView: View {
-    @EnvironmentObject var usersState: NotebooksListState
-    @Binding var notebook: NotebookM
+    @Bindable var usersState: NotebooksListState
+    @Binding var notebook: Notebook
     @State private var name: String = ""
     @FocusState private var isFocused: Bool
     
@@ -498,7 +500,7 @@ struct RowView: View {
                             usersState.deletingNotebook = notebook
                             
                             guard let temp = usersState.deletingNotebook else { return }
-                            usersState.deleteNotebookNew(ref: notebook.notebookRef)
+                            usersState.deleteNotebookNew(ref: notebook)
                             usersState.deletingNotebook = nil
                             
                         } label: {
@@ -520,7 +522,7 @@ struct RowView: View {
                 Group {
                     // restore
                     Button(action: {
-//                        usersState.insertBelow(ref: notebook.notebookRef)
+//                        usersState.insertBelow(ref: notebook)
                     }) {
                         Label("Restore", image: "arrow.uturn.backward")
 //                        HStack {
@@ -536,7 +538,7 @@ struct RowView: View {
                         usersState.deletingNotebook = notebook
     //                    usersState.presentDeleteConfirmation = true
                         
-                        usersState.deleteNotebookNew(ref: notebook.notebookRef)
+                        usersState.deleteNotebookNew(ref: notebook)
                         usersState.deletingNotebook = nil
                         
                     }) {
@@ -554,13 +556,13 @@ struct RowView: View {
                     RenameButton()
                     // insert below
                     Button(action: {
-                        usersState.insertBelow(ref: notebook.notebookRef)
+                        usersState.insertBelow(ref: notebook)
                     }) {
                         Text("Add Below")
                     }
                     // insert inside
                     Button(action: {
-                        usersState.insertInside(ref: notebook.notebookRef)
+                        usersState.insertInside(ref: notebook)
                     }) {
                         Text("Add Inside")
                     }
@@ -570,7 +572,7 @@ struct RowView: View {
     //                    usersState.presentDeleteConfirmation = true
                         
                         
-                        usersState.deleteNotebookNew(ref: notebook.notebookRef)
+                        usersState.deleteNotebookNew(ref: notebook)
                         usersState.deletingNotebook = nil
                         
                     }) {
@@ -602,7 +604,7 @@ struct RowView: View {
                 return
             }
             do {
-                try usersState.rename(for: notebook.notebookRef, newValue: name)
+                try usersState.rename(for: notebook, newValue: name)
 //                usersState.navTitle = name
                 isEditing = false
             } catch NotebookBusinessError.alreadyExists {

@@ -194,9 +194,7 @@ class ChooseEnvironment: ObservableObject {
                     }
                     
                     // handle children
-                    if let children = notebook.children {
-                        traverse(notebooks: children)
-                    }
+                    traverse(notebooks: notebook.children)
                 }
             }
             // create new

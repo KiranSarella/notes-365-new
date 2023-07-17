@@ -114,8 +114,8 @@ struct ContentView: View {
     // timeline related
     @ObservedObject var calendarState = CalendarState.shared
     // notebooks related
-    @State private var selectedNotebookM: NotebookM?
-    @ObservedObject var notebooksListState = NotebooksListState.shared
+    @State private var selectedNotebookM: Notebook.ID?
+    @State var notebooksListState = NotebooksListState()
     
     @State var selectedCalenderType: CalendarType.ID? = CalendarType.day.id
     
@@ -256,8 +256,7 @@ struct ContentView: View {
                     TimelineSidebarView(calendarID: $selectedCalenderType)
                         .environmentObject(calendarState)
                 case .noteBooks:
-                    NotebooksListView(icloudSyncing: $icloudSyncing, selectedNotebook: $selectedNotebookM)
-                        .environmentObject(notebooksListState)
+                    NotebooksListView(icloudSyncing: $icloudSyncing, usersState: notebooksListState, selectedNotebook: $selectedNotebookM)
 //                        .onAppear {
 //                            Task {
 //                                await notebooksListState.loadData()
@@ -291,8 +290,9 @@ struct ContentView: View {
             case .noteBooks:
                 
                 if selectedNotebookM != nil {
+                    Text("selcted")
                     // ** binding won't work here.
-                    NotebookEditorView(notebookM: selectedNotebookM!, editorState: editorState)
+//                    NotebookEditorView(notebookM: selectedNotebookM!, editorState: editorState)
                 } else {
                     Text("No notebook selected")
                 }

@@ -18,7 +18,7 @@ import Combine
 
 struct NotebookEditorView: View {
     
-    var notebookM: NotebookM
+    var notebookM: Notebook
     @ObservedObject var editorState: NotebookEditorState
 
     @State var autoSaveTimer: Timer.TimerPublisher = Timer.publish(every: 5, on: .main, in: .common)
@@ -57,7 +57,7 @@ struct NotebookEditorView: View {
         .onAppear {
             Task {
                 // new notebook steps
-                await editorState.loadContent(for: notebookM.notebookRef)
+                await editorState.loadContent(for: notebookM)
                 editorState.getNewContent = {
                     return await MainActor.run {
                         editorState.getTextHandler!()
@@ -77,7 +77,7 @@ struct NotebookEditorView: View {
                 await editorState.saveContentChanges()
                 
                 // new notebook steps
-                await editorState.loadContent(for: newValue.notebookRef)
+                await editorState.loadContent(for: newValue)
                 editorState.getNewContent = {
                     return await MainActor.run {
                         editorState.getTextHandler!()

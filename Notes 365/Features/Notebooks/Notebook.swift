@@ -5,23 +5,30 @@
 //  Created by Kiran Sarella on 15/11/22.
 //
 
-import UIKit
+import SwiftUI
 
+@Observable
 class Notebook: Identifiable, Codable {
     
-    var id: UUID
-    var name: String {
+    var id: UUID = UUID()
+    var name: String = "" {
         didSet {
             NotificationCenter.default.post(name: .notebookChangeNotification, object: nil)
         }
     }
-    var children: [Notebook]?
-    unowned var parent: Notebook?
+    var children: [Notebook] = []
+    
+    unowned var parent: Notebook? = nil
     
 //    var document: MarkdownDocument?
     var isResolvingConflicts = false
-    var newContentAvailalble: (()->())?
-    private var notificationObserver: Any?
+    var newContentAvailalble: (()->())? = nil
+    private var notificationObserver: Any? = nil
+    
+    var content: String = ""
+    var isExpanded: Bool = false
+    var isDeleted = false
+    var canShow = true
     
     init(id: UUID, name: String) {
         self.id = id
@@ -37,18 +44,17 @@ class Notebook: Identifiable, Codable {
         
         self.init(id: id, name: name)
         
-        children = try? container.decode([Notebook].self, forKey: .friends)
+        let listChildren = try? container.decode([Notebook].self, forKey: .friends)
+        children = listChildren ?? []
         
         // set parent reference
-        if let children = children {
-            for child in children {
-                child.parent = self
-            }
+        for child in children {
+            child.parent = self
         }
     }
     
     var containChildNotebooks: Bool {
-        children != nil ? true : false
+        return children.count != 0
     }
     
     var fileURL: URL {
@@ -70,7 +76,6 @@ extension Notebook: Equatable, Hashable {
         hasher.combine(id)
     }
 }
-
 
 extension Notebook {
 

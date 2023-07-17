@@ -262,7 +262,7 @@ extension NotebooksListBusiness {
         if path.count >= 2 {
             for i in 1..<path.count {
                 let id = path[i]
-                guard let baseRef = ref.children?.first(where: { $0.id.uuidString == path[0] }) else { return }
+                guard let baseRef = ref.children.first(where: { $0.id.uuidString == path[0] }) else { return }
                 ref = baseRef
             }
         }
