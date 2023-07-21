@@ -290,9 +290,16 @@ struct ContentView: View {
             case .noteBooks:
                 
                 if selectedNotebookM != nil {
-                    Text("selcted")
+                    
+                    if let notebook = NotebooksCache.shared.flatNotebooks[selectedNotebookM!.uuidString] {
+                        NotebookEditorView(notebookM: notebook, editorState: editorState)
+                    } else {
+                        Text("selcted")
+                    }
+                    
+                    
                     // ** binding won't work here.
-//                    NotebookEditorView(notebookM: selectedNotebookM!, editorState: editorState)
+                    
                 } else {
                     Text("No notebook selected")
                 }

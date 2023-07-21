@@ -76,7 +76,7 @@ class NotebooksListState {
         setupSearchText()
     }
     
-    @MainActor
+//    @MainActor
 //    func loadData() async {
 //        isLoaded = false
 //        // create notesHierarchy with actual notebook objects

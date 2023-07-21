@@ -60,6 +60,7 @@ class Notebook: Identifiable, Codable {
             }
         }
         
+        NotebooksCache.shared.flatNotebooks[self.id.uuidString] = self
     }
     
     var containChildNotebooks: Bool {
