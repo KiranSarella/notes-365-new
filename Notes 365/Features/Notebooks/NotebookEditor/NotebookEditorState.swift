@@ -40,10 +40,10 @@ class NotebookEditorState {
     }
     
     func observeThemeChanges() {
-        cancellableTheme = ThemeState.shared.$theme
+        cancellableTheme =  ThemeState.shared.themePub
             .receive(on: DispatchQueue.main)
             .sink { newTheme in
-                self.theme = newTheme!
+                self.theme = newTheme
             }
     }
     

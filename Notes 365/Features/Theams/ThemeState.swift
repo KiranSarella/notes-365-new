@@ -14,26 +14,30 @@ import Combine
  listen to theme changes
  listen to system light, dark mode changes
  */
-class ThemeState: ObservableObject {
+
+@Observable
+class ThemeState {
     
     static let shared = ThemeState()
     
-    @Published var colorScheme: ColorScheme = .light
+    var colorScheme: ColorScheme = .light
     
-    @Published var theme: MarkdownTheme!
+    var theme: MarkdownTheme! = ThemeBusiness().getLightTheme()
     
-    var cancellable: Cancellable?
+    
+    var themePub = CurrentValueSubject<MarkdownTheme, Never>(ThemeBusiness().getLightTheme())
+    
+    var cancellable: Cancellable? = nil
     
     init() {
-        observeColorSchemaChanges()
+//        observeColorSchemaChanges()
         loadTheme(colorScheme: colorScheme)
     }
 
-    func observeColorSchemaChanges() {
-        cancellable = $colorScheme.sink { newValue in
-            if newValue !=  self.colorScheme {
-                self.loadTheme(colorScheme: newValue)
-            }
+    func didChange(colorSchema newValue: ColorScheme) {
+        if newValue !=  self.colorScheme {
+            self.colorScheme = newValue
+            self.loadTheme(colorScheme: newValue)
         }
     }
     
@@ -43,6 +47,8 @@ class ThemeState: ObservableObject {
         } else {
             theme = ThemeBusiness().getDarkTheme()
         }
+        
+        themePub.send(theme)
     }
     
     // trigged on 'save changes' action
@@ -50,6 +56,8 @@ class ThemeState: ObservableObject {
         // if updated is current theme, then update immediately
         if theme.id == newValue.id {
             theme = newValue
+            
+            themePub.send(theme)
         }
     }
     
@@ -58,6 +66,8 @@ class ThemeState: ObservableObject {
         // if theme modified on current mode, the update with new theme
         if colorScheme == mode {
             theme = newValue
+            
+            themePub.send(theme)
         }
     }
 }

@@ -231,9 +231,13 @@ struct ContentView: View {
 //
 //                }
             }
-            .onChange(of: colorScheme) { newValue in
-                ThemeState.shared.colorScheme = newValue
-            }
+            .onChange(of: colorScheme, { oldValue, newValue in
+                ThemeState.shared.didChange(colorSchema: newValue)
+//                ThemeState.shared.colorScheme = newValue
+            })
+//            .onChange(of: colorScheme) { newValue in
+//                
+//            }
             // issue - seleted notebooks is cleared every time on app appear.
 //            .onChange(of: scenePhase) { newPhase in
 //                if newPhase == .active {
