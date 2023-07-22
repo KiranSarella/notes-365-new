@@ -48,7 +48,6 @@
 		9F45BD5B2920CD65003DE332 /* MotivationQuestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCE92920CCCE003DE332 /* MotivationQuestions.swift */; };
 		9F45BD5E2920CD85003DE332 /* DayContentGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCEB2920CCCE003DE332 /* DayContentGenerator.swift */; };
 		9F45BD5F2920CD8A003DE332 /* DayDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCEE2920CCCE003DE332 /* DayDetailView.swift */; };
-		9F45BD602920CD8A003DE332 /* DayCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCED2920CCCE003DE332 /* DayCalendarView.swift */; };
 		9F45BD612920CD90003DE332 /* WeekContentGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCF32920CCCE003DE332 /* WeekContentGenerator.swift */; };
 		9F45BD622920CD90003DE332 /* WeekDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCF12920CCCE003DE332 /* WeekDetailView.swift */; };
 		9F45BD632920CD90003DE332 /* WeekCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCF22920CCCE003DE332 /* WeekCalendarView.swift */; };
@@ -853,7 +852,6 @@
 				9F45BD532920CD5E003DE332 /* MonthDetailView.swift in Sources */,
 				9F45BD712920CDE0003DE332 /* MarkdownPattern.swift in Sources */,
 				9F45BCA42920CAAE003DE332 /* ContentView.swift in Sources */,
-				9F45BD602920CD8A003DE332 /* DayCalendarView.swift in Sources */,
 				9F45BDA42920CE41003DE332 /* ThemePreviewView.swift in Sources */,
 				9F7D291D299A7C1500B37F51 /* MarkdownDocument.swift in Sources */,
 				9FBB0B5D2A0E952E00F407AF /* MarkdownEditorViewState.swift in Sources */,

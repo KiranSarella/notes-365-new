@@ -27,15 +27,16 @@ struct DayDateItem: Identifiable {
 
 extension DayDateItem: Hashable {}
 
-class DayCalendarState: ObservableObject {
+@Observable
+class DayCalendarState {
     
-    @Published var dateTitle: String = Date().string(withFormat: "MMMM, YYYY")
-    @Published var dayitems = [DayDateItem]()
-    @Published var selectedDate: Date
+    var dateTitle: String = Date().string(withFormat: "MMMM, YYYY")
+    var dayitems = [DayDateItem]()
+    var selectedDate: Date = Date()
     
-    @Published var selectedDayItem: DayDateItem?
+    var selectedDayItem: DayDateItem? = nil
     
-    private(set) var displayingDate: Date
+    private(set) var displayingDate: Date = Date()
     
     var displayCounte: Int = 0
     
