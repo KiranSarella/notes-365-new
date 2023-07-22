@@ -30,7 +30,7 @@ struct DayDetailView2: View {
 struct DayDetailView: View {
     
     var dayItem: DayDateItem?
-    @StateObject private var dayState = DayDetailState()
+    @State private var dayState = DayDetailState()
 
     var body: some View {
         VStack(spacing: 0) {

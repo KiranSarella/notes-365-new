@@ -25,7 +25,7 @@ struct MonthDetailWrapperView: View {
 
 struct MonthDetailView: View {
     
-   @StateObject private var monthState = MonthDetailState()
+   @State private var monthState = MonthDetailState()
 
     var body: some View {
         VStack(spacing: 0) {

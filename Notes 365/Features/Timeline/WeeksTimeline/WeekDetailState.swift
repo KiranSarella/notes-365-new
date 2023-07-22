@@ -18,19 +18,20 @@ public struct DayChanges: Identifiable {
     let metadata: String
 }
 
-@MainActor class WeekDetailState: ObservableObject {
+@Observable
+class WeekDetailState {
     
 //    let timelineBusiness = TimelineBusiness(path: EnvironmentState.shared.basePathURL)
     
-    @Published var weekDate: WeekDate
-    @Published var currentState = CurrentState.loading
-    @Published var weekTimelineList = [DayChanges]()
-    @Published var theme: MarkdownTheme = ThemeState.shared.theme
+    var weekDate: WeekDate = CalendarState.shared.weekDate
+    var currentState = CurrentState.loading
+    var weekTimelineList = [DayChanges]()
+    var theme: MarkdownTheme = ThemeState.shared.theme
     
-    @Published var generatorTask: Task<(), Never>?
+    var generatorTask: Task<(), Never>? = nil
     
-    var cancellable: Cancellable!
-    var cancellableTheme: Cancellable!
+    var cancellable: Cancellable? = nil
+    var cancellableTheme: Cancellable? = nil
     
     init() {
         
@@ -57,8 +58,8 @@ public struct DayChanges: Identifiable {
     }
     
     deinit {
-        cancellable.cancel()
-        cancellableTheme.cancel()
+        cancellable?.cancel()
+        cancellableTheme?.cancel()
     }
     
     func readWeekData(weekDate: WeekDate) {

@@ -25,20 +25,20 @@ extension MonthTimelineThree {
     }
 }
 
-
-@MainActor class MonthDetailState: ObservableObject {
+@Observable
+class MonthDetailState: ObservableObject {
     
 //    let timelineBusiness = TimelineBusiness(path: EnvironmentState.shared.basePathURL)
     
-    @Published var monthDate: MonthDate
-    @Published var currentState = CurrentState.loading
-    @Published var monthTimelineList = [DayChanges]()
-    @Published var theme: MarkdownTheme = ThemeState.shared.theme
+    var monthDate: MonthDate = CalendarState.shared.monthDate
+    var currentState = CurrentState.loading
+    var monthTimelineList = [DayChanges]()
+    var theme: MarkdownTheme = ThemeState.shared.theme
     
-    @Published var generatorTask: Task<(), Never>?
+    var generatorTask: Task<(), Never>? = nil
     
-    var cancellable: Cancellable!
-    var cancellableTheme: Cancellable!
+    var cancellable: Cancellable? = nil
+    var cancellableTheme: Cancellable? = nil
     
     init() {
         monthDate = CalendarState.shared.monthDate
@@ -64,8 +64,8 @@ extension MonthTimelineThree {
     }
     
     deinit {
-        cancellable.cancel()
-        cancellableTheme.cancel()
+        cancellable?.cancel()
+        cancellableTheme?.cancel()
     }
     
     func readMonthData(monthDate: MonthDate) {

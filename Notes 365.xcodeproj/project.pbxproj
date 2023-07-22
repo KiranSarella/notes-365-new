@@ -434,8 +434,8 @@
 			children = (
 				9F45BCF22920CCCE003DE332 /* WeekCalendarView.swift */,
 				9F45BCF12920CCCE003DE332 /* WeekDetailView.swift */,
-				9F45BCF32920CCCE003DE332 /* WeekContentGenerator.swift */,
 				9FB6C6A62927939E00C8EC76 /* WeekDetailState.swift */,
+				9F45BCF32920CCCE003DE332 /* WeekContentGenerator.swift */,
 			);
 			path = WeeksTimeline;
 			sourceTree = "<group>";

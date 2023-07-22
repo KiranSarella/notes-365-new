@@ -71,25 +71,26 @@ enum SpeechState {
     }
 }
 
-class DayDetailState: ObservableObject {
+@Observable
+class DayDetailState {
     
     let timelineBusiness = TimelineBusiness(path: EnvironmentState.shared.basePathURL)
     
-    @Published var dayDate: DayDate = DayDate(date: CalendarState.shared.selectedDate)
-    @Published var currentState = CurrentState.loading
-    @Published var timelineList = [Timeline]()
-    @Published var searchInput: String = ""
-    @Published var theme: MarkdownTheme = ThemeState.shared.theme
-    @Published var generatorTask: Task<(), Never>?
+    var dayDate: DayDate = DayDate(date: CalendarState.shared.selectedDate)
+    var currentState = CurrentState.loading
+    var timelineList = [Timeline]()
+    var searchInput: String = ""
+    var theme: MarkdownTheme = ThemeState.shared.theme
+    var generatorTask: Task<(), Never>? = nil
     
-    @Published var speechState = SpeechState.stopped
+    var speechState = SpeechState.stopped
     
     let speechHelper = SpeechHelper()
     
 //    @Published var dayDateTest: DayDate
     
-    var cancellable: Cancellable!
-    var cancellableTheme: Cancellable!
+    var cancellable: Cancellable? = nil
+    var cancellableTheme: Cancellable? = nil
     
     init() {
         
@@ -114,8 +115,8 @@ class DayDetailState: ObservableObject {
     }
     
     deinit {
-        cancellable.cancel()
-        cancellableTheme.cancel()
+        cancellable?.cancel()
+        cancellableTheme?.cancel()
     }
     
 //    func updateNewDateDate(newDayDate: DayDate) {
