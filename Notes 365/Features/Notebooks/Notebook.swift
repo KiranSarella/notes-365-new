@@ -18,14 +18,10 @@ class Notebook: Identifiable, Codable {
         }
     }
     
-//    var child: [Notebook]? = nil
-    
     var children: [Notebook]? = nil
     
     unowned var parent: Notebook? = nil
     
-//    var document: MarkdownDocument?
-    var isResolvingConflicts = false
     var newContentAvailalble: (()->())? = nil
     private var notificationObserver: Any? = nil
     
@@ -49,7 +45,7 @@ class Notebook: Identifiable, Codable {
         self.init(id: id, name: name)
         
         let nested = try? container.decode([Notebook].self, forKey: .friends)
-        print(nested)
+        
         if nested != nil && nested!.isEmpty == false {
             children = nested
         }

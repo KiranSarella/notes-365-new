@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+import Combine
 
 
 
@@ -54,6 +55,13 @@ struct NotebooksListView: View {
 //                            }
 //                        }
                         .searchable(text: $usersState.searchText)
+                        .onReceive(Just(usersState.searchText)) { val in
+//                            print(val)
+                            usersState.searchTextPub.send(val)
+                        }
+//                        .onReceive(usersState.searchText.publisher) { value in
+//                            print(value)
+//                        }
                     //                .onChange(of: usersState.searchText) { newValue in
                     //                    selectedNotebook = nil
                     //                }
@@ -486,6 +494,15 @@ struct RowView: View {
         }
     }
     
+    var textColor: Color {
+        
+        if usersState.activeSearch {
+            return notebook.canShow ? Color.red : Color.gray
+        }
+        
+        return Color.primary
+    }
+    
     var disableActions: Bool {
         return false
     }
@@ -500,6 +517,7 @@ struct RowView: View {
                 .focused($isFocused)
             } else {
                 Text(notebook.name)
+                    .foregroundStyle(textColor)
                     .swipeActions(edge: .trailing) {
                         Button(role: .destructive) {
 //                            store.delete(message)

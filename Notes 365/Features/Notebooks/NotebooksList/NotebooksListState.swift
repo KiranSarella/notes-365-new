@@ -37,8 +37,11 @@ class NotebooksListState {
     var deletedNotes = DeletedNotebooks()
     
 //    @Published var notesHierarchy: NotebooksHierarchy
+    var searchTextPub = CurrentValueSubject<String, Never>("")
+    var searchText = ""
     
-    var searchText: String = ""
+    var cancellable: AnyCancellable? = nil
+    
     var isSearching = false
     var searchResultCount: Int = 0
     
@@ -362,31 +365,37 @@ extension NotebooksListState {
     
     func setupSearchText() {
         
-//        $searchText
-//            .map({ (string) -> String? in
-//                if string.count < 2 {
-////                    self.usersDB.notes = []
-//                    self.searchResultCount = 0
-//                    return nil
-//                }
-//                return string
-//            })
-//            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
-//            .receive(on: RunLoop.main)
-//            .compactMap{ $0 }
-//            .sink { status in
-////                print(status)
-//            } receiveValue: { [self] (searchField) in
-//                searchItems(searchField)
-//            }.store(in: &subscription)
+//        cancellable = searchText.publisher.sink { char in
+//            print(char)
+//        }
+
+        
+
+        searchTextPub
+            .map({ (string) -> String? in
+                if string.count < 2 {
+//                    self.usersDB.notes = []
+                    self.searchResultCount = 0
+                    return nil
+                }
+                return string
+            })
+            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
+            .receive(on: RunLoop.main)
+            .compactMap{ $0 }
+            .sink { status in
+//                print(status)
+            } receiveValue: { [self] (searchField) in
+                searchItems(searchField)
+            }.store(in: &subscription)
     }
     
     var activeSearch: Bool {
-        (isSearching && searchText.count > 1) || isShowingRecent
+        (isSearching && searchText.count >= 2) || isShowingRecent
     }
     
     func searchItems(_ text: String) {
-        
+        print(text)
         if isSearching == false {
             return
         }
@@ -395,58 +404,55 @@ extension NotebooksListState {
 //            notesHierarchy.notes = backupNotebooks
             searchResultCount = 0
         } else {
-            //            usersDB.notes = backupNotebooks.filter { note in
-            //                return note.name.lowercased().contains(text.lowercased())
-            //            }
             
             var resultsCount = 0
             
-//            func canAddNotebook(note: inout NotebookM) -> Bool {
-//                
-//                // go deep first, if deep return true, then mark current as true
-//                // if deep is false, then check current name condition
-//                
-//                // check nested items
-//                var childStatus = Set<Bool>()
-//                if note.children != nil {
-//                    let count = note.children!.count
-//                    for i in 0..<count {
-//                        let canAdd = canAddNotebook(note: &note.children![i])
-//                        childStatus.insert(canAdd)
-//                    }
-//                }
-//                if childStatus.contains(true) {
-//                    note.canShow = false
-//                    note.isExpanded = true
-//                } else {
-//                    if note.name.lowercased().contains(text.lowercased()) {
-//                        note.canShow = true
-//                        note.isExpanded = true
-//                        
-//                        resultsCount += 1
-//                    } else {
-//                        note.canShow = false
-//                        note.isExpanded = false
-//                    }
-//                }
-//                
-//                if note.isExpanded {
-//                    return true
-//                }
-//                
-//                return note.canShow
-//            }
+            func canAddNotebook(note: Notebook) -> Bool {
+                
+                // go deep first, if deep return true, then mark current as true
+                // if deep is false, then check current name condition
+                
+                // check nested items
+                var childStatus = Set<Bool>()
+                if note.children != nil {
+                    let count = note.children!.count
+                    for i in 0..<count {
+                        let canAdd = canAddNotebook(note: note.children![i])
+                        childStatus.insert(canAdd)
+                    }
+                }
+                if childStatus.contains(true) {
+                    note.canShow = false
+                    note.isExpanded = true
+                } else {
+                    if note.name.lowercased().contains(text.lowercased()) {
+                        note.canShow = true
+                        note.isExpanded = true
+                        
+                        resultsCount += 1
+                    } else {
+                        note.canShow = false
+                        note.isExpanded = false
+                    }
+                }
+                
+                if note.isExpanded {
+                    return true
+                }
+                
+                return note.canShow
+            }
             
-//            var notebooksList = notebooks
-////            var expandedIds = Set<String>()
-//            
-//            for i in 0..<notebooksList.count {
-//                _ = canAddNotebook(note: &notebooksList[i])
-////                print("checked \(i)")
-//            }
-////            print("NEW LIST")
-//            notesHierarchy.notes = notebooksList
-//            searchResultCount = resultsCount
+            var notebooksList = notebooks
+//            var expandedIds = Set<String>()
+            
+            for i in 0..<notebooksList.count {
+                _ = canAddNotebook(note: notebooksList[i])
+//                print("checked \(i)")
+            }
+//            print("NEW LIST")
+            self.notebooks = notebooksList
+            searchResultCount = resultsCount
         }
     }
     
