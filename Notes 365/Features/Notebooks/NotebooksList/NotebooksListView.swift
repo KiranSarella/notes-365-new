@@ -202,7 +202,7 @@ struct SearchedListView: View {
     
     var body: some View {
         if usersState.activeSearch {
-            Text("Results: \(usersState.searchResultCount)")
+            Text("Results: \(usersState.resultCount)")
                     .font(.caption)
                     .padding(2)
         }

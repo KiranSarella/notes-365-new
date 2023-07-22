@@ -43,9 +43,9 @@ class NotebooksListState {
     var cancellable: AnyCancellable? = nil
     
     var isSearching = false
-    var searchResultCount: Int = 0
-    
     var isShowingRecent = false
+    
+    var resultCount: Int = 0
     
     var presentDeleteConfirmation = false
     var deletingNotebook: Notebook? = nil
@@ -374,8 +374,10 @@ extension NotebooksListState {
         searchTextPub
             .map({ (string) -> String? in
                 if string.count < 2 {
-//                    self.usersDB.notes = []
-                    self.searchResultCount = 0
+                    if self.isShowingRecent == false {
+                        self.resultCount = 0
+                    }
+                    
                     return nil
                 }
                 return string
@@ -402,7 +404,7 @@ extension NotebooksListState {
         
         if text.count == 0 {
 //            notesHierarchy.notes = backupNotebooks
-            searchResultCount = 0
+            resultCount = 0
         } else {
             
             var resultsCount = 0
@@ -443,7 +445,7 @@ extension NotebooksListState {
                 return note.canShow
             }
             
-            var notebooksList = notebooks
+            let notebooksList = notebooks
 //            var expandedIds = Set<String>()
             
             for i in 0..<notebooksList.count {
@@ -452,7 +454,7 @@ extension NotebooksListState {
             }
 //            print("NEW LIST")
             self.notebooks = notebooksList
-            searchResultCount = resultsCount
+            resultCount = resultsCount
         }
     }
     
@@ -484,54 +486,54 @@ extension NotebooksListState {
         
         var resultsCount = 0
         
-//        func canAddNotebook(note: inout NotebookM) -> Bool {
-//            
-//            // go deep first, if deep return true, then mark current as true
-//            // if deep is false, then check current name condition
-//            
-//            // check nested items
-//            var childStatus = Set<Bool>()
-//            if note.children != nil {
-//                let count = note.children!.count
-//                for i in 0..<count {
-//                    let canAdd = canAddNotebook(note: &note.children![i])
-//                    childStatus.insert(canAdd)
-//                }
-//            }
-//            if childStatus.contains(true) {
-//                note.canShow = false
-//                note.isExpanded = true
-//            } else {
-//                if recentItems.contains(note.id.uuidString) {
-//                    note.canShow = true
-//                    note.isExpanded = true
-//                    
-//                    resultsCount += 1
-//                } else {
-//                    note.canShow = false
-//                    note.isExpanded = false
-//                }
-//            }
-//            
-//            if note.isExpanded {
-//                return true
-//            }
-//            
-//            return note.canShow
-//        }
+        func canAddNotebook(note: Notebook) -> Bool {
+            
+            // go deep first, if deep return true, then mark current as true
+            // if deep is false, then check current name condition
+            
+            // check nested items
+            var childStatus = Set<Bool>()
+            if note.children != nil {
+                let count = note.children!.count
+                for i in 0..<count {
+                    let canAdd = canAddNotebook(note: note.children![i])
+                    childStatus.insert(canAdd)
+                }
+            }
+            if childStatus.contains(true) {
+                note.canShow = false
+                note.isExpanded = true
+            } else {
+                if recentItems.contains(note.id.uuidString) {
+                    note.canShow = true
+                    note.isExpanded = true
+                    
+                    resultsCount += 1
+                } else {
+                    note.canShow = false
+                    note.isExpanded = false
+                }
+            }
+            
+            if note.isExpanded {
+                return true
+            }
+            
+            return note.canShow
+        }
         
-//        var notebooksList = notesHierarchy.notes
-////            var expandedIds = Set<String>()
-//        
-//        for i in 0..<notebooksList.count {
-//            _ = canAddNotebook(note: &notebooksList[i])
-////                print("checked \(i)")
-//        }
-////            print("NEW LIST")
-//        notesHierarchy.notes = notebooksList
-//        searchResultCount = resultsCount
-//        
-//        isShowingRecent = true
+        var notebooksList = self.notebooks
+//            var expandedIds = Set<String>()
+        
+        for i in 0..<notebooksList.count {
+            _ = canAddNotebook(note: notebooksList[i])
+//                print("checked \(i)")
+        }
+//            print("NEW LIST")
+        self.notebooks = notebooksList
+        self.resultCount = resultsCount
+        
+        isShowingRecent = true
     }
 }
 
