@@ -123,7 +123,7 @@ struct ContentView: View {
     
     @State var showDetail = false
     
-    @StateObject private var editorState = NotebookEditorState()
+    @State private var editorState = NotebookEditorState()
     
     private var notebooksListSync = NotebooksListSync(basePathURL: EnvironmentState.shared.basePathURL)
     private var timelineSync = TimelineSync(basePathURL: EnvironmentState.shared.basePathURL)

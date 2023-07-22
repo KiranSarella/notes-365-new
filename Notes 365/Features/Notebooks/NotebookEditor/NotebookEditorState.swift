@@ -10,25 +10,29 @@ import SwiftUI
 import Combine
 
 //@MainActor
-class NotebookEditorState: ObservableObject {
+@Observable
+class NotebookEditorState {
     
     var notebookBusiness = NotebookContentBusiness()
     
-    @Published var isFetchingData = true
-    @Published var baseContent: String = ""
-    @Published var theme: MarkdownTheme
+    var isFetchingData = true
+    var baseContent: String = ""
+    var theme: MarkdownTheme = ThemeState.shared.theme
     
     var contentEditedDate: Date? = Date()
     var lastSavedDate: Date = Date()
     
-    unowned private(set) var notebook: Notebook!
+    @ObservationIgnored
+    unowned private(set) var notebook: Notebook! = nil
     
 //    var getNotebook: (()->(Notebook?))?
     var getNewContent: (() async -> (String))? = nil
-    var getTextHandler:(() -> String)?
+    var getTextHandler:(() -> String)? = nil
     
-    var cancellableTheme: Cancellable!
-    var cancellableTimer: Cancellable?
+    @ObservationIgnored
+    var cancellableTheme: Cancellable? = nil
+    @ObservationIgnored
+    var cancellableTimer: Cancellable? = nil
     
     init() {
         theme = ThemeState.shared.theme
