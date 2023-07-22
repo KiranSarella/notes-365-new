@@ -7,25 +7,26 @@
 
 import SwiftUI
 
-class ThemeDetailState: ObservableObject {
+@Observable
+class ThemeDetailState {
     
-    var theme: MarkdownTheme!
+    var theme: MarkdownTheme! = MarkdownTheme(id: UUID())
     
     // font name
-    @Published var fontName: String = "System"
-    @Published var showFontPicker = false
-    @Published var font: Font = Font.system(Font.TextStyle.body)
+    var fontName: String = "System"
+    var showFontPicker = false
+    var font: Font = Font.system(Font.TextStyle.body)
     // font size
-    @Published var fontSize = 14
+    var fontSize = 14
     let step = 2
     let range = 8...64
     // colors
-    @Published var bodyColor = Color.black
-    @Published var headingColor = Color.black
-    @Published var boldColor = Color.black
-    @Published var listColor = Color.black
-    @Published var codeColor = Color.black
-    @Published var quoteColor = Color.black
+    var bodyColor = Color.black
+    var headingColor = Color.black
+    var boldColor = Color.black
+    var listColor = Color.black
+    var codeColor = Color.black
+    var quoteColor = Color.black
     
     init() {
         

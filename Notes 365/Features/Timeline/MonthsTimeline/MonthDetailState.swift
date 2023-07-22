@@ -26,7 +26,7 @@ extension MonthTimelineThree {
 }
 
 @Observable
-class MonthDetailState: ObservableObject {
+class MonthDetailState {
     
 //    let timelineBusiness = TimelineBusiness(path: EnvironmentState.shared.basePathURL)
     

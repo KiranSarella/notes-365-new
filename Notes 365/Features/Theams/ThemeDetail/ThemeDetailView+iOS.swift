@@ -15,7 +15,7 @@ struct ThemeDetailView_iOS: View {
     
     var theme: MarkdownTheme
     
-    @StateObject var state = ThemeDetailState()
+    @State var state = ThemeDetailState()
     
     var onThemeChange:((MarkdownTheme) -> ())
     

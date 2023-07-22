@@ -47,7 +47,7 @@ struct SettingsView_iPadOS: View {
 
     @Binding var showModel: Bool
     
-    @StateObject private var themesListState = ThemesListState()
+    @State private var themesListState = ThemesListState()
     
     @State private var selectedModeID: Mode.ID?
     

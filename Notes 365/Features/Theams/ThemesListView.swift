@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ThemesListView: View {
     
-    @StateObject private var themesListState = ThemesListState()
+    @State private var themesListState = ThemesListState()
     @State private var selectedThemeID: MarkdownTheme.ID = UUID()
     @State private var selectedLightThemeID: MarkdownTheme.ID = UUID()
     @State private var selectedDarkThemeID: MarkdownTheme.ID = UUID()

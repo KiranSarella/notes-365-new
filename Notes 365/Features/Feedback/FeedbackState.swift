@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-class FeedbackState: ObservableObject {
+@Observable
+class FeedbackState {
     
     enum Subject: String, CaseIterable, Identifiable {
         case feedback = "feedback"
@@ -18,8 +19,8 @@ class FeedbackState: ObservableObject {
         var id: Self { self }
     }
     
-    @Published var subject: Subject = Subject.feedback
-    @Published var message: String = ""
+    var subject: Subject = Subject.feedback
+    var message: String = ""
  
     
     func sendMail(recipients: [String]) {

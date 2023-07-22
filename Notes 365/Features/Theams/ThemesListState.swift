@@ -7,13 +7,14 @@
 
 import SwiftUI
 
-class ThemesListState: ObservableObject {
+@Observable
+class ThemesListState {
     
     private let themeBusiness = ThemeBusiness()
     
-    @Published var themes = [MarkdownTheme]()
-    @Published var selectedLightTheme: MarkdownTheme
-    @Published var selectedDarkTheme: MarkdownTheme
+    var themes = [MarkdownTheme]()
+    var selectedLightTheme: MarkdownTheme = MarkdownTheme(id: UUID())
+    var selectedDarkTheme: MarkdownTheme = MarkdownTheme(id: UUID())
     
     init() {
         // get themes
