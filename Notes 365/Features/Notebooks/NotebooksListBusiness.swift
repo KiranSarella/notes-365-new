@@ -220,6 +220,8 @@ extension NotebooksListBusiness {
         
         let plistURL = basePathURL.appending(path: Constants.notebooksPListName).appendingPathExtension("plist")
         
+        NotebooksCache.shared.clear()
+        
         do {
             // Read the file contents
             let plistData = try Data(contentsOf: plistURL)

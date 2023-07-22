@@ -210,7 +210,11 @@ class NotebooksListState {
             fileName = generateFileName(at: notebooks)
         }
         
-        return Notebook(id: UUID(), name: fileName)
+        let newNotebook = Notebook(id: UUID(), name: fileName)
+        // store reference
+        NotebooksCache.shared.store(notebook: newNotebook)
+        
+        return newNotebook
     }
     
     private func getNotebook(levels selectedLevels: [Int], index selectedIndex: Int) -> Notebook? {

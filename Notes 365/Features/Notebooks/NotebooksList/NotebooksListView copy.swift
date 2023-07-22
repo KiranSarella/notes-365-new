@@ -17,6 +17,11 @@ struct NotebooksListView: View {
     //    @State private var presentDeleteConfirmation = false
     //    @State private var deletingNotebook: NotebookM?
     @State private var selectNotebook: Notebook?
+    
+    @State var isExpanded = false
+    @Environment(\.editMode) private var editMode
+
+    
     var body: some View {
         
         //        Text("Loading..")
@@ -34,6 +39,8 @@ struct NotebooksListView: View {
                     //                List(selection: $selectedNotebook) {
                     //                    NotebooksListGroupView(notebooks: $usersState.usersDB.notes)
                     //                }
+                    
+//                    List(DisclosureGroup(isExpanded: <#T##Binding<Bool>#>, content: <#T##() -> View#>, label: <#T##() -> View#>))
                     
                     List(usersState.notebooks, children: \.children, selection: $selectedNotebook) { notebook in
                         
@@ -81,7 +88,9 @@ struct NotebooksListView: View {
                         
                         
                     }
-                    
+                    .toolbar {
+                        EditButton()
+                    }
                     .onChange(of: selectNotebook, { oldValue, newValue in
                         print(oldValue, newValue)
                     })
@@ -682,3 +691,6 @@ struct AddNotesView: View {
 //    }
 //
 //}
+
+
+

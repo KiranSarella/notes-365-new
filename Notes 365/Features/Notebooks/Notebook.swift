@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 @Observable
 class Notebook: Identifiable, Codable {
 //    var id: Self { self }

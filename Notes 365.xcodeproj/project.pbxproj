@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5C2B92ED2A6547BD00E7FA59 /* NotebooksListView copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2B92EC2A6547A300E7FA59 /* NotebooksListView copy.swift */; };
 		5C3BFEE62A25D2C100EF572F /* RecentListSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3BFEE52A25D2C100EF572F /* RecentListSync.swift */; };
 		5CA77C112A24A2660030EFB2 /* RecentNotebooksList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA77C102A24A2660030EFB2 /* RecentNotebooksList.swift */; };
 		5CA77C162A24AE220030EFB2 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C152A24AE220030EFB2 /* Collections */; };
@@ -568,6 +567,7 @@
 				9F45BDD929234150003DE332 /* Notebook.swift */,
 				9FB6C69F2927695000C8EC76 /* NotebookContentBusiness.swift */,
 				9F45BD042920CCCE003DE332 /* NotebooksListBusiness.swift */,
+				5CB7718A2A6A9AC3007BBE33 /* NotebooksCache.swift */,
 				9F9DBF7129F122E80088B0CA /* NotebooksListSync.swift */,
 				9FA7E34B29F299A0007AB408 /* NotebooksContentSync.swift */,
 				9FB6C69429275BF900C8EC76 /* NotebooksList */,
@@ -656,7 +656,6 @@
 				9F45BD252920CCCE003DE332 /* NotebooksListView.swift */,
 				5C2B92EC2A6547A300E7FA59 /* NotebooksListView copy.swift */,
 				9F45BD292920CCCE003DE332 /* NotebooksListState.swift */,
-				5CB7718A2A6A9AC3007BBE33 /* NotebooksCache.swift */,
 				5C3BFEE42A25D2A500EF572F /* RecentList */,
 				9FBB0B482A0913B300F407AF /* CommonDropDelegate.swift */,
 				9F6CA8DD2A041D27009061A0 /* ReorderLIst.md */,
@@ -861,7 +860,6 @@
 				9F45BD622920CD90003DE332 /* WeekDetailView.swift in Sources */,
 				9F45BD672920CDA9003DE332 /* TimelineSidebarView.swift in Sources */,
 				9F14B4B2299168980079D23B /* CalendarNavigatorView.swift in Sources */,
-				5C2B92ED2A6547BD00E7FA59 /* NotebooksListView copy.swift in Sources */,
 				9FB6C6A52927936F00C8EC76 /* DayDetailState.swift in Sources */,
 				9F93E15529ED0D0F00210E99 /* TodayVersionSync.swift in Sources */,
 				5CB7718B2A6A9AC3007BBE33 /* NotebooksCache.swift in Sources */,
