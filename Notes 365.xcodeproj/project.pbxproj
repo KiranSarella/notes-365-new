@@ -61,7 +61,7 @@
 		9F45BD712920CDE0003DE332 /* MarkdownPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD152920CCCE003DE332 /* MarkdownPattern.swift */; };
 		9F45BD792920CDE0003DE332 /* NotebookEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD242920CCCE003DE332 /* NotebookEditorView.swift */; };
 		9F45BD7F2920CDE0003DE332 /* NotebooksListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD252920CCCE003DE332 /* NotebooksListView.swift */; };
-		9F45BD812920CDE0003DE332 /* MarkdownAttributedString+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD0B2920CCCE003DE332 /* MarkdownAttributedString+iOS.swift */; };
+		9F45BD812920CDE0003DE332 /* MarkdownAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD0B2920CCCE003DE332 /* MarkdownAttributedString.swift */; };
 		9F45BD892920CDE0003DE332 /* EditorViewDelegate+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD172920CCCE003DE332 /* EditorViewDelegate+iOS.swift */; };
 		9F45BD8B2920CDE0003DE332 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD102920CCCE003DE332 /* EditorView.swift */; };
 		9F45BD8E2920CDE9003DE332 /* NotebooksListState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD292920CCCE003DE332 /* NotebooksListState.swift */; };
@@ -208,7 +208,7 @@
 		9F45BCFB2920CCCE003DE332 /* TimelineSidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineSidebarView.swift; sourceTree = "<group>"; };
 		9F45BCFF2920CCCE003DE332 /* CalendarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarState.swift; sourceTree = "<group>"; };
 		9F45BD042920CCCE003DE332 /* NotebooksListBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListBusiness.swift; sourceTree = "<group>"; };
-		9F45BD0B2920CCCE003DE332 /* MarkdownAttributedString+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MarkdownAttributedString+iOS.swift"; sourceTree = "<group>"; };
+		9F45BD0B2920CCCE003DE332 /* MarkdownAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownAttributedString.swift; sourceTree = "<group>"; };
 		9F45BD102920CCCE003DE332 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
 		9F45BD152920CCCE003DE332 /* MarkdownPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownPattern.swift; sourceTree = "<group>"; };
 		9F45BD172920CCCE003DE332 /* EditorViewDelegate+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewDelegate+iOS.swift"; sourceTree = "<group>"; };
@@ -499,7 +499,7 @@
 				9F7D291E299BABAC00B37F51 /* EditorViewUI.swift */,
 				9F45BD102920CCCE003DE332 /* EditorView.swift */,
 				9F45BD172920CCCE003DE332 /* EditorViewDelegate+iOS.swift */,
-				9F45BD0B2920CCCE003DE332 /* MarkdownAttributedString+iOS.swift */,
+				9F45BD0B2920CCCE003DE332 /* MarkdownAttributedString.swift */,
 				5CF83EEE2A6E6B39007A12A2 /* MarkdownAttributedString+iOS copy.swift */,
 				9F45BD152920CCCE003DE332 /* MarkdownPattern.swift */,
 				9FB40282297B9F60000DF922 /* markdown-regex.md */,
@@ -879,7 +879,7 @@
 				9F14B491298A684F0079D23B /* ThemeDetailView+iOS.swift in Sources */,
 				9F45BD662920CDA9003DE332 /* NotesTitleView.swift in Sources */,
 				9F14B4AE298F98900079D23B /* FontPicker.swift in Sources */,
-				9F45BD812920CDE0003DE332 /* MarkdownAttributedString+iOS.swift in Sources */,
+				9F45BD812920CDE0003DE332 /* MarkdownAttributedString.swift in Sources */,
 				9FB6C6A3292791A200C8EC76 /* MonthDetailState.swift in Sources */,
 				9FA7E34C29F299A0007AB408 /* NotebooksContentSync.swift in Sources */,
 				9FB6C6A02927695000C8EC76 /* NotebookContentBusiness.swift in Sources */,
