@@ -152,6 +152,23 @@ class MarkdownAttriburedString {
     }
 
     // MAKR: - Tree-sitter
+    func markdownTest() {
+
+        let parser = Parser()
+
+        let source = ""
+
+//        let tree = parser.parse(source)!
+//        print("tree: ", tree)
+
+        var attrStr = NSMutableAttributedString(string: source)
+        
+        blockParser(source: source, parser: parser, attrStr: &attrStr)
+        inlineParser(source: source, parser: parser, attrStr: &attrStr)
+        
+        attrStrNew = AttributedString(attrStr)
+    }
+    
     
     func blockParser(source: String, parser: Parser,  attrStr: inout NSMutableAttributedString) {
 
@@ -198,14 +215,10 @@ class MarkdownAttriburedString {
                         fontSize = getHeadingFontSize(level: 6)
                     }
                     
-                    // bold
-                    var boldFont = theme.font
-                    if let fontDesc = theme.font.fontDescriptor.withSymbolicTraits(.traitBold) {
-                        boldFont = UIFont(descriptor: fontDesc, size: fontSize)
-                    }
+                    
                     
                     // font
-                    attrStr.addAttribute(.font, value: boldFont, range: node.range)
+                    attrStr.addAttribute(.font, value: theme.font.withSize(fontSize), range: node.range)
                     // color
                     attrStr.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: node.range)
                     // hide special chars
@@ -222,9 +235,10 @@ class MarkdownAttriburedString {
 //                attrStr.addAttribute(.foregroundColor, value: theme.bodyColor.uiColor, range: node.range)
             } else if node.nodeType! == "block_quote" {
                 attrStr.addAttribute(.font, value: theme.font, range: node.range)
-                attrStr.addAttribute(.foregroundColor, value: theme.blockQuoteColor.uiColor, range: node.range)
-            } else if node.nodeType! == "list_marker_minus" || node.nodeType! == "list_marker_dot" {
-                attrStr.addAttribute(.foregroundColor, value: theme.listColor.uiColor, range: node.range)
+                attrStr.addAttribute(.foregroundColor, value: UIColor.red, range: node.range)
+//                attrStr.addAttribute(.backgroundColor, value: UIColor.yellow, range: node.range)
+            } else if node.nodeType! == "block_quote_marker" {
+//                attrStr.addAttribute(.font, value: UIFont.systemFont(ofSize: 0.1, weight: .light), range: node.range)
             } else if node.nodeType! == "fenced_code_block" {
                 
                 let font = UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: .regular)
@@ -232,7 +246,7 @@ class MarkdownAttriburedString {
                 attrStr.addAttribute(.font, value: font, range: node.range)
                 attrStr.addAttribute(.foregroundColor, value: theme.codeColor.uiColor, range: node.range)
                 
-                let paraStyle = NSMutableParagraphStyle()
+                var paraStyle = NSMutableParagraphStyle()
                 paraStyle.alignment = .center
                 
                 attrStr.addAttribute(.paragraphStyle, value: paraStyle, range: node.range)
