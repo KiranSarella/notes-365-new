@@ -3,11 +3,12 @@
 ## New things
 [ ] Xcode 15 Previews
 [x] Convert to Observable macro (partially done)
-[ ] Tree Sitter integration
+[ ] Tree Sitter integration - read only, editor
 [ ] Recently deleted list
 [ ] timeline delete option
 [ ] timetravel option
 [ ] new theme with appearance 
+[ ] custom fonts
 
 ## Issues
 [ ] delete notebook - inner files not deleted issue

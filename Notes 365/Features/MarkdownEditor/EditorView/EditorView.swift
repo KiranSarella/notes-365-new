@@ -5,6 +5,12 @@
 //  Created by Kiran Sarella on 12/04/22.
 //
 import UIKit
+// tree sitter parser
+import SwiftTreeSitter
+// markdown grammer
+import TreeSitterMarkdown
+import TreeSitterMarkdownInline
+
 
 public class EditorView: UIView {
     
@@ -233,6 +239,15 @@ extension EditorView: NSTextStorageDelegate {
         
         textStorage.addAttribute(.font, value: theme.font, range: extendedRange)
     }
+    
+//    public func textStorage2(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
+//        
+//        guard let edit = InputEdit(range: range, delta: delta, oldEndPoint: .zero) else { return }
+//        
+//        
+//    }
+//    
+    
     
     public func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
      

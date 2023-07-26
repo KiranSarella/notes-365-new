@@ -13,6 +13,7 @@ struct SettingsView_iPadOS: View {
     public enum Setting: String, CaseIterable, Identifiable {
         case themes = "Themes"
         case feedback = "Feedback"
+        case newTheme = "New Theme"
         
         public var id: String { self.name }
         
@@ -20,21 +21,23 @@ struct SettingsView_iPadOS: View {
             return self.rawValue
         }
         
-        var description: String {
-            switch self {
-            case .themes:
-                return "customized 1"
-            case .feedback:
-                return ""
-            }
-        }
-        
+//        var description: String {
+//            switch self {
+//            case .themes:
+//                return "customized 1"
+//            case .feedback:
+//                return ""
+//            }
+//        }
+//        
         var image: String {
             switch self {
             case .themes:
                 return "paintbrush"
             case .feedback:
                 return "hand.thumbsup"
+            case .newTheme:
+                return "paintbrush"
             }
         }
         
@@ -210,6 +213,8 @@ struct SettingsView_iPadOS: View {
                         
                     case .feedback:
                         FeedbackView_iPadOS()
+                    case .newTheme:
+                        NewThemeView()
                     }
                 }
                 .navigationTitle("Settings")

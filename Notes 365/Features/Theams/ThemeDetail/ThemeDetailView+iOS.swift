@@ -25,37 +25,6 @@ struct ThemeDetailView_iOS: View {
         VStack {
             
             List {
-                // font name
-//
-//                NavigationLink {
-//                    FontPicker { value in
-//                        //                    print(value)
-//                        let newValue = UIFont(descriptor: value.fontDescriptor, size: 16)
-//                        fontName = value.familyName
-//                        font = Font(newValue)
-//                        //                            showFontPicker = false
-//                    } onCancel: {
-//                        //                            showFontPicker = false
-//                    }
-//                    .toolbar {
-//                        Button {
-//
-//                        } label: {
-//                            Text("Done")
-//                        }
-//                    }
-//                } label: {
-//
-//                    HStack {
-//                        Text("Font")
-//                        Spacer()
-//                        Text(fontName)
-//                            .font(font)
-//                    }
-//
-//
-//                }
-//                .navigationViewStyle(StackNavigationViewStyle())
 
                 HStack {
                     Text("Font")
