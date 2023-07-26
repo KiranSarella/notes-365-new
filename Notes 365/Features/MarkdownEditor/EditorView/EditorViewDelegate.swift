@@ -47,7 +47,7 @@ extension EditorView: EditorViewDelegate {
 //        let formatterView = textView.viewPrintFormatter()
         
         var pdfTheme = ThemeBusiness().getLightTheme()
-        pdfTheme.fontSize = pdfTheme.fontSize * 0.6
+        pdfTheme.fontSize = Int(Float(pdfTheme.fontSize) * 0.6)
         let attrStrGen = MarkdownAttriburedString(theme: pdfTheme)
         let attrStr = attrStrGen.getAttriburedString(forMarkdown: self.text)
         

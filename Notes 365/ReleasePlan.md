@@ -8,7 +8,6 @@
 [ ] timeline delete option
 [ ] timetravel option
 [ ] new theme with appearance 
-[ ] custom fonts
 
 ## Issues
 [ ] delete notebook - inner files not deleted issue
@@ -18,4 +17,8 @@
 [ ] new design
 
 
+## backlogs
+[ ] custom fonts
+[ ] theme background color and image
+[ ] theme 
 

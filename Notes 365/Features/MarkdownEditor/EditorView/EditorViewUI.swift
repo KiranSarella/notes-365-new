@@ -37,7 +37,7 @@ struct EditorViewUI: UIViewRepresentable {
         editorView.textView.text = text
 
         editorView.textView.isEditable = isEditable
-        
+        editorView.textView.backgroundColor = .systemGreen
         return editorView
     }
     

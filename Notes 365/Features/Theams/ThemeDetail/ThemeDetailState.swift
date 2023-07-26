@@ -47,7 +47,7 @@ class ThemeDetailState {
     
     func updateChanges() {
         theme.fontName = fontName
-        theme.fontSize = Float(fontSize)
+        theme.fontSize = fontSize
         theme.bodyColor.assignColor(component: bodyColor.components)
         theme.headingColor.assignColor(component: headingColor.components)
         theme.styleColor.assignColor(component: boldColor.components)

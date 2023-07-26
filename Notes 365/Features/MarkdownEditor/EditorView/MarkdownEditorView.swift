@@ -43,6 +43,7 @@ struct MarkdownEditorView: View {
                 .font(Font.body)
                 .focused($isTextFieldFocused)
         }
+        .background(Color.green)
         .onAppear {
             
             markdownEditorState.fileName = self.fileName

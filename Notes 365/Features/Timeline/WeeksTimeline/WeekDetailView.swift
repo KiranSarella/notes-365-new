@@ -166,5 +166,6 @@ fileprivate struct DayTimelineTwoView: View {
                 }
             }
         }
+        .background(Color.green)
     }
 }

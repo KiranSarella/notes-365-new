@@ -64,6 +64,7 @@ struct DayDetailView: View {
                 .listRowSeparator(.hidden)
             }
             .listStyle(PlainListStyle())
+            .background(Color.green)
             
 //            .navigationTitle(dayState.dayDate.date.formattedDate())
         }

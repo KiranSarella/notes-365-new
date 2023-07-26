@@ -6,15 +6,16 @@
 //
 
 import Foundation
+import SwiftUI
 
-
+@Observable
 struct MarkdownTheme: Identifiable, Hashable, Codable {
     
-    var id: UUID
+    var id: UUID = UUID()
     var themeName: String = "default"
     
     var fontName: String = "system"
-    var fontSize: Float = 14
+    var fontSize: Int = 14
     // body
     var bodyColor: NamedColor = NamedColor(hex: 0xffffff)
     // Heading
@@ -40,7 +41,7 @@ struct MarkdownTheme: Identifiable, Hashable, Codable {
         themeName = try container.decode(String.self, forKey: .themeName)
         // body
         fontName = try container.decode(String.self, forKey: .fontName)
-        fontSize = try container.decode(Float.self, forKey: .fontSize)
+        fontSize = try container.decode(Int.self, forKey: .fontSize)
         
         bodyColor = try container.decode(NamedColor.self, forKey: .bodyColor)
         
@@ -88,6 +89,13 @@ struct MarkdownTheme: Identifiable, Hashable, Codable {
 
 extension MarkdownTheme: Equatable {
     
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
+    static func == (lhs: MarkdownTheme, rhs: MarkdownTheme) -> Bool {
+        lhs.id == rhs.id
+    }
 }
 
 extension MarkdownTheme  {
@@ -139,6 +147,10 @@ extension MarkdownTheme {
         } else {
             return UIFont(name: self.fontName, size: CGFloat(self.fontSize)) ?? UIFont.systemFont(ofSize: CGFloat(self.fontSize))
         }
+    }
+    
+    var font2 : Font {
+        Font(font)
     }
 }
 

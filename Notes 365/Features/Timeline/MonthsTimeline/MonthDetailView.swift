@@ -19,6 +19,7 @@ struct MonthDetailWrapperView: View {
             Text("Please enable iCloud.")
         } else {
             MonthDetailView()
+                .background(Color.green)
         }
     }
 }
@@ -29,20 +30,25 @@ struct MonthDetailView: View {
 
     var body: some View {
         VStack(spacing: 0) {
+            
             List {
                 ForEach($monthState.monthTimelineList, id: \.id) { $dayTimeline in
                     // for each day
                     MonthSectionView(date: monthState.monthDate.start, dayTimeline: $dayTimeline, theme: $monthState.theme)
                         .listRowSeparator(.hidden)
+                        .listRowBackground(Color.green)
+//                        .background(Color.green)
                 }
                 HStack {
                     Spacer()
                     Text(monthState.currentState.message)
+                        .listRowBackground(Color.green)
                         .listRowSeparator(.hidden)
                         .fontWeight(.ultraLight)
                         .foregroundColor(.gray)
                     Spacer()
                 }
+                .listRowBackground(Color.green)
                 .listRowSeparator(.hidden)
 //                // motivation question
 //                HStack {
@@ -58,7 +64,14 @@ struct MonthDetailView: View {
 //                }
 //                .padding()
             }
-            .listStyle(PlainListStyle())
+//            .listStyle(PlainListStyle())
+            .background(Color.green)
+//            .background {
+//                Image("ventura")
+//                    .resizable()
+//                    .blur(radius: 5)
+//            }
+            .scrollContentBackground(.hidden)
             .onAppear {
                 monthState.readMonthData(monthDate: monthState.monthDate)
             }
@@ -142,8 +155,11 @@ struct MonthSectionView: View {
             }
             
             DayTimelineTwoView(timelineList: $dayTimeline.notes, theme: $theme)
+                .background(Color.green)
         }
+        
     }
+    
 }
 
 fileprivate struct DayTimelineTwoView: View {
@@ -164,6 +180,7 @@ fileprivate struct DayTimelineTwoView: View {
                     Spacer()
                 }
             }
+            .background(Color.green)
         }
     }
 }

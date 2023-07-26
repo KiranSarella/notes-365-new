@@ -16,6 +16,7 @@
 		5CA77C1A2A24AE220030EFB2 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C192A24AE220030EFB2 /* OrderedCollections */; };
 		5CB312562A6BE72C00629FBE /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3DB0C1292DE09500704860 /* SettingsView.swift */; };
 		5CB7718B2A6A9AC3007BBE33 /* NotebooksCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB7718A2A6A9AC3007BBE33 /* NotebooksCache.swift */; };
+		5CD7DBFF2A71474A001BC31A /* ThemeCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD7DBFE2A71474A001BC31A /* ThemeCardView.swift */; };
 		5CE055DB2A17C5D3009EB4EA /* DayCalendarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE055DA2A17C5D3009EB4EA /* DayCalendarState.swift */; };
 		5CE055DD2A17D547009EB4EA /* DayCalendarView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE055DC2A17D547009EB4EA /* DayCalendarView2.swift */; };
 		5CEA2F702A6D98CA0068C823 /* SwiftTreeSitter in Frameworks */ = {isa = PBXBuildFile; productRef = 5CEA2F6F2A6D98CA0068C823 /* SwiftTreeSitter */; };
@@ -159,6 +160,7 @@
 		5C8E83C42A6ED86A001F28A6 /* NewThemeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewThemeState.swift; sourceTree = "<group>"; };
 		5CA77C102A24A2660030EFB2 /* RecentNotebooksList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentNotebooksList.swift; sourceTree = "<group>"; };
 		5CB7718A2A6A9AC3007BBE33 /* NotebooksCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksCache.swift; sourceTree = "<group>"; };
+		5CD7DBFE2A71474A001BC31A /* ThemeCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeCardView.swift; sourceTree = "<group>"; };
 		5CE055DA2A17C5D3009EB4EA /* DayCalendarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCalendarState.swift; sourceTree = "<group>"; };
 		5CE055DC2A17D547009EB4EA /* DayCalendarView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCalendarView2.swift; sourceTree = "<group>"; };
 		5CF83EEE2A6E6B39007A12A2 /* MarkdownAttributedString copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MarkdownAttributedString copy.swift"; sourceTree = "<group>"; };
@@ -320,6 +322,7 @@
 			isa = PBXGroup;
 			children = (
 				5C8E83C12A6ED789001F28A6 /* NewThemeView.swift */,
+				5CD7DBFE2A71474A001BC31A /* ThemeCardView.swift */,
 				5C8E83C42A6ED86A001F28A6 /* NewThemeState.swift */,
 			);
 			path = NewTheme;
@@ -882,6 +885,7 @@
 				9F45BCA42920CAAE003DE332 /* ContentView.swift in Sources */,
 				9F45BDA42920CE41003DE332 /* ThemePreviewView.swift in Sources */,
 				9F7D291D299A7C1500B37F51 /* MarkdownDocument.swift in Sources */,
+				5CD7DBFF2A71474A001BC31A /* ThemeCardView.swift in Sources */,
 				9FBB0B5D2A0E952E00F407AF /* MarkdownEditorViewState.swift in Sources */,
 				9F45BD622920CD90003DE332 /* WeekDetailView.swift in Sources */,
 				9F45BD672920CDA9003DE332 /* TimelineSidebarView.swift in Sources */,
