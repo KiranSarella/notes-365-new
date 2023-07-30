@@ -22,7 +22,7 @@ struct NotebooksListView: View {
 //        Text("Loading..")
 //            .opacity(usersState.isLoaded ? 0 : 1)
         VStack {
-            if usersState.isSearching == false && usersState.isEmpty {
+            if usersState.listSourceType == .notebooks(.none) && usersState.isEmpty {
                 AddNotesView()
                     .padding([.top], -100)
                     .environmentObject(usersState)
@@ -35,21 +35,39 @@ struct NotebooksListView: View {
                     //                List(selection: $selectedNotebook) {
                     //                    NotebooksListGroupView(notebooks: $usersState.usersDB.notes)
                     //                }
-                    SearchedListView(selectedNotebook: $selectedNotebook)
-                        .padding(.bottom, 20)
-                        .listStyle(PlainListStyle())
-                        .autocorrectionDisabled()
                     
-//                                    .listStyle(SidebarListStyle())
-                        .navigationTitle("Notebooks")
-//                        .onChange(of: selectedNotebook) { newValue in
-//                            if let newValue = newValue {
-//                                usersState.navTitle = newValue.name
-//                            }
-//                        }
-                        .searchable(text: $usersState.searchText)
+                    
+                    if usersState.listSourceType == .deletedItems ||
+                        usersState.listSourceType == .notebooks(.recentlyModified) {
+                        
+                        SearchedListView(selectedNotebook: $selectedNotebook)
+//                            .padding(.bottom, 20)
+                            .listStyle(PlainListStyle())
+                            .autocorrectionDisabled()
+                        
+    //                                    .listStyle(SidebarListStyle())
+                            .navigationTitle("Notebooks")
+                            .navigationBarTitleDisplayMode(.large)
+                    } else {
+                        SearchedListView(selectedNotebook: $selectedNotebook)
+                            .padding(.bottom, 20)
+                            .listStyle(PlainListStyle())
+                            .autocorrectionDisabled()
+                        
+    //                                    .listStyle(SidebarListStyle())
+                            .navigationTitle("Notebooks")
+                            .navigationBarTitleDisplayMode(.large)
+    //                        .onChange(of: selectedNotebook) { newValue in
+    //                            if let newValue = newValue {
+    //                                usersState.navTitle = newValue.name
+    //                            }
+    //                        }
+                            .searchable(text: $usersState.searchText, placement: .navigationBarDrawer(displayMode: .always))
+                    }
+                    
+                  
                     //                .onChange(of: usersState.searchText) { newValue in
-                    //                    selectedNotebook = nil
+                    //                    selectedNotebook = nil`
                     //                }
                     /*
                      ** IMP
@@ -59,11 +77,7 @@ struct NotebooksListView: View {
                      this is required to show disclosureGroup when first item have no childs.
                      and only working with SidebarListStyle.
                      
-                     DisclosureGroup(isExpanded: .constant(true)) {
-                     ListGroupView(notebooks: $usersState.usersDB.notes)
-                     } label: {
-                     
-                     }.disabled(true)
+
                      */
                     
                     if UIDevice.current.userInterfaceIdiom == .pad {
@@ -187,35 +201,56 @@ struct SearchedListView: View {
     @EnvironmentObject var usersState: NotebooksListState
     
     var body: some View {
-        if usersState.activeSearch {
-            Text("Results: \(usersState.searchResultCount)")
+        
+        switch usersState.listSourceType {
+        case .notebooks(let filterType):
+            switch filterType {
+            case .none:
+                EmptyView()
+            case .searching:
+                if usersState.activeSearch {
+                    Text("Search Results: \(usersState.searchResultCount)")
+                            .font(.caption)
+                            .padding(2)
+                }
+            case .recentlyModified:
+                Text("Recently Modified: \(usersState.modifiedResultCount)")
+                        .font(.caption)
+                        .padding(2)
+            }
+        case .deletedItems:
+            Text("Deleted Items: \(usersState.deletedResultCount)")
                     .font(.caption)
                     .padding(2)
         }
+        
         List(selection: $selectedNotebook) {
-            NotebooksListGroupView(notebooks: $usersState.notesHierarchy.notes)
             
-            Section {
-                DisclosureGroup {
-                    
-                    NotebooksListGroupView(notebooks: $usersState.notesHierarchy.deletedNotes)
-                    
-//                    Text("Note 1")
-//                    Text("Note 2")
-                } label: {
-                    HStack {
-                        Image(systemName: "trash")
-                        Text("Recently Deleted")
-                            .font(.subheadline)
-                            .fontWeight(.bold)
-                            .foregroundColor(.gray)
-                        
-                    }
-                }
-                .tint(.gray)
-//                .disclosureGroupStyle(MyDisclosureStyle)
-                
+            if usersState.listSourceType == .deletedItems {
+                DeletedNotebooksListGroupView(notebooks: $usersState.notesHierarchy.notes)
+            } else {
+                NotebooksListGroupView(notebooks: $usersState.notesHierarchy.notes)
             }
+            
+//            if usersState.notesHierarchy.deletedNotes.count > 0 {
+//                Section {
+//                    DisclosureGroup {
+//                        NotebooksListGroupView(notebooks: $usersState.notesHierarchy.deletedNotes)
+//                    } label: {
+//                        HStack {
+//                            Image(systemName: "trash")
+//                                .foregroundColor(.red)
+//                            Text("Recently Deleted")
+//                                .font(.subheadline)
+//                                .fontWeight(.thin)
+//                                .foregroundColor(.red)
+//                        }
+//
+//                    }
+//                }
+//                .tint(.gray)
+//            }
+            
             
 //            Section {
 //                DisclosureGroup {
@@ -248,16 +283,23 @@ struct SearchedListView: View {
                 usersState.showHideRecentlyModified()
             } label: {
                 Image(systemName: usersState.recentButtonIcon)
+                    .foregroundColor(usersState.listSourceType == .notebooks(.recentlyModified) ? Color.green : Color.accentColor)
             }
-            
-            EditButton()
+            .disabled(usersState.listSourceType == ListSourceType.deletedItems ? true : false)
+
+            Button {
+                usersState.showHideRecentlyDeleted()
+            } label: {
+                Image(systemName: usersState.recentlyDeletedButtonIcon)
+                    .foregroundColor(usersState.listSourceType == .deletedItems ? Color.green : Color.accentColor)
+            }
         }
         .onChange(of: isSearching) { newValue in
             // on search active
             if newValue {
                 // end editMode
                 editMode?.wrappedValue = .inactive
-                usersState.isShowingRecent = false
+                usersState.listSourceType = .notebooks(.searching)
             }
             
             usersState.isSearching = newValue
@@ -352,47 +394,20 @@ struct NotebooksListGroupView: View {
     @State private var isTargeted: Bool = true
     var body: some View {
         ForEach($notebooks, id: \.self) { $notebook in
-            if usersState.activeSearch {
-                // filters
-//                if notebook.canShow {
-                    if notebook.containChildNotebooks {
-                        DisclosureGroup(isExpanded: $notebook.isExpanded) {
-                            NotebooksListGroupView(notebooks: $notebook.children.unwrap()!)
+            if notebook.containChildNotebooks {
+                DisclosureGroup(isExpanded: $notebook.isExpanded) {
+                    NotebooksListGroupView(notebooks: $notebook.children.unwrap()!)
 //                                .foregroundColor(notebook.canShow ? .primary : .gray)
 //                                .opacity(notebook.canShow ? 1 : 0.3)
-                        } label: {
-                            RowView(notebook: $notebook)
-//                                .foregroundColor(notebook.canShow ? .primary : .gray)
-                                .opacity(notebook.canShow ? 1 : 0.4)
-                        }
-                    } else {
-                        RowView(notebook: $notebook)
-//                            .foregroundColor(notebook.canShow ? .primary : .gray)
-                            .opacity(notebook.canShow ? 1 : 0.3)
-                    }
-//                }
-            } else {
-                // normal
-                if notebook.containChildNotebooks {
-                    DisclosureGroup(isExpanded: $notebook.isExpanded) {
-                        NotebooksListGroupView(notebooks: $notebook.children.unwrap()!)
-                    } label: {
-                        RowView(notebook: $notebook)
-                    }
-                } else {
+                } label: {
                     RowView(notebook: $notebook)
-//                        .opacity(isDragging && draggedItem == notebook ? 0.2 : 1.0)
-//                        .foregroundColor(isDragging && draggedItem == notebook ? .red : .orange)
-//                        .onDrag({
-//                            makeItemProvider(user: notebook)
-//                        }, preview: {
-//                            Text("Drag it-3r : \(notebook.name)")
-//                                .background(Color.orange)
-//                                .frame(width: 200, height: 30)
-//                        })
-//                        .onDrop(of: [.plainText], delegate: makeDropDelegate(user: notebook) )
-                       // .opacity(notebook.canShow ? 1 : 0)
+//                                .foregroundColor(notebook.canShow ? .primary : .gray)
+                        .opacity(notebook.canShow ? 1 : 0.4)
                 }
+            } else {
+                RowView(notebook: $notebook)
+//                            .foregroundColor(notebook.canShow ? .primary : .gray)
+                    .opacity(notebook.canShow ? 1 : 0.3)
             }
         }
         .onMove(perform: move) 
@@ -462,6 +477,7 @@ struct NotebooksListGroupView: View {
 }
 
 
+
 struct RowView: View {
     @EnvironmentObject var usersState: NotebooksListState
     @Binding var notebook: NotebookM
@@ -516,7 +532,7 @@ struct RowView: View {
         }
         .contextMenu {
             
-            if notebook.isDeleted {
+            if usersState.listSourceType == .deletedItems {
                 Group {
                     // restore
                     Button(action: {
@@ -628,3 +644,77 @@ struct RowView: View {
     }
     
 }
+
+// MARK: - Deleted Notebooks
+
+struct DeletedNotebooksListGroupView: View {
+    @EnvironmentObject var usersState: NotebooksListState
+    @Binding var notebooks: [NotebookM]
+    @State private var isTargeted: Bool = true
+    var body: some View {
+        ForEach($notebooks, id: \.self) { $notebook in
+            if notebook.containChildNotebooks {
+                DisclosureGroup(isExpanded: $notebook.isExpanded) {
+                    DeletedNotebooksListGroupView(notebooks: $notebook.children.unwrap()!)
+                } label: {
+                    DeletedRowView(notebook: $notebook)
+                }
+            } else {
+                DeletedRowView(notebook: $notebook)
+            }
+        }
+    }
+}
+
+
+struct DeletedRowView: View {
+    @EnvironmentObject var usersState: NotebooksListState
+    @Binding var notebook: NotebookM
+    
+    var body: some View {
+        HStack {
+            Text(notebook.name)
+        }
+        
+        
+//        .contextMenu {
+//
+//            Group {
+//                // restore
+//                Button(action: {
+////                        usersState.insertBelow(ref: notebook.notebookRef)
+//                }) {
+//                    Label("Restore", image: "arrow.uturn.backward")
+////                        HStack {
+////                            Text("Restore")
+////                            Spacer()
+////                            Image(systemName: "arrow.uturn.backward")
+////                                .renderingMode(.original)
+////                        }
+//                }
+//
+//                // trash
+//                Button(role: .destructive, action: {
+////                    usersState.deletingNotebook = notebook
+//////                    usersState.presentDeleteConfirmation = true
+////
+////                    usersState.deleteNotebookNew(ref: notebook.notebookRef)
+////                    usersState.deletingNotebook = nil
+//
+//                }) {
+//                    HStack {
+//                        Text("Delete")
+//                        Spacer()
+//                        Image(systemName: "trash")
+//                            .renderingMode(.original)
+//                    }
+//                }
+//            }
+//        }
+        
+        
+        
+    }
+    
+}
+

@@ -13,9 +13,8 @@ import Combine
 struct NotebooksHierarchy {
     
     var notes: [NotebookM]
-    var deletedNotes: [NotebookM] = []
     
-    static func constructHierarchy(notebooks: [Notebook], expandedIds: Set<String>, isDeleted: Bool = false) -> [NotebookM] {
+    static func constructHierarchy(notebooks: [Notebook], expandedIds: Set<String>) -> [NotebookM] {
 //        print(#function)
         var noteList = [NotebookM]()
         
@@ -30,10 +29,9 @@ struct NotebooksHierarchy {
             // - create notebookM
             var note = NotebookM(notebook: notebook)
             note.isExpanded = expandedIds.contains(note.id.uuidString)
-            note.isDeleted = isDeleted
             
             if let children = notebook.children {
-                note.children = constructHierarchy(notebooks: children, expandedIds: expandedIds, isDeleted: isDeleted)
+                note.children = constructHierarchy(notebooks: children, expandedIds: expandedIds)
             }
             
             noteList.append(note)
@@ -72,8 +70,6 @@ struct NotebookM: Identifiable {
         }
     }
     
-    var isDeleted = false
-    
     private(set) var notebookRef: Notebook
     
     init(notebook: Notebook) {
@@ -109,6 +105,16 @@ extension NotebookM: Equatable, Hashable {
     }
 }
 
+enum NotebooksFilterType {
+    case none
+    case searching
+    case recentlyModified
+}
+
+enum ListSourceType: Equatable {
+    case notebooks(NotebooksFilterType)
+    case deletedItems
+}
 
 class NotebooksListState: ObservableObject {
     
@@ -125,15 +131,23 @@ class NotebooksListState: ObservableObject {
     
     @Published var notesHierarchy: NotebooksHierarchy
     
+    @Published var listSourceType = ListSourceType.notebooks(.none)
+    
     @Published var searchText: String = ""
     @Published var isSearching = false
     @Published var searchResultCount: Int = 0
     
-    @Published var isShowingRecent = false
+//    @Published var isShowingRecent = false
+    @Published var modifiedResultCount: Int = 0
+    
+//    @Published var isShowingRecentlyDeleted = false
+    @Published var deletedResultCount: Int = 0
     
     @Published var presentDeleteConfirmation = false
     @Published var deletingNotebook: NotebookM?
     
+    
+    var backupNotes = [NotebookM]()
 //    private var backupNotebooks = [NotebookM]()
 //    private var backupExpandedIds = Set<String>()
     
@@ -154,8 +168,6 @@ class NotebooksListState: ObservableObject {
         
         // construct deleted notebooks list
         deletedNotebooks = notebookBusiness.retrieveDeletedNotebooks() ?? []
-        let deletednotesList = NotebooksHierarchy.constructHierarchy(notebooks: deletedNotebooks, expandedIds: expandedIds, isDeleted: true)
-        notesHierarchy.deletedNotes = deletednotesList
                 
         // observe after initial hierarcy is constructed
         NotificationCenter.default.addObserver(self, selector: #selector(listenExpandCollapseNotification(_:)), name: .ExpandCollapseNotification, object: nil)
@@ -381,9 +393,9 @@ class NotebooksListState: ObservableObject {
         // add to deleted list
         deletedNotebooks.insert(notebook, at: 0)
         
-        // reconstruct list
-        let deletedNotesList = NotebooksHierarchy.constructHierarchy(notebooks: deletedNotebooks, expandedIds: expandedIds)
-        notesHierarchy.deletedNotes = deletedNotesList
+//        // reconstruct list
+//        let deletedNotesList = NotebooksHierarchy.constructHierarchy(notebooks: deletedNotebooks, expandedIds: expandedIds)
+//        notesHierarchy.deletedNotes = deletedNotesList
         
         // persist
         notebookBusiness.persist(notebooks: notebooks)
@@ -586,7 +598,7 @@ extension NotebooksListState {
     }
     
     var activeSearch: Bool {
-        (isSearching && searchText.count > 1) || isShowingRecent
+        isSearching && searchText.count > 1
     }
     
     func searchItems(_ text: String) {
@@ -661,11 +673,12 @@ extension NotebooksListState {
 extension NotebooksListState {
     
     var recentButtonIcon: String {
-        isShowingRecent ? "clock.fill" : "clock"
+//        isShowingRecent ? "clock.fill" : "clock"
+        listSourceType == .notebooks(.recentlyModified) ? "clock.arrow.circlepath" : "clock.arrow.circlepath"
     }
     
     func showHideRecentlyModified() {
-        if isShowingRecent {
+        if listSourceType == .notebooks(.recentlyModified) {
             hideRecentlyModified()
         } else {
             showRecentlyModified()
@@ -673,13 +686,12 @@ extension NotebooksListState {
     }
     
     func hideRecentlyModified() {
-        isShowingRecent = false
+        listSourceType = .notebooks(.none)
     }
     
     func showRecentlyModified() {
         
         let recentItems = recentNotebooks.items
-        
         var resultsCount = 0
         
         func canAddNotebook(note: inout NotebookM) -> Bool {
@@ -727,8 +739,47 @@ extension NotebooksListState {
         }
 //            print("NEW LIST")
         notesHierarchy.notes = notebooksList
-        searchResultCount = resultsCount
+        modifiedResultCount = resultsCount
         
-        isShowingRecent = true
+        listSourceType = .notebooks(.recentlyModified)
     }
+}
+
+// MARK: - recently deleted
+extension NotebooksListState {
+    
+    var recentlyDeletedButtonIcon: String {
+//        isShowingRecentlyDeleted ? "trash.fill" : "trash.square"
+        listSourceType == .deletedItems ? "trash" : "trash"
+    }
+    
+    
+    func showHideRecentlyDeleted() {
+        
+        if listSourceType == .deletedItems {
+            hideRecentlyDeleted()
+        } else {
+            showRecentlyDeleted()
+        }
+    }
+    
+    func hideRecentlyDeleted() {
+        listSourceType = .notebooks(.none)
+        notesHierarchy.notes = backupNotes
+        backupNotes = [NotebookM]()
+    }
+    
+    func showRecentlyDeleted() {
+        // backup normal hierarchy
+        backupNotes = notesHierarchy.notes
+        
+        let deletednotesList = NotebooksHierarchy.constructHierarchy(notebooks: deletedNotebooks, expandedIds: [])
+        notesHierarchy.notes = deletednotesList
+        
+        deletedResultCount = deletednotesList.count
+        
+        listSourceType = .deletedItems
+    }
+    
+    
 }

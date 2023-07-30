@@ -18,11 +18,16 @@ import Combine
 
 struct NotebookEditorView: View {
     
+    var listDisplayState: ListSourceType
     var notebookM: NotebookM
     @ObservedObject var editorState: NotebookEditorState
 
     @State var autoSaveTimer: Timer.TimerPublisher = Timer.publish(every: 5, on: .main, in: .common)
     @State var connectedTimer: Cancellable? = nil
+    
+    var isDeleted: Bool {
+        listDisplayState == .deletedItems
+    }
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -38,7 +43,7 @@ struct NotebookEditorView: View {
                 }
                 Spacer()
             } else {
-                MarkdownEditorView(fileName: notebookM.name, isDeleted: notebookM.isDeleted, contentEditedDate: $editorState.contentEditedDate, theme: $editorState.theme, baseContent: $editorState.baseContent, handler: { getText in
+                MarkdownEditorView(fileName: notebookM.name, isDeleted: isDeleted, contentEditedDate: $editorState.contentEditedDate, theme: $editorState.theme, baseContent: $editorState.baseContent, handler: { getText in
                     // attach ref.
                     editorState.getTextHandler = getText
                 })

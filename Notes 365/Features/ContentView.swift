@@ -41,33 +41,32 @@ struct ContentWrapperView: View {
                 .task {
                     do {
                         
-                        statusMessage = "checking iCloud settings"
-                        try chooseEnv.setEnviromment(with: .cloud)
-//                        statusMessage = "moving existing data to iCloud"
-//#if targetEnvironment(macCatalyst)
-//                        await chooseEnv.checkOldDataSync()
-//#endif
-                        // old data compatability
-                        /*
-                         if cloud folder is empty
-                         - new - first time user
-                         - new - new device - have to pull from cloud
-                         - local might contain old data
-                         
-                         copy from local to cloud folder and while doing convert to new folder structures.
-                         */
+                        #if DEBUG
+                        // choose environment
+                        try chooseEnv.setEnviromment(with: .local)
+                        // do any operations
+                        chooseEnv.enableConfigured()
+                        // clean base version
+                        TodayVersionBusiness.cleanBaseVersionIfNeeded()
                         
+                        #else
+                        statusMessage = "checking iCloud settings"
+                        // choose environment
+                        try chooseEnv.setEnviromment(with: .cloud)
                         statusMessage = "iCloud sync.."
                         
 //                        chooseEnv.downloaodCloudDocuments(completion: {
 //                            // do any operations
 //                            chooseEnv.enableConfigured()
 //                        })
+                        
                         // do any operations
                         chooseEnv.enableConfigured()
-                        
                         // clean base version
                         TodayVersionBusiness.cleanBaseVersionIfNeeded()
+                        #endif
+                        
+                        
                         
                     } catch let error {
                         errorDetail = error
@@ -292,7 +291,7 @@ struct ContentView: View {
                 
                 if selectedNotebookM != nil {
                     // ** binding won't work here.
-                    NotebookEditorView(notebookM: selectedNotebookM!, editorState: editorState)
+                    NotebookEditorView(listDisplayState: notebooksListState.listSourceType, notebookM: selectedNotebookM!, editorState: editorState)
                 } else {
                     Text("No notebook selected")
                 }

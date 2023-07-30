@@ -37,3 +37,22 @@ are you testing business layer or state models?
 
 
 # Output
+
+
+for results count
+
+
+
+all - hidden
+search results
+recently modified
+deleted items
+
+notebooks + all
+notebooks + search
+notebooks + recently modified
+
+recently deleted + all
+
+
+can we hide or remove - searchable
