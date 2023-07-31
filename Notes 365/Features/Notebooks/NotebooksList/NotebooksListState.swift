@@ -153,6 +153,10 @@ class NotebooksListState: ObservableObject {
     
     let notebooksPath = Constants.notebooksFolderName
     
+    var canEnableDone: Bool {
+        listSourceType == .deletedItems || listSourceType == .notebooks(.recentlyModified)
+    }
+    
 //    @Published var isLoaded = false
     
     init() {

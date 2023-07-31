@@ -279,20 +279,61 @@ struct SearchedListView: View {
         .scrollDismissesKeyboard(.interactively)
         .toolbar {
             
-            Button {
-                usersState.showHideRecentlyModified()
-            } label: {
-                Image(systemName: usersState.recentButtonIcon)
-                    .foregroundColor(usersState.listSourceType == .notebooks(.recentlyModified) ? Color.green : Color.accentColor)
+            if usersState.canEnableDone {
+                // Done button change
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        if usersState.listSourceType == .deletedItems {
+                            usersState.hideRecentlyDeleted()
+                        } else if usersState.listSourceType == .notebooks(.recentlyModified) {
+                            usersState.hideRecentlyModified()
+                        }
+                    }
+                }
+            } else {
+                // menu options
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Menu {
+                        Button {
+                            usersState.showRecentlyModified()
+                        } label: {
+                            Text("Recently Modified")
+                        }
+                        .foregroundColor(.primary)
+                        
+                        Button {
+                            usersState.showRecentlyDeleted()
+                        } label: {
+                            Text("Deleted Notebooks")
+                        }
+                        .foregroundColor(.primary)
+                        
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                    }//.disabled(usersState.canEnableDone)
+                }
             }
-            .disabled(usersState.listSourceType == ListSourceType.deletedItems ? true : false)
-
-            Button {
-                usersState.showHideRecentlyDeleted()
-            } label: {
-                Image(systemName: usersState.recentlyDeletedButtonIcon)
-                    .foregroundColor(usersState.listSourceType == .deletedItems ? Color.green : Color.accentColor)
-            }
+            
+            
+            
+            
+            
+            
+//
+//            Button {
+//                usersState.showHideRecentlyModified()
+//            } label: {
+//                Image(systemName: usersState.recentButtonIcon)
+//                    .foregroundColor(usersState.listSourceType == .notebooks(.recentlyModified) ? Color.green : Color.accentColor)
+//            }
+//            .disabled(usersState.listSourceType == ListSourceType.deletedItems ? true : false)
+//
+//            Button {
+//                usersState.showHideRecentlyDeleted()
+//            } label: {
+//                Image(systemName: usersState.recentlyDeletedButtonIcon)
+//                    .foregroundColor(usersState.listSourceType == .deletedItems ? Color.green : Color.accentColor)
+//            }
         }
         .onChange(of: isSearching) { newValue in
             // on search active
