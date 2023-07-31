@@ -14,9 +14,7 @@ struct NotebooksListView: View {
     @EnvironmentObject var usersState: NotebooksListState
     @Binding var selectedNotebook: NotebookM?
     @Environment(\.isSearching) private var isSearching
-//    @State private var presentDeleteConfirmation = false
-//    @State private var deletingNotebook: NotebookM?
-    
+
     var body: some View {
         
 //        Text("Loading..")
@@ -434,24 +432,43 @@ struct NotebooksListGroupView: View {
     @Binding var notebooks: [NotebookM]
     @State private var isTargeted: Bool = true
     var body: some View {
-        ForEach($notebooks, id: \.self) { $notebook in
-            if notebook.containChildNotebooks {
-                DisclosureGroup(isExpanded: $notebook.isExpanded) {
-                    NotebooksListGroupView(notebooks: $notebook.children.unwrap()!)
-//                                .foregroundColor(notebook.canShow ? .primary : .gray)
-//                                .opacity(notebook.canShow ? 1 : 0.3)
-                } label: {
+        
+        if usersState.listSourceType == .notebooks(.none) ||
+            (usersState.listSourceType == .notebooks(.searching) && usersState.activeSearch == false) {
+            ForEach($notebooks, id: \.self) { $notebook in
+                if notebook.containChildNotebooks {
+                    DisclosureGroup(isExpanded: $notebook.isExpanded) {
+                        NotebooksListGroupView(notebooks: $notebook.children.unwrap()!)
+                    } label: {
+                        RowView(notebook: $notebook)
+                    }
+                } else {
                     RowView(notebook: $notebook)
-//                                .foregroundColor(notebook.canShow ? .primary : .gray)
-                        .opacity(notebook.canShow ? 1 : 0.4)
                 }
-            } else {
-                RowView(notebook: $notebook)
-//                            .foregroundColor(notebook.canShow ? .primary : .gray)
-                    .opacity(notebook.canShow ? 1 : 0.3)
             }
+            .onMove(perform: move) 
+        } else {
+            ForEach($notebooks, id: \.self) { $notebook in
+                if notebook.containChildNotebooks {
+                    DisclosureGroup(isExpanded: $notebook.isExpanded) {
+                        NotebooksListGroupView(notebooks: $notebook.children.unwrap()!)
+    //                                .foregroundColor(notebook.canShow ? .primary : .gray)
+    //                                .opacity(notebook.canShow ? 1 : 0.3)
+                    } label: {
+                        RowView(notebook: $notebook)
+    //                                .foregroundColor(notebook.canShow ? .primary : .gray)
+                            .opacity(notebook.canShow ? 1 : 0.4)
+                    }
+                } else {
+                    RowView(notebook: $notebook)
+    //                            .foregroundColor(notebook.canShow ? .primary : .gray)
+                        .opacity(notebook.canShow ? 1 : 0.3)
+                }
+            }
+            .onMove(perform: move)
         }
-        .onMove(perform: move) 
+        
+        
 //        .onDrop(of: [.text], isTargeted: $isTargeted, perform: { providers in
 //            print("ON DROP")
 //            return true

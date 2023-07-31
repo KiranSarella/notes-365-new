@@ -146,10 +146,8 @@ class NotebooksListState: ObservableObject {
     @Published var presentDeleteConfirmation = false
     @Published var deletingNotebook: NotebookM?
     
-    
-    var backupNotes = [NotebookM]()
-//    private var backupNotebooks = [NotebookM]()
-//    private var backupExpandedIds = Set<String>()
+    private var backupNotebooks = [NotebookM]()
+    private var backupExpandedIds = Set<String>()
     
     let notebooksPath = Constants.notebooksFolderName
     
@@ -602,7 +600,7 @@ extension NotebooksListState {
     }
     
     var activeSearch: Bool {
-        isSearching && searchText.count > 1
+        isSearching && searchText.count >= 2
     }
     
     func searchItems(_ text: String) {
@@ -681,19 +679,25 @@ extension NotebooksListState {
         listSourceType == .notebooks(.recentlyModified) ? "clock.arrow.circlepath" : "clock.arrow.circlepath"
     }
     
-    func showHideRecentlyModified() {
-        if listSourceType == .notebooks(.recentlyModified) {
-            hideRecentlyModified()
-        } else {
-            showRecentlyModified()
-        }
-    }
+//    func showHideRecentlyModified() {
+//        if listSourceType == .notebooks(.recentlyModified) {
+//            hideRecentlyModified()
+//        } else {
+//            showRecentlyModified()
+//        }
+//    }
     
     func hideRecentlyModified() {
+        
+//        expandedIds = backupExpandedIds
+//        backupNotebooks = []
+        
         listSourceType = .notebooks(.none)
     }
     
     func showRecentlyModified() {
+        // as notebooks can be modify, only backup expanded ids
+//        backupExpandedIds = expandedIds
         
         let recentItems = recentNotebooks.items
         var resultsCount = 0
@@ -735,7 +739,6 @@ extension NotebooksListState {
         }
         
         var notebooksList = notesHierarchy.notes
-//            var expandedIds = Set<String>()
         
         for i in 0..<notebooksList.count {
             _ = canAddNotebook(note: &notebooksList[i])
@@ -758,24 +761,30 @@ extension NotebooksListState {
     }
     
     
-    func showHideRecentlyDeleted() {
-        
-        if listSourceType == .deletedItems {
-            hideRecentlyDeleted()
-        } else {
-            showRecentlyDeleted()
-        }
-    }
+//    func showHideRecentlyDeleted() {
+//
+//        if listSourceType == .deletedItems {
+//            hideRecentlyDeleted()
+//        } else {
+//            showRecentlyDeleted()
+//        }
+//    }
     
     func hideRecentlyDeleted() {
+        
+        expandedIds = backupExpandedIds
+        notesHierarchy.notes = backupNotebooks
+        
+        backupNotebooks = [NotebookM]()
+        backupExpandedIds = []
+        
         listSourceType = .notebooks(.none)
-        notesHierarchy.notes = backupNotes
-        backupNotes = [NotebookM]()
     }
     
     func showRecentlyDeleted() {
-        // backup normal hierarchy
-        backupNotes = notesHierarchy.notes
+        // backup normal hierarchy state
+        backupExpandedIds = expandedIds
+        backupNotebooks = notesHierarchy.notes
         
         let deletednotesList = NotebooksHierarchy.constructHierarchy(notebooks: deletedNotebooks, expandedIds: [])
         notesHierarchy.notes = deletednotesList
@@ -784,6 +793,4 @@ extension NotebooksListState {
         
         listSourceType = .deletedItems
     }
-    
-    
 }

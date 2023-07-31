@@ -16,7 +16,8 @@ class Notebook: Identifiable, Codable {
         }
     }
     var children: [Notebook]?
-    unowned var parent: Notebook?
+//    unowned var parent: Notebook?
+    var parent: Notebook?
     
 //    var document: MarkdownDocument?
     var isResolvingConflicts = false
