@@ -22,6 +22,8 @@ class NotebooksListBusiness {
     var basePathURL: URL
     private var syncDate: Date = Date()
     
+    private let deleteDays = 30
+    
     let notebooksPath = Constants.notebooksFolderName
     
     init(_ basePathURL: URL) {
@@ -233,7 +235,7 @@ extension NotebooksListBusiness {
     
 }
 
-// MARK: - Recently Deleted
+// MARK: - Deleted Notebooks
 extension NotebooksListBusiness {
     
     func restore(notebook: Notebook) {
@@ -278,6 +280,64 @@ extension NotebooksListBusiness {
             print("Failed reading from URL: \(plistURL), Error: " + error.localizedDescription)
         }
         return nil
+    }
+    
+    func deleteDateExceededNotebooks(deletedNotebooks: inout [Notebook]) {
+        // delete files that are 30 days old
+        
+        var oldNotebooks = [Notebook]()
+        var remainingNotebooks = [Notebook]()
+        
+        for notebook in deletedNotebooks {
+            let deletedDate = notebook.deletedDate!
+            if numberOfDaysBetween(deletedDate, and: Date()) > deleteDays {
+                oldNotebooks.append(notebook)
+            } else {
+                remainingNotebooks.append(notebook)
+            }
+        }
+        
+        // pyisically delete items
+        for notebook in oldNotebooks {
+            guard let deletedDate = notebook.deletedDate else { return }
+            if numberOfDaysBetween(deletedDate, and: Date()) > deleteDays {
+                delete(path: notebook.fileURL)
+                // nested items delete
+                if notebook.children != nil && notebook.children!.isEmpty == false {
+                    deleteNestedPerminantly(deletedNotebooks: notebook.children!)
+                }
+            }
+        }
+        
+        deletedNotebooks = remainingNotebooks
+        
+        persistDeleted(notebooks: deletedNotebooks)
+    }
+    
+    func deleteNestedPerminantly(deletedNotebooks: [Notebook]) {
+        for notebook in deletedNotebooks {
+            delete(path: notebook.fileURL)
+            // nested items delete
+            if notebook.children != nil && notebook.children!.isEmpty == false {
+                deleteNestedPerminantly(deletedNotebooks: notebook.children!)
+            }
+        }
+    }
+    
+    func delete(path: URL) {
+        // delete all files including nested files
+        do {
+            print("deleting: ", path.absoluteString)
+            try FileManager.default.removeItem(at: path)
+        } catch (let error) {
+            print(error)
+        }
+    }
+    
+    func numberOfDaysBetween(_ from: Date, and to: Date) -> Int {
+        let numberOfDays = Calendar.current.dateComponents([.day], from: from, to: to)
+        
+        return numberOfDays.day!
     }
     
 }

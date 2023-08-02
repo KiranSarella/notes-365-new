@@ -50,6 +50,7 @@ struct ContentWrapperView: View {
                         TodayVersionBusiness.cleanBaseVersionIfNeeded()
                         
                         #else
+                        
                         statusMessage = "checking iCloud settings"
                         // choose environment
                         try chooseEnv.setEnviromment(with: .cloud)

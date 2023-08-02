@@ -15,6 +15,8 @@ struct NotebooksListView: View {
     @Binding var selectedNotebook: NotebookM?
     @Environment(\.isSearching) private var isSearching
 
+    @State private var appearDate = Date()
+    
     var body: some View {
         
 //        Text("Loading..")
@@ -46,6 +48,13 @@ struct NotebooksListView: View {
     //                                    .listStyle(SidebarListStyle())
                             .navigationTitle("Notebooks")
                             .navigationBarTitleDisplayMode(.large)
+                        
+                        if usersState.listSourceType == .deletedItems {
+                            Text("Notebooks will be permanently deleted after 30 days.")
+                                .font(.caption2)
+                                .foregroundColor(.gray)
+                        }
+                            
                     } else {
                         SearchedListView(selectedNotebook: $selectedNotebook)
                             .padding(.bottom, 20)
@@ -102,12 +111,15 @@ struct NotebooksListView: View {
             }
             
         }
-        
         .onAppear {
             if isSearching {
                 return
             }
             usersState.reloadNotebooksList()
+            
+            if appearDate != Date() {
+                usersState.checkOldItemsToDelete()
+            }
         }
         .onChange(of: icloudSyncing) { newValue in
             if newValue == true {

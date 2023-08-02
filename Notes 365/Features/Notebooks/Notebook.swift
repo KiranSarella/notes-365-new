@@ -16,6 +16,10 @@ class Notebook: Identifiable, Codable {
         }
     }
     var children: [Notebook]?
+    
+    var createdDate: Date = Date()
+    var deletedDate: Date? = nil
+    
 //    unowned var parent: Notebook?
     var parent: Notebook?
     
@@ -37,6 +41,17 @@ class Notebook: Identifiable, Codable {
         let name = try! container.decode(String.self, forKey: .name)
         
         self.init(id: id, name: name)
+        
+        do {
+            createdDate = try container.decode(Date.self, forKey: .createdDate)
+        } catch {
+            let date = (try? FileManager.default.attributesOfItem(atPath: fileURL.path(percentEncoded: false)))?[.creationDate] as? Date
+            
+            createdDate = date ?? Date()
+        }
+        
+        
+        deletedDate = try? container.decode(Date.self, forKey: .deletedDate)
         
         children = try? container.decode([Notebook].self, forKey: .friends)
         
@@ -79,6 +94,8 @@ extension Notebook {
         case id
         case name
         case friends
+        case createdDate
+        case deletedDate
     }
 
     func encode(to encoder: Encoder) throws {
@@ -87,6 +104,8 @@ extension Notebook {
         try container.encode(id, forKey: .id)
         try container.encode(name, forKey: .name)
         try container.encode(children, forKey: .friends)
+        try container.encode(createdDate, forKey: .createdDate)
+        try container.encode(deletedDate, forKey: .deletedDate)
     }
 }
 

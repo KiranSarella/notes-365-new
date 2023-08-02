@@ -170,7 +170,8 @@ class NotebooksListState: ObservableObject {
         
         // construct deleted notebooks list
         deletedNotebooks = notebookBusiness.retrieveDeletedNotebooks() ?? []
-                
+        checkOldItemsToDelete()
+        
         // observe after initial hierarcy is constructed
         NotificationCenter.default.addObserver(self, selector: #selector(listenExpandCollapseNotification(_:)), name: .ExpandCollapseNotification, object: nil)
         
@@ -393,6 +394,7 @@ class NotebooksListState: ObservableObject {
             notesHierarchy.notes.removeAll(where: { $0.id == notebook.id })
         }
         // add to deleted list
+        notebook.deletedDate = Date()
         deletedNotebooks.insert(notebook, at: 0)
         
 //        // reconstruct list
@@ -792,5 +794,11 @@ extension NotebooksListState {
         deletedResultCount = deletednotesList.count
         
         listSourceType = .deletedItems
+    }
+    
+    func checkOldItemsToDelete() {
+        
+        // delete date exceeded notebooks
+        notebookBusiness.deleteDateExceededNotebooks(deletedNotebooks: &deletedNotebooks)
     }
 }
