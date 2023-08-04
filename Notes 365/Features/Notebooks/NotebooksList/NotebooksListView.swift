@@ -15,6 +15,7 @@ struct NotebooksListView: View {
     @Binding var selectedNotebook: NotebookM?
     @Environment(\.isSearching) private var isSearching
 
+    @State private var firstTimeAppear = true
     @State private var appearDate = Date()
     
     var body: some View {
@@ -26,10 +27,6 @@ struct NotebooksListView: View {
                 AddNotesView()
                     .padding([.top], -100)
                     .environmentObject(usersState)
-                    .onAppear {
-                        // try again
-                        usersState.reloadNotebooksList()
-                    }
             } else {
                 VStack {
                     //                List(selection: $selectedNotebook) {
@@ -112,10 +109,11 @@ struct NotebooksListView: View {
             
         }
         .onAppear {
-            if isSearching {
-                return
+            if firstTimeAppear {
+                usersState.reloadNotebooksList()
+                
+                firstTimeAppear = false
             }
-            usersState.reloadNotebooksList()
             
             if appearDate != Date() {
                 usersState.checkOldItemsToDelete()
@@ -464,17 +462,13 @@ struct NotebooksListGroupView: View {
                 if notebook.containChildNotebooks {
                     DisclosureGroup(isExpanded: $notebook.isExpanded) {
                         NotebooksListGroupView(notebooks: $notebook.children.unwrap()!)
-    //                                .foregroundColor(notebook.canShow ? .primary : .gray)
-    //                                .opacity(notebook.canShow ? 1 : 0.3)
                     } label: {
                         RowView(notebook: $notebook)
-    //                                .foregroundColor(notebook.canShow ? .primary : .gray)
                             .opacity(notebook.canShow ? 1 : 0.4)
                     }
                 } else {
                     RowView(notebook: $notebook)
-    //                            .foregroundColor(notebook.canShow ? .primary : .gray)
-                        .opacity(notebook.canShow ? 1 : 0.3)
+                        .opacity(notebook.canShow ? 1 : 0.4)
                 }
             }
             .onMove(perform: move)

@@ -130,6 +130,7 @@ struct ContentView: View {
     private var todayVersionSync = TodayVersionSync(basePathURL: EnvironmentState.shared.basePathURL)
     private var notebooksContentSync = NotebooksContentSync(basePathURL: EnvironmentState.shared.basePathURL)
     private var recentListSync = RecentListSync(basePathURL: EnvironmentState.shared.basePathURL)
+    private var deletedListSync = DeletedListSync(basePathURL: EnvironmentState.shared.basePathURL)
     
     var bottomViewBackgroundColor: Color {
         if UIDevice.current.userInterfaceIdiom == .phone {
@@ -169,6 +170,8 @@ struct ContentView: View {
                             todayVersionSync.initialGatheringSync()
                             // recent list
                             recentListSync.initialGatheringSync()
+                            // deleted list
+                            deletedListSync.initialGatheringSync()
                         } label: {
                             HStack {
                                 Image(systemName: "arrow.triangle.2.circlepath")

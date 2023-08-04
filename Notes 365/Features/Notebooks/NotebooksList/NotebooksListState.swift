@@ -155,14 +155,15 @@ class NotebooksListState: ObservableObject {
         listSourceType == .deletedItems || listSourceType == .notebooks(.recentlyModified)
     }
     
-//    @Published var isLoaded = false
+    var firstTimeAppear = true
     
     init() {
+        
         // get saved expandedIds
         if let expandedList = UserDefaults.standard.object(forKey: "notes365.expandedIds") as? [String] {
             expandedIds = Set(expandedList)
         }
-        
+        sleep(10)
         // create notesHierarchy with actual notebook objects
         notebooks = notebookBusiness.retrieveNotebooks() ?? []
         let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
@@ -219,6 +220,18 @@ class NotebooksListState: ObservableObject {
             let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
             notesHierarchy = NotebooksHierarchy(notes: notesList)
         }
+        
+        // refresh recent list
+        recentNotebooks.populateData()
+    }
+    
+    func forceReload() {
+        // clear
+        notesHierarchy.notes.removeAll()
+        // create notesHierarchy with actual notebook objects
+        notebooks = notebookBusiness.retrieveNotebooks() ?? []
+        let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
+        notesHierarchy = NotebooksHierarchy(notes: notesList)
         
         // refresh recent list
         recentNotebooks.populateData()
@@ -623,38 +636,45 @@ extension NotebooksListState {
             
             func canAddNotebook(note: inout NotebookM) -> Bool {
                 
+                // for expansion: isExpanded
                 // go deep first, if deep return true, then mark current as true
                 // if deep is false, then check current name condition
                 
+                // for canShow:
+                // if name contains search str - true else false
+                
+                
                 // check nested items
-                var childStatus = Set<Bool>()
+                var visibleChildsStatus = Set<Bool>()
+                // if children exists
                 if note.children != nil {
                     let count = note.children!.count
                     for i in 0..<count {
-                        let canAdd = canAddNotebook(note: &note.children![i])
-                        childStatus.insert(canAdd)
+                        let anyVisibleChildren = canAddNotebook(note: &note.children![i])
+                        visibleChildsStatus.insert(anyVisibleChildren)
                     }
                 }
-                if childStatus.contains(true) {
-                    note.canShow = false
-                    note.isExpanded = true
+                // check if search str contains in file name
+                if note.name.lowercased().contains(text.lowercased()) {
+                    note.canShow = true
+                    resultsCount += 1
                 } else {
-                    if note.name.lowercased().contains(text.lowercased()) {
-                        note.canShow = true
-                        note.isExpanded = true
-                        
-                        resultsCount += 1
-                    } else {
-                        note.canShow = false
-                        note.isExpanded = false
-                    }
+                    note.canShow = false
                 }
                 
-                if note.isExpanded {
+                // if any child notebooks are visible, expanded should be yes
+                if visibleChildsStatus.contains(true) {
+                    note.isExpanded = true
+                } else {
+                    note.isExpanded = false
+                }
+                
+                // status is used for parent node
+                if note.isExpanded || note.canShow {
                     return true
                 }
                 
-                return note.canShow
+                return false
             }
             
             var notebooksList = notesHierarchy.notes

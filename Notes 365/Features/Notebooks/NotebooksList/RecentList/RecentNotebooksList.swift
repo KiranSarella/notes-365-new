@@ -8,9 +8,9 @@
 import Foundation
 import Collections
 
-extension Notification.Name {
-    public static let notebookEdited = Notification.Name("com.notes365.notebookEdited")
-}
+//extension Notification.Name {
+//    public static let notebookEdited = Notification.Name("com.notes365.notebookEdited")
+//}
 
 class RecentNotebooksList {
     
