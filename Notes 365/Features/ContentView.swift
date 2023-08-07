@@ -129,7 +129,6 @@ struct ContentView: View {
     private var timelineSync = TimelineSync(basePathURL: EnvironmentState.shared.basePathURL)
     private var todayVersionSync = TodayVersionSync(basePathURL: EnvironmentState.shared.basePathURL)
     private var notebooksContentSync = NotebooksContentSync(basePathURL: EnvironmentState.shared.basePathURL)
-    private var recentListSync = RecentListSync(basePathURL: EnvironmentState.shared.basePathURL)
     private var deletedListSync = DeletedListSync(basePathURL: EnvironmentState.shared.basePathURL)
     
     var bottomViewBackgroundColor: Color {
@@ -168,8 +167,6 @@ struct ContentView: View {
                             timelineSync.initialGatheringSync()
                             // today base version
                             todayVersionSync.initialGatheringSync()
-                            // recent list
-                            recentListSync.initialGatheringSync()
                             // deleted list
                             deletedListSync.initialGatheringSync()
                         } label: {

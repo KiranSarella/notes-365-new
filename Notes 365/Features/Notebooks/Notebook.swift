@@ -19,6 +19,7 @@ class Notebook: Identifiable, Codable {
     
     var createdDate: Date = Date()
     var deletedDate: Date? = nil
+    var modifiedDate: Date = Date()
     
 //    unowned var parent: Notebook?
     var parent: Notebook?
@@ -50,6 +51,13 @@ class Notebook: Identifiable, Codable {
             createdDate = date ?? Date()
         }
         
+        do {
+            modifiedDate = try container.decode(Date.self, forKey: .modifiedDate)
+        } catch {
+            let date = (try? FileManager.default.attributesOfItem(atPath: fileURL.path(percentEncoded: false)))?[.modificationDate] as? Date
+            
+            modifiedDate = date ?? Date()
+        }
         
         deletedDate = try? container.decode(Date.self, forKey: .deletedDate)
         
@@ -95,6 +103,7 @@ extension Notebook {
         case name
         case friends
         case createdDate
+        case modifiedDate
         case deletedDate
     }
 
@@ -105,6 +114,7 @@ extension Notebook {
         try container.encode(name, forKey: .name)
         try container.encode(children, forKey: .friends)
         try container.encode(createdDate, forKey: .createdDate)
+        try container.encode((modifiedDate), forKey: .modifiedDate)
         try container.encode(deletedDate, forKey: .deletedDate)
     }
 }

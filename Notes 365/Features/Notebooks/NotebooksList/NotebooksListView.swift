@@ -105,6 +105,9 @@ struct NotebooksListView: View {
                 .onDisappear {
                     usersState.saveExpandedIds()
                 }
+                .onChange(of: selectedNotebook) { newValue in
+                    usersState.selectedNotebook = newValue
+                }
             }
             
         }

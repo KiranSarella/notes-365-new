@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5C3BFEE62A25D2C100EF572F /* RecentListSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3BFEE52A25D2C100EF572F /* RecentListSync.swift */; };
 		5C4A7B572A7BC626004C436F /* DeletedListSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4A7B562A7BC626004C436F /* DeletedListSync.swift */; };
-		5CA77C112A24A2660030EFB2 /* RecentNotebooksList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA77C102A24A2660030EFB2 /* RecentNotebooksList.swift */; };
 		5CA77C162A24AE220030EFB2 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C152A24AE220030EFB2 /* Collections */; };
 		5CA77C182A24AE220030EFB2 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C172A24AE220030EFB2 /* DequeModule */; };
 		5CA77C1A2A24AE220030EFB2 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C192A24AE220030EFB2 /* OrderedCollections */; };
@@ -149,9 +147,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		5C3BFEE52A25D2C100EF572F /* RecentListSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentListSync.swift; sourceTree = "<group>"; };
 		5C4A7B562A7BC626004C436F /* DeletedListSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletedListSync.swift; sourceTree = "<group>"; };
-		5CA77C102A24A2660030EFB2 /* RecentNotebooksList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentNotebooksList.swift; sourceTree = "<group>"; };
 		5CE055DA2A17C5D3009EB4EA /* DayCalendarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCalendarState.swift; sourceTree = "<group>"; };
 		5CE055DC2A17D547009EB4EA /* DayCalendarView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCalendarView2.swift; sourceTree = "<group>"; };
 		9F09CEB029267FBC00609D99 /* TodayVersionBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayVersionBusiness.swift; sourceTree = "<group>"; };
@@ -297,15 +293,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5C3BFEE42A25D2A500EF572F /* RecentList */ = {
-			isa = PBXGroup;
-			children = (
-				5CA77C102A24A2660030EFB2 /* RecentNotebooksList.swift */,
-				5C3BFEE52A25D2C100EF572F /* RecentListSync.swift */,
-			);
-			path = RecentList;
-			sourceTree = "<group>";
-		};
 		9F188D822930E5E80078D413 /* ThemeDetail */ = {
 			isa = PBXGroup;
 			children = (
@@ -654,7 +641,6 @@
 				9F45BD252920CCCE003DE332 /* NotebooksListView.swift */,
 				9F45BD292920CCCE003DE332 /* NotebooksListState.swift */,
 				5C4A7B562A7BC626004C436F /* DeletedListSync.swift */,
-				5C3BFEE42A25D2A500EF572F /* RecentList */,
 				9FBB0B482A0913B300F407AF /* CommonDropDelegate.swift */,
 				9F6CA8DD2A041D27009061A0 /* ReorderLIst.md */,
 			);
@@ -880,14 +866,12 @@
 				9F45BCA22920CAAE003DE332 /* Notes_365App.swift in Sources */,
 				9F45BD9E2920CE21003DE332 /* SpeechHelpr.swift in Sources */,
 				5C4A7B572A7BC626004C436F /* DeletedListSync.swift in Sources */,
-				5C3BFEE62A25D2C100EF572F /* RecentListSync.swift in Sources */,
 				9FB6C69829275D0600C8EC76 /* FormatOptionsView.swift in Sources */,
 				9F45BD932920CDF9003DE332 /* Mode.swift in Sources */,
 				9F1687CE29ADC2020085A0CA /* PlistDocument.swift in Sources */,
 				9F45BD7F2920CDE0003DE332 /* NotebooksListView.swift in Sources */,
 				9F45BDA12920CE2F003DE332 /* PreferencesView.swift in Sources */,
 				9F45BD8B2920CDE0003DE332 /* EditorView.swift in Sources */,
-				5CA77C112A24A2660030EFB2 /* RecentNotebooksList.swift in Sources */,
 				9FB6C6A929279BEC00C8EC76 /* TimelineBusiness.swift in Sources */,
 				9F45BD6C2920CDCB003DE332 /* NotebooksListBusiness.swift in Sources */,
 				9F8EE98A293EB3090021409E /* CloudDataManager.swift in Sources */,

@@ -289,7 +289,7 @@ extension NotebooksListBusiness {
         var remainingNotebooks = [Notebook]()
         
         for notebook in deletedNotebooks {
-            let deletedDate = notebook.deletedDate!
+            guard let deletedDate = notebook.deletedDate else { return }
             if numberOfDaysBetween(deletedDate, and: Date()) > deleteDays {
                 oldNotebooks.append(notebook)
             } else {

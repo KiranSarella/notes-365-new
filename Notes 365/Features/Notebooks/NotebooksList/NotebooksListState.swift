@@ -121,7 +121,6 @@ class NotebooksListState: ObservableObject {
     static let shared: NotebooksListState = NotebooksListState()
     
     let notebookBusiness = NotebooksListBusiness(EnvironmentState.shared.basePathURL)
-    let recentNotebooks = RecentNotebooksList(EnvironmentState.shared.basePathURL)
     
     var subscription: Set<AnyCancellable> = []
     var expandedIds = Set<String>()
@@ -151,6 +150,8 @@ class NotebooksListState: ObservableObject {
     
     let notebooksPath = Constants.notebooksFolderName
     
+    var selectedNotebook: NotebookM?
+    
     var canEnableDone: Bool {
         listSourceType == .deletedItems || listSourceType == .notebooks(.recentlyModified)
     }
@@ -177,6 +178,12 @@ class NotebooksListState: ObservableObject {
         NotificationCenter.default.addObserver(self, selector: #selector(listenExpandCollapseNotification(_:)), name: .ExpandCollapseNotification, object: nil)
         
         setupSearchText()
+        
+        registerNotebookChangesNotification()
+    }
+    
+    deinit {
+        removeNotebookChangesNotification()
     }
     
     @MainActor
@@ -220,9 +227,6 @@ class NotebooksListState: ObservableObject {
             let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
             notesHierarchy = NotebooksHierarchy(notes: notesList)
         }
-        
-        // refresh recent list
-        recentNotebooks.populateData()
     }
     
     func forceReload() {
@@ -232,9 +236,6 @@ class NotebooksListState: ObservableObject {
         notebooks = notebookBusiness.retrieveNotebooks() ?? []
         let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
         notesHierarchy = NotebooksHierarchy(notes: notesList)
-        
-        // refresh recent list
-        recentNotebooks.populateData()
     }
     
     func saveExpandedIds() {
@@ -447,6 +448,12 @@ class NotebooksListState: ObservableObject {
         notebookBusiness.persist(notebooks: notebooks)
     }
     
+    func updateModifiedDate(for notebook: Notebook) {
+        notebook.modifiedDate = Date()
+        // persist changes
+        notebookBusiness.persist(notebooks: notebooks)
+    }
+    
     func move(notebooksM: inout [NotebookM], from source: IndexSet, to destination: Int) {
         // move references
         if notebooksM.first?.notebookRef.parent?.children != nil {
@@ -625,13 +632,9 @@ extension NotebooksListState {
         }
         
         if text.count == 0 {
-//            notesHierarchy.notes = backupNotebooks
             searchResultCount = 0
         } else {
-            //            usersDB.notes = backupNotebooks.filter { note in
-            //                return note.name.lowercased().contains(text.lowercased())
-            //            }
-            
+
             var resultsCount = 0
             
             func canAddNotebook(note: inout NotebookM) -> Bool {
@@ -678,13 +681,11 @@ extension NotebooksListState {
             }
             
             var notebooksList = notesHierarchy.notes
-//            var expandedIds = Set<String>()
             
             for i in 0..<notebooksList.count {
                 _ = canAddNotebook(note: &notebooksList[i])
-//                print("checked \(i)")
             }
-//            print("NEW LIST")
+            // update
             notesHierarchy.notes = notebooksList
             searchResultCount = resultsCount
         }
@@ -701,76 +702,89 @@ extension NotebooksListState {
         listSourceType == .notebooks(.recentlyModified) ? "clock.arrow.circlepath" : "clock.arrow.circlepath"
     }
     
-//    func showHideRecentlyModified() {
-//        if listSourceType == .notebooks(.recentlyModified) {
-//            hideRecentlyModified()
-//        } else {
-//            showRecentlyModified()
-//        }
-//    }
-    
     func hideRecentlyModified() {
-        
-//        expandedIds = backupExpandedIds
-//        backupNotebooks = []
-        
         listSourceType = .notebooks(.none)
     }
     
     func showRecentlyModified() {
         // as notebooks can be modify, only backup expanded ids
-//        backupExpandedIds = expandedIds
         
-        let recentItems = recentNotebooks.items
         var resultsCount = 0
         
         func canAddNotebook(note: inout NotebookM) -> Bool {
             
+            // for expansion: isExpanded
             // go deep first, if deep return true, then mark current as true
             // if deep is false, then check current name condition
             
+            // for canShow:
+            // if name contains search str - true else false
+            
+            
             // check nested items
-            var childStatus = Set<Bool>()
+            var visibleChildsStatus = Set<Bool>()
+            // if children exists
             if note.children != nil {
                 let count = note.children!.count
                 for i in 0..<count {
-                    let canAdd = canAddNotebook(note: &note.children![i])
-                    childStatus.insert(canAdd)
+                    let anyVisibleChildren = canAddNotebook(note: &note.children![i])
+                    visibleChildsStatus.insert(anyVisibleChildren)
                 }
             }
-            if childStatus.contains(true) {
-                note.canShow = false
-                note.isExpanded = true
+            // check if search str contains in file name
+            if note.notebookRef.modifiedDate >= Calendar.current.date(byAdding: .day, value: -1, to: Date())! {
+                note.canShow = true
+                resultsCount += 1
             } else {
-                if recentItems.contains(note.id.uuidString) {
-                    note.canShow = true
-                    note.isExpanded = true
-                    
-                    resultsCount += 1
-                } else {
-                    note.canShow = false
-                    note.isExpanded = false
-                }
+                note.canShow = false
             }
             
-            if note.isExpanded {
+            // if any child notebooks are visible, expanded should be yes
+            if visibleChildsStatus.contains(true) {
+                note.isExpanded = true
+            } else {
+                note.isExpanded = false
+            }
+            
+            // status is used for parent node
+            if note.isExpanded || note.canShow {
                 return true
             }
             
-            return note.canShow
+            return false
         }
         
         var notebooksList = notesHierarchy.notes
         
         for i in 0..<notebooksList.count {
             _ = canAddNotebook(note: &notebooksList[i])
-//                print("checked \(i)")
         }
-//            print("NEW LIST")
+
         notesHierarchy.notes = notebooksList
         modifiedResultCount = resultsCount
         
         listSourceType = .notebooks(.recentlyModified)
+    }
+    
+    
+    func registerNotebookChangesNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookChangesNotification(_:)), name: Notification.Name.notebookContentUpdated, object: nil)
+    }
+    
+    func removeNotebookChangesNotification() {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.notebookContentUpdated, object: nil)
+    }
+    
+    @objc func handleNotebookChangesNotification(_ notification: Notification) {
+        print(#function)
+        guard
+            let uuid = notification.userInfo?["id"] as? String,
+            let notebook = selectedNotebook?.notebookRef
+        else { return }
+        
+        if notebook.id.uuidString == uuid {
+            updateModifiedDate(for: notebook)
+        }
     }
 }
 
@@ -821,4 +835,5 @@ extension NotebooksListState {
         // delete date exceeded notebooks
         notebookBusiness.deleteDateExceededNotebooks(deletedNotebooks: &deletedNotebooks)
     }
+    
 }
