@@ -732,7 +732,7 @@ extension NotebooksListState {
                 }
             }
             // check if search str contains in file name
-            if note.notebookRef.modifiedDate >= Calendar.current.date(byAdding: .day, value: -1, to: Date())! {
+            if note.notebookRef.modifiedDate >= Calendar.current.date(byAdding: .day, value: -2, to: Date())! {
                 note.canShow = true
                 resultsCount += 1
             } else {
