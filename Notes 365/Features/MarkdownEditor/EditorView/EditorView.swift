@@ -5,6 +5,12 @@
 //  Created by Kiran Sarella on 12/04/22.
 //
 import UIKit
+// tree sitter parser
+import SwiftTreeSitter
+// markdown grammer
+import TreeSitterMarkdown
+import TreeSitterMarkdownInline
+
 
 public class EditorView: UIView {
     
@@ -46,10 +52,20 @@ public class EditorView: UIView {
     public private(set) lazy var scrollview = UIScrollView()
     
     
+    let parserBlock = Parser()
+    let parserInline = Parser()
+    var treeBlock:Tree? = nil
+    var treeInline:Tree? = nil
+    
+    var preEditEndLocation = 0
+    
+    
 //    func resetText(text: String) {
 //
 //        textStorage.setAttributedString(NSAttributedString(string: text))
 //    }
+    
+    
     
     func setupTextViewStack() {
         
@@ -149,6 +165,12 @@ extension EditorView {
 //        self.textView.backgroundColor = UIColor.magenta
         
 
+        
+        let languageBlock = Language(language: tree_sitter_markdown())
+        let languageInline = Language(language: tree_sitter_markdown_inline())
+        
+        try? parserBlock.setLanguage(languageBlock)
+        try? parserInline.setLanguage(languageInline)
     }
  
     
@@ -235,6 +257,302 @@ extension EditorView: NSTextStorageDelegate {
     }
     
     public func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
+
+        
+        
+        guard
+            let treeBlock = treeBlock,
+            let treeInline = treeInline
+        else {
+            // do initial parsing
+            // block parsing
+            initialBlockParser(textStorage: textStorage)
+            // inline parsing
+            initialInlineParser(textStorage: textStorage)
+            return
+        }
+        
+        /// let edit = InputEdit(startByte: editStartByteOffset,
+        ///                      oldEndByte: preEditEndByteOffset,
+        ///                      newEndByte: postEditEndByteOffset,
+        ///                      startPoint: editStartPoint,
+        ///                      oldEndPoint: preEditEndPoint,
+        ///                      newEndPoint: postEditEndPoint)
+        
+//        let newEndLocation = NSMaxRange(editedRange) + delta
+        
+//        let edit = InputEdit(startByte: UInt32(editedRange.location * 2),
+//                  oldEndByte: UInt32(preEditEndLocation * 2),
+//                  newEndByte: UInt32(newEndLocation * 2),
+//                  startPoint: Point.zero,
+//                  oldEndPoint: Point.zero,
+//                  newEndPoint: Point.zero)
+        
+        guard let edit = InputEdit(range: editedRange, delta: delta, oldEndPoint: .zero) else { return }
+        print(edit)
+        
+        treeBlock.edit(edit)
+        treeInline.edit(edit)
+        
+//        resetAttributes(textStorage: textStorage, extendedRange: node.range)
+        
+        // block parsing
+        blockParser(textStorage: textStorage)
+        // inline parsing
+        inlineParser(textStorage: textStorage)
+        
+        /*
+        guard let newTree = parser.parse(tree: tree, string: text) else { return }
+
+        let changedRanges = tree.changedRanges(from: newTree)
+
+        print("changes: ", changedRanges.count)
+
+        // clear all attribures
+        let fullRange = textStorage.fullRange()
+        if fullRange.length > 0 {
+//            textStorage.removeAttribute(.foregroundColor, range: fullRange)
+//            textStorage.setAttributes([:], range: fullRange)
+            textStorage.addAttribute(.foregroundColor, value: UIColor.black, range: fullRange)
+        }
+        
+        for changedRange in changedRanges {
+            print(changedRange)
+            
+            newTree.enumerateNodes(in: changedRange.bytes) { node in
+//                print(node, node.range, node.nodeType!, node.byteRange, node.isNamed)
+                
+                textStorage.addAttribute(.foregroundColor, value: UIColor.red, range: node.range)
+            }
+            
+//            let nsrange = NSRange(location: changedRange.bytes.lowerBound, length: changedRange.bytes.count)
+//            print(nsrange)
+//
+            
+            
+//            let start = text.index(text.startIndex, offsetBy: Int(changedRange.bytes.lowerBound / 2))
+//            let end = text.index(text.startIndex, offsetBy: Int(changedRange.bytes.upperBound / 2))
+//            let subString = text[start..<end]
+//            print(subString)
+        }
+     
+//        preEditEndLocation = newEndLocation
+        self.tree = newTree
+         
+         */
+    }
+
+    // MAKR: - Tree-sitter
+    
+    func initialBlockParser(textStorage: NSTextStorage) {
+        print(#function)
+        guard let newTree = parserBlock.parse(text) else { return }
+        
+        guard let range = newTree.rootNode?.byteRange else { return }
+        
+        newTree.enumerateNodes(in: range) { node in
+            applyBlockStyles(node: node, attrStr: textStorage)
+        }
+        
+        self.treeBlock = newTree
+    }
+    
+    func initialInlineParser(textStorage: NSTextStorage) {
+        print(#function)
+        guard let newTree = parserInline.parse(text) else { return }
+        
+        guard let range = newTree.rootNode?.byteRange else { return }
+        
+        newTree.enumerateNodes(in: range) { node in
+            applyInlineStyles(node: node, attrStr: textStorage)
+        }
+        
+        self.treeInline = newTree
+    }
+    
+    func blockParser(textStorage: NSTextStorage) {
+        print(#function)
+        guard let newTree = parserBlock.parse(text) else { return }
+        guard let treeBlock = treeBlock else { return }
+        
+        let changedRanges = treeBlock.changedRanges(from: newTree)
+        print("changes: ", changedRanges.count)
+
+        for changedRange in changedRanges {
+            print(changedRange)
+            
+            newTree.enumerateNodes(in: changedRange.bytes) { node in
+                applyBlockStyles(node: node, attrStr: textStorage)
+            }
+        }
+        
+        self.treeBlock = newTree
+    }
+    
+    func inlineParser(textStorage: NSTextStorage) {
+        print(#function)
+        guard let newTree = parserInline.parse(text) else { return }
+        guard let treeInline = treeInline else { return }
+        
+        let changedRanges = treeInline.changedRanges(from: newTree)
+        print("changes: ", changedRanges.count)
+
+        for changedRange in changedRanges {
+            print(changedRange)
+            
+            newTree.enumerateNodes(in: changedRange.bytes) { node in
+                applyInlineStyles(node: node, attrStr: textStorage)
+            }
+        }
+        
+        self.treeInline = newTree
+    }
+    
+    func applyBlockStyles(node: Node, attrStr: NSTextStorage) {
+        
+//        resetAttributes(textStorage: attrStr, extendedRange: node.range)
+        
+        if node.nodeType! == "atx_heading" {
+            
+            if let firstChild = node.firstChild {
+                let heading = firstChild.nodeType
+                
+                var fontSize: CGFloat = 52
+                
+                if heading == "atx_h1_marker" {
+                    fontSize = getHeadingFontSize(level: 1)
+                }
+                else if heading == "atx_h2_marker" {
+                    fontSize = getHeadingFontSize(level: 2)
+                }
+                else if heading == "atx_h3_marker" {
+                    fontSize = getHeadingFontSize(level: 3)
+                }
+                else if heading == "atx_h4_marker" {
+                    fontSize = getHeadingFontSize(level: 4)
+                }
+                else if heading == "atx_h5_marker" {
+                    fontSize = getHeadingFontSize(level: 5)
+                }
+                else if heading == "atx_h6_marker" {
+                    fontSize = getHeadingFontSize(level: 6)
+                }
+                
+                // bold
+                var boldFont = theme.font
+                if let fontDesc = theme.font.fontDescriptor.withSymbolicTraits(.traitBold) {
+                    boldFont = UIFont(descriptor: fontDesc, size: fontSize)
+                }
+                
+                // font
+                attrStr.addAttribute(.font, value: boldFont, range: node.range)
+                // color
+                attrStr.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: node.range)
+//                // hide special chars
+                attrStr.addAttribute(NSAttributedString.Key.markdown,
+                                                   value: 0,
+                                                   range: NSRange(location: firstChild.range.location, length: firstChild.range.length + 1))
+//                attrStr.addAttribute(.font, value: UIFont.systemFont(ofSize: 0.1, weight: .thin), range: NSRange(location: firstChild.range.location, length: firstChild.range.length + 1))
+                
+            }
+            
+            
+        }
+        
+        else if node.nodeType! == "paragraph" {
+            
+//                attrStr.addAttribute(.font, value: theme.font, range: node.range)
+//                attrStr.addAttribute(.foregroundColor, value: theme.bodyColor.uiColor, range: node.range)
+        } else if node.nodeType! == "block_quote" {
+            attrStr.addAttribute(.font, value: theme.font, range: node.range)
+            attrStr.addAttribute(.foregroundColor, value: theme.blockQuoteColor.uiColor, range: node.range)
+        } else if node.nodeType! == "block_quote_marker" {
+//            attrStr.addAttribute(.font, value: UIFont.systemFont(ofSize: 0.1, weight: .light), range: node.range)
+            attrStr.addAttribute(NSAttributedString.Key.markdown,
+                                               value: 0,
+                                               range: node.range)
+        } else if node.nodeType! == "list_marker_minus" || node.nodeType! == "list_marker_dot" {
+            attrStr.addAttribute(.foregroundColor, value: theme.listColor.uiColor, range: node.range)
+        } else if node.nodeType! == "fenced_code_block" {
+            
+            let font = UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: .regular)
+            
+            attrStr.addAttribute(.font, value: font, range: node.range)
+            attrStr.addAttribute(.foregroundColor, value: theme.codeColor.uiColor, range: node.range)
+            
+            let paraStyle = NSMutableParagraphStyle()
+            paraStyle.alignment = .left
+            
+            attrStr.addAttribute(.paragraphStyle, value: paraStyle, range: node.range)
+        }
+    }
+    
+    func applyInlineStyles(node: Node, attrStr: NSTextStorage) {
+        
+//        resetAttributes(textStorage: attrStr, extendedRange: node.range)
+        
+        if node.nodeType! == "emphasis" {
+            
+            var italicFont = theme.font
+            
+            if let fontDesc = theme.font.fontDescriptor.withSymbolicTraits(.traitItalic) {
+                italicFont = UIFont(descriptor: fontDesc, size: CGFloat(theme.fontSize))
+            }
+            
+            attrStr.addAttribute(.font, value: italicFont, range: node.range)
+            attrStr.addAttribute(.foregroundColor, value: theme.styleColor.uiColor, range: node.range)
+        } else if node.nodeType! == "strong_emphasis" {
+            var boldFont = theme.font
+            if let fontDesc = theme.font.fontDescriptor.withSymbolicTraits(.traitBold) {
+                boldFont = UIFont(descriptor: fontDesc, size: CGFloat(theme.fontSize))
+            }
+            
+            // font
+            attrStr.addAttribute(.font, value: boldFont, range: node.range)
+            // color
+            attrStr.addAttribute(.foregroundColor, value: theme.styleColor.uiColor, range: node.range)
+        } else if node.nodeType! == "strikethrough" {
+//                attrStr.addAttribute(.font, value: UIFont.systemFont(ofSize: 22), range: node.range)
+            // foreground color
+            attrStr.addAttribute(.foregroundColor, value: theme.styleColor.uiColor, range: node.range)
+            // strikethroughStyle
+            attrStr.addAttribute(.strikethroughStyle, value: NSUnderlineStyle.single.rawValue, range: node.range)
+            // line color
+            attrStr.addAttribute(.strikethroughColor, value: theme.styleColor.uiColor, range: node.range)
+        } else if node.nodeType! == "code_span" {
+            attrStr.addAttribute(.font, value: UIFont.monospacedSystemFont(ofSize: 22, weight: .regular), range: node.range)
+            attrStr.addAttribute(.foregroundColor, value: theme.codeColor.uiColor, range: node.range)
+        } else if node.nodeType!.hasSuffix("delimiter") {
+            
+            attrStr.addAttribute(NSAttributedString.Key.markdown,
+                                               value: 0,
+                                               range: node.range)
+            
+//            attrStr.addAttribute(.font, value: UIFont.systemFont(ofSize: 0.1, weight: .ultraLight), range: node.range)
+//            attrStr.addAttribute(.foregroundColor, value: UIColor.clear, range: node.range)
+        }
+//            else if node.isNamed == false {
+//                attrStr.addAttribute(.font, value: UIFont.systemFont(ofSize: 22, weight: .ultraLight), range: node.range)
+//                attrStr.addAttribute(.foregroundColor, value: UIColor.gray, range: node.range)
+//            }
+        
+    }
+    
+    
+    func resetAttributes(textStorage: NSTextStorage, extendedRange: NSRange) {
+        
+        textStorage.removeAttribute(.markdown, range: extendedRange)
+        textStorage.removeAttribute(.markdownRange, range: extendedRange)
+        textStorage.removeAttribute(.foregroundColor, range: extendedRange)
+//        textStorage.removeAttribute(.paragraphStyle, range: extendedRange)
+        textStorage.removeAttribute(.underlineColor, range: extendedRange)
+        textStorage.removeAttribute(.underlineStyle, range: extendedRange)
+        
+        textStorage.addAttribute(.markdownRange, value: MarkdownPattern.body, range: extendedRange)
+    }
+    
+    
+    public func textStorage333(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
      
 //        print("editedRange", editedRange, "delta", delta, "editedMask", editedMask)
    
