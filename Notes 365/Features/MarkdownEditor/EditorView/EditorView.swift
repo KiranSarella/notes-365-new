@@ -409,10 +409,12 @@ extension EditorView: NSTextStorageDelegate {
     }
     
     func applyBlockStyles(node: Node, attrStr: NSTextStorage) {
+        print(node.nodeType, node.byteRange)
         
 //        resetAttributes(textStorage: attrStr, extendedRange: node.range)
         
         if node.nodeType! == "atx_heading" {
+            print("")
             
             if let firstChild = node.firstChild {
                 let heading = firstChild.nodeType
@@ -449,9 +451,10 @@ extension EditorView: NSTextStorageDelegate {
                 // color
                 attrStr.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: node.range)
 //                // hide special chars
+                let charRange = NSRange(location: firstChild.range.location, length: firstChild.range.length + 1)
                 attrStr.addAttribute(NSAttributedString.Key.markdown,
                                                    value: 0,
-                                                   range: NSRange(location: firstChild.range.location, length: firstChild.range.length + 1))
+                                                   range: charRange)
 //                attrStr.addAttribute(.font, value: UIFont.systemFont(ofSize: 0.1, weight: .thin), range: NSRange(location: firstChild.range.location, length: firstChild.range.length + 1))
                 
             }
@@ -461,8 +464,8 @@ extension EditorView: NSTextStorageDelegate {
         
         else if node.nodeType! == "paragraph" {
             
-//                attrStr.addAttribute(.font, value: theme.font, range: node.range)
-//                attrStr.addAttribute(.foregroundColor, value: theme.bodyColor.uiColor, range: node.range)
+                attrStr.addAttribute(.font, value: theme.font, range: node.range)
+                attrStr.addAttribute(.foregroundColor, value: theme.bodyColor.uiColor, range: node.range)
         } else if node.nodeType! == "block_quote" {
             attrStr.addAttribute(.font, value: theme.font, range: node.range)
             attrStr.addAttribute(.foregroundColor, value: theme.blockQuoteColor.uiColor, range: node.range)
@@ -484,10 +487,13 @@ extension EditorView: NSTextStorageDelegate {
             paraStyle.alignment = .left
             
             attrStr.addAttribute(.paragraphStyle, value: paraStyle, range: node.range)
+        } else {
+            print("NO BLOCK CHANGE *****")
         }
     }
     
     func applyInlineStyles(node: Node, attrStr: NSTextStorage) {
+        print(node.nodeType)
         
 //        resetAttributes(textStorage: attrStr, extendedRange: node.range)
         
@@ -530,6 +536,8 @@ extension EditorView: NSTextStorageDelegate {
             
 //            attrStr.addAttribute(.font, value: UIFont.systemFont(ofSize: 0.1, weight: .ultraLight), range: node.range)
 //            attrStr.addAttribute(.foregroundColor, value: UIColor.clear, range: node.range)
+        } else {
+            print("NO INLINE CHANGE ******")
         }
 //            else if node.isNamed == false {
 //                attrStr.addAttribute(.font, value: UIFont.systemFont(ofSize: 22, weight: .ultraLight), range: node.range)
