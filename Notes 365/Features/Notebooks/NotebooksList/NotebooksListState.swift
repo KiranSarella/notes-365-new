@@ -164,7 +164,6 @@ class NotebooksListState: ObservableObject {
         if let expandedList = UserDefaults.standard.object(forKey: "notes365.expandedIds") as? [String] {
             expandedIds = Set(expandedList)
         }
-        sleep(10)
         // create notesHierarchy with actual notebook objects
         notebooks = notebookBusiness.retrieveNotebooks() ?? []
         let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
@@ -236,6 +235,9 @@ class NotebooksListState: ObservableObject {
         notebooks = notebookBusiness.retrieveNotebooks() ?? []
         let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
         notesHierarchy = NotebooksHierarchy(notes: notesList)
+        // construct deleted notebooks list
+        deletedNotebooks = notebookBusiness.retrieveDeletedNotebooks() ?? []
+        checkOldItemsToDelete()
     }
     
     func saveExpandedIds() {

@@ -41,15 +41,14 @@ struct ContentWrapperView: View {
                 .task {
                     do {
                         
-                        #if DEBUG
-                        // choose environment
-                        try chooseEnv.setEnviromment(with: .local)
-                        // do any operations
-                        chooseEnv.enableConfigured()
-                        // clean base version
-                        TodayVersionBusiness.cleanBaseVersionIfNeeded()
-                        
-                        #else
+//                        #if DEBUG
+//                        // choose environment
+//                        try chooseEnv.setEnviromment(with: .local)
+//                        // do any operations
+//                        chooseEnv.enableConfigured()
+//                        // clean base version
+//                        TodayVersionBusiness.cleanBaseVersionIfNeeded()
+//                        #else
                         
                         statusMessage = "checking iCloud settings"
                         // choose environment
@@ -65,7 +64,7 @@ struct ContentWrapperView: View {
                         chooseEnv.enableConfigured()
                         // clean base version
                         TodayVersionBusiness.cleanBaseVersionIfNeeded()
-                        #endif
+//                        #endif
                         
                         
                         

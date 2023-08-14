@@ -23,7 +23,9 @@ struct NotebooksListView: View {
 //        Text("Loading..")
 //            .opacity(usersState.isLoaded ? 0 : 1)
         VStack {
-            if usersState.listSourceType == .notebooks(.none) && usersState.isEmpty {
+            if icloudSyncing {
+                ProgressView()
+            } else if usersState.listSourceType == .notebooks(.none) && usersState.isEmpty {
                 AddNotesView()
                     .padding([.top], -100)
                     .environmentObject(usersState)
@@ -129,7 +131,7 @@ struct NotebooksListView: View {
                 selectedNotebook = nil
             } else {
                 // after sync
-                usersState.reloadNotebooksList()
+                usersState.forceReload()
             }
         }
         .onChange(of: usersState.deletingNotebook) { newValue in
