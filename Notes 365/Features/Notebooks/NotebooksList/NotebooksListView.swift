@@ -23,7 +23,7 @@ struct NotebooksListView: View {
 //        Text("Loading..")
 //            .opacity(usersState.isLoaded ? 0 : 1)
         VStack {
-            if icloudSyncing {
+            if icloudSyncing || usersState.isLoading {
                 ProgressView()
             } else if usersState.listSourceType == .notebooks(.none) && usersState.isEmpty {
                 AddNotesView()
@@ -114,12 +114,25 @@ struct NotebooksListView: View {
             
         }
         .onAppear {
+            // to get new data not on first launch, user have to go back and come -  for now
             if firstTimeAppear {
-                usersState.reloadNotebooksList()
+                // if some how, list loading failed, force list load again.
+                if usersState.isEmpty {
+                    usersState.forceReload()
+                } else {
+                    if usersState.listSourceType == .notebooks(.none) {
+                        // because, if new sync data available, then refresh is not happening until next app launch
+                        // or
+                        // when background sync done, need to get update.
+                        // to get latest data
+                        usersState.reloadNotebooksListIfNewRequired()
+                    }
+                }
                 
                 firstTimeAppear = false
             }
             
+            // if app is in background until next day. so, on next appear if next day, check deleted items
             if appearDate != Date() {
                 usersState.checkOldItemsToDelete()
             }

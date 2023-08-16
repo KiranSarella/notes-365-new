@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 class NotebooksListSync {
     
@@ -13,6 +14,9 @@ class NotebooksListSync {
     
     var basePathURL: URL
     var metadataQuery: NSMetadataQuery = NSMetadataQuery()
+    
+    var isSyncing = PassthroughSubject<Bool, Never>()
+//    var isSyncing = CurrentValueSubject<Bool, Never>(false)
     
     var isSyncingStarted: (() -> ())?
     var isSyncingCompleted: (() -> ())?
@@ -34,6 +38,7 @@ class NotebooksListSync {
     
     func initialGatheringSync() {
         
+        notDownloadedItems.removeAll()
         // https://stackoverflow.com/questions/49066409/nsmetadataquery-by-folders-ios
         
         // query
@@ -79,15 +84,26 @@ class NotebooksListSync {
     @objc func metadataQueryDidFinishGathering(_ notification: NSNotification) {
 //        print(#function)
         metadataQuery.stop()
+        metadataQuery.disableUpdates()
+        removeObservers()
+        
         handleMetadataQueryResult(notification)
     }
     
+    func removeObservers() {
+        NotificationCenter.default.removeObserver(self, name: .NSMetadataQueryDidStartGathering, object: metadataQuery)
+        NotificationCenter.default.removeObserver(self, name: .NSMetadataQueryGatheringProgress, object: metadataQuery)
+        NotificationCenter.default.removeObserver(self, name: .NSMetadataQueryDidFinishGathering, object: metadataQuery)
+    }
+    
     func handleMetadataQueryResult(_ notification: NSNotification) {
-        //        print(#function)
+//                print(#function)
         
         guard let metadataQuery = notification.object as? NSMetadataQuery else { return }
         // pause updates till all results are processed
         //        metadataQuery.stop()
+        
+        isSyncing.send(true)
         
         isSyncingStarted?()
 //        metadataQuery.disableUpdates()
@@ -96,11 +112,11 @@ class NotebooksListSync {
         
 //        print("Results count: \(metadataQuery.resultCount)")
         
-        let changedMetadataItems = notification.userInfo?[NSMetadataQueryUpdateChangedItemsKey] as? [NSMetadataItem]
-        
-        let removedMetadataItems = notification.userInfo?[NSMetadataQueryUpdateRemovedItemsKey] as? [NSMetadataItem]
-        
-        let addedMetadataItems = notification.userInfo?[NSMetadataQueryUpdateAddedItemsKey] as? [NSMetadataItem]
+//        let changedMetadataItems = notification.userInfo?[NSMetadataQueryUpdateChangedItemsKey] as? [NSMetadataItem]
+//
+//        let removedMetadataItems = notification.userInfo?[NSMetadataQueryUpdateRemovedItemsKey] as? [NSMetadataItem]
+//
+//        let addedMetadataItems = notification.userInfo?[NSMetadataQueryUpdateAddedItemsKey] as? [NSMetadataItem]
         
 //        print("changedMetadataItems", changedMetadataItems,
 //              "removedMetadataItems", removedMetadataItems,
@@ -144,7 +160,7 @@ class NotebooksListSync {
 //              "isStopped", metadataQuery.isStopped)
         
         // wait for some time, bcz moveItem is not async and no completion status given
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
             // move items logic
             self.isSyncingCompleted?()
         }
@@ -153,7 +169,7 @@ class NotebooksListSync {
     }
     
     func downloadFile(_ cloudUrl: URL, item: NSMetadataItem) {
-        print(#function)
+//        print(#function)
         notDownloadedItems.append(item)
         print(cloudUrl.path(percentEncoded: false))
         do {

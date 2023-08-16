@@ -16,3 +16,6 @@ class Constants {
     static let notebooksPListName = "notebooks-list"
     static let deletedNotebooksPListName = "deleted-notebooks-list"
 }
+
+// po try! FileManager.default.contentsOfDirectory(atPath: basePathURL.path(percentEncoded: false))
+

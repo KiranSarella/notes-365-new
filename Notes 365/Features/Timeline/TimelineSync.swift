@@ -32,6 +32,8 @@ class TimelineSync {
     
     func initialGatheringSync() {
         
+        notDownloadedItems.removeAll()
+        
         // https://stackoverflow.com/questions/49066409/nsmetadataquery-by-folders-ios
         
         // query

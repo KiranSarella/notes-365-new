@@ -34,6 +34,7 @@ class NotebooksContentSync {
     
     func initialGatheringSync() {
         
+        notDownloadedItems.removeAll()
         // https://stackoverflow.com/questions/49066409/nsmetadataquery-by-folders-ios
         
         // query
@@ -77,7 +78,16 @@ class NotebooksContentSync {
     @objc func metadataQueryDidFinishGathering(_ notification: NSNotification) {
 //        print(#function)
         metadataQuery.stop()
+        metadataQuery.disableUpdates()
+        removeObservers()
+        
         handleMetadataQueryResult(notification)
+    }
+    
+    func removeObservers() {
+        NotificationCenter.default.removeObserver(self, name: .NSMetadataQueryDidStartGathering, object: metadataQuery)
+        NotificationCenter.default.removeObserver(self, name: .NSMetadataQueryGatheringProgress, object: metadataQuery)
+        NotificationCenter.default.removeObserver(self, name: .NSMetadataQueryDidFinishGathering, object: metadataQuery)
     }
     
     func handleMetadataQueryResult(_ notification: NSNotification) {

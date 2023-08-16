@@ -128,6 +128,7 @@ class NotebooksListState: ObservableObject {
     private var notebooks = [Notebook]()
     private var deletedNotebooks = [Notebook]()
     
+    @Published var isLoading = false
     @Published var notesHierarchy: NotebooksHierarchy
     
     @Published var listSourceType = ListSourceType.notebooks(.none)
@@ -159,7 +160,7 @@ class NotebooksListState: ObservableObject {
     var firstTimeAppear = true
     
     init() {
-        
+        isLoading = true
         // get saved expandedIds
         if let expandedList = UserDefaults.standard.object(forKey: "notes365.expandedIds") as? [String] {
             expandedIds = Set(expandedList)
@@ -179,6 +180,7 @@ class NotebooksListState: ObservableObject {
         setupSearchText()
         
         registerNotebookChangesNotification()
+        isLoading = false
     }
     
     deinit {
@@ -216,28 +218,56 @@ class NotebooksListState: ObservableObject {
         notesHierarchy = NotebooksHierarchy(notes: notesList)
     }
 
-    func reloadNotebooksList() {
-        // if notebooks is empty, try to reload on demand
-        if notebooks.count == 0 || notebookBusiness.isReloadRequired() {
+    func reloadNotebooksListIfNewRequired() {
+        // if notebooks list is empty, try to reload on demand
+        if notebookBusiness.isReloadRequired() {
+            isLoading = true
+            // create notesHierarchy with actual notebook objects
+            guard let list = notebookBusiness.retrieveNotebooks() else {
+                isLoading = false
+                return
+            }
             // clear
             notesHierarchy.notes.removeAll()
-            // create notesHierarchy with actual notebook objects
-            notebooks = notebookBusiness.retrieveNotebooks() ?? []
+            // update
+            notebooks = list
             let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
             notesHierarchy = NotebooksHierarchy(notes: notesList)
+            isLoading = false
         }
     }
     
     func forceReload() {
+        isLoading = true
         // clear
         notesHierarchy.notes.removeAll()
         // create notesHierarchy with actual notebook objects
         notebooks = notebookBusiness.retrieveNotebooks() ?? []
-        let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
-        notesHierarchy = NotebooksHierarchy(notes: notesList)
         // construct deleted notebooks list
         deletedNotebooks = notebookBusiness.retrieveDeletedNotebooks() ?? []
-        checkOldItemsToDelete()
+        
+        // reconstruct hierarchy
+        let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
+        notesHierarchy = NotebooksHierarchy(notes: notesList)
+        
+        switch listSourceType {
+        case .notebooks(let notebooksFilterType):
+            switch notebooksFilterType {
+            case .none:
+                break
+            case .searching:
+                // ??
+                break
+            case .recentlyModified:
+                showRecentlyModified()
+            }
+        case .deletedItems:
+            showRecentlyDeleted()
+            checkOldItemsToDelete()
+        }
+        
+        
+        isLoading = false
     }
     
     func saveExpandedIds() {

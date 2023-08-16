@@ -32,6 +32,7 @@ class TodayVersionSync {
     
     func initialGatheringSync() {
         
+        notDownloadedItems.removeAll()
     // https://stackoverflow.com/questions/49066409/nsmetadataquery-by-folders-ios
         
         // query
@@ -94,6 +95,8 @@ class TodayVersionSync {
 //        print(#function)
         handleMetadataQueryResult(notification)
     }
+    
+    
     
     func handleMetadataQueryResult(_ notification: NSNotification) {
         //        print(#function)

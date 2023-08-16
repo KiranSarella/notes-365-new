@@ -20,7 +20,7 @@ public enum NotebookBusinessError: Error {
 class NotebooksListBusiness {
     
     var basePathURL: URL
-    private var syncDate: Date = Date()
+    private var listSyncDate: Date = Date()
     
     private let deleteDays = 30
     
@@ -36,7 +36,7 @@ class NotebooksListBusiness {
         let plistURL = basePathURL.appending(path: Constants.notebooksPListName).appendingPathExtension("plist")
 
         if let modifiedDate = fileModificationDate(url: plistURL) {
-            if modifiedDate > syncDate {
+            if modifiedDate > listSyncDate {
                 // reload data
                 return true
             } else {
@@ -198,7 +198,6 @@ extension NotebooksListBusiness {
     
     // It will save only notebooks list hierarchy to plist, not notebook content.
     func persist(notebooks: [Notebook]) {
-        syncDate = Date()
         
         do {
             // generate data
@@ -209,6 +208,7 @@ extension NotebooksListBusiness {
             do {
                 // Write to the file
                 try plistData.write(to: fileURL)
+                self.listSyncDate = Date()
             } catch let error as NSError {
                 print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
             }
@@ -226,6 +226,7 @@ extension NotebooksListBusiness {
             // Read the file contents
             let plistData = try Data(contentsOf: plistURL)
             let notebooksList = try PropertyListDecoder().decode([Notebook].self, from: plistData)
+            self.listSyncDate = Date()
             return notebooksList
         } catch let error as NSError {
             print("Failed reading from URL: \(plistURL), Error: " + error.localizedDescription)
@@ -247,7 +248,7 @@ extension NotebooksListBusiness {
     
     // It will save only notebooks list hierarchy to plist, not notebook content.
     func persistDeleted(notebooks: [Notebook]) {
-        syncDate = Date()
+        listSyncDate = Date()
         
         do {
             // generate data

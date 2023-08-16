@@ -148,6 +148,7 @@
 
 /* Begin PBXFileReference section */
 		5C4A7B562A7BC626004C436F /* DeletedListSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletedListSync.swift; sourceTree = "<group>"; };
+		5C9732212A8B74C200C42E28 /* iCloud-sync.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "iCloud-sync.md"; sourceTree = "<group>"; };
 		5CE055DA2A17C5D3009EB4EA /* DayCalendarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCalendarState.swift; sourceTree = "<group>"; };
 		5CE055DC2A17D547009EB4EA /* DayCalendarView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCalendarView2.swift; sourceTree = "<group>"; };
 		9F09CEB029267FBC00609D99 /* TodayVersionBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayVersionBusiness.swift; sourceTree = "<group>"; };
@@ -346,6 +347,7 @@
 				9F8EE98C293F4B7E0021409E /* Notes-365-Info.plist */,
 				9F45BCA12920CAAE003DE332 /* Notes_365App.swift */,
 				9FB0A47129D9246D0093FBD2 /* architecture-decissions.md */,
+				5C9732212A8B74C200C42E28 /* iCloud-sync.md */,
 				9FB0A47429DBD6830093FBD2 /* Features */,
 				9F45BCA52920CAB0003DE332 /* Assets.xcassets */,
 				9F45BCA72920CAB0003DE332 /* Notes_365.entitlements */,
