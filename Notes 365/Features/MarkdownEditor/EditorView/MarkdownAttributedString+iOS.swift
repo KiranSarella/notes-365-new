@@ -507,6 +507,7 @@ class MarkdownAttriburedString {
         }
     }
     
+    
     func processCodeBlock(extendedRange: NSRange, textStorage innerAttributedString: NSMutableAttributedString) {
         
         let pattern = MarkdownPattern.codeBlock.rawValue
@@ -556,7 +557,10 @@ class MarkdownAttriburedString {
                                                value: info,
                                                range: NSRange(location: match!.range.location, length: match!.range.length))
             
-            innerAttributedString.addAttribute(.markdownRange, value: MarkdownPattern.inlineCode, range: match!.range)
+            innerAttributedString.addAttribute(.markdownRange, value: MarkdownPattern.codeBlock, range: match!.range)
+            
+//            let lineRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 2)
+//            innerAttributedString.addAttribute(.blockquoteBorderColor, value: UIColor.orange, range: lineRange)
         }
     }
     

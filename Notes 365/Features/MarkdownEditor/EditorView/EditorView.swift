@@ -37,7 +37,7 @@ public class EditorView: UIView {
 //    public private(set) lazy var smartTextStorage = SmartTextStorage()
 //    public private(set) lazy var markdownStorage = MarkdownTextStorage()
     
-    public private(set) lazy var layoutManager = NSLayoutManager()
+    private(set) lazy var layoutManager = LayoutManager() // NSLayoutManager()
 //    private lazy var smartLayoutManagerDelegate = SmartLayoutManagerDelegate(textView: textView)
 //    private lazy var markdownlayoutManagerDelegate = MarkdownLayoutManagerDelegate(textView: textView)
     
@@ -815,17 +815,27 @@ extension EditorView {
                                                value: 0,
                                                range: NSRange(location: match!.range.location + match!.range.length - 3 , length: 3))
             
+            let fullRange = NSRange(location: match!.range.location, length: match!.range.length)
             
             let info: [String: Any] = [
-                "range": NSRange(location: match!.range.location, length: match!.range.length),
+                "range": fullRange,
                 "type": "codeblock"
             ]
             // info
             innerAttributedString.addAttribute(NSAttributedString.Key.markdownInfo,
                                                value: info,
-                                               range: NSRange(location: match!.range.location, length: match!.range.length))
+                                               range: fullRange)
             
-            innerAttributedString.addAttribute(.markdownRange, value: MarkdownPattern.inlineCode, range: match!.range)
+            innerAttributedString.addAttribute(.markdownRange, value: MarkdownPattern.codeBlock, range: match!.range)
+            
+            let lineRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 2)
+            innerAttributedString.addAttribute(.blockquoteBorderColor, value: UIColor.orange, range: lineRange)
+            
+            let para = NSMutableParagraphStyle()
+            para.firstLineHeadIndent = 30
+            para.headIndent = 30
+//            para.tailIndent = 10
+            innerAttributedString.addAttribute(.paragraphStyle, value: para, range: textRange)
         }
     }
     

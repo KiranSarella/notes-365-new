@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C117C3F2A8E77FF00B0F3BE /* LayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C117C3E2A8E77FF00B0F3BE /* LayoutManager.swift */; };
 		5C4A7B572A7BC626004C436F /* DeletedListSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4A7B562A7BC626004C436F /* DeletedListSync.swift */; };
 		5CA77C162A24AE220030EFB2 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C152A24AE220030EFB2 /* Collections */; };
 		5CA77C182A24AE220030EFB2 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C172A24AE220030EFB2 /* DequeModule */; };
@@ -147,6 +148,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5C117C3D2A8E662800B0F3BE /* Features.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Features.md; sourceTree = "<group>"; };
+		5C117C3E2A8E77FF00B0F3BE /* LayoutManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutManager.swift; sourceTree = "<group>"; };
 		5C4A7B562A7BC626004C436F /* DeletedListSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletedListSync.swift; sourceTree = "<group>"; };
 		5C9732212A8B74C200C42E28 /* iCloud-sync.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "iCloud-sync.md"; sourceTree = "<group>"; };
 		5CE055DA2A17C5D3009EB4EA /* DayCalendarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCalendarState.swift; sourceTree = "<group>"; };
@@ -348,6 +351,7 @@
 				9F45BCA12920CAAE003DE332 /* Notes_365App.swift */,
 				9FB0A47129D9246D0093FBD2 /* architecture-decissions.md */,
 				5C9732212A8B74C200C42E28 /* iCloud-sync.md */,
+				5C117C3D2A8E662800B0F3BE /* Features.md */,
 				9FB0A47429DBD6830093FBD2 /* Features */,
 				9F45BCA52920CAB0003DE332 /* Assets.xcassets */,
 				9F45BCA72920CAB0003DE332 /* Notes_365.entitlements */,
@@ -480,6 +484,7 @@
 				9FBB0B5C2A0E952E00F407AF /* MarkdownEditorViewState.swift */,
 				9F7D291E299BABAC00B37F51 /* EditorViewUI.swift */,
 				9F45BD102920CCCE003DE332 /* EditorView.swift */,
+				5C117C3E2A8E77FF00B0F3BE /* LayoutManager.swift */,
 				9F45BD172920CCCE003DE332 /* EditorViewDelegate+iOS.swift */,
 				9F45BD0B2920CCCE003DE332 /* MarkdownAttributedString+iOS.swift */,
 				9F45BD152920CCCE003DE332 /* MarkdownPattern.swift */,
@@ -885,6 +890,7 @@
 				9F45BD502920CD45003DE332 /* Extensions.swift in Sources */,
 				9F3DB0C2292DE09500704860 /* SettingsView.swift in Sources */,
 				9F45BD642920CDA3003DE332 /* Timeline.swift in Sources */,
+				5C117C3F2A8E77FF00B0F3BE /* LayoutManager.swift in Sources */,
 				9F09CEB129267FBC00609D99 /* TodayVersionBusiness.swift in Sources */,
 				9F45BD612920CD90003DE332 /* WeekContentGenerator.swift in Sources */,
 				9F3DB0CC292E340200704860 /* ThemeState.swift in Sources */,
@@ -1078,7 +1084,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Notes 365/Notes 365Debug.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 24;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Notes 365/Preview Content\"";
 				DEVELOPMENT_TEAM = Z5MSV52AV7;
@@ -1101,7 +1107,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 2.5;
+				MARKETING_VERSION = 2.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sarella.MyNotes-local";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -1122,7 +1128,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Notes 365/Notes 365Release.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 24;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Notes 365/Preview Content\"";
 				DEVELOPMENT_TEAM = Z5MSV52AV7;
@@ -1145,7 +1151,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 2.5;
+				MARKETING_VERSION = 2.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sarella.MyNotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1313,7 +1319,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Notes 365/Notes_365.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 24;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Notes 365/Preview Content\"";
 				DEVELOPMENT_TEAM = Z5MSV52AV7;
@@ -1336,7 +1342,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 2.5;
+				MARKETING_VERSION = 2.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sarella.MyNotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
