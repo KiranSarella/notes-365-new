@@ -37,10 +37,10 @@ struct DayDetailView: View {
             return 100
         }
         let nsattrStt = NSAttributedString(attrStr)
-        print("width: ", width)
+//        print("width: ", width)
         let rect = nsattrStt.boundingRect(with: CGSize(width: width, height: 10000), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
-        print("rect: ", rect)        
-        return rect.height + 100
+//        print("rect: ", rect)
+        return rect.height + 50
     }
     
     var body: some View {

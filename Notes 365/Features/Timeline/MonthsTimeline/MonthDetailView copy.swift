@@ -1,5 +1,5 @@
 //
-//  WeekDetailView.swift
+//  MonthDetailView.swift
 //  MyNotes
 //
 //  Created by Kiran Sarella on 13/10/21.
@@ -7,21 +7,38 @@
 
 import SwiftUI
 
-struct WeekDetailView: View {
+
+struct MonthDetailWrapperView: View {
     
-    @StateObject private var weekState = WeekDetailState()
+    var body: some View {
     
+        // if url exists, load actual view
+        // else block with alert
+        
+        if EnvironmentState.shared.basePathURL != nil {
+            Text("Please enable iCloud.")
+        } else {
+            MonthDetailView()
+        }
+    }
+}
+
+struct MonthDetailView: View {
+    
+   @StateObject private var monthState = MonthDetailState()
+
     var body: some View {
         VStack(spacing: 0) {
             GeometryReader { g in
                 List {
-                    ForEach($weekState.weekTimelineList) { $weekTimeline in
-                        WeekSectionView(weekTimeline: $weekTimeline, theme: $weekState.theme, width: g.size.width)
+                    ForEach($monthState.monthTimelineList, id: \.id) { $dayTimeline in
+                        // for each day
+                        MonthSectionView(date: monthState.monthDate.start, dayTimeline: $dayTimeline, theme: $monthState.theme, width: g.size.width)
                             .listRowSeparator(.hidden)
                     }
                     HStack {
                         Spacer()
-                        Text(weekState.currentState.message)
+                        Text(monthState.currentState.message)
                             .listRowSeparator(.hidden)
                             .fontWeight(.ultraLight)
                             .foregroundColor(.gray)
@@ -32,7 +49,7 @@ struct WeekDetailView: View {
                     //                HStack {
                     //                    Spacer()
                     //
-                    //                    Text(MotivationQuestions.weekQuestions.randomElement() ?? "")
+                    //                    Text(MotivationQuestions.monthQuestions.randomElement() ?? "")
                     //                        .fontWeight(.thin)
                     //                        .foregroundColor(.gray)
                     //                        .padding()
@@ -43,111 +60,94 @@ struct WeekDetailView: View {
                     //                .padding()
                 }
                 .listStyle(PlainListStyle())
-            }
-        }
-        .onChange(of: weekState.weekDate, perform: { newValue in
-            Task {
-                weekState.generatorTask?.cancel()
-                DispatchQueue.main.async {
-                    weekState.currentState = .loading
-                    weekState.weekTimelineList.removeAll()
+                .onAppear {
+                    monthState.readMonthData(monthDate: monthState.monthDate)
                 }
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    // your code here
-                    weekState.readWeekData(weekDate: newValue)
+                .onReceive(NotificationCenter.default.publisher(for: Notification.Name("theme.modified"))) { output in
+                    guard let newTheme = output.object as? MarkdownTheme else { return }
+                    monthState.theme = newTheme
                 }
-            }
-        })
-        .onReceive(NotificationCenter.default.publisher(for: Notification.Name("theme.modified"))) { output in
-            guard let newTheme = output.object as? MarkdownTheme else { return }
-            weekState.theme = newTheme
-        }
-        .onChange(of: weekState.theme) { newValue in
-            Task {
-                for weekIndex in 0..<weekState.weekTimelineList.count {
-                    for notesIndex in 0..<weekState.weekTimelineList[weekIndex].notes.count {
-                        await weekState.weekTimelineList[weekIndex].notes[notesIndex].updateWithTheme(theme: newValue)
+                .onChange(of: monthState.theme) { newValue in
+                    Task {
+                        for weekIndex in 0..<monthState.monthTimelineList.count {
+                            for notesIndex in 0..<monthState.monthTimelineList[weekIndex].notes.count {
+                                await monthState.monthTimelineList[weekIndex].notes[notesIndex].updateWithTheme(theme: newValue)
+                            }
+                        }
                     }
                 }
+                .onChange(of: monthState.monthDate, perform: { newValue in
+                    Task {
+                        monthState.generatorTask?.cancel()
+                        DispatchQueue.main.async {
+                            monthState.currentState = .loading
+                            monthState.monthTimelineList.removeAll()
+                        }
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            // your code here
+                            monthState.readMonthData(monthDate: newValue)
+                        }
+                    }
+                })
+                .onDisappear {
+                    monthState.generatorTask?.cancel()
+                }
             }
         }
-        .onAppear {
-            weekState.readWeekData(weekDate: weekState.weekDate)
+        .toolbar {
+//            ScaleFontView(theme: $theme)
         }
-        .onDisappear {
-            weekState.generatorTask?.cancel()
-        }
-//        .navigationTitle(weekState.weekDate.start.formattedDate())
     }
     
-    static func getWeekStartEndDates(date: Date) -> (Date, Date) {
+    
+    static func getMonthStartEndDates(date: Date) -> (Date, Date) {
         
         guard
-            let weekInterval = Calendar.current.dateInterval(of: .weekOfMonth, for: date)
+            let monthInterval = Calendar.current.dateInterval(of: .month, for: date)
         else { fatalError() }
         
-        let startDate = weekInterval.start
-        let endDate = Calendar.current.date(byAdding: .day, value: 7, to: startDate)!
+        let startDate = monthInterval.start
+        let endDate = monthInterval.end
         
         return (startDate, endDate)
     }
     
-    static func getWeekDates(startDate: Date) -> [Date] {
-        
-        guard
-            let weekInterval = Calendar.current.dateInterval(of: .weekOfMonth, for: startDate)
-        else { fatalError() }
-        
-        // form first day date
-        let firstDay = weekInterval.start
-        
-        var weekDates = [firstDay]
-        
-        // form 2nd to 7th day dates
-        for i in 1...6 {
-            let nextDayDate = Calendar.current.date(byAdding: .day, value: i, to: firstDay)!
-            weekDates.append(nextDayDate)
-        }
-        
-        return weekDates
-    }
-    
 }
 
-
-struct WeekSectionView: View {
+// each day
+struct MonthSectionView: View {
     
-    @Binding var weekTimeline: DayChanges
+    var date: Date
+    @Binding var dayTimeline: DayChanges
     @Binding var theme: MarkdownTheme
     var width: CGFloat
     
     var body: some View {
-        // date heading
+        
+        // day header
         VStack {
             HStack {
                 Spacer()
-                
                 if UIDevice.current.userInterfaceIdiom == .phone {
-                    Text(weekTimeline.date.formatted(date: .abbreviated, time: .omitted))
+                    Text(dayTimeline.date.formatted(date: .abbreviated, time: .omitted))
                         .listRowSeparator(.hidden)
                         .padding(.horizontal)
                         .font(.largeTitle)
+                        .padding(.top, 30)
                 } else {
-                    Text(weekTimeline.date.formatted(date: .complete, time: .omitted))
+                    Text(dayTimeline.date.formatted(date: .complete, time: .omitted))
                         .listRowSeparator(.hidden)
                         .padding(.horizontal)
                         .font(.largeTitle)
+                        .padding(.top, 30)
                 }
-                
-                
             }
-            .padding(.top, 30)
+            
+            DayTimelineTwoView(timelineList: $dayTimeline.notes, theme: $theme, width: width)
         }
-        DayTimelineTwoView(timelineList: $weekTimeline.notes, theme: $theme, width: width)
     }
 }
-
 
 fileprivate struct DayTimelineTwoView: View {
     
@@ -170,9 +170,7 @@ fileprivate struct DayTimelineTwoView: View {
         ForEach($timelineList) { $noteChange in
             VStack {
                 NotesTitleView(noteChange: noteChange)
-                    .listRowSeparator(.hidden)
                 HStack {
-                    
                     EditorViewUI(theme: theme,
                                  text: noteChange.content ?? "no content",
                                  editorView: Binding.constant(EditorView()),
@@ -180,8 +178,6 @@ fileprivate struct DayTimelineTwoView: View {
                                  isEditable: false,
                                  isEditor: false)
                         .frame(height: calculateHeight(noteChange.attriburedString, width: width))
-                    
-                    
 //                    Text(noteChange.attriburedString!)
                         .listRowSeparator(.hidden)
 //                        .padding()
@@ -193,3 +189,4 @@ fileprivate struct DayTimelineTwoView: View {
         }
     }
 }
+

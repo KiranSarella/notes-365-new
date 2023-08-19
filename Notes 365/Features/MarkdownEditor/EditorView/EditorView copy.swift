@@ -53,12 +53,9 @@ public class EditorView: UIView {
 extension EditorView {
     /**
      Creates and configures the NSTextView, NSTextContainer, NSTextStorage and NSLayoutManager objects
+     // TextView -> TextContainer -> LayoutManager -> TextStorage
      */
     func setupTextViewStack() {
-        print(#function)
-        
-        // TextView -> TextContainer -> LayoutManager -> TextStorage
-        
         // layoutManager <-> textStorage
         self.layoutManager.textStorage = textStorage
         // layoutManager <-> textContainer
@@ -84,13 +81,10 @@ extension EditorView {
         ])
         
         // configureTextContainer
-        textContainer.lineFragmentPadding = 20  // margin padding
-        self.textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        
-//        let contentSize = self.scrollview.contentSize
-//        CGSize(width: contentSize.width, height: CGFloat.greatestFiniteMagnitude)
+//        textContainer.lineFragmentPadding = 20  // margin padding
+//        self.textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         self.textContainer.widthTracksTextView = true
-//        self.textView.frame = CGRect(x: 0, y: 0, width: contentSize.width, height: contentSize.height)
+
         
 //        textView.autoresizingMask = [.width]
         
@@ -104,6 +98,9 @@ extension EditorView {
     }
     
     func setAsEditor(isEditable: Bool) {
+        textContainer.lineFragmentPadding = 20  // margin padding
+        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        
         textView.isEditable = isEditable
         textView.showsVerticalScrollIndicator = true
         textView.isScrollEnabled = true
@@ -642,7 +639,7 @@ extension EditorView {
         
         regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
-            let font = UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: UIFont.Weight.medium)
+            let font = UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: UIFont.Weight.regular)
             let textRange = NSRange(location: match!.range.location + 1, length: match!.range.length - 2)
             
             // font
@@ -717,7 +714,7 @@ extension EditorView {
         regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
             
-            let font = UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: UIFont.Weight.medium)
+            let font = UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: UIFont.Weight.regular)
             let textRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 6)
             
             // remove all existing attributes
