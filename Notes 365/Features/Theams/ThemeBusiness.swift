@@ -157,7 +157,7 @@ extension ThemeBusiness {
         var theme = MarkdownTheme(id: UUID())
         theme.themeName = "Customized-light"
         theme.fontName = "Helvetica"
-        theme.fontSize = 18
+        theme.fontSize = 28
         theme.bodyColor = NamedColor(hex: 0x000000)
         theme.styleColor = NamedColor(hex: 0xbf5af2)
         theme.codeColor = NamedColor(hex: 0x797979)
@@ -173,7 +173,7 @@ extension ThemeBusiness {
         var theme = MarkdownTheme(id: UUID())
         theme.themeName = "Customized-dark"
         theme.fontName = "ChalkboardSE-Light"
-        theme.fontSize = 18
+        theme.fontSize = 28
         theme.bodyColor = NamedColor(hex: 0xffffff)
         theme.styleColor = NamedColor(hex: 0xffd60a)
         theme.codeColor = NamedColor(hex: 0x0096ff)

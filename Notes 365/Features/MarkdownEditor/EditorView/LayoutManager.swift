@@ -10,6 +10,7 @@ import UIKit
 /// https://github.com/wordpress-mobile/AztecEditor-iOS/blob/develop/Aztec/Classes/TextKit/LayoutManager.swift
 final class LayoutManager: NSLayoutManager {
   override func drawBackground(forGlyphRange glyphsToShow: NSRange, at origin: CGPoint) {
+//      print(#function)
     super.drawBackground(forGlyphRange: glyphsToShow, at: origin)
     drawBlockquotes(forGlyphRange: glyphsToShow, at: origin)
   }
@@ -30,9 +31,9 @@ private extension LayoutManager {
       preconditionFailure("When drawBackgroundForGlyphRange is called, the graphics context is supposed to be set by UIKit")
     }
 
-    print(glyphsToShow)
+//    print(glyphsToShow)
     let characterRange = characterRange(forGlyphRange: glyphsToShow, actualGlyphRange: nil)
-      print(characterRange)
+//      print(characterRange)
     textStorage.enumerateAttribute(.blockquoteBorderColor, in: characterRange, options: []) { object, range, _ in
         
 //        print(object, range)
