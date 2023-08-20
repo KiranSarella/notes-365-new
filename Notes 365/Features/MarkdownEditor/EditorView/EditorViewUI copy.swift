@@ -7,16 +7,17 @@
 
 import SwiftUI
 
-struct EditorViewUI: UIViewRepresentable {
+struct EditorViewUI2: UIViewRepresentable {
     
     let theme: MarkdownTheme
     let text: String
-    @Binding var editorView: EditorView
-    @Binding var contentEditedDate: Date?
+    let editorView = EditorView()
     let isEditable: Bool
     var isEditor = true
-    var width: CGFloat = 0
+    var width: CGFloat
     @Binding var height: CGFloat
+    
+//    var changeHandler: (()->())?
     
     fileprivate func calculateHeight(_ attrStr: NSAttributedString?, width: CGFloat) -> CGFloat {
         guard let attrStr = attrStr else {
@@ -56,104 +57,101 @@ struct EditorViewUI: UIViewRepresentable {
             editorView.setAsEditor(isEditable: isEditable)
         } else {
             editorView.setAsReadOnly()
-            // calc height
-            DispatchQueue.main.async {
-                height = calculateHeight(editorView.textView.attributedText, width: width)
-            }
+        }
+        
+        DispatchQueue.main.async {
+            height = calculateHeight(editorView.textView.attributedText, width: width)
         }
         
         return editorView
     }
     
     func updateUIView(_ editorView: EditorView, context: Context) {
-//        editorView.textView.sizeToFit()
+        
     }
     
     typealias NSViewType = EditorView
 }
 
-extension EditorViewUI {
-    func makeCoordinator() -> EditorUICoordinator {
-        return EditorUICoordinator(self)
+extension EditorViewUI2 {
+    func makeCoordinator() -> EditorUICoordinator2 {
+        return EditorUICoordinator2(self)
     }
 }
 
 // Define View Modifiers
-class EditorUICoordinator: NSObject {
-    var parent: EditorViewUI
-    init(_ parent: EditorViewUI) {
+class EditorUICoordinator2: NSObject {
+    var parent: EditorViewUI2
+    init(_ parent: EditorViewUI2) {
         self.parent = parent
     }
 }
 
 
-extension EditorUICoordinator: UITextViewDelegate {
+extension EditorUICoordinator2: UITextViewDelegate {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        parent.contentEditedDate = Date()
+//        parent.contentEditedDate = Date()
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        parent.contentEditedDate = Date()
+//        parent.contentEditedDate = Date()
+//        parent.changeHandler?()
     }
     
 }
 
 // MARK: - Modifier
-//
-//struct SetDisplayWithAttr: ViewModifier {
-//    
-//    fileprivate func calculateHeight(_ attrStr: NSAttributedString?, width: CGFloat) -> CGFloat {
-//        guard let attrStr = attrStr else {
-//            return 100
-//        }
-//        
-////        print("width: ", width)
-//        let rect = attrStr.boundingRect(with: CGSize(width: width, height: 10000), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
-////        print("rect: ", rect)
-//        return rect.height + 50
-//    }
-//    
-//    let width: CGFloat
-//    let attrStr: NSAttributedString?
-//    
-//    func body(content: Content) -> some View {
-//        content.frame(height: calculateHeight(attrStr, width: width))
-//    }
-//}
-//
-//extension EditorViewUI {
-//    
-//    func setDisplay(width: CGFloat) -> some View {
-//        modifier(SetDisplayWithAttr(width: width, attrStr: self.editorView.textView.attributedText))
-//    }
-//}
 
-
-struct ReadOnlyMarkDownView: View {
+struct SetDisplayWithAttr: ViewModifier {
     
-    @State var editorView = EditorView()
+    fileprivate func calculateHeight(_ attrStr: NSAttributedString?, width: CGFloat) -> CGFloat {
+        guard let attrStr = attrStr else {
+            return 100
+        }
+        
+//        print("width: ", width)
+        let rect = attrStr.boundingRect(with: CGSize(width: width, height: 10000), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
+//        print("rect: ", rect)
+        return rect.height + 50
+    }
+    
+    let width: CGFloat
+    let attrStr: NSAttributedString?
+    
+    func body(content: Content) -> some View {
+        content.frame(height: calculateHeight(attrStr, width: width))
+    }
+}
+
+extension EditorViewUI2 {
+    
+    func setDisplay(width: CGFloat) -> some View {
+        modifier(SetDisplayWithAttr(width: width, attrStr: self.editorView.textView.attributedText))
+    }
+//
+//    func onContentChange(completion:@escaping (() -> ())) -> some View {
+//
+//        self.changeHandler = completion
+//
+//        return modifier(EmptyModifier())
+//    }
+//
+}
+
+
+struct ReadOnlyMarkDownView2: View {
+    
     var content: String?
     @Binding var theme: MarkdownTheme
     var width: CGFloat
     @State var height: CGFloat = 100
     
     var body: some View {
-        
-        EditorViewUI(theme: theme,
+        EditorViewUI2(theme: theme,
                      text: content ?? "no content",
-                     editorView: $editorView,
-                     contentEditedDate: Binding.constant(Date()),
                      isEditable: false,
-                     isEditor: false,
-                     width: width,
-                     height: $height)
+                      isEditor: false, width: width, height: $height)
         .frame(height: height)
-        
-//        EditorViewUI(theme: theme,
-//                     text: content ?? "no content",
-//                     isEditable: false,
-//                      isEditor: false, width: width, height: $height)
-//        .frame(height: height)
     }
 }

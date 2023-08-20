@@ -59,7 +59,8 @@ struct DayContentGenerator: AsyncSequence, AsyncIteratorProtocol {
 //            timeline.isNotebookExists = false
 //        }
         // fetch content
-        timeline.content = await TimelineBusiness(path: EnvironmentState.shared.basePathURL).readContent(today: today, fileName: timeline.fileUUID.uuidString) ?? "<no content>"
+        timeline.content = await TimelineBusiness(path: EnvironmentState.shared.basePathURL).readContent(today: today, fileName: timeline.fileUUID.uuidString)?.trimmingCharacters(in: .newlines) ?? "<no content>"
+        
         if Task.isCancelled {
             return nil
         }

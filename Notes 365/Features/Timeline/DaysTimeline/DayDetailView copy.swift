@@ -56,18 +56,20 @@ struct DayDetailView: View {
                             .listRowSeparator(.hidden)
                         
                             HStack {
-                                
-                                EditorViewUI(theme: dayState.theme,
-                                             text: noteChange.content ?? "no content",
-                                             editorView: Binding.constant(EditorView()),
-                                             contentEditedDate: Binding.constant(Date()),
-                                             isEditable: false,
-                                             isEditor: false)
-                                    .frame(height: calculateHeight(noteChange.attriburedString, width: g.size.width))
+                                ReadOnlyMarkDownView(content: noteChange.content,
+                                                     theme: $dayState.theme,
+                                                     width: g.size.width)
+//                                EditorViewUI(theme: dayState.theme,
+//                                             text: noteChange.content ?? "no content",
+//                                             editorView: Binding.constant(EditorView()),
+//                                             contentEditedDate: Binding.constant(Date()),
+//                                             isEditable: false,
+//                                             isEditor: false)
+//                                    .frame(height: calculateHeight(noteChange.attriburedString, width: g.size.width))
                                 
 //                                Text(noteChange.attriburedString!).hidden()
                                     .listRowSeparator(.hidden)
-//                                    .padding()
+                                    .padding()
                                     .textSelection(.enabled)
                                     .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
                                 Spacer()

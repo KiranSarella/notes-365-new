@@ -13,6 +13,7 @@
 		5CA77C182A24AE220030EFB2 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C172A24AE220030EFB2 /* DequeModule */; };
 		5CA77C1A2A24AE220030EFB2 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C192A24AE220030EFB2 /* OrderedCollections */; };
 		5CC0C4A12A90AB4E00BA83D8 /* MonthDetailView copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC0C4A02A90AB4E00BA83D8 /* MonthDetailView copy.swift */; };
+		5CC0C4A32A90E5AE00BA83D8 /* EditorViewUI copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC0C4A22A90E5AE00BA83D8 /* EditorViewUI copy.swift */; };
 		5CC4C01F2A908D7000A4BE41 /* EditorView copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC4C01E2A908D7000A4BE41 /* EditorView copy.swift */; };
 		5CC4C0212A908DE000A4BE41 /* MarkdownAttributedString+iOS copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC4C0202A908DE000A4BE41 /* MarkdownAttributedString+iOS copy.swift */; };
 		5CC4C0232A909B2C00A4BE41 /* DayDetailView copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC4C0222A909B2C00A4BE41 /* DayDetailView copy.swift */; };
@@ -154,6 +155,7 @@
 		5C9732212A8B74C200C42E28 /* iCloud-sync.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "iCloud-sync.md"; sourceTree = "<group>"; };
 		5C9B5CFF2A8FED2A00396102 /* TextKit.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TextKit.md; sourceTree = "<group>"; };
 		5CC0C4A02A90AB4E00BA83D8 /* MonthDetailView copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MonthDetailView copy.swift"; sourceTree = "<group>"; };
+		5CC0C4A22A90E5AE00BA83D8 /* EditorViewUI copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewUI copy.swift"; sourceTree = "<group>"; };
 		5CC4C01E2A908D7000A4BE41 /* EditorView copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorView copy.swift"; sourceTree = "<group>"; };
 		5CC4C0202A908DE000A4BE41 /* MarkdownAttributedString+iOS copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MarkdownAttributedString+iOS copy.swift"; sourceTree = "<group>"; };
 		5CC4C0222A909B2C00A4BE41 /* DayDetailView copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DayDetailView copy.swift"; sourceTree = "<group>"; };
@@ -492,9 +494,10 @@
 				9F93E14F29E6A2AC00210E99 /* MarkdownEditorView.swift */,
 				9FBB0B5C2A0E952E00F407AF /* MarkdownEditorViewState.swift */,
 				9F7D291E299BABAC00B37F51 /* EditorViewUI.swift */,
+				5CC4C01E2A908D7000A4BE41 /* EditorView copy.swift */,
+				5CC0C4A22A90E5AE00BA83D8 /* EditorViewUI copy.swift */,
 				9F45BD102920CCCE003DE332 /* EditorView.swift */,
 				5C117C3E2A8E77FF00B0F3BE /* LayoutManager.swift */,
-				5CC4C01E2A908D7000A4BE41 /* EditorView copy.swift */,
 				5C9B5CFF2A8FED2A00396102 /* TextKit.md */,
 				9F45BD172920CCCE003DE332 /* EditorViewDelegate+iOS.swift */,
 				9F45BD0B2920CCCE003DE332 /* MarkdownAttributedString+iOS.swift */,
@@ -858,6 +861,7 @@
 				9F45BCA42920CAAE003DE332 /* ContentView.swift in Sources */,
 				9F45BD602920CD8A003DE332 /* DayCalendarView.swift in Sources */,
 				9F45BDA42920CE41003DE332 /* ThemePreviewView.swift in Sources */,
+				5CC0C4A32A90E5AE00BA83D8 /* EditorViewUI copy.swift in Sources */,
 				9F7D291D299A7C1500B37F51 /* MarkdownDocument.swift in Sources */,
 				9FBB0B5D2A0E952E00F407AF /* MarkdownEditorViewState.swift in Sources */,
 				9F45BD672920CDA9003DE332 /* TimelineSidebarView.swift in Sources */,

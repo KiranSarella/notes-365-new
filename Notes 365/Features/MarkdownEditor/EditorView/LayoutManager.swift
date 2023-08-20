@@ -43,46 +43,51 @@ private extension LayoutManager {
       }
         
         
-    
-                let nRange = NSIntersectionRange(glyphsToShow, range)
-                if nRange.length == 0 {
-                    return
-                }
-                if let tc = self.textContainer(forGlyphAt:nRange.location, effectiveRange:nil, withoutAdditionalLayout:true) {
-                    var r = self.boundingRect(forGlyphRange:nRange, in:tc)
-                    r.origin.x += origin.x
-                    r.origin.y += origin.y
-                    
+
+        let nRange = NSIntersectionRange(glyphsToShow, range)
+        if nRange.length == 0 {
+            return
+        }
+        
+        if let tc = self.textContainer(forGlyphAt: nRange.location, effectiveRange: nil, withoutAdditionalLayout: true) {
+            
+            let nRange = NSRange(location: nRange.location, length: nRange.length + 1)
+            // prepare rect
+            var r = self.boundingRect(forGlyphRange:nRange, in:tc)
+            r.origin.x += origin.x
+            r.origin.y += origin.y
+            
 //                    let c = UIGraphicsGetCurrentContext()!
 //                    c.saveGState()
 //                    c.setStrokeColor(UIColor.black.cgColor)
 //                    c.setLineWidth(1.0)
 //                    c.stroke(r)
 //                    c.restoreGState()
-                    
-                    guard let context = UIGraphicsGetCurrentContext() else { return }
+            
+            guard let context = UIGraphicsGetCurrentContext() else { return }
 
-                     context.saveGState()
-                     defer { context.restoreGState() }
+             context.saveGState()
+             defer { context.restoreGState() }
 
-                    let path = UIBezierPath(roundedRect: r, cornerRadius: 8.0)
+            let path = UIBezierPath(roundedRect: r, cornerRadius: 8.0)
 
-                     context.addPath(path.cgPath)
-                     context.closePath()
+             context.addPath(path.cgPath)
+             context.closePath()
 
 //                    UIColor.quaternarySystemFill.setFill()
 //                    path.fill()
-                    
-                    // rgb(245, 245, 245)
-                    let fillColor = UIColor(white: 0.9, alpha: 0.2)
+            
+            // rgb(245, 245, 245)
+//            let fillColor = UIColor(white: 0.9, alpha: 0.2)
+            let fillColor = UIColor.gray.withAlphaComponent(0.1)
 //                    let lineColor = UIColor(white: 0.9, alpha: 0.1)
-                    
-                    context.setLineWidth(1.0)
-                    context.setStrokeColor(UIColor.secondarySystemFill.cgColor)
-                    context.setFillColor(fillColor.cgColor)
+            
+            context.setLineWidth(1.0)
+            context.setStrokeColor(UIColor.lightGray.cgColor)
+            context.setFillColor(fillColor.cgColor)
 //                     context.strokePath()
-                    context.drawPath(using: .fillStroke)
-                }
+            context.drawPath(using: .fillStroke)
+        }
         
         
 //      let verticalBarGlyphRange = glyphRange(forCharacterRange: range, actualCharacterRange: nil)

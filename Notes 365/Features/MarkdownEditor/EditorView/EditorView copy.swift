@@ -754,8 +754,12 @@ extension EditorView {
             
             innerAttributedString.addAttribute(.markdownRange, value: MarkdownPattern.codeBlock, range: match!.range)
             
-//            let lineRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 2)
-            innerAttributedString.addAttribute(.blockquoteBorderColor, value: UIColor.orange, range: textRange)
+//            let textRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 6)
+            
+
+//            let endLength: Int = editorType == .smart ? 3 : 3
+            let lineRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 3)
+            innerAttributedString.addAttribute(.blockquoteBorderColor, value: UIColor.orange, range: lineRange)
             
             let para = NSMutableParagraphStyle()
             para.firstLineHeadIndent = 30
@@ -764,6 +768,7 @@ extension EditorView {
             innerAttributedString.addAttribute(.paragraphStyle, value: para, range: textRange)
         }
     }
+    
     
     func processOrderedList(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
         

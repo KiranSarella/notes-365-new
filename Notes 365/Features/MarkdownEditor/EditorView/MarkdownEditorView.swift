@@ -39,7 +39,7 @@ struct MarkdownEditorView: View {
                 .background(.background)
                 .disabled(isDeleted)
             
-            EditorViewUI(theme: theme, text: baseContent, editorView: $editorView, contentEditedDate: $contentEditedDate, isEditable: !isDeleted)
+            EditorViewUI(theme: theme, text: baseContent, editorView: $editorView, contentEditedDate: $contentEditedDate, isEditable: !isDeleted, height: Binding.constant(0))
                 .font(Font.body)
                 .focused($isTextFieldFocused)
                 .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working

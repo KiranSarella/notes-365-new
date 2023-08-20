@@ -171,16 +171,18 @@ fileprivate struct DayTimelineTwoView: View {
             VStack {
                 NotesTitleView(noteChange: noteChange)
                 HStack {
-                    EditorViewUI(theme: theme,
-                                 text: noteChange.content ?? "no content",
-                                 editorView: Binding.constant(EditorView()),
-                                 contentEditedDate: Binding.constant(Date()),
-                                 isEditable: false,
-                                 isEditor: false)
-                        .frame(height: calculateHeight(noteChange.attriburedString, width: width))
+                    
+                    ReadOnlyMarkDownView(content: noteChange.content, theme: $theme, width: width)
+                    
+//                    EditorViewUI2(theme: theme,
+//                                 text: noteChange.content ?? "no content",
+//                                 isEditable: false,
+//                                  isEditor: false, width: width)
+//                        .frame(height: calculateHeight(noteChange.attriburedString, width: width))
+//                    .setDisplay(width: width)
 //                    Text(noteChange.attriburedString!)
                         .listRowSeparator(.hidden)
-//                        .padding()
+                        .padding()
                         .textSelection(.enabled)
                         .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
                     Spacer()
