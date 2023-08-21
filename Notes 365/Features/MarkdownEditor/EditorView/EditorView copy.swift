@@ -70,10 +70,6 @@ extension EditorView {
         textView.showsVerticalScrollIndicator = false
         textView.isScrollEnabled = false
         
-        // set margin or padding
-        textContainer.lineFragmentPadding = 20  // margin padding
-        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        
         // add textView to scrollView
         textView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(textView)
@@ -104,8 +100,10 @@ extension EditorView {
     }
     
     func setAsEditor(isEditable: Bool) {
-//        textContainer.lineFragmentPadding = 20  // margin padding
-//        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        layoutManager.isReadOnly = false
+        
+        textContainer.lineFragmentPadding = 20  // margin padding
+        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         
         textView.isEditable = isEditable
         textView.showsVerticalScrollIndicator = true
@@ -114,6 +112,11 @@ extension EditorView {
     }
     
     func setAsReadOnly() {
+        layoutManager.isReadOnly = true
+        
+        textContainer.lineFragmentPadding = 10  // margin padding
+        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        
         textView.isEditable = false
         textView.showsVerticalScrollIndicator = false
         textView.isScrollEnabled = false
@@ -182,7 +185,15 @@ extension EditorView: NSTextStorageDelegate {
         textStorage.removeAttribute(.underlineColor, range: extendedRange)
         textStorage.removeAttribute(.underlineStyle, range: extendedRange)
         
+        textStorage.removeAttribute(.codeBlockBackground, range: extendedRange)
+        textStorage.removeAttribute(.blockQuoteBackground, range: extendedRange)
+        textStorage.removeAttribute(.paragraphStyle, range: extendedRange)
+        
         textStorage.addAttribute(.markdownRange, value: MarkdownPattern.body, range: extendedRange)
+        
+        let para = NSMutableParagraphStyle()
+        para.lineSpacing = 10
+        textStorage.addAttribute(.paragraphStyle, value: para, range: extendedRange)
         
         // FIXIT: - ** if enabled, telugu font will not work. if disabled, code block and below lines font
 //        textStorage.addAttribute(.font, value: theme.font, range: extendedRange)
@@ -689,7 +700,7 @@ extension EditorView {
         let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
         
         let numberOfMatches = regex.numberOfMatches(in: innerAttributedString.string, range: extendedRange)
-        print(numberOfMatches)
+//        print(numberOfMatches)
         if numberOfMatches == 0 {
             return (numberOfMatches, false)
         }
@@ -712,7 +723,7 @@ extension EditorView {
         let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
         // pairs count shoud match half of total single symbols
         let pairsCount = regex.numberOfMatches(in: innerAttributedString.string, range: extendedRange)
-        print(pairsCount)
+//        print(pairsCount)
         if pairsCount != (count / 2) {
             return
         }
@@ -720,7 +731,9 @@ extension EditorView {
         regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
             
-            let font = UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: UIFont.Weight.regular)
+            let fontM = UIFont.monospacedSystemFont(ofSize: theme.font.pointSize - 2, weight: UIFont.Weight.regular)
+            let font = UIFont(name: "Menlo", size: theme.font.pointSize - 2) ?? fontM
+//            print("code#font", font)
             let textRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 6)
             
             // remove all existing attributes
@@ -765,11 +778,12 @@ extension EditorView {
 
 //            let endLength: Int = editorType == .smart ? 3 : 3
             let lineRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 3)
-            innerAttributedString.addAttribute(.codeBlockBackground, value: UIColor.orange, range: lineRange)
+            innerAttributedString.addAttribute(.codeBlockBackground, value: UIColor.orange, range: textRange)
             
             let para = NSMutableParagraphStyle()
             para.firstLineHeadIndent = 20
             para.headIndent = 20
+            para.lineSpacing = 10
 //            para.tailIndent = 10
             innerAttributedString.addAttribute(.paragraphStyle, value: para, range: textRange)
             print(lineRange)
@@ -980,6 +994,8 @@ extension EditorView {
             
             let font =  theme.font
             
+            let fullRange = NSRange(location: match!.range.location, length: match!.range.length)
+            
             innerAttributedString.addAttribute(.font,
                                                value: font,
                                                 range: NSRange(location: match!.range.location, length: match!.range.length))
@@ -1013,13 +1029,20 @@ extension EditorView {
             innerAttributedString.addAttribute(.markdownRange, value: MarkdownPattern.blockQuote, range: match!.range)
             
             let lineRange = NSRange(location: match!.range.location + 1, length: match!.range.length - 1)
-            innerAttributedString.addAttribute(.blockQuoteBackground, value: "blockQuote", range: lineRange)
+            
+            let bgInfo = [
+                "code": "blockQuote",
+                "color": theme.listColor.uiColor
+            ] as [String : Any]
+            
+            innerAttributedString.addAttribute(.blockQuoteBackground, value: bgInfo, range: lineRange)
             
             let para = NSMutableParagraphStyle()
             para.firstLineHeadIndent = 20
             para.headIndent = 20
+            para.lineSpacing = 10
 //            para.tailIndent = 10
-            innerAttributedString.addAttribute(.paragraphStyle, value: para, range: lineRange)
+            innerAttributedString.addAttribute(.paragraphStyle, value: para, range: fullRange)
         }
     }
     
