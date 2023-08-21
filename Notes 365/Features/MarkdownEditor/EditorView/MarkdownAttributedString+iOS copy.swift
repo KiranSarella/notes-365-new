@@ -667,7 +667,7 @@ class MarkdownAttriburedString {
         regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
             
-            let font = UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: UIFont.Weight.medium)
+            let font = UIFont.monospacedSystemFont(ofSize: self.theme.font.pointSize, weight: UIFont.Weight.medium)
             let textRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 6)
             
             // remove all existing attributes
@@ -708,13 +708,13 @@ class MarkdownAttriburedString {
             innerAttributedString.addAttribute(.markdownRange, value: MarkdownPattern.codeBlock, range: match!.range)
             
 //            let lineRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 2)
-            innerAttributedString.addAttribute(.blockquoteBorderColor, value: UIColor.orange, range: textRange)
+//            innerAttributedString.addAttribute(.blockquoteBorderColor, value: UIColor.orange, range: textRange)
             
-            let para = NSMutableParagraphStyle()
-            para.firstLineHeadIndent = 30
-            para.headIndent = 30
-//            para.tailIndent = 10
-            innerAttributedString.addAttribute(.paragraphStyle, value: para, range: textRange)
+//            let para = NSMutableParagraphStyle()
+//            para.firstLineHeadIndent = 30
+//            para.headIndent = 30
+////            para.tailIndent = 10
+//            innerAttributedString.addAttribute(.paragraphStyle, value: para, range: textRange)
         }
     }
     

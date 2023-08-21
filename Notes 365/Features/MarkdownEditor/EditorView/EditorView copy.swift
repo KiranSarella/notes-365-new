@@ -70,6 +70,10 @@ extension EditorView {
         textView.showsVerticalScrollIndicator = false
         textView.isScrollEnabled = false
         
+        // set margin or padding
+        textContainer.lineFragmentPadding = 20  // margin padding
+        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        
         // add textView to scrollView
         textView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(textView)
@@ -95,11 +99,13 @@ extension EditorView {
         self.layoutManager.textStorage?.delegate = self
         
         textView.sizeToFit()
+        
+//        textView.backgroundColor = UIColor.yellow
     }
     
     func setAsEditor(isEditable: Bool) {
-        textContainer.lineFragmentPadding = 20  // margin padding
-        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+//        textContainer.lineFragmentPadding = 20  // margin padding
+//        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         
         textView.isEditable = isEditable
         textView.showsVerticalScrollIndicator = true
@@ -694,7 +700,7 @@ extension EditorView {
     }
     
     func processCodeBlock(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        
+        print(#function)
         // continue if balanced only, else skip
         let (count, canProceed) = canPocessCodeBlock(extendedRange, textStorage)
         
@@ -759,13 +765,14 @@ extension EditorView {
 
 //            let endLength: Int = editorType == .smart ? 3 : 3
             let lineRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 3)
-            innerAttributedString.addAttribute(.blockquoteBorderColor, value: UIColor.orange, range: lineRange)
+            innerAttributedString.addAttribute(.codeBlockBackground, value: UIColor.orange, range: lineRange)
             
             let para = NSMutableParagraphStyle()
-            para.firstLineHeadIndent = 30
-            para.headIndent = 30
+            para.firstLineHeadIndent = 20
+            para.headIndent = 20
 //            para.tailIndent = 10
             innerAttributedString.addAttribute(.paragraphStyle, value: para, range: textRange)
+            print(lineRange)
         }
     }
     
@@ -1004,6 +1011,15 @@ extension EditorView {
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
 
             innerAttributedString.addAttribute(.markdownRange, value: MarkdownPattern.blockQuote, range: match!.range)
+            
+            let lineRange = NSRange(location: match!.range.location + 1, length: match!.range.length - 1)
+            innerAttributedString.addAttribute(.blockQuoteBackground, value: "blockQuote", range: lineRange)
+            
+            let para = NSMutableParagraphStyle()
+            para.firstLineHeadIndent = 20
+            para.headIndent = 20
+//            para.tailIndent = 10
+            innerAttributedString.addAttribute(.paragraphStyle, value: para, range: lineRange)
         }
     }
     

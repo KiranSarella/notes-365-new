@@ -16,3 +16,7 @@ https://developer.apple.com/documentation/foundation/nsstring/1531844-size
 https://stackoverflow.com/questions/14409897/how-to-calculate-the-height-of-an-nsattributedstring-with-given-width-in-ios-6
 
 
+
+Layout subclass
+https://github.com/wordpress-mobile/AztecEditor-iOS/blob/develop/Aztec/Classes/TextKit/LayoutManager.swift
+

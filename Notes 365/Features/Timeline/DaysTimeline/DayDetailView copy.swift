@@ -69,7 +69,7 @@ struct DayDetailView: View {
                                 
 //                                Text(noteChange.attriburedString!).hidden()
                                     .listRowSeparator(.hidden)
-                                    .padding()
+//                                    .padding()
                                     .textSelection(.enabled)
                                     .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
                                 Spacer()

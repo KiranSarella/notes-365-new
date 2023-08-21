@@ -184,7 +184,7 @@ fileprivate struct DayTimelineTwoView: View {
                     
 //                    Text(noteChange.attriburedString!)
                         .listRowSeparator(.hidden)
-                        .padding()
+//                        .padding()
                         .textSelection(.enabled)
                         .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
                     Spacer()
