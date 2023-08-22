@@ -19,6 +19,7 @@ struct ThemeDetailView_iOS: View {
     
     var onThemeChange:((MarkdownTheme) -> ())
     
+    @State var isFirstAppear = true
     
     var body: some View {
         
@@ -141,9 +142,13 @@ struct ThemeDetailView_iOS: View {
             }
         }
         .onAppear {
+            if isFirstAppear {
+                state.theme = theme
+                state.populateFields()
+                
+                isFirstAppear = false
+            }
             
-            state.theme = theme
-            state.populateFields()
         }
     }
 }

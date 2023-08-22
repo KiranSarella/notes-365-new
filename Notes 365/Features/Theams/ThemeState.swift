@@ -40,8 +40,10 @@ class ThemeState: ObservableObject {
     private func loadTheme(colorScheme: ColorScheme) {
         if colorScheme == .light {
             theme = ThemeBusiness().getLightTheme()
+            themeChangedNotification()
         } else {
             theme = ThemeBusiness().getDarkTheme()
+            themeChangedNotification()
         }
     }
     
@@ -50,6 +52,7 @@ class ThemeState: ObservableObject {
         // if updated is current theme, then update immediately
         if theme.id == newValue.id {
             theme = newValue
+            themeChangedNotification()
         }
     }
     
@@ -58,6 +61,17 @@ class ThemeState: ObservableObject {
         // if theme modified on current mode, the update with new theme
         if colorScheme == mode {
             theme = newValue
+            themeChangedNotification()
         }
     }
+    
+    
+    // send notification
+    func themeChangedNotification() {
+        NotificationCenter.default.post(name: .themeUpdated, object: theme)
+    }
+}
+
+public extension NSNotification.Name {
+    static let themeUpdated = NSNotification.Name("notes365.theme.updated")
 }

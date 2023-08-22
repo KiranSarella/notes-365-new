@@ -13,35 +13,37 @@ struct WeekDetailView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            List {
-                ForEach($weekState.weekTimelineList) { $weekTimeline in
-                    WeekSectionView(weekTimeline: $weekTimeline, theme: $weekState.theme)
-                        .listRowSeparator(.hidden)
+            GeometryReader { g in
+                List {
+                    ForEach($weekState.weekTimelineList) { $weekTimeline in
+                        WeekSectionView(weekTimeline: $weekTimeline, theme: $weekState.theme, width: g.size.width)
+                            .listRowSeparator(.hidden)
+                    }
+                    HStack {
+                        Spacer()
+                        Text(weekState.currentState.message)
+                            .listRowSeparator(.hidden)
+                            .fontWeight(.ultraLight)
+                            .foregroundColor(.gray)
+                        Spacer()
+                    }
+                    .listRowSeparator(.hidden)
+                    //                // motivation question
+                    //                HStack {
+                    //                    Spacer()
+                    //
+                    //                    Text(MotivationQuestions.weekQuestions.randomElement() ?? "")
+                    //                        .fontWeight(.thin)
+                    //                        .foregroundColor(.gray)
+                    //                        .padding()
+                    //                        .opacity(currentState == .empty ? 1 : 0)
+                    //
+                    //                    Spacer()
+                    //                }
+                    //                .padding()
                 }
-                HStack {
-                    Spacer()
-                    Text(weekState.currentState.message)
-                        .listRowSeparator(.hidden)
-                        .fontWeight(.ultraLight)
-                        .foregroundColor(.gray)
-                    Spacer()
-                }
-                .listRowSeparator(.hidden)
-//                // motivation question
-//                HStack {
-//                    Spacer()
-//                    
-//                    Text(MotivationQuestions.weekQuestions.randomElement() ?? "")
-//                        .fontWeight(.thin)
-//                        .foregroundColor(.gray)
-//                        .padding()
-//                        .opacity(currentState == .empty ? 1 : 0)
-//                    
-//                    Spacer()
-//                }
-//                .padding()
+                .listStyle(PlainListStyle())
             }
-            .listStyle(PlainListStyle())
         }
         .onChange(of: weekState.weekDate, perform: { newValue in
             Task {
@@ -118,6 +120,7 @@ struct WeekSectionView: View {
     
     @Binding var weekTimeline: DayChanges
     @Binding var theme: MarkdownTheme
+    var width: CGFloat
     
     var body: some View {
         // date heading
@@ -141,7 +144,7 @@ struct WeekSectionView: View {
             }
             .padding(.top, 30)
         }
-        DayTimelineTwoView(timelineList: $weekTimeline.notes, theme: $theme)
+        DayTimelineTwoView(timelineList: $weekTimeline.notes, theme: $theme, width: width)
     }
 }
 
@@ -150,6 +153,18 @@ fileprivate struct DayTimelineTwoView: View {
     
     @Binding var timelineList: [Timeline]
     @Binding var theme: MarkdownTheme
+    var width: CGFloat
+    
+    func calculateHeight(_ attrStr: AttributedString?, width: CGFloat) -> CGFloat {
+        guard let attrStr = attrStr else {
+            return 100
+        }
+        let nsattrStt = NSAttributedString(attrStr)
+//        print("width: ", width)
+        let rect = nsattrStt.boundingRect(with: CGSize(width: width, height: 10000), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
+//        print("rect: ", rect)
+        return rect.height + 50
+    }
     
     var body: some View {
         ForEach($timelineList) { $noteChange in
@@ -157,9 +172,19 @@ fileprivate struct DayTimelineTwoView: View {
                 NotesTitleView(noteChange: noteChange)
                     .listRowSeparator(.hidden)
                 HStack {
-                    Text(noteChange.attriburedString!)
+                    ReadOnlyMarkDownView(content: noteChange.content, theme: $theme, width: width)
+//                    EditorViewUI(theme: theme,
+//                                 text: noteChange.content ?? "no content",
+//                                 editorView: Binding.constant(EditorView()),
+//                                 contentEditedDate: Binding.constant(Date()),
+//                                 isEditable: false,
+//                                 isEditor: false)
+//                        .frame(height: calculateHeight(noteChange.attriburedString, width: width))
+                    
+                    
+//                    Text(noteChange.attriburedString!)
                         .listRowSeparator(.hidden)
-                        .padding()
+//                        .padding()
                         .textSelection(.enabled)
                         .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
                     Spacer()

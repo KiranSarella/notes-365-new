@@ -33,24 +33,20 @@ struct DayDetailView: View {
     @StateObject private var dayState = DayDetailState()
 
     func calculateHeight(_ attrStr: AttributedString?, width: CGFloat) -> CGFloat {
-        
         guard let attrStr = attrStr else {
-            return 0
+            return 100
         }
-        
         let nsattrStt = NSAttributedString(attrStr)
-        
-        print("width: ", width)
+//        print("width: ", width)
         let rect = nsattrStt.boundingRect(with: CGSize(width: width, height: 10000), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
-        print("rect: ", rect)
-
-        
-        return rect.height + 100
+//        print("rect: ", rect)
+        return rect.height + 50
     }
     
     var body: some View {
         
         VStack(spacing: 0) {
+            GeometryReader { g in
             List {
                 ForEach($dayState.timelineList) { $noteChange in
                     
@@ -58,11 +54,18 @@ struct DayDetailView: View {
                         // notebook heading view
                         NotesTitleView(noteChange: noteChange)
                             .listRowSeparator(.hidden)
-//                        GeometryReader { g in
+                        
                             HStack {
-                                
-                                EditorViewUI(theme: ThemeBusiness.generateCustomizedLightTheme(), text: noteChange.content ?? "no content", editorView: Binding.constant(EditorView()), contentEditedDate: Binding.constant(Date()), isEditable: false)
-                                    .frame(height: calculateHeight(noteChange.attriburedString, width: 1100))
+                                ReadOnlyMarkDownView(content: noteChange.content,
+                                                     theme: $dayState.theme,
+                                                     width: g.size.width)
+//                                EditorViewUI(theme: dayState.theme,
+//                                             text: noteChange.content ?? "no content",
+//                                             editorView: Binding.constant(EditorView()),
+//                                             contentEditedDate: Binding.constant(Date()),
+//                                             isEditable: false,
+//                                             isEditor: false)
+//                                    .frame(height: calculateHeight(noteChange.attriburedString, width: g.size.width))
                                 
 //                                Text(noteChange.attriburedString!).hidden()
                                     .listRowSeparator(.hidden)
@@ -72,7 +75,7 @@ struct DayDetailView: View {
                                 Spacer()
                             }
                             .listRowSeparator(.hidden)
-//                        }
+                        
                     }
                     .listRowSeparator(.hidden)
                 }
@@ -87,8 +90,9 @@ struct DayDetailView: View {
                 }
                 .listRowSeparator(.hidden)
             }
+                
             .listStyle(PlainListStyle())
-            
+            }
 //            .navigationTitle(dayState.dayDate.date.formattedDate())
         }
         .onChange(of: dayState.dayDate) { newValue in

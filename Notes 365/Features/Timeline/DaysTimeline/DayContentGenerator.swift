@@ -65,13 +65,13 @@ struct DayContentGenerator: AsyncSequence, AsyncIteratorProtocol {
         if Task.isCancelled {
             return nil
         }
-        // generate attribured string
-        let markdownAttrStr = MarkdownAttriburedString(theme: theme)
-        let newAttS = await markdownAttrStr.getAttriburedStringAsync(forMarkdown: timeline.content!)
-        if Task.isCancelled {
-            return nil
-        }
-        timeline.attriburedString = AttributedString(newAttS)
+//        // generate attribured string
+//        let markdownAttrStr = MarkdownAttriburedString(theme: theme)
+//        let newAttS = await markdownAttrStr.getAttriburedStringAsync(forMarkdown: timeline.content!)
+//        if Task.isCancelled {
+//            return nil
+//        }
+//        timeline.attriburedString = AttributedString(newAttS)
         
         return timeline
     }

@@ -5,11 +5,12 @@
 //  Created by Kiran Sarella on 12/04/22.
 //
 import UIKit
+import Combine
 
 public class EditorView: UIView {
     
+//    var width: CGFloat = 0
     var fileName: String = ""
-    
     var text: String {
         get {
             return textView.text
@@ -18,9 +19,7 @@ public class EditorView: UIView {
             textView.text = newValue
         }
     }
-    
     var theme: MarkdownTheme = ThemeBusiness.generateBasicLightTheme()
-    
     var editorType = EditorType.smart {
         didSet {
             switch editorType {
@@ -31,158 +30,126 @@ public class EditorView: UIView {
             }
         }
     }
-    
     public private(set) lazy var textStorage = NSTextStorage()
-    
-//    public private(set) lazy var smartTextStorage = SmartTextStorage()
-//    public private(set) lazy var markdownStorage = MarkdownTextStorage()
-    
-    private(set) lazy var layoutManager = LayoutManager() // NSLayoutManager()
-//    private lazy var smartLayoutManagerDelegate = SmartLayoutManagerDelegate(textView: textView)
-//    private lazy var markdownlayoutManagerDelegate = MarkdownLayoutManagerDelegate(textView: textView)
-    
+    private(set) lazy var layoutManager = LayoutManager()
     public private(set) lazy var textContainer = NSTextContainer()
     public private(set) var textView: UITextView!
     public private(set) lazy var scrollview = UIScrollView()
-    
-    
-//    func resetText(text: String) {
-//
-//        textStorage.setAttributedString(NSAttributedString(string: text))
-//    }
-    
-    func setupTextViewStack() {
-        
-        self.layoutManager.textStorage = textStorage
-        self.layoutManager.addTextContainer(self.textContainer)
-        
-        // create textView with container
-        textView = UITextView(frame: self.bounds, textContainer: textContainer)
-        textView.delegate = self
-        
-        // add textView to scrollView
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        // add scroll view to Base View
-        addSubview(textView)
-//        textView.backgroundColor = .green
-        NSLayoutConstraint.activate([
-            textView.widthAnchor.constraint(equalTo: self.widthAnchor),
-            textView.topAnchor.constraint(equalTo: self.topAnchor),
-            textView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-        ])
-        
-    }
-    
    
     convenience init(theme: MarkdownTheme) {
-        
         self.init(frame: CGRect.zero)
         self.theme = theme
-        
-//        self.backgroundColor = UIColor.orange
     }
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-
         setupTextViewStack()
-        configureTextView()
-        setupNewEditor()
+        observeThemeChanges()
     }
 
     required init?(coder: NSCoder) {
-        
         super.init(coder: coder)
-        
         setupTextViewStack()
-        configureTextView()
-        setupNewEditor()
+        observeThemeChanges()
+    }
+    
+    // theme notifcation
+    var cancellables: Set<AnyCancellable> = []
+    
+    func observeThemeChanges() {
+        NotificationCenter.default
+            .publisher(for: .themeUpdated)
+            .sink { [weak self] notification in
+                // Unwrap the sent object
+                guard let newTheme = notification.object as? MarkdownTheme else {
+                    return
+                }
+
+                self?.updateTheme(theme: newTheme)
+            }
+            .store(in: &cancellables)
     }
     
 }
 
 
 extension EditorView {
-    
     /**
      Creates and configures the NSTextView, NSTextContainer, NSTextStorage and NSLayoutManager objects
-     - parameter isHorizontalScrollingEnabled: If true, the NSTextView will allow horizontal scrolling
+     // TextView -> TextContainer -> LayoutManager -> TextStorage
      */
-    
-    func configureTextContainer() {
-        
-        textContainer.lineFragmentPadding = 20  // margin padding
-        self.textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        
+    func setupTextViewStack() {
+        // layoutManager <-> textStorage
+        self.layoutManager.textStorage = textStorage
+        // layoutManager <-> textContainer
         self.layoutManager.addTextContainer(self.textContainer)
+        let rect = self.bounds
+//        print("bounds: ", self.bounds)
+//        let rect = CGRect(origin: self.bounds.origin, size: CGSize(width: width, height: 10000))
+//        print("rect: ", rect)
+        // textView <-> textContainer
+        textView = UITextView(frame: rect, textContainer: textContainer)
+        textView.delegate = self
+        textView.isEditable = false
+        textView.showsVerticalScrollIndicator = false
+        textView.isScrollEnabled = false
         
-//        let contentSize = self.scrollview.contentSize
-//        self.textContainer.containerSize = CGSize(width: contentSize.width, height: CGFloat.greatestFiniteMagnitude)
+        // add textView to scrollView
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(textView)
+        
+        NSLayoutConstraint.activate([
+            textView.widthAnchor.constraint(equalTo: self.widthAnchor),
+            textView.topAnchor.constraint(equalTo: self.topAnchor),
+            textView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+        ])
+        
+        // configureTextContainer
+//        textContainer.lineFragmentPadding = 20  // margin padding
+//        self.textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         self.textContainer.widthTracksTextView = true
-    }
-    
-    internal func configureTextView() {
-        // TextView -> TextContainer -> LayoutManager -> TextStorage
-        
-        configureTextContainer()
-        
-        let contentSize = self.scrollview.contentSize
-        
-//        self.textView.minSize = CGSize(width: 0, height: 0)
-//        self.textView.maxSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
-//        self.textView.isVerticallyResizable = true
-//        self.textView.isHorizontallyResizable = false
-        self.textView.frame = CGRect(x: 0, y: 0, width: contentSize.width, height: contentSize.height)
+
         
 //        textView.autoresizingMask = [.width]
         
         self.textView.isFindInteractionEnabled = true
         
         
-//        self.textView
-//        self.textView.allowsUndo = true
-//        self.textView.usesFindPanel = true
-//        self.textView.usesFindBar = true
-//        self.textView.showFindIndicator(for: NSRange(location: 20, length: 200))
-//        self.textView.usesRuler = true
+        // set delegate
+        self.layoutManager.textStorage?.delegate = self
         
-//        self.textView.backgroundColor = UIColor.magenta
+        textView.sizeToFit()
         
-
+//        textView.backgroundColor = UIColor.yellow
     }
- 
+    
+    func setAsEditor(isEditable: Bool) {
+        layoutManager.isReadOnly = false
+        
+        textContainer.lineFragmentPadding = 20  // margin padding
+        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        
+        textView.isEditable = isEditable
+        textView.showsVerticalScrollIndicator = true
+        textView.isScrollEnabled = true
+        textView.sizeToFit()
+    }
+    
+    func setAsReadOnly() {
+        layoutManager.isReadOnly = true
+        
+        textContainer.lineFragmentPadding = 10  // margin padding
+        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        
+        textView.isEditable = false
+        textView.showsVerticalScrollIndicator = false
+        textView.isScrollEnabled = false
+        textView.sizeToFit()
+    }
     
     func refreshLayout() {
-        
-//        textContainer.replaceLayoutManager(layoutManager)
-        
         self.layoutManager.invalidateDisplay(forCharacterRange: NSRange())
     }
-    
-    // storage
-    func setupNewEditor() {
-        
-//        self.layoutManager.textStorage = textStorage
-        // replaceTextStorage(textStorage)  // this is imp. routne assign will not work
-        self.layoutManager.textStorage?.delegate = self
-//        self.layoutManager.delegate =  smartLayoutManagerDelegate
-    }
-    
-    
-//    func setupSmartEditor() {
-//
-//        smartTextStorage = SmartTextStorage(str: self.textView.string)  // this is imp.
-//
-//        self.layoutManager.delegate =  smartLayoutManagerDelegate
-//
-//        // refresh
-//        self.layoutManager.replaceTextStorage(smartTextStorage)
-//        refreshLayout()
-//
-//        // old storage to new storage
-//        self.textView.string = self.textView.string // other wise getting odd font related behaviour
-//    }
-    
     
     func switchToSmartEditorMode() {
         
@@ -205,14 +172,6 @@ extension EditorView {
 //            textView.scrollRangeToVisible(cursorRange)
 //        }
     }
-}
-
-
-// auto formatting
-extension EditorView {
-    
-    
-    
 }
 
 
@@ -250,7 +209,15 @@ extension EditorView: NSTextStorageDelegate {
         textStorage.removeAttribute(.underlineColor, range: extendedRange)
         textStorage.removeAttribute(.underlineStyle, range: extendedRange)
         
+        textStorage.removeAttribute(.codeBlockBackground, range: extendedRange)
+        textStorage.removeAttribute(.blockQuoteBackground, range: extendedRange)
+        textStorage.removeAttribute(.paragraphStyle, range: extendedRange)
+        
         textStorage.addAttribute(.markdownRange, value: MarkdownPattern.body, range: extendedRange)
+        
+        let para = NSMutableParagraphStyle()
+        para.lineSpacing = 10
+        textStorage.addAttribute(.paragraphStyle, value: para, range: extendedRange)
         
         // FIXIT: - ** if enabled, telugu font will not work. if disabled, code block and below lines font
 //        textStorage.addAttribute(.font, value: theme.font, range: extendedRange)
@@ -713,7 +680,7 @@ extension EditorView {
         
         regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
-            let font = UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: UIFont.Weight.medium)
+            let font = UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: UIFont.Weight.regular)
             let textRange = NSRange(location: match!.range.location + 1, length: match!.range.length - 2)
             
             // font
@@ -757,7 +724,7 @@ extension EditorView {
         let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
         
         let numberOfMatches = regex.numberOfMatches(in: innerAttributedString.string, range: extendedRange)
-        print(numberOfMatches)
+//        print(numberOfMatches)
         if numberOfMatches == 0 {
             return (numberOfMatches, false)
         }
@@ -768,7 +735,7 @@ extension EditorView {
     }
     
     func processCodeBlock(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        
+        print(#function)
         // continue if balanced only, else skip
         let (count, canProceed) = canPocessCodeBlock(extendedRange, textStorage)
         
@@ -780,7 +747,7 @@ extension EditorView {
         let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
         // pairs count shoud match half of total single symbols
         let pairsCount = regex.numberOfMatches(in: innerAttributedString.string, range: extendedRange)
-        print(pairsCount)
+//        print(pairsCount)
         if pairsCount != (count / 2) {
             return
         }
@@ -788,7 +755,9 @@ extension EditorView {
         regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
             
-            let font = UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: UIFont.Weight.medium)
+            let fontM = UIFont.monospacedSystemFont(ofSize: theme.font.pointSize - 2, weight: UIFont.Weight.regular)
+            let font = UIFont(name: "Menlo", size: theme.font.pointSize - 2) ?? fontM
+//            print("code#font", font)
             let textRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 6)
             
             // remove all existing attributes
@@ -828,16 +797,23 @@ extension EditorView {
             
             innerAttributedString.addAttribute(.markdownRange, value: MarkdownPattern.codeBlock, range: match!.range)
             
-            let lineRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 2)
-            innerAttributedString.addAttribute(.blockquoteBorderColor, value: UIColor.orange, range: lineRange)
+//            let textRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 6)
+            
+
+//            let endLength: Int = editorType == .smart ? 3 : 3
+            let lineRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 3)
+            innerAttributedString.addAttribute(.codeBlockBackground, value: UIColor.orange, range: textRange)
             
             let para = NSMutableParagraphStyle()
-            para.firstLineHeadIndent = 30
-            para.headIndent = 30
+            para.firstLineHeadIndent = 20
+            para.headIndent = 20
+            para.lineSpacing = 10
 //            para.tailIndent = 10
             innerAttributedString.addAttribute(.paragraphStyle, value: para, range: textRange)
+            print(lineRange)
         }
     }
+    
     
     func processOrderedList(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
         
@@ -1042,6 +1018,8 @@ extension EditorView {
             
             let font =  theme.font
             
+            let fullRange = NSRange(location: match!.range.location, length: match!.range.length)
+            
             innerAttributedString.addAttribute(.font,
                                                value: font,
                                                 range: NSRange(location: match!.range.location, length: match!.range.length))
@@ -1073,6 +1051,22 @@ extension EditorView {
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
 
             innerAttributedString.addAttribute(.markdownRange, value: MarkdownPattern.blockQuote, range: match!.range)
+            
+            let lineRange = NSRange(location: match!.range.location + 1, length: match!.range.length - 1)
+            
+            let bgInfo = [
+                "code": "blockQuote",
+                "color": theme.blockQuoteColor.uiColor
+            ] as [String : Any]
+            
+            innerAttributedString.addAttribute(.blockQuoteBackground, value: bgInfo, range: lineRange)
+            
+            let para = NSMutableParagraphStyle()
+            para.firstLineHeadIndent = 20
+            para.headIndent = 20
+            para.lineSpacing = 10
+//            para.tailIndent = 10
+            innerAttributedString.addAttribute(.paragraphStyle, value: para, range: fullRange)
         }
     }
     

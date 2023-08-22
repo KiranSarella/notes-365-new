@@ -29,68 +29,70 @@ struct MonthDetailView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            List {
-                ForEach($monthState.monthTimelineList, id: \.id) { $dayTimeline in
-                    // for each day
-                    MonthSectionView(date: monthState.monthDate.start, dayTimeline: $dayTimeline, theme: $monthState.theme)
-                        .listRowSeparator(.hidden)
+            GeometryReader { g in
+                List {
+                    ForEach($monthState.monthTimelineList, id: \.id) { $dayTimeline in
+                        // for each day
+                        MonthSectionView(date: monthState.monthDate.start, dayTimeline: $dayTimeline, theme: $monthState.theme, width: g.size.width)
+                            .listRowSeparator(.hidden)
+                    }
+                    HStack {
+                        Spacer()
+                        Text(monthState.currentState.message)
+                            .listRowSeparator(.hidden)
+                            .fontWeight(.ultraLight)
+                            .foregroundColor(.gray)
+                        Spacer()
+                    }
+                    .listRowSeparator(.hidden)
+                    //                // motivation question
+                    //                HStack {
+                    //                    Spacer()
+                    //
+                    //                    Text(MotivationQuestions.monthQuestions.randomElement() ?? "")
+                    //                        .fontWeight(.thin)
+                    //                        .foregroundColor(.gray)
+                    //                        .padding()
+                    //                        .opacity(currentState == .empty ? 1 : 0)
+                    //
+                    //                    Spacer()
+                    //                }
+                    //                .padding()
                 }
-                HStack {
-                    Spacer()
-                    Text(monthState.currentState.message)
-                        .listRowSeparator(.hidden)
-                        .fontWeight(.ultraLight)
-                        .foregroundColor(.gray)
-                    Spacer()
+                .listStyle(PlainListStyle())
+                .onAppear {
+                    monthState.readMonthData(monthDate: monthState.monthDate)
                 }
-                .listRowSeparator(.hidden)
-//                // motivation question
-//                HStack {
-//                    Spacer()
-//
-//                    Text(MotivationQuestions.monthQuestions.randomElement() ?? "")
-//                        .fontWeight(.thin)
-//                        .foregroundColor(.gray)
-//                        .padding()
-//                        .opacity(currentState == .empty ? 1 : 0)
-//
-//                    Spacer()
-//                }
-//                .padding()
-            }
-            .listStyle(PlainListStyle())
-            .onAppear {
-                monthState.readMonthData(monthDate: monthState.monthDate)
-            }
-            .onReceive(NotificationCenter.default.publisher(for: Notification.Name("theme.modified"))) { output in
-                guard let newTheme = output.object as? MarkdownTheme else { return }
-                monthState.theme = newTheme
-            }
-            .onChange(of: monthState.theme) { newValue in
-                Task {
-                    for weekIndex in 0..<monthState.monthTimelineList.count {
-                        for notesIndex in 0..<monthState.monthTimelineList[weekIndex].notes.count {
-                            await monthState.monthTimelineList[weekIndex].notes[notesIndex].updateWithTheme(theme: newValue)
+                .onReceive(NotificationCenter.default.publisher(for: Notification.Name("theme.modified"))) { output in
+                    guard let newTheme = output.object as? MarkdownTheme else { return }
+                    monthState.theme = newTheme
+                }
+                .onChange(of: monthState.theme) { newValue in
+                    Task {
+                        for weekIndex in 0..<monthState.monthTimelineList.count {
+                            for notesIndex in 0..<monthState.monthTimelineList[weekIndex].notes.count {
+                                await monthState.monthTimelineList[weekIndex].notes[notesIndex].updateWithTheme(theme: newValue)
+                            }
                         }
                     }
                 }
-            }
-            .onChange(of: monthState.monthDate, perform: { newValue in
-                Task {
+                .onChange(of: monthState.monthDate, perform: { newValue in
+                    Task {
+                        monthState.generatorTask?.cancel()
+                        DispatchQueue.main.async {
+                            monthState.currentState = .loading
+                            monthState.monthTimelineList.removeAll()
+                        }
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            // your code here
+                            monthState.readMonthData(monthDate: newValue)
+                        }
+                    }
+                })
+                .onDisappear {
                     monthState.generatorTask?.cancel()
-                    DispatchQueue.main.async {
-                        monthState.currentState = .loading
-                        monthState.monthTimelineList.removeAll()
-                    }
-
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        // your code here
-                        monthState.readMonthData(monthDate: newValue)
-                    }
                 }
-            })
-            .onDisappear {
-                monthState.generatorTask?.cancel()
             }
         }
         .toolbar {
@@ -119,6 +121,7 @@ struct MonthSectionView: View {
     var date: Date
     @Binding var dayTimeline: DayChanges
     @Binding var theme: MarkdownTheme
+    var width: CGFloat
     
     var body: some View {
         
@@ -141,7 +144,7 @@ struct MonthSectionView: View {
                 }
             }
             
-            DayTimelineTwoView(timelineList: $dayTimeline.notes, theme: $theme)
+            DayTimelineTwoView(timelineList: $dayTimeline.notes, theme: $theme, width: width)
         }
     }
 }
@@ -150,15 +153,36 @@ fileprivate struct DayTimelineTwoView: View {
     
     @Binding var timelineList: [Timeline]
     @Binding var theme: MarkdownTheme
+    var width: CGFloat
+    
+    func calculateHeight(_ attrStr: AttributedString?, width: CGFloat) -> CGFloat {
+        guard let attrStr = attrStr else {
+            return 100
+        }
+        let nsattrStt = NSAttributedString(attrStr)
+//        print("width: ", width)
+        let rect = nsattrStt.boundingRect(with: CGSize(width: width, height: 10000), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
+//        print("rect: ", rect)
+        return rect.height + 50
+    }
     
     var body: some View {
         ForEach($timelineList) { $noteChange in
             VStack {
                 NotesTitleView(noteChange: noteChange)
                 HStack {
-                    Text(noteChange.attriburedString!)
+                    
+                    ReadOnlyMarkDownView(content: noteChange.content, theme: $theme, width: width)
+                    
+//                    EditorViewUI2(theme: theme,
+//                                 text: noteChange.content ?? "no content",
+//                                 isEditable: false,
+//                                  isEditor: false, width: width)
+//                        .frame(height: calculateHeight(noteChange.attriburedString, width: width))
+//                    .setDisplay(width: width)
+//                    Text(noteChange.attriburedString!)
                         .listRowSeparator(.hidden)
-                        .padding()
+//                        .padding()
                         .textSelection(.enabled)
                         .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
                     Spacer()

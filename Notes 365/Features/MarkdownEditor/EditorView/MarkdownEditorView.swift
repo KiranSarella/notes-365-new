@@ -55,9 +55,9 @@ struct MarkdownEditorView: View {
         .onChange(of: markdownEditorState.fileName, perform: { newValue in
             editorView.fileName = newValue
         })
-        .onChange(of: theme, perform: { newValue in
-            editorView.updateTheme(theme: theme)
-        })
+//        .onChange(of: theme, perform: { newValue in
+//            editorView.updateTheme(theme: theme)
+//        })
         .onChange(of: baseContent, perform: { newValue in
             isTextFieldFocused = false
             showSymbols = false
