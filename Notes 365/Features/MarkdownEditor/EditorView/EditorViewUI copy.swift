@@ -24,8 +24,8 @@ struct EditorViewUI2: UIViewRepresentable {
             return 100
         }
         
-//        print("width: ", width)
-        let rect = attrStr.boundingRect(with: CGSize(width: width, height: 10000), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
+        print("width: ", width)
+        let rect = attrStr.boundingRect(with: CGSize(width: width - 100, height: 10000), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
 //        print("rect: ", rect)
         return rect.height + 50
     }

@@ -7,6 +7,8 @@
 import UIKit
 
 public class EditorView: UIView {
+    
+//    var width: CGFloat = 0
     var fileName: String = ""
     var text: String {
         get {
@@ -61,8 +63,9 @@ extension EditorView {
         // layoutManager <-> textContainer
         self.layoutManager.addTextContainer(self.textContainer)
         let rect = self.bounds
-//        let rect = CGRect(origin: .zero, size: CGSize(width: 1200, height: 1500))
-        
+//        print("bounds: ", self.bounds)
+//        let rect = CGRect(origin: self.bounds.origin, size: CGSize(width: width, height: 10000))
+//        print("rect: ", rect)
         // textView <-> textContainer
         textView = UITextView(frame: rect, textContainer: textContainer)
         textView.delegate = self
@@ -1032,7 +1035,7 @@ extension EditorView {
             
             let bgInfo = [
                 "code": "blockQuote",
-                "color": theme.listColor.uiColor
+                "color": theme.blockQuoteColor.uiColor
             ] as [String : Any]
             
             innerAttributedString.addAttribute(.blockQuoteBackground, value: bgInfo, range: lineRange)

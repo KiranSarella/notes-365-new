@@ -198,10 +198,13 @@ private extension LayoutManager {
             
             guard let info = object as? [String : Any],
                   let code = info["code"] as? String, code == "blockQuote",
-                  let color = info["color"] as? UIColor
+                  let color0 = info["color"] as? UIColor
             else {
               return
             }
+            
+            let color = color0.withAlphaComponent(0.15)
+//            let color = UIColor.lightGray
 
             let verticalBarGlyphRange = glyphRange(forCharacterRange: range, actualCharacterRange: nil)
             enumerateLineFragments(forGlyphRange: verticalBarGlyphRange) { rect, _, _, _, _ in
@@ -212,7 +215,7 @@ private extension LayoutManager {
                 let gap: CGFloat = self.isReadOnly ? 10 : 20
                 
                 // vertical bar
-                var verticalBarRect = rect.offsetBy(dx: origin.x + gap, dy: origin.y)
+                var verticalBarRect = rect.offsetBy(dx: origin.x + gap, dy: origin.y - 4)
 //                context.fill(verticalBarRect)
                 verticalBarRect.size.width = 4
                 color.setFill()

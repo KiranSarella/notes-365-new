@@ -60,6 +60,7 @@ struct DayContentGenerator: AsyncSequence, AsyncIteratorProtocol {
 //        }
         // fetch content
         timeline.content = await TimelineBusiness(path: EnvironmentState.shared.basePathURL).readContent(today: today, fileName: timeline.fileUUID.uuidString)?.trimmingCharacters(in: .newlines) ?? "<no content>"
+        // ?.trimmingCharacters(in: .newlines)
         
         if Task.isCancelled {
             return nil

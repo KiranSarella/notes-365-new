@@ -18,18 +18,27 @@ struct EditorViewUI: UIViewRepresentable {
     var width: CGFloat = 0
     @Binding var height: CGFloat
     
+    func heightForView(attrtext:NSAttributedString, width:CGFloat) -> CGFloat {
+        
+        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        label.attributedText = attrtext
+        label.sizeToFit()
+        print("label.frame: ", label.frame)
+        return label.frame.height
+    }
+    
     fileprivate func calculateHeight(_ attrStr: NSAttributedString?, width: CGFloat) -> CGFloat {
         guard let attrStr = attrStr else {
             return 100
         }
-        
-//        print("width: ", width)
-        let rect = attrStr.boundingRect(with: CGSize(width: width, height: 10000), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
-//        print("rect: ", rect)
+        let rect = attrStr.boundingRect(with: CGSize(width: width - 90, height: 10000), options: [.usesLineFragmentOrigin], context: nil)
         return rect.height + 50
     }
     
     func makeUIView(context: Context) -> EditorView {
+//        editorView.width = width
         editorView.theme = theme
         editorView.editorType = .smart
         editorView.textView.delegate = context.coordinator
@@ -155,5 +164,25 @@ struct ReadOnlyMarkDownView: View {
 //                     isEditable: false,
 //                      isEditor: false, width: width, height: $height)
 //        .frame(height: height)
+    }
+}
+
+
+extension NSAttributedString {
+
+    func height(for containerWidth: CGFloat) -> CGFloat {
+
+        let rect = self.boundingRect(with: CGSize.init(width: containerWidth, height: CGFloat.greatestFiniteMagnitude),
+                                     options: [.usesLineFragmentOrigin, .usesFontLeading],
+                                     context: nil)
+        return ceil(rect.size.height)
+    }
+
+    func width(for containerHeight: CGFloat) -> CGFloat {
+
+        let rect = self.boundingRect(with: CGSize.init(width: CGFloat.greatestFiniteMagnitude, height: containerHeight),
+                                     options: [.usesLineFragmentOrigin, .usesFontLeading],
+                                     context: nil)
+        return ceil(rect.size.width)
     }
 }
