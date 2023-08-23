@@ -15,6 +15,10 @@ struct FeedbackView_iPadOS: View {
     @State private var result: Result<MFMailComposeResult, Error>? = nil
     @State private var isShowingMailView = false
     
+    var enableSendButton: Bool {
+        canSendMail && (feedbackState.message.count > 0)
+    }
+    
     var canSendMail: Bool {
         MFMailComposeViewController.canSendMail()
     }
@@ -50,7 +54,7 @@ struct FeedbackView_iPadOS: View {
                     } label: {
                         Text("send")
                     }
-                    .disabled(!canSendMail)
+                    .disabled(!enableSendButton)
                 }
                 HStack {
                     Spacer()
