@@ -130,6 +130,8 @@ struct ContentView: View {
     private var notebooksContentSync = NotebooksContentSync(basePathURL: EnvironmentState.shared.basePathURL)
     private var deletedListSync = DeletedListSync(basePathURL: EnvironmentState.shared.basePathURL)
     
+    @State var navigationSplitViewVisibility = NavigationSplitViewVisibility.all
+    
     var bottomViewBackgroundColor: Color {
         if UIDevice.current.userInterfaceIdiom == .phone {
             return Color(uiColor: UIColor.systemGroupedBackground)
@@ -141,7 +143,7 @@ struct ContentView: View {
     }
     
     var body: some View {
-        NavigationSplitView {
+        NavigationSplitView(columnVisibility: $navigationSplitViewVisibility) {
             // navigation headings
             VStack {
                 List(Mode.allCases, selection: $selectedModeID) { selectedMode in
@@ -291,7 +293,7 @@ struct ContentView: View {
                 
                 if selectedNotebookM != nil {
                     // ** binding won't work here.
-                    NotebookEditorView(listDisplayState: notebooksListState.listSourceType, notebookM: selectedNotebookM!, editorState: editorState)
+                    NotebookEditorView(listDisplayState: notebooksListState.listSourceType, notebookM: selectedNotebookM!, editorState: editorState, navigationSplitViewVisibility: $navigationSplitViewVisibility)
                 } else {
                     Text("No notebook selected")
                 }
