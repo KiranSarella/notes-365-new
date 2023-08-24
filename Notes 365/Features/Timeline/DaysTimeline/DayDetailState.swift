@@ -79,22 +79,17 @@ class DayDetailState: ObservableObject {
     @Published var currentState = CurrentState.loading
     @Published var timelineList = [Timeline]()
     @Published var searchInput: String = ""
-    @Published var theme: MarkdownTheme = ThemeState.shared.theme
     @Published var generatorTask: Task<(), Never>?
     
     @Published var speechState = SpeechState.stopped
     
     let speechHelper = SpeechHelper()
     
-//    @Published var dayDateTest: DayDate
-    
     var cancellable: Cancellable!
-    var cancellableTheme: Cancellable!
     
     init() {
         
         observeCalenderChanges()
-        observeThemeChanges()
     }
     
     func observeCalenderChanges() {
@@ -105,17 +100,8 @@ class DayDetailState: ObservableObject {
             }
     }
     
-    func observeThemeChanges() {
-        cancellableTheme = ThemeState.shared.$theme
-            .receive(on: DispatchQueue.main)
-            .sink { newTheme in
-                self.theme = newTheme!
-            }
-    }
-    
     deinit {
         cancellable.cancel()
-        cancellableTheme.cancel()
     }
     
 //    func updateNewDateDate(newDayDate: DayDate) {
@@ -144,7 +130,7 @@ class DayDetailState: ObservableObject {
         
         generatorTask = Task {
             
-            for await timeline in DayContentGenerator(lines: lines, today: dayDate.date, theme: theme) {
+            for await timeline in DayContentGenerator(lines: lines, today: dayDate.date) {
                 if Task.isCancelled == true { return }
                 DispatchQueue.main.async {
                     self.timelineList.append(timeline)

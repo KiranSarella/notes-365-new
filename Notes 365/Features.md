@@ -2,9 +2,9 @@
 
 [x] code block style
 [x] block quote style
+[x] expand/fullscreen editor
 
 # Todo
-[ ] expand/fullscreen editor
 [ ] editor style symbols
 
 # Backlogs 

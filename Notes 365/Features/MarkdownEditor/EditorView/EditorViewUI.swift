@@ -9,13 +9,14 @@ import SwiftUI
 
 struct EditorViewUI: UIViewRepresentable {
     
-    let theme: MarkdownTheme
+    let theme: MarkdownTheme = ThemeState.shared.theme
     let text: String
     @Binding var editorView: EditorView
     @Binding var contentEditedDate: Date?
     let isEditable: Bool
     var isEditor = true
     var width: CGFloat = 0
+    var editorType = EditorType.smart
     @Binding var height: CGFloat
     
     func heightForView(attrtext:NSAttributedString, width:CGFloat) -> CGFloat {
@@ -39,8 +40,8 @@ struct EditorViewUI: UIViewRepresentable {
     
     func makeUIView(context: Context) -> EditorView {
 //        editorView.width = width
-        editorView.theme = theme
-        editorView.editorType = .smart
+//        editorView.theme = theme
+        editorView.editorType = editorType
         editorView.textView.delegate = context.coordinator
         editorView.textView.font = theme.font
         editorView.textView.textColor = theme.bodyColor.uiColor
@@ -143,27 +144,49 @@ struct ReadOnlyMarkDownView: View {
     
     @State var editorView = EditorView()
     var content: String?
-    @Binding var theme: MarkdownTheme
     var width: CGFloat
     @State var height: CGFloat = 100
     
     var body: some View {
         
-        EditorViewUI(theme: theme,
-                     text: content ?? "no content",
+        EditorViewUI(text: content ?? "no content",
                      editorView: $editorView,
                      contentEditedDate: Binding.constant(Date()),
                      isEditable: false,
                      isEditor: false,
                      width: width,
-                     height: $height)
+                     height: $height
+        )
         .frame(height: height)
+    }
+}
+
+
+struct ReadOnlySymbolsView: View {
+    
+    @State var editorView = EditorView()
+    var content: String?
+    var width: CGFloat
+    @State var height: CGFloat = 100
+    @Binding var editorType: EditorType
+    
+    var body: some View {
         
-//        EditorViewUI(theme: theme,
-//                     text: content ?? "no content",
-//                     isEditable: false,
-//                      isEditor: false, width: width, height: $height)
-//        .frame(height: height)
+        EditorViewUI(text: content ?? "no content",
+                     editorView: $editorView,
+                     contentEditedDate: Binding.constant(Date()),
+                     isEditable: false,
+                     isEditor: false,
+                     width: width,
+                     editorType: editorType, height: $height
+        )
+        .onAppear {
+            editorView.textView.backgroundColor = .clear
+        }
+        .frame(height: height)
+        .onChange(of: editorType) { newValue in
+            editorView.editorType = newValue
+        }
     }
 }
 

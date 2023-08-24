@@ -19,7 +19,7 @@ public class EditorView: UIView {
             textView.text = newValue
         }
     }
-    var theme: MarkdownTheme = ThemeBusiness.generateBasicLightTheme()
+    var theme: MarkdownTheme = ThemeState.shared.theme
     var editorType = EditorType.smart {
         didSet {
             switch editorType {
@@ -79,6 +79,7 @@ extension EditorView {
      // TextView -> TextContainer -> LayoutManager -> TextStorage
      */
     func setupTextViewStack() {
+        
         // layoutManager <-> textStorage
         self.layoutManager.textStorage = textStorage
         // layoutManager <-> textContainer
@@ -120,7 +121,7 @@ extension EditorView {
         
         textView.sizeToFit()
         
-//        textView.backgroundColor = UIColor.yellow
+//        textView.backgroundColor = UIColor.clear
     }
     
     func setAsEditor(isEditable: Bool) {
@@ -735,7 +736,6 @@ extension EditorView {
     }
     
     func processCodeBlock(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        print(#function)
         // continue if balanced only, else skip
         let (count, canProceed) = canPocessCodeBlock(extendedRange, textStorage)
         

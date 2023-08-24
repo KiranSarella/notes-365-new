@@ -16,7 +16,7 @@ struct WeekDetailView: View {
             GeometryReader { g in
                 List {
                     ForEach($weekState.weekTimelineList) { $weekTimeline in
-                        WeekSectionView(weekTimeline: $weekTimeline, theme: $weekState.theme, width: g.size.width)
+                        WeekSectionView(weekTimeline: $weekTimeline, width: g.size.width)
                             .listRowSeparator(.hidden)
                     }
                     HStack {
@@ -59,19 +59,19 @@ struct WeekDetailView: View {
                 }
             }
         })
-        .onReceive(NotificationCenter.default.publisher(for: Notification.Name("theme.modified"))) { output in
-            guard let newTheme = output.object as? MarkdownTheme else { return }
-            weekState.theme = newTheme
-        }
-        .onChange(of: weekState.theme) { newValue in
-            Task {
-                for weekIndex in 0..<weekState.weekTimelineList.count {
-                    for notesIndex in 0..<weekState.weekTimelineList[weekIndex].notes.count {
-                        await weekState.weekTimelineList[weekIndex].notes[notesIndex].updateWithTheme(theme: newValue)
-                    }
-                }
-            }
-        }
+//        .onReceive(NotificationCenter.default.publisher(for: Notification.Name("theme.modified"))) { output in
+//            guard let newTheme = output.object as? MarkdownTheme else { return }
+//            weekState.theme = newTheme
+//        }
+//        .onChange(of: weekState.theme) { newValue in
+//            Task {
+//                for weekIndex in 0..<weekState.weekTimelineList.count {
+//                    for notesIndex in 0..<weekState.weekTimelineList[weekIndex].notes.count {
+//                        await weekState.weekTimelineList[weekIndex].notes[notesIndex].updateWithTheme(theme: newValue)
+//                    }
+//                }
+//            }
+//        }
         .onAppear {
             weekState.readWeekData(weekDate: weekState.weekDate)
         }
@@ -119,7 +119,6 @@ struct WeekDetailView: View {
 struct WeekSectionView: View {
     
     @Binding var weekTimeline: DayChanges
-    @Binding var theme: MarkdownTheme
     var width: CGFloat
     
     var body: some View {
@@ -144,7 +143,7 @@ struct WeekSectionView: View {
             }
             .padding(.top, 30)
         }
-        DayTimelineTwoView(timelineList: $weekTimeline.notes, theme: $theme, width: width)
+        DayTimelineTwoView(timelineList: $weekTimeline.notes, width: width)
     }
 }
 
@@ -152,7 +151,6 @@ struct WeekSectionView: View {
 fileprivate struct DayTimelineTwoView: View {
     
     @Binding var timelineList: [Timeline]
-    @Binding var theme: MarkdownTheme
     var width: CGFloat
     
     func calculateHeight(_ attrStr: AttributedString?, width: CGFloat) -> CGFloat {
@@ -172,17 +170,7 @@ fileprivate struct DayTimelineTwoView: View {
                 NotesTitleView(noteChange: noteChange)
                     .listRowSeparator(.hidden)
                 HStack {
-                    ReadOnlyMarkDownView(content: noteChange.content, theme: $theme, width: width)
-//                    EditorViewUI(theme: theme,
-//                                 text: noteChange.content ?? "no content",
-//                                 editorView: Binding.constant(EditorView()),
-//                                 contentEditedDate: Binding.constant(Date()),
-//                                 isEditable: false,
-//                                 isEditor: false)
-//                        .frame(height: calculateHeight(noteChange.attriburedString, width: width))
-                    
-                    
-//                    Text(noteChange.attriburedString!)
+                    ReadOnlyMarkDownView(content: noteChange.content, width: width)
                         .listRowSeparator(.hidden)
 //                        .padding()
                         .textSelection(.enabled)

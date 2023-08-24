@@ -33,7 +33,7 @@ struct MonthDetailView: View {
                 List {
                     ForEach($monthState.monthTimelineList, id: \.id) { $dayTimeline in
                         // for each day
-                        MonthSectionView(date: monthState.monthDate.start, dayTimeline: $dayTimeline, theme: $monthState.theme, width: g.size.width)
+                        MonthSectionView(date: monthState.monthDate.start, dayTimeline: $dayTimeline, width: g.size.width)
                             .listRowSeparator(.hidden)
                     }
                     HStack {
@@ -62,19 +62,6 @@ struct MonthDetailView: View {
                 .listStyle(PlainListStyle())
                 .onAppear {
                     monthState.readMonthData(monthDate: monthState.monthDate)
-                }
-                .onReceive(NotificationCenter.default.publisher(for: Notification.Name("theme.modified"))) { output in
-                    guard let newTheme = output.object as? MarkdownTheme else { return }
-                    monthState.theme = newTheme
-                }
-                .onChange(of: monthState.theme) { newValue in
-                    Task {
-                        for weekIndex in 0..<monthState.monthTimelineList.count {
-                            for notesIndex in 0..<monthState.monthTimelineList[weekIndex].notes.count {
-                                await monthState.monthTimelineList[weekIndex].notes[notesIndex].updateWithTheme(theme: newValue)
-                            }
-                        }
-                    }
                 }
                 .onChange(of: monthState.monthDate, perform: { newValue in
                     Task {
@@ -120,7 +107,6 @@ struct MonthSectionView: View {
     
     var date: Date
     @Binding var dayTimeline: DayChanges
-    @Binding var theme: MarkdownTheme
     var width: CGFloat
     
     var body: some View {
@@ -144,7 +130,7 @@ struct MonthSectionView: View {
                 }
             }
             
-            DayTimelineTwoView(timelineList: $dayTimeline.notes, theme: $theme, width: width)
+            DayTimelineTwoView(timelineList: $dayTimeline.notes, width: width)
         }
     }
 }
@@ -152,7 +138,6 @@ struct MonthSectionView: View {
 fileprivate struct DayTimelineTwoView: View {
     
     @Binding var timelineList: [Timeline]
-    @Binding var theme: MarkdownTheme
     var width: CGFloat
     
     func calculateHeight(_ attrStr: AttributedString?, width: CGFloat) -> CGFloat {
@@ -172,7 +157,7 @@ fileprivate struct DayTimelineTwoView: View {
                 NotesTitleView(noteChange: noteChange)
                 HStack {
                     
-                    ReadOnlyMarkDownView(content: noteChange.content, theme: $theme, width: width)
+                    ReadOnlyMarkDownView(content: noteChange.content, width: width)
                     
 //                    EditorViewUI2(theme: theme,
 //                                 text: noteChange.content ?? "no content",

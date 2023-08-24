@@ -57,17 +57,7 @@ struct DayDetailView: View {
                         
                             HStack {
                                 ReadOnlyMarkDownView(content: noteChange.content,
-                                                     theme: $dayState.theme,
                                                      width: g.size.width)
-//                                EditorViewUI(theme: dayState.theme,
-//                                             text: noteChange.content ?? "no content",
-//                                             editorView: Binding.constant(EditorView()),
-//                                             contentEditedDate: Binding.constant(Date()),
-//                                             isEditable: false,
-//                                             isEditor: false)
-//                                    .frame(height: calculateHeight(noteChange.attriburedString, width: g.size.width))
-                                
-//                                Text(noteChange.attriburedString!).hidden()
                                     .listRowSeparator(.hidden)
 //                                    .padding()
                                     .textSelection(.enabled)
@@ -108,17 +98,6 @@ struct DayDetailView: View {
                 }
 //                try? await Task.sleep(nanoseconds: 3_000_000_000)
                 
-            }
-        }
-        .onReceive(NotificationCenter.default.publisher(for: Notification.Name("theme.modified"))) { output in
-            guard let newTheme = output.object as? MarkdownTheme else { return }
-            dayState.theme = newTheme
-        }
-        .onChange(of: dayState.theme) { newValue in
-            Task {
-                for i in 0..<dayState.timelineList.count {
-                    await dayState.timelineList[i].updateWithTheme(theme: newValue)
-                }
             }
         }
         .onAppear {

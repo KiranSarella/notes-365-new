@@ -33,18 +33,15 @@ extension MonthTimelineThree {
     @Published var monthDate: MonthDate
     @Published var currentState = CurrentState.loading
     @Published var monthTimelineList = [DayChanges]()
-    @Published var theme: MarkdownTheme = ThemeState.shared.theme
     
     @Published var generatorTask: Task<(), Never>?
     
     var cancellable: Cancellable!
-    var cancellableTheme: Cancellable!
     
     init() {
         monthDate = CalendarState.shared.monthDate
         // observe changes
         observeMonthChanges()
-        observeThemeChanges()
     }
     
     func observeMonthChanges() {
@@ -55,17 +52,8 @@ extension MonthTimelineThree {
             }
     }
     
-    func observeThemeChanges() {
-        cancellableTheme = ThemeState.shared.$theme
-            .receive(on: DispatchQueue.main)
-            .sink { newTheme in
-                self.theme = newTheme!
-            }
-    }
-    
     deinit {
         cancellable.cancel()
-        cancellableTheme.cancel()
     }
     
     func readMonthData(monthDate: MonthDate) {
@@ -86,7 +74,7 @@ extension MonthTimelineThree {
             let lines = dayChanges.metadata.components(separatedBy: "\n")
             // ??
             //            print(lines.count)
-            for await timeline in DayContentGenerator(lines: lines, today: dayChanges.date, theme: theme) {
+            for await timeline in DayContentGenerator(lines: lines, today: dayChanges.date) {
                 //                print(timeline.fileName)
                 DispatchQueue.main.async {
                     if self.generatorTask!.isCancelled { return }

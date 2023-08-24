@@ -12,6 +12,7 @@ struct SettingsView_iPadOS: View {
     
     public enum Setting: String, CaseIterable, Identifiable {
         case themes = "Themes"
+        case editorSymbols = "Text Format Symbols"
         case feedback = "Feedback"
         
         public var id: String { self.name }
@@ -26,6 +27,8 @@ struct SettingsView_iPadOS: View {
                 return "customized 1"
             case .feedback:
                 return ""
+            case .editorSymbols:
+                return ""
             }
         }
         
@@ -33,6 +36,8 @@ struct SettingsView_iPadOS: View {
             switch self {
             case .themes:
                 return "paintbrush"
+            case .editorSymbols:
+                return "textformat"
             case .feedback:
                 return "hand.thumbsup"
             }
@@ -207,7 +212,8 @@ struct SettingsView_iPadOS: View {
 //                            })
 //                        }
                         
-                        
+                    case .editorSymbols:
+                        EditorSymbolsView()
                     case .feedback:
                         FeedbackView_iPadOS()
                     }

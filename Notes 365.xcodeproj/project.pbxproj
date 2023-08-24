@@ -8,7 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		5C117C3F2A8E77FF00B0F3BE /* LayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C117C3E2A8E77FF00B0F3BE /* LayoutManager.swift */; };
+		5C11AF4E2A97639F00EF1F66 /* EditorSymbolsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C11AF4D2A97639F00EF1F66 /* EditorSymbolsState.swift */; };
 		5C4A7B572A7BC626004C436F /* DeletedListSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4A7B562A7BC626004C436F /* DeletedListSync.swift */; };
+		5C4ADCE32A9757EF000A037E /* EditorSymbolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4ADCE22A9757EF000A037E /* EditorSymbolsView.swift */; };
 		5CA77C162A24AE220030EFB2 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C152A24AE220030EFB2 /* Collections */; };
 		5CA77C182A24AE220030EFB2 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C172A24AE220030EFB2 /* DequeModule */; };
 		5CA77C1A2A24AE220030EFB2 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C192A24AE220030EFB2 /* OrderedCollections */; };
@@ -149,7 +151,9 @@
 /* Begin PBXFileReference section */
 		5C117C3D2A8E662800B0F3BE /* Features.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Features.md; sourceTree = "<group>"; };
 		5C117C3E2A8E77FF00B0F3BE /* LayoutManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutManager.swift; sourceTree = "<group>"; };
+		5C11AF4D2A97639F00EF1F66 /* EditorSymbolsState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorSymbolsState.swift; sourceTree = "<group>"; };
 		5C4A7B562A7BC626004C436F /* DeletedListSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletedListSync.swift; sourceTree = "<group>"; };
+		5C4ADCE22A9757EF000A037E /* EditorSymbolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSymbolsView.swift; sourceTree = "<group>"; };
 		5C9732212A8B74C200C42E28 /* iCloud-sync.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "iCloud-sync.md"; sourceTree = "<group>"; };
 		5C9B5CFF2A8FED2A00396102 /* TextKit.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TextKit.md; sourceTree = "<group>"; };
 		5CC0C4A02A90AB4E00BA83D8 /* MonthDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthDetailView.swift; sourceTree = "<group>"; };
@@ -296,6 +300,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5C4ADCE12A97576F000A037E /* EditorSymbols */ = {
+			isa = PBXGroup;
+			children = (
+				5C4ADCE22A9757EF000A037E /* EditorSymbolsView.swift */,
+				5C11AF4D2A97639F00EF1F66 /* EditorSymbolsState.swift */,
+			);
+			path = EditorSymbols;
+			sourceTree = "<group>";
+		};
 		9F188D822930E5E80078D413 /* ThemeDetail */ = {
 			isa = PBXGroup;
 			children = (
@@ -548,6 +561,7 @@
 				9F45BD332920CCCF003DE332 /* Preferences */,
 				9F45BD382920CCCF003DE332 /* Theams */,
 				9F1AAE2F292C93E000B4D254 /* Feedback */,
+				5C4ADCE12A97576F000A037E /* EditorSymbols */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -859,6 +873,7 @@
 				9FB6C6A02927695000C8EC76 /* NotebookContentBusiness.swift in Sources */,
 				9F45BDAA2920CE52003DE332 /* NamedColor.swift in Sources */,
 				9F45BDA82920CE41003DE332 /* MarkdownTheme.swift in Sources */,
+				5C4ADCE32A9757EF000A037E /* EditorSymbolsView.swift in Sources */,
 				9F45BD8E2920CDE9003DE332 /* NotebooksListState.swift in Sources */,
 				5CE055DD2A17D547009EB4EA /* DayCalendarView2.swift in Sources */,
 				9F45BD962920CE00003DE332 /* CalendarType.swift in Sources */,
@@ -877,6 +892,7 @@
 				5CC0C4A12A90AB4E00BA83D8 /* MonthDetailView.swift in Sources */,
 				9FB6C6A929279BEC00C8EC76 /* TimelineBusiness.swift in Sources */,
 				9F45BD6C2920CDCB003DE332 /* NotebooksListBusiness.swift in Sources */,
+				5C11AF4E2A97639F00EF1F66 /* EditorSymbolsState.swift in Sources */,
 				9F8EE98A293EB3090021409E /* CloudDataManager.swift in Sources */,
 				5CC4C01F2A908D7000A4BE41 /* EditorView.swift in Sources */,
 				9F45BD542920CD5E003DE332 /* MonthCalendarView.swift in Sources */,

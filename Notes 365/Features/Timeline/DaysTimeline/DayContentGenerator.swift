@@ -12,14 +12,12 @@ struct DayContentGenerator: AsyncSequence, AsyncIteratorProtocol {
     typealias Element = Timeline
     var linesIterator: IndexingIterator<Array<String>>
     var today: Date
-    var theme: MarkdownTheme
     
-    init(lines: [String], today: Date, theme: MarkdownTheme) {
+    init(lines: [String], today: Date) {
         // remove empty lines
         let lines = lines.map({ $0.count > 0 ? $0 : nil }).compactMap({ $0 })
         linesIterator = lines.makeIterator()
         self.today = today
-        self.theme = theme
     }
     
     mutating func next() async -> Element? {

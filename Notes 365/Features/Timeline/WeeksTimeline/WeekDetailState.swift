@@ -25,19 +25,18 @@ public struct DayChanges: Identifiable {
     @Published var weekDate: WeekDate
     @Published var currentState = CurrentState.loading
     @Published var weekTimelineList = [DayChanges]()
-    @Published var theme: MarkdownTheme = ThemeState.shared.theme
     
     @Published var generatorTask: Task<(), Never>?
     
     var cancellable: Cancellable!
-    var cancellableTheme: Cancellable!
+//    var cancellableTheme: Cancellable!
     
     init() {
         
         weekDate = CalendarState.shared.weekDate
         // observe changes
         observeCalenderChanges()
-        observeThemeChanges()
+//        observeThemeChanges()
     }
     
     func observeCalenderChanges() {
@@ -48,17 +47,17 @@ public struct DayChanges: Identifiable {
             }
     }
     
-    func observeThemeChanges() {
-        cancellableTheme = ThemeState.shared.$theme
-            .receive(on: DispatchQueue.main)
-            .sink { newTheme in
-                self.theme = newTheme!
-            }
-    }
+//    func observeThemeChanges() {
+//        cancellableTheme = ThemeState.shared.$theme
+//            .receive(on: DispatchQueue.main)
+//            .sink { newTheme in
+//                self.theme = newTheme!
+//            }
+//    }
     
     deinit {
         cancellable.cancel()
-        cancellableTheme.cancel()
+//        cancellableTheme.cancel()
     }
     
     func readWeekData(weekDate: WeekDate) {
@@ -82,7 +81,7 @@ public struct DayChanges: Identifiable {
             let lines = dayChanges.metadata.components(separatedBy: "\n")
             // ??
             //            print(lines.count)
-            for await timeline in DayContentGenerator(lines: lines, today: dayChanges.date, theme: theme) {
+            for await timeline in DayContentGenerator(lines: lines, today: dayChanges.date) {
                 //                print(timeline.fileName)
                 DispatchQueue.main.async {
                     if self.generatorTask!.isCancelled { return }
