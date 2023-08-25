@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 
 public struct Timeline: Identifiable {
@@ -17,6 +18,12 @@ public struct Timeline: Identifiable {
     var attriburedString: AttributedString?
     var needUpdate = true
     var isNotebookExists = true
+    // UI optimazation related
+    var editorView: EditorView = EditorView()
+    var height: CGFloat = 0
+    var isConfigured = false
+    var themeID: UUID = UUID()
+    var width: CGFloat = 0
 }
 
 extension Timeline: Equatable {
@@ -32,5 +39,8 @@ extension Timeline {
         let newAttS = markdownAttrStr.getAttriburedString(forMarkdown: self.content!)
         self.attriburedString = AttributedString(newAttS)
     }
-    
+
+    var isRefreshRequired: Bool {
+        (themeID != editorView.theme.id) || (width != editorView.textView.intrinsicContentSize.width)
+    }
 }

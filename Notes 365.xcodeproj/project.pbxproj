@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5C117C3F2A8E77FF00B0F3BE /* LayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C117C3E2A8E77FF00B0F3BE /* LayoutManager.swift */; };
 		5C11AF4E2A97639F00EF1F66 /* EditorSymbolsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C11AF4D2A97639F00EF1F66 /* EditorSymbolsState.swift */; };
+		5C29FECD2A98B377001DC601 /* PreviewViewUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C29FECC2A98B377001DC601 /* PreviewViewUI.swift */; };
 		5C4A7B572A7BC626004C436F /* DeletedListSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4A7B562A7BC626004C436F /* DeletedListSync.swift */; };
 		5C4ADCE32A9757EF000A037E /* EditorSymbolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4ADCE22A9757EF000A037E /* EditorSymbolsView.swift */; };
 		5CA77C162A24AE220030EFB2 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C152A24AE220030EFB2 /* Collections */; };
@@ -152,6 +153,7 @@
 		5C117C3D2A8E662800B0F3BE /* Features.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Features.md; sourceTree = "<group>"; };
 		5C117C3E2A8E77FF00B0F3BE /* LayoutManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutManager.swift; sourceTree = "<group>"; };
 		5C11AF4D2A97639F00EF1F66 /* EditorSymbolsState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorSymbolsState.swift; sourceTree = "<group>"; };
+		5C29FECC2A98B377001DC601 /* PreviewViewUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewUI.swift; sourceTree = "<group>"; };
 		5C4A7B562A7BC626004C436F /* DeletedListSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletedListSync.swift; sourceTree = "<group>"; };
 		5C4ADCE22A9757EF000A037E /* EditorSymbolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSymbolsView.swift; sourceTree = "<group>"; };
 		5C9732212A8B74C200C42E28 /* iCloud-sync.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "iCloud-sync.md"; sourceTree = "<group>"; };
@@ -494,6 +496,7 @@
 				9F93E14F29E6A2AC00210E99 /* MarkdownEditorView.swift */,
 				9FBB0B5C2A0E952E00F407AF /* MarkdownEditorViewState.swift */,
 				9F7D291E299BABAC00B37F51 /* EditorViewUI.swift */,
+				5C29FECC2A98B377001DC601 /* PreviewViewUI.swift */,
 				5CC4C01E2A908D7000A4BE41 /* EditorView.swift */,
 				5C117C3E2A8E77FF00B0F3BE /* LayoutManager.swift */,
 				5C9B5CFF2A8FED2A00396102 /* TextKit.md */,
@@ -833,6 +836,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F1687CC29AD0E7F0085A0CA /* InitialCloudSync.swift in Sources */,
+				5C29FECD2A98B377001DC601 /* PreviewViewUI.swift in Sources */,
 				9F92CF0529B7525500B8D3C4 /* MailView.swift in Sources */,
 				9F93E15229E7DA2700210E99 /* TimelineCreatorBusiness.swift in Sources */,
 				9F9DBF7229F122E80088B0CA /* NotebooksListSync.swift in Sources */,

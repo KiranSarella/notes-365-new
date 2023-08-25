@@ -29,11 +29,11 @@ struct MonthDetailView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            GeometryReader { g in
+//            GeometryReader { g in
                 List {
                     ForEach($monthState.monthTimelineList, id: \.id) { $dayTimeline in
                         // for each day
-                        MonthSectionView(date: monthState.monthDate.start, dayTimeline: $dayTimeline, width: g.size.width)
+                        MonthSectionView(date: monthState.monthDate.start, dayTimeline: $dayTimeline, width: 0)
                             .listRowSeparator(.hidden)
                     }
                     HStack {
@@ -80,7 +80,7 @@ struct MonthDetailView: View {
                 .onDisappear {
                     monthState.generatorTask?.cancel()
                 }
-            }
+//            }
         }
         .toolbar {
 //            ScaleFontView(theme: $theme)
@@ -130,7 +130,7 @@ struct MonthSectionView: View {
                 }
             }
             
-            DayTimelineTwoView(timelineList: $dayTimeline.notes, width: width)
+            DayTimelineTwoView(timelineList: $dayTimeline.notes)
         }
     }
 }
@@ -138,18 +138,6 @@ struct MonthSectionView: View {
 fileprivate struct DayTimelineTwoView: View {
     
     @Binding var timelineList: [Timeline]
-    var width: CGFloat
-    
-    func calculateHeight(_ attrStr: AttributedString?, width: CGFloat) -> CGFloat {
-        guard let attrStr = attrStr else {
-            return 100
-        }
-        let nsattrStt = NSAttributedString(attrStr)
-//        print("width: ", width)
-        let rect = nsattrStt.boundingRect(with: CGSize(width: width, height: 10000), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
-//        print("rect: ", rect)
-        return rect.height + 50
-    }
     
     var body: some View {
         ForEach($timelineList) { $noteChange in
@@ -157,7 +145,9 @@ fileprivate struct DayTimelineTwoView: View {
                 NotesTitleView(noteChange: noteChange)
                 HStack {
                     
-                    ReadOnlyMarkDownView(content: noteChange.content, width: width)
+                    ReadOnlyMarkDownViewTwo(timeline: $noteChange)
+                    
+//                    ReadOnlyMarkDownView(content: noteChange.content)
                     
 //                    EditorViewUI2(theme: theme,
 //                                 text: noteChange.content ?? "no content",

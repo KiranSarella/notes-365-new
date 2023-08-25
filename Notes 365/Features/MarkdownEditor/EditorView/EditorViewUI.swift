@@ -15,30 +15,38 @@ struct EditorViewUI: UIViewRepresentable {
     @Binding var contentEditedDate: Date?
     let isEditable: Bool
     var isEditor = true
-    var width: CGFloat = 0
+//    var width: CGFloat = 0
     var editorType = EditorType.smart
-    @Binding var height: CGFloat
+    var isConfigured = false
+//    @Binding var height: CGFloat
     
-    func heightForView(attrtext:NSAttributedString, width:CGFloat) -> CGFloat {
-        
-        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
-        label.numberOfLines = 0
-        label.lineBreakMode = NSLineBreakMode.byWordWrapping
-        label.attributedText = attrtext
-        label.sizeToFit()
-        print("label.frame: ", label.frame)
-        return label.frame.height
-    }
+//    func heightForView(attrtext:NSAttributedString, width:CGFloat) -> CGFloat {
+//        let width = width - 40
+//        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
+//        label.numberOfLines = 0
+//        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+//        label.attributedText = attrtext
+//        label.sizeToFit()
+//        print("label.frame: ", label.frame)
+//        return label.frame.height
+//    }
     
     fileprivate func calculateHeight(_ attrStr: NSAttributedString?, width: CGFloat) -> CGFloat {
         guard let attrStr = attrStr else {
             return 100
         }
         let rect = attrStr.boundingRect(with: CGSize(width: width - 90, height: 10000), options: [.usesLineFragmentOrigin], context: nil)
-        return rect.height + 50
+        return ceil(rect.size.height) + 50
+//        return rect.height + 50
     }
     
     func makeUIView(context: Context) -> EditorView {
+        
+        if isConfigured {
+            return editorView
+        }
+        
+        print(#function)
 //        editorView.width = width
 //        editorView.theme = theme
         editorView.editorType = editorType
@@ -67,16 +75,18 @@ struct EditorViewUI: UIViewRepresentable {
         } else {
             editorView.setAsReadOnly()
             // calc height
-            DispatchQueue.main.async {
-                height = calculateHeight(editorView.textView.attributedText, width: width)
-            }
+//            DispatchQueue.main.async {
+//                height = calculateHeight(editorView.textView.attributedText, width: width)
+//                print("calc: ", width, height)
+//                print("content size: ", editorView.textView.contentSize)
+//            }
         }
         
         return editorView
     }
     
     func updateUIView(_ editorView: EditorView, context: Context) {
-//        editorView.textView.sizeToFit()
+
     }
     
     typealias NSViewType = EditorView
@@ -144,7 +154,7 @@ struct ReadOnlyMarkDownView: View {
     
     @State var editorView = EditorView()
     var content: String?
-    var width: CGFloat
+//    var width: CGFloat
     @State var height: CGFloat = 100
     
     var body: some View {
@@ -153,10 +163,26 @@ struct ReadOnlyMarkDownView: View {
                      editorView: $editorView,
                      contentEditedDate: Binding.constant(Date()),
                      isEditable: false,
-                     isEditor: false,
-                     width: width,
-                     height: $height
+                     isEditor: false
         )
+        .onAppear {
+            
+            
+            DispatchQueue.main.async {
+                editorView.textView.sizeToFit()
+                height = editorView.textView.contentSize.height
+//                print("height: ", height)
+                
+                
+                print("contentSize: ", editorView.textView.contentSize)
+                print("intrinsicContentSize: ", editorView.textView.intrinsicContentSize)
+                
+                print("editorView.compression: ", editorView.contentCompressionResistancePriority(for: .vertical))
+                
+                print("textview.compression: ", editorView.textView.contentCompressionResistancePriority(for: .vertical))
+            }
+        }
+//        .frame(height: editorView.textView.intrinsicContentSize.height)
         .frame(height: height)
     }
 }
@@ -177,8 +203,7 @@ struct ReadOnlySymbolsView: View {
                      contentEditedDate: Binding.constant(Date()),
                      isEditable: false,
                      isEditor: false,
-                     width: width,
-                     editorType: editorType, height: $height
+                     editorType: editorType
         )
         .onAppear {
             editorView.textView.backgroundColor = .clear

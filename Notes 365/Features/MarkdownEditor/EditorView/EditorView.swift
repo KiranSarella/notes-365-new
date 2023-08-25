@@ -34,7 +34,7 @@ public class EditorView: UIView {
     private(set) lazy var layoutManager = LayoutManager()
     public private(set) lazy var textContainer = NSTextContainer()
     public private(set) var textView: UITextView!
-    public private(set) lazy var scrollview = UIScrollView()
+//    public private(set) lazy var scrollview = UIScrollView()
    
     convenience init(theme: MarkdownTheme) {
         self.init(frame: CGRect.zero)
@@ -91,19 +91,30 @@ extension EditorView {
         // textView <-> textContainer
         textView = UITextView(frame: rect, textContainer: textContainer)
         textView.delegate = self
-        textView.isEditable = false
-        textView.showsVerticalScrollIndicator = false
-        textView.isScrollEnabled = false
+//        textView.isEditable = false
+//        textView.showsVerticalScrollIndicator = false
+//        textView.isScrollEnabled = false
         
         // add textView to scrollView
         textView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(textView)
         
+//        self.backgroundColor = UIColor.green
+//        self.textView.backgroundColor = UIColor.yellow
+        
+//        textView.contentSize
+        
         NSLayoutConstraint.activate([
+//            textView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0, constant: -20),
+//            textView.topAnchor.constraint(equalTo: self.topAnchor, constant: -20),
+//            textView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -20),
             textView.widthAnchor.constraint(equalTo: self.widthAnchor),
             textView.topAnchor.constraint(equalTo: self.topAnchor),
             textView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
         ])
+        
+//        textView.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+//        self.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         
         // configureTextContainer
 //        textContainer.lineFragmentPadding = 20  // margin padding
@@ -119,7 +130,7 @@ extension EditorView {
         // set delegate
         self.layoutManager.textStorage?.delegate = self
         
-        textView.sizeToFit()
+//        textView.sizeToFit()
         
 //        textView.backgroundColor = UIColor.clear
     }
@@ -189,14 +200,14 @@ extension EditorView: NSTextStorageDelegate {
     
     public func textStorage(_ textStorage: NSTextStorage, willProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
         
-        var extendedRange = (textStorage.string as NSString).paragraphRange(for: editedRange)
+        let extendedRange = (textStorage.string as NSString).paragraphRange(for: editedRange)
         
         textStorage.addAttribute(.font, value: theme.font, range: extendedRange)
     }
     
     public func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
      
-//        print("editedRange", editedRange, "delta", delta, "editedMask", editedMask)
+        print("editedRange", editedRange, "delta", delta, "editedMask", editedMask)
    
         var extendedRange = (textStorage.string as NSString).paragraphRange(for: editedRange)
         

@@ -35,12 +35,17 @@ struct DayContentGenerator: AsyncSequence, AsyncIteratorProtocol {
         self
     }
     
+    @MainActor
     func prepareContent(for line: String) async -> Timeline? {
         
         let words = line.components(separatedBy: "\t")
         let uuid =  UUID(uuidString: words[0])!
         let fileName = words[2]
         let filePath = words[3]
+//
+//        DispatchQueue.main.async {
+//
+//        }
         
         var timeline = Timeline(fileUUID: uuid, fileName: fileName, filePath: filePath)
         
@@ -63,13 +68,6 @@ struct DayContentGenerator: AsyncSequence, AsyncIteratorProtocol {
         if Task.isCancelled {
             return nil
         }
-//        // generate attribured string
-//        let markdownAttrStr = MarkdownAttriburedString(theme: theme)
-//        let newAttS = await markdownAttrStr.getAttriburedStringAsync(forMarkdown: timeline.content!)
-//        if Task.isCancelled {
-//            return nil
-//        }
-//        timeline.attriburedString = AttributedString(newAttS)
         
         return timeline
     }

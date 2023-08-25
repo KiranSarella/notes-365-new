@@ -143,7 +143,7 @@ struct WeekSectionView: View {
             }
             .padding(.top, 30)
         }
-        DayTimelineTwoView(timelineList: $weekTimeline.notes, width: width)
+        DayTimelineTwoView(timelineList: $weekTimeline.notes)
     }
 }
 
@@ -151,18 +151,6 @@ struct WeekSectionView: View {
 fileprivate struct DayTimelineTwoView: View {
     
     @Binding var timelineList: [Timeline]
-    var width: CGFloat
-    
-    func calculateHeight(_ attrStr: AttributedString?, width: CGFloat) -> CGFloat {
-        guard let attrStr = attrStr else {
-            return 100
-        }
-        let nsattrStt = NSAttributedString(attrStr)
-//        print("width: ", width)
-        let rect = nsattrStt.boundingRect(with: CGSize(width: width, height: 10000), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
-//        print("rect: ", rect)
-        return rect.height + 50
-    }
     
     var body: some View {
         ForEach($timelineList) { $noteChange in
@@ -170,7 +158,8 @@ fileprivate struct DayTimelineTwoView: View {
                 NotesTitleView(noteChange: noteChange)
                     .listRowSeparator(.hidden)
                 HStack {
-                    ReadOnlyMarkDownView(content: noteChange.content, width: width)
+                    ReadOnlyMarkDownViewTwo(timeline: $noteChange)
+//                    ReadOnlyMarkDownView(content: noteChange.content)
                         .listRowSeparator(.hidden)
 //                        .padding()
                         .textSelection(.enabled)

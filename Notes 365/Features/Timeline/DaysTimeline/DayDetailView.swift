@@ -31,33 +31,20 @@ struct DayDetailView: View {
     
     var dayItem: DayDateItem?
     @StateObject private var dayState = DayDetailState()
-
-    func calculateHeight(_ attrStr: AttributedString?, width: CGFloat) -> CGFloat {
-        guard let attrStr = attrStr else {
-            return 100
-        }
-        let nsattrStt = NSAttributedString(attrStr)
-//        print("width: ", width)
-        let rect = nsattrStt.boundingRect(with: CGSize(width: width, height: 10000), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
-//        print("rect: ", rect)
-        return rect.height + 50
-    }
     
     var body: some View {
         
         VStack(spacing: 0) {
-            GeometryReader { g in
             List {
                 ForEach($dayState.timelineList) { $noteChange in
-                    
                     VStack {
                         // notebook heading view
                         NotesTitleView(noteChange: noteChange)
                             .listRowSeparator(.hidden)
                         
                             HStack {
-                                ReadOnlyMarkDownView(content: noteChange.content,
-                                                     width: g.size.width)
+                                ReadOnlyMarkDownViewTwo(timeline: $noteChange)
+//                                ReadOnlyMarkDownView(content: noteChange.content)
                                     .listRowSeparator(.hidden)
 //                                    .padding()
                                     .textSelection(.enabled)
@@ -82,7 +69,6 @@ struct DayDetailView: View {
             }
                 
             .listStyle(PlainListStyle())
-            }
 //            .navigationTitle(dayState.dayDate.date.formattedDate())
         }
         .onChange(of: dayState.dayDate) { newValue in
