@@ -34,7 +34,6 @@ public class EditorView: UIView {
     private(set) lazy var layoutManager = LayoutManager()
     public private(set) lazy var textContainer = NSTextContainer()
     public private(set) var textView: UITextView!
-//    public private(set) lazy var scrollview = UIScrollView()
    
     convenience init(theme: MarkdownTheme) {
         self.init(frame: CGRect.zero)
@@ -207,9 +206,9 @@ extension EditorView: NSTextStorageDelegate {
     
     public func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
      
-        print("editedRange", editedRange, "delta", delta, "editedMask", editedMask)
+//        print("editedRange", editedRange, "delta", delta, "editedMask", editedMask)
    
-        var extendedRange = (textStorage.string as NSString).paragraphRange(for: editedRange)
+        let extendedRange = (textStorage.string as NSString).paragraphRange(for: editedRange)
         
 //        textStorage.setAttributes([:], range: extendedRange)
         // FIXIT: - ** if enabled, telugu font will not work. if disabled, code block and below lines font issue.
@@ -608,7 +607,7 @@ extension EditorView {
         let pattern = MarkdownPattern.url
 
         
-        var boldFont = theme.font
+        let boldFont = theme.font
         //        let fontDesc = boldFont.fontDescriptor.withSymbolicTraits(.traitBold)
         //        boldFont = UIFont.boldSystemFont(ofSize: boldFont.pointSize)
         //        boldFont = boldFont.apply(newTraits: .bold)
@@ -812,7 +811,7 @@ extension EditorView {
             
 
 //            let endLength: Int = editorType == .smart ? 3 : 3
-            let lineRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 3)
+//            let lineRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 3)
             innerAttributedString.addAttribute(.codeBlockBackground, value: UIColor.orange, range: textRange)
             
             let para = NSMutableParagraphStyle()
@@ -821,7 +820,7 @@ extension EditorView {
             para.lineSpacing = 10
 //            para.tailIndent = 10
             innerAttributedString.addAttribute(.paragraphStyle, value: para, range: textRange)
-            print(lineRange)
+//            print(lineRange)
         }
     }
     

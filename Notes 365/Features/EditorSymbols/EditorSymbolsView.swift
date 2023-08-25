@@ -13,23 +13,24 @@ struct EditorSymbolsView: View {
     @State var showSymbols: Bool = true
     
     var body: some View {
-        GeometryReader { g in
-            List(state.symbolsList) { symbol in
-                Section(symbol.heading) {
-                    VStack {
-//                        Text(symbol.content)
-                        ReadOnlySymbolsView(content: symbol.content, width: g.size.width, editorType: $state.editorType)
-                            .padding(EdgeInsets(top: 8, leading: 0, bottom: -20, trailing: 0))
-                    }
+        
+        List($state.symbolsList) { $symbol in
+            Section(symbol.heading) {
+                VStack {
+                    ReadOnlyMarkDownViewThree(timeline: $symbol, showSymbols: $showSymbols)
+                        .padding(EdgeInsets(top: 8, leading: 0, bottom: 5, trailing: 0))
                 }
             }
-            .navigationBarTitle("Text Format Symbols")
         }
+        .navigationBarTitle("Aa")
         .toolbar {
             Toggle("Show Symbols", isOn: $showSymbols)
         }
         .onChange(of: showSymbols) { newShowSymbols in
-            state.editorType = (newShowSymbols == true) ? .markdown : .smart
+//            state.editorType = (newShowSymbols == true) ? .markdown : .smart
+            for i in 0..<state.symbolsList.count {
+                state.symbolsList[i].editorView.editorType = newShowSymbols ? .markdown : .smart
+            }
         }
 
 //        .listStyle(GroupedListStyle())

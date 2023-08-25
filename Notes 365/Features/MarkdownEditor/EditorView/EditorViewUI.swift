@@ -15,21 +15,10 @@ struct EditorViewUI: UIViewRepresentable {
     @Binding var contentEditedDate: Date?
     let isEditable: Bool
     var isEditor = true
-//    var width: CGFloat = 0
+    var width: CGFloat = 0
     var editorType = EditorType.smart
     var isConfigured = false
 //    @Binding var height: CGFloat
-    
-//    func heightForView(attrtext:NSAttributedString, width:CGFloat) -> CGFloat {
-//        let width = width - 40
-//        let label:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: CGFloat.greatestFiniteMagnitude))
-//        label.numberOfLines = 0
-//        label.lineBreakMode = NSLineBreakMode.byWordWrapping
-//        label.attributedText = attrtext
-//        label.sizeToFit()
-//        print("label.frame: ", label.frame)
-//        return label.frame.height
-//    }
     
     fileprivate func calculateHeight(_ attrStr: NSAttributedString?, width: CGFloat) -> CGFloat {
         guard let attrStr = attrStr else {
@@ -41,12 +30,10 @@ struct EditorViewUI: UIViewRepresentable {
     }
     
     func makeUIView(context: Context) -> EditorView {
-        
         if isConfigured {
             return editorView
         }
-        
-        print(#function)
+//        print(#function)
 //        editorView.width = width
 //        editorView.theme = theme
         editorView.editorType = editorType
@@ -154,7 +141,7 @@ struct ReadOnlyMarkDownView: View {
     
     @State var editorView = EditorView()
     var content: String?
-//    var width: CGFloat
+    var width: CGFloat
     @State var height: CGFloat = 100
     
     var body: some View {
@@ -166,23 +153,14 @@ struct ReadOnlyMarkDownView: View {
                      isEditor: false
         )
         .onAppear {
-            
-            
             DispatchQueue.main.async {
                 editorView.textView.sizeToFit()
                 height = editorView.textView.contentSize.height
 //                print("height: ", height)
-                
-                
-                print("contentSize: ", editorView.textView.contentSize)
-                print("intrinsicContentSize: ", editorView.textView.intrinsicContentSize)
-                
-                print("editorView.compression: ", editorView.contentCompressionResistancePriority(for: .vertical))
-                
-                print("textview.compression: ", editorView.textView.contentCompressionResistancePriority(for: .vertical))
+//                print("contentSize: ", editorView.textView.contentSize)
+//                print("intrinsicContentSize: ", editorView.textView.intrinsicContentSize)
             }
         }
-//        .frame(height: editorView.textView.intrinsicContentSize.height)
         .frame(height: height)
     }
 }

@@ -42,10 +42,6 @@ struct DayContentGenerator: AsyncSequence, AsyncIteratorProtocol {
         let uuid =  UUID(uuidString: words[0])!
         let fileName = words[2]
         let filePath = words[3]
-//
-//        DispatchQueue.main.async {
-//
-//        }
         
         var timeline = Timeline(fileUUID: uuid, fileName: fileName, filePath: filePath)
         
@@ -63,7 +59,6 @@ struct DayContentGenerator: AsyncSequence, AsyncIteratorProtocol {
 //        }
         // fetch content
         timeline.content = await TimelineBusiness(path: EnvironmentState.shared.basePathURL).readContent(today: today, fileName: timeline.fileUUID.uuidString)?.trimmingCharacters(in: .newlines) ?? "<no content>"
-        // ?.trimmingCharacters(in: .newlines)
         
         if Task.isCancelled {
             return nil

@@ -12,7 +12,7 @@ struct SettingsView_iPadOS: View {
     
     public enum Setting: String, CaseIterable, Identifiable {
         case themes = "Themes"
-        case editorSymbols = "Text Format Symbols"
+        case editorSymbols = "Text Formatting Symbols"
         case feedback = "Feedback"
         
         public var id: String { self.name }
@@ -69,153 +69,89 @@ struct SettingsView_iPadOS: View {
         
         NavigationStack {
             VStack {
-                List(Setting.allCases, selection: $selectedModeID) { selectedMode in
-                    NavigationLink(value: selectedMode) {
-                        HStack(spacing: 0) {
-                            Image(systemName: selectedMode.image)
-                                .imageScale(.large)
-//                                .frame(width: 80, height: 80)
-                            
-                            VStack(alignment: .leading) {
-                                Text(selectedMode.name)
-                                    .font(.system(Font.TextStyle.title2))
-//                                Text(selectedMode.description)
-//                                    .font(.system(Font.TextStyle.caption))
-                                
-                            }.padding(.leading)
-                        }.padding(6)
-                    }
-                }
-                .navigationDestination(for: Setting.self) { option in
-                    switch option {
-                    case .themes:
-                        
-                        List {
-                            Picker("Light", selection: $selectedLightThemeID) {
-                                ForEach(themesListState.themes) { theme in
-                                    Text(theme.themeName).tag(theme.id)
-                                }
-                            }
-                            .tag(selectedLightThemeID)
-                            
-                            Picker("Dark", selection: $selectedDarkThemeID) {
-                                ForEach(themesListState.themes) { theme in
-                                    Text(theme.themeName).tag(theme.id)
-                                }
-                            }
-                            .tag(selectedDarkThemeID)
-                            
-                            Section("Themes") {
-                                ForEach(themesListState.themes, id:\.self) { theme in
-                                    
-//                                    Text(theme.themeName)
-                                    
-//                                    Button {
-////                                        showThemeDetail = true
-//
-//                                        NavigationLink(theme.themeName, value: selectedTheme)
-//
-//                                    } label: {
-//
-//                                        HStack {
-//                                            Text(theme.themeName)
-//                                            Spacer()
-//                                            Image(systemName: "chevron.right")
-//                                                .foregroundColor(.gray)
-//                                                .fixedSize()
-//                                                .frame(width: 8, height: 8)
-//                                        }
-//
-//                                    }
-
-                                    
-                                    Button(theme.themeName) {
-                                        
-                                        selectedTheme = theme
-//                                        print(selectedTheme?.id, selectedTheme?.themeName)
-                                        showThemeDetail = true
-                                        
-                                       
-                                        
-//                                        selectedTheme = theme
-//                                        print(selectedTheme?.id, selectedTheme?.themeName)
+                List {
+                    Section("") {
+                        NavigationLink {
+                            List {
+                                Picker("Light", selection: $selectedLightThemeID) {
+                                    ForEach(themesListState.themes) { theme in
+                                        Text(theme.themeName).tag(theme.id)
                                     }
-                                    
-//                                    NavigationLink {
-//                                        ThemeDetailView_iOS(theme: theme, onThemeChange: { value in
-//                                            print(value)
-////                                            theme = value
-////                                            themesListState.saveChanges(value)
-//                                        }).tag(theme.id)
-//                                    } label: {
-//                                        Text(theme.themeName)
-//                                    }
-
-                                    
-//                                    NavigationLink(theme.themeName, value: selectedTheme)
-                                    
                                 }
-                                .buttonStyle(PlainButtonStyle())
+                                .tag(selectedLightThemeID)
                                 
+                                Picker("Dark", selection: $selectedDarkThemeID) {
+                                    ForEach(themesListState.themes) { theme in
+                                        Text(theme.themeName).tag(theme.id)
+                                    }
+                                }
+                                .tag(selectedDarkThemeID)
+                                
+                                Section("Themes") {
+                                    ForEach(themesListState.themes, id:\.self) { theme in
+                                        Button(theme.themeName) {
+                                            selectedTheme = theme
+                                            showThemeDetail = true
+                                        }
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                }
                             }
-                            
-
-                            
-                        }
-                        .onChange(of: selectedLightThemeID) { newValue in
-                            themesListState.saveLightTheme(newValue)
-                        }
-                        .onChange(of: selectedDarkThemeID) { newValue in
-                            themesListState.saveDarkTheme(newValue)
-                        }
-                        .navigationTitle("Themes")
-//                        .listStyle(InsetGroupedListStyle())
-                        .onAppear {
-                            
-//                            selectedLightThemeID = themesListState.themes.first!.id
-//                            selectedDarkThemeID = themesListState.themes.first!.id
-                            
-//                            print(selectedLightThemeID)
-//                            selectedThemeID = ThemeState.shared.theme.id
-//                            selectedLightThemeID = themesListState.selectedLightTheme.id
-//                            selectedDarkThemeID = themesListState.selectedDarkTheme.id
-//                            print(selectedLightThemeID)
-//                            print(themesListState.themes)
-                        }
-                        .sheet(item: $selectedTheme, content: { theme in
-                            NavigationStack {
-                                ThemeDetailView_iOS(theme: theme, onThemeChange: { value in
-//                                    selectedTheme = value
-                                    themesListState.saveChanges(value)
-                                })
+                            .onChange(of: selectedLightThemeID) { newValue in
+                                themesListState.saveLightTheme(newValue)
                             }
-                        })
-//                        .sheet(isPresented: $showThemeDetail) {
-//
-//                            if selectedTheme == nil {
-////                               Text("invalid selection")
-//                            } else {
-//                                NavigationStack {
-//                                    ThemeDetailView_iOS(theme: selectedTheme, onThemeChange: { value in
-//                                        selectedTheme = value
-//                                        themesListState.saveChanges(value)
-//                                    })
-//                                }
-//                            }
-//                        }
-//                        .navigationDestination(for: MarkdownTheme.self) { selectedTheme in
-////                            Text(selectedTheme.themeName)
-//                            ThemeDetailView_iOS(theme: selectedTheme, onThemeChange: { value in
-//                                // print(value)
-////                                  theme = value
-//                                 themesListState.saveChanges(value)
-//                            })
-//                        }
+                            .onChange(of: selectedDarkThemeID) { newValue in
+                                themesListState.saveDarkTheme(newValue)
+                            }
+                            .navigationTitle("Themes")
+                            .sheet(item: $selectedTheme, content: { theme in
+                                NavigationStack {
+                                    ThemeDetailView_iOS(theme: theme, onThemeChange: { value in
+                                        themesListState.saveChanges(value)
+                                    })
+                                }
+                            })
+                        } label: {
+                            let selectedMode = Setting.themes
+                            HStack(spacing: 0) {
+                                Image(systemName: selectedMode.image)
+                                    .imageScale(.large)
+                                VStack(alignment: .leading) {
+                                    Text(selectedMode.name)
+                                        .font(.system(Font.TextStyle.title2))
+                                }.padding(.leading)
+                            }.padding(6)
+                        }
+                    }
+                    
+                    Section("") {
+                        NavigationLink {
+                            EditorSymbolsView()
+                        } label: {
+                            let selectedMode = Setting.editorSymbols
+                            HStack(spacing: 0) {
+                                Image(systemName: selectedMode.image)
+                                    .imageScale(.large)
+                                VStack(alignment: .leading) {
+                                    Text(selectedMode.name)
+                                        .font(.system(Font.TextStyle.title2))
+                                }.padding(.leading)
+                            }.padding(6)
+                        }
                         
-                    case .editorSymbols:
-                        EditorSymbolsView()
-                    case .feedback:
-                        FeedbackView_iPadOS()
+                        NavigationLink {
+                            FeedbackView_iPadOS()
+                        } label: {
+                            let selectedMode = Setting.feedback
+                            HStack(spacing: 0) {
+                                Image(systemName: selectedMode.image)
+                                    .imageScale(.large)
+                                VStack(alignment: .leading) {
+                                    Text(selectedMode.name)
+                                        .font(.system(Font.TextStyle.title2))
+                                }.padding(.leading)
+                            }.padding(6)
+                        }
                     }
                 }
                 .navigationTitle("Settings")
@@ -230,36 +166,9 @@ struct SettingsView_iPadOS: View {
             }
         }
         .onAppear {
-            
             selectedLightThemeID = themesListState.selectedLightTheme.id
             selectedDarkThemeID = themesListState.selectedDarkTheme.id
-            
-//            selectedTheme = ThemeState.shared.theme
-//
-//            showThemeDetail = true
-//            showThemeDetail = false
-//
-            
-//            selectedTheme = theme
         }
-        
-        
-//        List(options, selection: $selectedOption) { option in
-//            HStack(spacing: 0) {
-//                Image(systemName: option.image)
-//                Text(option.name)
-//                    .padding(.horizontal)
-//            }
-//        }.onAppear {
-//
-//            options = [
-//                Setting(name: "Themes", image: "paintbrush"),
-//                Setting(name: "Purchases", image: "cart"),
-//                Setting(name: "Feedback", image: "hand.thumbsup"),
-//            ]
-//
-//            selectedOption = .
-//        }
     }
 }
 

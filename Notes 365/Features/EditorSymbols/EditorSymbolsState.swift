@@ -7,19 +7,19 @@
 
 import SwiftUI
 
-public struct EditorSymbolDoc: Identifiable {
-    public let id: UUID = UUID()
-    let heading: String
-    let content: String
-}
+//public struct ReadonlyEditorCache: Identifiable {
+//    public let id: UUID = UUID()
+//    let heading: String
+//    let content: String
+//}
 
 
 class EditorSymbolsState: ObservableObject {
     
-    @Published var theme: MarkdownTheme = ThemeState.shared.theme
-    @Published var editorType = EditorType.markdown
+//    @Published var theme: MarkdownTheme = ThemeState.shared.theme
+//    @Published var editorType = EditorType.markdown
     
-    var symbolsList = [EditorSymbolDoc]()
+    @Published var symbolsList = [ReadonlyEditorCache]()
     
     init() {
         
@@ -38,34 +38,34 @@ class EditorSymbolsState: ObservableObject {
         symbolsList.append(prepareBlockQuoteSymbols())
     }
     
-    func prepareBoldSymbols() -> EditorSymbolDoc {
+    func prepareBoldSymbols() -> ReadonlyEditorCache {
         
         let heading = "Bold"
         let content = """
         This is **bold**
         """
-        return EditorSymbolDoc(heading: heading, content: content)
+        return ReadonlyEditorCache(heading: heading, content: content)
     }
     
-    func prepareItalicSymbols() -> EditorSymbolDoc {
+    func prepareItalicSymbols() -> ReadonlyEditorCache {
         
         let heading = "Italic"
         let content = """
         This is *italic*
         """
-        return EditorSymbolDoc(heading: heading, content: content)
+        return ReadonlyEditorCache(heading: heading, content: content)
     }
     
-    func prepareStrikethroughSymbols() -> EditorSymbolDoc {
+    func prepareStrikethroughSymbols() -> ReadonlyEditorCache {
         
         let heading = "Strikethrough"
         let content = """
         This is ~~strikethrough~~
         """
-        return EditorSymbolDoc(heading: heading, content: content)
+        return ReadonlyEditorCache(heading: heading, content: content)
     }
     
-    func prepareHeadingSymbols() -> EditorSymbolDoc {
+    func prepareHeadingSymbols() -> ReadonlyEditorCache {
         
         let heading = "Headings"
         let content = """
@@ -76,10 +76,10 @@ class EditorSymbolsState: ObservableObject {
         ##### Heading 5
         ###### Heading 6
         """
-        return EditorSymbolDoc(heading: heading, content: content)
+        return ReadonlyEditorCache(heading: heading, content: content)
     }
     
-    func prepareOrderedListSymbols() -> EditorSymbolDoc {
+    func prepareOrderedListSymbols() -> ReadonlyEditorCache {
         
         let heading = "Ordered List"
         let content = """
@@ -87,10 +87,10 @@ class EditorSymbolsState: ObservableObject {
         2. Tuesday
         3. Wednesday
         """
-        return EditorSymbolDoc(heading: heading, content: content)
+        return ReadonlyEditorCache(heading: heading, content: content)
     }
     
-    func prepareDashedListSymbols() -> EditorSymbolDoc {
+    func prepareDashedListSymbols() -> ReadonlyEditorCache {
         
         let heading = "Dashed List"
         let content = """
@@ -98,19 +98,19 @@ class EditorSymbolsState: ObservableObject {
         - iPadOS
         - iOS
         """
-        return EditorSymbolDoc(heading: heading, content: content)
+        return ReadonlyEditorCache(heading: heading, content: content)
     }
     
-    func prepareInlineCodeSymbols() -> EditorSymbolDoc {
+    func prepareInlineCodeSymbols() -> ReadonlyEditorCache {
         
         let heading = "Inline code"
         let content = """
         this is `inline`
         """
-        return EditorSymbolDoc(heading: heading, content: content)
+        return ReadonlyEditorCache(heading: heading, content: content)
     }
     
-    func prepareCodeBlockSymbols() -> EditorSymbolDoc {
+    func prepareCodeBlockSymbols() -> ReadonlyEditorCache {
         
         let heading = "Code Block"
         let content = """
@@ -119,16 +119,16 @@ class EditorSymbolsState: ObservableObject {
         // line 2
         ```
         """
-        return EditorSymbolDoc(heading: heading, content: content)
+        return ReadonlyEditorCache(heading: heading, content: content)
     }
     
-    func prepareBlockQuoteSymbols() -> EditorSymbolDoc {
+    func prepareBlockQuoteSymbols() -> ReadonlyEditorCache {
         
         let heading = "Block Quote"
         let content = """
         >Curabitur blandit tempus porttitor. Nullam quis risus eget urna mollis ornare vel eu leo.
         """
-        return EditorSymbolDoc(heading: heading, content: content)
+        return ReadonlyEditorCache(heading: heading, content: content)
     }
     
 }
