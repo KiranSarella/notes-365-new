@@ -134,6 +134,7 @@ struct SettingsView_iPadOS: View {
                                     .imageScale(.large)
                                 VStack(alignment: .leading) {
                                     Text(selectedMode.name)
+                                        .lineLimit(1)
                                         .font(.system(Font.TextStyle.title2))
                                 }.padding(.leading)
                             }.padding(6)
