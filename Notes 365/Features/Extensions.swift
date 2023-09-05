@@ -113,6 +113,15 @@ public extension Date {
     func isSameDayAs(_ date2: Date) -> Bool {
         return Calendar.current.isDate(self, inSameDayAs: date2)
     }
+   
+    func getDayNumberFromStart(_ from: Date) -> Int {
+        let numberOfDays = Calendar.current.dateComponents([.day], from: from, to: self)
+        return numberOfDays.day!
+    }
+    
+    func getDayNumber() -> Int {
+        return Calendar.current.ordinality(of: .day, in: .year, for: self)!
+    }
     
     func getWeekNumber() -> Int {
         return Calendar.current.component(.weekOfYear, from: self)

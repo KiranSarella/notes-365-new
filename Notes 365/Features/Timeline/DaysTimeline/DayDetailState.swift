@@ -81,15 +81,20 @@ class DayDetailState: ObservableObject {
     @Published var searchInput: String = ""
     @Published var generatorTask: Task<(), Never>?
     
+    @Published var dayNumberText: String = ""
+    @Published var showDayNumberFromDOB = true
+    
     @Published var speechState = SpeechState.stopped
     
     let speechHelper = SpeechHelper()
     
     var cancellable: Cancellable!
+    var cancellableSet = Set<AnyCancellable>()
     
     init() {
         
         observeCalenderChanges()
+        observeDayNumberOptionChanges()
     }
     
     func observeCalenderChanges() {
@@ -108,7 +113,40 @@ class DayDetailState: ObservableObject {
 //        self.dayDate = newDayDate
 //    }
     
+    
+    func observeDayNumberOptionChanges() {
+        $showDayNumberFromDOB.sink { isOn in
+            if isOn {
+                self.updateDayNumberTextWithDOB()
+            } else {
+                self.updateDayNumberTextWithYear()
+            }
+        }.store(in: &cancellableSet)
+    }
+    
+    func updateDayNumberText() {
+        self.updateDayNumberTextWithYear()
+        
+//        if self.showDayNumberFromDOB {
+//            self.updateDayNumberTextWithDOB()
+//        } else {
+//            self.updateDayNumberTextWithYear()
+//        }
+    }
+    
+    func updateDayNumberTextWithDOB() {
+        let dob = "1989-07-21 00:00:00".toUTCDate()!
+        let count = dayDate.date.getDayNumberFromStart(dob)
+        dayNumberText = "DAY \(count)"
+    }
+    
+    func updateDayNumberTextWithYear() {
+        let count = dayDate.date.getDayNumber()
+        dayNumberText = "DAY \(count)"
+    }
+    
     func readDayData(dayDate: DayDate) {
+        updateDayNumberText()
         
         currentState = .loading
         // prepare folder path

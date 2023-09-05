@@ -13,37 +13,35 @@ struct WeekDetailView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            GeometryReader { g in
-                List {
-                    ForEach($weekState.weekTimelineList) { $weekTimeline in
-                        WeekSectionView(weekTimeline: $weekTimeline, width: g.size.width)
-                            .listRowSeparator(.hidden)
-                    }
-                    HStack {
-                        Spacer()
-                        Text(weekState.currentState.message)
-                            .listRowSeparator(.hidden)
-                            .fontWeight(.ultraLight)
-                            .foregroundColor(.gray)
-                        Spacer()
-                    }
-                    .listRowSeparator(.hidden)
-                    //                // motivation question
-                    //                HStack {
-                    //                    Spacer()
-                    //
-                    //                    Text(MotivationQuestions.weekQuestions.randomElement() ?? "")
-                    //                        .fontWeight(.thin)
-                    //                        .foregroundColor(.gray)
-                    //                        .padding()
-                    //                        .opacity(currentState == .empty ? 1 : 0)
-                    //
-                    //                    Spacer()
-                    //                }
-                    //                .padding()
+            List {
+                ForEach($weekState.weekTimelineList) { $weekTimeline in
+                    WeekSectionView(weekTimeline: $weekTimeline)
+                        .listRowSeparator(.hidden)
                 }
-                .listStyle(PlainListStyle())
+                HStack {
+                    Spacer()
+                    Text(weekState.currentState.message)
+                        .listRowSeparator(.hidden)
+                        .fontWeight(.ultraLight)
+                        .foregroundColor(.gray)
+                    Spacer()
+                }
+                .listRowSeparator(.hidden)
+                //                // motivation question
+                //                HStack {
+                //                    Spacer()
+                //
+                //                    Text(MotivationQuestions.weekQuestions.randomElement() ?? "")
+                //                        .fontWeight(.thin)
+                //                        .foregroundColor(.gray)
+                //                        .padding()
+                //                        .opacity(currentState == .empty ? 1 : 0)
+                //
+                //                    Spacer()
+                //                }
+                //                .padding()
             }
+            .listStyle(PlainListStyle())
         }
         .onChange(of: weekState.weekDate, perform: { newValue in
             Task {
@@ -119,7 +117,6 @@ struct WeekDetailView: View {
 struct WeekSectionView: View {
     
     @Binding var weekTimeline: DayChanges
-    var width: CGFloat
     
     var body: some View {
         // date heading

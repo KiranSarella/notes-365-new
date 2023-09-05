@@ -36,6 +36,48 @@ struct DayDetailView: View {
         
         VStack(spacing: 0) {
             List {
+                // date heading
+                VStack {
+                    HStack {
+                        Spacer()
+                        
+                        if UIDevice.current.userInterfaceIdiom == .phone {
+                            Text(dayState.dayDate.date.formatted(date: .abbreviated, time: .omitted))
+                                .listRowSeparator(.hidden)
+                                .padding(.horizontal)
+                                .font(.largeTitle)
+                        } else {
+                            Text(dayState.dayDate.date.formatted(date: .complete, time: .omitted))
+                                .listRowSeparator(.hidden)
+                                .padding(.horizontal)
+                                .font(.largeTitle)
+                        }
+                        
+                        
+                    }
+                    .padding(.top, 30)
+                }
+                .listRowSeparator(.hidden)
+                // day number
+//                HStack(alignment: .center) {
+//                    Spacer()
+//                    VStack {
+////                        Spacer()
+//                        HStack {
+//                            Text(dayState.dayNumberText)
+//                                .listRowSeparator(.hidden)
+//                                .font(.title3)
+//                                .fontWeight(.bold)
+//
+////                            Toggle("", isOn: $dayState.showDayNumberFromDOB)
+//                        }
+////                        Spacer()
+//                    }
+//
+//                    Spacer()
+//                }
+//                .listRowSeparator(.hidden)
+                // list
                 ForEach($dayState.timelineList) { $noteChange in
                     VStack {
                         // notebook heading view
@@ -56,6 +98,7 @@ struct DayDetailView: View {
                     }
                     .listRowSeparator(.hidden)
                 }
+                // status message
                 HStack {
                     Spacer()
                     Text(dayState.currentState.message)
@@ -92,6 +135,7 @@ struct DayDetailView: View {
                 CalendarState.shared.selectedDate = date
             }
             
+//            dayState.updateDayNumberText()
             dayState.readDayData(dayDate: dayState.dayDate)
         }
         .onDisappear {
