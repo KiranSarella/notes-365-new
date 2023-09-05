@@ -198,7 +198,7 @@ extension NotebooksListBusiness {
     
     // It will save only notebooks list hierarchy to plist, not notebook content.
     func persist(notebooks: [Notebook]) {
-        
+        print(#function)
         do {
             // generate data
             let plistData = try PropertyListEncoder().encode(notebooks)

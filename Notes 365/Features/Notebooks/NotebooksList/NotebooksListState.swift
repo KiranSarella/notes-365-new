@@ -808,7 +808,7 @@ extension NotebooksListState {
     }
     
     @objc func handleNotebookChangesNotification(_ notification: Notification) {
-        print(#function)
+//        print(#function)
         guard
             let uuid = notification.userInfo?["id"] as? String,
             let notebook = selectedNotebook?.notebookRef

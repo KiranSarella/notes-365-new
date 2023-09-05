@@ -20,6 +20,7 @@ class NotebookContentBusiness {
     static let baseVersionPath = Constants.todayBaseVersionFolderName
     
     func saveContentChanges(content: String, notebook: Notebook) {
+//        print(#function)
         // write updated content to file
         notebook.saveContent(content: content)
         // send notification

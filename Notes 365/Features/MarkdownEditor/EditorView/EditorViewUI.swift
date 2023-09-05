@@ -96,9 +96,9 @@ class EditorUICoordinator: NSObject {
 
 extension EditorUICoordinator: UITextViewDelegate {
     
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        parent.contentEditedDate = Date()
-    }
+//    func textViewDidBeginEditing(_ textView: UITextView) {
+//        parent.contentEditedDate = Date()
+//    }
     
     func textViewDidChange(_ textView: UITextView) {
         parent.contentEditedDate = Date()
