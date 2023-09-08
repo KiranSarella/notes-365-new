@@ -9,8 +9,9 @@ import SwiftUI
 
 struct NotesTitleView: View {
     @Environment(\.colorScheme) var colorScheme
-    
+    @State private var isFocused = false
     var noteChange: Timeline
+    var showDelete = false
     
     func getAbsolutePath() -> String {
         var components = noteChange.filePath.components(separatedBy: "/")
@@ -40,9 +41,22 @@ struct NotesTitleView: View {
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
             Spacer()
+            // delete button
+            Button {
+                // infrom delete action to parent
+            } label: {
+                Image(systemName: "trash")
+                    .foregroundColor(.red)
+            }
+            .padding()
+            .opacity(showDelete && isFocused ? 1 : 0)
+
         }
         .background(colorScheme == .light ? Color.gray.opacity(0.2) : Color(UIColor.darkGray))
         .cornerRadius(4)
+        .onHover { subscriptionStatus in
+            isFocused = subscriptionStatus
+        }
     }
 }
 //

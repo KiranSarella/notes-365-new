@@ -91,6 +91,10 @@ class DayDetailState: ObservableObject {
     var cancellable: Cancellable!
     var cancellableSet = Set<AnyCancellable>()
     
+    var canDelete: Bool {
+        dayDate.date.isSameDayAs(Date())
+    }
+    
     init() {
         
         observeCalenderChanges()
@@ -146,7 +150,7 @@ class DayDetailState: ObservableObject {
     }
     
     func readDayData(dayDate: DayDate) {
-        updateDayNumberText()
+//        updateDayNumberText()
         
         currentState = .loading
         // prepare folder path
@@ -179,6 +183,15 @@ class DayDetailState: ObservableObject {
                 self.currentState = .data
             }
         }
+    }
+    
+    func removeChanges(timeline: Timeline) {
+        // remove timeline file
+        timelineBusiness.removeContent(today: Date(), fileName: timeline.fileUUID.uuidString)
+        // update metadata file
+        
+        // remove base version
+        
     }
     
 }

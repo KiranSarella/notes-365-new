@@ -100,4 +100,21 @@ class TimelineBusiness {
         let directoryURL = basePathURL.appendingPathComponent(dayFolderPath)
         return FileManager.default.fileExists(atPath: directoryURL.path)
     }
+    
+    func removeContent(today: Date, fileName: String) {
+        let folderPath = "\(timelinePath)/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
+        
+        let fileURL = basePathURL
+            .appendingPathComponent(folderPath)
+            .appendingPathComponent(fileName)
+            .appendingPathExtension("md")
+        //        print(fileURL.path(percentEncoded: false))
+        
+        do {
+            try FileManager.default.removeItem(at: fileURL)
+        } catch let error as NSError {
+            print("Failed deleting from URL: \(fileURL), Error: " + error.localizedDescription)
+            return nil
+        }
+    }
 }

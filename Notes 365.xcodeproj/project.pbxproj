@@ -432,7 +432,6 @@
 				5CC4C0222A909B2C00A4BE41 /* DayDetailView.swift */,
 				9FB6C6A42927936F00C8EC76 /* DayDetailState.swift */,
 				9F45BCEB2920CCCE003DE332 /* DayContentGenerator.swift */,
-				9FB6C6A829279BEC00C8EC76 /* TimelineBusiness.swift */,
 			);
 			path = DaysTimeline;
 			sourceTree = "<group>";
@@ -614,6 +613,7 @@
 				9FB0A48A29DF130A0093FBD2 /* __tests */,
 				9F45BCF62920CCCE003DE332 /* Timeline.swift */,
 				9F93E15129E7DA2700210E99 /* TimelineCreatorBusiness.swift */,
+				9FB6C6A829279BEC00C8EC76 /* TimelineBusiness.swift */,
 				9FA7BE2B29F1024000CB5D6F /* TimelineSync.swift */,
 				9F93E14E29E68CCA00210E99 /* StringDiff */,
 				9F45BCE72920CCCE003DE332 /* Motiviation */,

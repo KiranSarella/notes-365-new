@@ -30,6 +30,8 @@ struct DayDetailView2: View {
 struct DayDetailView: View {
     
     var dayItem: DayDateItem?
+    @Binding var navigationSplitViewVisibility: NavigationSplitViewVisibility
+    
     @StateObject private var dayState = DayDetailState()
     
     var body: some View {
@@ -81,7 +83,7 @@ struct DayDetailView: View {
                 ForEach($dayState.timelineList) { $noteChange in
                     VStack {
                         // notebook heading view
-                        NotesTitleView(noteChange: noteChange)
+                        NotesTitleView(noteChange: noteChange, showDelete: dayState.canDelete)
                             .listRowSeparator(.hidden)
                         
                             HStack {
@@ -140,6 +142,27 @@ struct DayDetailView: View {
         }
         .onDisappear {
             dayState.generatorTask?.cancel()
+        }
+        .toolbar {
+            // works for mac also, because of mac catalyst
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        if navigationSplitViewVisibility == .detailOnly {
+                            navigationSplitViewVisibility = .doubleColumn
+                        } else {
+                            navigationSplitViewVisibility = .detailOnly
+                        }
+                    } label: {
+                        if navigationSplitViewVisibility == .detailOnly {
+                            Image(systemName: "arrow.down.right.and.arrow.up.left")
+                        } else {
+                            Image(systemName: "arrow.up.left.and.arrow.down.right")
+                        }
+                    }
+
+                }
+            }
         }
     }
 }

@@ -58,7 +58,7 @@ fileprivate struct DayGridView: View {
     
     @EnvironmentObject var dayState: DayCalendarState
     @Binding var dayDate: DayDate
-   
+    
     @State private var displayCounter: Int = 0
     
     var body: some View {
@@ -106,7 +106,9 @@ fileprivate struct DayGridView: View {
             CalendarState.shared.dayDate = dayDate
         })
         .navigationDestination(for: DayDateItem.self) { newDate in
-            DayDetailView(dayItem: newDate)
+//            DayDetailView(dayItem: newDate)
+            DayDetailView(dayItem: newDate, navigationSplitViewVisibility: Binding.constant(.automatic))
+
 //            DestinationView(input: newDate, emp: $dayState.selectedDayItem) {
 //                DayDetailView2(dayItem: newDate)
 //            }

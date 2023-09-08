@@ -282,7 +282,8 @@ struct ContentView: View {
                         
 //                        Text("\(calendarState.dayDate.date.string(format: "mm-dd-yy"))")
 //                        NotebookEditorView(notebookM: selectedNotebookM!, editorState: editorState)
-                        DayDetailView()
+//                        DayDetailView()
+                        DayDetailView(navigationSplitViewVisibility: $navigationSplitViewVisibility)
                     case .week:
                         WeekDetailView()
                     case .month:
