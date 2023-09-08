@@ -34,6 +34,8 @@ struct DayDetailView: View {
     
     @StateObject private var dayState = DayDetailState()
     
+    @State var deleteTimeline: Timeline?
+    
     var body: some View {
         
         VStack(spacing: 0) {
@@ -83,7 +85,7 @@ struct DayDetailView: View {
                 ForEach($dayState.timelineList) { $noteChange in
                     VStack {
                         // notebook heading view
-                        NotesTitleView(noteChange: noteChange, showDelete: dayState.canDelete)
+                        NotesTitleView(noteChange: noteChange, showDelete: dayState.canDelete, deleteTimeline: $deleteTimeline)
                             .listRowSeparator(.hidden)
                         
                             HStack {
@@ -131,6 +133,11 @@ struct DayDetailView: View {
                 
             }
         }
+        .onChange(of: deleteTimeline, perform: { newValue in
+            guard let newValue = newValue else { return }
+            dayState.removeTimelineChanges(newValue)
+            deleteTimeline = nil
+        })
         .onAppear {
             
             if let date = dayItem?.date {

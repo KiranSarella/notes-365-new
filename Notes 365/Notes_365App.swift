@@ -13,7 +13,6 @@ struct Notes_365App: App {
     @Environment(\.scenePhase) private var scenePhase
     
     var todayVersionBusiness = TodayVersionBusiness()
-    var timelineCreatorBusiness = TimelineCreatorBusiness()
     
     var body: some Scene {
         WindowGroup {

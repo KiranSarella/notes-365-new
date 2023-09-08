@@ -131,6 +131,25 @@ class TodayVersionBusiness {
             return nil
         }
     }
+    
+    // get base content from todaysVersion/<date>/uuid.md
+    static func removeBaseVersion(for fileName: String) {
+        
+        guard let basePathURL = EnvironmentState.shared.basePathURL else { return }
+        
+        let fileURL = basePathURL
+            .appendingPathComponent(baseVersionFolderName)
+            .appendingPathComponent(folderDatePath)
+            .appendingPathComponent(fileName)
+            .appendingPathExtension("md")
+        
+        do {
+            try FileManager.default.removeItem(at: fileURL)
+            //            print(fileURL)
+        } catch let error as NSError {
+            print("Failed removing from URL: \(fileURL), Error: " + error.localizedDescription)
+        }
+    }
 }
 
 

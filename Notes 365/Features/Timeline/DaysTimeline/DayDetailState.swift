@@ -185,13 +185,17 @@ class DayDetailState: ObservableObject {
         }
     }
     
-    func removeChanges(timeline: Timeline) {
-        // remove timeline file
-        timelineBusiness.removeContent(today: Date(), fileName: timeline.fileUUID.uuidString)
-        // update metadata file
+    func removeTimelineChanges(_ timeline: Timeline) {
+        // remove from UI
+        timelineList.removeAll { item in
+            item.id == timeline.id
+        }
         
-        // remove base version
+        if timelineList.count == 0 {
+            currentState = .empty
+        }
         
+        // remove physical files
+        timelineBusiness.removeTimelineChanges(timeline)
     }
-    
 }

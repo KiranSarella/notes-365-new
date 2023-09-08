@@ -13,6 +13,8 @@ struct NotesTitleView: View {
     var noteChange: Timeline
     var showDelete = false
     
+    @Binding var deleteTimeline: Timeline?
+    
     func getAbsolutePath() -> String {
         var components = noteChange.filePath.components(separatedBy: "/")
 //        if components.count > 0 {
@@ -43,7 +45,8 @@ struct NotesTitleView: View {
             Spacer()
             // delete button
             Button {
-                // infrom delete action to parent
+                // inform delete action to parent
+                deleteTimeline = noteChange
             } label: {
                 Image(systemName: "trash")
                     .foregroundColor(.red)

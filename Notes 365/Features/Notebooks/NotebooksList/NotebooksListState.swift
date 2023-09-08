@@ -159,7 +159,11 @@ class NotebooksListState: ObservableObject {
     
     var firstTimeAppear = true
     
+    var timelineCreatorBusiness = TimelineBusiness(path: EnvironmentState.shared.basePathURL)
+    
     init() {
+        timelineCreatorBusiness.registerNotebookChangesNotification()
+        
         isLoading = true
         // get saved expandedIds
         if let expandedList = UserDefaults.standard.object(forKey: "notes365.expandedIds") as? [String] {
@@ -181,9 +185,12 @@ class NotebooksListState: ObservableObject {
         
         registerNotebookChangesNotification()
         isLoading = false
+        
+        
     }
     
     deinit {
+        timelineCreatorBusiness.removeNotebookChangesNotification()
         removeNotebookChangesNotification()
     }
     

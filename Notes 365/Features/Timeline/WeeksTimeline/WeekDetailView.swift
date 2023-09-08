@@ -152,7 +152,7 @@ fileprivate struct DayTimelineTwoView: View {
     var body: some View {
         ForEach($timelineList) { $noteChange in
             VStack {
-                NotesTitleView(noteChange: noteChange)
+                NotesTitleView(noteChange: noteChange, deleteTimeline: Binding.constant(nil))
                     .listRowSeparator(.hidden)
                 HStack {
                     ReadOnlyMarkDownViewTwo(timeline: $noteChange)

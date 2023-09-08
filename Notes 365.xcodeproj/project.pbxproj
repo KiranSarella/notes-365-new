@@ -94,8 +94,6 @@
 		9F92CF0529B7525500B8D3C4 /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F92CF0429B7525500B8D3C4 /* MailView.swift */; };
 		9F93E14629E3FB4E00210E99 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F57BAE6299688BC0076FD9D /* Constants.swift */; };
 		9F93E15029E6A2AC00210E99 /* MarkdownEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93E14F29E6A2AC00210E99 /* MarkdownEditorView.swift */; };
-		9F93E15229E7DA2700210E99 /* TimelineCreatorBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93E15129E7DA2700210E99 /* TimelineCreatorBusiness.swift */; };
-		9F93E15329E7DA2700210E99 /* TimelineCreatorBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93E15129E7DA2700210E99 /* TimelineCreatorBusiness.swift */; };
 		9F93E15529ED0D0F00210E99 /* TodayVersionSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93E15429ED0D0F00210E99 /* TodayVersionSync.swift */; };
 		9F93E15629ED0D0F00210E99 /* TodayVersionSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93E15429ED0D0F00210E99 /* TodayVersionSync.swift */; };
 		9F9DBF7229F122E80088B0CA /* NotebooksListSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9DBF7129F122E80088B0CA /* NotebooksListSync.swift */; };
@@ -247,7 +245,6 @@
 		9F93E14729E532D600210E99 /* TodayVersion.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TodayVersion.md; sourceTree = "<group>"; };
 		9F93E14929E59E3200210E99 /* MarkdownEditor.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MarkdownEditor.md; sourceTree = "<group>"; };
 		9F93E14F29E6A2AC00210E99 /* MarkdownEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownEditorView.swift; sourceTree = "<group>"; };
-		9F93E15129E7DA2700210E99 /* TimelineCreatorBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineCreatorBusiness.swift; sourceTree = "<group>"; };
 		9F93E15429ED0D0F00210E99 /* TodayVersionSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayVersionSync.swift; sourceTree = "<group>"; };
 		9F93E15829EE620900210E99 /* Release Notes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Release Notes.md"; sourceTree = "<group>"; };
 		9F9DBF7129F122E80088B0CA /* NotebooksListSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListSync.swift; sourceTree = "<group>"; };
@@ -612,7 +609,6 @@
 				9FB0A48B29DF13160093FBD2 /* __UITests */,
 				9FB0A48A29DF130A0093FBD2 /* __tests */,
 				9F45BCF62920CCCE003DE332 /* Timeline.swift */,
-				9F93E15129E7DA2700210E99 /* TimelineCreatorBusiness.swift */,
 				9FB6C6A829279BEC00C8EC76 /* TimelineBusiness.swift */,
 				9FA7BE2B29F1024000CB5D6F /* TimelineSync.swift */,
 				9F93E14E29E68CCA00210E99 /* StringDiff */,
@@ -842,7 +838,6 @@
 				5C29FECD2A98B377001DC601 /* PreviewViewUI.swift in Sources */,
 				5C29FED32A98D8FD001DC601 /* EditorSymbolsState.swift in Sources */,
 				9F92CF0529B7525500B8D3C4 /* MailView.swift in Sources */,
-				9F93E15229E7DA2700210E99 /* TimelineCreatorBusiness.swift in Sources */,
 				9F9DBF7229F122E80088B0CA /* NotebooksListSync.swift in Sources */,
 				9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */,
 				5CE055DB2A17C5D3009EB4EA /* DayCalendarState.swift in Sources */,
@@ -934,7 +929,6 @@
 			files = (
 				9FB0A48229DE8D950093FBD2 /* NotebookContentBusiness.swift in Sources */,
 				9F93E14629E3FB4E00210E99 /* Constants.swift in Sources */,
-				9F93E15329E7DA2700210E99 /* TimelineCreatorBusiness.swift in Sources */,
 				9FB0A48729DE8E150093FBD2 /* ThemeBusiness.swift in Sources */,
 				9FB0A47D29DD27470093FBD2 /* CloudServiceTwo.swift in Sources */,
 				9F09CEB229267FBC00609D99 /* TodayVersionBusiness.swift in Sources */,

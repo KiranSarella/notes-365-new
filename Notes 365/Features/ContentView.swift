@@ -142,6 +142,8 @@ struct ContentView: View {
         return Color(uiColor: UIColor.systemGroupedBackground)
     }
     
+    
+    
     var body: some View {
         NavigationSplitView(columnVisibility: $navigationSplitViewVisibility) {
             // navigation headings
