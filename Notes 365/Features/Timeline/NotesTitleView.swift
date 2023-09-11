@@ -46,11 +46,14 @@ struct NotesTitleView: View {
             // delete button
             Button {
                 // inform delete action to parent
+                
+                
                 deleteTimeline = noteChange
             } label: {
                 Image(systemName: "trash")
                     .foregroundColor(.red)
             }
+            .help("Ignore changes in timeline")
             .padding()
             .opacity(showDelete && isFocused ? 1 : 0)
 
