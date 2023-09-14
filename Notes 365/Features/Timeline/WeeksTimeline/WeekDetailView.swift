@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WeekDetailView: View {
     
-    @StateObject private var weekState = WeekDetailState()
+    @State private var weekState = WeekDetailState()
     
     var body: some View {
         VStack(spacing: 0) {

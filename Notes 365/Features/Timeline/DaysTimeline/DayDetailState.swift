@@ -71,24 +71,25 @@ enum SpeechState {
     }
 }
 
-class DayDetailState: ObservableObject {
+@Observable
+class DayDetailState {
     
     let timelineBusiness = TimelineBusiness(path: EnvironmentState.shared.basePathURL)
     
-    @Published var dayDate: DayDate = DayDate(date: CalendarState.shared.selectedDate)
-    @Published var currentState = CurrentState.loading
-    @Published var timelineList = [Timeline]()
-    @Published var searchInput: String = ""
-    @Published var generatorTask: Task<(), Never>?
+    var dayDate: DayDate = DayDate(date: CalendarState.shared.selectedDate)
+    var currentState = CurrentState.loading
+    var timelineList = [Timeline]()
+    var searchInput: String = ""
+    var generatorTask: Task<(), Never>? = nil
     
-    @Published var dayNumberText: String = ""
-    @Published var showDayNumberFromDOB = true
+    var dayNumberText: String = ""
+    var showDayNumberFromDOB = true
     
-    @Published var speechState = SpeechState.stopped
+    var speechState = SpeechState.stopped
     
     let speechHelper = SpeechHelper()
     
-    var cancellable: Cancellable!
+    var cancellable: Cancellable? = nil
     var cancellableSet = Set<AnyCancellable>()
     
     var canDelete: Bool {
@@ -98,7 +99,7 @@ class DayDetailState: ObservableObject {
     init() {
         
         observeCalenderChanges()
-        observeDayNumberOptionChanges()
+//        observeDayNumberOptionChanges()
     }
     
     func observeCalenderChanges() {
@@ -110,7 +111,7 @@ class DayDetailState: ObservableObject {
     }
     
     deinit {
-        cancellable.cancel()
+        cancellable?.cancel()
     }
     
 //    func updateNewDateDate(newDayDate: DayDate) {
@@ -118,15 +119,15 @@ class DayDetailState: ObservableObject {
 //    }
     
     
-    func observeDayNumberOptionChanges() {
-        $showDayNumberFromDOB.sink { isOn in
-            if isOn {
-                self.updateDayNumberTextWithDOB()
-            } else {
-                self.updateDayNumberTextWithYear()
-            }
-        }.store(in: &cancellableSet)
-    }
+//    func observeDayNumberOptionChanges() {
+//        $showDayNumberFromDOB.sink { isOn in
+//            if isOn {
+//                self.updateDayNumberTextWithDOB()
+//            } else {
+//                self.updateDayNumberTextWithYear()
+//            }
+//        }.store(in: &cancellableSet)
+//    }
     
     func updateDayNumberText() {
         self.updateDayNumberTextWithYear()

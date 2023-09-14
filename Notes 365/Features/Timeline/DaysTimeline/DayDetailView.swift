@@ -32,7 +32,7 @@ struct DayDetailView: View {
     var dayItem: DayDateItem?
     @Binding var navigationSplitViewVisibility: NavigationSplitViewVisibility
     
-    @StateObject private var dayState = DayDetailState()
+    @State private var dayState = DayDetailState()
     
     @State var deleteTimeline: Timeline?
     
