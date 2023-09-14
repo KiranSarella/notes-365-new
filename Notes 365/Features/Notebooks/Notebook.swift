@@ -75,10 +75,13 @@ class Notebook: Identifiable, Codable {
                 child.parent = self
             }
         }
+        
+        NotebooksCache.shared.flatNotebooks[self.id.uuidString] = self
     }
     
     var containChildNotebooks: Bool {
-        children != nil ? true : false
+        guard let children = children, children.count > 0 else { return false }
+        return true
     }
     
     var fileURL: URL {

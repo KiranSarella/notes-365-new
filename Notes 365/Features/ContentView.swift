@@ -113,7 +113,7 @@ struct ContentView: View {
     // timeline related
     @ObservedObject var calendarState = CalendarState.shared
     // notebooks related
-    @State private var selectedNotebookM: Notebook?
+    @State private var selectedNotebookM: Notebook.ID?
     @State var notebooksListState = NotebooksListState()
     
     @State var selectedCalenderType: CalendarType.ID? = CalendarType.day.id
@@ -260,7 +260,7 @@ struct ContentView: View {
                         .environmentObject(calendarState)
                 case .noteBooks:
                     NotebooksListView(icloudSyncing: $icloudSyncing, usersState: notebooksListState, selectedNotebook: $selectedNotebookM)
-                        .environmentObject(notebooksListState)
+//                        .environmentObject(notebooksListState)
 //                        .onAppear {
 //                            Task {
 //                                await notebooksListState.loadData()
@@ -296,7 +296,17 @@ struct ContentView: View {
                 
                 if selectedNotebookM != nil {
                     // ** binding won't work here.
-                    NotebookEditorView(listDisplayState: notebooksListState.listSourceType, notebookM: selectedNotebookM!, editorState: editorState, navigationSplitViewVisibility: $navigationSplitViewVisibility)
+//                    NotebookEditorView(listDisplayState: notebooksListState.listSourceType, notebookM: selectedNotebookM!, editorState: editorState, navigationSplitViewVisibility: $navigationSplitViewVisibility)
+                    
+                    if let notebook = NotebooksCache.shared.flatNotebooks[selectedNotebookM!.uuidString] {
+                        
+                        NotebookEditorView(listDisplayState: notebooksListState.listSourceType, notebookM: notebook, editorState: editorState, navigationSplitViewVisibility: $navigationSplitViewVisibility)
+                        
+//                        NotebookEditorView(notebookM: notebook, editorState: editorState)
+                    } else {
+                        Text("selcted")
+                    }
+                    
                 } else {
                     Text("No notebook selected")
                 }

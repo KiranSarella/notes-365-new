@@ -13,7 +13,7 @@ struct NotebooksListView: View {
 
     @Binding var icloudSyncing: Bool
     @Bindable var usersState: NotebooksListState
-    @Binding var selectedNotebook: Notebook?
+    @Binding var selectedNotebook: Notebook.ID?
     @Environment(\.isSearching) private var isSearching
 
     @State private var firstTimeAppear = true
@@ -27,9 +27,8 @@ struct NotebooksListView: View {
             if icloudSyncing || usersState.isLoading {
                 ProgressView()
             } else if usersState.listSourceType == .notebooks(.none) && usersState.isEmpty {
-                AddNotesView()
+                AddNotesView(usersState: usersState)
                     .padding([.top], -100)
-                    .environmentObject(usersState)
             } else {
                 VStack {
                     //                List(selection: $selectedNotebook) {
@@ -40,7 +39,7 @@ struct NotebooksListView: View {
                     if usersState.listSourceType == .deletedItems ||
                         usersState.listSourceType == .notebooks(.recentlyModified) {
                         
-                        SearchedListView(selectedNotebook: $selectedNotebook)
+                        SearchedListView(selectedNotebook: $selectedNotebook, usersState: usersState)
 //                            .padding(.bottom, 20)
                             .listStyle(PlainListStyle())
                             .autocorrectionDisabled()
@@ -56,7 +55,7 @@ struct NotebooksListView: View {
                         }
                             
                     } else {
-                        SearchedListView(selectedNotebook: $selectedNotebook)
+                        SearchedListView(selectedNotebook: $selectedNotebook, usersState: usersState)
                             .padding(.bottom, 20)
                             .listStyle(PlainListStyle())
                             .autocorrectionDisabled()
@@ -108,9 +107,9 @@ struct NotebooksListView: View {
                 .onDisappear {
                     usersState.saveExpandedIds()
                 }
-                .onChange(of: selectedNotebook) { newValue in
-                    usersState.selectedNotebook = newValue
-                }
+//                .onChange(of: selectedNotebook) { newValue in
+//                    usersState.selectedNotebook = newValue
+//                }
             }
             
         }
@@ -175,7 +174,12 @@ struct NotebooksListView: View {
                     if selectedNotebook == nil {
                         return
                     }
-                    usersState.insertBelow(ref: selectedNotebook!)
+                    
+//                    if let notebook = NotebooksCache.shared.flatNotebooks[selectedNotebook!.uuidString] {
+////                        usersState.insertBelow(ref: notebook)
+////                        usersState.insertBelow(ref: selectedNotebook!)
+//                    }
+                    
                 }) {
                     //                Image(systemName: "arrow.down")
                     //                    .renderingMode(.original)
@@ -186,7 +190,7 @@ struct NotebooksListView: View {
                     if selectedNotebook == nil {
                         return
                     }
-                    usersState.insertInside(ref: selectedNotebook!)
+//                    usersState.insertInside(ref: selectedNotebook!)
                 }) {
                     //                Image(systemName: "arrow.turn.down.right")
                     //                    .renderingMode(.original)
@@ -200,7 +204,7 @@ struct NotebooksListView: View {
                 if selectedNotebook == nil {
                     return
                 }
-                usersState.deletingNotebook = selectedNotebook
+//                usersState.deletingNotebook = selectedNotebook
 //                usersState.presentDeleteConfirmation = true
                 guard let temp = usersState.deletingNotebook else { return }
                 usersState.deleteNotebookNew(ref: temp)
@@ -224,8 +228,8 @@ struct SearchedListView: View {
     
     @Environment(\.editMode) private var editMode
     @Environment(\.isSearching) private var isSearching
-    @Binding var selectedNotebook: Notebook?
-    @EnvironmentObject var usersState: NotebooksListState
+    @Binding var selectedNotebook: Notebook.ID?
+    @Bindable var usersState: NotebooksListState
     
     var body: some View {
         
@@ -254,7 +258,7 @@ struct SearchedListView: View {
         List(selection: $selectedNotebook) {
             
             if usersState.listSourceType == .deletedItems {
-                DeletedNotebooksListGroupView(notebooks: $usersState.notebooks)
+                DeletedNotebooksListGroupView(usersState: usersState, notebooks: $usersState.notebooks)
             } else {
                 NotebooksListGroupView(usersState: usersState, notebooks: $usersState.notebooks)
             }
@@ -416,7 +420,7 @@ struct MyDisclosureStyle: DisclosureGroupStyle {
 }
 
 struct AddNotesView: View {
-    @EnvironmentObject var usersState: NotebooksListState
+    @Bindable var usersState: NotebooksListState
     
     var body: some View {
         VStack(alignment: .center) {
@@ -616,7 +620,7 @@ struct RowView: View {
                             
                             usersState.deletingNotebook = notebook
                             
-                            guard let temp = usersState.deletingNotebook else { return }
+//                            guard let temp = usersState.deletingNotebook else { return }
                             usersState.deleteNotebookNew(ref: notebook)
                             usersState.deletingNotebook = nil
                             
@@ -751,27 +755,28 @@ struct RowView: View {
 // MARK: - Deleted Notebooks
 
 struct DeletedNotebooksListGroupView: View {
-    @EnvironmentObject var usersState: NotebooksListState
+    @Bindable var usersState: NotebooksListState
     @Binding var notebooks: [Notebook]
     @State private var isTargeted: Bool = true
     var body: some View {
-        ForEach($notebooks, id: \.self) { $notebook in
-            if notebook.containChildNotebooks {
-                DisclosureGroup(isExpanded: $notebook.isExpanded) {
-                    DeletedNotebooksListGroupView(notebooks: $notebook.children.unwrap()!)
-                } label: {
-                    DeletedRowView(notebook: $notebook)
-                }
-            } else {
-                DeletedRowView(notebook: $notebook)
-            }
-        }
+        Text("todo")
+//        ForEach($notebooks, id: \.self) { $notebook in
+//            if notebook.containChildNotebooks {
+//                DisclosureGroup(isExpanded: $notebook.isExpanded) {
+//                    DeletedNotebooksListGroupView(usersState: usersState, notebooks: $notebook.children.unwrap()!)
+//                } label: {
+//                    DeletedRowView(usersState: usersState, notebook: $notebook)
+//                }
+//            } else {
+//                DeletedRowView(notebook: $notebook)
+//            }
+//        }
     }
 }
 
 
 struct DeletedRowView: View {
-    @EnvironmentObject var usersState: NotebooksListState
+    @Bindable var usersState: NotebooksListState
     @Binding var notebook: Notebook
     
     var body: some View {

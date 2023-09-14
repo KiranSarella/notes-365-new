@@ -31,7 +31,7 @@ enum ListSourceType: Equatable {
 }
 
 @Observable
-class NotebooksListState: ObservableObject {
+class NotebooksListState {
     
 //    static let shared: NotebooksListState = NotebooksListState()
     
@@ -287,8 +287,8 @@ class NotebooksListState: ObservableObject {
         }
         
         let newNotebook = Notebook(id: UUID(), name: fileName)
-//        // store reference
-//        NotebooksCache.shared.store(notebook: newNotebook)
+        // store reference
+        NotebooksCache.shared.store(notebook: newNotebook)
         
         return newNotebook
     }
