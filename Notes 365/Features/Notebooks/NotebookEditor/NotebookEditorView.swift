@@ -20,7 +20,7 @@ struct NotebookEditorView: View {
     
     var listDisplayState: ListSourceType
     var notebookM: Notebook
-    @ObservedObject var editorState: NotebookEditorState
+    @Bindable var editorState: NotebookEditorState
 
     @State var autoSaveTimer: Timer.TimerPublisher = Timer.publish(every: 5, on: .main, in: .common)
     @State var connectedTimer: Cancellable? = nil
