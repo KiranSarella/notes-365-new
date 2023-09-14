@@ -71,8 +71,8 @@ public struct MonthDate {
 extension MonthDate: Equatable {}
 extension MonthDate: Hashable {}
 
-
-class CalendarState: ObservableObject {
+@Observable
+class CalendarState {
     
     static let shared: CalendarState = CalendarState()
     
@@ -89,7 +89,7 @@ class CalendarState: ObservableObject {
         }
     }    // todays date by default
     
-    @Published var calenderType: CalendarType = .day {
+    var calenderType: CalendarType = .day {
         didSet {
             switch oldValue {
             case .day:
@@ -138,11 +138,11 @@ class CalendarState: ObservableObject {
         }
     }
     
-    @Published var dayDate: DayDate
-    @Published var weekDate: WeekDate
-    @Published var monthDate: MonthDate
+    var dayDate: DayDate = DayDate(date: Date())
+    var weekDate: WeekDate = WeekDate(date: Date())
+    var monthDate: MonthDate = MonthDate(date: Date())
     
-    @Published var dayDateItem: DayDateItem.ID = DayDateItem(date: Date.now, canShow: true).id
+    var dayDateItem: DayDateItem.ID = DayDateItem(date: Date.now, canShow: true).id
     
     var navigationDate: Date = Date()
     

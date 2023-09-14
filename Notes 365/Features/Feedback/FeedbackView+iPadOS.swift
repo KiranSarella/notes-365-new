@@ -10,7 +10,7 @@ import MessageUI
 
 struct FeedbackView_iPadOS: View {
     
-    @StateObject private var feedbackState = FeedbackState()
+    @State private var feedbackState = FeedbackState()
     
     @State private var result: Result<MFMailComposeResult, Error>? = nil
     @State private var isShowingMailView = false

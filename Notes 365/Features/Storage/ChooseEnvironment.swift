@@ -14,20 +14,21 @@ enum EnvironmentType {
     case custom(URL)
 }
 
-class ChooseEnvironment: ObservableObject {
+@Observable
+class ChooseEnvironment {
     
     // based on preferences
     // if cloud, then intereact with cloud service and get its url or respective error
     // or if local, then get it from local filemanager
     // or if test env/user provided/custom url, use it to initialize.
     
-    @Published var isConfigured: Bool = false
+    var isConfigured: Bool = false
     
 //    var isConfigured: Bool {
 //        EnvironmentState.shared.basePathURL != nil
 //    }
     
-    var cloudService: CloudServiceTwo!
+    var cloudService: CloudServiceTwo? = nil
     
 //    var cloudDocumentSync: iCloud = iCloud.sharedCloud
     
@@ -55,7 +56,7 @@ class ChooseEnvironment: ObservableObject {
         case .cloud:
             // if cloud, then intereact with cloud service and get its url or respective error
             cloudService = CloudServiceTwo()
-            let value = cloudService.getCloudPath()
+            let value = cloudService!.getCloudPath()
             switch value {
             case .success(let url):
                 print(url.path(percentEncoded: false))

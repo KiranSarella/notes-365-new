@@ -13,13 +13,13 @@ import SwiftUI
 //    let content: String
 //}
 
-
-class EditorSymbolsState: ObservableObject {
+@Observable
+class EditorSymbolsState {
     
 //    @Published var theme: MarkdownTheme = ThemeState.shared.theme
 //    @Published var editorType = EditorType.markdown
     
-    @Published var symbolsList = [ReadonlyEditorCache]()
+    var symbolsList = [ReadonlyEditorCache]()
     
     init() {
         

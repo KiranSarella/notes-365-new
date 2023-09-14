@@ -41,11 +41,11 @@ class WeekDetailState {
     }
     
     func observeCalenderChanges() {
-        cancellable = CalendarState.shared.$weekDate
-            .receive(on: DispatchQueue.main)
-            .sink { newWeekDate in
-                self.weekDate = newWeekDate
-            }
+//        cancellable = CalendarState.shared.$weekDate
+//            .receive(on: DispatchQueue.main)
+//            .sink { newWeekDate in
+//                self.weekDate = newWeekDate
+//            }
     }
     
 //    func observeThemeChanges() {

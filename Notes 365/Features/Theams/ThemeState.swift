@@ -14,15 +14,16 @@ import Combine
  listen to theme changes
  listen to system light, dark mode changes
  */
-class ThemeState: ObservableObject {
+@Observable
+class ThemeState {
     
     static let shared = ThemeState()
     
-    @Published var colorScheme: ColorScheme = .light
+    var colorScheme: ColorScheme = .light
     
-    @Published var theme: MarkdownTheme!
+    var theme: MarkdownTheme! = MarkdownTheme(id: UUID())
     
-    var cancellable: Cancellable?
+    var cancellable: Cancellable? = nil
     
     init() {
         observeColorSchemaChanges()
@@ -30,11 +31,11 @@ class ThemeState: ObservableObject {
     }
 
     func observeColorSchemaChanges() {
-        cancellable = $colorScheme.sink { newValue in
-            if newValue !=  self.colorScheme {
-                self.loadTheme(colorScheme: newValue)
-            }
-        }
+//        cancellable = $colorScheme.sink { newValue in
+//            if newValue !=  self.colorScheme {
+//                self.loadTheme(colorScheme: newValue)
+//            }
+//        }
     }
     
     private func loadTheme(colorScheme: ColorScheme) {

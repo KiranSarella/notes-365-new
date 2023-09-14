@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-class SpeechHelperState: ObservableObject {
+@Observable
+class SpeechHelperState {
     
-    @Published var speechState = SpeechState.stopped
+    var speechState = SpeechState.stopped
     
     let speechHelper = SpeechHelper()
     

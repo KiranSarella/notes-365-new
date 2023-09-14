@@ -10,9 +10,10 @@ import SwiftUI
 struct TimelineSidebarView: View {
     
     @Binding var calendarID: CalendarType.ID?
-    @EnvironmentObject var calendarState: CalendarState
+    @Environment(CalendarState.self) var calendarState
     
     var body: some View {
+        @Bindable var calendarState = calendarState
         VStack {
             // calendar type picker
             Picker("", selection: $calendarState.calenderType) {

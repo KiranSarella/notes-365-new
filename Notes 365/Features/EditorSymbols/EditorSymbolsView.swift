@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EditorSymbolsView: View {
     
-    @StateObject var state = EditorSymbolsState()
+    @State var state = EditorSymbolsState()
     @State var showSymbols: Bool = true
     
     var body: some View {

@@ -103,11 +103,12 @@ class DayDetailState {
     }
     
     func observeCalenderChanges() {
-        cancellable = CalendarState.shared.$dayDate
-            .receive(on: DispatchQueue.main)
-            .sink { newDayDate in
-                self.dayDate = newDayDate
-            }
+        
+//        cancellable = CalendarState.shared.$dayDate
+//            .receive(on: DispatchQueue.main)
+//            .sink { newDayDate in
+//                self.dayDate = newDayDate
+//            }
     }
     
     deinit {

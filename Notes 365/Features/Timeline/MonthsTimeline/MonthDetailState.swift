@@ -45,11 +45,11 @@ class MonthDetailState {
     }
     
     func observeMonthChanges() {
-        cancellable = CalendarState.shared.$monthDate
-            .receive(on: DispatchQueue.main)
-            .sink { newMonthDate in
-                self.monthDate = newMonthDate
-            }
+//        cancellable = CalendarState.shared.$monthDate
+//            .receive(on: DispatchQueue.main)
+//            .sink { newMonthDate in
+//                self.monthDate = newMonthDate
+//            }
     }
     
     deinit {

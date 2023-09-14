@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentWrapperView: View {
     
-    @StateObject var chooseEnv = ChooseEnvironment()
+    @State var chooseEnv = ChooseEnvironment()
     
     @State private var didError = false
     @State private var errorDetail: Error?
@@ -90,7 +90,7 @@ struct ContentWrapperView: View {
             
         } else {
             ContentView()
-                .environmentObject(chooseEnv)
+                .environment(chooseEnv)
         }
     }
 }
@@ -101,7 +101,7 @@ struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.colorScheme) private var colorScheme
     
-    @EnvironmentObject var chooseEnv: ChooseEnvironment
+    @Environment(ChooseEnvironment.self) var chooseEnv
     
     @State private var showSettings = false
     @State private var icloudSyncing = false
@@ -111,7 +111,7 @@ struct ContentView: View {
     
     @State private var selectedModeID: Mode.ID? = Mode.timeline.id
     // timeline related
-    @ObservedObject var calendarState = CalendarState.shared
+    @State var calendarState = CalendarState.shared
     // notebooks related
     @State private var selectedNotebookM: Notebook.ID?
     @State var notebooksListState = NotebooksListState()
@@ -257,7 +257,7 @@ struct ContentView: View {
                 switch selectedMode {
                 case .timeline:
                     TimelineSidebarView(calendarID: $selectedCalenderType)
-                        .environmentObject(calendarState)
+                        .environment(calendarState)
                 case .noteBooks:
                     NotebooksListView(icloudSyncing: $icloudSyncing, usersState: notebooksListState, selectedNotebook: $selectedNotebookM)
 //                        .environmentObject(notebooksListState)
