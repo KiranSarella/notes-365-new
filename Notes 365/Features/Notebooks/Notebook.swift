@@ -7,6 +7,7 @@
 
 import UIKit
 
+@Observable
 class Notebook: Identifiable, Codable {
     
     var id: UUID
@@ -15,19 +16,24 @@ class Notebook: Identifiable, Codable {
             NotificationCenter.default.post(name: .notebookChangeNotification, object: nil)
         }
     }
-    var children: [Notebook]?
+    var children: [Notebook]? = nil
     
     var createdDate: Date = Date()
     var deletedDate: Date? = nil
     var modifiedDate: Date = Date()
     
 //    unowned var parent: Notebook?
-    var parent: Notebook?
+    var parent: Notebook? = nil
     
 //    var document: MarkdownDocument?
     var isResolvingConflicts = false
-    var newContentAvailalble: (()->())?
-    private var notificationObserver: Any?
+    var newContentAvailalble: (()->())? = nil
+    private var notificationObserver: Any? = nil
+    
+    var content: String = ""
+    var isExpanded: Bool = false
+    var isDeleted = false
+    var canShow = true
     
     init(id: UUID, name: String) {
         self.id = id

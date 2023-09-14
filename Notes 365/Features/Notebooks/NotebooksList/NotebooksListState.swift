@@ -9,40 +9,6 @@ import Foundation
 import SwiftUI
 import Combine
 
-/// because Publisher will not triggering change events with array (that too nested array in this case), we moved array to a struct.
-struct NotebooksHierarchy {
-    
-    var notes: [NotebookM]
-    
-    static func constructHierarchy(notebooks: [Notebook], expandedIds: Set<String>) -> [NotebookM] {
-//        print(#function)
-        var noteList = [NotebookM]()
-        
-        for notebook in notebooks {
-            /*
-             - create notebookM
-             - need its children?
-                - create children? - just children; not its inner children again
-             - after creating its children in a loop
-             - assign those to chilren[]
-             */
-            // - create notebookM
-            var note = NotebookM(notebook: notebook)
-            note.isExpanded = expandedIds.contains(note.id.uuidString)
-            
-            if let children = notebook.children {
-                note.children = constructHierarchy(notebooks: children, expandedIds: expandedIds)
-            }
-            
-            noteList.append(note)
-        }
-        
-        return noteList
-    }
-    
-}
-
-
 enum ListState {
     case all
     case recent
@@ -51,58 +17,6 @@ enum ListState {
 
 extension  Notification.Name {
     public static let ExpandCollapseNotification = Notification.Name("com.notes365.ExpandCollapseNotification")
-}
-
-struct NotebookM: Identifiable {
-    
-    var id: UUID
-    var name: String {
-        didSet {
-            notebookRef.name = self.name
-        }
-    }
-    var children: [NotebookM]? = nil
-    var content: String = ""
-    var isExpanded: Bool = false {
-        didSet {
-            let info = ["id": id, "isExpanded": isExpanded] as [String : Any]
-            NotificationCenter.default.post(name: .ExpandCollapseNotification, object: nil, userInfo: info)
-        }
-    }
-    
-    private(set) var notebookRef: Notebook
-    
-    init(notebook: Notebook) {
-        self.id = notebook.id
-        self.name = notebook.name
-        self.notebookRef = notebook
-    }
-
-    var containChildNotebooks: Bool {
-        
-        var result: Bool = false
-        
-        if self.children == nil || self.children?.count == 0 {
-            result =  false
-        } else {
-            result = true
-        }
-        
-        return result
-    }
-    
-    var canShow = true
-}
-
-extension NotebookM: Equatable, Hashable {
-    
-    static func == (lhs: NotebookM, rhs: NotebookM) -> Bool {
-        return lhs.id == rhs.id && lhs.name == rhs.name
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
 }
 
 enum NotebooksFilterType {
@@ -116,42 +30,43 @@ enum ListSourceType: Equatable {
     case deletedItems
 }
 
+@Observable
 class NotebooksListState: ObservableObject {
     
-    static let shared: NotebooksListState = NotebooksListState()
+//    static let shared: NotebooksListState = NotebooksListState()
     
     let notebookBusiness = NotebooksListBusiness(EnvironmentState.shared.basePathURL)
     
     var subscription: Set<AnyCancellable> = []
     var expandedIds = Set<String>()
     
-    private var notebooks = [Notebook]()
-    private var deletedNotebooks = [Notebook]()
+    var notebooks = [Notebook]()
+    var deletedNotebooks = [Notebook]()
     
-    @Published var isLoading = false
-    @Published var notesHierarchy: NotebooksHierarchy
+    var isLoading = false
+//    var notesHierarchy: NotebooksHierarchy
     
-    @Published var listSourceType = ListSourceType.notebooks(.none)
+    var listSourceType = ListSourceType.notebooks(.none)
     
-    @Published var searchText: String = ""
-    @Published var isSearching = false
-    @Published var searchResultCount: Int = 0
+    var searchText: String = ""
+    var isSearching = false
+    var searchResultCount: Int = 0
     
 //    @Published var isShowingRecent = false
-    @Published var modifiedResultCount: Int = 0
+    var modifiedResultCount: Int = 0
     
 //    @Published var isShowingRecentlyDeleted = false
-    @Published var deletedResultCount: Int = 0
+    var deletedResultCount: Int = 0
     
-    @Published var presentDeleteConfirmation = false
-    @Published var deletingNotebook: NotebookM?
+    var presentDeleteConfirmation = false
+    var deletingNotebook: Notebook? = nil
     
-    private var backupNotebooks = [NotebookM]()
+    private var backupNotebooks = [Notebook]()
     private var backupExpandedIds = Set<String>()
     
     let notebooksPath = Constants.notebooksFolderName
     
-    var selectedNotebook: NotebookM?
+    var selectedNotebook: Notebook? = nil
     
     var canEnableDone: Bool {
         listSourceType == .deletedItems || listSourceType == .notebooks(.recentlyModified)
@@ -171,8 +86,8 @@ class NotebooksListState: ObservableObject {
         }
         // create notesHierarchy with actual notebook objects
         notebooks = notebookBusiness.retrieveNotebooks() ?? []
-        let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
-        notesHierarchy = NotebooksHierarchy(notes: notesList)
+//        let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
+//        notesHierarchy = NotebooksHierarchy(notes: notesList)
         
         // construct deleted notebooks list
         deletedNotebooks = notebookBusiness.retrieveDeletedNotebooks() ?? []
@@ -221,8 +136,8 @@ class NotebooksListState: ObservableObject {
         
         // create notesHierarchy with actual notebook objects
         notebooks = notebookBusiness.retrieveNotebooks() ?? []
-        let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
-        notesHierarchy = NotebooksHierarchy(notes: notesList)
+//        let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
+//        notesHierarchy = NotebooksHierarchy(notes: notesList)
     }
 
     func reloadNotebooksListIfNewRequired() {
@@ -235,11 +150,11 @@ class NotebooksListState: ObservableObject {
                 return
             }
             // clear
-            notesHierarchy.notes.removeAll()
+//            notesHierarchy.notes.removeAll()
             // update
             notebooks = list
-            let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
-            notesHierarchy = NotebooksHierarchy(notes: notesList)
+//            let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
+//            notesHierarchy = NotebooksHierarchy(notes: notesList)
             isLoading = false
         }
     }
@@ -247,15 +162,15 @@ class NotebooksListState: ObservableObject {
     func forceReload() {
         isLoading = true
         // clear
-        notesHierarchy.notes.removeAll()
+//        notesHierarchy.notes.removeAll()
         // create notesHierarchy with actual notebook objects
         notebooks = notebookBusiness.retrieveNotebooks() ?? []
         // construct deleted notebooks list
         deletedNotebooks = notebookBusiness.retrieveDeletedNotebooks() ?? []
         
         // reconstruct hierarchy
-        let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
-        notesHierarchy = NotebooksHierarchy(notes: notesList)
+//        let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
+//        notesHierarchy = NotebooksHierarchy(notes: notesList)
         
         switch listSourceType {
         case .notebooks(let notebooksFilterType):
@@ -287,7 +202,7 @@ class NotebooksListState: ObservableObject {
 //    }
     
     var isEmpty: Bool {
-        notesHierarchy.notes.count == 0
+        notebooks.count == 0
     }
     
     func addFirstNotes() {
@@ -296,7 +211,6 @@ class NotebooksListState: ObservableObject {
         notebookBusiness.addFirst(notebook: notebook)
         // add to heirarchy
         notebooks.append(notebook)
-        notesHierarchy.notes.append(NotebookM(notebook: notebook))
         // persist hierarchy
         notebookBusiness.persist(notebooks: notebooks)
     }
@@ -304,17 +218,6 @@ class NotebooksListState: ObservableObject {
     func insertBelow(ref notebook: Notebook) {
         // create actual notebook
         let (childNotebook, parent, index) = insertBelow(notebook: notebook)
-        // create state notebook object
-        let notebookM = NotebookM(notebook: childNotebook)
-        // insert in hierachy
-        if parent == nil {
-            // insert at base level
-            notesHierarchy.notes.insert(notebookM, at: index + 1)
-        } else {
-            getNotebookReferenceForPath(uuidPath: parent!.uuidPath) { noteM in
-                noteM.children!.insert(notebookM, at: index + 1)
-            }
-        }
         // persist
         notebookBusiness.persist(notebooks: notebooks)
     }
@@ -343,16 +246,6 @@ class NotebooksListState: ObservableObject {
     func insertInside(ref notebook: Notebook) {
         // create actual notebook in the storage and hierarchy
         let childNotebook = insertInside(notebook: notebook)
-        // create state notebook object
-        let notebookM = NotebookM(notebook: childNotebook)
-        // insert in hierachy
-        getNotebookReferenceForPath(uuidPath: notebook.uuidPath) { noteM in
-            if noteM.children == nil {
-                noteM.children = [notebookM]
-            } else {
-                noteM.children!.append(notebookM)
-            }
-        }
         // persist
         notebookBusiness.persist(notebooks: notebooks)
     }
@@ -366,7 +259,7 @@ class NotebooksListState: ObservableObject {
         
         if let index = index {
             // create object
-            notebook.children?.insert(newNotebook, at: index + 1)
+            notebook.children!.insert(newNotebook, at: index + 1)
             // ..folder already exists
         } else if notebook.children == nil {
             // create object
@@ -393,7 +286,11 @@ class NotebooksListState: ObservableObject {
             fileName = generateFileName(at: notebooks)
         }
         
-        return Notebook(id: UUID(), name: fileName)
+        let newNotebook = Notebook(id: UUID(), name: fileName)
+//        // store reference
+//        NotebooksCache.shared.store(notebook: newNotebook)
+        
+        return newNotebook
     }
     
     private func getNotebook(levels selectedLevels: [Int], index selectedIndex: Int) -> Notebook? {
@@ -412,17 +309,13 @@ class NotebooksListState: ObservableObject {
         // delete from hierarchy
         if let parent = notebook.parent {
             // delete notebook ref
-            parent.children!.removeAll(where: { $0 == notebook })
-            // delete in hierachy
-            getNotebookReferenceForPath(uuidPath: parent.uuidPath) { noteM in
-                noteM.children!.removeAll(where: { $0.id == notebook.id })
-            }
+            parent.children?.removeAll(where: { $0 == notebook })
         } else {
             // base level
             // delete notebook ref
             notebooks.removeAll(where: { $0 == notebook })
             // delete object
-            notesHierarchy.notes.removeAll(where: { $0.id == notebook.id })
+            notebooks.removeAll(where: { $0.id == notebook.id })
         }
         // delete physical file
         notebookBusiness.deleteNotebook(notebook: notebook)
@@ -434,29 +327,27 @@ class NotebooksListState: ObservableObject {
         // delete from hierarchy
         if let parent = notebook.parent {
             // delete notebook ref
-            parent.children!.removeAll(where: { $0 == notebook })
-            // delete in hierachy
-            getNotebookReferenceForPath(uuidPath: parent.uuidPath) { noteM in
-                noteM.children!.removeAll(where: { $0.id == notebook.id })
-            }
+            parent.children?.removeAll(where: { $0 == notebook })
         } else {
             // base level
             // delete notebook ref
             notebooks.removeAll(where: { $0 == notebook })
             // delete object
-            notesHierarchy.notes.removeAll(where: { $0.id == notebook.id })
+            notebooks.removeAll(where: { $0.id == notebook.id })
         }
         // add to deleted list
-        notebook.deletedDate = Date()
         deletedNotebooks.insert(notebook, at: 0)
+        // save restore path
+//        deletedNotebookRestorePaths[notebook.id.uuidString] = notebook.path
         
 //        // reconstruct list
 //        let deletedNotesList = NotebooksHierarchy.constructHierarchy(notebooks: deletedNotebooks, expandedIds: expandedIds)
-//        notesHierarchy.deletedNotes = deletedNotesList
+//        deletedNotes = deletedNotesList
         
         // persist
         notebookBusiness.persist(notebooks: notebooks)
-        notebookBusiness.persistDeleted(notebooks: deletedNotebooks)
+//        notebookBusiness.persistDeleted(notebooks: deletedNotebooks)
+//        notebookBusiness.persistDeletedRestorePath(notebooks: deletedNotebookRestorePaths)
     }
     
     
@@ -467,10 +358,8 @@ class NotebooksListState: ObservableObject {
         }
         // check if already same file name exists
         if let parent = notebook.parent {
-            if let children = parent.children {
-                if isAlreadyExists(fileName: newValue, in: children) {
-                    throw NotebookBusinessError.alreadyExists
-                }
+            if isAlreadyExists(fileName: newValue, in: parent.children!) {
+                throw NotebookBusinessError.alreadyExists
             }
         } else {
             if isAlreadyExists(fileName: newValue, in: notebooks) {
@@ -479,33 +368,30 @@ class NotebooksListState: ObservableObject {
         }
         // store name
         notebook.name = newValue
-        // update model
-        getNotebookReferenceForPath(uuidPath: notebook.uuidPath) { noteM in
-            noteM.name = newValue
-        }
         // persist changes
         notebookBusiness.persist(notebooks: notebooks)
     }
-    
+
     func updateModifiedDate(for notebook: Notebook) {
         notebook.modifiedDate = Date()
         // persist changes
         notebookBusiness.persist(notebooks: notebooks)
     }
     
-    func move(notebooksM: inout [NotebookM], from source: IndexSet, to destination: Int) {
+    func move(notebooks: inout [Notebook], from source: IndexSet, to destination: Int) {
         // move references
-        if notebooksM.first?.notebookRef.parent?.children != nil {
-            notebooksM.first?.notebookRef.parent?.children?.move(fromOffsets: source, toOffset: destination)
+        if notebooks.first?.parent?.children != nil {
+            notebooks.first?.parent?.children?.move(fromOffsets: source, toOffset: destination)
         } else {
             self.notebooks.move(fromOffsets: source, toOffset: destination)
         }
         // move structs
-        notebooksM.move(fromOffsets: source, toOffset: destination)
+        notebooks.move(fromOffsets: source, toOffset: destination)
         
         // persist refernce list
         notebookBusiness.persist(notebooks: self.notebooks)
     }
+    
     
     private func isAlreadyExists(fileName: String, in siblings: [Notebook]) -> Bool {
         return siblings.contains(where: { $0.name == fileName })
@@ -529,88 +415,6 @@ class NotebooksListState: ObservableObject {
         notebooksPath
     }
     
-    func getNotebookReferenceForPath(uuidPath: [UUID], completion: ((inout NotebookM) -> ())) {
-        
-        if uuidPath.count == 0 {
-            // top level
-            let index = notesHierarchy.notes.firstIndex(where: { $0.id == uuidPath.first! })!
-            completion(&notesHierarchy.notes[index])
-        } else {
-            
-            var uuids = uuidPath
-            var index = notesHierarchy.notes.firstIndex(where: { $0.id == uuids.first! })!
-            uuids.removeFirst()
-            // get selected Notebook reference (bcz we are using struct, we need use assignment)
-            func getSelectedNotebookReference(notebook: inout NotebookM) {
-                // base condition
-                if uuids.count <= 0 {
-                    completion(&notebook)
-                    return
-                }
-                // next level
-                index = notebook.children!.firstIndex(where: { $0.id == uuids.first! })!
-                uuids.removeFirst()
-                // next element
-                getSelectedNotebookReference(notebook: &notebook.children![index])
-            }
-            // start resurssion
-            getSelectedNotebookReference(notebook: &notesHierarchy.notes[index])
-        }
-    }
-    
-    
-    func getNotebookReference(levels selectedLevels: [Int], index selectedIndex: Int,
-                              completion: ((inout NotebookM) -> ())) {
-        
-        if selectedLevels.isEmpty {
-            // top level
-            completion(&notesHierarchy.notes[selectedIndex])
-        } else {
-            
-            var levels = selectedLevels
-            levels.append(selectedIndex) // because selectedIndex is the last level
-            
-            var baseLevel = levels.first!
-            
-            levels.removeFirst() // remove base level
-            
-            // get selected Notebook reference (bcz we are using struct, we need use assignment)
-            func getSelectedNotebookReference(notebook: inout NotebookM) {
-                
-                // base condition
-                if levels.count <= 0 {
-                    completion(&notebook)
-                    return
-                }
-                
-                // next level
-                baseLevel = levels.first!
-                levels.removeFirst()
-                
-                // next element
-                getSelectedNotebookReference(notebook: &notebook.children![baseLevel])
-            }
-            getSelectedNotebookReference(notebook: &notesHierarchy.notes[baseLevel])
-        }
-    }
-    
-    func getNotebook(levels: [Int], index: Int) -> NotebookM? {
-        
-        var notebooks = notesHierarchy.notes
-        
-        for level in levels {
-            
-            if notebooks[level].children != nil {
-                notebooks = notebooks[level].children!
-            }
-        }
-        
-        if notebooks.indices.contains(index) {
-            return notebooks[index]
-        } else {
-            return nil
-        }
-    }
     
     // MARK: -
     func saveSelectionState() {
@@ -641,23 +445,23 @@ extension NotebooksListState {
     
     func setupSearchText() {
         
-        $searchText
-            .map({ (string) -> String? in
-                if string.count < 2 {
-//                    self.usersDB.notes = []
-                    self.searchResultCount = 0
-                    return nil
-                }
-                return string
-            })
-            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
-            .receive(on: RunLoop.main)
-            .compactMap{ $0 }
-            .sink { status in
-//                print(status)
-            } receiveValue: { [self] (searchField) in
-                searchItems(searchField)
-            }.store(in: &subscription)
+//        $searchText
+//            .map({ (string) -> String? in
+//                if string.count < 2 {
+////                    self.usersDB.notes = []
+//                    self.searchResultCount = 0
+//                    return nil
+//                }
+//                return string
+//            })
+//            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
+//            .receive(on: RunLoop.main)
+//            .compactMap{ $0 }
+//            .sink { status in
+////                print(status)
+//            } receiveValue: { [self] (searchField) in
+//                searchItems(searchField)
+//            }.store(in: &subscription)
     }
     
     var activeSearch: Bool {
@@ -676,7 +480,7 @@ extension NotebooksListState {
 
             var resultsCount = 0
             
-            func canAddNotebook(note: inout NotebookM) -> Bool {
+            func canAddNotebook(note: inout Notebook) -> Bool {
                 
                 // for expansion: isExpanded
                 // go deep first, if deep return true, then mark current as true
@@ -719,13 +523,13 @@ extension NotebooksListState {
                 return false
             }
             
-            var notebooksList = notesHierarchy.notes
+            var notebooksList = self.notebooks
             
             for i in 0..<notebooksList.count {
                 _ = canAddNotebook(note: &notebooksList[i])
             }
             // update
-            notesHierarchy.notes = notebooksList
+            self.notebooks = notebooksList
             searchResultCount = resultsCount
         }
     }
@@ -750,7 +554,7 @@ extension NotebooksListState {
         
         var resultsCount = 0
         
-        func canAddNotebook(note: inout NotebookM) -> Bool {
+        func canAddNotebook(note: inout Notebook) -> Bool {
             
             // for expansion: isExpanded
             // go deep first, if deep return true, then mark current as true
@@ -771,7 +575,7 @@ extension NotebooksListState {
                 }
             }
             // check if search str contains in file name
-            if note.notebookRef.modifiedDate >= Calendar.current.date(byAdding: .day, value: -2, to: Date())! {
+            if note.modifiedDate >= Calendar.current.date(byAdding: .day, value: -2, to: Date())! {
                 note.canShow = true
                 resultsCount += 1
             } else {
@@ -793,13 +597,13 @@ extension NotebooksListState {
             return false
         }
         
-        var notebooksList = notesHierarchy.notes
+        var notebooksList = self.notebooks
         
         for i in 0..<notebooksList.count {
             _ = canAddNotebook(note: &notebooksList[i])
         }
 
-        notesHierarchy.notes = notebooksList
+        self.notebooks = notebooksList
         modifiedResultCount = resultsCount
         
         listSourceType = .notebooks(.recentlyModified)
@@ -818,7 +622,7 @@ extension NotebooksListState {
 //        print(#function)
         guard
             let uuid = notification.userInfo?["id"] as? String,
-            let notebook = selectedNotebook?.notebookRef
+            let notebook = selectedNotebook
         else { return }
         
         if notebook.id.uuidString == uuid {
@@ -848,9 +652,9 @@ extension NotebooksListState {
     func hideRecentlyDeleted() {
         
         expandedIds = backupExpandedIds
-        notesHierarchy.notes = backupNotebooks
+//        notesHierarchy.notes = backupNotebooks
         
-        backupNotebooks = [NotebookM]()
+        backupNotebooks = [Notebook]()
         backupExpandedIds = []
         
         listSourceType = .notebooks(.none)
@@ -859,12 +663,12 @@ extension NotebooksListState {
     func showRecentlyDeleted() {
         // backup normal hierarchy state
         backupExpandedIds = expandedIds
-        backupNotebooks = notesHierarchy.notes
+        backupNotebooks = notebooks
         
-        let deletednotesList = NotebooksHierarchy.constructHierarchy(notebooks: deletedNotebooks, expandedIds: [])
-        notesHierarchy.notes = deletednotesList
+//        let deletednotesList = NotebooksHierarchy.constructHierarchy(notebooks: deletedNotebooks, expandedIds: [])
+//        notesHierarchy.notes = deletednotesList
         
-        deletedResultCount = deletednotesList.count
+//        deletedResultCount = deletednotesList.count
         
         listSourceType = .deletedItems
     }

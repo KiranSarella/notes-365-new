@@ -113,8 +113,8 @@ struct ContentView: View {
     // timeline related
     @ObservedObject var calendarState = CalendarState.shared
     // notebooks related
-    @State private var selectedNotebookM: NotebookM?
-    @ObservedObject var notebooksListState = NotebooksListState.shared
+    @State private var selectedNotebookM: Notebook?
+    @State var notebooksListState = NotebooksListState()
     
     @State var selectedCalenderType: CalendarType.ID? = CalendarType.day.id
     
@@ -259,7 +259,7 @@ struct ContentView: View {
                     TimelineSidebarView(calendarID: $selectedCalenderType)
                         .environmentObject(calendarState)
                 case .noteBooks:
-                    NotebooksListView(icloudSyncing: $icloudSyncing, selectedNotebook: $selectedNotebookM)
+                    NotebooksListView(icloudSyncing: $icloudSyncing, usersState: notebooksListState, selectedNotebook: $selectedNotebookM)
                         .environmentObject(notebooksListState)
 //                        .onAppear {
 //                            Task {

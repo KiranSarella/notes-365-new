@@ -7,12 +7,13 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+import Combine
 
 struct NotebooksListView: View {
 
     @Binding var icloudSyncing: Bool
-    @EnvironmentObject var usersState: NotebooksListState
-    @Binding var selectedNotebook: NotebookM?
+    @Bindable var usersState: NotebooksListState
+    @Binding var selectedNotebook: Notebook?
     @Environment(\.isSearching) private var isSearching
 
     @State private var firstTimeAppear = true
@@ -98,7 +99,7 @@ struct NotebooksListView: View {
                 .confirmationDialog("Are you sure?", isPresented: $usersState.presentDeleteConfirmation) {
                     Button("Delete", role: .destructive) {
                         guard let temp = usersState.deletingNotebook else { return }
-                        usersState.deleteNotebook(ref: temp.notebookRef)
+                        usersState.deleteNotebook(ref: temp)
                         usersState.deletingNotebook = nil
                     }
                 } message: {
@@ -174,7 +175,7 @@ struct NotebooksListView: View {
                     if selectedNotebook == nil {
                         return
                     }
-                    usersState.insertBelow(ref: selectedNotebook!.notebookRef)
+                    usersState.insertBelow(ref: selectedNotebook!)
                 }) {
                     //                Image(systemName: "arrow.down")
                     //                    .renderingMode(.original)
@@ -185,7 +186,7 @@ struct NotebooksListView: View {
                     if selectedNotebook == nil {
                         return
                     }
-                    usersState.insertInside(ref: selectedNotebook!.notebookRef)
+                    usersState.insertInside(ref: selectedNotebook!)
                 }) {
                     //                Image(systemName: "arrow.turn.down.right")
                     //                    .renderingMode(.original)
@@ -202,7 +203,7 @@ struct NotebooksListView: View {
                 usersState.deletingNotebook = selectedNotebook
 //                usersState.presentDeleteConfirmation = true
                 guard let temp = usersState.deletingNotebook else { return }
-                usersState.deleteNotebookNew(ref: temp.notebookRef)
+                usersState.deleteNotebookNew(ref: temp)
                 usersState.deletingNotebook = nil
                 
             }) {
@@ -223,7 +224,7 @@ struct SearchedListView: View {
     
     @Environment(\.editMode) private var editMode
     @Environment(\.isSearching) private var isSearching
-    @Binding var selectedNotebook: NotebookM?
+    @Binding var selectedNotebook: Notebook?
     @EnvironmentObject var usersState: NotebooksListState
     
     var body: some View {
@@ -253,9 +254,9 @@ struct SearchedListView: View {
         List(selection: $selectedNotebook) {
             
             if usersState.listSourceType == .deletedItems {
-                DeletedNotebooksListGroupView(notebooks: $usersState.notesHierarchy.notes)
+                DeletedNotebooksListGroupView(notebooks: $usersState.notebooks)
             } else {
-                NotebooksListGroupView(notebooks: $usersState.notesHierarchy.notes)
+                NotebooksListGroupView(usersState: usersState, notebooks: $usersState.notebooks)
             }
             
 //            if usersState.notesHierarchy.deletedNotes.count > 0 {
@@ -456,38 +457,20 @@ struct AddNotesView: View {
 
 
 struct NotebooksListGroupView: View {
-    @EnvironmentObject var usersState: NotebooksListState
-    @Binding var notebooks: [NotebookM]
+    @Bindable var usersState: NotebooksListState
+    @Binding var notebooks: [Notebook]
     @State private var isTargeted: Bool = true
     var body: some View {
         
         if usersState.listSourceType == .notebooks(.none) ||
             (usersState.listSourceType == .notebooks(.searching) && usersState.activeSearch == false) {
-            ForEach($notebooks, id: \.self) { $notebook in
-                if notebook.containChildNotebooks {
-                    DisclosureGroup(isExpanded: $notebook.isExpanded) {
-                        NotebooksListGroupView(notebooks: $notebook.children.unwrap()!)
-                    } label: {
-                        RowView(notebook: $notebook)
-                    }
-                } else {
-                    RowView(notebook: $notebook)
-                }
+            ForEach($notebooks) { $notebook in
+                MyTableRow(usersState: usersState, notebook: $notebook)
             }
             .onMove(perform: move) 
         } else {
-            ForEach($notebooks, id: \.self) { $notebook in
-                if notebook.containChildNotebooks {
-                    DisclosureGroup(isExpanded: $notebook.isExpanded) {
-                        NotebooksListGroupView(notebooks: $notebook.children.unwrap()!)
-                    } label: {
-                        RowView(notebook: $notebook)
-                            .opacity(notebook.canShow ? 1 : 0.4)
-                    }
-                } else {
-                    RowView(notebook: $notebook)
-                        .opacity(notebook.canShow ? 1 : 0.4)
-                }
+            ForEach($notebooks) { $notebook in
+                MyTableDeletedRow(usersState: usersState, notebook: $notebook)
             }
             .onMove(perform: move)
         }
@@ -505,12 +488,12 @@ struct NotebooksListGroupView: View {
     }
     
     @State private var operationTag = 1
-    @State private var draggedItem: NotebookM?
+    @State private var draggedItem: Notebook?
     @State private var isDragging = false
     @State private var isCustomPreview = true
     
     
-    private func makeDropDelegate(user: NotebookM) -> DropDelegate {
+    private func makeDropDelegate(user: Notebook) -> DropDelegate {
 //        print("makeDropDelegate \(user.name)")
         let operation: DropOperation
         switch operationTag {
@@ -539,7 +522,7 @@ struct NotebooksListGroupView: View {
         )
     }
     
-    private func makeItemProvider(user: NotebookM) -> NSItemProvider {
+    private func makeItemProvider(user: Notebook) -> NSItemProvider {
         print(#function)
         print(user.name)
         isDragging = true
@@ -554,15 +537,53 @@ struct NotebooksListGroupView: View {
 //
 //        notebooks.first?.notebook.parent?.children?.move(fromOffsets: source, toOffset: destination)
 //
-        usersState.move(notebooksM: &notebooks, from: source, to: destination)
+        usersState.move(notebooks: &notebooks, from: source, to: destination)
     }
 }
 
+struct MyTableRow: View {
+    
+    @Bindable var usersState: NotebooksListState
+    @Binding var notebook: Notebook
+    
+    var body: some View {
+        
+        // normal
+        if notebook.containChildNotebooks {
+            DisclosureGroup(isExpanded: $notebook.isExpanded) {
+                NotebooksListGroupView(usersState: usersState, notebooks: $notebook.children.unwrap()!)
+            } label: {
+                RowView(usersState: usersState, notebook: $notebook)
+            }
+        } else {
+            RowView(usersState: usersState, notebook: $notebook)
+        }
+    }
+}
 
+struct MyTableDeletedRow: View {
+    
+    @Bindable var usersState: NotebooksListState
+    @Binding var notebook: Notebook
+    
+    var body: some View {
+        if notebook.containChildNotebooks {
+            DisclosureGroup(isExpanded: $notebook.isExpanded) {
+                NotebooksListGroupView(usersState: usersState, notebooks: $notebook.children.unwrap()!)
+            } label: {
+                RowView(usersState: usersState, notebook: $notebook)
+                    .opacity(notebook.canShow ? 1 : 0.4)
+            }
+        } else {
+            RowView(usersState: usersState, notebook: $notebook)
+                .opacity(notebook.canShow ? 1 : 0.4)
+        }
+    }
+}
 
 struct RowView: View {
-    @EnvironmentObject var usersState: NotebooksListState
-    @Binding var notebook: NotebookM
+    @Bindable var usersState: NotebooksListState
+    @Binding var notebook: Notebook
     @State private var name: String = ""
     @FocusState private var isFocused: Bool
     
@@ -596,7 +617,7 @@ struct RowView: View {
                             usersState.deletingNotebook = notebook
                             
                             guard let temp = usersState.deletingNotebook else { return }
-                            usersState.deleteNotebookNew(ref: notebook.notebookRef)
+                            usersState.deleteNotebookNew(ref: notebook)
                             usersState.deletingNotebook = nil
                             
                         } label: {
@@ -618,7 +639,7 @@ struct RowView: View {
                 Group {
                     // restore
                     Button(action: {
-//                        usersState.insertBelow(ref: notebook.notebookRef)
+//                        usersState.insertBelow(ref: notebook)
                     }) {
                         Label("Restore", image: "arrow.uturn.backward")
 //                        HStack {
@@ -634,7 +655,7 @@ struct RowView: View {
                         usersState.deletingNotebook = notebook
     //                    usersState.presentDeleteConfirmation = true
                         
-                        usersState.deleteNotebookNew(ref: notebook.notebookRef)
+                        usersState.deleteNotebookNew(ref: notebook)
                         usersState.deletingNotebook = nil
                         
                     }) {
@@ -652,13 +673,13 @@ struct RowView: View {
                     RenameButton()
                     // insert below
                     Button(action: {
-                        usersState.insertBelow(ref: notebook.notebookRef)
+                        usersState.insertBelow(ref: notebook)
                     }) {
                         Text("Add Below")
                     }
                     // insert inside
                     Button(action: {
-                        usersState.insertInside(ref: notebook.notebookRef)
+                        usersState.insertInside(ref: notebook)
                     }) {
                         Text("Add Inside")
                     }
@@ -668,7 +689,7 @@ struct RowView: View {
     //                    usersState.presentDeleteConfirmation = true
                         
                         
-                        usersState.deleteNotebookNew(ref: notebook.notebookRef)
+                        usersState.deleteNotebookNew(ref: notebook)
                         usersState.deletingNotebook = nil
                         
                     }) {
@@ -700,7 +721,7 @@ struct RowView: View {
                 return
             }
             do {
-                try usersState.rename(for: notebook.notebookRef, newValue: name)
+                try usersState.rename(for: notebook, newValue: name)
 //                usersState.navTitle = name
                 isEditing = false
             } catch NotebookBusinessError.alreadyExists {
@@ -731,7 +752,7 @@ struct RowView: View {
 
 struct DeletedNotebooksListGroupView: View {
     @EnvironmentObject var usersState: NotebooksListState
-    @Binding var notebooks: [NotebookM]
+    @Binding var notebooks: [Notebook]
     @State private var isTargeted: Bool = true
     var body: some View {
         ForEach($notebooks, id: \.self) { $notebook in
@@ -751,7 +772,7 @@ struct DeletedNotebooksListGroupView: View {
 
 struct DeletedRowView: View {
     @EnvironmentObject var usersState: NotebooksListState
-    @Binding var notebook: NotebookM
+    @Binding var notebook: Notebook
     
     var body: some View {
         HStack {
@@ -764,7 +785,7 @@ struct DeletedRowView: View {
 //            Group {
 //                // restore
 //                Button(action: {
-////                        usersState.insertBelow(ref: notebook.notebookRef)
+////                        usersState.insertBelow(ref: notebook)
 //                }) {
 //                    Label("Restore", image: "arrow.uturn.backward")
 ////                        HStack {
@@ -780,7 +801,7 @@ struct DeletedRowView: View {
 ////                    usersState.deletingNotebook = notebook
 //////                    usersState.presentDeleteConfirmation = true
 ////
-////                    usersState.deleteNotebookNew(ref: notebook.notebookRef)
+////                    usersState.deleteNotebookNew(ref: notebook)
 ////                    usersState.deletingNotebook = nil
 //
 //                }) {

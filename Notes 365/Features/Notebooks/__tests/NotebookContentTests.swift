@@ -9,7 +9,7 @@ import XCTest
 
 final class NotebookContentTests: XCTestCase {
 
-    var notebook: NotebookM!
+    var notebook: Notebook!
     var notebooksListState: NotebooksListState!
     var notebookEditorState: NotebookEditorState!
     
