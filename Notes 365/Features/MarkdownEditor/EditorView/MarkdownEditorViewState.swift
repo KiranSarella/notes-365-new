@@ -11,9 +11,10 @@ extension Notification.Name {
     public static let notebookRenamed = Notification.Name("com.notes365.notebookRenamed")
 }
 
-class MarkdownEditorViewState: ObservableObject {
+@Observable
+class MarkdownEditorViewState {
     
-    @Published var fileName: String = ""
+    var fileName: String = ""
     
     init() {
         NotificationCenter.default.addObserver(self, selector: #selector(notebookNameChanged(_:)), name: .notebookRenamed, object: nil)

@@ -10,21 +10,21 @@ import SwiftUI
 struct DayCalendarView2: View {
     
     @Binding var dayDate: DayDate
-    @StateObject var dayState = DayCalendarState()
+    @State var dayState = DayCalendarState()
     
     var body: some View {
         VStack {
             // current month, prev, next actions
             HeaderView()
                 .padding(.bottom)
-                .environmentObject(dayState)
+                .environment(dayState)
 
             // grid view 7 x 7
             // 7 columns
             // titles: sun, mon...
             // detail rows: 6
             DayGridView(dayDate: $dayDate)
-                .environmentObject(dayState)
+                .environment(dayState)
         }
         .padding()
         .onAppear {
@@ -36,7 +36,7 @@ struct DayCalendarView2: View {
 
 fileprivate struct HeaderView: View {
     
-    @EnvironmentObject var dayState: DayCalendarState
+    @Environment(DayCalendarState.self) var dayState
      
     var body: some View {
         
@@ -56,7 +56,8 @@ fileprivate struct DayGridView: View {
     var columns = Array(repeating: GridItem(), count: 7)
     var weekdaySymbols = Calendar.current.shortWeekdaySymbols
     
-    @EnvironmentObject var dayState: DayCalendarState
+    @Environment(DayCalendarState.self) var dayState
+
     @Binding var dayDate: DayDate
     
     @State private var displayCounter: Int = 0

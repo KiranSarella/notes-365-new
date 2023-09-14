@@ -14,7 +14,7 @@ struct MarkdownEditorView: View {
     
     var fileName: String
     var isDeleted: Bool
-    @StateObject var markdownEditorState = MarkdownEditorViewState()
+    @State var markdownEditorState = MarkdownEditorViewState()
     @FocusState private var isTextFieldFocused: Bool
     @State private var editorView = EditorView()
     
