@@ -14,24 +14,28 @@ struct EditorSymbolsView: View {
     
     var body: some View {
         
-        List($state.symbolsList) { $symbol in
-            Section(symbol.heading) {
-                VStack {
-                    ReadOnlyMarkDownViewThree(timeline: $symbol, showSymbols: $showSymbols)
-                        .padding(EdgeInsets(top: 8, leading: 0, bottom: 5, trailing: 0))
+        NavigationStack {
+            List($state.symbolsList) { $symbol in
+                Section(symbol.heading) {
+                    VStack {
+                        ReadOnlyMarkDownViewThree(timeline: $symbol, showSymbols: $showSymbols)
+                            .padding(EdgeInsets(top: 8, leading: 0, bottom: 5, trailing: 0))
+                    }
+                }
+            }
+            .navigationBarTitle("Aa")
+            .toolbar {
+                Toggle("Show Symbols", isOn: $showSymbols)
+            }
+            .onChange(of: showSymbols) { newShowSymbols in
+    //            state.editorType = (newShowSymbols == true) ? .markdown : .smart
+                for i in 0..<state.symbolsList.count {
+                    state.symbolsList[i].editorView.editorType = newShowSymbols ? .markdown : .smart
                 }
             }
         }
-        .navigationBarTitle("Aa")
-        .toolbar {
-            Toggle("Show Symbols", isOn: $showSymbols)
-        }
-        .onChange(of: showSymbols) { newShowSymbols in
-//            state.editorType = (newShowSymbols == true) ? .markdown : .smart
-            for i in 0..<state.symbolsList.count {
-                state.symbolsList[i].editorView.editorType = newShowSymbols ? .markdown : .smart
-            }
-        }
+        
+        
 
 //        .listStyle(GroupedListStyle())
     }

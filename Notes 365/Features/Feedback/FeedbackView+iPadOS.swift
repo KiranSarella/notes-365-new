@@ -25,55 +25,59 @@ struct FeedbackView_iPadOS: View {
     
     var body: some View {
         
-        VStack {
-            VStack(alignment: .leading) {
-                Text("feedback@notes365.app")
-                HStack {
-                    Text("Subject")
-                    Picker("", selection: $feedbackState.subject) {
-                        ForEach(FeedbackState.Subject.allCases) { item in
-                            Text(item.rawValue).tag(item)
-                        }
-                    }
-                }
-                HStack(alignment: .top) {
+        NavigationStack {
+            
+            VStack {
+                VStack(alignment: .leading) {
+                    Text("feedback@notes365.app")
                     HStack {
-                        VStack {
-                            TextEditor(text: $feedbackState.message)
-                                .frame(height: 160)
-                                .border(.gray)
+                        Text("Subject")
+                        Picker("", selection: $feedbackState.subject) {
+                            ForEach(FeedbackState.Subject.allCases) { item in
+                                Text(item.rawValue).tag(item)
+                            }
                         }
                     }
-                }
-                HStack {
-                    Spacer()
-                    Button {
-                        if canSendMail {
-                            self.isShowingMailView.toggle()
+                    HStack(alignment: .top) {
+                        HStack {
+                            VStack {
+                                TextEditor(text: $feedbackState.message)
+                                    .frame(height: 160)
+                                    .border(.gray)
+                            }
                         }
-                    } label: {
-                        Text("send")
                     }
-                    .disabled(!enableSendButton)
-                }
-                HStack {
+                    HStack {
+                        Spacer()
+                        Button {
+                            if canSendMail {
+                                self.isShowingMailView.toggle()
+                            }
+                        } label: {
+                            Text("send")
+                        }
+                        .disabled(!enableSendButton)
+                    }
+                    HStack {
+                        Spacer()
+                        Text("Can't send emails from this device")
+                            .opacity(canSendMail ? 0 : 1)
+                            .fontWeight(.ultraLight)
+                    }
+                    .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
                     Spacer()
-                    Text("Can't send emails from this device")
-                        .opacity(canSendMail ? 0 : 1)
-                        .fontWeight(.ultraLight)
                 }
-                .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
-                Spacer()
+                .padding(50)
             }
-            .padding(50)
-        }
-        .navigationTitle("Feedback")
-        .sheet(isPresented: $isShowingMailView) {
-            MailView(result: $result) { composer in
-                composer.setSubject(feedbackState.subject.rawValue)
-                composer.setMessageBody(feedbackState.message, isHTML: false)
-                composer.setToRecipients(["feedback@notes365.app"])
+            .navigationTitle("Feedback")
+            .sheet(isPresented: $isShowingMailView) {
+                MailView(result: $result) { composer in
+                    composer.setSubject(feedbackState.subject.rawValue)
+                    composer.setMessageBody(feedbackState.message, isHTML: false)
+                    composer.setToRecipients(["feedback@notes365.app"])
+                }
             }
+            
         }
         
         

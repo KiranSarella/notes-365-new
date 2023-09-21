@@ -53,6 +53,10 @@ struct NotebooksListView: View {
     
     @State private var calenderType: NotebookListOption = .all
     
+    @State private var colors: [UUID] = []
+    @State private var editorState = NotebookEditorState()
+    
+    
     var body: some View {
         
 //        Text("Loading..")
@@ -99,6 +103,9 @@ struct NotebooksListView: View {
                         }
                             
                     } else {
+                        
+                        NavigationStack(path: $colors) {
+                         
                         SearchedListView(selectedNotebook: $selectedNotebook, usersState: usersState)
                             .padding(.bottom, 20)
                             .listStyle(SidebarListStyle())
@@ -107,14 +114,29 @@ struct NotebooksListView: View {
     //                                    .listStyle(SidebarListStyle())
                             .navigationTitle("Notebooks")
                             .navigationBarTitleDisplayMode(.large)
-    //                        .onChange(of: selectedNotebook) { newValue in
-    //                            if let newValue = newValue {
-    //                                usersState.navTitle = newValue.name
-    //                            }
-    //                        }
+                            .onChange(of: selectedNotebook, { oldValue, newValue in
+                                if let newValue = newValue {
+                                    colors.append(newValue)
+                                }
+                            })
                             .searchable(text: $usersState.searchText, placement: .navigationBarDrawer(displayMode: .always))
                             
                             
+                        }.navigationDestination(for: Notebook.ID.self) { color in
+                            
+                            
+                            if let notebook = NotebooksCache.shared.flatNotebooks[color.uuidString] {
+        
+                                NotebookEditorView(listDisplayState: usersState.listSourceType, notebookM: notebook, editorState: editorState)
+        
+        //                        NotebookEditorView(notebookM: notebook, editorState: editorState)
+                            } else {
+                                Text("canvas")
+                            }
+                            
+                        }
+                        
+                        
                     }
                     
                   
@@ -160,6 +182,9 @@ struct NotebooksListView: View {
             
         }
         .onAppear {
+            
+            selectedNotebook = nil
+            
             // to get new data not on first launch, user have to go back and come -  for now
             if firstTimeAppear {
                 // if some how, list loading failed, force list load again.

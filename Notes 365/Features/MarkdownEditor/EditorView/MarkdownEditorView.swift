@@ -31,8 +31,6 @@ struct MarkdownEditorView: View {
     
     @State private var pdfFileData: PDFFile = PDFFile(data: Data())
     
-    @Binding var navigationSplitViewVisibility: NavigationSplitViewVisibility
-    
     var body: some View {
         
         VStack(alignment: .leading) {
@@ -73,25 +71,6 @@ struct MarkdownEditorView: View {
             isTextFieldFocused = false
         }
         .toolbar {
-            // works for mac also, because of mac catalyst
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        if navigationSplitViewVisibility == .detailOnly {
-                            navigationSplitViewVisibility = .doubleColumn
-                        } else {
-                            navigationSplitViewVisibility = .detailOnly
-                        }
-                    } label: {
-                        if navigationSplitViewVisibility == .detailOnly {
-                            Image(systemName: "arrow.down.right.and.arrow.up.left")
-                        } else {
-                            Image(systemName: "arrow.up.left.and.arrow.down.right")
-                        }
-                    }
-
-                }
-            }
             
             // mode change
             ToolbarItem {

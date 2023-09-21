@@ -24,7 +24,6 @@ struct NotebookEditorView: View {
 
     @State var autoSaveTimer: Timer.TimerPublisher = Timer.publish(every: 5, on: .main, in: .common)
     @State var connectedTimer: Cancellable? = nil
-    @Binding var navigationSplitViewVisibility: NavigationSplitViewVisibility
     
     var isDeleted: Bool {
         listDisplayState == .deletedItems
@@ -47,7 +46,7 @@ struct NotebookEditorView: View {
                 MarkdownEditorView(fileName: notebookM.name, isDeleted: isDeleted, contentEditedDate: $editorState.contentEditedDate, theme: $editorState.theme, baseContent: $editorState.baseContent, handler: { getText in
                     // attach ref.
                     editorState.getTextHandler = getText
-                }, navigationSplitViewVisibility: $navigationSplitViewVisibility)
+                })
                 .onAppear(perform: {
                     self.instantiateTimer()
                 })

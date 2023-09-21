@@ -70,91 +70,44 @@ struct SettingsView_iPadOS: View {
         NavigationStack {
             VStack {
                 List {
-                    Section("") {
-                        NavigationLink {
-                            List {
-                                Picker("Light", selection: $selectedLightThemeID) {
-                                    ForEach(themesListState.themes) { theme in
-                                        Text(theme.themeName).tag(theme.id)
-                                    }
-                                }
-                                .tag(selectedLightThemeID)
-                                
-                                Picker("Dark", selection: $selectedDarkThemeID) {
-                                    ForEach(themesListState.themes) { theme in
-                                        Text(theme.themeName).tag(theme.id)
-                                    }
-                                }
-                                .tag(selectedDarkThemeID)
-                                
-                                Section("Themes") {
-                                    ForEach(themesListState.themes, id:\.self) { theme in
-                                        Button(theme.themeName) {
-                                            selectedTheme = theme
-                                            showThemeDetail = true
-                                        }
-                                    }
-                                    .buttonStyle(PlainButtonStyle())
-                                }
-                            }
-                            .onChange(of: selectedLightThemeID) { newValue in
-                                themesListState.saveLightTheme(newValue)
-                            }
-                            .onChange(of: selectedDarkThemeID) { newValue in
-                                themesListState.saveDarkTheme(newValue)
-                            }
-                            .navigationTitle("Themes")
-                            .sheet(item: $selectedTheme, content: { theme in
-                                NavigationStack {
-                                    ThemeDetailView_iOS(theme: theme, onThemeChange: { value in
-                                        themesListState.saveChanges(value)
-                                    })
-                                }
-                            })
-                        } label: {
-                            let selectedMode = Setting.themes
-                            HStack(spacing: 0) {
-                                Image(systemName: selectedMode.image)
-                                    .imageScale(.large)
-                                VStack(alignment: .leading) {
-                                    Text(selectedMode.name)
-                                        .font(.system(Font.TextStyle.title2))
-                                }.padding(.leading)
-                            }.padding(6)
+                    Picker("Light", selection: $selectedLightThemeID) {
+                        ForEach(themesListState.themes) { theme in
+                            Text(theme.themeName).tag(theme.id)
                         }
                     }
+                    .tag(selectedLightThemeID)
                     
-                    Section("") {
-                        NavigationLink {
-                            EditorSymbolsView()
-                        } label: {
-                            let selectedMode = Setting.editorSymbols
-                            HStack(spacing: 0) {
-                                Image(systemName: selectedMode.image)
-                                    .imageScale(.large)
-                                VStack(alignment: .leading) {
-                                    Text(selectedMode.name)
-                                        .lineLimit(1)
-                                        .font(.system(Font.TextStyle.title2))
-                                }.padding(.leading)
-                            }.padding(6)
+                    Picker("Dark", selection: $selectedDarkThemeID) {
+                        ForEach(themesListState.themes) { theme in
+                            Text(theme.themeName).tag(theme.id)
                         }
-                        
-                        NavigationLink {
-                            FeedbackView_iPadOS()
-                        } label: {
-                            let selectedMode = Setting.feedback
-                            HStack(spacing: 0) {
-                                Image(systemName: selectedMode.image)
-                                    .imageScale(.large)
-                                VStack(alignment: .leading) {
-                                    Text(selectedMode.name)
-                                        .font(.system(Font.TextStyle.title2))
-                                }.padding(.leading)
-                            }.padding(6)
+                    }
+                    .tag(selectedDarkThemeID)
+                    
+                    Section("Themes") {
+                        ForEach(themesListState.themes, id:\.self) { theme in
+                            Button(theme.themeName) {
+                                selectedTheme = theme
+                                showThemeDetail = true
+                            }
                         }
+                        .buttonStyle(PlainButtonStyle())
                     }
                 }
+                .onChange(of: selectedLightThemeID) { newValue in
+                    themesListState.saveLightTheme(newValue)
+                }
+                .onChange(of: selectedDarkThemeID) { newValue in
+                    themesListState.saveDarkTheme(newValue)
+                }
+                .navigationTitle("Themes")
+                .sheet(item: $selectedTheme, content: { theme in
+                    NavigationStack {
+                        ThemeDetailView_iOS(theme: theme, onThemeChange: { value in
+                            themesListState.saveChanges(value)
+                        })
+                    }
+                })
                 .navigationTitle("Settings")
                 .navigationBarTitleDisplayMode(.inline)
             }

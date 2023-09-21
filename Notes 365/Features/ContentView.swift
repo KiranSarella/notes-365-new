@@ -103,7 +103,10 @@ struct ContentView: View {
     
     @Environment(ChooseEnvironment.self) var chooseEnv
     
-    @State private var showSettings = false
+    @State private var showThemes = false
+    @State private var showFormattingSymbols = false
+    @State private var showFeedback = false
+    
     @State private var icloudSyncing = false
     
 //    @State private var notesListSyncing = false
@@ -167,19 +170,19 @@ struct ContentView: View {
                 Section("Settings", isExpanded: $settingsExpanded) {
                     
                     Button {
-                        showSettings = true
+                        showThemes = true
                     } label: {
                         Label("Themes", systemImage: "paintbrush")
                     }
                     
                     Button {
-                        showSettings = true
+                        showFormattingSymbols = true
                     } label: {
                         Label("Formatting Symbols", systemImage: "textformat")
                     }
                     
                     Button {
-                        showSettings = true
+                        showFeedback = true
                     } label: {
                         Label("Feedback", systemImage: "hand.thumbsup")
                     }
@@ -304,8 +307,14 @@ struct ContentView: View {
 //                    Spacer()
 //                }
 //                .padding()
-                .sheet(isPresented: $showSettings) {
-                    SettingsView_iPadOS(showModel: $showSettings)
+                .sheet(isPresented: $showThemes) {
+                    SettingsView_iPadOS(showModel: $showThemes)
+                }
+                .sheet(isPresented: $showFormattingSymbols) {
+                    EditorSymbolsView()
+                }
+                .sheet(isPresented: $showFeedback) {
+                    FeedbackView_iPadOS()
                 }
 //            }
 //            .frame(minWidth: 180)
