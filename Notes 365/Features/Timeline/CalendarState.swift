@@ -89,7 +89,7 @@ class CalendarState {
         }
     }    // todays date by default
     
-    var calenderType: CalendarType = .day {
+    var calenderType: CalendarType = .month {
         didSet {
             switch oldValue {
             case .day:

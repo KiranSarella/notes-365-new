@@ -19,7 +19,7 @@ struct MonthCalendarView: View {
             // grid view
             MonthGridView(monthDate: $monthDate, navigationDate: $navigationDate)
         }
-        .padding()
+//        .padding()
         .onAppear {
             navigationDate = self.monthDate.start
         }

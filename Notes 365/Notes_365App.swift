@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct Notes_365App: App {
@@ -18,6 +19,9 @@ struct Notes_365App: App {
         WindowGroup {
             ContentWrapperView()
         }
+        .modelContainer(
+            for: [Notebook2.self]
+        )
         .commands {
             SidebarCommands()
         }
@@ -32,6 +36,7 @@ struct Notes_365App: App {
             PreferencesView()
                 .environmentObject(store)
         }
+        
 #endif
     }
 }

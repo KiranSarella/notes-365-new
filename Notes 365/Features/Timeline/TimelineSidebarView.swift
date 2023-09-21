@@ -21,11 +21,11 @@ struct TimelineSidebarView: View {
                     Text(calendarType.name).tag(calendarType)
                 }
             }
-            .navigationTitle("Timeline")
+//            .navigationTitle("Timeline")
             .onChange(of: calendarState.calenderType, perform: { newValue in
                 calendarID = newValue.id
             })
-            .padding()
+//            .padding()
             
             HStack(alignment: .bottom) {
                 switch calendarState.calenderType {

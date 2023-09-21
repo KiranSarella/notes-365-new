@@ -26,7 +26,7 @@ struct DayCalendarView2: View {
             DayGridView(dayDate: $dayDate)
                 .environment(dayState)
         }
-        .padding()
+//        .padding()
         .onAppear {
             dayState.setDisplayDate(dayDate.date)
 //            navigationDate = dayDate.date
@@ -88,9 +88,12 @@ fileprivate struct DayGridView: View {
 //                            NavigationLink(value: dayState.selectedDayItem) {
 //                                DayGridItem(dayItem: dayItem, isSelected: dayState.isSelected(dayItem))
 //                            }
-                            NavigationLink(value: dayItem) {
-                                DayGridItem(dayItem: dayItem, isSelected: dayState.isSelected(dayItem))
-                            }
+                            
+                            DayGridItem(dayItem: dayItem, isSelected: dayState.isSelected(dayItem))
+                            
+//                            NavigationLink(value: dayItem) {
+//                                DayGridItem(dayItem: dayItem, isSelected: dayState.isSelected(dayItem))
+//                            }
                         } else {
                             DayGridItem(dayItem: dayItem, isSelected: dayState.isSelected(dayItem))
                         }
@@ -108,7 +111,7 @@ fileprivate struct DayGridView: View {
         })
         .navigationDestination(for: DayDateItem.self) { newDate in
 //            DayDetailView(dayItem: newDate)
-            DayDetailView(dayItem: newDate, navigationSplitViewVisibility: Binding.constant(.automatic))
+            DayDetailView(dayItem: newDate)
 
 //            DestinationView(input: newDate, emp: $dayState.selectedDayItem) {
 //                DayDetailView2(dayItem: newDate)

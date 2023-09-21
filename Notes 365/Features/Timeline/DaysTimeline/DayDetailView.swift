@@ -30,7 +30,6 @@ struct DayDetailView2: View {
 struct DayDetailView: View {
     
     var dayItem: DayDateItem?
-    @Binding var navigationSplitViewVisibility: NavigationSplitViewVisibility
     
     @State private var dayState = DayDetailState()
     
@@ -149,27 +148,6 @@ struct DayDetailView: View {
         }
         .onDisappear {
             dayState.generatorTask?.cancel()
-        }
-        .toolbar {
-            // works for mac also, because of mac catalyst
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        if navigationSplitViewVisibility == .detailOnly {
-                            navigationSplitViewVisibility = .doubleColumn
-                        } else {
-                            navigationSplitViewVisibility = .detailOnly
-                        }
-                    } label: {
-                        if navigationSplitViewVisibility == .detailOnly {
-                            Image(systemName: "arrow.down.right.and.arrow.up.left")
-                        } else {
-                            Image(systemName: "arrow.up.left.and.arrow.down.right")
-                        }
-                    }
-
-                }
-            }
         }
     }
 }

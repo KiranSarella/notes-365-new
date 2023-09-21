@@ -58,7 +58,7 @@ struct WeekCalendarView: View {
             // detail rows: 6
             WeekGridView(weekDate: $weekDate, navigationDate: $navigationDate, selectedWeek: $selectedWeek)
         }
-        .padding()
+//        .padding()
         .onAppear {
             navigationDate = weekDate.end   // taken .end date to show correct month visually.
             selectedWeek = getWeek(weekDate.start)

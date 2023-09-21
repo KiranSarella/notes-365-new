@@ -7,6 +7,18 @@
 
 import Foundation
 
+
+public enum SidebarItem: String, CaseIterable, Identifiable {
+    public var id: String { self.rawValue }
+    
+    case timeline
+    case notebooks
+//    case themes
+//    case formatingSymbols
+//    case feedback
+    
+}
+
 public enum Mode: String, CaseIterable, Identifiable {
     case timeline = "Timeline"
     case noteBooks = "Notebooks"

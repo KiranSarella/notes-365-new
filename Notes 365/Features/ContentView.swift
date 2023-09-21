@@ -110,6 +110,9 @@ struct ContentView: View {
 //    @State private var notesContentSyncing = false
     
     @State private var selectedModeID: Mode.ID? = Mode.timeline.id
+    @State private var sidebarItemSelected: SidebarItem.ID? = SidebarItem.timeline.id
+    
+    
     // timeline related
     @State var calendarState = CalendarState.shared
     // notebooks related
@@ -142,71 +145,171 @@ struct ContentView: View {
         return Color(uiColor: UIColor.systemGroupedBackground)
     }
     
+    @State var timelineExpanded = true
+    @State var notebooksExpanded = true
+    @State var settingsExpanded = true
     
+    @State var allExpanded = true
+    @State var pinsExpanded = true
+    
+    @State var selection: Int = 0
     
     var body: some View {
         NavigationSplitView(columnVisibility: $navigationSplitViewVisibility) {
+            
+            List(selection: $sidebarItemSelected) {
+                
+                Label("Timeline", systemImage: "rectangle.stack")
+                    .tag(SidebarItem.timeline.id)
+                Label("Notebooks", systemImage: "books.vertical")
+                    .tag(SidebarItem.notebooks.id)
+                
+                Section("Settings", isExpanded: $settingsExpanded) {
+                    
+                    Button {
+                        showSettings = true
+                    } label: {
+                        Label("Themes", systemImage: "paintbrush")
+                    }
+                    
+                    Button {
+                        showSettings = true
+                    } label: {
+                        Label("Formatting Symbols", systemImage: "textformat")
+                    }
+                    
+                    Button {
+                        showSettings = true
+                    } label: {
+                        Label("Feedback", systemImage: "hand.thumbsup")
+                    }
+
+//                   Label("Formatting Symbols", systemImage: "textformat")
+//                        .tag(SidebarItem.formatingSymbols.id)
+//                   Label("Feedback", systemImage: "hand.thumbsup")
+//                        .tag(SidebarItem.feedback.id)
+               }
+            }
+            .navigationTitle("Notes 365")
+            
+////                Section(isExpanded: $notebooksExpanded) {
+////                    NotebooksListView(icloudSyncing: $icloudSyncing, usersState: notebooksListState, selectedNotebook: $selectedNotebookM)
+////                        .frame(height: 500)
+////                } header: {
+////                    Label("Notebooks", systemImage: "books.vertical")
+////                }
+//
+//                
+////                Section("Notebooks", isExpanded: $notebooksExpanded) {
+////    
+////                    NotebooksListView(icloudSyncing: $icloudSyncing, usersState: notebooksListState, selectedNotebook: $selectedNotebookM)
+////                        .frame(height: 500)
+////                    
+//////                    Section(isExpanded: $allExpanded) {
+//////                        
+//////                    } header: {
+//////                        Label("All", systemImage: "books.vertical")
+//////                    }
+////                    
+////                    Section(isExpanded: $pinsExpanded) {
+////                        Text("red")
+////                        Text("orange")
+////                        Text("green")
+////                    } header: {
+////                        Label("Pinned", systemImage: "pin")
+////                    }
+////
+//////                    Label("Pinned", systemImage: "pin")
+////                    Label("Tags", systemImage: "tag")
+////                    Label("Labels", systemImage: "number")
+////                    Label("Search", systemImage: "magnifyingglass")
+////                }
+//                
+//                Section("Settings", isExpanded: $settingsExpanded) {
+//                    Label("Themes", systemImage: "paintbrush")
+//                    Label("Formatting Symbols", systemImage: "textformat")
+//                    Label("Feedback", systemImage: "hand.thumbsup")
+//                }
+//                
+//            }
+//            .navigationTitle("Notes 365")
+//            .listStyle(.inset)
+//            .listStyle(.sidebar)
+            
             // navigation headings
-            VStack {
-                List(Mode.allCases, selection: $selectedModeID) { selectedMode in
-                    HStack(spacing: 0) {
-                        Image(systemName: selectedMode.image)
-                        Text(selectedMode.name)
-                            .padding(.horizontal)
-                    }
-                }
-                .navigationTitle("Notes 365")
-                Spacer()
-                // bottom view - settings option
-                HStack {
-                    VStack {
-                        Button {
-                            // do sync
-                            // plist
-                            notebooksListSync.initialGatheringSync()
-                            // notebooks
-                            notebooksContentSync.initialGatheringSync()
-                            // timeline
-                            timelineSync.initialGatheringSync()
-                            // today base version
-                            todayVersionSync.initialGatheringSync()
-                            // deleted list
-                            deletedListSync.initialGatheringSync()
-                        } label: {
-                            HStack {
-                                Image(systemName: "arrow.triangle.2.circlepath")
-                                Text("iCloud Sync")
-                                    .padding(.horizontal, 6)
-                                
-                                ProgressView()
-                                    .opacity(icloudSyncing ? 1 : 0)
-                                
-                            }.padding(4)
-                            Spacer()
-                        }
-                        .help("Sync with iCloud")
-                        
-                        Button {
-                            showSettings = true
-                        } label: {
-                            HStack {
-                                Image(systemName: "gearshape")
-                                Text("Settings")
-                                    .padding(.horizontal, 6)
-                            }.padding(4)
-                            Spacer()
-                        }
-                        .help("Settings")
-                    }
-                    Spacer()
-                }
-                .padding()
+//            VStack {
+            
+            
+        
+            
+//                List(Mode.allCases, selection: $selectedModeID) { selectedMode in
+//                    HStack(spacing: 0) {
+//                        Label(selectedMode.name, systemImage: selectedMode.image)
+////                        Image(systemName: selectedMode.image)
+////                        Text(selectedMode.name)
+////                            .padding(.horizontal)
+//                    }
+//                    
+//                    
+//                    
+//                    Section("Settings", isExpanded: $settingsExpanded) {
+//                        Label("Themes", systemImage: "paintbrush")
+//                        Label("Formatting Symbols", systemImage: "textformat")
+//                        Label("Feedback", systemImage: "hand.thumbsup")
+//                    }
+//                }
+//                .navigationTitle("Notes 365")
+//                Spacer()
+//                // bottom view - settings option
+//                HStack {
+//                    VStack {
+//                        Button {
+//                            // do sync
+//                            // plist
+//                            notebooksListSync.initialGatheringSync()
+//                            // notebooks
+//                            notebooksContentSync.initialGatheringSync()
+//                            // timeline
+//                            timelineSync.initialGatheringSync()
+//                            // today base version
+//                            todayVersionSync.initialGatheringSync()
+//                            // deleted list
+//                            deletedListSync.initialGatheringSync()
+//                        } label: {
+//                            HStack {
+//                                Image(systemName: "arrow.triangle.2.circlepath")
+//                                Text("iCloud Sync")
+//                                    .padding(.horizontal, 6)
+//                                
+//                                ProgressView()
+//                                    .opacity(icloudSyncing ? 1 : 0)
+//                                
+//                            }.padding(4)
+//                            Spacer()
+//                        }
+//                        .help("Sync with iCloud")
+//                        
+//                        Button {
+//                            showSettings = true
+//                        } label: {
+//                            HStack {
+//                                Image(systemName: "gearshape")
+//                                Text("Settings")
+//                                    .padding(.horizontal, 6)
+//                            }.padding(4)
+//                            Spacer()
+//                        }
+//                        .help("Settings")
+//                    }
+//                    Spacer()
+//                }
+//                .padding()
                 .sheet(isPresented: $showSettings) {
                     SettingsView_iPadOS(showModel: $showSettings)
                 }
-            }
-            .frame(minWidth: 180)
-            .background(bottomViewBackgroundColor)
+//            }
+//            .frame(minWidth: 180)
+//            .background(bottomViewBackgroundColor)
             .onAppear {
                 ThemeState.shared.colorScheme = colorScheme
 //                    // do sync
@@ -251,72 +354,99 @@ struct ContentView: View {
 //                }
 //            }
             
-        } content: {
-            // calender and notebooks list
-            if let selectedMode = Mode.getMode(id: selectedModeID) {
-                switch selectedMode {
-                case .timeline:
-                    TimelineSidebarView(calendarID: $selectedCalenderType)
-                        .environment(calendarState)
-                case .noteBooks:
-                    NotebooksListView(icloudSyncing: $icloudSyncing, usersState: notebooksListState, selectedNotebook: $selectedNotebookM)
-//                        .environmentObject(notebooksListState)
-//                        .onAppear {
-//                            Task {
-//                                await notebooksListState.loadData()
-//                            }
-//                        }
-                }
-            } else {
-                // no selection done
-                Text("NOT SELECTED")
-            }
-        } detail: {
-            let selectedMode = Mode.getMode(id: selectedModeID ?? Mode.timeline.id)!
-            switch selectedMode {
-            case .timeline:
-//                if UIDevice.current.userInterfaceIdiom == .phone {
-//                    EmptyView()
-//                } else {
-                    let calendarType = calendarState.calenderType
-                    switch calendarType {
-                    case .day:
-                        
-//                        Text("\(calendarState.dayDate.date.string(format: "mm-dd-yy"))")
-//                        NotebookEditorView(notebookM: selectedNotebookM!, editorState: editorState)
-//                        DayDetailView()
-                        DayDetailView(navigationSplitViewVisibility: $navigationSplitViewVisibility)
-                    case .week:
-                        WeekDetailView()
-                    case .month:
-                        MonthDetailView()
-                    }
+        } 
+    
+//    content: {
+//            // calender and notebooks list
+//            if let selectedMode = Mode.getMode(id: selectedModeID) {
+//                switch selectedMode {
+//                case .timeline:
+//                    Text("contentview")
+////                        .navigationSplitViewStyle(.prominentDetail)
+////                        .navigationSplitViewColumnWidth(min: 0, ideal: 0, max: 0)
+////                    TimelineSidebarView(calendarID: $selectedCalenderType)
+////                        .environment(calendarState)
+//                case .noteBooks:
+//                    NotebooksListView(icloudSyncing: $icloudSyncing, usersState: notebooksListState, selectedNotebook: $selectedNotebookM)
+////                        .environmentObject(notebooksListState)
+////                        .onAppear {
+////                            Task {
+////                                await notebooksListState.loadData()
+////                            }
+////                        }
 //                }
-            case .noteBooks:
-                
-                if selectedNotebookM != nil {
-                    // ** binding won't work here.
-//                    NotebookEditorView(listDisplayState: notebooksListState.listSourceType, notebookM: selectedNotebookM!, editorState: editorState, navigationSplitViewVisibility: $navigationSplitViewVisibility)
-                    
-                    if let notebook = NotebooksCache.shared.flatNotebooks[selectedNotebookM!.uuidString] {
-                        
-                        NotebookEditorView(listDisplayState: notebooksListState.listSourceType, notebookM: notebook, editorState: editorState, navigationSplitViewVisibility: $navigationSplitViewVisibility)
-                        
-//                        NotebookEditorView(notebookM: notebook, editorState: editorState)
-                    } else {
-                        Text("selcted")
-                    }
-                    
-                } else {
-                    Text("No notebook selected")
-                }
-                
-                
-//                    .navigationTitle(selectedUser?.name ?? "")
-            }
+//            } else {
+//                // no selection done
+//                Text("NOT SELECTED")
+//            }
+//        } 
+//    
+    detail: {
+        
+        let selectedItem = SidebarItem(rawValue: sidebarItemSelected ?? SidebarItem.timeline.id)!
+        switch selectedItem {
+            
+        case .timeline:
+            TimelineDetailView(calendarID: $selectedCalenderType)
+                .environment(calendarState)
+        case .notebooks:
+            NotebooksListView(icloudSyncing: $icloudSyncing, usersState: notebooksListState, selectedNotebook: $selectedNotebookM)
+        }
+        
+        
+        
+        
+//            let selectedMode = Mode.getMode(id: selectedModeID ?? Mode.timeline.id)!
+//            switch selectedMode {
+//            case .timeline:
+////                if UIDevice.current.userInterfaceIdiom == .phone {
+////                    EmptyView()
+////                } else {
+//                    let calendarType = calendarState.calenderType
+//                    switch calendarType {
+//                    case .day:
+//                        
+////                        Text("\(calendarState.dayDate.date.string(format: "mm-dd-yy"))")
+////                        NotebookEditorView(notebookM: selectedNotebookM!, editorState: editorState)
+////                        DayDetailView()
+//                        DayDetailView(navigationSplitViewVisibility: $navigationSplitViewVisibility)
+//                            .navigationSplitViewStyle(.prominentDetail)
+//                    case .week:
+//                        WeekDetailView()
+//                    case .month:
+//                        MonthDetailView()
+//                    }
+//                    
+////                }
+//            case .noteBooks:
+//                
+//                
+//                NotebooksListView(icloudSyncing: $icloudSyncing, usersState: notebooksListState, selectedNotebook: $selectedNotebookM)
+//                
+////                if selectedNotebookM != nil {
+////                    // ** binding won't work here.
+//////                    NotebookEditorView(listDisplayState: notebooksListState.listSourceType, notebookM: selectedNotebookM!, editorState: editorState, navigationSplitViewVisibility: $navigationSplitViewVisibility)
+////                    
+////                    if let notebook = NotebooksCache.shared.flatNotebooks[selectedNotebookM!.uuidString] {
+////                        
+////                        NotebookEditorView(listDisplayState: notebooksListState.listSourceType, notebookM: notebook, editorState: editorState, navigationSplitViewVisibility: $navigationSplitViewVisibility)
+////                        
+//////                        NotebookEditorView(notebookM: notebook, editorState: editorState)
+////                    } else {
+////                        Text("selcted")
+////                    }
+////                    
+////                } else {
+////                    Text("No notebook selected")
+////                }
+//                
+//                
+////                    .navigationTitle(selectedUser?.name ?? "")
+//            case .settings:
+//                Text("asdf")
+//            }
         }
     }
-    
     
 }
 

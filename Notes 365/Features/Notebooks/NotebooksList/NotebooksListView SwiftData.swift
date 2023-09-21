@@ -8,41 +8,11 @@
 import SwiftUI
 import UniformTypeIdentifiers
 import Combine
-
-
-public enum NotebookListOption: String, CaseIterable, Identifiable {
-    case all
-    case modified
-    case deleted
-    case bookmarks
-    case tags
-    
-    public var id: String { self.rawValue }
-    
-    var name: String {
-        switch self {
-        case .all:
-            return "all"
-        case .modified:
-            return "modified"
-        case .deleted:
-            return "deleted"
-        case .bookmarks:
-            return "bookmarks"
-        case .tags:
-            return "tags"
-        }
-    }
-    
-//    static func getCalendarType(id: String?) -> CalendarType? {
-//        guard let id = id else { return nil }
-//        return CalendarType(rawValue: id)
-//    }
-}
-
+import SwiftData
 
 struct NotebooksListView: View {
 
+    @Environment(\.modelContext) private var context
     @Binding var icloudSyncing: Bool
     @Bindable var usersState: NotebooksListState
     @Binding var selectedNotebook: Notebook.ID?
@@ -51,155 +21,154 @@ struct NotebooksListView: View {
     @State private var firstTimeAppear = true
     @State private var appearDate = Date()
     
-    @State private var calenderType: NotebookListOption = .all
+    @Query var notes: [Notebook2]
     
     var body: some View {
         
-//        Text("Loading..")
-//            .opacity(usersState.isLoaded ? 0 : 1)
-        
-        VStack {
-            if icloudSyncing || usersState.isLoading {
-                ProgressView()
-            } else if usersState.listSourceType == .notebooks(.none) && usersState.isEmpty {
-                AddNotesView(usersState: usersState)
-                    .padding([.top], -100)
-            } else {
-                VStack {
-                    //                List(selection: $selectedNotebook) {
-                    //                    NotebooksListGroupView(notebooks: $usersState.usersDB.notes)
-                    //                }
-                    
-//                    // calendar type picker
-//                    Picker("", selection: $calenderType) {
-//                        ForEach(NotebookListOption.allCases, id: \.self) { calendarType in
-//                            Text(calendarType.name).tag(calendarType)
-//                        }
-//                    }
-//                    .padding()
-//                    .pickerStyle(SegmentedPickerStyle())
-                    
-                    
-                    if usersState.listSourceType == .deletedItems ||
-                        usersState.listSourceType == .notebooks(.recentlyModified) {
-                        
-                        SearchedListView(selectedNotebook: $selectedNotebook, usersState: usersState)
-//                            .padding(.bottom, 20)
-                            .listStyle(SidebarListStyle())
-                            .autocorrectionDisabled()
-                        
-    //                                    .listStyle(SidebarListStyle())
-                            .navigationTitle("Notebooks")
-                            .navigationBarTitleDisplayMode(.large)
-                        
-                        if usersState.listSourceType == .deletedItems {
-                            Text("Notebooks will be permanently deleted after 30 days.")
-                                .font(.caption2)
-                                .foregroundColor(.gray)
-                        }
-                            
-                    } else {
-                        SearchedListView(selectedNotebook: $selectedNotebook, usersState: usersState)
-                            .padding(.bottom, 20)
-                            .listStyle(SidebarListStyle())
-                            .autocorrectionDisabled()
-                        
-    //                                    .listStyle(SidebarListStyle())
-                            .navigationTitle("Notebooks")
-                            .navigationBarTitleDisplayMode(.large)
-    //                        .onChange(of: selectedNotebook) { newValue in
-    //                            if let newValue = newValue {
-    //                                usersState.navTitle = newValue.name
-    //                            }
-    //                        }
-                            .searchable(text: $usersState.searchText, placement: .navigationBarDrawer(displayMode: .always))
-                            
-                            
-                    }
-                    
-                  
-                    //                .onChange(of: usersState.searchText) { newValue in
-                    //                    selectedNotebook = nil`
-                    //                }
-                    /*
-                     ** IMP
-                     
-                     .listStyle(SidebarListStyle())
-                     
-                     this is required to show disclosureGroup when first item have no childs.
-                     and only working with SidebarListStyle.
-                     
+        Button {
+            let note = Notebook2(id: UUID(), name: "swift data 1")
+            context.insert(note)
+            try? context.save()
+        } label: {
+            Text("add +")
+        }
 
-                     */
-                    
-                    if UIDevice.current.userInterfaceIdiom == .pad {
-                        VStack {
-                            getToolbarView()
-                            Spacer()
-                        }
-                        .frame(height: 40)
-                    }
-                }
-//                .frame(minWidth: 280, maxWidth: 500)
-                .confirmationDialog("Are you sure?", isPresented: $usersState.presentDeleteConfirmation) {
-                    Button("Delete", role: .destructive) {
-                        guard let temp = usersState.deletingNotebook else { return }
-                        usersState.deleteNotebook(ref: temp)
-                        usersState.deletingNotebook = nil
-                    }
-                } message: {
-                    Text("You cannot undo this action")
-                }
-                .onDisappear {
-                    usersState.saveExpandedIds()
-                }
-//                .onChange(of: selectedNotebook) { newValue in
-//                    usersState.selectedNotebook = newValue
-//                }
-            }
-            
-        }
-        .onAppear {
-            // to get new data not on first launch, user have to go back and come -  for now
-            if firstTimeAppear {
-                // if some how, list loading failed, force list load again.
-                if usersState.isEmpty {
-                    usersState.forceReload()
-                } else {
-                    if usersState.listSourceType == .notebooks(.none) {
-                        // because, if new sync data available, then refresh is not happening until next app launch
-                        // or
-                        // when background sync done, need to get update.
-                        // to get latest data
-                        usersState.reloadNotebooksListIfNewRequired()
-                    }
-                }
-                
-                firstTimeAppear = false
-            }
-            
-            // if app is in background until next day. so, on next appear if next day, check deleted items
-            if appearDate != Date() {
-                usersState.checkOldItemsToDelete()
-            }
-        }
-        .onChange(of: icloudSyncing) { newValue in
-            if newValue == true {
-                // before sync start
-                selectedNotebook = nil
-                selectedNotebook = nil
-            } else {
-                // after sync
-                usersState.forceReload()
-            }
-        }
-        .onChange(of: usersState.deletingNotebook) { newValue in
-            if newValue != nil {
-                // if deleting a note, de-select it before deleting
-                selectedNotebook = nil
-            }
+        
+        ForEach(notes) { note in
+            Text(note.name)
         }
         
+//        VStack {
+//            if icloudSyncing || usersState.isLoading {
+//                ProgressView()
+//            } else if usersState.listSourceType == .notebooks(.none) && usersState.isEmpty {
+//                AddNotesView(usersState: usersState)
+//                    .padding([.top], -100)
+//            } else {
+//                VStack {
+//                    //                List(selection: $selectedNotebook) {
+//                    //                    NotebooksListGroupView(notebooks: $usersState.usersDB.notes)
+//                    //                }
+//                    
+//                    
+//                    if usersState.listSourceType == .deletedItems ||
+//                        usersState.listSourceType == .notebooks(.recentlyModified) {
+//                        
+//                        SearchedListView(selectedNotebook: $selectedNotebook, usersState: usersState)
+////                            .padding(.bottom, 20)
+//                            .listStyle(PlainListStyle())
+//                            .autocorrectionDisabled()
+//                        
+//    //                                    .listStyle(SidebarListStyle())
+//                            .navigationTitle("Notebooks")
+//                            .navigationBarTitleDisplayMode(.large)
+//                        
+//                        if usersState.listSourceType == .deletedItems {
+//                            Text("Notebooks will be permanently deleted after 30 days.")
+//                                .font(.caption2)
+//                                .foregroundColor(.gray)
+//                        }
+//                            
+//                    } else {
+//                        SearchedListView(selectedNotebook: $selectedNotebook, usersState: usersState)
+//                            .padding(.bottom, 20)
+//                            .listStyle(PlainListStyle())
+//                            .autocorrectionDisabled()
+//                        
+//    //                                    .listStyle(SidebarListStyle())
+//                            .navigationTitle("Notebooks")
+//                            .navigationBarTitleDisplayMode(.large)
+//    //                        .onChange(of: selectedNotebook) { newValue in
+//    //                            if let newValue = newValue {
+//    //                                usersState.navTitle = newValue.name
+//    //                            }
+//    //                        }
+//                            .searchable(text: $usersState.searchText, placement: .navigationBarDrawer(displayMode: .always))
+//                    }
+//                    
+//                  
+//                    //                .onChange(of: usersState.searchText) { newValue in
+//                    //                    selectedNotebook = nil`
+//                    //                }
+//                    /*
+//                     ** IMP
+//                     
+//                     .listStyle(SidebarListStyle())
+//                     
+//                     this is required to show disclosureGroup when first item have no childs.
+//                     and only working with SidebarListStyle.
+//                     
+//
+//                     */
+//                    
+//                    if UIDevice.current.userInterfaceIdiom == .pad {
+//                        VStack {
+//                            getToolbarView()
+//                            Spacer()
+//                        }
+//                        .frame(height: 40)
+//                    }
+//                }
+//                .frame(minWidth: 280, maxWidth: 500)
+//                .confirmationDialog("Are you sure?", isPresented: $usersState.presentDeleteConfirmation) {
+//                    Button("Delete", role: .destructive) {
+//                        guard let temp = usersState.deletingNotebook else { return }
+//                        usersState.deleteNotebook(ref: temp)
+//                        usersState.deletingNotebook = nil
+//                    }
+//                } message: {
+//                    Text("You cannot undo this action")
+//                }
+//                .onDisappear {
+//                    usersState.saveExpandedIds()
+//                }
+////                .onChange(of: selectedNotebook) { newValue in
+////                    usersState.selectedNotebook = newValue
+////                }
+//            }
+//            
+//        }
+//        .onAppear {
+//            // to get new data not on first launch, user have to go back and come -  for now
+//            if firstTimeAppear {
+//                // if some how, list loading failed, force list load again.
+//                if usersState.isEmpty {
+//                    usersState.forceReload()
+//                } else {
+//                    if usersState.listSourceType == .notebooks(.none) {
+//                        // because, if new sync data available, then refresh is not happening until next app launch
+//                        // or
+//                        // when background sync done, need to get update.
+//                        // to get latest data
+//                        usersState.reloadNotebooksListIfNewRequired()
+//                    }
+//                }
+//                
+//                firstTimeAppear = false
+//            }
+//            
+//            // if app is in background until next day. so, on next appear if next day, check deleted items
+//            if appearDate != Date() {
+//                usersState.checkOldItemsToDelete()
+//            }
+//        }
+//        .onChange(of: icloudSyncing) { newValue in
+//            if newValue == true {
+//                // before sync start
+//                selectedNotebook = nil
+//                selectedNotebook = nil
+//            } else {
+//                // after sync
+//                usersState.forceReload()
+//            }
+//        }
+//        .onChange(of: usersState.deletingNotebook) { newValue in
+//            if newValue != nil {
+//                // if deleting a note, de-select it before deleting
+//                selectedNotebook = nil
+//            }
+//        }
+//        
     }
     
     var disableActions: Bool {
@@ -301,7 +270,6 @@ struct SearchedListView: View {
                     .padding(2)
         }
         
-//        VStack {
         List(selection: $selectedNotebook) {
             
             if usersState.listSourceType == .deletedItems {
