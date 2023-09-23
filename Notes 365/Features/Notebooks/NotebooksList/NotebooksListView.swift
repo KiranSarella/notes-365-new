@@ -8,6 +8,7 @@
 import SwiftUI
 import UniformTypeIdentifiers
 import Combine
+import SwiftData
 
 
 public enum NotebookListOption: String, CaseIterable, Identifiable {
@@ -43,6 +44,7 @@ public enum NotebookListOption: String, CaseIterable, Identifiable {
 
 struct NotebooksListView: View {
 
+    @Environment(\.modelContext) private var modelContext
     @Binding var icloudSyncing: Bool
     @Bindable var usersState: NotebooksListState
     @Binding var selectedNotebook: Notebook.ID?
@@ -56,6 +58,27 @@ struct NotebooksListView: View {
     @State private var colors: [UUID] = []
     @State private var editorState = NotebookEditorState()
     
+    
+    func fetchNotebooks() {
+        
+        let tripPredicate = #Predicate<Notebook> {
+            $0.parent == nil
+        }
+        
+        
+        let descriptor = FetchDescriptor(predicate: tripPredicate, sortBy: [SortDescriptor(\Notebook.createdDate)])
+//        let descriptor = FetchDescriptor<Item>(
+//            sortBy: SortDescriptor(\Item.timestamp),
+//            predicate: tripPredicate)
+
+        do {
+            let trips = try modelContext.fetch(descriptor)
+            usersState.notebooks = trips
+        } catch let err {
+            print(err)
+        }
+        
+    }
     
     var body: some View {
         
@@ -89,7 +112,7 @@ struct NotebooksListView: View {
                         
                         SearchedListView(selectedNotebook: $selectedNotebook, usersState: usersState)
 //                            .padding(.bottom, 20)
-                            .listStyle(SidebarListStyle())
+//                            .listStyle(SidebarListStyle())
                             .autocorrectionDisabled()
                         
     //                                    .listStyle(SidebarListStyle())
@@ -108,7 +131,7 @@ struct NotebooksListView: View {
                          
                         SearchedListView(selectedNotebook: $selectedNotebook, usersState: usersState)
                             .padding(.bottom, 20)
-                            .listStyle(SidebarListStyle())
+//                            .listStyle(SidebarListStyle())
                             .autocorrectionDisabled()
                         
     //                                    .listStyle(SidebarListStyle())
@@ -183,30 +206,32 @@ struct NotebooksListView: View {
         }
         .onAppear {
             
-            selectedNotebook = nil
+            fetchNotebooks()
             
-            // to get new data not on first launch, user have to go back and come -  for now
-            if firstTimeAppear {
-                // if some how, list loading failed, force list load again.
-                if usersState.isEmpty {
-                    usersState.forceReload()
-                } else {
-                    if usersState.listSourceType == .notebooks(.none) {
-                        // because, if new sync data available, then refresh is not happening until next app launch
-                        // or
-                        // when background sync done, need to get update.
-                        // to get latest data
-                        usersState.reloadNotebooksListIfNewRequired()
-                    }
-                }
-                
-                firstTimeAppear = false
-            }
-            
-            // if app is in background until next day. so, on next appear if next day, check deleted items
-            if appearDate != Date() {
-                usersState.checkOldItemsToDelete()
-            }
+//            selectedNotebook = nil
+//            
+//            // to get new data not on first launch, user have to go back and come -  for now
+//            if firstTimeAppear {
+//                // if some how, list loading failed, force list load again.
+//                if usersState.isEmpty {
+//                    usersState.forceReload()
+//                } else {
+//                    if usersState.listSourceType == .notebooks(.none) {
+//                        // because, if new sync data available, then refresh is not happening until next app launch
+//                        // or
+//                        // when background sync done, need to get update.
+//                        // to get latest data
+//                        usersState.reloadNotebooksListIfNewRequired()
+//                    }
+//                }
+//                
+//                firstTimeAppear = false
+//            }
+//            
+//            // if app is in background until next day. so, on next appear if next day, check deleted items
+//            if appearDate != Date() {
+//                usersState.checkOldItemsToDelete()
+//            }
         }
         .onChange(of: icloudSyncing) { newValue in
             if newValue == true {
@@ -297,6 +322,7 @@ struct NotebooksListView: View {
 
 struct SearchedListView: View {
     
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.editMode) private var editMode
     @Environment(\.isSearching) private var isSearching
     @Binding var selectedNotebook: Notebook.ID?
@@ -492,13 +518,15 @@ struct MyDisclosureStyle: DisclosureGroupStyle {
 }
 
 struct AddNotesView: View {
+    
+    @Environment(\.modelContext) private var modelContext
     @Bindable var usersState: NotebooksListState
     
     var body: some View {
         VStack(alignment: .center) {
             // show add first notebook button
             Button {
-                usersState.addFirstNotes()
+                usersState.addFirstNotes(modelContext)
             } label: {
                 Text(" + Notebook ")
             }.padding()
@@ -658,6 +686,8 @@ struct MyTableDeletedRow: View {
 }
 
 struct RowView: View {
+    
+    @Environment(\.modelContext) private var modelContext
     @Bindable var usersState: NotebooksListState
     @Binding var notebook: Notebook
     @State private var name: String = ""
@@ -749,13 +779,13 @@ struct RowView: View {
                     RenameButton()
                     // insert below
                     Button(action: {
-                        usersState.insertBelow(ref: notebook)
+                        usersState.insertBelow(ref: notebook, modelContext)
                     }) {
                         Text("Add Below")
                     }
                     // insert inside
                     Button(action: {
-                        usersState.insertInside(ref: notebook)
+                        usersState.insertInside(ref: notebook, modelContext)
                     }) {
                         Text("Add Inside")
                     }

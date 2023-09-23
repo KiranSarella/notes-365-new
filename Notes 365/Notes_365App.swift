@@ -15,13 +15,26 @@ struct Notes_365App: App {
     
     var todayVersionBusiness = TodayVersionBusiness()
     
+    var container: ModelContainer = {
+        let conf = ModelConfiguration("iCloud.com.sarella.notes365-local")
+        do {
+            let container = try ModelContainer(for: Notebook.self, configurations: conf)
+            return container
+        } catch {
+            print("errror: \(error)")
+            // fallback to local container
+            return try! ModelContainer(for: Notebook.self)
+        }
+    }()
+    
     var body: some Scene {
         WindowGroup {
             ContentWrapperView()
         }
-        .modelContainer(
-            for: [Notebook2.self]
-        )
+        .modelContainer(container)
+//        .modelContainer(
+//            for: [Notebook2.self]
+//        )
         .commands {
             SidebarCommands()
         }

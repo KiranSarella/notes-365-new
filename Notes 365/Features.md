@@ -13,7 +13,6 @@
 [x] convert ObservableObject to @Observed
 [ ] fix all $published combine logic to - onChange or other way
 [ ] update onChange to new syntax
-[ ] fix extra views issue in day calendar in - ios 17
 
 # SwiftData
 [ ] do notebooks list hierarchy with iCloud sync

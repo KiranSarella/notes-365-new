@@ -22,11 +22,12 @@
 		5CC4C0212A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC4C0202A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift */; };
 		5CC4C0232A909B2C00A4BE41 /* DayDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC4C0222A909B2C00A4BE41 /* DayDetailView.swift */; };
 		5CC4C0262A90A6BA00A4BE41 /* WeekDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC4C0242A90A66B00A4BE41 /* WeekDetailView.swift */; };
-		5CC8C9A12AB4ADD400479B94 /* NotebooksListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD252920CCCE003DE332 /* NotebooksListView.swift */; };
-		5CC8C9A22AB4ADFA00479B94 /* Notebook copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5F5B612AB3265400E1AE5F /* Notebook copy.swift */; };
 		5CDE34BD2AB2D885002D88ED /* NotebooksCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CDE34BC2AB2D885002D88ED /* NotebooksCache.swift */; };
 		5CE055DB2A17C5D3009EB4EA /* DayCalendarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE055DA2A17C5D3009EB4EA /* DayCalendarState.swift */; };
 		5CE055DD2A17D547009EB4EA /* DayCalendarView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE055DC2A17D547009EB4EA /* DayCalendarView2.swift */; };
+		5CFCF5E42ABEDF4D00351EEA /* NotebooksListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD252920CCCE003DE332 /* NotebooksListView.swift */; };
+		5CFCF5E62ABEDFA400351EEA /* Notebook copy 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFCF5E52ABEDF7000351EEA /* Notebook copy 2.swift */; };
+		5CFCF5E92ABEFDAF00351EEA /* Fakery in Frameworks */ = {isa = PBXBuildFile; productRef = 5CFCF5E82ABEFDAF00351EEA /* Fakery */; };
 		9F09CEB129267FBC00609D99 /* TodayVersionBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F09CEB029267FBC00609D99 /* TodayVersionBusiness.swift */; };
 		9F09CEB229267FBC00609D99 /* TodayVersionBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F09CEB029267FBC00609D99 /* TodayVersionBusiness.swift */; };
 		9F14B491298A684F0079D23B /* ThemeDetailView+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B490298A684F0079D23B /* ThemeDetailView+iOS.swift */; };
@@ -84,8 +85,6 @@
 		9F45BDBB2920E824003DE332 /* StringDiff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD2E2920CCCE003DE332 /* StringDiff.swift */; };
 		9F45BDBF2920EB14003DE332 /* NotebooksListBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD042920CCCE003DE332 /* NotebooksListBusiness.swift */; };
 		9F45BDD329226BD9003DE332 /* NotebooksListState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD292920CCCE003DE332 /* NotebooksListState.swift */; };
-		9F45BDDA29234150003DE332 /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BDD929234150003DE332 /* Notebook.swift */; };
-		9F45BDDB29234150003DE332 /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BDD929234150003DE332 /* Notebook.swift */; };
 		9F57BAE7299688BC0076FD9D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F57BAE6299688BC0076FD9D /* Constants.swift */; };
 		9F7D291D299A7C1500B37F51 /* MarkdownDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D291C299A7C1500B37F51 /* MarkdownDocument.swift */; };
 		9F7D291F299BABAC00B37F51 /* EditorViewUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D291E299BABAC00B37F51 /* EditorViewUI.swift */; };
@@ -172,6 +171,7 @@
 		5CDE34BC2AB2D885002D88ED /* NotebooksCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksCache.swift; sourceTree = "<group>"; };
 		5CE055DA2A17C5D3009EB4EA /* DayCalendarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCalendarState.swift; sourceTree = "<group>"; };
 		5CE055DC2A17D547009EB4EA /* DayCalendarView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCalendarView2.swift; sourceTree = "<group>"; };
+		5CFCF5E52ABEDF7000351EEA /* Notebook copy 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notebook copy 2.swift"; sourceTree = "<group>"; };
 		9F09CEB029267FBC00609D99 /* TodayVersionBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayVersionBusiness.swift; sourceTree = "<group>"; };
 		9F14B490298A684F0079D23B /* ThemeDetailView+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThemeDetailView+iOS.swift"; sourceTree = "<group>"; };
 		9F14B4AD298F98900079D23B /* FontPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontPicker.swift; sourceTree = "<group>"; };
@@ -285,6 +285,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CFCF5E92ABEFDAF00351EEA /* Fakery in Frameworks */,
 				5CA77C162A24AE220030EFB2 /* Collections in Frameworks */,
 				5CA77C182A24AE220030EFB2 /* DequeModule in Frameworks */,
 				5CA77C1A2A24AE220030EFB2 /* OrderedCollections in Frameworks */,
@@ -579,6 +580,7 @@
 			isa = PBXGroup;
 			children = (
 				9F45BDCA29214D48003DE332 /* notebooks.md */,
+				5CFCF5E52ABEDF7000351EEA /* Notebook copy 2.swift */,
 				9F45BDD929234150003DE332 /* Notebook.swift */,
 				5C5F5B612AB3265400E1AE5F /* Notebook copy.swift */,
 				9FB6C69F2927695000C8EC76 /* NotebookContentBusiness.swift */,
@@ -724,6 +726,7 @@
 				5CA77C152A24AE220030EFB2 /* Collections */,
 				5CA77C172A24AE220030EFB2 /* DequeModule */,
 				5CA77C192A24AE220030EFB2 /* OrderedCollections */,
+				5CFCF5E82ABEFDAF00351EEA /* Fakery */,
 			);
 			productName = "Notes 365";
 			productReference = 9F45BC9E2920CAAE003DE332 /* Notes 365.app */;
@@ -773,7 +776,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1410;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					9F45BC9D2920CAAE003DE332 = {
 						CreatedOnToolsVersion = 14.1;
@@ -799,6 +802,7 @@
 			mainGroup = 9F45BC952920CAAE003DE332;
 			packageReferences = (
 				5CA77C142A24AE220030EFB2 /* XCRemoteSwiftPackageReference "swift-collections" */,
+				5CFCF5E72ABEFDAF00351EEA /* XCRemoteSwiftPackageReference "Fakery" */,
 			);
 			productRefGroup = 9F45BC9F2920CAAE003DE332 /* Products */;
 			projectDirPath = "";
@@ -850,8 +854,8 @@
 				5C29FED32A98D8FD001DC601 /* EditorSymbolsState.swift in Sources */,
 				9F92CF0529B7525500B8D3C4 /* MailView.swift in Sources */,
 				9F9DBF7229F122E80088B0CA /* NotebooksListSync.swift in Sources */,
-				5CC8C9A12AB4ADD400479B94 /* NotebooksListView.swift in Sources */,
 				9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */,
+				5CFCF5E62ABEDFA400351EEA /* Notebook copy 2.swift in Sources */,
 				5CE055DB2A17C5D3009EB4EA /* DayCalendarState.swift in Sources */,
 				9FB6C69C29275E0300C8EC76 /* NotebookEditorState.swift in Sources */,
 				9F3DB0CA292E23D900704860 /* ThemesListState.swift in Sources */,
@@ -865,7 +869,6 @@
 				9F45BD5E2920CD85003DE332 /* DayContentGenerator.swift in Sources */,
 				9F45BD632920CD90003DE332 /* WeekCalendarView.swift in Sources */,
 				9F45BDA92920CE52003DE332 /* ScaleFontView.swift in Sources */,
-				9F45BDDA29234150003DE332 /* Notebook.swift in Sources */,
 				9F45BDA52920CE41003DE332 /* ColorPickerWindow.swift in Sources */,
 				9F45BD892920CDE0003DE332 /* EditorViewDelegate+iOS.swift in Sources */,
 				9F7D2922299CF2AF00B37F51 /* CloudService.swift in Sources */,
@@ -911,8 +914,8 @@
 				5CC4C01F2A908D7000A4BE41 /* EditorView.swift in Sources */,
 				5CDE34BD2AB2D885002D88ED /* NotebooksCache.swift in Sources */,
 				9F45BD542920CD5E003DE332 /* MonthCalendarView.swift in Sources */,
+				5CFCF5E42ABEDF4D00351EEA /* NotebooksListView.swift in Sources */,
 				9F3DB0C4292DF82300704860 /* FeedbackView+iPadOS.swift in Sources */,
-				5CC8C9A22AB4ADFA00479B94 /* Notebook copy.swift in Sources */,
 				9F188D812930E49F0078D413 /* MarkdownHeading.swift in Sources */,
 				9F93E15029E6A2AC00210E99 /* MarkdownEditorView.swift in Sources */,
 				9FB21DF3295D89E000CFEDA8 /* ChooseEnvironment.swift in Sources */,
@@ -955,7 +958,6 @@
 				9FB0A48029DD873E0093FBD2 /* NotebookContentTests.swift in Sources */,
 				9F45BDBB2920E824003DE332 /* StringDiff.swift in Sources */,
 				9FB0A47B29DD26580093FBD2 /* NotebooksListTests.swift in Sources */,
-				9F45BDDB29234150003DE332 /* Notebook.swift in Sources */,
 				9FB0A48529DE8DEF0093FBD2 /* NamedColor.swift in Sources */,
 				9F45BDBF2920EB14003DE332 /* NotebooksListBusiness.swift in Sources */,
 				9FB21DF4295DBE5900CFEDA8 /* ChooseEnvironment.swift in Sources */,
@@ -1032,6 +1034,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1091,6 +1094,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1326,6 +1330,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1487,6 +1492,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		5CFCF5E72ABEFDAF00351EEA /* XCRemoteSwiftPackageReference "Fakery" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vadymmarkov/Fakery";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1504,6 +1517,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5CA77C142A24AE220030EFB2 /* XCRemoteSwiftPackageReference "swift-collections" */;
 			productName = OrderedCollections;
+		};
+		5CFCF5E82ABEFDAF00351EEA /* Fakery */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CFCF5E72ABEFDAF00351EEA /* XCRemoteSwiftPackageReference "Fakery" */;
+			productName = Fakery;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

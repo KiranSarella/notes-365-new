@@ -26,6 +26,7 @@ struct EditorSymbolsView: View {
             .navigationBarTitle("Aa")
             .toolbar {
                 Toggle("Show Symbols", isOn: $showSymbols)
+                    .padding(.horizontal)
             }
             .onChange(of: showSymbols) { newShowSymbols in
     //            state.editorType = (newShowSymbols == true) ? .markdown : .smart

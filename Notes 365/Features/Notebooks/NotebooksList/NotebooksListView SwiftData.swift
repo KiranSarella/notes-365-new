@@ -15,7 +15,7 @@ struct NotebooksListView: View {
     @Environment(\.modelContext) private var context
     @Binding var icloudSyncing: Bool
     @Bindable var usersState: NotebooksListState
-    @Binding var selectedNotebook: Notebook.ID?
+    @Binding var selectedNotebook: Notebook2.ID?
     @Environment(\.isSearching) private var isSearching
 
     @State private var firstTimeAppear = true
@@ -33,10 +33,12 @@ struct NotebooksListView: View {
             Text("add +")
         }
 
-        
-        ForEach(notes) { note in
-            Text(note.name)
+        List {
+            ForEach(notes) { note in
+                Text(note.name)
+            }
         }
+        
         
 //        VStack {
 //            if icloudSyncing || usersState.isLoading {

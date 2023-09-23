@@ -8,6 +8,8 @@
 import Foundation
 import SwiftUI
 import Combine
+import SwiftData
+import Fakery
 
 enum ListState {
     case all
@@ -205,21 +207,36 @@ class NotebooksListState {
         notebooks.count == 0
     }
     
-    func addFirstNotes() {
-        let notebook = createNotebook(parent: nil)
-        // create file
-        notebookBusiness.addFirst(notebook: notebook)
-        // add to heirarchy
-        notebooks.append(notebook)
-        // persist hierarchy
-        notebookBusiness.persist(notebooks: notebooks)
+    func addFirstNotes(_ modelContext: ModelContext) {
+        
+        withAnimation {
+            let notebook = createNotebook(parent: nil)
+            modelContext.insert(notebook)
+        }
+//        fetchNotebooks()
+        
+//        // create file
+//        notebookBusiness.addFirst(notebook: notebook)
+//        // add to heirarchy
+//        notebooks.append(notebook)
+//        // persist hierarchy
+//        notebookBusiness.persist(notebooks: notebooks)
     }
     
-    func insertBelow(ref notebook: Notebook) {
-        // create actual notebook
-        let (childNotebook, parent, index) = insertBelow(notebook: notebook)
-        // persist
-        notebookBusiness.persist(notebooks: notebooks)
+    func insertBelow(ref notebook: Notebook, _ modelContext: ModelContext) {
+        
+        let newNotebook = Notebook(id: UUID(), name: Faker().name.name())
+        
+        notebook.parent?.children?.append(newNotebook)
+        
+//        notebooks.append(newNotebook)
+        try? modelContext.save()
+//        modelContext.insert(newNotebook)
+        
+//        // create actual notebook
+//        let (childNotebook, parent, index) = insertBelow(notebook: notebook)
+//        // persist
+//        notebookBusiness.persist(notebooks: notebooks)
     }
     
     // return - (newNotebook, parent, ref notebook Index)
@@ -243,11 +260,22 @@ class NotebooksListState {
         }
     }
     
-    func insertInside(ref notebook: Notebook) {
-        // create actual notebook in the storage and hierarchy
-        let childNotebook = insertInside(notebook: notebook)
-        // persist
-        notebookBusiness.persist(notebooks: notebooks)
+    func insertInside(ref notebook: Notebook, _ modelContext: ModelContext) {
+        
+        let newNotebook = Notebook(id: UUID(), name: Faker().name.name())
+        
+        if notebook.children == nil {
+            notebook.children = [newNotebook]
+        } else {
+            notebook.children?.append(newNotebook)
+        }
+        
+        try? modelContext.save()
+        
+//        // create actual notebook in the storage and hierarchy
+//        let childNotebook = insertInside(notebook: notebook)
+//        // persist
+//        notebookBusiness.persist(notebooks: notebooks)
     }
     
     private func insertInside(notebook: Notebook, below index: Int? = nil) -> Notebook {

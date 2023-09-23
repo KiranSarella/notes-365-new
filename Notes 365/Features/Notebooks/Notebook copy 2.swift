@@ -9,24 +9,24 @@ import UIKit
 import SwiftData
 
 @Model
-class Notebook2: Identifiable, Codable {
+class Notebook: Identifiable, Codable {
     
     var id: UUID = UUID()
     var name: String = ""
-//    @Relationship(inverse: \Notebook2.parent)
+//    @Relationship(inverse: \Notebook.parent)
 //    @Relationship(.cascade)
     @Relationship
-    var children: [Notebook2]?
+    var children: [Notebook]?
     
     var createdDate: Date = Date()
     var deletedDate: Date?
     var modifiedDate: Date = Date()
     
 //    unowned var parent: Notebook?
-    @Relationship(inverse: \Notebook2.children)
+    @Relationship(inverse: \Notebook.children)
 //    @Relationship(.cascade)
 //    @Relationship
-    var parent: Notebook2?
+    var parent: Notebook?
     
     var content: String = ""
     var isExpanded: Bool = false
@@ -74,7 +74,7 @@ class Notebook2: Identifiable, Codable {
         
         deletedDate = try? container.decode(Date.self, forKey: .deletedDate)
         
-        children = try? container.decode([Notebook2].self, forKey: .friends)
+        children = try? container.decode([Notebook].self, forKey: .friends)
         
         // set parent reference
         if let children = children {
@@ -101,8 +101,8 @@ class Notebook2: Identifiable, Codable {
     
 }
 
-extension Notebook2: Equatable, Hashable {
-    static func == (lhs: Notebook2, rhs: Notebook2) -> Bool {
+extension Notebook: Equatable, Hashable {
+    static func == (lhs: Notebook, rhs: Notebook) -> Bool {
         return lhs.id == rhs.id
     }
     
@@ -112,7 +112,7 @@ extension Notebook2: Equatable, Hashable {
 }
 
 
-extension Notebook2 {
+extension Notebook {
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -135,7 +135,7 @@ extension Notebook2 {
     }
 }
 
-extension Notebook2 {
+extension Notebook {
     
     var uuidPath: [UUID] {
         
@@ -186,7 +186,7 @@ extension Notebook2 {
 }
 
 
-extension Notebook2 {
+extension Notebook {
     
     nonisolated func loadContent() async -> String? {
         do {
