@@ -147,8 +147,7 @@ struct NotebooksListView: View {
                             
                         }.navigationDestination(for: Notebook.ID.self) { color in
                             
-                            
-                            if let notebook = NotebooksCache.shared.flatNotebooks[color.uuidString] {
+                            if let notebook = usersState.getNotebook(uuid: color) {
         
                                 NotebookEditorView(listDisplayState: usersState.listSourceType, notebookM: notebook, editorState: editorState)
         
@@ -206,9 +205,12 @@ struct NotebooksListView: View {
         }
         .onAppear {
             
+            selectedNotebook = nil
+            editorState.modelContext = modelContext
+            
             fetchNotebooks()
             
-//            selectedNotebook = nil
+            
 //            
 //            // to get new data not on first launch, user have to go back and come -  for now
 //            if firstTimeAppear {
@@ -526,7 +528,7 @@ struct AddNotesView: View {
         VStack(alignment: .center) {
             // show add first notebook button
             Button {
-                usersState.addFirstNotes(modelContext)
+                usersState.addFirstNotes()
             } label: {
                 Text(" + Notebook ")
             }.padding()
@@ -779,13 +781,13 @@ struct RowView: View {
                     RenameButton()
                     // insert below
                     Button(action: {
-                        usersState.insertBelow(ref: notebook, modelContext)
+                        usersState.insertBelow(ref: notebook)
                     }) {
                         Text("Add Below")
                     }
                     // insert inside
                     Button(action: {
-                        usersState.insertInside(ref: notebook, modelContext)
+                        usersState.insertInside(ref: notebook)
                     }) {
                         Text("Add Inside")
                     }

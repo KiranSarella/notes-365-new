@@ -28,7 +28,6 @@ class Notebook: Identifiable, Codable {
 //    @Relationship
     var parent: Notebook?
     
-    var content: String = ""
     var isExpanded: Bool = false
     var isDeleted: Bool = false
     var canShow: Bool = true
@@ -41,7 +40,6 @@ class Notebook: Identifiable, Codable {
         deletedDate = nil
         modifiedDate = Date()
         
-        content = ""
         isExpanded = false
         isDeleted = false
         canShow = true

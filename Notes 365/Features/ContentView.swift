@@ -102,6 +102,7 @@ struct ContentView: View {
     @Environment(\.colorScheme) private var colorScheme
     
     @Environment(ChooseEnvironment.self) var chooseEnv
+    @Environment(\.modelContext) private var modelContext
     
     @State private var showThemes = false
     @State private var showFormattingSymbols = false
@@ -194,6 +195,10 @@ struct ContentView: View {
                }
             }
             .navigationTitle("Notes 365")
+            .onAppear {
+                notebooksListState.modelContext = modelContext
+                editorState.modelContext = modelContext
+            }
             
 ////                Section(isExpanded: $notebooksExpanded) {
 ////                    NotebooksListView(icloudSyncing: $icloudSyncing, usersState: notebooksListState, selectedNotebook: $selectedNotebookM)
@@ -456,6 +461,7 @@ struct ContentView: View {
 //            }
         }
     }
+       
     
 }
 

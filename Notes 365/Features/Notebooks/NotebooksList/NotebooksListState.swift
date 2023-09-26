@@ -37,6 +37,8 @@ class NotebooksListState {
     
 //    static let shared: NotebooksListState = NotebooksListState()
     
+    var modelContext: ModelContext?
+    
     let notebookBusiness = NotebooksListBusiness(EnvironmentState.shared.basePathURL)
     
     var subscription: Set<AnyCancellable> = []
@@ -207,11 +209,11 @@ class NotebooksListState {
         notebooks.count == 0
     }
     
-    func addFirstNotes(_ modelContext: ModelContext) {
+    func addFirstNotes() {
         
         withAnimation {
             let notebook = createNotebook(parent: nil)
-            modelContext.insert(notebook)
+            modelContext?.insert(notebook)
         }
 //        fetchNotebooks()
         
@@ -223,14 +225,14 @@ class NotebooksListState {
 //        notebookBusiness.persist(notebooks: notebooks)
     }
     
-    func insertBelow(ref notebook: Notebook, _ modelContext: ModelContext) {
+    func insertBelow(ref notebook: Notebook) {
         
         let newNotebook = Notebook(id: UUID(), name: Faker().name.name())
         
         notebook.parent?.children?.append(newNotebook)
         
 //        notebooks.append(newNotebook)
-        try? modelContext.save()
+        try? modelContext?.save()
 //        modelContext.insert(newNotebook)
         
 //        // create actual notebook
@@ -239,28 +241,9 @@ class NotebooksListState {
 //        notebookBusiness.persist(notebooks: notebooks)
     }
     
-    // return - (newNotebook, parent, ref notebook Index)
-    private func insertBelow(notebook: Notebook) -> (new: Notebook, parent: Notebook?, refIndex: Int) {
-        if let parent = notebook.parent {
-            // get index of current notebook
-            let index = parent.children!.firstIndex(of: notebook)!
-            let childNote = insertInside(notebook: parent, below: index)
-            return (childNote, parent, index)
-        } else {
-            // base level
-            let fullPath = notebooksPath
-            let newNotebook = createNotebook(parent: notebook.parent)
-            // get index of current notebook
-            let index = notebooks.firstIndex(of: notebook)!
-            // create object
-            notebooks.insert(newNotebook, at: index + 1)
-            // create phycical file
-            notebookBusiness.insertBelow(notebook: newNotebook)
-            return (newNotebook, nil, index)
-        }
-    }
+
     
-    func insertInside(ref notebook: Notebook, _ modelContext: ModelContext) {
+    func insertInside(ref notebook: Notebook) {
         
         let newNotebook = Notebook(id: UUID(), name: Faker().name.name())
         
@@ -270,7 +253,7 @@ class NotebooksListState {
             notebook.children?.append(newNotebook)
         }
         
-        try? modelContext.save()
+        try? modelContext?.save()
         
 //        // create actual notebook in the storage and hierarchy
 //        let childNotebook = insertInside(notebook: notebook)
@@ -396,8 +379,9 @@ class NotebooksListState {
         }
         // store name
         notebook.name = newValue
-        // persist changes
-        notebookBusiness.persist(notebooks: notebooks)
+        
+//        // persist changes
+//        notebookBusiness.persist(notebooks: notebooks)
     }
 
     func updateModifiedDate(for notebook: Notebook) {
@@ -447,6 +431,29 @@ class NotebooksListState {
     // MARK: -
     func saveSelectionState() {
         
+    }
+    
+    func getNotebook(uuid: UUID) -> Notebook? {
+        
+        let tripPredicate = #Predicate<Notebook> {
+            $0.id == uuid
+        }
+        
+        
+        var descriptor = FetchDescriptor(predicate: tripPredicate)
+        descriptor.fetchLimit = 1
+//        let descriptor = FetchDescriptor<Item>(
+//            sortBy: SortDescriptor(\Item.timestamp),
+//            predicate: tripPredicate)
+
+        do {
+            let trips = try modelContext?.fetch(descriptor)
+            return trips?.first
+        } catch let err {
+            print(err)
+        }
+        
+        return nil
     }
     
 }

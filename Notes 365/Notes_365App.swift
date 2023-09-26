@@ -17,13 +17,14 @@ struct Notes_365App: App {
     
     var container: ModelContainer = {
         let conf = ModelConfiguration("iCloud.com.sarella.notes365-local")
+//        return try! ModelContainer(for: Notebook.self, NotebookContent.self, configurations: conf)
         do {
-            let container = try ModelContainer(for: Notebook.self, configurations: conf)
+            let container = try ModelContainer(for: Notebook.self, NotebookContent.self, configurations: conf)
             return container
         } catch {
             print("errror: \(error)")
             // fallback to local container
-            return try! ModelContainer(for: Notebook.self)
+            return try! ModelContainer(for: Notebook.self, NotebookContent.self)
         }
     }()
     
