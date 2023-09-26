@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftData
 
 extension Notification.Name {
     public static let notebookContentLoaded = Notification.Name("com.notes365.notebookContentLoaded")
@@ -37,120 +38,121 @@ class TodayVersionBusiness {
     
     @objc func handleNotebookLoadedNotification(_ notification: Notification) {
         // get filename from userInfo
-        guard let uuid = notification.userInfo?["id"] as? String else { return }
+        guard 
+            let uuidString = notification.userInfo?["id"] as? String,
+            let uuid = UUID(uuidString: uuidString),
+            let modelContext = notification.userInfo?["modelContext"] as? ModelContext
+        else { return }
+        
         Task {
             // ask NotebookBusiness object for content
-            let content = await NotebookContentBusiness.loadContent(id: uuid) ?? ""
+            let content = await NotebookContentBusiness.loadContent(id: uuid.uuidString) ?? ""
             // create base version
-            TodayVersionBusiness.createBaseVersionIfNotExists(for: uuid, with: content)
+            TodayVersionBusiness.createBaseVersionIfNotExists(for: uuid, with: content, modelContext)
         }
     }
     
-    static func cleanBaseVersionIfNeeded() {
-        // prepare basefolder and todayDate paths
-        guard let basePathURL = EnvironmentState.shared.basePathURL else { return }
-        let folderURL = basePathURL.appendingPathComponent(baseVersionFolderName, conformingTo: .fileURL)
-        let todayPathURL = folderURL.appendingPathComponent(folderDatePath, conformingTo: .fileURL)
-        // if new today date folder not exits, then remove all items.
-        if FileManager.default.fileExists(atPath: todayPathURL.path(percentEncoded: false)) == false {
-            do {
-                try FileManager.default.removeAllItems(at: folderURL)
-            } catch {
-                print(error.localizedDescription)
-            }
+    static func cleanBaseVersionIfNeeded(modelContext: ModelContext) {
+        let date = Date.yesterday
+        let predicate = #Predicate<TodayVersion> {
+            $0.date <= date
+        }
+        do {
+            try modelContext.delete(model: TodayVersion.self, where: predicate)
+        } catch let error {
+            print(error)
         }
     }
     
     
-    static func createBaseVersionIfNotExists(for fileName: String, with content: String) {
-        //        print(#function)
-        //        print(fileName, content)
+    static func createBaseVersionIfNotExists(for id: UUID, with content: String, _ modelContext: ModelContext) {
         
-        guard let basePathURL = EnvironmentState.shared.basePathURL else { return }
-        
-        let folderURL = basePathURL
-            .appendingPathComponent(baseVersionFolderName, conformingTo: .fileURL)
-            .appendingPathComponent(folderDatePath, conformingTo: .fileURL)
-        let fileURL = folderURL.appendingPathComponent(fileName)
-            .appendingPathExtension("md")
-        print(fileURL)
         // if file already exits, then skip creation steps
-        if FileManager.default.fileExists(atPath: fileURL.path(percentEncoded: false)) {
+        if Self.isBaseVersionExists(id, modelContext) {
             return
         }
-        // check if file exists in the server, if so, force download
         
+        let todayVersion = TodayVersion(notebookID: id, content: content)
+        modelContext.insert(todayVersion)
         
         do {
-            // create intermediate folders if not exists
-            if FileManager.default.fileExists(atPath: folderURL.path) == false {
-                do {
-                    try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
-                } catch {
-                    print(error.localizedDescription)
-                }
+            try modelContext.save()
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    static func isBaseVersionExists(_ id: UUID, _ modelContext: ModelContext) -> Bool {
+        
+        let predicate = #Predicate<TodayVersion> {
+            $0.notebookID == id
+        }
+        
+        var descriptor = FetchDescriptor(predicate: predicate)
+        descriptor.fetchLimit = 1
+        
+        do {
+            let results = try modelContext.fetch(descriptor)
+            if results.count > 0 {
+                return true
             }
-            // Write to the file
-            try content.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
-        } catch let error as NSError {
-            print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
+        } catch let err {
+            print(err)
         }
-    }
-    
-    static func isBaseVersionExists(fileName: String) -> Bool {
         
-        guard let basePathURL = EnvironmentState.shared.basePathURL else { return false }
-        
-        let directoryURL = basePathURL
-            .appendingPathComponent(fileName, isDirectory: true)
-            .appendingPathComponent(folderDatePath, conformingTo: .fileURL)
-        let filePath = directoryURL
-            .appendingPathComponent(fileName)
-            .appendingPathExtension("md")
-        
-        return FileManager.default.fileExists(atPath: filePath.path)
+        return false
     }
     
     // get base content from todaysVersion/<date>/uuid.md
-    static func getBaseVersion(for fileName: String) -> String? {
+    static func getBaseVersion(for id: UUID, modelContext: ModelContext) -> String? {
         
-        guard let basePathURL = EnvironmentState.shared.basePathURL else { return nil }
+        let predicate = #Predicate<TodayVersion> {
+            $0.notebookID == id
+        }
         
-        let fileURL = basePathURL
-            .appendingPathComponent(baseVersionFolderName)
-            .appendingPathComponent(folderDatePath)
-            .appendingPathComponent(fileName)
-            .appendingPathExtension("md")
+        var descriptor = FetchDescriptor(predicate: predicate)
+        descriptor.fetchLimit = 1
         
         do {
-            // Read the file contents
-            return try String(contentsOf: fileURL)
-            //            print(fileURL)
-        } catch let error as NSError {
-            print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
-            return nil
+            let results = try modelContext.fetch(descriptor)
+            return results.first?.content
+        } catch let err {
+            print(err)
         }
+        
+        return nil
     }
     
     // get base content from todaysVersion/<date>/uuid.md
-    static func removeBaseVersion(for fileName: String) {
-        
-        guard let basePathURL = EnvironmentState.shared.basePathURL else { return }
-        
-        let fileURL = basePathURL
-            .appendingPathComponent(baseVersionFolderName)
-            .appendingPathComponent(folderDatePath)
-            .appendingPathComponent(fileName)
-            .appendingPathExtension("md")
-        
+    static func removeBaseVersion(for id: UUID, modelContext: ModelContext) {
+        let predicate = #Predicate<TodayVersion> {
+            $0.notebookID == id
+        }
         do {
-            try FileManager.default.removeItem(at: fileURL)
-            //            print(fileURL)
-        } catch let error as NSError {
-            print("Failed removing from URL: \(fileURL), Error: " + error.localizedDescription)
+            try modelContext.delete(model: TodayVersion.self, where: predicate)
+        } catch let error {
+            print(error)
         }
     }
 }
 
 
-
+extension Date {
+    static var yesterday: Date { return Date().dayBefore }
+    static var tomorrow:  Date { return Date().dayAfter }
+    var dayBefore: Date {
+        return Calendar.current.date(byAdding: .day, value: -1, to: noon)!
+    }
+    var dayAfter: Date {
+        return Calendar.current.date(byAdding: .day, value: 1, to: noon)!
+    }
+    var noon: Date {
+        return Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: self)!
+    }
+    var month: Int {
+        return Calendar.current.component(.month,  from: self)
+    }
+    var isLastDayOfMonth: Bool {
+        return dayAfter.month != month
+    }
+}

@@ -52,9 +52,9 @@ struct NotebookEditorView: View {
                 })
                 .onDisappear(perform: {
                     Task {
+                        self.cancelTimer()
                         await editorState.saveContentChanges()
                     }
-                    self.cancelTimer()
                 })
             }
         }

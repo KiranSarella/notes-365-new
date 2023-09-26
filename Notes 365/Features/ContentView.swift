@@ -16,6 +16,7 @@ struct ContentWrapperView: View {
     @State private var showRefresh = false
     
     @State private var statusMessage = "Loading.."
+    @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         
@@ -47,7 +48,7 @@ struct ContentWrapperView: View {
                         // do any operations
                         chooseEnv.enableConfigured()
                         // clean base version
-                        TodayVersionBusiness.cleanBaseVersionIfNeeded()
+                        TodayVersionBusiness.cleanBaseVersionIfNeeded(modelContext: modelContext)
                         #else
                         
                         statusMessage = "checking iCloud settings"
@@ -129,7 +130,7 @@ struct ContentView: View {
     
     @State var showDetail = false
     
-    @State private var editorState = NotebookEditorState()
+//    @State private var editorState = NotebookEditorState()
     
     private var notebooksListSync = NotebooksListSync(basePathURL: EnvironmentState.shared.basePathURL)
     private var timelineSync = TimelineSync(basePathURL: EnvironmentState.shared.basePathURL)
@@ -197,7 +198,6 @@ struct ContentView: View {
             .navigationTitle("Notes 365")
             .onAppear {
                 notebooksListState.modelContext = modelContext
-                editorState.modelContext = modelContext
             }
             
 ////                Section(isExpanded: $notebooksExpanded) {

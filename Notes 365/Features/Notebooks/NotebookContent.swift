@@ -17,6 +17,7 @@ class NotebookContent: Identifiable, Codable {
     
     init(notebookID: UUID, content: String = "") {
         self.notebookID = notebookID
+        self.content = content
     }
     
     required convenience init(from decoder: Decoder) throws {

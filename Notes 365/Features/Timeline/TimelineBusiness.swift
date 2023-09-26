@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftData
 
 class TimelineBusiness {
     
@@ -23,6 +24,8 @@ class TimelineBusiness {
     var basePathURL: URL
     
     let timelineFolderPath = Constants.timelineFolderName
+    
+    var modelContext: ModelContext?
     
     init(path basePathURL: URL) {
         self.basePathURL = basePathURL
@@ -108,7 +111,7 @@ class TimelineBusiness {
         // remove row from metadata file
         removeFromMetadata(uuid: timeline.fileUUID.uuidString)
         // remove base version
-        TodayVersionBusiness.removeBaseVersion(for: timeline.fileUUID.uuidString)
+        TodayVersionBusiness.removeBaseVersion(for: timeline.fileUUID, modelContext: modelContext!)
     }
     
     func removeContent(today: Date, fileName: String) {
@@ -213,7 +216,7 @@ extension TimelineBusiness {
             // get updated content from notebook business
             guard let content = await NotebookContentBusiness.loadContent(id: uuid) else { return }
             // ask todayVersion object to get baseversion
-            let baseVersion = TodayVersionBusiness.getBaseVersion(for: uuid) ?? ""
+            let baseVersion = TodayVersionBusiness.getBaseVersion(for: UUID(uuidString: uuid)!, modelContext: modelContext!) ?? ""
             // do string diff
             // save to timeline path
             let noteChanges = StringDiff.getChanges(old: baseVersion, new: content)
