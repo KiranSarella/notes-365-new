@@ -20,6 +20,8 @@ class TodayVersionBusiness {
         return Date().string(format: "yyyy-MM-dd")
     }
     
+    var modelContext: ModelContext?
+    
     init() {
         registerNotebookLoadedNotification()
     }
@@ -39,17 +41,14 @@ class TodayVersionBusiness {
     @objc func handleNotebookLoadedNotification(_ notification: Notification) {
         // get filename from userInfo
         guard 
-            let uuidString = notification.userInfo?["id"] as? String,
-            let uuid = UUID(uuidString: uuidString),
-            let modelContext = notification.userInfo?["modelContext"] as? ModelContext
+            let uuid = notification.userInfo?["id"] as? UUID,
+            let modelContext = self.modelContext
         else { return }
         
-        Task {
-            // ask NotebookBusiness object for content
-            let content = await NotebookContentBusiness.loadContent(id: uuid.uuidString) ?? ""
-            // create base version
-            TodayVersionBusiness.createBaseVersionIfNotExists(for: uuid, with: content, modelContext)
-        }
+        // ask NotebookBusiness object for content
+        let notebookContent = NotebookContentBusiness.fetchNotebookContent(for: uuid, in: modelContext)
+        // create base version
+        TodayVersionBusiness.createBaseVersionIfNotExists(for: uuid, with: notebookContent?.content ?? "", modelContext)
     }
     
     static func cleanBaseVersionIfNeeded(modelContext: ModelContext) {

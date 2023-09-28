@@ -10,17 +10,6 @@ import SwiftData
 
 class TimelineBusiness {
     
-//    static let shared = TimelineBusiness()
-    
-//    private static var _instance: TimelineBusiness!
-//
-//    static func shared(basePath: URL) -> TimelineBusiness {
-//        if _instance == nil {
-//            _instance = TimelineBusiness(basePathURL: basePath)
-//        }
-//        return _instance
-//    }
-    
     var basePathURL: URL
     
     let timelineFolderPath = Constants.timelineFolderName
@@ -30,10 +19,6 @@ class TimelineBusiness {
     init(path basePathURL: URL) {
         self.basePathURL = basePathURL
     }
-    
-//    private init() {
-//
-//    }
     
     func readDayMetaData(dayDate: DayDate) -> String? {
             
@@ -94,6 +79,23 @@ class TimelineBusiness {
             return readString
         } catch let error as NSError {
             print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
+            return nil
+        }
+    }
+    
+    func fetchTimeline(for year: Int) -> [TimelineContent]? {
+        guard let modelContext = modelContext else { return nil }
+        
+        let predicate = #Predicate<TimelineContent> {
+            $0.year == year
+        }
+        
+        let descriptor = FetchDescriptor(predicate: predicate, sortBy: [SortDescriptor(\TimelineContent.modifiedDate)])
+
+        do {
+            return try modelContext.fetch(descriptor)
+        } catch let err {
+            print(err)
             return nil
         }
     }
@@ -207,114 +209,102 @@ extension TimelineBusiness {
     
     @objc func handleNotebookChangesNotification(_ notification: Notification) {
         guard
-            let uuid = notification.userInfo?["id"] as? String,
+            let uuid = notification.userInfo?["id"] as? UUID,
             let notebookName = notification.userInfo?["notebookName"] as? String,
-            let notebookPath = notification.userInfo?["notebookPath"] as? String
+            let notebookPath = notification.userInfo?["notebookPath"] as? [String]
         else { return }
         
-        Task {
-            // get updated content from notebook business
-            guard let content = await NotebookContentBusiness.loadContent(id: uuid) else { return }
-            // ask todayVersion object to get baseversion
-            let baseVersion = TodayVersionBusiness.getBaseVersion(for: UUID(uuidString: uuid)!, modelContext: modelContext!) ?? ""
-            // do string diff
-            // save to timeline path
-            let noteChanges = StringDiff.getChanges(old: baseVersion, new: content)
-            
-            if noteChanges.count == 0 {
-                return
-            }
-            
-            let today = Date()
-            let timelinePath = "timeline/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
-            
-            // save noteChanges
-            save(noteChanges: noteChanges, to: timelinePath, uuid: uuid)
-            // save metadata
-            saveMetadata(timelinePath: timelinePath, uuid: uuid, notebookName: notebookName, notebookPath: notebookPath)
-        }
-        
+        createTimeline(uuid: uuid, notebookName: notebookName, notebookPath: notebookPath)
         
     }
     
-    func save(noteChanges: String, to timelinePath: String, uuid: String) {
-        guard let basePathURL = EnvironmentState.shared.basePathURL else { return }
-        let folderURL = basePathURL.appendingPathComponent(timelinePath)
-        let fileURL = folderURL.appendingPathComponent(uuid).appendingPathExtension("md")
+    func createTimeline(uuid: UUID, notebookName: String, notebookPath: [String]) {
+        
+        guard let modelContext = modelContext else { return }
+        
+        // get updated content from notebook business
+        guard let notebookContent = NotebookContentBusiness.fetchNotebookContent(for: uuid, in: modelContext) else { return }
+        // ask todayVersion object to get baseversion
+        let baseVersion = TodayVersionBusiness.getBaseVersion(for: uuid, modelContext: modelContext) ?? ""
+        // do string diff
+        // save to timeline path
+        let newChanges = StringDiff.getChanges(old: baseVersion, new: notebookContent.content)
+        
+        if newChanges.count == 0 {
+            return
+        }
+        
+        let today = Date()
+        // if already exists, then upate
+        if let timelineContent = getTimelineContent(today: today, uuid: uuid) {
+            timelineContent.content = newChanges
+            timelineContent.modifiedDate = Date()
+        } else {
+            // else insert
+            let timelineContent = TimelineContent()
+            timelineContent.year = today.getYear()
+            timelineContent.month = today.getMonth()
+            timelineContent.day = today.getDay()
+            timelineContent.content = newChanges
+            timelineContent.notebookID = uuid
+            timelineContent.filename = notebookName
+            timelineContent.path = notebookPath
+            
+            modelContext.insert(timelineContent)
+            
+        }
+        
         do {
-            // create intermediate folders if not exists
-            if FileManager.default.fileExists(atPath: folderURL.path) == false {
-                do {
-                    try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
-                } catch {
-                    print(error.localizedDescription)
-                }
-            }
-            // Write to the file
-            try noteChanges.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
-        } catch let error as NSError {
-            print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
+            try modelContext.save()
+        } catch let error {
+            print(error)
+        }
+        
+        
+        /*
+         var year: Int = 0
+         var month: Int = 0
+         var day: Int = 0
+         var content = ""
+         var notebookID: UUID = UUID()
+         var filename = ""
+         var path = [String]()
+         var modifiedDate = Date()
+         */
+        
+        
+            
+    }
+    
+    func getTimelineContent(today: Date, uuid: UUID) -> TimelineContent? {
+        
+        guard let modelContext = self.modelContext else {
+            return nil
+        }
+        
+        let year = today.getYear()
+        let month = today.getMonth()
+        let day = today.getDay()
+        // if already exists, then upate
+        let predicate = #Predicate<TimelineContent> {
+            $0.year == year &&
+            $0.month == month &&
+            $0.day == day &&
+            $0.notebookID == uuid
+        }
+        
+        var descriptor = FetchDescriptor(predicate: predicate)
+        descriptor.fetchLimit = 1
+        
+        do {
+            let results = try modelContext.fetch(descriptor)
+            return results.first
+        } catch let err {
+            print(err)
+            return nil
         }
     }
     
-    func saveMetadata(timelinePath: String, uuid: String, notebookName: String, notebookPath: String) {
-        
-        let metadataFilePath = timelinePath + "/" + "metadata"
-        var metadata: String = ""
-        
-        guard let basePathURL = EnvironmentState.shared.basePathURL else { return }
-        
-        let metaFileURL = basePathURL.appendingPathComponent(metadataFilePath, isDirectory: false)
-        
-        if FileManager.default.fileExists(atPath: metaFileURL.path) {
-            /*
-             read metadata file
-             form object from it
-             update/add this file metadata to this object
-             write metadat to file
-             
-             format:
-             UUID Timestamp timezone filename filepath
-             */
-            
-            metadata = readBinaryFile(fileName: "metadata", folderPath: timelinePath) ?? ""
-            var lines = metadata.components(separatedBy: "\n")
-            // find index
-            var searchIndex: Int?
-            for i in 0..<lines.count {
-                let line = lines[i]
-                let words = line.components(separatedBy: "\t")
-                if words.first == uuid {
-                    searchIndex = i
-                    break
-                }
-            }
-            
-            if let searchIndex = searchIndex {
-                // remove object
-                lines.remove(at: searchIndex)
-                // clean existing metadata and add each one again
-                metadata = ""
-                for line in lines {
-                    if line.count > 0 {
-                        metadata = metadata.appending(line)
-                        metadata = metadata.appending("\n")
-                    }
-                }
-            }
-        }
-        // add this file metadata to this object
-        let metadataLine =  "\(uuid)\t\(Date.now)\t\(notebookName)\t\(notebookPath)\n"
-        metadata = metadata.appending(metadataLine)
-        
-        let fileURL = basePathURL.appendingPathComponent(timelinePath).appendingPathComponent("metadata")
-        do {
-            // Write to the file
-            try metadata.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
-        } catch let error as NSError {
-            print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
-        }
-    }
     
     func readBinaryFile(fileName: String, folderPath: String) -> String? {
         

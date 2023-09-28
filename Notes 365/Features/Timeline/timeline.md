@@ -47,3 +47,13 @@ notebook updated/saved notification with new content and path
 - notechanges will be saved to timeline path
 
 
+
+year
+month
+day
+content
+id
+filename
+path
+date
+

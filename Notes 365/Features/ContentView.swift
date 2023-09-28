@@ -140,6 +140,9 @@ struct ContentView: View {
     
     @State var navigationSplitViewVisibility = NavigationSplitViewVisibility.all
     
+    
+    var todayVersionBusiness = TodayVersionBusiness()
+    
     var bottomViewBackgroundColor: Color {
         if UIDevice.current.userInterfaceIdiom == .phone {
             return Color(uiColor: UIColor.systemGroupedBackground)
@@ -197,6 +200,7 @@ struct ContentView: View {
             }
             .navigationTitle("Notes 365")
             .onAppear {
+                todayVersionBusiness.modelContext = modelContext
                 notebooksListState.modelContext = modelContext
             }
             

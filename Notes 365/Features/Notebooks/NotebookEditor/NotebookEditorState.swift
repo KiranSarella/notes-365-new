@@ -61,43 +61,30 @@ class NotebookEditorState {
         setupNewNotebook(notebook)
         self.isFetchingData = true
         
-        fetchNotebookContent(notebook.id)
+        if let result = NotebookContentBusiness.fetchNotebookContent(for: notebook.id, in: modelContext!) {
+            notebookContent = result
+            self.baseContent = result.content
+        } else {
+            notebookContent = NotebookContent(notebookID: notebook.id)
+        }
         
 //        let content = await self.notebook.loadContent() ?? ""
 //        self.baseContent = content
         self.isFetchingData = false
         self.contentEditedDate = nil
         // send notebook Content Loaded notification
-        let info = ["id": notebook.id.uuidString]
+        let info = [
+            "id": notebook.id
+        ]
         NotificationCenter.default.post(name: Notification.Name.notebookContentLoaded, object: nil, userInfo: info)
-    }
-    
-    func fetchNotebookContent(_ id: UUID) {
-        
-        let contentPredicate = #Predicate<NotebookContent> {
-            $0.notebookID == id
-        }
-                
-        var descriptor = FetchDescriptor(predicate: contentPredicate)
-        descriptor.fetchLimit = 1
-
-        do {
-            let trips = try modelContext?.fetch(descriptor)
-            if let content = trips?.first {
-                notebookContent = content
-                self.baseContent = notebookContent!.content
-            } else {
-                notebookContent = NotebookContent(notebookID: id)
-            }
-        } catch let err {
-            print(err)
-        }
-        
     }
     
     func saveContentChanges() async {
         // ignore autosave if content was not edited
-        guard let contentEditedDate = contentEditedDate else { return }
+        guard 
+            let contentEditedDate = contentEditedDate,
+            let modelContext = modelContext
+        else { return }
         if contentEditedDate >= lastSavedDate {
             // get new content
             if let txt = await self.getNewContent?() {
@@ -107,17 +94,25 @@ class NotebookEditorState {
                 print(#function)
                 guard let notebookContent = notebookContent else { return }
                 notebookContent.content = txt
-                self.modelContext?.insert(notebookContent)
+                modelContext.insert(notebookContent)
                 do {
-                    try self.modelContext?.save()
+                    try modelContext.save()
                 } catch let err {
                     print(err)
                 }
                 
                 
+                // TODO: send notification after some delay - based on result.
+                let info = [
+                    "id": notebook.id,
+                    "notebookName": notebook.name,
+                    "notebookPath": notebook.folderPaths
+                ] as [String : Any]
+                NotificationCenter.default.post(name: Notification.Name.notebookContentUpdated, object: nil, userInfo: info)
                 
-                // save content to file
-                notebookBusiness.saveContentChanges(content: txt, notebook: notebook)
+                
+//                // save content to file
+//                notebookBusiness.saveContentChanges(content: txt, notebook: notebook)
             }
         }
     }

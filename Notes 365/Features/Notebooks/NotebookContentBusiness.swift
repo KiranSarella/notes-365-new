@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftData
 
 /*
  
@@ -26,10 +27,10 @@ class NotebookContentBusiness {
         // send notification
         // TODO: send notification after some delay - based on result.
         let info = [
-            "id": notebook.id.uuidString,
+            "id": notebook.id,
             "notebookName": notebook.name,
-            "notebookPath": notebook.folderPath
-        ]
+            "notebookPath": notebook.folderPaths
+        ] as [String : Any]
         NotificationCenter.default.post(name: Notification.Name.notebookContentUpdated, object: nil, userInfo: info)
     }
     
@@ -53,6 +54,24 @@ class NotebookContentBusiness {
             return readString
         } catch let error as NSError {
             print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
+            return nil
+        }
+    }
+    
+    static func fetchNotebookContent(for id: UUID, in modelContext: ModelContext) -> NotebookContent? {
+        
+        let contentPredicate = #Predicate<NotebookContent> {
+            $0.notebookID == id
+        }
+                
+        var descriptor = FetchDescriptor(predicate: contentPredicate)
+        descriptor.fetchLimit = 1
+
+        do {
+            let trips = try modelContext.fetch(descriptor)
+            return trips.first
+        } catch let err {
+            print(err)
             return nil
         }
     }

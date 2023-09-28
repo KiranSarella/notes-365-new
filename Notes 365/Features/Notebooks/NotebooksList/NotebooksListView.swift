@@ -206,6 +206,7 @@ struct NotebooksListView: View {
         .onAppear {
             
             selectedNotebook = nil
+            usersState.timelineCreatorBusiness.modelContext = modelContext
             editorState.modelContext = modelContext
             
             fetchNotebooks()

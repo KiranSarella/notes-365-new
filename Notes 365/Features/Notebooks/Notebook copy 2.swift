@@ -181,6 +181,20 @@ extension Notebook {
         // return
         return path
     }
+    
+    var folderPaths: [String] {
+        // add self
+        var paths = [self.name]
+        // add parents
+        var parentRef = self.parent
+        while parentRef != nil {
+            paths.append(parentRef!.name)
+            // next
+            parentRef = parentRef?.parent
+        }
+        // return
+        return paths
+    }
 }
 
 

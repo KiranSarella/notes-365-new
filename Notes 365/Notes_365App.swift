@@ -13,20 +13,19 @@ struct Notes_365App: App {
     
     @Environment(\.scenePhase) private var scenePhase
     
-    var todayVersionBusiness = TodayVersionBusiness()
     
     var container: ModelContainer = {
         let conf = ModelConfiguration("iCloud.com.sarella.notes365-local")
 //        return try! ModelContainer(for: Notebook.self, NotebookContent.self, configurations: conf)
         do {
             let container = try ModelContainer(for:
-                                                Notebook.self, NotebookContent.self, TodayVersion.self,
+                                                Notebook.self, NotebookContent.self, TodayVersion.self, TimelineContent.self,
                                                configurations: conf)
             return container
         } catch {
             print("errror: \(error)")
             // fallback to local container
-            return try! ModelContainer(for: Notebook.self, NotebookContent.self, TodayVersion.self)
+            return try! ModelContainer(for: Notebook.self, NotebookContent.self, TodayVersion.self, TimelineContent.self)
         }
     }()
     

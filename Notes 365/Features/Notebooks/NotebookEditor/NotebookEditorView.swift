@@ -71,9 +71,9 @@ struct NotebookEditorView: View {
             }
         }
         .onDisappear {
-            Task {
-                await editorState.saveContentChanges()
-            }
+//            Task {
+//                await editorState.saveContentChanges()
+//            }
         }
         .onChange(of: notebookM) { newValue in
             Task {

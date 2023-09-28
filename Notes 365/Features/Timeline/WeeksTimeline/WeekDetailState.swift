@@ -21,8 +21,6 @@ public struct DayChanges: Identifiable {
 @Observable
 class WeekDetailState {
     
-//    let timelineBusiness = TimelineBusiness(path: EnvironmentState.shared.basePathURL)
-    
     var weekDate: WeekDate
     var currentState = CurrentState.loading
     var weekTimelineList = [DayChanges]()

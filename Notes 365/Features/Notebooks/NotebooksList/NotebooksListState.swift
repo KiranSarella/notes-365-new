@@ -89,13 +89,13 @@ class NotebooksListState {
             expandedIds = Set(expandedList)
         }
         // create notesHierarchy with actual notebook objects
-        notebooks = notebookBusiness.retrieveNotebooks() ?? []
+//        notebooks = notebookBusiness.retrieveNotebooks() ?? []
 //        let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
 //        notesHierarchy = NotebooksHierarchy(notes: notesList)
         
         // construct deleted notebooks list
-        deletedNotebooks = notebookBusiness.retrieveDeletedNotebooks() ?? []
-        checkOldItemsToDelete()
+//        deletedNotebooks = notebookBusiness.retrieveDeletedNotebooks() ?? []
+//        checkOldItemsToDelete()
         
         // observe after initial hierarcy is constructed
         NotificationCenter.default.addObserver(self, selector: #selector(listenExpandCollapseNotification(_:)), name: .ExpandCollapseNotification, object: nil)
@@ -227,12 +227,32 @@ class NotebooksListState {
     
     func insertBelow(ref notebook: Notebook) {
         
+        guard let modelContext = modelContext else { return }
+        
         let newNotebook = Notebook(id: UUID(), name: Faker().name.name())
         
-        notebook.parent?.children?.append(newNotebook)
+        if notebook.parent != nil {
+            
+            if notebook.parent?.children != nil {
+                notebook.parent?.children?.append(newNotebook)
+            } else {
+                notebook.parent?.children = [newNotebook]
+            }
+            
+        } else {
+            // root objects
+            // get index of current notebook
+            let index = notebooks.firstIndex(of: notebook)!
+            // create object
+            notebooks.insert(newNotebook, at: index + 1)
+            
+            // order number?
+            modelContext.insert(newNotebook)
+        }
+        
         
 //        notebooks.append(newNotebook)
-        try? modelContext?.save()
+        try? modelContext.save()
 //        modelContext.insert(newNotebook)
         
 //        // create actual notebook

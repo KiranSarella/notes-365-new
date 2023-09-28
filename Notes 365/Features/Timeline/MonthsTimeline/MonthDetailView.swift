@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import SwiftData
 
 struct MonthDetailWrapperView: View {
     
@@ -25,6 +25,7 @@ struct MonthDetailWrapperView: View {
 
 struct MonthDetailView: View {
     
+    @Environment (\.modelContext) var modelContext
    @State private var monthState = MonthDetailState()
 
     var body: some View {
@@ -61,6 +62,7 @@ struct MonthDetailView: View {
                 }
                 .listStyle(PlainListStyle())
                 .onAppear {
+                    monthState.timelineBusiness.modelContext = modelContext
                     monthState.readMonthData(monthDate: monthState.monthDate)
                 }
                 .onChange(of: monthState.monthDate, perform: { newValue in
