@@ -168,10 +168,10 @@ class NotebooksListState {
         // clear
 //        notesHierarchy.notes.removeAll()
         // create notesHierarchy with actual notebook objects
-        notebooks = notebookBusiness.retrieveNotebooks() ?? []
-        // construct deleted notebooks list
-        deletedNotebooks = notebookBusiness.retrieveDeletedNotebooks() ?? []
-        
+//        notebooks = notebookBusiness.retrieveNotebooks() ?? []
+//        // construct deleted notebooks list
+//        deletedNotebooks = notebookBusiness.retrieveDeletedNotebooks() ?? []
+//        
         // reconstruct hierarchy
 //        let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
 //        notesHierarchy = NotebooksHierarchy(notes: notesList)
@@ -213,6 +213,7 @@ class NotebooksListState {
         
         withAnimation {
             let notebook = createNotebook(parent: nil)
+            notebook.orderID = 0
             modelContext?.insert(notebook)
         }
 //        fetchNotebooks()
@@ -229,27 +230,104 @@ class NotebooksListState {
         
         guard let modelContext = modelContext else { return }
         
-        let newNotebook = Notebook(id: UUID(), name: Faker().name.name())
+        let newNotebook = Notebook(id: UUID(), name: "0")
         
         if notebook.parent != nil {
             
-            if notebook.parent?.children != nil {
-                notebook.parent?.children?.append(newNotebook)
+            if notebook.parent!.children != nil {
+                
+//                notebook.parent?.children?.append(newNotebook)
+                
+                // get index of current notebook
+//                let sortedArr = sortedChildren.sorted { $0.orderID < $1.orderID }
+//                notebook.parent!.onlySelfSortChildren()
+                guard let index = notebook.parent!.children!.firstIndex(of: notebook) else { return }
+                let insertIndex = index + 1
+                print("insertIndex: ", insertIndex)
+                
+//                // order number
+                newNotebook.name = "\(insertIndex)"
+                newNotebook.orderID = insertIndex
+                // save
+//                modelContext.insert(newNotebook)
+//                notebook.parent!.onlySelfSortChildren()
+                // insert to hierachy create object
+                notebook.parent!.children!.insert(newNotebook, at: insertIndex)
+//                sortedChildren.insert(newNotebook, at: index + 1) // not working
+                
+//                let start = index + 2
+//                for i in start..<sortedChildren.count {
+//                    sortedChildren[i].name = "\(i) " + Faker().name.name()
+//                    sortedChildren[i].orderID = i
+////                    children[i].orderID = i
+//                }
+//                
+//                notebook.parent!.children = sortedChildren
+//                
+//                // print order ids
+//                for i in 0..<sortedChildren.count {
+//                    print(sortedChildren[i].orderID, sortedChildren[i].name)
+//                }
+                
+//                notebook.parent?.onlySelfSortChildren()
+                // update order number to rest of the notebooks
+                let start = insertIndex + 1
+                for i in start..<notebook.parent!.children!.count {
+                    notebook.parent!.children![i].name = "\(i) " + notebook.parent!.children![i].name
+                    notebook.parent!.children![i].orderID = i
+                }
+                // print order ids
+                for i in 0..<notebook.parent!.children!.count {
+                    print(notebook.parent!.children![i].orderID, notebook.parent!.children![i].name)
+                }
+                
+//                notebook.parent?.onlySelfSortChildren()
+                
             } else {
                 notebook.parent?.children = [newNotebook]
             }
             
         } else {
+            
             // root objects
             // get index of current notebook
             let index = notebooks.firstIndex(of: notebook)!
-            // create object
-            notebooks.insert(newNotebook, at: index + 1)
-            
-            // order number?
+            // order number
+            newNotebook.name = "\(index + 1) " + newNotebook.name
+            newNotebook.orderID = index + 1
+            // save
             modelContext.insert(newNotebook)
+            // insert to hierachy create object
+            notebooks.insert(newNotebook, at: index + 1)
+            // update order number to rest of the notebooks
+//            let start = index + 2
+            for i in 0..<notebooks.count {
+                notebooks[i].name = "\(i) " + newNotebook.name
+                notebooks[i].orderID = i
+            }
+            // print order ids
+            for notebook in notebooks {
+                print(notebook.orderID, notebook.name)
+            }
         }
-        
+//        
+//        if notebook.parent != nil {
+//            
+//            
+//            
+//            if notebook.parent?.children == nil {
+//                
+//                
+//            } else {
+//                
+//            }
+//            
+//            
+//            
+//        } else {
+//            
+//        }
+//        
         
 //        notebooks.append(newNotebook)
         try? modelContext.save()

@@ -199,38 +199,38 @@ extension NotebooksListBusiness {
     // It will save only notebooks list hierarchy to plist, not notebook content.
     func persist(notebooks: [Notebook]) {
         print(#function)
-        do {
-            // generate data
-            let plistData = try PropertyListEncoder().encode(notebooks)
-            // prepare path
-            let fileURL = basePathURL.appendingPathComponent(Constants.notebooksPListName).appendingPathExtension("plist")
-            // save file
-            do {
-                // Write to the file
-                try plistData.write(to: fileURL)
-                self.listSyncDate = Date()
-            } catch let error as NSError {
-                print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
-            }
-        } catch {
-            print("Save Failed")
-        }
+//        do {
+//            // generate data
+//            let plistData = try PropertyListEncoder().encode(notebooks)
+//            // prepare path
+//            let fileURL = basePathURL.appendingPathComponent(Constants.notebooksPListName).appendingPathExtension("plist")
+//            // save file
+//            do {
+//                // Write to the file
+//                try plistData.write(to: fileURL)
+//                self.listSyncDate = Date()
+//            } catch let error as NSError {
+//                print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
+//            }
+//        } catch {
+//            print("Save Failed")
+//        }
     }
     
     // retrives notebooks hierarcy from plist, not the notebook content.
     func retrieveNotebooks() -> [Notebook]? {
         
-        let plistURL = basePathURL.appending(path: Constants.notebooksPListName).appendingPathExtension("plist")
-        
-        do {
-            // Read the file contents
-            let plistData = try Data(contentsOf: plistURL)
-            let notebooksList = try PropertyListDecoder().decode([Notebook].self, from: plistData)
-            self.listSyncDate = Date()
-            return notebooksList
-        } catch let error as NSError {
-            print("Failed reading from URL: \(plistURL), Error: " + error.localizedDescription)
-        }
+//        let plistURL = basePathURL.appending(path: Constants.notebooksPListName).appendingPathExtension("plist")
+//        
+//        do {
+//            // Read the file contents
+//            let plistData = try Data(contentsOf: plistURL)
+//            let notebooksList = try PropertyListDecoder().decode([Notebook].self, from: plistData)
+//            self.listSyncDate = Date()
+//            return notebooksList
+//        } catch let error as NSError {
+//            print("Failed reading from URL: \(plistURL), Error: " + error.localizedDescription)
+//        }
         return nil
     }
     
@@ -250,21 +250,21 @@ extension NotebooksListBusiness {
     func persistDeleted(notebooks: [Notebook]) {
         listSyncDate = Date()
         
-        do {
-            // generate data
-            let plistData = try PropertyListEncoder().encode(notebooks)
-            // prepare path
-            let fileURL = basePathURL.appendingPathComponent(Constants.deletedNotebooksPListName).appendingPathExtension("plist")
-            // save file
-            do {
-                // Write to the file
-                try plistData.write(to: fileURL)
-            } catch let error as NSError {
-                print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
-            }
-        } catch {
-            print("Save Failed")
-        }
+//        do {
+//            // generate data
+//            let plistData = try PropertyListEncoder().encode(notebooks)
+//            // prepare path
+//            let fileURL = basePathURL.appendingPathComponent(Constants.deletedNotebooksPListName).appendingPathExtension("plist")
+//            // save file
+//            do {
+//                // Write to the file
+//                try plistData.write(to: fileURL)
+//            } catch let error as NSError {
+//                print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
+//            }
+//        } catch {
+//            print("Save Failed")
+//        }
     }
     
     // retrives notebooks hierarcy from plist, not the notebook content.
@@ -272,14 +272,14 @@ extension NotebooksListBusiness {
         
         let plistURL = basePathURL.appending(path: Constants.deletedNotebooksPListName).appendingPathExtension("plist")
         
-        do {
-            // Read the file contents
-            let plistData = try Data(contentsOf: plistURL)
-            let notebooksList = try PropertyListDecoder().decode([Notebook].self, from: plistData)
-            return notebooksList
-        } catch let error as NSError {
-            print("Failed reading from URL: \(plistURL), Error: " + error.localizedDescription)
-        }
+//        do {
+//            // Read the file contents
+//            let plistData = try Data(contentsOf: plistURL)
+//            let notebooksList = try PropertyListDecoder().decode([Notebook].self, from: plistData)
+//            return notebooksList
+//        } catch let error as NSError {
+//            print("Failed reading from URL: \(plistURL), Error: " + error.localizedDescription)
+//        }
         return nil
     }
     

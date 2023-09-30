@@ -65,19 +65,26 @@ struct NotebooksListView: View {
             $0.parent == nil
         }
         
+        let descriptor = FetchDescriptor(predicate: tripPredicate, sortBy: [SortDescriptor(\Notebook.orderID)])
+//        let descriptor = FetchDescriptor(predicate: tripPredicate)
         
-        let descriptor = FetchDescriptor(predicate: tripPredicate, sortBy: [SortDescriptor(\Notebook.createdDate)])
-//        let descriptor = FetchDescriptor<Item>(
-//            sortBy: SortDescriptor(\Item.timestamp),
-//            predicate: tripPredicate)
-
+        
+        
         do {
-            let trips = try modelContext.fetch(descriptor)
-            usersState.notebooks = trips
+            var results = try modelContext.fetch(descriptor)
+            // do sorting
+//            sortedNotes(notebooks: &results)
+            usersState.notebooks = results
         } catch let err {
             print(err)
         }
         
+    }
+    
+    func sortedNotes(notebooks: inout [Notebook]) {
+        for i in 0..<notebooks.count {
+            notebooks[i].sortChildren()
+        }
     }
     
     var body: some View {
