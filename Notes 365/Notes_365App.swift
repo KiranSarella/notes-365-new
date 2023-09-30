@@ -19,13 +19,13 @@ struct Notes_365App: App {
 //        return try! ModelContainer(for: Notebook.self, NotebookContent.self, configurations: conf)
         do {
             let container = try ModelContainer(for:
-                                                 NotebookContent.self, TodayVersion.self, TimelineContent.self,
+                                                Notebook.self, NotebookContent.self, TodayVersion.self, TimelineContent.self,
                                                configurations: conf)
             return container
         } catch {
             print("errror: \(error)")
             // fallback to local container
-            return try! ModelContainer(for: NotebookContent.self, TodayVersion.self, TimelineContent.self)
+            return try! ModelContainer(for: Notebook.self, NotebookContent.self, TodayVersion.self, TimelineContent.self)
         }
     }()
     

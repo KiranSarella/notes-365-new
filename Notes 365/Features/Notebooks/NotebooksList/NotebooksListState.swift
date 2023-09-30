@@ -230,7 +230,7 @@ class NotebooksListState {
             let notebook = generateNotebook(parent: nil)
             notebook.orderID = 0
             notebooks = [notebook]
-//            modelContext?.insert(notebook)
+            modelContext?.insert(notebook)
         }
 //        fetchNotebooks()
         
@@ -289,6 +289,9 @@ class NotebooksListState {
 //                notebook.parent?.onlySelfSortChildren()
                 // update order number to rest of the notebooks
                 let start = insertIndex + 1
+                if start >= notebook.parent!.children!.count {
+                    return
+                }
                 for i in start..<notebook.parent!.children!.count {
 //                    notebook.parent!.children![i].name = "\(i) " + notebook.parent!.children![i].name
                     notebook.parent!.children![i].orderID = i
@@ -312,7 +315,7 @@ class NotebooksListState {
 //            newNotebook.name = "\(index + 1) " + newNotebook.name
             newNotebook.orderID = index + 1
             // save
-//            modelContext.insert(newNotebook)
+            modelContext.insert(newNotebook)
             // insert to hierachy create object
             notebooks.insert(newNotebook, at: index + 1)
             // update order number to rest of the notebooks

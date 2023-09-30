@@ -8,7 +8,7 @@
 import UIKit
 import SwiftData
 
-@Observable
+@Model
 class Notebook: Identifiable {
     
     var id: UUID = UUID()
