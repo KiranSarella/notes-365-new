@@ -32,8 +32,23 @@ enum ListSourceType: Equatable {
     case deletedItems
 }
 
+
+
 @Observable
 class NotebooksListState {
+    
+    var genArr = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
+    var gen: Int = 0
+    
+    var generateNextName: String {
+        defer {
+            gen += 1
+            if gen == genArr.count - 1 {
+                gen = 0
+            }
+        }
+        return genArr[gen]
+    }
     
 //    static let shared: NotebooksListState = NotebooksListState()
     
@@ -212,9 +227,10 @@ class NotebooksListState {
     func addFirstNotes() {
         
         withAnimation {
-            let notebook = createNotebook(parent: nil)
+            let notebook = generateNotebook(parent: nil)
             notebook.orderID = 0
-            modelContext?.insert(notebook)
+            notebooks = [notebook]
+//            modelContext?.insert(notebook)
         }
 //        fetchNotebooks()
         
@@ -230,12 +246,14 @@ class NotebooksListState {
         
         guard let modelContext = modelContext else { return }
         
-        let newNotebook = Notebook(id: UUID(), name: "0")
+        let newNotebook = generateNotebook(parent: notebook.parent)
         
         if notebook.parent != nil {
+            // set parent
+            newNotebook.parent = notebook.parent
             
             if notebook.parent!.children != nil {
-                
+                // if children contains
 //                notebook.parent?.children?.append(newNotebook)
                 
                 // get index of current notebook
@@ -246,7 +264,6 @@ class NotebooksListState {
                 print("insertIndex: ", insertIndex)
                 
 //                // order number
-                newNotebook.name = "\(insertIndex)"
                 newNotebook.orderID = insertIndex
                 // save
 //                modelContext.insert(newNotebook)
@@ -273,7 +290,7 @@ class NotebooksListState {
                 // update order number to rest of the notebooks
                 let start = insertIndex + 1
                 for i in start..<notebook.parent!.children!.count {
-                    notebook.parent!.children![i].name = "\(i) " + notebook.parent!.children![i].name
+//                    notebook.parent!.children![i].name = "\(i) " + notebook.parent!.children![i].name
                     notebook.parent!.children![i].orderID = i
                 }
                 // print order ids
@@ -288,21 +305,20 @@ class NotebooksListState {
             }
             
         } else {
-            
-            // root objects
+            // no parent, so root objects
             // get index of current notebook
             let index = notebooks.firstIndex(of: notebook)!
             // order number
-            newNotebook.name = "\(index + 1) " + newNotebook.name
+//            newNotebook.name = "\(index + 1) " + newNotebook.name
             newNotebook.orderID = index + 1
             // save
-            modelContext.insert(newNotebook)
+//            modelContext.insert(newNotebook)
             // insert to hierachy create object
             notebooks.insert(newNotebook, at: index + 1)
             // update order number to rest of the notebooks
 //            let start = index + 2
             for i in 0..<notebooks.count {
-                notebooks[i].name = "\(i) " + newNotebook.name
+//                notebooks[i].name = "\(i) " + newNotebook.name
                 notebooks[i].orderID = i
             }
             // print order ids
@@ -343,7 +359,8 @@ class NotebooksListState {
     
     func insertInside(ref notebook: Notebook) {
         
-        let newNotebook = Notebook(id: UUID(), name: Faker().name.name())
+        let newNotebook = generateNotebook(parent: notebook)
+        newNotebook.parent = notebook
         
         if notebook.children == nil {
             notebook.children = [newNotebook]
@@ -359,33 +376,33 @@ class NotebooksListState {
 //        notebookBusiness.persist(notebooks: notebooks)
     }
     
-    private func insertInside(notebook: Notebook, below index: Int? = nil) -> Notebook {
-        let fullPath = notebooksPath
-        let newNotebook = createNotebook(parent: notebook)
-        
-        //        let newNotebook = createNotebook(atPath: fullPath)
-        newNotebook.parent = notebook
-        
-        if let index = index {
-            // create object
-            notebook.children!.insert(newNotebook, at: index + 1)
-            // ..folder already exists
-        } else if notebook.children == nil {
-            // create object
-            notebook.children = [newNotebook]
-            // create folder
-            //            dataManager.createFolder(fullPath)
-        } else {
-            // create object
-            notebook.children?.append(newNotebook)
-            // ..folder already exists
-        }
-        // create phycical file
-        notebookBusiness.insertInside(notebook: newNotebook)
-        return newNotebook
-    }
+//    private func insertInside(notebook: Notebook, below index: Int? = nil) -> Notebook {
+//        let fullPath = notebooksPath
+//        let newNotebook = generateNotebook(parent: notebook)
+//        
+//        //        let newNotebook = createNotebook(atPath: fullPath)
+//        newNotebook.parent = notebook
+//        
+//        if let index = index {
+//            // create object
+//            notebook.children!.insert(newNotebook, at: index + 1)
+//            // ..folder already exists
+//        } else if notebook.children == nil {
+//            // create object
+//            notebook.children = [newNotebook]
+//            // create folder
+//            //            dataManager.createFolder(fullPath)
+//        } else {
+//            // create object
+//            notebook.children?.append(newNotebook)
+//            // ..folder already exists
+//        }
+//        // create phycical file
+//        notebookBusiness.insertInside(notebook: newNotebook)
+//        return newNotebook
+//    }
     
-    func createNotebook(parent: Notebook?) -> Notebook {
+    func generateNotebook(parent: Notebook?) -> Notebook {
         
         // generate non existed file name at that level
         var fileName = ""
@@ -538,18 +555,18 @@ class NotebooksListState {
         }
         
         
-        var descriptor = FetchDescriptor(predicate: tripPredicate)
-        descriptor.fetchLimit = 1
-//        let descriptor = FetchDescriptor<Item>(
-//            sortBy: SortDescriptor(\Item.timestamp),
-//            predicate: tripPredicate)
-
-        do {
-            let trips = try modelContext?.fetch(descriptor)
-            return trips?.first
-        } catch let err {
-            print(err)
-        }
+//        var descriptor = FetchDescriptor(predicate: tripPredicate)
+//        descriptor.fetchLimit = 1
+////        let descriptor = FetchDescriptor<Item>(
+////            sortBy: SortDescriptor(\Item.timestamp),
+////            predicate: tripPredicate)
+//
+//        do {
+//            let trips = try modelContext?.fetch(descriptor)
+//            return trips?.first
+//        } catch let err {
+//            print(err)
+//        }
         
         return nil
     }

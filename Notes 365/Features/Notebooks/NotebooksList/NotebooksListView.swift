@@ -61,23 +61,23 @@ struct NotebooksListView: View {
     
     func fetchNotebooks() {
         
-        let tripPredicate = #Predicate<Notebook> {
-            $0.parent == nil
-        }
-        
-        let descriptor = FetchDescriptor(predicate: tripPredicate, sortBy: [SortDescriptor(\Notebook.orderID)])
-//        let descriptor = FetchDescriptor(predicate: tripPredicate)
-        
-        
-        
-        do {
-            var results = try modelContext.fetch(descriptor)
-            // do sorting
-//            sortedNotes(notebooks: &results)
-            usersState.notebooks = results
-        } catch let err {
-            print(err)
-        }
+//        let tripPredicate = #Predicate<Notebook> {
+//            $0.parent == nil
+//        }
+//        
+//        let descriptor = FetchDescriptor(predicate: tripPredicate, sortBy: [SortDescriptor(\Notebook.orderID)])
+////        let descriptor = FetchDescriptor(predicate: tripPredicate)
+//        
+//        
+//        
+//        do {
+//            var results = try modelContext.fetch(descriptor)
+//            // do sorting
+////            sortedNotes(notebooks: &results)
+//            usersState.notebooks = results
+//        } catch let err {
+//            print(err)
+//        }
         
     }
     
