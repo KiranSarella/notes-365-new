@@ -552,23 +552,21 @@ class NotebooksListState {
     
     func getNotebook(uuid: UUID) -> Notebook? {
         
-        let tripPredicate = #Predicate<Notebook> {
+        let tripPredicate = #Predicate<NotebookData> {
             $0.id == uuid
         }
         
-        
-//        var descriptor = FetchDescriptor(predicate: tripPredicate)
-//        descriptor.fetchLimit = 1
-////        let descriptor = FetchDescriptor<Item>(
-////            sortBy: SortDescriptor(\Item.timestamp),
-////            predicate: tripPredicate)
-//
-//        do {
-//            let trips = try modelContext?.fetch(descriptor)
-//            return trips?.first
-//        } catch let err {
-//            print(err)
-//        }
+        var descriptor = FetchDescriptor(predicate: tripPredicate)
+        descriptor.fetchLimit = 1
+
+        do {
+            let trips = try modelContext?.fetch(descriptor)
+            if let noteData = trips?.first {
+                return Notebook(noteData)
+            }
+        } catch let err {
+            print(err)
+        }
         
         return nil
     }
