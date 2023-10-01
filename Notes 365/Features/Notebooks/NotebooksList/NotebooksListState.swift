@@ -37,19 +37,6 @@ enum ListSourceType: Equatable {
 @Observable
 class NotebooksListState {
     
-    var genArr = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]
-    var gen: Int = 0
-    
-    var generateNextName: String {
-        defer {
-            gen += 1
-            if gen == genArr.count - 1 {
-                gen = 0
-            }
-        }
-        return genArr[gen]
-    }
-    
 //    static let shared: NotebooksListState = NotebooksListState()
     
     var modelContext: ModelContext?
@@ -226,11 +213,15 @@ class NotebooksListState {
     
     func addFirstNotes() {
         
+        guard let modelContext = modelContext else { return }
+        
         withAnimation {
             let notebook = generateNotebook(parent: nil)
             notebook.orderID = 0
             notebooks = [notebook]
-            modelContext?.insert(notebook)
+            notebook.saveNotebookData(modelContext)
+//            modelContext?.insert(notebook)
+            
         }
 //        fetchNotebooks()
         
@@ -270,6 +261,8 @@ class NotebooksListState {
 //                notebook.parent!.onlySelfSortChildren()
                 // insert to hierachy create object
                 notebook.parent!.children!.insert(newNotebook, at: insertIndex)
+                newNotebook.saveNotebookData(modelContext)
+                
 //                sortedChildren.insert(newNotebook, at: index + 1) // not working
                 
 //                let start = index + 2
@@ -289,23 +282,25 @@ class NotebooksListState {
 //                notebook.parent?.onlySelfSortChildren()
                 // update order number to rest of the notebooks
                 let start = insertIndex + 1
-                if start >= notebook.parent!.children!.count {
-                    return
+                if start < notebook.parent!.children!.count {
+                    for i in start..<notebook.parent!.children!.count {
+    //                    notebook.parent!.children![i].name = "\(i) " + notebook.parent!.children![i].name
+                        notebook.parent!.children![i].orderID = i
+                    }
+                    // print order ids
+                    for i in 0..<notebook.parent!.children!.count {
+                        print(notebook.parent!.children![i].orderID, notebook.parent!.children![i].name)
+                    }
                 }
-                for i in start..<notebook.parent!.children!.count {
-//                    notebook.parent!.children![i].name = "\(i) " + notebook.parent!.children![i].name
-                    notebook.parent!.children![i].orderID = i
-                }
-                // print order ids
-                for i in 0..<notebook.parent!.children!.count {
-                    print(notebook.parent!.children![i].orderID, notebook.parent!.children![i].name)
-                }
+                
                 
 //                notebook.parent?.onlySelfSortChildren()
                 
             } else {
                 notebook.parent?.children = [newNotebook]
             }
+            // update parent as its childen udpated
+            notebook.parent!.updateNotebookData(modelContext)
             
         } else {
             // no parent, so root objects
@@ -314,10 +309,9 @@ class NotebooksListState {
             // order number
 //            newNotebook.name = "\(index + 1) " + newNotebook.name
             newNotebook.orderID = index + 1
-            // save
-            modelContext.insert(newNotebook)
             // insert to hierachy create object
             notebooks.insert(newNotebook, at: index + 1)
+            newNotebook.saveNotebookData(modelContext)
             // update order number to rest of the notebooks
 //            let start = index + 2
             for i in 0..<notebooks.count {
@@ -349,7 +343,7 @@ class NotebooksListState {
 //        
         
 //        notebooks.append(newNotebook)
-        try? modelContext.save()
+//        try? modelContext.save()
 //        modelContext.insert(newNotebook)
         
 //        // create actual notebook
@@ -362,6 +356,8 @@ class NotebooksListState {
     
     func insertInside(ref notebook: Notebook) {
         
+        guard let modelContext = modelContext else { return }
+        
         let newNotebook = generateNotebook(parent: notebook)
         newNotebook.parent = notebook
         
@@ -371,7 +367,10 @@ class NotebooksListState {
             notebook.children?.append(newNotebook)
         }
         
-        try? modelContext?.save()
+        newNotebook.saveNotebookData(modelContext)
+        notebook.updateNotebookData(modelContext)
+        
+//        try? modelContext?.save()
         
 //        // create actual notebook in the storage and hierarchy
 //        let childNotebook = insertInside(notebook: notebook)

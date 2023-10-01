@@ -61,18 +61,36 @@ struct NotebooksListView: View {
     
     func fetchNotebooks() {
         
-        let tripPredicate = #Predicate<Notebook> {
-            $0.parent == nil
+        let allListPredicate = #Predicate<NotebookData> { _ in
+            true
         }
-        
-        let descriptor = FetchDescriptor(predicate: tripPredicate, sortBy: [SortDescriptor(\Notebook.orderID)])
+        let descriptor = FetchDescriptor(predicate: allListPredicate)
+//        let descriptor = FetchDescriptor(predicate: allListPredicate, sortBy: [SortDescriptor(\NotebookData.orderID)])
 //        let descriptor = FetchDescriptor(predicate: tripPredicate)
         
         do {
-            var results = try modelContext.fetch(descriptor)
-            // do sorting
-            sortedNotes(notebooks: &results)
-            usersState.notebooks = results
+            let results: [NotebookData] = try modelContext.fetch(descriptor)
+            // prepare dict
+            var dict = [UUID: NotebookData]()
+            for result in results {
+                dict[result.id] = result
+            }
+            
+            // topLevel
+            let topLevels: [NotebookData] = results.filter { $0.parent == nil }
+                .sorted { $0.orderID < $1.orderID }
+            
+            // notebooks
+            var notebooksList = [Notebook]()
+            for topNote in topLevels {
+                notebooksList.append(Notebook(topNote))
+            }
+            // populate childnotes
+            for notebook in notebooksList {
+                notebook.populateChildren(dict)
+            }
+            
+            usersState.notebooks = notebooksList
         } catch let err {
             print(err)
         }

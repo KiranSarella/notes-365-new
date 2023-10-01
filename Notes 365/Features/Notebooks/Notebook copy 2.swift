@@ -9,23 +9,108 @@ import UIKit
 import SwiftData
 
 @Model
+class NotebookData {
+    
+    var id: UUID = UUID()
+    var parent: UUID?
+    var name: String = ""
+    var orderID: Int = 0
+    
+    var children: [UUID]?
+    
+    var createdDate: Date = Date()
+    var deletedDate: Date?
+    var modifiedDate: Date = Date()
+    
+    init(id: UUID, name: String) {
+        self.id = id
+        self.name = name
+        
+        createdDate = Date()
+        deletedDate = nil
+        modifiedDate = Date()
+    }
+}
+
+extension Notebook {
+    
+    func generateNotebookData() -> NotebookData {
+        let notedata = NotebookData(id: id, name: name)
+        notedata.parent = parent?.id
+        notedata.orderID = orderID
+        notedata.createdDate = createdDate
+        notedata.modifiedDate = modifiedDate
+        
+        return notedata
+    }
+    
+    func syncNotebookData() {
+        
+        notebookData.id = id
+        notebookData.name = name
+        notebookData.orderID = orderID
+        notebookData.parent = parent?.id
+        notebookData.children = children?.map { $0.id }
+        
+        notebookData.createdDate = createdDate
+        notebookData.modifiedDate = modifiedDate
+        notebookData.deletedDate = deletedDate
+        
+        
+    }
+    
+    func saveNotebookData(_ modelContext: ModelContext) {
+        syncNotebookData()
+        do {
+            modelContext.insert(notebookData)
+            try modelContext.save()
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    func updateNotebookData(_ modelContext: ModelContext) {
+        syncNotebookData()
+        do {
+            try modelContext.save()
+        } catch let error {
+            print(error)
+        }
+    }
+}
+
+/*
+ getParent() -> Notebook
+ // have to maintain [childID: parentID] dictionary
+ // - when new child added, insert here
+ // - no persistance is required, in-mem instant only
+ // - when grouping changed
+ 
+ getChildren() -> [Notebook]
+ 
+ */
+
+@Observable
 class Notebook: Identifiable {
     
     var id: UUID = UUID()
     var name: String = ""
 //    @Relationship(inverse: \Notebook.parent)
 //    @Relationship(.cascade)
-    @Relationship
+//    @Relationship
     var children: [Notebook]?
     
     var createdDate: Date = Date()
-    var deletedDate: Date?
+    var deletedDate: Date? = nil
     var modifiedDate: Date = Date()
     
     var orderID: Int = 0
 //    unowned var parent: Notebook?
-    @Relationship(inverse: \Notebook.children)
+//    @Relationship(inverse: \Notebook.children)
     var parent: Notebook?
+    
+    @ObservationIgnored
+    var notebookData: NotebookData
     
     var isExpanded: Bool = false
     var isDeleted: Bool = false
@@ -78,19 +163,46 @@ class Notebook: Identifiable {
         }
     }
     
+    init(_ notebookData: NotebookData) {
+        
+        self.notebookData = notebookData
+        
+        self.id = notebookData.id
+        self.name = notebookData.name
+        self.orderID = notebookData.orderID
+//        self.parent = // get parent object
+//        self.children = // get children objects
+        self.createdDate = notebookData.createdDate
+        self.modifiedDate = notebookData.modifiedDate
+        self.deletedDate = notebookData.deletedDate
+        
+    }
+    
     init(id: UUID, name: String) {
         self.id = id
         self.name = name
-        
-        createdDate = Date()
-        deletedDate = nil
-        modifiedDate = Date()
-        
-        isExpanded = false
-        isDeleted = false
-        canShow = true
+        notebookData = NotebookData(id: id, name: name)
     }
     
+    func populateChildren(_ dict: [UUID: NotebookData]) {
+        
+        guard let cArr = notebookData.children else { return }
+        
+        children = [Notebook]()
+        for cid in cArr {
+            if let noteD = dict[cid] {
+                let note = Notebook(noteD)
+                note.parent = self
+                children?.append(note)
+            }
+        }
+        // populate inner list
+        // populate childnotes
+        for cNote in children! {
+            cNote.populateChildren(dict)
+        }
+        
+    }
     
 //    required convenience init(from decoder: Decoder) throws {
 //
