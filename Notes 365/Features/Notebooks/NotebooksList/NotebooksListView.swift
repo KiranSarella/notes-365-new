@@ -354,6 +354,9 @@ struct SearchedListView: View {
     @Binding var selectedNotebook: Notebook.ID?
     @Bindable var usersState: NotebooksListState
     
+    @Namespace var topID
+    @Namespace var bottomID
+    
     var body: some View {
         
         switch usersState.listSourceType {
@@ -379,59 +382,64 @@ struct SearchedListView: View {
         }
         
 //        VStack {
-        List(selection: $selectedNotebook) {
-            
-            if usersState.listSourceType == .deletedItems {
-                DeletedNotebooksListGroupView(usersState: usersState, notebooks: $usersState.notebooks)
-            } else {
-                NotebooksListGroupView(usersState: usersState, notebooks: $usersState.notebooks)
+        
+        
+            List(selection: $selectedNotebook) {
+                
+                if usersState.listSourceType == .deletedItems {
+                    DeletedNotebooksListGroupView(usersState: usersState, notebooks: $usersState.notebooks)
+                } else {
+                    NotebooksListGroupView(usersState: usersState, notebooks: $usersState.notebooks)
+                }
+                
+//                .id(usersState.notebooks.last?.id)
+                
+                //            if usersState.notesHierarchy.deletedNotes.count > 0 {
+                //                Section {
+                //                    DisclosureGroup {
+                //                        NotebooksListGroupView(notebooks: $usersState.notesHierarchy.deletedNotes)
+                //                    } label: {
+                //                        HStack {
+                //                            Image(systemName: "trash")
+                //                                .foregroundColor(.red)
+                //                            Text("Recently Deleted")
+                //                                .font(.subheadline)
+                //                                .fontWeight(.thin)
+                //                                .foregroundColor(.red)
+                //                        }
+                //
+                //                    }
+                //                }
+                //                .tint(.gray)
+                //            }
+                
+                
+                //            Section {
+                //                DisclosureGroup {
+                //                    Text("Note 1")
+                //                } label: {
+                //                    Text("Recently Deleted")
+                //                        .fontWeight(.bold)
+                //                        .foregroundColor(.gray)
+                //                        .padding(.top, 14)
+                //                }
+                //            } header: {
+                //                Text("Recently Deleted")
+                //                    .fontWeight(.bold)
+                //
+                //            }
+                
+                
+                
+                //            DisclosureGroup("recently deleted") {
+                //                Text("Note 1")
+                //            }
+                //            Section("Recently Deleted") {
+                //                Text("Note 1")
+                //            }
             }
-            
-//            if usersState.notesHierarchy.deletedNotes.count > 0 {
-//                Section {
-//                    DisclosureGroup {
-//                        NotebooksListGroupView(notebooks: $usersState.notesHierarchy.deletedNotes)
-//                    } label: {
-//                        HStack {
-//                            Image(systemName: "trash")
-//                                .foregroundColor(.red)
-//                            Text("Recently Deleted")
-//                                .font(.subheadline)
-//                                .fontWeight(.thin)
-//                                .foregroundColor(.red)
-//                        }
-//
-//                    }
-//                }
-//                .tint(.gray)
-//            }
-            
-            
-//            Section {
-//                DisclosureGroup {
-//                    Text("Note 1")
-//                } label: {
-//                    Text("Recently Deleted")
-//                        .fontWeight(.bold)
-//                        .foregroundColor(.gray)
-//                        .padding(.top, 14)
-//                }
-//            } header: {
-//                Text("Recently Deleted")
-//                    .fontWeight(.bold)
-//
-//            }
-
-            
-            
-//            DisclosureGroup("recently deleted") {
-//                Text("Note 1")
-//            }
-//            Section("Recently Deleted") {
-//                Text("Note 1")
-//            }
-        }
-        .scrollDismissesKeyboard(.interactively)
+            .scrollDismissesKeyboard(.interactively)
+        
         .toolbar {
             
             if usersState.canEnableDone {
@@ -684,9 +692,11 @@ struct MyTableRow: View {
                 NotebooksListGroupView(usersState: usersState, notebooks: $notebook.children.unwrap()!)
             } label: {
                 RowView(usersState: usersState, notebook: $notebook)
+                    .id(notebook.id)
             }
         } else {
             RowView(usersState: usersState, notebook: $notebook)
+                .id(notebook.id)
         }
     }
 }

@@ -11,6 +11,7 @@ struct MonthCalendarView: View {
     
     @Binding var monthDate: MonthDate
     @State private var navigationDate: Date = Date()
+    @State var isAnimating = false
     
     var body: some View {
         VStack {
@@ -18,7 +19,9 @@ struct MonthCalendarView: View {
             MonthHeaderView(monthDate: $monthDate, navigationDate: $navigationDate)
             // grid view
             MonthGridView(monthDate: $monthDate, navigationDate: $navigationDate)
+                .animation(.easeOut(duration: 1), value: isAnimating)
         }
+        .transition(.slide)
 //        .padding()
         .onAppear {
             navigationDate = self.monthDate.start

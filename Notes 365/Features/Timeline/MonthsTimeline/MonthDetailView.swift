@@ -25,18 +25,54 @@ struct MonthDetailWrapperView: View {
 
 struct MonthDetailView: View {
     
-    @Environment (\.modelContext) var modelContext
-   @State private var monthState = MonthDetailState()
+    @Namespace var bottomID
 
+    @Environment (\.modelContext) var modelContext
+    @State private var monthState = MonthDetailState()
+    
+    // loading
+    @State var topCount = 0
+    @State var isTopLoading = false
+    @State var bottomCount = 0
+    @State var isBottonLoading = false
+    
     var body: some View {
         VStack(spacing: 0) {
-//            GeometryReader { g in
+            ScrollViewReader { proxy in
                 List {
                     ForEach($monthState.monthTimelineList, id: \.id) { $dayTimeline in
                         // for each day
                         MonthSectionView(date: monthState.monthDate.start, dayTimeline: $dayTimeline, width: 0)
+                            .id(dayTimeline.notes.first?.id)
                             .listRowSeparator(.hidden)
+                            
                     }
+                    
+                    if monthState.monthTimelineList.count > 0 {
+                        
+                        HStack {
+                            Spacer()
+                            Text("Loading.. \(bottomCount)")
+//                            ProgressView()
+                                .onAppear {
+                                    print("appear \(bottomCount)")
+                                    
+                                    if isBottonLoading == false {
+                                        isBottonLoading = true
+                                        bottomCount += 1
+                                        Task {
+                                            // Delay the task by 1 second:
+                                            try await Task.sleep(nanoseconds: 5_000_000_000)
+                                            
+                                            // Perform our operation
+                                            isBottonLoading = false
+                                        }
+                                    }
+                                }
+                            Spacer()
+                        }
+                    }
+                    
                     HStack {
                         Spacer()
                         Text(monthState.currentState.message)
@@ -46,49 +82,35 @@ struct MonthDetailView: View {
                         Spacer()
                     }
                     .listRowSeparator(.hidden)
-                    //                // motivation question
-                    //                HStack {
-                    //                    Spacer()
-                    //
-                    //                    Text(MotivationQuestions.monthQuestions.randomElement() ?? "")
-                    //                        .fontWeight(.thin)
-                    //                        .foregroundColor(.gray)
-                    //                        .padding()
-                    //                        .opacity(currentState == .empty ? 1 : 0)
-                    //
-                    //                    Spacer()
-                    //                }
-                    //                .padding()
                 }
                 .listStyle(PlainListStyle())
-                .onAppear {
-                    monthState.timelineBusiness.modelContext = modelContext
-                    monthState.readMonthData(monthDate: monthState.monthDate)
-                }
-                .onChange(of: monthState.monthDate, perform: { newValue in
-                    Task {
-                        monthState.generatorTask?.cancel()
-                        DispatchQueue.main.async {
-                            monthState.currentState = .loading
-                            monthState.monthTimelineList.removeAll()
-                        }
-                        
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            // your code here
-                            monthState.readMonthData(monthDate: newValue)
-                        }
-                    }
-                })
-                .onDisappear {
+            }
+            .onAppear {
+                monthState.timelineBusiness.modelContext = modelContext
+                monthState.readMonthData(monthDate: monthState.monthDate)
+            }
+            .onChange(of: monthState.monthDate, perform: { newValue in
+                Task {
                     monthState.generatorTask?.cancel()
+                    DispatchQueue.main.async {
+                        monthState.currentState = .loading
+                        monthState.monthTimelineList.removeAll()
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        // your code here
+                        monthState.readMonthData(monthDate: newValue)
+                    }
                 }
-//            }
+            })
+            .onDisappear {
+                monthState.generatorTask?.cancel()
+            }
         }
         .toolbar {
 //            ScaleFontView(theme: $theme)
         }
     }
-    
     
     static func getMonthStartEndDates(date: Date) -> (Date, Date) {
         
@@ -134,6 +156,7 @@ struct MonthSectionView: View {
             
             DayTimelineTwoView(timelineList: $dayTimeline.notes)
         }
+//        .id(dayTimeline.notes.first!.id)
     }
 }
 
@@ -145,6 +168,7 @@ fileprivate struct DayTimelineTwoView: View {
         ForEach($timelineList) { $noteChange in
             VStack {
                 NotesTitleView(noteChange: noteChange, deleteTimeline: Binding.constant(nil))
+//                    .id(noteChange.id)
                 HStack {
                     
                     ReadOnlyMarkDownViewTwo(timeline: $noteChange)
@@ -165,6 +189,7 @@ fileprivate struct DayTimelineTwoView: View {
                     Spacer()
                 }
             }
+            
         }
     }
 }

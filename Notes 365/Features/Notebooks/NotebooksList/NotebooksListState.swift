@@ -480,10 +480,11 @@ class NotebooksListState {
     
     
     func rename(for notebook: Notebook, newValue: String) throws {
-        // validate characters
-        if newValue.contains(":") {
-            throw NotebookBusinessError.invalidCharacters
-        }
+//        // validate characters
+//        if newValue.contains(":") {
+//            throw NotebookBusinessError.invalidCharacters
+//        }
+        
         // check if already same file name exists
         if let parent = notebook.parent {
             if isAlreadyExists(fileName: newValue, in: parent.children!) {
@@ -496,6 +497,9 @@ class NotebooksListState {
         }
         // store name
         notebook.name = newValue
+        // update in notebooksData and save
+        notebook.notebookData.name = newValue
+        try modelContext?.save()
         
 //        // persist changes
 //        notebookBusiness.persist(notebooks: notebooks)

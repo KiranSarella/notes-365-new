@@ -13,6 +13,7 @@ class TimelineContent {
     var year: Int = 0
     var month: Int = 0
     var day: Int = 0
+    
     var content = ""
     var notebookID: UUID = UUID()
     var filename = ""
@@ -22,6 +23,11 @@ class TimelineContent {
     func getAbsolutePath() -> String {
         // https://www.compart.com/en/unicode/U+203A
         return path.joined(separator: "  \u{203A}   ")
+    }
+    
+    var date: Date {
+        let dateStr = "\(day)/\(month)/\(year)"
+        return Date.fromString(dateStr: dateStr)!
     }
     
     init() {

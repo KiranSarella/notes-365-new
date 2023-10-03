@@ -249,3 +249,14 @@ extension FileManager {
         }
     }
 }
+
+
+
+extension Date {
+    
+    static func fromString(dateStr: String, _ dateFormat: String = "dd/MM/yyyy") -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = dateFormat
+        return dateFormatter.date(from: dateStr)
+    }
+}

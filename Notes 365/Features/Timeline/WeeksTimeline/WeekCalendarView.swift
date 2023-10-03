@@ -107,7 +107,7 @@ struct WeekGridView: View {
     @Binding var navigationDate: Date
     @Binding var selectedWeek: WeekGrid
     
-    var weekdaySymbols = [" "] + Calendar.current.shortWeekdaySymbols   // [" "] is required
+    var weekdaySymbols = Calendar.current.shortWeekdaySymbols + [" "]    // [" "] is required
     var calendar = Calendar(identifier: .gregorian)
     
     var body: some View {
@@ -117,7 +117,7 @@ struct WeekGridView: View {
                 ForEach(weekdaySymbols, id: \.self) { weekdaySymbol in
                     Text(String(weekdaySymbol.first!))
                         .padding(.bottom, 4)
-                        .font(.system(size: 10))
+//                        .font(.system(size: 10))
                         .frame(maxWidth: .infinity)
                         .fontWeight(.semibold)
                         .foregroundColor(.secondary)
@@ -170,23 +170,25 @@ struct WeekView: View {
     
     fileprivate func weekGridRowView() -> some View {
         return HStack() {
-            Text("\(week.weekNumber)")
-                .frame(maxWidth: .infinity)
-                .font(.system(size: 14, weight: .bold))
-                .foregroundColor(Color.red)
+            
             ForEach(week.weekDays, id: \.self) { date in
                 if date.getMonth() == navigationDate.getMonth() {
                     Text("\(date.getDay())")
                         .frame(maxWidth: .infinity)
-                        .font(.system(size: 12))
+//                        .font(.system(size: 12))
                         .foregroundColor(week.isCurrentWeek() ? CalendarState.todayTint : .primary)
                 } else {
                     Text("\(date.getDay())")
                         .frame(maxWidth: .infinity)
-                        .font(.system(size: 12))
+//                        .font(.system(size: 12))
                         .opacity(0.4)
                 }
             }
+            Text("\(week.weekNumber)")
+                .frame(maxWidth: .infinity)
+//                .font(.system(size: 14, weight: .bold))
+                .fontWeight(.bold)
+                .foregroundColor(Color.red)
         }
         .padding(.init(top: 2, leading: 5, bottom: 2, trailing: 5))
     }

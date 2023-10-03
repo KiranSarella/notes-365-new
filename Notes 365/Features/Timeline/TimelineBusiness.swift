@@ -90,7 +90,44 @@ class TimelineBusiness {
             $0.year == year
         }
         
-        let descriptor = FetchDescriptor(predicate: predicate, sortBy: [SortDescriptor(\TimelineContent.modifiedDate)])
+        let descriptor = FetchDescriptor(predicate: predicate, 
+                                         sortBy: [SortDescriptor(\TimelineContent.modifiedDate, order: .reverse)])
+
+        do {
+            return try modelContext.fetch(descriptor)
+        } catch let err {
+            print(err)
+            return nil
+        }
+    }
+    
+    func fetchMonthTimeline(for year: Int, _ month: Int) -> [TimelineContent]? {
+        guard let modelContext = modelContext else { return nil }
+        
+        let predicate = #Predicate<TimelineContent> {
+            $0.year == year && $0.month == month
+        }
+        
+        let descriptor = FetchDescriptor(predicate: predicate, 
+                                         sortBy: [SortDescriptor(\TimelineContent.modifiedDate, order: .reverse)])
+
+        do {
+            return try modelContext.fetch(descriptor)
+        } catch let err {
+            print(err)
+            return nil
+        }
+    }
+    
+    func fetchDayTimeline(for year: Int, _ month: Int, _ day: Int) -> [TimelineContent]? {
+        guard let modelContext = modelContext else { return nil }
+        
+        let predicate = #Predicate<TimelineContent> {
+            $0.year == year && $0.month == month && $0.day == day
+        }
+        
+        let descriptor = FetchDescriptor(predicate: predicate,
+                                         sortBy: [SortDescriptor(\TimelineContent.modifiedDate, order: .reverse)])
 
         do {
             return try modelContext.fetch(descriptor)

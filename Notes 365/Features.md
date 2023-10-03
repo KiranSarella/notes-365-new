@@ -19,3 +19,8 @@
 [ ] 
 
 
+
+## Infinite Scrolling
+https://copyprogramming.com/howto/swiftui-how-to-detect-when-list-is-scrolled
+
+

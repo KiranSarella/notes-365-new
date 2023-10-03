@@ -61,13 +61,23 @@ class MonthDetailState {
         
         let timelineContents = timelineBusiness.fetchTimeline(for: monthDate.start.getYear()) ?? []
         
-        var timelines = [Timeline]()
-        for timelineContent in timelineContents {
-            timelines.append(timelineContent.getTimeline())
-        }
+        let groupedList = Dictionary(grouping: timelineContents,
+                                     by: { $0.date })
+//
+        print(groupedList)
         
-        let dayChanges = DayChanges(notes: timelines, date: monthDate.start, metadata: "")
-        monthTimelineList.append(dayChanges)
+        for day in groupedList.keys.sorted(by: { $0 > $1 }) {
+            // load notechange for each day
+            guard let contents = groupedList[day] else { return }
+            
+            var timelines = [Timeline]()
+            for timelineContent in contents {
+                timelines.append(timelineContent.getTimeline())
+            }
+            
+            let dayChanges = DayChanges(notes: timelines, date: day, metadata: "")
+            monthTimelineList.append(dayChanges)
+        }
         
         currentState = .data
     }
