@@ -20,27 +20,6 @@ class TimelineBusiness {
         self.basePathURL = basePathURL
     }
     
-    func readDayMetaData(dayDate: DayDate) -> String? {
-            
-        let today = dayDate.date
-        let timelinePath = "\(timelineFolderPath)/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
-        let metadataFilePath = timelinePath + "/" + "metadata"
-        
-        let fileURL = basePathURL.appendingPathComponent(metadataFilePath, isDirectory: false)
-        
-        if FileManager.default.fileExists(atPath: fileURL.path) == false {
-            return nil
-        }
-
-        do {
-            // Read the file contents
-            return try String(contentsOf: fileURL)
-        } catch let error as NSError {
-            print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
-            return nil
-        }
-    }
-    
     func readDayMetaData(date: Date) async -> String? {
         
         let timelinePath = "\(timelineFolderPath)/\(date.getYear())/\(date.getMonth())/\(date.getDay())"

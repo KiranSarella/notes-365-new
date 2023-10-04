@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct NotesTitleView: View {
+struct NoteChangeHeadingView: View {
     @Environment(\.colorScheme) var colorScheme
     @State private var isFocused = false
     var noteChange: Timeline

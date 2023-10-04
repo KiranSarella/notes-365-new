@@ -119,21 +119,21 @@ struct ContentView: View {
     
     
     // timeline related
-    @State var calendarState = CalendarState.shared
+//    @State var calendarState = CalendarState.shared
     // notebooks related
     @State private var selectedNotebookM: Notebook.ID?
     @State var notebooksListState = NotebooksListState()
     
-    @State var selectedCalenderType: CalendarType.ID? = CalendarType.day.id
-    
-    @State var selectedCalender: CalendarType? = CalendarType.day
+//    @State var selectedCalenderType: CalendarType.ID? = CalendarType.day.id
+//    
+//    @State var selectedCalender: CalendarType? = CalendarType.day
     
     @State var showDetail = false
     
 //    @State private var editorState = NotebookEditorState()
     
     private var notebooksListSync = NotebooksListSync(basePathURL: EnvironmentState.shared.basePathURL)
-    private var timelineSync = TimelineSync(basePathURL: EnvironmentState.shared.basePathURL)
+//    private var timelineSync = TimelineSync(basePathURL: EnvironmentState.shared.basePathURL)
     private var todayVersionSync = TodayVersionSync(basePathURL: EnvironmentState.shared.basePathURL)
     private var notebooksContentSync = NotebooksContentSync(basePathURL: EnvironmentState.shared.basePathURL)
     private var deletedListSync = DeletedListSync(basePathURL: EnvironmentState.shared.basePathURL)
@@ -405,8 +405,7 @@ struct ContentView: View {
         switch selectedItem {
             
         case .timeline:
-            TimelineDetailView(calendarID: $selectedCalenderType)
-                .environment(calendarState)
+            TimelineDetailView()
         case .notebooks:
             NotebooksListView(icloudSyncing: $icloudSyncing, usersState: notebooksListState, selectedNotebook: $selectedNotebookM)
         }
