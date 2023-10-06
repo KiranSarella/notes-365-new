@@ -15,8 +15,17 @@ import SwiftData
 @Model
 class TimelineIndex {
     var id: UUID = UUID()
-    var dateString: String = Date().string(withFormat: "yyyy-MM-dd")
+
     var changes = [UUID]()
+    
+    var year: Int = 0
+    var month: Int = 0
+    var day: Int = 0
+    //    var dateString: String = Date().string(withFormat: "yyyy-MM-dd")
+    var dateString: String {
+        "\(year)-\(month)-\(day)"
+    }
+    
     
 //    @Transient
 //    var timelineContents: [TimelineContent]?

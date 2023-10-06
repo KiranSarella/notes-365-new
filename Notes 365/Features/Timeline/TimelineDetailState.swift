@@ -139,7 +139,7 @@ class TimelineDetailState {
         
         timelineBusiness.registerNotebookChangesNotification()
         
-        fetchAllTimelineIndexList()
+//        fetchAllTimelineIndexList()
     }
     
     func setToday() {
@@ -216,13 +216,67 @@ class TimelineDetailState {
         }
     }
     
-    func fetchAllTimelineIndexList() {
-        
+//    func fetchAllTimelineIndexList() {
+//        
+//        DispatchQueue.main.async {
+//            self.currentState = .loading
+//            self.timelineIndexList.removeAll()
+//            
+//            if let results = self.timelineBusiness.fetchAllTimelineIndex(), results.count > 0 {
+//                self.timelineIndexList = results.map { DayIndex(timelineIndex: $0) }
+//                self.currentState = .data
+//            } else {
+//                self.currentState = .empty
+//            }
+//        }
+//    }
+    
+    
+    func fetchDayTimelineIndexList(_ date: Date) {
+        print(#function, date)
         DispatchQueue.main.async {
             self.currentState = .loading
             self.timelineIndexList.removeAll()
             
-            if let results = self.timelineBusiness.fetchAllTimelineIndex(), results.count > 0 {
+            if let result = self.timelineBusiness.fetchDayTimelineIndex(year: date.getYear(), month: date.getMonth(), day: date.getDay()) {
+                self.timelineIndexList = [DayIndex(timelineIndex: result)]
+                self.currentState = .data
+            } else {
+                self.currentState = .empty
+            }
+        }
+    }
+    
+    
+    func fetchWeekTimelineIndexList(_ startDate: Date) {
+        print(#function, startDate)
+        DispatchQueue.main.async {
+            self.currentState = .loading
+            self.timelineIndexList.removeAll()
+            
+            for i in 0..<7 {
+                let date = Calendar.current.date(byAdding: .day, value: i, to: startDate)!
+                if let result = self.timelineBusiness.fetchDayTimelineIndex(year: date.getYear(), month: date.getMonth(), day: date.getDay()) {
+                    self.timelineIndexList.append(DayIndex(timelineIndex: result))
+                }
+            }
+            
+            if self.timelineIndexList.count > 0 {
+                self.currentState = .data
+            } else {
+                self.currentState = .empty
+            }
+        }
+    }
+    
+    
+    func fetchMonthTimelineIndexList(_ date: Date) {
+        print(#function, date)
+        DispatchQueue.main.async {
+            self.currentState = .loading
+            self.timelineIndexList.removeAll()
+            
+            if let results = self.timelineBusiness.fetchMonthTimelineIndex(year: date.getYear(), month: date.getMonth()), results.count > 0 {
                 self.timelineIndexList = results.map { DayIndex(timelineIndex: $0) }
                 self.currentState = .data
             } else {

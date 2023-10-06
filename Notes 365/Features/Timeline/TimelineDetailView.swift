@@ -12,7 +12,7 @@ struct TimelineDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @Binding var timelineDetailState: TimelineDetailState
     @State private var isShowingCalendar = false
-    
+    @State private var calendarState = CalendarState()
     
     
     var body: some View {
@@ -27,8 +27,9 @@ struct TimelineDetailView: View {
                 timelineDetailState.timelineBusiness.modelContext = modelContext
                 timelineDetailState.timelineBusiness.updateTodayTimelineIndex()
                 // load timelineindex
-                
-                timelineDetailState.fetchAllTimelineIndexList()
+            // day
+            timelineDetailState.fetchDayTimelineIndexList(calendarState.dayDate.date)
+//                timelineDetailState.fetchAllTimelineIndexList()
 //            }
             
             
@@ -40,15 +41,52 @@ struct TimelineDetailView: View {
         .onDisappear(perform: {
             timelineDetailState.clearDisplay()
         })
+//        .onChange(of: calendarState.calenderType, { oldValue, newValue in
+//            print("calenderType: ", newValue)
+//            
+////            calendarState.monthDate
+//        })
+        .onChange(of: calendarState.dayDate, { oldValue, newValue in
+            // day
+            timelineDetailState.fetchDayTimelineIndexList(newValue.date)
+        })
+        .onChange(of: calendarState.weekDate, { oldValue, newValue in
+            // week
+            timelineDetailState.fetchWeekTimelineIndexList(newValue.start)
+        })
+        .onChange(of: calendarState.monthDate, { oldValue, newValue in
+            // month
+            timelineDetailState.fetchMonthTimelineIndexList(newValue.start)
+        })
         .toolbar {
             // menu options
+//            ToolbarItem(placement: .navigationBarTrailing) {
+//                Button {
+////                    timelineDetailState.setToday()
+//                    
+//                    timelineDetailState.timelineBusiness.setAsBeforeDay()
+//                } label: {
+//                    Text("set as before day")
+//                }
+//                .foregroundColor(.primary)
+//            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
 //                    timelineDetailState.setToday()
                     
-                    timelineDetailState.timelineBusiness.setAsBeforeDay()
+//                    timelineDetailState.timelineBusiness.setAsBeforeDay()
                 } label: {
-                    Text("set as before day")
+                    Image(systemName: "chevron.left")
+                }
+                .foregroundColor(.primary)
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+//                    timelineDetailState.setToday()
+                    
+//                    timelineDetailState.timelineBusiness.setAsBeforeDay()
+                } label: {
+                    Image(systemName: "chevron.right")
                 }
                 .foregroundColor(.primary)
             }
@@ -60,7 +98,8 @@ struct TimelineDetailView: View {
                 }
                 .foregroundColor(.primary)
                 .popover(isPresented: $isShowingCalendar) {
-                    TimelineCalendarView(selectedDate: $timelineDetailState.selectedDate)
+                    TimelineCalendarView()
+                        .environment(calendarState)
                         .frame(width: 280)
                         .padding()
                 }
@@ -123,20 +162,20 @@ struct MonthDetailView: View {
                     .listRowSeparator(.hidden)
                 }
                 .listStyle(PlainListStyle())
-                .onChange(of: timelineDetailState.selectedDate, { oldValue, newValue in
-                    // get id for the selected date
-                    let selectedDayIndex = timelineDetailState.timelineIndexList.first { dayIndex in
-                        dayIndex.date <= newValue
-                    }
-                    
-                    guard let selectedDayIndex = selectedDayIndex else { return }
-                    
-                    withAnimation {
-                        proxy.scrollTo(selectedDayIndex.id, anchor: .top)
-                    }
-//                    print(selectedDayIndex.dateString)
-                    
-                })
+//                .onChange(of: timelineDetailState.selectedDate, { oldValue, newValue in
+//                    // get id for the selected date
+//                    let selectedDayIndex = timelineDetailState.timelineIndexList.first { dayIndex in
+//                        dayIndex.date <= newValue
+//                    }
+//                    
+//                    guard let selectedDayIndex = selectedDayIndex else { return }
+//                    
+//                    withAnimation {
+//                        proxy.scrollTo(selectedDayIndex.id, anchor: .top)
+//                    }
+////                    print(selectedDayIndex.dateString)
+//                    
+//                })
             }
 //            .onChange(of: timelineDetailState.selectedDate, { oldValue, newValue in
 //
@@ -190,55 +229,61 @@ struct MonthSectionView: View {
     
     var body: some View {
         
-        Section {
+        VStack {
             
-            VStack {
-                
-                if isDataLoaded {
-                    DayTimelineTwoView(timelineList: $timelineIndex.dayChanges.notes)
-                } else {
-                    HStack {
-                        Spacer()
-                        Text("Loading..")
-                        Spacer()
-                    }
-                    .frame(idealHeight: 800)
-                }
-            }
-            .onAppear {
-                isVisible = true
-                
-                if loadingSpinnerTask != nil {
-                    return
-                }
-                
-                loadingSpinnerTask = Task {
-                    
-                    try await Task.sleep(nanoseconds: 10_000_000_000)
-                    guard let loadingSpinnerTask = loadingSpinnerTask, !loadingSpinnerTask.isCancelled else {
-                        print("afterSleep: isCancelled: true", timelineIndex.dateString)
-                        return }
-                    
-                    print("afterSleep: isCancelled: false", timelineIndex.dateString)
-                    timelineIndex.loadTimelineContent(timelineState.timelineBusiness)
-                }
-    //                timelineIndex.loadTimelineContent(timelineState.timelineBusiness)
-            }
-            .onDisappear {
-                isVisible = false
-                loadingSpinnerTask?.cancel()
-                loadingSpinnerTask = nil
-                print("onDisappear: cancelled", timelineIndex.dateString)
-            }
-        } header: {
             HStack {
                 Spacer()
                 Text(timelineIndex.formattedDate)
                     .listRowSeparator(.hidden)
                     .padding(.horizontal)
-                    .font(.title)
+//                    .font(.title)
+                    .font(.largeTitle)
+                    .padding(.top, 30)
+            }
+            
+            if isDataLoaded {
+                DayTimelineTwoView(timelineList: $timelineIndex.dayChanges.notes)
+            } else {
+                HStack {
+                    Spacer()
+                    Text("Loading..")
+                    Spacer()
+                }
+                .frame(idealHeight: 800)
             }
         }
+        .onAppear {
+            isVisible = true
+            
+//            if loadingSpinnerTask != nil {
+//                return
+//            }
+            
+            loadingSpinnerTask = Task {
+                
+                try await Task.sleep(nanoseconds: 2_000_000_000)
+//                guard let loadingSpinnerTask = loadingSpinnerTask, !loadingSpinnerTask.isCancelled else {
+//                    print("afterSleep: isCancelled: true", timelineIndex.dateString)
+//                    return }
+//                
+//                print("afterSleep: isCancelled: false", timelineIndex.dateString)
+                timelineIndex.loadTimelineContent(timelineState.timelineBusiness)
+            }
+//                timelineIndex.loadTimelineContent(timelineState.timelineBusiness)
+        }
+//        .onDisappear {
+//            isVisible = false
+//            loadingSpinnerTask?.cancel()
+//            loadingSpinnerTask = nil
+////            print("onDisappear: cancelled", timelineIndex.dateString)
+//        }
+        
+//        Section {
+//            
+//            
+//        } header: {
+            
+//        }
         
         
         

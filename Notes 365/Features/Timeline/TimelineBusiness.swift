@@ -20,8 +20,8 @@ class TimelineBusiness {
     var todayTimelineIndex: TimelineIndex?
     
     var count = -5
-//    var today = Date().dayBefore.dayBefore.dayBefore
-    var today = Calendar.current.date(byAdding: .day, value: -5, to: Date())!
+    var today = Date()
+//    var today = Calendar.current.date(byAdding: .day, value: -5, to: Date())!
     
     init(path basePathURL: URL) {
         self.basePathURL = basePathURL
@@ -40,7 +40,7 @@ class TimelineBusiness {
     func updateTodayTimelineIndex() {
         todayTimelineIndex = nil
         
-        if let todayIndex = fetchTimelineIndex(today) {
+        if let todayIndex = fetchDayTimelineIndex(year: today.getYear(), month: today.getMonth(), day: today.getDay()) {
             self.todayTimelineIndex = todayIndex
         } else {
 //            self.todayTimelineIndex = TimelineIndex()
@@ -126,7 +126,7 @@ class TimelineBusiness {
         }
     }
     
-    func fetchDayTimeline(for year: Int, _ month: Int, _ day: Int) -> [TimelineContent]? {
+    func fetchDayTimeline(for year: Int, _ month: Int, _ day: Int) -> TimelineContent? {
         guard let modelContext = modelContext else { return nil }
         
         let predicate = #Predicate<TimelineContent> {
@@ -137,7 +137,7 @@ class TimelineBusiness {
                                          sortBy: [SortDescriptor(\TimelineContent.modifiedDate, order: .reverse)])
 
         do {
-            return try modelContext.fetch(descriptor)
+            return try modelContext.fetch(descriptor).first
         } catch let err {
             print(err)
             return nil
@@ -184,15 +184,57 @@ class TimelineBusiness {
 //    }
     
     
-    func fetchAllTimelineIndex() -> [TimelineIndex]? {
+//    func fetchAllTimelineIndex() -> [TimelineIndex]? {
+//        guard let modelContext = modelContext else { return nil }
+//        
+//        let predicate = #Predicate<TimelineIndex> { _ in
+//            true
+//        }
+//        
+//        var descriptor = FetchDescriptor(predicate: predicate,
+//                                         sortBy: [SortDescriptor(\TimelineIndex.dateString, order: .reverse)])
+//        descriptor.includePendingChanges = true
+//        
+//        do {
+//            return try modelContext.fetch(descriptor)
+//        } catch let err {
+//            print(err)
+//            return nil
+//        }
+//    }
+    
+    
+    /// day - year, month. day numbers
+    func fetchDayTimelineIndex(year: Int, month: Int, day: Int) -> TimelineIndex? {
         guard let modelContext = modelContext else { return nil }
         
-        let predicate = #Predicate<TimelineIndex> { _ in
-            true
+        let predicate = #Predicate<TimelineIndex> {
+            $0.year == year && $0.month == month && $0.day == day
+        }
+        
+        var descriptor = FetchDescriptor(predicate: predicate)
+        descriptor.fetchLimit = 1
+        descriptor.includePendingChanges = true
+        
+        do {
+            return try modelContext.fetch(descriptor).first
+        } catch let err {
+            print(err)
+            return nil
+        }
+    }
+    
+    /// month - year, month
+    func fetchMonthTimelineIndex(year: Int, month: Int) -> [TimelineIndex]? {
+        guard let modelContext = modelContext else { return nil }
+        
+        let predicate = #Predicate<TimelineIndex> {
+            $0.year == year && $0.month == month
         }
         
         var descriptor = FetchDescriptor(predicate: predicate,
-                                         sortBy: [SortDescriptor(\TimelineIndex.dateString, order: .reverse)])
+                                         sortBy: [SortDescriptor(\TimelineIndex.day, order: .reverse)])
+        descriptor.fetchLimit = 31
         descriptor.includePendingChanges = true
         
         do {
@@ -202,6 +244,8 @@ class TimelineBusiness {
             return nil
         }
     }
+    
+    
     
 //    func fetchDayTimeline(for id: UUID) -> [TimelineContent]? {
 //        guard let modelContext = modelContext else { return nil }
@@ -377,7 +421,9 @@ extension TimelineBusiness {
             } else {
                 // create today timelineasdf
                 let newTimelineIndex = TimelineIndex()
-                newTimelineIndex.dateString = today.string(withFormat: "yyyy-MM-dd")
+                newTimelineIndex.year = today.getYear()
+                newTimelineIndex.month = today.getMonth()
+                newTimelineIndex.day = today.getDay()
                 newTimelineIndex.changes.append(timelineContent.id)
                 // save to db
                 modelContext.insert(newTimelineIndex)
@@ -405,27 +451,27 @@ extension TimelineBusiness {
     }
     
     // MARK: - TimelineIndex
-    func fetchTimelineIndex(_ date: Date) -> TimelineIndex? {
-        guard let modelContext = self.modelContext else { return nil }
-        
-        let dateString = date.string(withFormat: "yyyy-MM-dd")
-        
-        // if already exists, then update
-        let predicate = #Predicate<TimelineIndex> {
-            $0.dateString == dateString
-        }
-        
-        var descriptor = FetchDescriptor(predicate: predicate)
-        descriptor.fetchLimit = 1
-        
-        do {
-            let results = try modelContext.fetch(descriptor)
-            return results.first
-        } catch let err {
-            print(err)
-            return nil
-        }
-    }
+//    func fetchTimelineIndex(_ date: Date) -> TimelineIndex? {
+//        guard let modelContext = self.modelContext else { return nil }
+//        
+//        let dateString = date.string(withFormat: "yyyy-MM-dd")
+//        
+//        // if already exists, then update
+//        let predicate = #Predicate<TimelineIndex> {
+//            $0.dateString == dateString
+//        }
+//        
+//        var descriptor = FetchDescriptor(predicate: predicate)
+//        descriptor.fetchLimit = 1
+//        
+//        do {
+//            let results = try modelContext.fetch(descriptor)
+//            return results.first
+//        } catch let err {
+//            print(err)
+//            return nil
+//        }
+//    }
     
     // MARK: - TimelineContent
     func getTimelineContent(today: Date, uuid: UUID) -> TimelineContent? {
