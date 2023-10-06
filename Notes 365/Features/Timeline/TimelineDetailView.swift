@@ -9,20 +9,46 @@ import SwiftUI
 
 struct TimelineDetailView: View {
     
-    @State private var timelineDetailState = TimelineDetailState()
+    @Environment(\.modelContext) private var modelContext
+    @Binding var timelineDetailState: TimelineDetailState
     @State private var isShowingCalendar = false
+    
+    
     
     var body: some View {
         VStack {
             MonthDetailView(timelineDetailState: timelineDetailState)
         }
+        .onAppear {
+//            if timelineDetailState.isFirstAppear {
+//                timelineDetailState.isFirstAppear = false
+                
+                
+                timelineDetailState.timelineBusiness.modelContext = modelContext
+                timelineDetailState.timelineBusiness.updateTodayTimelineIndex()
+                // load timelineindex
+                
+                timelineDetailState.fetchAllTimelineIndexList()
+//            }
+            
+            
+//                // load first notebook
+//
+//
+//                timelineDetailState.readData(timelineDetailState.selectedDate)
+        }
+        .onDisappear(perform: {
+            timelineDetailState.clearDisplay()
+        })
         .toolbar {
             // menu options
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    timelineDetailState.setToday()
+//                    timelineDetailState.setToday()
+                    
+                    timelineDetailState.timelineBusiness.setAsBeforeDay()
                 } label: {
-                    Text("Today")
+                    Text("set as before day")
                 }
                 .foregroundColor(.primary)
             }
@@ -58,33 +84,33 @@ struct MonthDetailView: View {
         VStack(spacing: 0) {
             ScrollViewReader { proxy in
                 List {
-                    ForEach($timelineDetailState.dayChangesList, id: \.id) { $dayTimeline in
+                    ForEach($timelineDetailState.timelineIndexList, id: \.id) { $timelineIndex in
                         // for each day
-                        MonthSectionView(date: timelineDetailState.selectedDate, dayTimeline: $dayTimeline, width: 0)
-                            .id(dayTimeline.notes.first?.id)
+                        MonthSectionView(timelineState: timelineDetailState, timelineIndex: $timelineIndex)
                             .listRowSeparator(.hidden)
+                            .id(timelineIndex.id)
                     }
                     
-                    if timelineDetailState.canLoadMore && timelineDetailState.dayChangesList.count > 0 {
-                        HStack {
-                            Spacer()
-                            Text("Loading..")
-                                .onAppear {
-                                    if isLoadingMore == false {
-                                        isLoadingMore = true
-                                        Task {
-                                            // Delay the task by 1 second:
-//                                            try await Task.sleep(nanoseconds: 5_000_000_000)
-                                             timelineDetailState.fetchPreviousDate()
-                                            
-                                            // Perform our operation
-                                            isLoadingMore = false
-                                        }
-                                    }
-                                }
-                            Spacer()
-                        }
-                    }
+//                    if timelineDetailState.canLoadMore && timelineDetailState.dayChangesList.count > 0 {
+//                        HStack {
+//                            Spacer()
+//                            Text("Loading..")
+//                                .onAppear {
+//                                    if isLoadingMore == false {
+//                                        isLoadingMore = true
+//                                        Task {
+//                                            // Delay the task by 1 second:
+////                                            try await Task.sleep(nanoseconds: 5_000_000_000)
+//                                             timelineDetailState.fetchPreviousDate()
+//                                            
+//                                            // Perform our operation
+//                                            isLoadingMore = false
+//                                        }
+//                                    }
+//                                }
+//                            Spacer()
+//                        }
+//                    }
                     
                     HStack {
                         Spacer()
@@ -97,27 +123,38 @@ struct MonthDetailView: View {
                     .listRowSeparator(.hidden)
                 }
                 .listStyle(PlainListStyle())
-            }
-            .onAppear {
-                timelineDetailState.timelineBusiness.modelContext = modelContext
-                timelineDetailState.readData(timelineDetailState.selectedDate)
-            }
-            .onChange(of: timelineDetailState.selectedDate, { oldValue, newValue in
-                Task {
-                    timelineDetailState.generatorTask?.cancel()
-                    DispatchQueue.main.async {
-                        timelineDetailState.currentState = .loading
-                        timelineDetailState.dayChangesList.removeAll()
+                .onChange(of: timelineDetailState.selectedDate, { oldValue, newValue in
+                    // get id for the selected date
+                    let selectedDayIndex = timelineDetailState.timelineIndexList.first { dayIndex in
+                        dayIndex.date <= newValue
                     }
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        // your code here
-                        timelineDetailState.readData(newValue)
+                    guard let selectedDayIndex = selectedDayIndex else { return }
+                    
+                    withAnimation {
+                        proxy.scrollTo(selectedDayIndex.id, anchor: .top)
                     }
-                }
-            })
+//                    print(selectedDayIndex.dateString)
+                    
+                })
+            }
+//            .onChange(of: timelineDetailState.selectedDate, { oldValue, newValue in
+//
+////                Task {
+////                    timelineDetailState.generatorTask?.cancel()
+////                    DispatchQueue.main.async {
+////                        timelineDetailState.currentState = .loading
+////                        timelineDetailState.dayChangesList.removeAll()
+////                    }
+////                    
+////                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+////                        // your code here
+////                        timelineDetailState.readData(newValue)
+////                    }
+////                }
+//            })
             .onDisappear {
-                timelineDetailState.generatorTask?.cancel()
+//                timelineDetailState.generatorTask?.cancel()
             }
         }
         .toolbar {
@@ -126,7 +163,6 @@ struct MonthDetailView: View {
     }
     
     static func getMonthStartEndDates(date: Date) -> (Date, Date) {
-        
         guard
             let monthInterval = Calendar.current.dateInterval(of: .month, for: date)
         else { fatalError() }
@@ -142,33 +178,105 @@ struct MonthDetailView: View {
 // each day
 struct MonthSectionView: View {
     
-    var date: Date
-    @Binding var dayTimeline: DayChanges
-    var width: CGFloat
+    var timelineState: TimelineDetailState
+    @Binding var timelineIndex: DayIndex
+    @State var loadingSpinnerTask: Task<(), Error>?
+    @State var isVisible = false
+    
+    var isDataLoaded: Bool {
+        timelineIndex.dayChanges != nil
+    }
+    
     
     var body: some View {
         
-        // day header
-        VStack {
-            HStack {
-                Spacer()
-                if UIDevice.current.userInterfaceIdiom == .phone {
-                    Text(dayTimeline.date.formatted(date: .abbreviated, time: .omitted))
-                        .listRowSeparator(.hidden)
-                        .padding(.horizontal)
-                        .font(.largeTitle)
-                        .padding(.top, 30)
+        Section {
+            
+            VStack {
+                
+                if isDataLoaded {
+                    DayTimelineTwoView(timelineList: $timelineIndex.dayChanges.notes)
                 } else {
-                    Text(dayTimeline.date.formatted(date: .complete, time: .omitted))
-                        .listRowSeparator(.hidden)
-                        .padding(.horizontal)
-                        .font(.largeTitle)
-                        .padding(.top, 30)
+                    HStack {
+                        Spacer()
+                        Text("Loading..")
+                        Spacer()
+                    }
+                    .frame(idealHeight: 800)
                 }
             }
-            
-            DayTimelineTwoView(timelineList: $dayTimeline.notes)
+            .onAppear {
+                isVisible = true
+                
+                if loadingSpinnerTask != nil {
+                    return
+                }
+                
+                loadingSpinnerTask = Task {
+                    
+                    try await Task.sleep(nanoseconds: 10_000_000_000)
+                    guard let loadingSpinnerTask = loadingSpinnerTask, !loadingSpinnerTask.isCancelled else {
+                        print("afterSleep: isCancelled: true", timelineIndex.dateString)
+                        return }
+                    
+                    print("afterSleep: isCancelled: false", timelineIndex.dateString)
+                    timelineIndex.loadTimelineContent(timelineState.timelineBusiness)
+                }
+    //                timelineIndex.loadTimelineContent(timelineState.timelineBusiness)
+            }
+            .onDisappear {
+                isVisible = false
+                loadingSpinnerTask?.cancel()
+                loadingSpinnerTask = nil
+                print("onDisappear: cancelled", timelineIndex.dateString)
+            }
+        } header: {
+            HStack {
+                Spacer()
+                Text(timelineIndex.formattedDate)
+                    .listRowSeparator(.hidden)
+                    .padding(.horizontal)
+                    .font(.title)
+            }
         }
+        
+        
+        
+//        // day header
+//        
+//        if timelineIndex.dayChanges == nil {
+//            
+//            
+//        } else {
+//            
+//            
+//
+//        }
+        
+        
+//        Section(dayTimeline.date.formatted(date: .complete, time: .omitted)) {
+//            DayTimelineTwoView(timelineList: $dayTimeline.notes)
+//        }
+        
+//        VStack {
+//            HStack {
+//                Spacer()
+//                if UIDevice.current.userInterfaceIdiom == .phone {
+//                    Text(dayTimeline.date.formatted(date: .abbreviated, time: .omitted))
+//                        .listRowSeparator(.hidden)
+//                        .padding(.horizontal)
+//                        .font(.largeTitle)
+//                        .padding(.top, 30)
+//                } else {
+//                    Text(dayTimeline.date.formatted(date: .complete, time: .omitted))
+//                        .listRowSeparator(.hidden)
+//                        .padding(.horizontal)
+//                        .font(.largeTitle)
+//                        .padding(.top, 30)
+//                }
+//            }
+//            DayTimelineTwoView(timelineList: $dayTimeline.notes)
+//        }
 //        .id(dayTimeline.notes.first!.id)
     }
 }

@@ -80,10 +80,11 @@ class NotebooksListState {
     
     var firstTimeAppear = true
     
-    var timelineCreatorBusiness = TimelineBusiness(path: EnvironmentState.shared.basePathURL)
+//    var timelineCreatorBusiness = TimelineBusiness(path: EnvironmentState.shared.basePathURL)
     
     init() {
-        timelineCreatorBusiness.registerNotebookChangesNotification()
+//        timelineCreatorBusiness.registerNotebookChangesNotification()
+//        timelineCreatorBusiness.updateTodayTimelineIndex()
         
         isLoading = true
         // get saved expandedIds
@@ -111,7 +112,7 @@ class NotebooksListState {
     }
     
     deinit {
-        timelineCreatorBusiness.removeNotebookChangesNotification()
+//        timelineCreatorBusiness.removeNotebookChangesNotification()
         removeNotebookChangesNotification()
     }
     
@@ -357,17 +358,21 @@ class NotebooksListState {
     func insertInside(ref notebook: Notebook) {
         
         guard let modelContext = modelContext else { return }
-        
+        // create new notebook
         let newNotebook = generateNotebook(parent: notebook)
+        // set its parent
         newNotebook.parent = notebook
         
         if notebook.children == nil {
+            // first child
             notebook.children = [newNotebook]
         } else {
+            // already contains children
             notebook.children?.append(newNotebook)
         }
-        
+        // save new notebook
         newNotebook.saveNotebookData(modelContext)
+        // update children order list
         notebook.updateNotebookData(modelContext)
         
 //        try? modelContext?.save()

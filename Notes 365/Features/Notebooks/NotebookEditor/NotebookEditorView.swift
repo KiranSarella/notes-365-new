@@ -22,7 +22,7 @@ struct NotebookEditorView: View {
     var notebookM: Notebook
     @Bindable var editorState: NotebookEditorState
 
-    @State var autoSaveTimer: Timer.TimerPublisher = Timer.publish(every: 5, on: .main, in: .common)
+    @State var autoSaveTimer: Timer.TimerPublisher = Timer.publish(every: 10, on: .main, in: .common)
     @State var connectedTimer: Cancellable? = nil
     
     var isDeleted: Bool {

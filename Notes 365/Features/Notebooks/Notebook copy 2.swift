@@ -109,7 +109,7 @@ class Notebook: Identifiable {
 //    @Relationship(inverse: \Notebook.children)
     var parent: Notebook?
     
-    @ObservationIgnored
+//    @ObservationIgnored
     var notebookData: NotebookData
     
     var isExpanded: Bool = false

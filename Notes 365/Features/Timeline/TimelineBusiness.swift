@@ -8,6 +8,7 @@
 import Foundation
 import SwiftData
 
+
 class TimelineBusiness {
     
     var basePathURL: URL
@@ -16,8 +17,35 @@ class TimelineBusiness {
     
     var modelContext: ModelContext?
     
+    var todayTimelineIndex: TimelineIndex?
+    
+    var count = -5
+//    var today = Date().dayBefore.dayBefore.dayBefore
+    var today = Calendar.current.date(byAdding: .day, value: -5, to: Date())!
+    
     init(path basePathURL: URL) {
         self.basePathURL = basePathURL
+//        updateTodayTimelineIndex()
+    }
+    
+    func setAsBeforeDay() {
+        
+        count -= 1
+        today = Calendar.current.date(byAdding: .day, value: count, to: Date())!
+        print(#function, today)
+        
+        updateTodayTimelineIndex()
+    }
+    
+    func updateTodayTimelineIndex() {
+        todayTimelineIndex = nil
+        
+        if let todayIndex = fetchTimelineIndex(today) {
+            self.todayTimelineIndex = todayIndex
+        } else {
+//            self.todayTimelineIndex = TimelineIndex()
+        }
+         
     }
     
     func readDayMetaData(date: Date) async -> String? {
@@ -116,6 +144,83 @@ class TimelineBusiness {
         }
     }
     
+    func fetchTimelineContent(for id: UUID) -> TimelineContent? {
+        guard let modelContext = modelContext else { return nil }
+        
+        let predicate = #Predicate<TimelineContent> {
+            $0.id == id
+        }
+        
+        var descriptor = FetchDescriptor(predicate: predicate)
+        descriptor.fetchLimit = 1
+
+        do {
+            return try modelContext.fetch(descriptor).first
+        } catch let err {
+            print(err)
+            return nil
+        }
+    }
+    
+    
+//    func fetchTimelineIndex(after date: Date) -> [TimelineIndex]? {
+//        guard let modelContext = modelContext else { return nil }
+//        
+//        let predicate = #Predicate<TimelineIndex> { _ in
+//            true
+//        }
+//        
+//        var descriptor = FetchDescriptor(predicate: predicate,
+//                                         sortBy: [SortDescriptor(\TimelineIndex.dateString, order: .reverse)])
+//        descriptor.fetchLimit = 50
+//        descriptor.includePendingChanges = true
+//        
+//        do {
+//            return try modelContext.fetch(descriptor)
+//        } catch let err {
+//            print(err)
+//            return nil
+//        }
+//    }
+    
+    
+    func fetchAllTimelineIndex() -> [TimelineIndex]? {
+        guard let modelContext = modelContext else { return nil }
+        
+        let predicate = #Predicate<TimelineIndex> { _ in
+            true
+        }
+        
+        var descriptor = FetchDescriptor(predicate: predicate,
+                                         sortBy: [SortDescriptor(\TimelineIndex.dateString, order: .reverse)])
+        descriptor.includePendingChanges = true
+        
+        do {
+            return try modelContext.fetch(descriptor)
+        } catch let err {
+            print(err)
+            return nil
+        }
+    }
+    
+//    func fetchDayTimeline(for id: UUID) -> [TimelineContent]? {
+//        guard let modelContext = modelContext else { return nil }
+//        
+//        let predicate = #Predicate<TimelineContent> {
+//            $0.year == year && $0.month == month && $0.day == day
+//        }
+//        
+//        let descriptor = FetchDescriptor(predicate: predicate,
+//                                         sortBy: [SortDescriptor(\TimelineContent.modifiedDate, order: .reverse)])
+//
+//        do {
+//            return try modelContext.fetch(descriptor)
+//        } catch let err {
+//            print(err)
+//            return nil
+//        }
+//    }
+    
     func timelineExists(day: Date) -> Bool {
         let dayFolderPath = "\(timelineFolderPath)/\(day.getYear())/\(day.getMonth())/\(day.getDay())"
         let directoryURL = basePathURL.appendingPathComponent(dayFolderPath)
@@ -125,7 +230,7 @@ class TimelineBusiness {
     // MARK: - Remove Timeline
     func removeTimelineChanges(_ timeline: Timeline) {
         // remove timeline file
-        removeContent(today: Date(), fileName: timeline.fileUUID.uuidString)
+        removeContent(today: today, fileName: timeline.fileUUID.uuidString)
         // remove row from metadata file
         removeFromMetadata(uuid: timeline.fileUUID.uuidString)
         // remove base version
@@ -229,13 +334,12 @@ extension TimelineBusiness {
             let notebookName = notification.userInfo?["notebookName"] as? String,
             let notebookPath = notification.userInfo?["notebookPath"] as? [String]
         else { return }
-        
-        createTimeline(uuid: uuid, notebookName: notebookName, notebookPath: notebookPath)
+                createTimeline(uuid: uuid, notebookName: notebookName, notebookPath: notebookPath)
         
     }
     
     func createTimeline(uuid: UUID, notebookName: String, notebookPath: [String]) {
-        
+        print(#function, notebookName)
         guard let modelContext = modelContext else { return }
         
         // get updated content from notebook business
@@ -250,11 +354,10 @@ extension TimelineBusiness {
             return
         }
         
-        let today = Date()
         // if already exists, then upate
         if let timelineContent = getTimelineContent(today: today, uuid: uuid) {
             timelineContent.content = newChanges
-            timelineContent.modifiedDate = Date()
+            timelineContent.modifiedDate = today //Date()
         } else {
             // else insert
             let timelineContent = TimelineContent()
@@ -268,6 +371,18 @@ extension TimelineBusiness {
             
             modelContext.insert(timelineContent)
             
+            // update timeline index
+            if let todayTimelineIndex = todayTimelineIndex {
+                todayTimelineIndex.changes.append(timelineContent.id)
+            } else {
+                // create today timelineasdf
+                let newTimelineIndex = TimelineIndex()
+                newTimelineIndex.dateString = today.string(withFormat: "yyyy-MM-dd")
+                newTimelineIndex.changes.append(timelineContent.id)
+                // save to db
+                modelContext.insert(newTimelineIndex)
+                todayTimelineIndex = newTimelineIndex
+            }
         }
         
         do {
@@ -287,11 +402,32 @@ extension TimelineBusiness {
          var path = [String]()
          var modifiedDate = Date()
          */
-        
-        
-            
     }
     
+    // MARK: - TimelineIndex
+    func fetchTimelineIndex(_ date: Date) -> TimelineIndex? {
+        guard let modelContext = self.modelContext else { return nil }
+        
+        let dateString = date.string(withFormat: "yyyy-MM-dd")
+        
+        // if already exists, then update
+        let predicate = #Predicate<TimelineIndex> {
+            $0.dateString == dateString
+        }
+        
+        var descriptor = FetchDescriptor(predicate: predicate)
+        descriptor.fetchLimit = 1
+        
+        do {
+            let results = try modelContext.fetch(descriptor)
+            return results.first
+        } catch let err {
+            print(err)
+            return nil
+        }
+    }
+    
+    // MARK: - TimelineContent
     func getTimelineContent(today: Date, uuid: UUID) -> TimelineContent? {
         
         guard let modelContext = self.modelContext else {

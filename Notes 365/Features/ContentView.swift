@@ -162,6 +162,8 @@ struct ContentView: View {
     
     @State var selection: Int = 0
     
+    @State private var timelineDetailState = TimelineDetailState()
+    
     var body: some View {
         NavigationSplitView(columnVisibility: $navigationSplitViewVisibility) {
             
@@ -405,7 +407,7 @@ struct ContentView: View {
         switch selectedItem {
             
         case .timeline:
-            TimelineDetailView()
+            TimelineDetailView(timelineDetailState: $timelineDetailState)
         case .notebooks:
             NotebooksListView(icloudSyncing: $icloudSyncing, usersState: notebooksListState, selectedNotebook: $selectedNotebookM)
         }

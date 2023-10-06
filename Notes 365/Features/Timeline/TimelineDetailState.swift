@@ -122,16 +122,24 @@ class TimelineDetailState {
     var loadingDate = Date()
     
     var currentState = CurrentState.loading
-    var dayChangesList = [DayChanges]()
-    var generatorTask: Task<(), Never>? = nil
+//    var dayChangesList = [DayChanges]()
+//    var generatorTask: Task<(), Never>? = nil
     
     var cancellable: Cancellable? = nil
     
+    var timelineIndexList = [DayIndex]()
+    
     var timelineBusiness = TimelineBusiness(path: URL(string: "test")!)
+    
+    var isFirstAppear = true
     
     init() {
         // observe changes
         observeMonthChanges()
+        
+        timelineBusiness.registerNotebookChangesNotification()
+        
+        fetchAllTimelineIndexList()
     }
     
     func setToday() {
@@ -148,59 +156,91 @@ class TimelineDetailState {
     
     deinit {
         cancellable?.cancel()
+        timelineBusiness.removeNotebookChangesNotification()
     }
     
-    func readData(_ date: Date) {
-        currentState = .loading
-        dayChangesList.removeAll()
+//    func readData(_ date: Date) {
+//        currentState = .loading
+//        dayChangesList.removeAll()
+//        
+//        guard let timelineContents = timelineBusiness.fetchDayTimeline(for: date.getYear(), date.getMonth(), date.getDay()) else { return }
+//        
+//        let groupedList = Dictionary(grouping: timelineContents,
+//                                     by: { $0.date })
+////
+//        print(groupedList)
+//        
+//        for day in groupedList.keys.sorted(by: { $0 > $1 }) {
+//            // load notechange for each day
+//            guard let contents = groupedList[day] else { return }
+//            
+//            var timelines = [Timeline]()
+//            for timelineContent in contents {
+//                timelines.append(timelineContent.getTimeline())
+//            }
+//            
+//            let dayChanges = DayChanges(notes: timelines, date: day, metadata: "")
+//            dayChangesList.append(dayChanges)
+//        }
+//        
+//        currentState = .data
+//    }
+    
+//    func fetchPreviousDate() {
+//        loadingDate = loadingDate.dayBefore
+//        if let dayChanges = fetchData(for: loadingDate) {
+//            dayChangesList.append(dayChanges)
+//        } else {
+//            canLoadMore = false
+//        }
+//    }
+//    
+//    func fetchData(for date: Date) -> DayChanges? {
+//        
+//        guard 
+//            let timelineContents = timelineBusiness.fetchDayTimeline(for: date.getYear(), date.getMonth(), date.getDay()),
+//            timelineContents.count > 0
+//        else { return nil }
+//        
+//        var timelines = [Timeline]()
+//        for timelineContent in timelineContents {
+//            timelines.append(timelineContent.getTimeline())
+//        }
+//        
+//        return DayChanges(notes: timelines, date: date, metadata: "")
+//    }
+    
+    func clearDisplay() {
+        DispatchQueue.main.async {
+            self.timelineIndexList.removeAll()
+        }
+    }
+    
+    func fetchAllTimelineIndexList() {
         
-        guard let timelineContents = timelineBusiness.fetchDayTimeline(for: date.getYear(), date.getMonth(), date.getDay()) else { return }
-        
-//        let timelineContents = timelineBusiness.fetchTimeline(for: monthDate.start.getYear()) ?? []
-        
-        let groupedList = Dictionary(grouping: timelineContents,
-                                     by: { $0.date })
-//
-        print(groupedList)
-        
-        for day in groupedList.keys.sorted(by: { $0 > $1 }) {
-            // load notechange for each day
-            guard let contents = groupedList[day] else { return }
+        DispatchQueue.main.async {
+            self.currentState = .loading
+            self.timelineIndexList.removeAll()
             
-            var timelines = [Timeline]()
-            for timelineContent in contents {
-                timelines.append(timelineContent.getTimeline())
+            if let results = self.timelineBusiness.fetchAllTimelineIndex(), results.count > 0 {
+                self.timelineIndexList = results.map { DayIndex(timelineIndex: $0) }
+                self.currentState = .data
+            } else {
+                self.currentState = .empty
             }
-            
-            let dayChanges = DayChanges(notes: timelines, date: day, metadata: "")
-            dayChangesList.append(dayChanges)
-        }
-        
-        currentState = .data
-    }
-    
-    func fetchPreviousDate() {
-        loadingDate = loadingDate.dayBefore
-        if let dayChanges = fetchData(for: loadingDate) {
-            dayChangesList.append(dayChanges)
-        } else {
-            canLoadMore = false
         }
     }
     
-    func fetchData(for date: Date) -> DayChanges? {
-        
-        guard 
-            let timelineContents = timelineBusiness.fetchDayTimeline(for: date.getYear(), date.getMonth(), date.getDay()),
-            timelineContents.count > 0
-        else { return nil }
-        
-        var timelines = [Timeline]()
-        for timelineContent in timelineContents {
-            timelines.append(timelineContent.getTimeline())
-        }
-        
-        return DayChanges(notes: timelines, date: date, metadata: "")
-    }
+    
+//    func fetchTimelineIndexList() {
+//        
+//        if let results = timelineBusiness.fetchTimelineIndex(after: timelineIndexDate), results.count > 0 {
+//            timelineIndexList = results
+//            timelineIndexDate = results.last!.date.dayBefore
+//        } else {
+//            isLoadMoreTimelineIndex = false
+//        }
+//        
+//    }
     
 }
