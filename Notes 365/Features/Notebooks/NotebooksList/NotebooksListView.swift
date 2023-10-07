@@ -199,13 +199,13 @@ struct NotebooksListView: View {
 
                      */
                     
-                    if UIDevice.current.userInterfaceIdiom == .pad {
-                        VStack {
-                            getToolbarView()
-                            Spacer()
-                        }
-                        .frame(height: 40)
-                    }
+//                    if UIDevice.current.userInterfaceIdiom == .pad {
+//                        VStack {
+//                            getToolbarView()
+//                            Spacer()
+//                        }
+//                        .frame(height: 40)
+//                    }
                 }
 //                .frame(minWidth: 280, maxWidth: 500)
                 .confirmationDialog("Are you sure?", isPresented: $usersState.presentDeleteConfirmation) {

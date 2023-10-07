@@ -94,12 +94,12 @@ struct SettingsView_iPadOS: View {
                         .buttonStyle(PlainButtonStyle())
                     }
                 }
-                .onChange(of: selectedLightThemeID) { newValue in
+                .onChange(of: selectedLightThemeID, { oldValue, newValue in
                     themesListState.saveLightTheme(newValue)
-                }
-                .onChange(of: selectedDarkThemeID) { newValue in
+                })
+                .onChange(of: selectedDarkThemeID, { oldValue, newValue in
                     themesListState.saveDarkTheme(newValue)
-                }
+                })
                 .navigationTitle("Themes")
                 .sheet(item: $selectedTheme, content: { theme in
                     NavigationStack {

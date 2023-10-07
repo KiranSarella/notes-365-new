@@ -331,35 +331,13 @@ struct ContentView: View {
 //            .frame(minWidth: 180)
 //            .background(bottomViewBackgroundColor)
             .onAppear {
-                ThemeState.shared.colorScheme = colorScheme
-//                    // do sync
-//                    icloudSyncing = true
-//                    chooseEnv.downloaodCloudDocuments(completion: {
-//                        // do any operations
-//                        icloudSyncing = false
-//                    })
-                
-                notebooksListSync.isSyncingStarted = {
-                    self.icloudSyncing = true
-                }
-                
-                notebooksListSync.isSyncingCompleted = {
-                    self.icloudSyncing = false
-                }
-                
-//                notebooksContentSync.isSyncingStarted = {
-//                    if self.icloudSyncing == false {
-//                        self.icloudSyncing = true
-//                    }
-//                }
-//
-//                notebooksContentSync.isSyncingCompleted = {
-//
-//                }
+                ThemeState.shared.updateColorScheme(colorScheme)
             }
-            .onChange(of: colorScheme) { newValue in
-                ThemeState.shared.colorScheme = newValue
-            }
+            .onChange(of: colorScheme, { oldValue, newValue in
+                if ThemeState.shared.colorScheme != newValue {
+                    ThemeState.shared.updateColorScheme(newValue)
+                }
+            })
             // issue - seleted notebooks is cleared every time on app appear.
 //            .onChange(of: scenePhase) { newPhase in
 //                if newPhase == .active {

@@ -19,23 +19,14 @@ class ThemeState {
     
     static let shared = ThemeState()
     
-    var colorScheme: ColorScheme = .light
+    private(set) var colorScheme: ColorScheme = .light
     
-    var theme: MarkdownTheme! = MarkdownTheme(id: UUID())
+    private(set) var theme: MarkdownTheme! = MarkdownTheme(id: UUID())
     
-    var cancellable: Cancellable? = nil
+    private var cancellable: Cancellable? = nil
     
     init() {
-        observeColorSchemaChanges()
         loadTheme(colorScheme: colorScheme)
-    }
-
-    func observeColorSchemaChanges() {
-//        cancellable = $colorScheme.sink { newValue in
-//            if newValue !=  self.colorScheme {
-//                self.loadTheme(colorScheme: newValue)
-//            }
-//        }
     }
     
     private func loadTheme(colorScheme: ColorScheme) {
@@ -46,6 +37,11 @@ class ThemeState {
             theme = ThemeBusiness().getDarkTheme()
             themeChangedNotification()
         }
+    }
+    
+    func updateColorScheme(_ newValue: ColorScheme) {
+        colorScheme = newValue
+        self.loadTheme(colorScheme: colorScheme)
     }
     
     // trigged on 'save changes' action
