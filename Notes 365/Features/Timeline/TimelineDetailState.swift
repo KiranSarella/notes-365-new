@@ -142,6 +142,8 @@ class TimelineDetailState {
 //        fetchAllTimelineIndexList()
     }
     
+    
+    
     func setToday() {
         selectedDate = Date()
     }
@@ -277,7 +279,9 @@ class TimelineDetailState {
             self.timelineIndexList.removeAll()
             
             if let results = self.timelineBusiness.fetchMonthTimelineIndex(year: date.getYear(), month: date.getMonth()), results.count > 0 {
-                self.timelineIndexList = results.map { DayIndex(timelineIndex: $0) }
+                self.timelineIndexList = results
+                                            .sorted { $0.day < $1.day }
+                                            .map { DayIndex(timelineIndex: $0) }
                 self.currentState = .data
             } else {
                 self.currentState = .empty

@@ -17,7 +17,7 @@ struct TimelineDetailView: View {
     
     var body: some View {
         VStack {
-            MonthDetailView(timelineDetailState: timelineDetailState)
+            MonthDetailView(timelineDetailState: timelineDetailState, calendarState: calendarState)
         }
         .onAppear {
 //            if timelineDetailState.isFirstAppear {
@@ -72,9 +72,7 @@ struct TimelineDetailView: View {
 //            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-//                    timelineDetailState.setToday()
-                    
-//                    timelineDetailState.timelineBusiness.setAsBeforeDay()
+                    calendarState.previousStep()
                 } label: {
                     Image(systemName: "chevron.left")
                 }
@@ -82,9 +80,7 @@ struct TimelineDetailView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-//                    timelineDetailState.setToday()
-                    
-//                    timelineDetailState.timelineBusiness.setAsBeforeDay()
+                    calendarState.nextStep()
                 } label: {
                     Image(systemName: "chevron.right")
                 }
@@ -115,17 +111,62 @@ struct MonthDetailView: View {
     @Namespace var bottomID
     @Environment (\.modelContext) var modelContext
     @Bindable var timelineDetailState: TimelineDetailState
+    @Bindable var calendarState: CalendarState
     
     // loading
     @State var isLoadingMore = false
     
     var body: some View {
         VStack(spacing: 0) {
-            ScrollViewReader { proxy in
+//            ScrollViewReader { proxy in
                 List {
+                    
+                    VStack {
+                        // day/week/month header view
+                        switch calendarState.calenderType {
+                        case .day:
+                            // header view
+                            HStack {
+                                Spacer()
+                                Text(calendarState.dayDate.formattedDate)
+                                    .listRowSeparator(.hidden)
+                                    .padding(.horizontal)
+                                    .font(.largeTitle)
+                                    .fontDesign(.rounded)
+                                    .fontWeight(.heavy)
+                                Spacer()
+                            }
+                        case .week:
+                            // header view
+                            HStack {
+                                Spacer()
+                                Text(calendarState.weekDate.weekNumberHeading)
+                                    .listRowSeparator(.hidden)
+                                    .padding(.horizontal)
+                                    .font(.largeTitle)
+                                    .fontDesign(.rounded)
+                                    .fontWeight(.heavy)
+                                Spacer()
+                            }
+                        case .month:
+                            HStack {
+                                Spacer()
+                                Text(calendarState.monthDate.start.string(format: "MMMM, YYYY"))
+                                    .listRowSeparator(.hidden)
+                                    .padding(.horizontal)
+                                    .font(.largeTitle)
+                                    .fontDesign(.rounded)
+                                    .fontWeight(.heavy)
+                                Spacer()
+                            }
+                        }
+                    }
+                    .listRowSeparator(.hidden)
+                    
+                    
                     ForEach($timelineDetailState.timelineIndexList, id: \.id) { $timelineIndex in
                         // for each day
-                        MonthSectionView(timelineState: timelineDetailState, timelineIndex: $timelineIndex)
+                        MonthSectionView(timelineState: timelineDetailState, timelineIndex: $timelineIndex, calenderType: calendarState.calenderType)
                             .listRowSeparator(.hidden)
                             .id(timelineIndex.id)
                     }
@@ -155,8 +196,8 @@ struct MonthDetailView: View {
                         Spacer()
                         Text(timelineDetailState.currentState.message)
                             .listRowSeparator(.hidden)
-                            .fontWeight(.ultraLight)
-                            .foregroundColor(.gray)
+                            .fontWeight(.medium)
+//                            .foregroundColor(.gray)
                         Spacer()
                     }
                     .listRowSeparator(.hidden)
@@ -176,7 +217,7 @@ struct MonthDetailView: View {
 ////                    print(selectedDayIndex.dateString)
 //                    
 //                })
-            }
+//            }
 //            .onChange(of: timelineDetailState.selectedDate, { oldValue, newValue in
 //
 ////                Task {
@@ -222,6 +263,8 @@ struct MonthSectionView: View {
     @State var loadingSpinnerTask: Task<(), Error>?
     @State var isVisible = false
     
+    var calenderType: CalendarType
+    
     var isDataLoaded: Bool {
         timelineIndex.dayChanges != nil
     }
@@ -231,15 +274,32 @@ struct MonthSectionView: View {
         
         VStack {
             
-            HStack {
-                Spacer()
-                Text(timelineIndex.formattedDate)
-                    .listRowSeparator(.hidden)
-                    .padding(.horizontal)
-//                    .font(.title)
-                    .font(.largeTitle)
-                    .padding(.top, 30)
+            // header view
+            switch calenderType {
+            case .day:
+                EmptyView()
+            case .week:
+                HStack {
+                    Spacer()
+//                    Text(timelineIndex.date.string(withFormat: "EEEE, d MMMM"))
+                    Text(timelineIndex.formattedDate)
+                        .listRowSeparator(.hidden)
+                        .padding(.horizontal)
+                        .font(.title)
+                        .padding(.top, 30)
+                }
+            case .month:
+                HStack {
+                    Spacer()
+                    Text(timelineIndex.formattedDate)
+                        .listRowSeparator(.hidden)
+                        .padding(.horizontal)
+                        .font(.title)
+                        .padding(.top, 30)
+                }
             }
+            
+            
             
             if isDataLoaded {
                 DayTimelineTwoView(timelineList: $timelineIndex.dayChanges.notes)
@@ -254,21 +314,24 @@ struct MonthSectionView: View {
         }
         .onAppear {
             isVisible = true
+            timelineIndex.loadTimelineContent(timelineState.timelineBusiness)
             
 //            if loadingSpinnerTask != nil {
 //                return
 //            }
             
-            loadingSpinnerTask = Task {
-                
-                try await Task.sleep(nanoseconds: 2_000_000_000)
-//                guard let loadingSpinnerTask = loadingSpinnerTask, !loadingSpinnerTask.isCancelled else {
-//                    print("afterSleep: isCancelled: true", timelineIndex.dateString)
-//                    return }
+            
+            
+//            loadingSpinnerTask = Task {
 //                
-//                print("afterSleep: isCancelled: false", timelineIndex.dateString)
-                timelineIndex.loadTimelineContent(timelineState.timelineBusiness)
-            }
+//                try await Task.sleep(nanoseconds: 2_000_000_000)
+////                guard let loadingSpinnerTask = loadingSpinnerTask, !loadingSpinnerTask.isCancelled else {
+////                    print("afterSleep: isCancelled: true", timelineIndex.dateString)
+////                    return }
+////                
+////                print("afterSleep: isCancelled: false", timelineIndex.dateString)
+//                
+//            }
 //                timelineIndex.loadTimelineContent(timelineState.timelineBusiness)
         }
 //        .onDisappear {

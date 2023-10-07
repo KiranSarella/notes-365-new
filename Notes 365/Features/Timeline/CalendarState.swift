@@ -44,6 +44,21 @@ func getWeekDates(startDate: Date) -> [Date] {
 public struct DayDate: Identifiable {
     public let id = UUID()
     let date: Date
+    
+    var formattedDate: String {
+        
+        if date.isSameDayAs(Date()) {
+            return "Today"
+        } else if date.isSameDayAs(Date().dayBefore) {
+            return "Yesterday"
+        } else {
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                return date.formatted(date: .abbreviated, time: .omitted)
+            } else {
+                return date.formatted(date: .complete, time: .omitted)
+            }
+        }
+    }
 }
 
 extension DayDate: Equatable {}
@@ -60,6 +75,10 @@ public struct WeekDate {
     init(date: Date) {
         (start, end) = date.getWeekStartEndDates()
         days = getWeekDates(startDate: start)
+    }
+    
+    var weekNumberHeading: String {
+        "Week \(start.getWeekNumber()), \(start.getYear())"
     }
 }
 
@@ -188,3 +207,30 @@ class CalendarState {
     static let todayTint = Color.accentColor
 }
 
+extension CalendarState {
+    
+    func previousStep() {
+        
+        switch calenderType {
+        case .day:
+            dayDate = DayDate(date: Calendar.current.date(byAdding: .day, value: -1, to: dayDate.date)!)
+        case .week:
+            weekDate = WeekDate(date: Calendar.current.date(byAdding: .day, value: -7, to: weekDate.start)!)
+        case .month:
+            monthDate = MonthDate(date: Calendar.current.date(byAdding: .month, value: -1, to: monthDate.start)!)
+        }
+        
+    }
+    
+    func nextStep() {
+        
+        switch calenderType {
+        case .day:
+            dayDate = DayDate(date: Calendar.current.date(byAdding: .day, value: 1, to: dayDate.date)!)
+        case .week:
+            weekDate = WeekDate(date: Calendar.current.date(byAdding: .day, value: 7, to: weekDate.start)!)
+        case .month:
+            monthDate = MonthDate(date: Calendar.current.date(byAdding: .month, value: 1, to: monthDate.start)!)
+        }
+    }
+}

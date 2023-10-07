@@ -28,17 +28,23 @@ class DayIndex {
     
     var formattedDate: String {
         
-        if date.isSameDayAs(Date()) {
-            return "Today"
-        } else if date.isSameDayAs(Date().dayBefore) {
-            return "Yesterday"
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return date.formatted(date: .abbreviated, time: .omitted)
         } else {
-            if UIDevice.current.userInterfaceIdiom == .phone {
-                return date.formatted(date: .abbreviated, time: .omitted)
-            } else {
-                return date.formatted(date: .complete, time: .omitted)
-            }
+            return date.formatted(date: .complete, time: .omitted)
         }
+        
+//        if date.isSameDayAs(Date()) {
+//            return "Today"
+//        } else if date.isSameDayAs(Date().dayBefore) {
+//            return "Yesterday"
+//        } else {
+//            if UIDevice.current.userInterfaceIdiom == .phone {
+//                return date.formatted(date: .abbreviated, time: .omitted)
+//            } else {
+//                return date.formatted(date: .complete, time: .omitted)
+//            }
+//        }
     }
     
     var isDataLoaded = false
