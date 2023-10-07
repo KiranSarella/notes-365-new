@@ -143,6 +143,26 @@ extension EditorView: EditorViewDelegate {
         }
     }
     
+    func markHighlight() {
+
+        let selectedRange = textView.selectedRange
+        // get string from the selected Range
+        let str = textView.text as NSString?   // So we cast String? to NSString?
+        if let substr = str?.substring(with: selectedRange), substr.count > 0 {
+            // append
+            let newStr = "==\(substr)=="
+            // add spaces if not exists
+            self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
+            textView.selectedRange = NSRange(location: selectedRange.location, length: selectedRange.length + 4)
+        } else {
+            // append
+            let newStr = "===="
+            // add spaces if not exists
+            self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
+            textView.selectedRange = NSRange(location: selectedRange.location + 2, length: selectedRange.length)
+        }
+    }
+    
     
     func markItalic() {
         
@@ -303,7 +323,7 @@ extension EditorView: EditorViewDelegate {
         if let substr = str?.substring(with: selectedRange) {
             // append
             
-            let cleanStr = substr.replacingOccurrences(of: "[*#~`]", with: "", options: .regularExpression, range: nil)
+            let cleanStr = substr.replacingOccurrences(of: "[*#~`=]", with: "", options: .regularExpression, range: nil)
             
             self.textView.textStorage.replaceCharacters(in: selectedRange, with: cleanStr)
         }

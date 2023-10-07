@@ -25,6 +25,7 @@ class ThemeDetailState {
     var headingColor = Color.black
     var boldColor = Color.black
     var listColor = Color.black
+    var highlightColor = Color.black
     var codeColor = Color.black
     var quoteColor = Color.black
     
@@ -41,6 +42,7 @@ class ThemeDetailState {
         headingColor = theme.headingColor.getColor()
         boldColor = theme.styleColor.getColor()
         listColor = theme.listColor.getColor()
+        highlightColor = theme.highlightColor.getColor()
         codeColor = theme.codeColor.getColor()
         quoteColor = theme.blockQuoteColor.getColor()
     }
@@ -52,6 +54,7 @@ class ThemeDetailState {
         theme.headingColor.assignColor(component: headingColor.components)
         theme.styleColor.assignColor(component: boldColor.components)
         theme.listColor.assignColor(component: listColor.components)
+        theme.highlightColor.assignColor(component: highlightColor.components)
         theme.codeColor.assignColor(component: codeColor.components)
         theme.blockQuoteColor.assignColor(component: quoteColor.components)
     }
@@ -65,6 +68,7 @@ class ThemeDetailState {
         headingColor = theme.headingColor.getColor()
         boldColor = theme.styleColor.getColor()
         listColor = theme.listColor.getColor()
+        highlightColor = theme.highlightColor.getColor()
         codeColor = theme.codeColor.getColor()
         quoteColor = theme.blockQuoteColor.getColor()
     }

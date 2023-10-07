@@ -185,7 +185,7 @@ struct ContentView: View {
                     Button {
                         showFormattingSymbols = true
                     } label: {
-                        Label("Formatting Symbols", systemImage: "textformat")
+                        Label("Symbols Guide", systemImage: "textformat")
                     }
                     
                     Button {

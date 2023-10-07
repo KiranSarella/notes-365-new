@@ -31,6 +31,7 @@ class EditorSymbolsState {
         
         symbolsList.append(prepareOrderedListSymbols())
         symbolsList.append(prepareDashedListSymbols())
+        symbolsList.append(prepareHighlightSymbols())
         
         symbolsList.append(prepareInlineCodeSymbols())
         symbolsList.append(prepareCodeBlockSymbols())
@@ -97,6 +98,15 @@ class EditorSymbolsState {
         - macOS
         - iPadOS
         - iOS
+        """
+        return ReadonlyEditorCache(heading: heading, content: content)
+    }
+    
+    func prepareHighlightSymbols() -> ReadonlyEditorCache {
+        
+        let heading = "Highlight"
+        let content = """
+        This is ==highlight==
         """
         return ReadonlyEditorCache(heading: heading, content: content)
     }

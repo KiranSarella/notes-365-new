@@ -21,6 +21,7 @@ struct MarkdownTheme: Identifiable, Hashable, Codable {
     var headingColor: NamedColor = NamedColor(hex: 0xffffff)
     // bold, italic, strikethrough
     var styleColor: NamedColor = NamedColor(hex: 0xffffff)
+    var highlightColor: NamedColor = NamedColor(hex: 0xFFFF00)
     // inline code, code block
     var codeColor: NamedColor = NamedColor(hex: 0xffffff)
     var blockQuoteColor: NamedColor = NamedColor(hex: 0xffffff)

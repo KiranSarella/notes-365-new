@@ -86,6 +86,7 @@ struct ThemeDetailView_iOS: View {
                 ColorPicker("Heading", selection: $state.headingColor, supportsOpacity: false)
                 ColorPicker("Bold, Italic, Strikthrough", selection: $state.boldColor, supportsOpacity: false)
                 ColorPicker("List", selection: $state.listColor, supportsOpacity: false)
+                ColorPicker("Highlight", selection: $state.highlightColor, supportsOpacity: false)
                 ColorPicker("Source Code", selection: $state.codeColor, supportsOpacity: false)
                 ColorPicker("Block Quote", selection: $state.quoteColor, supportsOpacity: false)
             }

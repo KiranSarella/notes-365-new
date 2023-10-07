@@ -12,7 +12,7 @@ struct SettingsView_iPadOS: View {
     
     public enum Setting: String, CaseIterable, Identifiable {
         case themes = "Themes"
-        case editorSymbols = "Text Formatting Symbols"
+        case editorSymbols = "Symbols Help"
         case feedback = "Feedback"
         
         public var id: String { self.name }

@@ -107,6 +107,7 @@ class MarkdownAttriburedString {
         
         processItalic(extendedRange: fullRange, textStorage: attrStr)
         processBold(extendedRange: fullRange, textStorage: attrStr)
+        processHighlight(extendedRange: fullRange, textStorage: attrStr)
         processBoldAndItalic(extendedRange: fullRange, textStorage: attrStr)
         processStrikethrough(extendedRange: fullRange, textStorage: attrStr)
         
@@ -199,6 +200,54 @@ class MarkdownAttriburedString {
         }
     }
     
+    func processHighlight(extendedRange: NSRange, textStorage innerAttributedString: NSMutableAttributedString) {
+        
+        let pattern = MarkdownPattern.highlight.rawValue
+        
+        let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
+        
+        regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
+            match, flags, stop in
+            
+            let regExCharLenght = 2
+            //            let frontPadding = 0
+            let backPadding = 0
+            let styleRange = NSRange(location: match!.range.location + regExCharLenght, length: match!.range.length - (2 * regExCharLenght) - backPadding)
+            
+            innerAttributedString.enumerateAttribute(.font, in: styleRange, options: []) { value, range, stop in
+                
+                let highlightColor = theme.highlightColor.uiColor.withAlphaComponent(0.45)
+                
+                // update text color
+                innerAttributedString.addAttribute(.backgroundColor,
+                                                   value: highlightColor, range: styleRange)
+                
+                // get markdown symbol start,end ranges
+                let startRange = NSRange(location: match!.range.location, length: regExCharLenght)
+                let endRange = NSRange(location: match!.range.location + match!.range.length - regExCharLenght - backPadding , length: regExCharLenght)
+                // mark char as markdown start symbol, used to show/hide in layout delegate
+                innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
+                                                   value: 0,
+                                                   range: startRange)
+                
+                // mark char as markdown end symbol, used to show/hide in layout delegate
+                innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
+                                                   value: 0,
+                                                   range: endRange)
+                
+                let info: [String: Any] = [
+                    "range": styleRange,
+                    "type": "highlight"
+                ]
+                // info
+                innerAttributedString.addAttribute(NSAttributedString.Key.markdownInfo,
+                                                   value: info,
+                                                   range: styleRange)
+                
+                innerAttributedString.addAttribute(.markdownRange, value: MarkdownPattern.highlight, range: match!.range)
+            }
+        }
+    }
     
     func processItalic(extendedRange: NSRange, textStorage innerAttributedString: NSMutableAttributedString) {
         

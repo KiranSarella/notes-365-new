@@ -151,6 +151,15 @@ struct FormattingOptionsView: View {
                             Image(systemName: "text.quote")
                                 .help("Quote Block")
                         }
+                        // highlight
+                        Button {
+                            // make selected range as highlight
+                            editorView.markHighlight()
+                            contentEditedDate = Date()
+                        } label: {
+                            Image(systemName: "highlighter")
+                                .help("Highlight")
+                        }
                     }
                     .frame(width: 40, height: 44)
 //                    .padding([.leading, .trailing], 10)
