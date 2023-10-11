@@ -8,7 +8,7 @@
 import SwiftUI
 import Foundation
 
-struct DayDetailView: View {
+struct DayChangesView: View {
     
     var date: Date
     @Binding var timelines: [Timeline]
@@ -20,8 +20,7 @@ struct DayDetailView: View {
     var body: some View {
         
         VStack(spacing: 0) {
-//            List {
-                // date heading
+                // day heading
                 VStack {
                     HStack {
                         Spacer()
@@ -33,44 +32,23 @@ struct DayDetailView: View {
                     .padding(.vertical)
                 }
                 .listRowSeparator(.hidden)
-                // day number
-                //                HStack(alignment: .center) {
-                //                    Spacer()
-                //                    VStack {
-                ////                        Spacer()
-                //                        HStack {
-                //                            Text(dayState.dayNumberText)
-                //                                .listRowSeparator(.hidden)
-                //                                .font(.title3)
-                //                                .fontWeight(.bold)
-                //
-                ////                            Toggle("", isOn: $dayState.showDayNumberFromDOB)
-                //                        }
-                ////                        Spacer()
-                //                    }
-                //
-                //                    Spacer()
-                //                }
-                //                .listRowSeparator(.hidden)
-                // list
+               
+                // each note change content list
                 ForEach($timelines) { $noteChange in
                     VStack {
                         // notebook heading view
                         NoteChangeHeadingView(noteChange: noteChange, showDelete: dayState.canDelete, deleteTimeline: $deleteTimeline)
                             .listRowSeparator(.hidden)
                             .padding(.bottom, 10)
-                        
+                        // content
                         HStack {
                             ReadOnlyMarkDownViewTwo(timeline: $noteChange)
-                            //                                ReadOnlyMarkDownView(content: noteChange.content)
                                 .listRowSeparator(.hidden)
-                            //                                    .padding()
                                 .textSelection(.enabled)
                                 .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
                             Spacer()
                         }
                         .listRowSeparator(.hidden)
-                        
                     }
                     .listRowSeparator(.hidden)
                 }

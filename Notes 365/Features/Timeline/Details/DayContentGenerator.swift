@@ -40,6 +40,8 @@ struct DayContentGenerator: AsyncSequence, AsyncIteratorProtocol {
             return nil
         }
         
+        try? await Task.sleep(nanoseconds: 3_000_000_000)
+        
         guard let timelineContent = await timelineBusiness.fetchTimelineContentAsync(for: uuid) else { return nil }
         
         if Task.isCancelled {
