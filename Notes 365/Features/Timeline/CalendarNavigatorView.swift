@@ -16,8 +16,10 @@ struct CalendarNavigatorView: View {
     
     var body: some View {
         HStack {
+            // current date title
             Text(label)
-                .font(.system(size: 14, weight: Font.Weight.semibold, design: Font.Design.rounded))
+                .fontWeight(.semibold)
+                .fontDesign(.rounded)
             Spacer()
             // previous
             Button {

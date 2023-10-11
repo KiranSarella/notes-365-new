@@ -81,7 +81,7 @@ struct MonthGridView: View {
             .buttonStyle(PlainButtonStyle())
             Spacer()
         }
-        .frame(height: 220)
+//        .frame(height: 220)
         .navigationDestination(for: MonthDate.self) { newDate in
 //            MonthDetailView()
 //                .onAppear {

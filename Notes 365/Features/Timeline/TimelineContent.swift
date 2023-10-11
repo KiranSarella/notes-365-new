@@ -31,9 +31,9 @@ class TimelineIndex {
 //    var timelineContents: [TimelineContent]?
     
 //    @Transient
-//    var date: Date {
-//        dateString.toLocalDate(withFormat: "yyyy-MM-dd")!
-//    }
+    var date: Date {
+        dateString.toLocalDate(withFormat: "yyyy-MM-dd")!
+    }
 //    
 //    @Transient
 //    var isDataLoaded = false

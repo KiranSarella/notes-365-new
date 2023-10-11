@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+
 //import AttributedText
 
 public struct WeekGrid: Hashable {
@@ -134,7 +135,7 @@ struct WeekGridView: View {
             Spacer()
         }
         .buttonStyle(.plain)
-        .frame(height: 220)
+//        .frame(height: 220)
     }
 }
 

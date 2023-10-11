@@ -16,7 +16,7 @@ struct DayCalendarView2: View {
         VStack {
             // current month, prev, next actions
             HeaderView()
-                .padding(.bottom)
+                .padding(.bottom, 4)
                 .environment(dayState)
 
             // grid view 7 x 7
@@ -76,61 +76,25 @@ fileprivate struct DayGridView: View {
                 }
                 // grid numbers
                 ForEach(dayState.dayitems) { dayItem in
-                    
                     Button {
                         if !dayItem.canShow {
                             return
                         }
                         dayState.selectedDate = dayItem.date
                     } label: {
-//                        DayGridItem(dayItem: dayItem, isSelected: dayState.isSelected(dayItem))
-                        if UIDevice.current.userInterfaceIdiom == .phone {
-//                            NavigationLink(value: dayState.selectedDayItem) {
-//                                DayGridItem(dayItem: dayItem, isSelected: dayState.isSelected(dayItem))
-//                            }
-                            
-                            DayGridItem(dayItem: dayItem, isSelected: dayState.isSelected(dayItem))
-                            
-//                            NavigationLink(value: dayItem) {
-//                                DayGridItem(dayItem: dayItem, isSelected: dayState.isSelected(dayItem))
-//                            }
-                        } else {
-                            DayGridItem(dayItem: dayItem, isSelected: dayState.isSelected(dayItem))
-                        }
+                        DayGridItem(dayItem: dayItem, isSelected: dayState.isSelected(dayItem))
                     }
                 }.buttonStyle(PlainButtonStyle())
                 Spacer()
             }
             Spacer()
         }
-        .frame(height: 260)
+//        .frame(height: 250)
         .onChange(of: dayState.selectedDate, perform: { newValue in
             // update for detail view
             dayDate = DayDate(date: newValue)
 //            CalendarState.shared.dayDate = dayDate
         })
-        .navigationDestination(for: DayDateItem.self) { newDate in
-//            DayDetailView(dayItem: newDate)
-
-//            DestinationView(input: newDate, emp: $dayState.selectedDayItem) {
-//                DayDetailView2(dayItem: newDate)
-//            }
-            
-//            DayDetailView2(dayItem: newDate)
-//                .onAppear {
-//                    displayCounter += 1
-//                }
-//                .environmentObject(dayState)
-//                .onDisappear {
-//                    dayState.selectedDate = newDate.date
-//                }
-////                .onAppear {
-//
-//
-////                    dayDate = DayDate(date: newDate.date)
-////                    CalendarState.shared.dayDate = dayDate
-//                }
-        }
     }
     
 }

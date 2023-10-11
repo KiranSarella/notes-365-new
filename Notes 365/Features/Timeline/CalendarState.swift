@@ -52,11 +52,13 @@ public struct DayDate: Identifiable {
         } else if date.isSameDayAs(Date().dayBefore) {
             return "Yesterday"
         } else {
-            if UIDevice.current.userInterfaceIdiom == .phone {
-                return date.formatted(date: .abbreviated, time: .omitted)
-            } else {
-                return date.formatted(date: .complete, time: .omitted)
-            }
+            return "Day \(date.getDayNumber()), \(date.getYear())"
+            
+//            if UIDevice.current.userInterfaceIdiom == .phone {
+//                return date.formatted(date: .abbreviated, time: .omitted)
+//            } else {
+//                return date.formatted(date: .complete, time: .omitted)
+//            }
         }
     }
 }

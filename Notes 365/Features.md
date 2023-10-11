@@ -1,17 +1,11 @@
 
 # Todo
-[ ] calendar view - font adjustments
-[ ] calendar selections are working properly
-
-# Xcode 15 
-[ ] fix all $published combine logic to - onChange or other way
-[ ] update onChange to new syntax
-
+[ ] crash due to loading issue - use loadmore, async and cancel (like old code).
+[ ] discard option in timeline
+[ ] path in heading
 
 ## Timeline pending tasks
-[ ] crash due to loading issue - use loadmore, async and cancel (like old code).
-[ ] increase readonlyView - height - no bottom padding
-[ ] discard option in timeline
+[ ] delete all unused code - folders, sync related
 
 ## Notebooks pending tasks
 [ ] Inside notebooks - not updating on list issue
@@ -20,6 +14,9 @@
 [ ] recently modified
 [ ] deleted list
 
+
+# Xcode 15 
+[ ] update onChange to new syntax
 
 
 

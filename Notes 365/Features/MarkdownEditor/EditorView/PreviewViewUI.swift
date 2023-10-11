@@ -75,7 +75,7 @@ struct ReadOnlyMarkDownViewTwo: View {
             Task {
                 DispatchQueue.main.async {
                     timeline.editorView.textView.sizeToFit()
-                    timeline.height = timeline.editorView.textView.intrinsicContentSize.height
+                    timeline.height = timeline.editorView.textView.intrinsicContentSize.height + 80
                     // refresh purpose
                     timeline.themeID = timeline.editorView.theme.id
                     timeline.width = timeline.editorView.textView.intrinsicContentSize.width
@@ -118,7 +118,7 @@ struct ReadOnlyMarkDownViewThree: View {
                 timeline.editorView.textView.backgroundColor = UIColor.clear
                 
                 timeline.editorView.textView.sizeToFit()
-                timeline.height = timeline.editorView.textView.intrinsicContentSize.height
+                timeline.height = timeline.editorView.textView.intrinsicContentSize.height + 20
                 // refresh purpose
                 timeline.themeID = timeline.editorView.theme.id
                 timeline.width = timeline.editorView.textView.intrinsicContentSize.width

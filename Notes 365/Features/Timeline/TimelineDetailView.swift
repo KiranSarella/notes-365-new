@@ -12,12 +12,125 @@ struct TimelineDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @Binding var timelineDetailState: TimelineDetailState
     @State private var isShowingCalendar = false
-    @State private var calendarState = CalendarState()
+//    @State private var calendarState = CalendarState()
     
+    @State private var loadedFirstTime = false
+    @State var isFirstTimeAppear = true
+    
+    var calendarState: CalendarState {
+        timelineDetailState.calendarState
+    }
     
     var body: some View {
         VStack {
-            MonthDetailView(timelineDetailState: timelineDetailState, calendarState: calendarState)
+            List {
+                // header
+                VStack {
+                    // day/week/month header view
+                    switch calendarState.calenderType {
+                    case .day:
+                        // header view
+                        HStack {
+                            Spacer()
+                            Text(calendarState.dayDate.formattedDate)
+                                .listRowSeparator(.hidden)
+                                .padding(.horizontal)
+                                .font(.largeTitle)
+                                .fontDesign(.rounded)
+                                .fontWeight(.heavy)
+                            Spacer()
+                        }
+                        .listRowSeparator(.hidden)
+                        if timelineDetailState.currentState != .data {
+                            Text(calendarState.dayDate.date.string(withFormat: "EEEE, d MMMM"))
+                                .font(.callout)
+                                .padding(0)
+                                .listRowSeparator(.hidden)
+                        }
+                    case .week:
+                        // header view
+                        HStack {
+                            Spacer()
+                            Text(calendarState.weekDate.weekNumberHeading)
+                                .listRowSeparator(.hidden)
+                                .padding(.horizontal)
+                                .font(.largeTitle)
+                                .fontDesign(.rounded)
+                                .fontWeight(.heavy)
+                            Spacer()
+                        }
+                    case .month:
+                        HStack {
+                            Spacer()
+                            Text(calendarState.monthDate.start.string(format: "MMMM, YYYY"))
+                                .listRowSeparator(.hidden)
+                                .padding(.horizontal)
+                                .font(.largeTitle)
+                                .fontDesign(.rounded)
+                                .fontWeight(.heavy)
+                            Spacer()
+                        }
+                    }
+                }
+                .listRowSeparator(.hidden)
+                
+                // loading status message
+                if timelineDetailState.currentState != .data {
+                    HStack {
+                        Spacer()
+                        Text(timelineDetailState.currentState.message)
+                            .listRowSeparator(.hidden)
+                            .fontWeight(.medium)
+                                .foregroundColor(.gray)
+                        Spacer()
+                    }
+                    .frame(height: 100)
+                    .listRowSeparator(.hidden)
+                }
+               
+                // contents
+                ForEach($timelineDetailState.days) { $day in
+                    DayDetailView(date: day.date, timelines: $day.timelines, dayState: $timelineDetailState)
+                        .listRowSeparator(.hidden)
+                }
+                
+                // load more
+                if timelineDetailState.canLoadMore {
+                    VStack {
+                        VStack {
+                            Text("Load more")
+                        }
+                        .background(Color.green)
+                        .frame(height: 50)
+                        .onAppear {
+                            print("load more appear")
+                            timelineDetailState.tryLoadMore()
+                        }
+                    }
+                    .listRowSeparator(.hidden)
+                }
+            }
+            .listStyle(PlainListStyle())
+            
+//            let calendarType = calendarState.calenderType
+//            switch calendarType {
+//            case .day:
+//                
+//                ForEach($timelineDetailState.days) { $day in
+////                    DayDetailView(dayState: $timelineDetailState)
+//                    DayDetailView(date: day.date, timelines: $day.timelines, dayState: $timelineDetailState)
+//                }
+//                
+////                DayDetailView(dayState: $timelineDetailState)
+//            case .week:
+//                WeekDetailView(weekState: $timelineDetailState)
+//            case .month:
+////                MonthDetailView()
+//                Text("month")
+//            }
+            
+            
+//            MonthDetailView(timelineDetailState: timelineDetailState, calendarState: calendarState)
         }
         .onAppear {
 //            if timelineDetailState.isFirstAppear {
@@ -27,8 +140,47 @@ struct TimelineDetailView: View {
                 timelineDetailState.timelineBusiness.modelContext = modelContext
                 timelineDetailState.timelineBusiness.updateTodayTimelineIndex()
                 // load timelineindex
+            
+            if loadedFirstTime == false {
+                loadedFirstTime = true
+                
+                switch calendarState.calenderType {
+                case .day:
+                    Task {
+                        timelineDetailState.generatorTask?.cancel()
+                        timelineDetailState.clearDisplay()
+                        DispatchQueue.main.async {
+                            timelineDetailState.currentState = .loading
+                            timelineDetailState.days.removeAll()
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            // your code here
+                            timelineDetailState.readDayData(dayDate: calendarState.dayDate)
+                        }
+                    }
+                case .week:
+                    Task {
+                        timelineDetailState.generatorTask?.cancel()
+                        timelineDetailState.clearDisplay()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            // your code here
+                            timelineDetailState.readWeekData(weekDate: calendarState.weekDate)
+                        }
+                    }
+                case .month:
+                    Task {
+                        timelineDetailState.generatorTask?.cancel()
+                        timelineDetailState.clearDisplay()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            // your code here
+                            timelineDetailState.readMonthData(monthDate: calendarState.monthDate)
+                        }
+                    }
+                }
+            }
+            
             // day
-            timelineDetailState.fetchDayTimelineIndexList(calendarState.dayDate.date)
+//            timelineDetailState.fetchDayTimelineIndexList(calendarState.dayDate.date)
 //                timelineDetailState.fetchAllTimelineIndexList()
 //            }
             
@@ -41,22 +193,55 @@ struct TimelineDetailView: View {
         .onDisappear(perform: {
             timelineDetailState.clearDisplay()
         })
-//        .onChange(of: calendarState.calenderType, { oldValue, newValue in
-//            print("calenderType: ", newValue)
-//            
-////            calendarState.monthDate
-//        })
+        .onChange(of: calendarState.calenderType, { oldValue, newValue in
+            print("calenderType: ", newValue)
+            timelineDetailState.displayngCalendarType = newValue
+//            calendarState.monthDate
+        })
         .onChange(of: calendarState.dayDate, { oldValue, newValue in
             // day
-            timelineDetailState.fetchDayTimelineIndexList(newValue.date)
+            
+//            timelineDetailState.readDayData(dayDate: newValue)
+//            timelineDetailState.loadContent(.day, newValue.date)
+            
+            Task {
+                timelineDetailState.generatorTask?.cancel()
+                timelineDetailState.clearDisplay()
+                DispatchQueue.main.async {
+                    timelineDetailState.currentState = .loading
+                    timelineDetailState.days.removeAll()
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    // your code here
+                    timelineDetailState.readDayData(dayDate: newValue)
+                }
+            }
         })
         .onChange(of: calendarState.weekDate, { oldValue, newValue in
             // week
-            timelineDetailState.fetchWeekTimelineIndexList(newValue.start)
+//            timelineDetailState.readWeekData(weekDate: newValue)
+//            timelineDetailState.loadContent(.week, newValue.start)
+            
+            Task {
+                timelineDetailState.generatorTask?.cancel()
+                timelineDetailState.clearDisplay()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    // your code here
+                    timelineDetailState.readWeekData(weekDate: newValue)
+                }
+            }
         })
         .onChange(of: calendarState.monthDate, { oldValue, newValue in
             // month
-            timelineDetailState.fetchMonthTimelineIndexList(newValue.start)
+//            timelineDetailState.loadContent(.month, newValue.start)
+            Task {
+                timelineDetailState.generatorTask?.cancel()
+                timelineDetailState.clearDisplay()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    // your code here
+                    timelineDetailState.readMonthData(monthDate: newValue)
+                }
+            }
         })
         .toolbar {
             // menu options
@@ -164,7 +349,7 @@ struct MonthDetailView: View {
                     .listRowSeparator(.hidden)
                     
                     
-                    ForEach($timelineDetailState.timelineIndexList, id: \.id) { $timelineIndex in
+                    ForEach($timelineDetailState.days, id: \.id) { $timelineIndex in
                         // for each day
                         MonthSectionView(timelineState: timelineDetailState, timelineIndex: $timelineIndex, calenderType: calendarState.calenderType)
                             .listRowSeparator(.hidden)
@@ -266,7 +451,7 @@ struct MonthSectionView: View {
     var calenderType: CalendarType
     
     var isDataLoaded: Bool {
-        timelineIndex.dayChanges != nil
+        timelineIndex.dayChanges != nil && timelineIndex.dayChanges.notes.count > 0
     }
     
     
@@ -302,7 +487,13 @@ struct MonthSectionView: View {
             
             
             if isDataLoaded {
-                DayTimelineTwoView(timelineList: $timelineIndex.dayChanges.notes)
+                
+                ForEach(timelineIndex.dayChanges.notes) { note in
+                    Text(note.content ?? "")
+                }
+                
+                
+//                DayTimelineTwoView(timelineList: $timelineIndex.dayChanges.notes)
             } else {
                 HStack {
                     Spacer()
@@ -314,7 +505,7 @@ struct MonthSectionView: View {
         }
         .onAppear {
             isVisible = true
-            timelineIndex.loadTimelineContent(timelineState.timelineBusiness)
+//            timelineIndex.loadTimelineContent(timelineState.timelineBusiness)
             
 //            if loadingSpinnerTask != nil {
 //                return
@@ -399,7 +590,6 @@ fileprivate struct DayTimelineTwoView: View {
                 NoteChangeHeadingView(noteChange: noteChange, deleteTimeline: Binding.constant(nil))
 //                    .id(noteChange.id)
                 HStack {
-                    
                     ReadOnlyMarkDownViewTwo(timeline: $noteChange)
                         .listRowSeparator(.hidden)
                         .textSelection(.enabled)

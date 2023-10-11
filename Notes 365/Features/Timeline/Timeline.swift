@@ -14,13 +14,13 @@ import UIKit
  each timeline index refers to one day.
  */
 @Observable
-class DayIndex {
+class DayIndex: Identifiable {
+    
     var id: UUID = UUID()
     var dateString: String = ""//Date().string(withFormat: "yyyy-MM-dd")
     var changes = [UUID]()
     
-//    @Transient
-//    var timelineContents: [TimelineContent]?
+    var timelines = [Timeline]()
     
     var date: Date {
         dateString.toLocalDate(withFormat: "yyyy-MM-dd")!
@@ -48,7 +48,7 @@ class DayIndex {
     }
     
     var isDataLoaded = false
-    var dayChanges: DayChanges!
+    var dayChanges: DayChanges = DayChanges(timelineIndex: TimelineIndex())
     
     init(timelineIndex: TimelineIndex) {
         self.id = timelineIndex.id
@@ -57,40 +57,44 @@ class DayIndex {
         print(#function, dateString)
     }
     
-    func loadTimelineContent(_ business: TimelineBusiness) {
-        
-        print(#function, dateString)
-        
-        // fetch all timeline contents in a single day
-        var timelineContents = [TimelineContent]()
-        
-        for id in changes {
-            if let timelineContent = business.fetchTimelineContent(for: id) {
-                timelineContents.append(timelineContent)
-            }
-        }
-        // prepare to display
-        prepareDayChanges(timelineContents: timelineContents)
-    }
     
-    func prepareDayChanges(timelineContents: [TimelineContent]) {
-        
-//        guard let timelineContents = timelineContents else { return }
-        
-        DispatchQueue.main.async {
-            var timelines = [Timeline]()
-            for timelineContent in timelineContents {
-                timelines.append(timelineContent.getTimeline())
-            }
-        
-            self.dayChanges = DayChanges(notes: timelines, date: self.date, metadata: "")
-            // Delay the task by 1 second:
-//            try await Task.sleep(nanoseconds: 2_000_000_000)
-            self.isDataLoaded = true
-//            print(self.dayChanges)
-        }
-         
-    }
+//    func createDayContent(timelines: [Timeline], for date: Date) async -> DayChanges? {
+//        
+//        return await withUnsafeContinuation { continuation in
+//            
+//            DispatchQueue.main.async {
+//                if Task.isCancelled {
+//                    continuation.resume(returning: nil)
+//                }
+//                
+//                let dayChange = DayChanges(notes: timelines, date: date, metadata: "")
+//                
+//                continuation.resume(returning: dayChange)
+//            }
+//            
+//        }
+//        
+//        // TODO: keeping delay  to fix error
+////        try? await Task.sleep(nanoseconds: 4_000_000_000)   // ** required in production also
+////        if Task.isCancelled {
+////            return nil
+////        }
+////        return dayChange
+//    }
+    
+//    func prepareDayChanges(timelineContents: [TimelineContent]) {
+//        
+//        DispatchQueue.main.async {
+//            let timelines = timelineContents.map { $0.getTimeline() }
+//            
+//            self.dayChanges = DayChanges(notes: timelines, date: self.date, metadata: "")
+//            // Delay the task by 1 second:
+////            try await Task.sleep(nanoseconds: 2_000_000_000)
+//            self.isDataLoaded = true
+////            print(self.dayChanges)
+//        }
+//         
+//    }
 }
 
 public struct Timeline: Identifiable {

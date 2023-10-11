@@ -11,8 +11,6 @@ import SwiftData
 
 class TimelineBusiness {
     
-    var basePathURL: URL
-    
     let timelineFolderPath = Constants.timelineFolderName
     
     var modelContext: ModelContext?
@@ -23,9 +21,8 @@ class TimelineBusiness {
     var today = Date()
 //    var today = Calendar.current.date(byAdding: .day, value: -5, to: Date())!
     
-    init(path basePathURL: URL) {
-        self.basePathURL = basePathURL
-//        updateTodayTimelineIndex()
+    init() {
+        
     }
     
     func setAsBeforeDay() {
@@ -48,47 +45,6 @@ class TimelineBusiness {
          
     }
     
-    func readDayMetaData(date: Date) async -> String? {
-        
-        let timelinePath = "\(timelineFolderPath)/\(date.getYear())/\(date.getMonth())/\(date.getDay())"
-        let metadataFilePath = timelinePath + "/" + "metadata"
-        
-        let fileURL = basePathURL.appendingPathComponent(metadataFilePath, isDirectory: false)
-        
-        if FileManager.default.fileExists(atPath: fileURL.path) == false {
-            return nil
-        }
-
-        do {
-            // Read the file contents
-            return try String(contentsOf: fileURL)
-        } catch let error as NSError {
-            print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
-            return nil
-        }
-    }
-    
-    func readContent(today: Date, fileName: String) async -> String? {
-        let folderPath = "\(timelineFolderPath)/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
-        
-        let fileURL = basePathURL
-            .appendingPathComponent(folderPath)
-            .appendingPathComponent(fileName)
-            .appendingPathExtension("md")
-        //        print(fileURL.path(percentEncoded: false))
-        do {
-            let fileHandle = try FileHandle(forReadingFrom: fileURL)
-            guard
-                let data = try fileHandle.readToEnd(),
-                let readString = String(data: data, encoding: .utf8) else { return nil }
-            
-            fileHandle.closeFile()
-            return readString
-        } catch let error as NSError {
-            print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
-            return nil
-        }
-    }
     
     func fetchTimeline(for year: Int) -> [TimelineContent]? {
         guard let modelContext = modelContext else { return nil }
@@ -153,13 +109,55 @@ class TimelineBusiness {
         
         var descriptor = FetchDescriptor(predicate: predicate)
         descriptor.fetchLimit = 1
-
+        
         do {
             return try modelContext.fetch(descriptor).first
         } catch let err {
             print(err)
             return nil
         }
+    }
+    
+    // MARK: - async
+    func fetchTimelineContentAsync(for id: UUID) async -> TimelineContent? {
+        
+        await withCheckedContinuation { continuation in
+            
+            guard
+                let modelContext = modelContext
+            else {
+                continuation.resume(returning: nil)
+                return
+            }
+            
+            let predicate = #Predicate<TimelineContent> {
+                $0.id == id
+            }
+            
+            var descriptor = FetchDescriptor(predicate: predicate)
+            descriptor.fetchLimit = 1
+            
+            do {
+                continuation.resume(returning: try modelContext.fetch(descriptor).first)
+            } catch let err {
+                print(err)
+                continuation.resume(returning: nil)
+            }
+        }
+    }
+    
+    func loadDayTimelineContentAsync(_ uuids: [UUID]) async -> [TimelineContent] {
+        
+        // fetch all timeline contents in a single day
+        var timelineContents = [TimelineContent]()
+        
+        for id in uuids {
+            if let timelineContent = await fetchTimelineContentAsync(for: id) {
+                timelineContents.append(timelineContent)
+            }
+        }
+        
+        return timelineContents
     }
     
     
@@ -208,6 +206,8 @@ class TimelineBusiness {
     func fetchDayTimelineIndex(year: Int, month: Int, day: Int) -> TimelineIndex? {
         guard let modelContext = modelContext else { return nil }
         
+        print(#function, year, month, day)
+        
         let predicate = #Predicate<TimelineIndex> {
             $0.year == year && $0.month == month && $0.day == day
         }
@@ -245,7 +245,27 @@ class TimelineBusiness {
         }
     }
     
-    
+    /// day - year, month. day numbers
+    func fetchWeekTimelineIndex(year: Int, month: Int, dayStart: Int, dayEnd: Int) -> [TimelineIndex]? {
+        guard let modelContext = modelContext else { return nil }
+        
+        print(#function, year, month, dayStart, dayEnd)
+        
+        let predicate = #Predicate<TimelineIndex> {
+            $0.year == year && $0.month == month && ($0.day >= dayStart && $0.day <= dayEnd)
+        }
+        
+        var descriptor = FetchDescriptor(predicate: predicate)
+        descriptor.fetchLimit = 1
+        descriptor.includePendingChanges = true
+        
+        do {
+            return try modelContext.fetch(descriptor)
+        } catch let err {
+            print(err)
+            return nil
+        }
+    }
     
 //    func fetchDayTimeline(for id: UUID) -> [TimelineContent]? {
 //        guard let modelContext = modelContext else { return nil }
@@ -265,37 +285,32 @@ class TimelineBusiness {
 //        }
 //    }
     
-    func timelineExists(day: Date) -> Bool {
-        let dayFolderPath = "\(timelineFolderPath)/\(day.getYear())/\(day.getMonth())/\(day.getDay())"
-        let directoryURL = basePathURL.appendingPathComponent(dayFolderPath)
-        return FileManager.default.fileExists(atPath: directoryURL.path)
-    }
     
     // MARK: - Remove Timeline
-    func removeTimelineChanges(_ timeline: Timeline) {
-        // remove timeline file
-        removeContent(today: today, fileName: timeline.fileUUID.uuidString)
-        // remove row from metadata file
-        removeFromMetadata(uuid: timeline.fileUUID.uuidString)
-        // remove base version
-        TodayVersionBusiness.removeBaseVersion(for: timeline.fileUUID, modelContext: modelContext!)
-    }
+//    func removeTimelineChanges(_ timeline: Timeline) {
+//        // remove timeline file
+//        removeContent(today: today, fileName: timeline.fileUUID.uuidString)
+//        // remove row from metadata file
+//        removeFromMetadata(uuid: timeline.fileUUID.uuidString)
+//        // remove base version
+//        TodayVersionBusiness.removeBaseVersion(for: timeline.fileUUID, modelContext: modelContext!)
+//    }
     
-    func removeContent(today: Date, fileName: String) {
-        let folderPath = "\(timelineFolderPath)/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
-        
-        let fileURL = basePathURL
-            .appendingPathComponent(folderPath)
-            .appendingPathComponent(fileName)
-            .appendingPathExtension("md")
-        //        print(fileURL.path(percentEncoded: false))
-        
-        do {
-            try FileManager.default.removeItem(at: fileURL)
-        } catch let error as NSError {
-            print("Failed deleting from URL: \(fileURL), Error: " + error.localizedDescription)
-        }
-    }
+//    func removeContent(today: Date, fileName: String) {
+//        let folderPath = "\(timelineFolderPath)/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
+//        
+//        let fileURL = basePathURL
+//            .appendingPathComponent(folderPath)
+//            .appendingPathComponent(fileName)
+//            .appendingPathExtension("md")
+//        //        print(fileURL.path(percentEncoded: false))
+//        
+//        do {
+//            try FileManager.default.removeItem(at: fileURL)
+//        } catch let error as NSError {
+//            print("Failed deleting from URL: \(fileURL), Error: " + error.localizedDescription)
+//        }
+//    }
     
     func removeFromMetadata(uuid: String, today: Date = Date()) {
         

@@ -102,13 +102,11 @@ enum SpeechState {
     }
 }
 
-
 public struct DayChanges: Identifiable {
     public let id = UUID()
     
+    var timelineIndex: TimelineIndex
     var notes = [Timeline]()
-    let date: Date
-    let metadata: String
 }
 
 
@@ -118,7 +116,7 @@ class TimelineDetailState {
     var selectedDate = Date()
     
     // load more
-    var canLoadMore = true
+    var canLoadMore = false
     var loadingDate = Date()
     
     var currentState = CurrentState.loading
@@ -127,11 +125,21 @@ class TimelineDetailState {
     
     var cancellable: Cancellable? = nil
     
-    var timelineIndexList = [DayIndex]()
-    
-    var timelineBusiness = TimelineBusiness(path: URL(string: "test")!)
-    
+    var days = [DayIndex]()
+    var timelineBusiness = TimelineBusiness()
     var isFirstAppear = true
+    var generatorTask: Task<(), Never>? = nil
+    
+    var canDelete: Bool {
+        false
+//        dayDate.date.isSameDayAs(Date())
+    }
+    
+    var cancellableSet = Set<AnyCancellable>()
+    
+    var displayngCalendarType: CalendarType = .day
+    
+    var calendarState = CalendarState()
     
     init() {
         // observe changes
@@ -213,9 +221,7 @@ class TimelineDetailState {
 //    }
     
     func clearDisplay() {
-        DispatchQueue.main.async {
-            self.timelineIndexList.removeAll()
-        }
+        self.days.removeAll()
     }
     
 //    func fetchAllTimelineIndexList() {
@@ -234,14 +240,33 @@ class TimelineDetailState {
 //    }
     
     
+    func loadContent(_ calendarType: CalendarType, _ date: Date) {
+        
+        clearDisplay()
+        
+        switch calendarType {
+        case .day:
+            // day
+            fetchDayTimelineIndexList(date)
+        case .week:
+            // week
+            fetchWeekTimelineIndexList(date)
+        case .month:
+            // month
+            fetchMonthTimelineIndexList(date)
+        }
+        
+    }
+    
+    
     func fetchDayTimelineIndexList(_ date: Date) {
         print(#function, date)
         DispatchQueue.main.async {
             self.currentState = .loading
-            self.timelineIndexList.removeAll()
+            self.days.removeAll()
             
             if let result = self.timelineBusiness.fetchDayTimelineIndex(year: date.getYear(), month: date.getMonth(), day: date.getDay()) {
-                self.timelineIndexList = [DayIndex(timelineIndex: result)]
+                self.days = [DayIndex(timelineIndex: result)]
                 self.currentState = .data
             } else {
                 self.currentState = .empty
@@ -254,16 +279,18 @@ class TimelineDetailState {
         print(#function, startDate)
         DispatchQueue.main.async {
             self.currentState = .loading
-            self.timelineIndexList.removeAll()
-            
+            self.days.removeAll()
+
+            // why loop instead of between query
+            // because a week might contain two months
             for i in 0..<7 {
                 let date = Calendar.current.date(byAdding: .day, value: i, to: startDate)!
                 if let result = self.timelineBusiness.fetchDayTimelineIndex(year: date.getYear(), month: date.getMonth(), day: date.getDay()) {
-                    self.timelineIndexList.append(DayIndex(timelineIndex: result))
+                    self.days.append(DayIndex(timelineIndex: result))
                 }
             }
             
-            if self.timelineIndexList.count > 0 {
+            if self.days.count > 0 {
                 self.currentState = .data
             } else {
                 self.currentState = .empty
@@ -276,10 +303,10 @@ class TimelineDetailState {
         print(#function, date)
         DispatchQueue.main.async {
             self.currentState = .loading
-            self.timelineIndexList.removeAll()
+            self.days.removeAll()
             
             if let results = self.timelineBusiness.fetchMonthTimelineIndex(year: date.getYear(), month: date.getMonth()), results.count > 0 {
-                self.timelineIndexList = results
+                self.days = results
                                             .sorted { $0.day < $1.day }
                                             .map { DayIndex(timelineIndex: $0) }
                 self.currentState = .data
@@ -300,5 +327,153 @@ class TimelineDetailState {
 //        }
 //        
 //    }
+ 
+    
+    // MARK: - Day
+    
+    
+    func readDayData(dayDate: DayDate) -> Bool {
+        currentState = .loading
+
+        guard let timelineIndex = timelineBusiness.fetchDayTimelineIndex(year: dayDate.date.getYear(), month: dayDate.date.getMonth(), day: dayDate.date.getDay()) else {
+            currentState = .empty
+            return false
+        }
+        let dayIndex = DayIndex(timelineIndex: timelineIndex)
+        
+        generatorTask = Task {
+            
+            for await timeline in DayContentGenerator(lines: timelineIndex.changes, timelineBusiness: timelineBusiness) {
+                if Task.isCancelled == true { return }
+                DispatchQueue.main.async {
+                    dayIndex.timelines.append(timeline)
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self.days.append(dayIndex)
+                self.currentState = .data
+            }
+        }
+        
+        return true
+    }
+    
+    func readDayDataOnly(timelineIndex: TimelineIndex) {
+        currentState = .loading
+
+        let dayIndex = DayIndex(timelineIndex: timelineIndex)
+        
+        generatorTask = Task {
+            
+            for await timeline in DayContentGenerator(lines: timelineIndex.changes, timelineBusiness: timelineBusiness) {
+                if Task.isCancelled == true { return }
+                DispatchQueue.main.async {
+                    dayIndex.timelines.append(timeline)
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self.days.append(dayIndex)
+                self.currentState = .data
+            }
+        }
+    }
+    
+    func removeTimelineChanges(_ timeline: Timeline) {
+//        // remove from UI
+//        timelineList.removeAll { item in
+//            item.id == timeline.id
+//        }
+//        
+//        if timelineList.count == 0 {
+//            currentState = .empty
+//        }
+        
+        // remove physical files
+//        timelineBusiness.removeTimelineChanges(timeline)
+    }
+    
+    
+    // MARK: - Week
+    
+    var weekDays = [TimelineIndex]()
+    
+    func readWeekData(weekDate: WeekDate) {
+        let date = weekDate.start
+        currentState = .loading
+        self.canLoadMore = false
+        self.days.removeAll()
+        self.weekDays.removeAll()
+        
+        // why loop instead of between query
+        // because a week might contain two months
+        for i in 0..<7 {
+            let date = Calendar.current.date(byAdding: .day, value: i, to: date)!
+            if let timelineIndex = self.timelineBusiness.fetchDayTimelineIndex(year: date.getYear(), 
+                                                                               month: date.getMonth(),
+                                                                               day: date.getDay()) {
+                self.weekDays.append(timelineIndex)
+            }
+        }
+        
+        print(weekDays)
+        
+        if self.weekDays.count > 0 {
+            self.currentState = .data
+            processNextDay()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                self.canLoadMore = true
+            }
+        } else {
+            self.currentState = .empty
+        }
+    }
+    
+    func readMonthData(monthDate: MonthDate) {
+        let date = monthDate.start
+        currentState = .loading
+        self.canLoadMore = false
+        self.days.removeAll()
+        self.weekDays.removeAll()
+        
+        if let results = self.timelineBusiness.fetchMonthTimelineIndex(year: date.getYear(), month: date.getMonth()), results.count > 0 {
+            self.weekDays = results.sorted { $0.day < $1.day }
+            print(weekDays.count)
+            self.currentState = .data
+            processNextDay()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                self.canLoadMore = true
+            }
+        } else {
+            self.currentState = .empty
+        }
+    }
+    
+    func processNextDay() {
+        print(#function)
+        if weekDays.count > 0 {
+            // load first day
+            readDayDataOnly(timelineIndex: weekDays.removeFirst())
+        } else {
+            canLoadMore = false
+        }
+    }
+    
+    
+    // load more
+    
+    func tryLoadMore() {
+        
+        switch displayngCalendarType {
+        case .day:
+            break
+        case .week:
+            processNextDay()
+        case .month:
+            processNextDay()
+        }
+        
+    }
     
 }
