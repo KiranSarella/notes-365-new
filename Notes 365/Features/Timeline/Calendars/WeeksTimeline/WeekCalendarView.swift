@@ -78,16 +78,22 @@ struct WeekHeaderView: View {
             // previous is navigation
             guard let newDate = calendar.date(byAdding: .month, value: -1, to: weekDate.end) else { return }
             // update navigation
-            weekDate = WeekDate(date: newDate)
+//            withAnimation {
+                weekDate = WeekDate(date: newDate)
+//            }
         }, today: {
             // today is selection
-            weekDate = WeekDate(date: Date())
+//            withAnimation {
+                weekDate = WeekDate(date: Date())
+//            }
             // make selection
             selectedWeekDate = weekDate
         }, next: {
             // next is navigation
             guard let newDate = calendar.date(byAdding: .month, value: 1, to: weekDate.end) else { return }
-            weekDate = WeekDate(date: newDate)
+//            withAnimation {
+                weekDate = WeekDate(date: newDate)
+//            }
         })
     }
     

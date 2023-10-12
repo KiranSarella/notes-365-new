@@ -47,7 +47,8 @@ struct NotebooksListView: View {
     @Environment(\.modelContext) private var modelContext
     @Binding var icloudSyncing: Bool
     @Bindable var usersState: NotebooksListState
-    @Binding var selectedNotebook: Notebook.ID?
+//    @Binding var selectedNotebook: Notebook.ID?
+    @Binding var selectedNotebook: Notebook?
     @Environment(\.isSearching) private var isSearching
 
     @State private var firstTimeAppear = true
@@ -55,7 +56,8 @@ struct NotebooksListView: View {
     
     @State private var calenderType: NotebookListOption = .all
     
-    @State private var colors: [UUID] = []
+//    @State private var colors: [UUID] = []
+    @State private var colors: [Notebook] = []
     @State private var editorState = NotebookEditorState()
     
     
@@ -168,18 +170,31 @@ struct NotebooksListView: View {
                             .searchable(text: $usersState.searchText, placement: .navigationBarDrawer(displayMode: .always))
                             
                             
-                        }.navigationDestination(for: Notebook.ID.self) { color in
+                        }
+                        .navigationDestination(for: Notebook.self) { color in
                             
-                            if let notebook = usersState.getNotebook(uuid: color) {
+//                            if let notebook = usersState.getNotebook(uuid: color) {
         
-                                NotebookEditorView(listDisplayState: usersState.listSourceType, notebookM: notebook, editorState: editorState)
+                                NotebookEditorView(listDisplayState: usersState.listSourceType, notebookM: color, editorState: editorState)
         
         //                        NotebookEditorView(notebookM: notebook, editorState: editorState)
-                            } else {
-                                Text("canvas")
-                            }
+//                            } else {
+//                                Text("canvas")
+//                            }
                             
                         }
+//                        .navigationDestination(for: Notebook.ID.self) { color in
+//                            
+//                            if let notebook = usersState.getNotebook(uuid: color) {
+//        
+//                                NotebookEditorView(listDisplayState: usersState.listSourceType, notebookM: notebook, editorState: editorState)
+//        
+//        //                        NotebookEditorView(notebookM: notebook, editorState: editorState)
+//                            } else {
+//                                Text("canvas")
+//                            }
+//                            
+//                        }
                         
                         
                     }
@@ -232,7 +247,11 @@ struct NotebooksListView: View {
 //            usersState.timelineCreatorBusiness.modelContext = modelContext
             editorState.modelContext = modelContext
             
-            fetchNotebooks()
+            if usersState.notebooks.count == 0 {
+                fetchNotebooks()
+            }
+            
+            
             
             
 //            
@@ -351,7 +370,8 @@ struct SearchedListView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.editMode) private var editMode
     @Environment(\.isSearching) private var isSearching
-    @Binding var selectedNotebook: Notebook.ID?
+//    @Binding var selectedNotebook: Notebook.ID?
+    @Binding var selectedNotebook: Notebook?
     @Bindable var usersState: NotebooksListState
     
     @Namespace var topID
@@ -602,12 +622,12 @@ struct NotebooksListGroupView: View {
         
         if usersState.listSourceType == .notebooks(.none) ||
             (usersState.listSourceType == .notebooks(.searching) && usersState.activeSearch == false) {
-            ForEach($notebooks) { $notebook in
+            ForEach($notebooks, id: \.self) { $notebook in
                 MyTableRow(usersState: usersState, notebook: $notebook)
             }
             .onMove(perform: move) 
         } else {
-            ForEach($notebooks) { $notebook in
+            ForEach($notebooks, id: \.self) { $notebook in
                 MyTableDeletedRow(usersState: usersState, notebook: $notebook)
             }
             .onMove(perform: move)

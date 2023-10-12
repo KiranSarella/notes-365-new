@@ -55,8 +55,6 @@ extension Notebook {
         notebookData.createdDate = createdDate
         notebookData.modifiedDate = modifiedDate
         notebookData.deletedDate = deletedDate
-        
-        
     }
     
     func saveNotebookData(_ modelContext: ModelContext) {
@@ -95,9 +93,7 @@ class Notebook: Identifiable {
     
     var id: UUID = UUID()
     var name: String = ""
-//    @Relationship(inverse: \Notebook.parent)
-//    @Relationship(.cascade)
-//    @Relationship
+
     var children: [Notebook]?
     
     var createdDate: Date = Date()
@@ -105,11 +101,9 @@ class Notebook: Identifiable {
     var modifiedDate: Date = Date()
     
     var orderID: Int = 0
-//    unowned var parent: Notebook?
-//    @Relationship(inverse: \Notebook.children)
+    
     var parent: Notebook?
     
-//    @ObservationIgnored
     var notebookData: NotebookData
     
     var isExpanded: Bool = false
@@ -352,34 +346,34 @@ extension Notebook {
             parentRef = parentRef?.parent
         }
         // return
-        return paths
+        return paths.reversed()
     }
 }
 
 
-extension Notebook {
-    
-    nonisolated func loadContent() async -> String? {
-        do {
-            let fileHandle = try FileHandle(forReadingFrom: fileURL)
-            guard
-                let data = try fileHandle.readToEnd(),
-                let readString = String(data: data, encoding: .utf8) else { return nil }
-            
-            fileHandle.closeFile()
-            return readString
-        } catch let error as NSError {
-            print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
-            return nil
-        }
-    }
-    
-    func saveContent(content: String) {
-        do {
-            // Write to the file
-            try content.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
-        } catch let error as NSError {
-            print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
-        }
-    }
-}
+//extension Notebook {
+//    
+//    nonisolated func loadContent() async -> String? {
+//        do {
+//            let fileHandle = try FileHandle(forReadingFrom: fileURL)
+//            guard
+//                let data = try fileHandle.readToEnd(),
+//                let readString = String(data: data, encoding: .utf8) else { return nil }
+//            
+//            fileHandle.closeFile()
+//            return readString
+//        } catch let error as NSError {
+//            print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
+//            return nil
+//        }
+//    }
+//    
+//    func saveContent(content: String) {
+//        do {
+//            // Write to the file
+//            try content.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
+//        } catch let error as NSError {
+//            print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
+//        }
+//    }
+//}

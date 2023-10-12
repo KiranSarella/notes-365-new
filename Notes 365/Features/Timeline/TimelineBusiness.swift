@@ -416,15 +416,20 @@ extension TimelineBusiness {
         // if already exists, then upate
         if let timelineContent = getTimelineContent(today: today, uuid: uuid) {
             timelineContent.content = newChanges
+            timelineContent.filename = notebookName
+            timelineContent.path = notebookPath
+            
             timelineContent.modifiedDate = today //Date()
         } else {
             // else insert
             let timelineContent = TimelineContent()
+            // index
             timelineContent.year = today.getYear()
             timelineContent.month = today.getMonth()
             timelineContent.day = today.getDay()
-            timelineContent.content = newChanges
             timelineContent.notebookID = uuid
+            // data
+            timelineContent.content = newChanges
             timelineContent.filename = notebookName
             timelineContent.path = notebookPath
             

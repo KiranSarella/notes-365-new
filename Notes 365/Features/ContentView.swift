@@ -121,7 +121,8 @@ struct ContentView: View {
     // timeline related
 //    @State var calendarState = CalendarState.shared
     // notebooks related
-    @State private var selectedNotebookM: Notebook.ID?
+//    @State private var selectedNotebookM: Notebook.ID?
+    @State private var selectedNotebookM: Notebook?
     @State var notebooksListState = NotebooksListState()
     
 //    @State var selectedCalenderType: CalendarType.ID? = CalendarType.day.id

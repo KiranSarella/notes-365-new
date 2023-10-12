@@ -23,7 +23,7 @@ class NotebookContentBusiness {
     func saveContentChanges(content: String, notebook: Notebook) {
 //        print(#function)
         // write updated content to file
-        notebook.saveContent(content: content)
+//        notebook.saveContent(content: content)
         // send notification
         // TODO: send notification after some delay - based on result.
         let info = [

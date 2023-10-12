@@ -1,10 +1,9 @@
 
 # Todo
-[x] crash due to loading issue - use loadmore, async and cancel (like old code).
-[ ] path in heading
+
 
 ## Timeline pending tasks
-[ ] delete all unused code - folders, sync related
+[ ] path in heading
 [ ] discard option in timeline
 
 ## Notebooks pending tasks
@@ -17,6 +16,9 @@
 
 # Xcode 15 
 [ ] update onChange to new syntax
+[ ] delete all unused code and sync
+[ ] compatable - convert old data to new swiftData structure
+
 
 
 

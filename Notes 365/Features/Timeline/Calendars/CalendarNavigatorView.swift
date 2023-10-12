@@ -20,6 +20,7 @@ struct CalendarNavigatorView: View {
             Text(label)
                 .fontWeight(.semibold)
                 .fontDesign(.rounded)
+                .transition(.move(edge: .leading))
             Spacer()
             // previous
             Button {
