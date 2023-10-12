@@ -126,76 +126,36 @@ extension MonthDate: Hashable {}
 
 @Observable
 class CalendarState {
+    // navigation related
+//    var navigationDate: Date = Date()
     
-    var selectedDate: Date = Date() {
-        didSet {
-            switch calenderType {
-            case .day:
-                dayDate = DayDate(date: selectedDate)
-            case .week:
-                break
-            case .month:
-                break
-            }
-        }
-    }    // todays date by default
+    var calenderType: CalendarType = .day
     
-    var calenderType: CalendarType = .day {
-        didSet {
-            switch oldValue {
-            case .day:
-                switch calenderType {
-                case .day:
-                    break
-                case .week:
-                    // convert day to week
-                    weekDate = WeekDate(date: dayDate.date)
-                case .month:
-                    // convert day to month
-                    monthDate = MonthDate(date: dayDate.date)
-                }
-            case .week:
-                switch calenderType {
-                case .day:
-                    // convert week to day
-                    dayDate = DayDate(date: weekDate.start)
-                case .week:
-                    break
-                case .month:
-                    // convert week to month
-                    // TODO: get week navigation date, from get month
-                    // choose active month date from (start or end)
-                    
-                    if weekDate.start.getMonth() == navigationDate.getMonth() {
-                        monthDate = MonthDate(date: weekDate.start)
-                    } else {
-                        monthDate = MonthDate(date: weekDate.end)
-                    }
-                    
-                    
-                }
-            case .month:
-                switch calenderType {
-                case .day:
-                    // convert month to day
-                    dayDate = DayDate(date: monthDate.start)
-                case .week:
-                    // convert month to week
-                    weekDate = WeekDate(date: monthDate.start)
-                case .month:
-                    break
-                }
-            }
-        }
-    }
     
     var dayDate: DayDate = DayDate(date: Date())
     var weekDate: WeekDate = WeekDate(date: Date())
     var monthDate: MonthDate = MonthDate(date: Date())
     
+    var selectedDayDate: DayDate?
+    var selectedWeekDate: WeekDate?
+    var selectedMonthDate: MonthDate?
+    
+    // selection related
     var dayDateItem: DayDateItem.ID = DayDateItem(date: Date.now, canShow: true).id
     
-    var navigationDate: Date = Date()
+//    var selectedDate: Date = Date() {
+//        didSet {
+//            switch calenderType {
+//            case .day:
+//                dayDate = DayDate(date: selectedDate)
+//            case .week:
+//                break
+//            case .month:
+//                break
+//            }
+//        }
+//    }    // todays date by default
+//    
     
     init() {
         // set current day
@@ -207,6 +167,37 @@ class CalendarState {
     }
     
     static let todayTint = Color.accentColor
+    
+    var oldCalenderType: CalendarType = .day
+    
+    func getOldNavigationDate(_ oldValue: CalendarType) -> Date {
+        print(#function, oldValue)
+        switch oldValue {
+        case .day:
+            return dayDate.date
+        case .week:
+            // convert week to day
+            return weekDate.end
+        case .month:
+            // convert month to day
+            return monthDate.start
+        }
+    }
+    
+    func updateNavigation(_ oldValue: CalendarType, _ newValue: CalendarType) {
+        
+        switch newValue {
+        case .day:
+            dayDate = DayDate(date: getOldNavigationDate(oldValue))
+        case .week:
+            weekDate = WeekDate(date: getOldNavigationDate(oldValue))
+            print(#function , weekDate.start)
+        case .month:
+            monthDate = MonthDate(date: getOldNavigationDate(oldValue))
+        }
+    }
+    
+    
 }
 
 extension CalendarState {

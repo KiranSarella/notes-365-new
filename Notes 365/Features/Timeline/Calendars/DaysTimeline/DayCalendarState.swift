@@ -32,61 +32,47 @@ class DayCalendarState {
     
     var dateTitle: String = Date().string(withFormat: "MMMM, YYYY")
     var dayitems = [DayDateItem]()
-    var selectedDate: Date = Date()
     
-    var selectedDayItem: DayDateItem? = nil
+    var dayDate: DayDate
+    var selectedDayDate: DayDate?
     
-    private(set) var displayingDate: Date = Date()
+//    private(set) var displayingDate: Date = Date()
     
     var displayCounte: Int = 0
     
     private var calendar = Calendar.current
     
     init() {
-        displayingDate = Date()
-        selectedDate = displayingDate
-//        selectedDayItem = displayingDate
-        
-        updateDisplay()
-        
-        NotificationCenter.default.addObserver(forName: NSNotification.Name("daydetailview"), object: nil, queue: nil) { notification in
-            if let userInfo = notification.userInfo {
-                if let date = userInfo["date"] as? Date {
-                    print(date)
-//                    DispatchQueue.main.async {
-                        self.selectedDate = date
-//                    }
-                }
-            }
-        }
+        dayDate = DayDate(date: Date())
+        selectedDayDate = nil
+//        updateDisplay()
     }
     
-    func setDisplayDate(_ newDate: Date) {
-        displayingDate = newDate
-        selectedDate = displayingDate
-        updateDisplay()
-    }
+//    func setDisplayDate(_ newDate: Date) {
+//        displayingDate = newDate
+//        selectedDate = displayingDate
+//        updateDisplay()
+//    }
     
     func isSelected(_ dayItem: DayDateItem) -> Bool {
-        if !dayItem.canShow {
-            return false
-        }
+        if !dayItem.canShow { return false }
         
+        guard let selectedDayDate = selectedDayDate else { return false }
         
-        return dayItem.date.isSameDayAs(selectedDate)
+        return dayItem.date.isSameDayAs(selectedDayDate.date)
     }
     
     
     func updateDisplay() {
         // title
-        dateTitle = displayingDate.string(withFormat: "MMMM, YYYY")
+        dateTitle = dayDate.date.string(withFormat: "MMMM, YYYY")
         // date items
         
         // for given date get
-        let dates = getCalenderDates(displayingDate)
+        let dates = getCalenderDates(dayDate.date)
         var newItems = [DayDateItem]()
         for date in dates {
-            let isSameMonth = (displayingDate.getMonth() == date.getMonth())
+            let isSameMonth = (dayDate.date.getMonth() == date.getMonth())
             let item = DayDateItem(date: date, canShow: isSameMonth)
             newItems.append(item)
         }
@@ -116,21 +102,26 @@ class DayCalendarState {
     
     // MARK: - navigation
     func setToday() {
-        displayingDate = Date()
-        selectedDate = displayingDate
+        dayDate = DayDate(date: Date())
+        selectedDayDate = dayDate
         updateDisplay()
     }
     
     func previousMonth() {
-        guard let newDate = calendar.date(byAdding: .month, value: -1, to: displayingDate) else { return }
-        displayingDate = newDate
+        guard let newDate = calendar.date(byAdding: .month, value: -1, to: dayDate.date) else { return }
+        dayDate = DayDate(date: newDate)
         updateDisplay()
     }
     
     func nextMonth() {
-        guard let newDate = calendar.date(byAdding: .month, value: 1, to: displayingDate) else { return }
-        displayingDate = newDate
+        guard let newDate = calendar.date(byAdding: .month, value: 1, to: dayDate.date) else { return }
+        dayDate = DayDate(date: newDate)
         updateDisplay()
     }
 
+    // MARK: - Selection
+    func makeSelection(_ dayDateItem: DayDateItem) {
+        dayDate = DayDate(date: dayDateItem.date)
+        selectedDayDate = dayDate
+    }
 }

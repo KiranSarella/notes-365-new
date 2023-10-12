@@ -9,8 +9,9 @@ import SwiftUI
 
 struct DayCalendarView2: View {
     
+    @State private var dayState = DayCalendarState()
     @Binding var dayDate: DayDate
-    @State var dayState = DayCalendarState()
+    @Binding var selectedDayDate: DayDate?
     
     var body: some View {
         VStack {
@@ -26,10 +27,16 @@ struct DayCalendarView2: View {
             DayGridView(dayDate: $dayDate)
                 .environment(dayState)
         }
-//        .padding()
         .onAppear {
-            dayState.setDisplayDate(dayDate.date)
-//            navigationDate = dayDate.date
+            dayState.dayDate = dayDate
+            dayState.selectedDayDate = selectedDayDate
+            dayState.updateDisplay()
+        }
+        .onChange(of: dayState.dayDate) { oldValue, newValue in
+            dayDate = newValue
+        }
+        .onChange(of: dayState.selectedDayDate) { oldValue, newValue in
+            selectedDayDate = newValue
         }
     }
 }
@@ -70,7 +77,6 @@ fileprivate struct DayGridView: View {
                 ForEach(weekdaySymbols, id: \.self) { weekdaySymbol in
                     Text(String(weekdaySymbol.first!))
                         .padding(.bottom, 4)
-//                        .font(.system(size: 12))
                         .fontWeight(.semibold)
                         .foregroundColor(.secondary)
                 }
@@ -80,21 +86,22 @@ fileprivate struct DayGridView: View {
                         if !dayItem.canShow {
                             return
                         }
-                        dayState.selectedDate = dayItem.date
+                        
+                        dayState.makeSelection(dayItem)
                     } label: {
                         DayGridItem(dayItem: dayItem, isSelected: dayState.isSelected(dayItem))
                     }
                 }.buttonStyle(PlainButtonStyle())
-                Spacer()
+//                Spacer()
             }
             Spacer()
         }
-//        .frame(height: 250)
-        .onChange(of: dayState.selectedDate, perform: { newValue in
-            // update for detail view
-            dayDate = DayDate(date: newValue)
-//            CalendarState.shared.dayDate = dayDate
-        })
+//        .frame(height: 270)
+//        .onChange(of: dayState.selectedDate, perform: { newValue in
+//            // update for detail view
+//            dayDate = DayDate(date: newValue)
+////            CalendarState.shared.dayDate = dayDate
+//        })
     }
     
 }
@@ -117,7 +124,6 @@ struct DayGridItem: View {
     var body: some View {
 //        HStack(alignment: .center) {
             Text("\(dayItem.day)")
-//                .font(.system(size: 14))
                 .padding([.horizontal], 2)
                 .padding([.vertical], 6)
                 .foregroundColor(textColor)
@@ -131,21 +137,3 @@ struct DayGridItem: View {
     }
 }
 
-struct DestinationView<Content: View>: View {
-    
-    @Binding var employee: DayDateItem?
-    let content: () -> Content
-    
-    init(input: DayDateItem, emp: Binding<DayDateItem?>, @ViewBuilder content: @escaping () -> Content) {
-        _employee = emp
-        
-        self.content = content
-        print(input)
-//        employee = input
-    }
-    
-    var body: some View {
-        self.content()
-    }
-    
-}

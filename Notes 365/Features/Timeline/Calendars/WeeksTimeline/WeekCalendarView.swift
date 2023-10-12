@@ -7,8 +7,7 @@
 
 import SwiftUI
 
-//import AttributedText
-
+/// take .end date to show correct month visually.
 public struct WeekGrid: Hashable {
     let weekNumber: Int
     let weekDays: [Date]
@@ -33,14 +32,15 @@ public struct WeekGrid: Hashable {
         return false
     }
     
+    var weekDate: WeekDate {
+        WeekDate(date: weekDays.first!)
+    }
 }
 
 struct WeekCalendarView: View {
 
     @Binding var weekDate: WeekDate
-    @State private var navigationDate: Date = Date()
-    
-    @State private var selectedWeek: WeekGrid = getWeek(Date())
+    @Binding var selectedWeekDate: WeekDate?
     
     var calendar = Calendar(identifier: .gregorian)
    
@@ -48,8 +48,7 @@ struct WeekCalendarView: View {
         VStack {
             // current month, prev, next actions
             WeekHeaderView(weekDate: $weekDate,
-                           navigationDate: $navigationDate,
-                           selectedWeek: $selectedWeek,
+                           selectedWeekDate: $selectedWeekDate,
                            calendar: calendar)
             .frame(height: 50)
             
@@ -57,16 +56,12 @@ struct WeekCalendarView: View {
             // 7 columns
             // titles: sun, mon...
             // detail rows: 6
-            WeekGridView(weekDate: $weekDate, navigationDate: $navigationDate, selectedWeek: $selectedWeek)
+            WeekGridView(weekDate: $weekDate, selectedWeekDate: $selectedWeekDate)
+        }
+        .onAppear {
+            print(weekDate.start)
         }
 //        .padding()
-        .onAppear {
-            navigationDate = weekDate.end   // taken .end date to show correct month visually.
-            selectedWeek = getWeek(weekDate.start)
-        }
-        .onChange(of: navigationDate) { newValue in
-//            CalendarState.shared.navigationDate = newValue
-        }
     }
 
 }
@@ -74,22 +69,25 @@ struct WeekCalendarView: View {
 struct WeekHeaderView: View {
     
     @Binding var weekDate: WeekDate
-    @Binding var navigationDate: Date
-    @Binding var selectedWeek: WeekGrid
+    @Binding var selectedWeekDate: WeekDate?
     var calendar: Calendar
     
     var body: some View {
         
-        CalendarNavigatorView(label: navigationDate.string(withFormat: "MMMM, YYYY"), previous: {
-            guard let newDate = calendar.date(byAdding: .month, value: -1, to: navigationDate) else { return }
-            navigationDate = newDate
+        CalendarNavigatorView(label: weekDate.end.string(withFormat: "MMMM, YYYY"), previous: {
+            // previous is navigation
+            guard let newDate = calendar.date(byAdding: .month, value: -1, to: weekDate.end) else { return }
+            // update navigation
+            weekDate = WeekDate(date: newDate)
         }, today: {
+            // today is selection
             weekDate = WeekDate(date: Date())
-            navigationDate = Date()
-            selectedWeek = getWeek(weekDate.start)
+            // make selection
+            selectedWeekDate = weekDate
         }, next: {
-            guard let newDate = calendar.date(byAdding: .month, value: 1, to: navigationDate) else { return }
-            navigationDate = newDate
+            // next is navigation
+            guard let newDate = calendar.date(byAdding: .month, value: 1, to: weekDate.end) else { return }
+            weekDate = WeekDate(date: newDate)
         })
     }
     
@@ -105,8 +103,7 @@ struct WeekHeaderView: View {
 struct WeekGridView: View {
     
     @Binding var weekDate: WeekDate
-    @Binding var navigationDate: Date
-    @Binding var selectedWeek: WeekGrid
+    @Binding var selectedWeekDate: WeekDate?
     
     var weekdaySymbols = [" "] + Calendar.current.shortWeekdaySymbols   // [" "] is required
     var calendar = Calendar(identifier: .gregorian)
@@ -118,7 +115,6 @@ struct WeekGridView: View {
                 ForEach(weekdaySymbols, id: \.self) { weekdaySymbol in
                     Text(String(weekdaySymbol.first!))
                         .padding(.bottom, 4)
-//                        .font(.system(size: 10))
                         .frame(maxWidth: .infinity)
                         .fontWeight(.semibold)
                         .foregroundColor(.secondary)
@@ -126,10 +122,9 @@ struct WeekGridView: View {
             }
             .padding(EdgeInsets(top: 20, leading: 5, bottom: 0, trailing: 5))
             // weeks grid
-            ForEach(getWeekDates(navigationDate), id: \.self) { week in
+            ForEach(getWeekDates(weekDate.end), id: \.self) { week in
                WeekView(weekDate: $weekDate,
-                        navigationDate: $navigationDate,
-                        selectedWeek: $selectedWeek,
+                        selectedWeekDate: $selectedWeekDate,
                         week: week)
             }
             Spacer()
@@ -142,22 +137,21 @@ struct WeekGridView: View {
 struct WeekView: View {
     
     @Binding var weekDate: WeekDate
-    @Binding var navigationDate: Date
-    @Binding var selectedWeek: WeekGrid
+    @Binding var selectedWeekDate: WeekDate?
     
     var week: WeekGrid
     
     private func isSelectedWeek(_ week: WeekGrid) -> Bool {
-        selectedWeek == week
+        selectedWeekDate == week.weekDate
     }
     
     private func highlightColor(_ week: WeekGrid) -> Color {
-        week == selectedWeek ? .accentColor : .clear
+        week.weekDate == selectedWeekDate ? .accentColor : .clear
     }
     
     var isValidSelection: Bool {
-        if week.weekDays.first!.getMonth() == navigationDate.getMonth() ||
-            week.weekDays.last!.getMonth() == navigationDate.getMonth() {
+        if week.weekDays.first!.getMonth() == weekDate.end.getMonth() ||
+            week.weekDays.last!.getMonth() == weekDate.end.getMonth() {
 
 //            let selectedDate = week.weekDays.first!
 //            weekDate = WeekDate(date: selectedDate)
@@ -173,14 +167,12 @@ struct WeekView: View {
         return HStack() {
             Text("\(week.weekNumber)")
                 .frame(maxWidth: .infinity)
-                .fontWeight(.bold)
-//                .font(.system(size: 14, weight: .bold))
+                .fontWeight(.heavy)
                 .foregroundColor(Color.red)
             ForEach(week.weekDays, id: \.self) { date in
 //                if date.getMonth() == navigationDate.getMonth() {
                     Text("\(date.getDay())")
                         .frame(maxWidth: .infinity)
-//                        .font(.system(size: 12))
                         .foregroundColor(week.isCurrentWeek() ? CalendarState.todayTint : .primary)
 //                } else {
 //                    Text("\(date.getDay())")
@@ -202,12 +194,12 @@ struct WeekView: View {
             .background(Color.red.opacity(0.01))
             .onTapGesture {
                 // accept tap only when week belongs to current month
-                if week.weekDays.first!.getMonth() == navigationDate.getMonth() ||
-                    week.weekDays.last!.getMonth() == navigationDate.getMonth() {
+                if week.weekDays.first!.getMonth() == weekDate.end.getMonth() ||
+                    week.weekDays.last!.getMonth() == weekDate.end.getMonth() {
 
                     let selectedDate = week.weekDays.first!
                     weekDate = WeekDate(date: selectedDate)
-                    selectedWeek = week
+                    selectedWeekDate = week.weekDate
                 }
             }
         }
@@ -277,7 +269,7 @@ func getCalenderDates(forMonth date: Date) -> [Date] {
     
     var dates = [date]
     
-    let monthEndDate = Calendar.current.dateInterval(of: .weekOfMonth, for: monthInterval.end)
+//    _ = Calendar.current.dateInterval(of: .weekOfMonth, for: monthInterval.end)
     
     while date < endDate {
         date = Calendar.current.date(byAdding: .day, value: 1, to: date)!

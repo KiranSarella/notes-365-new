@@ -109,12 +109,62 @@ public struct DayChanges: Identifiable {
     var notes = [Timeline]()
 }
 
+//@Observable
+//class TimelineCalendarState {
+//    var calenderType: CalendarType = .day
+//    var dayDate: DayDate? = DayDate(date: Date())
+//    var weekDate: WeekDate? = WeekDate(date: Date())
+//    var monthDate: MonthDate? = MonthDate(date: Date())
+//}
+
+
+enum TimelineCalendarState: Equatable {
+    case day(DayDate)
+    case week(WeekDate)
+    case month(MonthDate)
+}
+
+
+
+
+
+extension TimelineCalendarState {
+    
+    mutating func previousStep() {
+        switch self {
+        case .day(let dayDate):
+            let dayDate = DayDate(date: Calendar.current.date(byAdding: .day, value: -1, to: dayDate.date)!)
+            self = .day(dayDate)
+        case .week(let weekDate):
+            let weekDate = WeekDate(date: Calendar.current.date(byAdding: .day, value: -7, to: weekDate.start)!)
+            self = .week(weekDate)
+        case .month(let monthDate):
+            let monthDate = MonthDate(date: Calendar.current.date(byAdding: .month, value: -1, to: monthDate.start)!)
+            self = .month(monthDate)
+        }
+    }
+    
+    mutating func nextStep() {
+        switch self {
+        case .day(let dayDate):
+            let dayDate = DayDate(date: Calendar.current.date(byAdding: .day, value: 1, to: dayDate.date)!)
+            self = .day(dayDate)
+        case .week(let weekDate):
+            let weekDate = WeekDate(date: Calendar.current.date(byAdding: .day, value: 7, to: weekDate.start)!)
+            self = .week(weekDate)
+        case .month(let monthDate):
+            let monthDate = MonthDate(date: Calendar.current.date(byAdding: .month, value: 1, to: monthDate.start)!)
+            self = .month(monthDate)
+        }
+    }
+    
+}
 
 @Observable
 class TimelineDetailState {
     
     var timelineBusiness = TimelineBusiness()
-    var calendarState = CalendarState()
+    var calendarState = TimelineCalendarState.day(DayDate(date: Date()))
     
     var selectedDate = Date()
     
@@ -174,13 +224,13 @@ class TimelineDetailState {
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 // your code here
-                switch self.calendarState.calenderType {
-                case .day:
-                    self.startFetchingDayIndex(dayDate: self.calendarState.dayDate)
-                case .week:
-                    self.startFetchingWeekIndex(weekDate: self.calendarState.weekDate)
-                case .month:
-                    self.startFetchingMonthIndex(monthDate: self.calendarState.monthDate)
+                switch self.calendarState {
+                case .day(let dayDate):
+                    self.startFetchingDayIndex(dayDate: dayDate)
+                case .week(let weekDate):
+                    self.startFetchingWeekIndex(weekDate: weekDate)
+                case .month(let monthDate):
+                    self.startFetchingMonthIndex(monthDate: monthDate)
                 }
             }
         }
@@ -240,11 +290,10 @@ class TimelineDetailState {
     
     func tryLoadMore() {
         
-        //        // have to maintain queue? - what if day content is single line?
-        //        if loadingDayChanges {
-        //            return
-        //        }
-        
+        // have to maintain queue? - what if day content is single line?
+        if loadingDayChanges {
+            return
+        }
         processNextDay()
     }
     
@@ -300,11 +349,6 @@ class TimelineDetailState {
                     }
                 }
                 continuation.resume(returning: dayIndex)
-                
-//                DispatchQueue.main.async {
-//                    self.dayIndexs.append(dayIndex)
-//                    self.loadingDayChanges = false
-//                }
             }
         }
     }

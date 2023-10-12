@@ -29,10 +29,10 @@ import SwiftUI
 /// events: calender type, selected day, selected week, selected month
 struct TimelineCalendarView: View {
     
-    @Environment(CalendarState.self) var calendarState
+    @State private var calendarState = CalendarState()
+    @Binding var timelineCalendarState: TimelineCalendarState
     
     var body: some View {
-        @Bindable var calendarState = calendarState
         VStack {
             // calendar type picker
             Picker("", selection: $calendarState.calenderType) {
@@ -44,11 +44,11 @@ struct TimelineCalendarView: View {
             HStack(alignment: .bottom) {
                 switch calendarState.calenderType {
                 case .day:
-                    DayCalendarView2(dayDate: $calendarState.dayDate)
+                    DayCalendarView2(dayDate: $calendarState.dayDate, selectedDayDate: $calendarState.selectedDayDate)
                 case .week:
-                    WeekCalendarView(weekDate: $calendarState.weekDate)
+                    WeekCalendarView(weekDate: $calendarState.weekDate, selectedWeekDate: $calendarState.selectedWeekDate)
                 case .month:
-                    MonthCalendarView(monthDate: $calendarState.monthDate)
+                    MonthCalendarView(monthDate: $calendarState.monthDate, selectedMonthDate: $calendarState.selectedMonthDate)
                 }
             }
             
@@ -56,5 +56,43 @@ struct TimelineCalendarView: View {
         }
 //        .frame(width: 280)
         .pickerStyle(SegmentedPickerStyle())
+        .onAppear {
+            // update navigation according to user given inputs
+            
+            switch timelineCalendarState {
+            case .day(let dayDate):
+                calendarState.calenderType = .day
+                calendarState.dayDate = dayDate
+                calendarState.selectedDayDate = dayDate
+            case .week(let weekDate):
+                calendarState.calenderType = .week
+                calendarState.weekDate = weekDate
+                calendarState.selectedWeekDate = weekDate
+            case .month(let monthDate):
+                calendarState.calenderType = .month
+                calendarState.monthDate = monthDate
+                calendarState.selectedMonthDate = monthDate
+            }
+        }
+        .onChange(of: calendarState.selectedDayDate) { oldValue, newValue in
+            if let newValue = newValue {
+                timelineCalendarState = .day(newValue)
+            }
+        }
+        .onChange(of: calendarState.selectedWeekDate) { oldValue, newValue in
+            if let newValue = newValue {
+                timelineCalendarState = .week(newValue)
+            }
+        }
+        .onChange(of: calendarState.selectedMonthDate) { oldValue, newValue in
+            if let newValue = newValue {
+                timelineCalendarState = .month(newValue)
+            }
+        }
+        .onChange(of: calendarState.calenderType) { oldValue, newValue in
+            
+//            calendarState.oldCalenderType = oldValue
+            calendarState.updateNavigation(oldValue, newValue)
+        }
     }
 }

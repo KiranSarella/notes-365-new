@@ -173,7 +173,6 @@
 		5CDE34BC2AB2D885002D88ED /* NotebooksCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksCache.swift; sourceTree = "<group>"; };
 		5CEC4D1A2AD3A4EA00750268 /* DayChangesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayChangesView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.simpleColoring; };
 		5CEC4D1B2AD3A4EA00750268 /* DayContentGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayContentGenerator.swift; sourceTree = "<group>"; };
-		5CEC4D212AD3C10A00750268 /* WeekContentGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekContentGenerator.swift; sourceTree = "<group>"; };
 		5CFCF5E52ABEDF7000351EEA /* Notebook copy 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notebook copy 2.swift"; sourceTree = "<group>"; };
 		9F09CEB029267FBC00609D99 /* TodayVersionBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayVersionBusiness.swift; sourceTree = "<group>"; };
 		9F14B490298A684F0079D23B /* ThemeDetailView+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThemeDetailView+iOS.swift"; sourceTree = "<group>"; };
@@ -312,7 +311,6 @@
 			isa = PBXGroup;
 			children = (
 				5C0FEF6D2AD01CC000056DC7 /* WeekCalendarView.swift */,
-				5CEC4D212AD3C10A00750268 /* WeekContentGenerator.swift */,
 			);
 			path = WeeksTimeline;
 			sourceTree = "<group>";

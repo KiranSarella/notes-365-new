@@ -10,18 +10,14 @@ import SwiftUI
 struct MonthCalendarView: View {
     
     @Binding var monthDate: MonthDate
-    @State private var navigationDate: Date = Date()
+    @Binding var selectedMonthDate: MonthDate?
     
     var body: some View {
         VStack {
             // current month, prev, next actions
-            MonthHeaderView(monthDate: $monthDate, navigationDate: $navigationDate)
+            MonthHeaderView(monthDate: $monthDate, selectedMonthDate: $selectedMonthDate)
             // grid view
-            MonthGridView(monthDate: $monthDate, navigationDate: $navigationDate)
-        }
-//        .padding()
-        .onAppear {
-            navigationDate = self.monthDate.start
+            MonthGridView(monthDate: $monthDate, selectedMonthDate: $selectedMonthDate)
         }
     }
     
@@ -31,20 +27,24 @@ struct MonthCalendarView: View {
 struct MonthHeaderView: View {
     
     @Binding var monthDate: MonthDate
-    @Binding var navigationDate: Date
+    @Binding var selectedMonthDate: MonthDate?
     var calendar = Calendar(identifier: .gregorian)
     
     var body: some View {
         
-        CalendarNavigatorView(label: navigationDate.string(withFormat: "YYYY"), previous: {
-            guard let newDate = calendar.date(byAdding: .year, value: -1, to: navigationDate) else { return }
-            navigationDate = newDate
+        CalendarNavigatorView(label: monthDate.start.string(withFormat: "YYYY"), previous: {
+            guard let newDate = calendar.date(byAdding: .year, value: -1, to: monthDate.start) else { return }
+            // update navigation
+            monthDate = MonthDate(date: newDate)
         }, today: {
-            navigationDate = Date()
-            monthDate = MonthDate(date: navigationDate)
+            // today
+            monthDate = MonthDate(date: Date())
+            // make selection
+            selectedMonthDate = monthDate
         }, next: {
-            guard let newDate = calendar.date(byAdding: .year, value: 1, to: navigationDate) else { return }
-            navigationDate = newDate
+            guard let newDate = calendar.date(byAdding: .year, value: 1, to: monthDate.start) else { return }
+            // update navigation
+            monthDate = MonthDate(date: newDate)
         })
         .frame(height: 60)
     }
@@ -54,7 +54,7 @@ struct MonthHeaderView: View {
 struct MonthGridView: View {
     
     @Binding var monthDate: MonthDate
-    @Binding var navigationDate: Date
+    @Binding var selectedMonthDate: MonthDate?
 
     var columns = Array(repeating: GridItem(), count: 3)
     var monthSymbols = Calendar.current.shortMonthSymbols
@@ -68,6 +68,7 @@ struct MonthGridView: View {
                     ZStack {
                         Button {
                             monthDate = date.monthDate
+                            selectedMonthDate = monthDate
                         } label: {
                             Text("\(date.monthSymbol)")
                                 .padding()
@@ -81,25 +82,18 @@ struct MonthGridView: View {
             .buttonStyle(PlainButtonStyle())
             Spacer()
         }
-//        .frame(height: 220)
-        .navigationDestination(for: MonthDate.self) { newDate in
-//            MonthDetailView()
-//                .onAppear {
-//                    monthDate = newDate
-//                }
-        }
         .onAppear {
-            refreshMonthGrid(navigationDate: navigationDate)
+            refreshMonthGrid(monthDate: monthDate)
         }
-        .onChange(of: navigationDate) { newValue in
-            refreshMonthGrid(navigationDate: newValue)
-        }
+        .onChange(of: monthDate, { oldValue, newValue in
+            refreshMonthGrid(monthDate: newValue)
+        })
     }
     
-    func refreshMonthGrid(navigationDate: Date) {
+    func refreshMonthGrid(monthDate: MonthDate) {
         var monthDatesList = [MonthGridDate]()
         
-        let year = navigationDate.string(withFormat: "YYYY")
+        let year = monthDate.start.string(withFormat: "YYYY")
         for monthIndex in monthSymbols.indices {
             let monthSymbol = monthSymbols[monthIndex]
             let month = monthIndex + 1
@@ -130,7 +124,8 @@ struct MonthGridView: View {
         // check same month
         let today = Date()
         
-        if navigationDate.getYear() == today.getYear() && month == today.getMonth() {
+        if monthDate.start.getYear() == today.getYear() &&
+            month == today.getMonth() {
             return true
         }
         
@@ -138,18 +133,12 @@ struct MonthGridView: View {
     }
     
     private func isSelectedMonth(_ month: Int) -> Bool {
-        
         // selected date's year, month should match to UI month, year
-        if navigationDate.getYear() == monthDate.start.getYear() && monthDate.start.getMonth() == month {
+        if selectedMonthDate?.start.getYear() == monthDate.start.getYear() &&
+            selectedMonthDate?.start.getMonth() == month {
             return true
         }
         
         return false
     }
 }
-
-//struct MonthCalendar_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MonthCalendar()
-//    }
-//}

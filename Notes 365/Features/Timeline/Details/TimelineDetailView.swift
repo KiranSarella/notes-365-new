@@ -14,9 +14,9 @@ struct TimelineDetailView: View {
     @State private var isShowingCalendar = false
     @State private var loadedFirstTime = false
     
-    var calendarState: CalendarState {
-        timelineDetailState.calendarState
-    }
+//    var calendarState: TimelineCalendarState {
+//        timelineDetailState.calendarState
+//    }
     
     var body: some View {
         VStack {
@@ -24,12 +24,12 @@ struct TimelineDetailView: View {
                 // header
                 VStack {
                     // day/week/month header view
-                    switch calendarState.calenderType {
-                    case .day:
+                    switch timelineDetailState.calendarState {
+                    case .day(let dayDate):
                         // header view
                         HStack {
                             Spacer()
-                            Text(calendarState.dayDate.formattedDate)
+                            Text(dayDate.formattedDate)
                                 .listRowSeparator(.hidden)
                                 .padding(.horizontal)
                                 .font(.largeTitle)
@@ -39,15 +39,15 @@ struct TimelineDetailView: View {
                         }
                         .listRowSeparator(.hidden)
                         if timelineDetailState.currentState != .data {
-                            Text(calendarState.dayDate.date.string(withFormat: "EEEE, d MMMM"))
+                            Text(dayDate.date.string(withFormat: "EEEE, d MMMM"))
                                 .font(.subheadline)
                                 .listRowSeparator(.hidden)
                         }
-                    case .week:
+                    case .week(let weekDate):
                         // header view
                         HStack {
                             Spacer()
-                            Text(calendarState.weekDate.weekNumberHeading)
+                            Text(weekDate.weekNumberHeading)
                                 .listRowSeparator(.hidden)
                                 .padding(.horizontal)
                                 .font(.largeTitle)
@@ -55,10 +55,10 @@ struct TimelineDetailView: View {
                                 .fontWeight(.heavy)
                             Spacer()
                         }
-                    case .month:
+                    case .month(let monthDate):
                         HStack {
                             Spacer()
-                            Text(calendarState.monthDate.start.string(format: "MMMM, YYYY"))
+                            Text(monthDate.start.string(format: "MMMM, YYYY"))
                                 .listRowSeparator(.hidden)
                                 .padding(.horizontal)
                                 .font(.largeTitle)
@@ -124,23 +124,27 @@ struct TimelineDetailView: View {
         .onDisappear(perform: {
             timelineDetailState.clearDisplay()
         })
-        .onChange(of: calendarState.dayDate, { oldValue, newValue in
-            // day
+        .onChange(of: timelineDetailState.calendarState, { oldValue, newValue in
             timelineDetailState.startReloadingContent()
         })
-        .onChange(of: calendarState.weekDate, { oldValue, newValue in
-            // week
-            timelineDetailState.startReloadingContent()
-        })
-        .onChange(of: calendarState.monthDate, { oldValue, newValue in
-            // month
-            timelineDetailState.startReloadingContent()
-        })
+//        
+//        .onChange(of: calendarState.dayDate, { oldValue, newValue in
+//            // day
+//            timelineDetailState.startReloadingContent()
+//        })
+//        .onChange(of: calendarState.weekDate, { oldValue, newValue in
+//            // week
+//            timelineDetailState.startReloadingContent()
+//        })
+//        .onChange(of: calendarState.monthDate, { oldValue, newValue in
+//            // month
+//            timelineDetailState.startReloadingContent()
+//        })
         .toolbar {
             // menu options
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    calendarState.previousStep()
+                    timelineDetailState.calendarState.previousStep()
                 } label: {
                     Image(systemName: "chevron.left")
                 }
@@ -148,7 +152,7 @@ struct TimelineDetailView: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    calendarState.nextStep()
+                    timelineDetailState.calendarState.nextStep()
                 } label: {
                     Image(systemName: "chevron.right")
                 }
@@ -162,9 +166,8 @@ struct TimelineDetailView: View {
                 }
                 .foregroundColor(.primary)
                 .popover(isPresented: $isShowingCalendar) {
-                    TimelineCalendarView()
-                        .environment(calendarState)
-                        .frame(width: 280)
+                    TimelineCalendarView(timelineCalendarState: $timelineDetailState.calendarState)
+                        .frame(minWidth: 320)
                         .padding()
                 }
             }
