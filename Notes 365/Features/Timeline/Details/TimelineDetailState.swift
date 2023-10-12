@@ -69,6 +69,7 @@ extension String {
 }
 
 enum CurrentState {
+    case new
     case loading
     case data
     case empty
@@ -81,6 +82,8 @@ enum CurrentState {
             return ""
         case .empty:
             return "No notes were added/updated on the given day(s)"
+        case .new:
+            return ""
         }
     }
 }
@@ -173,7 +176,7 @@ class TimelineDetailState {
     var loadingDayChanges = false
     var loadingDate = Date()
     
-    var currentState = CurrentState.loading
+    var currentState = CurrentState.new
     
     var cancellable: Cancellable? = nil
     
@@ -192,7 +195,7 @@ class TimelineDetailState {
     
     var cancellableSet = Set<AnyCancellable>()
     
-    
+    var currentTaskID = UUID()
     
     init() {
         timelineBusiness.registerNotebookChangesNotification()
@@ -218,19 +221,18 @@ class TimelineDetailState {
     func startReloadingContent() {
         Task {
             clearDisplay()
-            DispatchQueue.main.async {
-                self.currentState = .loading
-                self.canLoadMore = false
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                // your code here
+            currentTaskID = UUID()
+            self.currentState = .loading
+            self.canLoadMore = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                // start fetching data
                 switch self.calendarState {
                 case .day(let dayDate):
-                    self.startFetchingDayIndex(dayDate: dayDate)
+                    self.startFetchingDayIndex(dayDate: dayDate, reqID: self.currentTaskID)
                 case .week(let weekDate):
-                    self.startFetchingWeekIndex(weekDate: weekDate)
+                    self.startFetchingWeekIndex(weekDate: weekDate, reqID: self.currentTaskID)
                 case .month(let monthDate):
-                    self.startFetchingMonthIndex(monthDate: monthDate)
+                    self.startFetchingMonthIndex(monthDate: monthDate, reqID: self.currentTaskID)
                 }
             }
         }
@@ -239,18 +241,21 @@ class TimelineDetailState {
     
     // MARK: - Timeline Index
     
-    func startFetchingDayIndex(dayDate: DayDate) {
+    func startFetchingDayIndex(dayDate: DayDate, reqID: UUID) {
         print(#function, dayDate.date)
         if let result = self.timelineBusiness.fetchDayTimelineIndex(year: dayDate.date.getYear(), month: dayDate.date.getMonth(), day: dayDate.date.getDay()) {
+            if reqID != currentTaskID {
+                return
+            }
             self.timelineIndexes.append(result)
-            print(timelineIndexes.count)
-            processFirstDay()
+            print("timelineIndexes: ", timelineIndexes.count)
+            processFirstDay(reqID: reqID)
         } else {
             self.currentState = .empty
         }
     }
     
-    func startFetchingWeekIndex(weekDate: WeekDate) {
+    func startFetchingWeekIndex(weekDate: WeekDate, reqID: UUID) {
         let date = weekDate.start
         print(#function, date)
         // why loop instead of between query
@@ -260,27 +265,35 @@ class TimelineDetailState {
             if let timelineIndex = self.timelineBusiness.fetchDayTimelineIndex(year: date.getYear(),
                                                                                month: date.getMonth(),
                                                                                day: date.getDay()) {
+                if reqID != currentTaskID {
+                    return
+                }
                 self.timelineIndexes.append(timelineIndex)
             }
         }
         
-        print(timelineIndexes)
+        print("timelineIndexes: ", timelineIndexes.count)
         
         if self.timelineIndexes.count > 0 {
-            processFirstDay()
+            processFirstDay(reqID: reqID)
         } else {
             self.currentState = .empty
         }
     }
     
-    func startFetchingMonthIndex(monthDate: MonthDate) {
+    func startFetchingMonthIndex(monthDate: MonthDate, reqID: UUID) {
         let date = monthDate.start
         print(#function, date)
         
         if let results = self.timelineBusiness.fetchMonthTimelineIndex(year: date.getYear(), month: date.getMonth()), results.count > 0 {
+            
+            if reqID != currentTaskID {
+                return
+            }
             self.timelineIndexes = results.sorted { $0.day < $1.day }
-            print(timelineIndexes.count)
-            processFirstDay()
+            
+            print("timelineIndexes: ", timelineIndexes.count)
+            processFirstDay(reqID: reqID)
         } else {
             self.currentState = .empty
         }
@@ -297,12 +310,23 @@ class TimelineDetailState {
         processNextDay()
     }
     
-    func processFirstDay() {
+    func processFirstDay(reqID: UUID) {
         print(#function)
-        if timelineIndexes.count > 0 {
-            // load first day
-            Task {
-                let dayIndex = await readDayDataOnly(timelineIndex: timelineIndexes.removeFirst())
+        // load first day
+        Task {
+            print("timelineIndexes: before - ", timelineIndexes.count)
+            if let current = timelineIndexes.first {
+                let dayIndex = await readDayDataOnly(timelineIndex: current)
+                
+                if reqID != currentTaskID {
+                    return
+                }
+                if timelineIndexes.count == 0 {
+                    return
+                }
+                
+                timelineIndexes.removeFirst()
+                print("timelineIndexes: after - ", timelineIndexes.count)
                 DispatchQueue.main.async {
                     self.dayIndexs.append(dayIndex)
                     self.currentState = .data
@@ -314,8 +338,7 @@ class TimelineDetailState {
                     }
                 }
             }
-        } else {
-            canLoadMore = false
+            
         }
     }
     

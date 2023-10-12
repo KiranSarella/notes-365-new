@@ -1,11 +1,11 @@
 
 # Todo
-[ ] crash due to loading issue - use loadmore, async and cancel (like old code).
-[ ] discard option in timeline
+[x] crash due to loading issue - use loadmore, async and cancel (like old code).
 [ ] path in heading
 
 ## Timeline pending tasks
 [ ] delete all unused code - folders, sync related
+[ ] discard option in timeline
 
 ## Notebooks pending tasks
 [ ] Inside notebooks - not updating on list issue
