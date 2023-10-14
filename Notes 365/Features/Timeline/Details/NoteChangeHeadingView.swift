@@ -44,19 +44,41 @@ struct NoteChangeHeadingView: View {
             .padding(.vertical, 6)
             Spacer()
             // discard button
-            Button {
-                // inform delete action to parent
-                discardTimeline = noteChange
-            } label: {
-                Text("Discard")
-//                Image(systemName: "trash")
-                    .foregroundColor(.red)
+            
+//            Button {
+//                print("one")
+//            } label: {
+//                Text("one")
+//            }
+//
+//            Button {
+//                print("two")
+//            } label: {
+//                Text("two")
+//            }
+            
+            if showDiscard && isFocused {
+                
+                Button {
+                    // inform delete action to parent
+                    print("## Discard")
+                    print(noteChange.fileName)
+                    print(noteChange.id, noteChange.content)
+                    
+                    discardTimeline = noteChange
+                } label: {
+                    Text("Discard")
+    //                Image(systemName: "trash")
+                        .foregroundColor(.red)
+                }
+                .help("Ignore changes in timeline")
+                .padding()
+//                .opacity(showDiscard && isFocused ? 1 : 0)
             }
-            .help("Ignore changes in timeline")
-            .padding()
-            .opacity(showDiscard && isFocused ? 1 : 0)
+            
 
         }
+        .buttonStyle(.bordered)
         .background(colorScheme == .light ? Color.gray.opacity(0.2) : Color(UIColor.darkGray))
         .cornerRadius(4)
         .onHover { subscriptionStatus in

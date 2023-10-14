@@ -13,7 +13,7 @@ struct DayChangesView: View {
     var date: Date
     @Binding var timelines: [Timeline]
     @Binding var dayState: TimelineDetailState
-    @State var deleteTimeline: Timeline?
+    @State var discardTimeline: Timeline?
     
     @State var isFirstTimeAppear = true
     
@@ -37,7 +37,7 @@ struct DayChangesView: View {
             ForEach($timelines) { $noteChange in
                 VStack {
                     // notebook heading view
-                    NoteChangeHeadingView(noteChange: noteChange, showDiscard: dayState.canDiscard, discardTimeline: $deleteTimeline)
+                    NoteChangeHeadingView(noteChange: noteChange, showDiscard: dayState.canDiscard, discardTimeline: $discardTimeline)
                     .listRowSeparator(.hidden)
                     .padding(.bottom, 10)
                     // content
@@ -107,10 +107,10 @@ struct DayChangesView: View {
         //
         //            }
         //        }
-        .onChange(of: deleteTimeline, { oldValue, newValue in
+        .onChange(of: discardTimeline, { oldValue, newValue in
             guard let newValue = newValue else { return }
             dayState.removeTimelineChanges(newValue)
-            deleteTimeline = nil
+            discardTimeline = nil
         })
         .onAppear {
             //            dayState.readDayData(dayDate: dayState.dayDate)
