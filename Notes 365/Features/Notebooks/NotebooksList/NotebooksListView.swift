@@ -45,7 +45,6 @@ public enum NotebookListOption: String, CaseIterable, Identifiable {
 struct NotebooksListView: View {
 
     @Environment(\.modelContext) private var modelContext
-    @Binding var icloudSyncing: Bool
     @Bindable var usersState: NotebooksListState
 //    @Binding var selectedNotebook: Notebook.ID?
     @Binding var selectedNotebook: Notebook?
@@ -60,44 +59,7 @@ struct NotebooksListView: View {
     @State private var colors: [Notebook] = []
     @State private var editorState = NotebookEditorState()
     
-    
-    func fetchNotebooks() {
-        
-        let allListPredicate = #Predicate<NotebookData> { _ in
-            true
-        }
-        let descriptor = FetchDescriptor(predicate: allListPredicate)
-//        let descriptor = FetchDescriptor(predicate: allListPredicate, sortBy: [SortDescriptor(\NotebookData.orderID)])
-//        let descriptor = FetchDescriptor(predicate: tripPredicate)
-        
-        do {
-            let results: [NotebookData] = try modelContext.fetch(descriptor)
-            // prepare dict
-            var dict = [UUID: NotebookData]()
-            for result in results {
-                dict[result.id] = result
-            }
-            
-            // topLevel
-            let topLevels: [NotebookData] = results.filter { $0.parent == nil }
-                .sorted { $0.orderID < $1.orderID }
-            
-            // notebooks
-            var notebooksList = [Notebook]()
-            for topNote in topLevels {
-                notebooksList.append(Notebook(topNote))
-            }
-            // populate childnotes
-            for notebook in notebooksList {
-                notebook.populateChildren(dict)
-            }
-            
-            usersState.notebooks = notebooksList
-        } catch let err {
-            print(err)
-        }
-        
-    }
+    @Environment(\.scenePhase) var scenePhase
     
     func sortedNotes(notebooks: inout [Notebook]) {
         for i in 0..<notebooks.count {
@@ -111,7 +73,7 @@ struct NotebooksListView: View {
 //            .opacity(usersState.isLoaded ? 0 : 1)
         
         VStack {
-            if icloudSyncing || usersState.isLoading {
+            if usersState.isLoading {
                 ProgressView()
             } else if usersState.listSourceType == .notebooks(.none) && usersState.isEmpty {
                 AddNotesView(usersState: usersState)
@@ -246,9 +208,12 @@ struct NotebooksListView: View {
             selectedNotebook = nil
 //            usersState.timelineCreatorBusiness.modelContext = modelContext
             editorState.modelContext = modelContext
+            usersState.modelContext = modelContext
+            
+            usersState.notebookBusiness.modelContext = modelContext
             
             if usersState.notebooks.count == 0 {
-                fetchNotebooks()
+                usersState.fetchNotebooks()
             }
             
             
@@ -278,22 +243,26 @@ struct NotebooksListView: View {
 //                usersState.checkOldItemsToDelete()
 //            }
         }
-        .onChange(of: icloudSyncing) { newValue in
-            if newValue == true {
-                // before sync start
-                selectedNotebook = nil
-                selectedNotebook = nil
-            } else {
-                // after sync
-                usersState.forceReload()
-            }
-        }
         .onChange(of: usersState.deletingNotebook) { newValue in
             if newValue != nil {
                 // if deleting a note, de-select it before deleting
                 selectedNotebook = nil
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { (_) in
+              print("UIApplication: willEnterForegroundNotification")
+            usersState.fetchNotebooks()
+        }
+//        onChange(of: scenePhase, { oldPhase, newPhase in
+//            if newPhase == .active {
+//                print("Active")
+////                usersState.fetchNotebooks()
+//            } else if newPhase == .inactive {
+//                print("Inactive")
+//            } else if newPhase == .background {
+//                print("Background")
+//            }
+//        })
         
     }
     

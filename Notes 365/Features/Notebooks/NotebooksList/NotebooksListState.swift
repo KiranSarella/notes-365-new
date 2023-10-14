@@ -166,41 +166,53 @@ class NotebooksListState {
         }
     }
     
-    func forceReload() {
-        isLoading = true
-        // clear
-//        notesHierarchy.notes.removeAll()
-        // create notesHierarchy with actual notebook objects
-//        notebooks = notebookBusiness.retrieveNotebooks() ?? []
-//        // construct deleted notebooks list
-//        deletedNotebooks = notebookBusiness.retrieveDeletedNotebooks() ?? []
+//    func forceReload() {
+//        isLoading = true
+//        // clear
+////        notesHierarchy.notes.removeAll()
+//        // create notesHierarchy with actual notebook objects
+////        notebooks = notebookBusiness.retrieveNotebooks() ?? []
+////        // construct deleted notebooks list
+////        deletedNotebooks = notebookBusiness.retrieveDeletedNotebooks() ?? []
+////        
+//        // reconstruct hierarchy
+////        let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
+////        notesHierarchy = NotebooksHierarchy(notes: notesList)
 //        
-        // reconstruct hierarchy
-//        let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
-//        notesHierarchy = NotebooksHierarchy(notes: notesList)
-        
-        switch listSourceType {
-        case .notebooks(let notebooksFilterType):
-            switch notebooksFilterType {
-            case .none:
-                break
-            case .searching:
-                // ??
-                break
-            case .recentlyModified:
-                showRecentlyModified()
-            }
-        case .deletedItems:
-            showRecentlyDeleted()
-            checkOldItemsToDelete()
-        }
-        
-        
-        isLoading = false
-    }
+//        switch listSourceType {
+//        case .notebooks(let notebooksFilterType):
+//            switch notebooksFilterType {
+//            case .none:
+//                break
+//            case .searching:
+//                // ??
+//                break
+//            case .recentlyModified:
+//                showRecentlyModified()
+//            }
+//        case .deletedItems:
+//            showRecentlyDeleted()
+//            checkOldItemsToDelete()
+//        }
+//        
+//        
+//        isLoading = false
+//    }
     
     func saveExpandedIds() {
         UserDefaults.standard.set(Array(expandedIds), forKey: "notes365.expandedIds")
+    }
+    
+    
+    func fetchNotebooks() {
+        
+        Task {
+            isLoading = true
+//            try? await Task.sleep(nanoseconds: 1_000_000_000)
+            self.notebooks = await notebookBusiness.fetchNotebooks() ?? []
+            isLoading = false
+        }
+        
     }
     
     

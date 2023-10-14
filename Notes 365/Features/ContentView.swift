@@ -392,7 +392,7 @@ struct ContentView: View {
         case .timeline:
             TimelineDetailView(timelineDetailState: $timelineDetailState)
         case .notebooks:
-            NotebooksListView(icloudSyncing: $icloudSyncing, usersState: notebooksListState, selectedNotebook: $selectedNotebookM)
+            NotebooksListView(usersState: notebooksListState, selectedNotebook: $selectedNotebookM)
         }
         
         

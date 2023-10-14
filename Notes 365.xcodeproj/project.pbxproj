@@ -161,7 +161,6 @@
 		5C29FED42A98D91D001DC601 /* ReadonlyEditorCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadonlyEditorCache.swift; sourceTree = "<group>"; };
 		5C4A7B562A7BC626004C436F /* DeletedListSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletedListSync.swift; sourceTree = "<group>"; };
 		5C4ADCE22A9757EF000A037E /* EditorSymbolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSymbolsView.swift; sourceTree = "<group>"; };
-		5C5F5B632AB3292100E1AE5F /* NotebooksListView SwiftData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotebooksListView SwiftData.swift"; sourceTree = "<group>"; };
 		5C9732212A8B74C200C42E28 /* iCloud-sync.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "iCloud-sync.md"; sourceTree = "<group>"; };
 		5C9B5CFF2A8FED2A00396102 /* TextKit.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TextKit.md; sourceTree = "<group>"; };
 		5CC4C01E2A908D7000A4BE41 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
@@ -579,7 +578,6 @@
 				5CFCF5E52ABEDF7000351EEA /* NotebookModels.swift */,
 				5CCCF7F02AC15E0D00F5923E /* NotebookContent.swift */,
 				9FB6C69F2927695000C8EC76 /* NotebookContentBusiness.swift */,
-				9F45BD042920CCCE003DE332 /* NotebooksListBusiness.swift */,
 				5CDE34BC2AB2D885002D88ED /* NotebooksCache.swift */,
 				9F9DBF7129F122E80088B0CA /* NotebooksListSync.swift */,
 				9FA7E34B29F299A0007AB408 /* NotebooksContentSync.swift */,
@@ -646,7 +644,7 @@
 				9F1687CD29ADC2020085A0CA /* PlistDocument.swift */,
 				9F45BD252920CCCE003DE332 /* NotebooksListView.swift */,
 				9F45BD292920CCCE003DE332 /* NotebooksListState.swift */,
-				5C5F5B632AB3292100E1AE5F /* NotebooksListView SwiftData.swift */,
+				9F45BD042920CCCE003DE332 /* NotebooksListBusiness.swift */,
 				5C4A7B562A7BC626004C436F /* DeletedListSync.swift */,
 				9FBB0B482A0913B300F407AF /* CommonDropDelegate.swift */,
 				9F6CA8DD2A041D27009061A0 /* ReorderLIst.md */,

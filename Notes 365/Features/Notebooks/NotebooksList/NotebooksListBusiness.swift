@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftData
 
 extension  Notification.Name {
     public static let notebookChangeNotification = Notification.Name("NotebookChangeNotification")
@@ -23,6 +24,8 @@ class NotebooksListBusiness {
     private var listSyncDate: Date = Date()
     
     private let deleteDays = 30
+    
+    var modelContext: ModelContext?
     
     let notebooksPath = Constants.notebooksFolderName
     
@@ -133,6 +136,56 @@ class NotebooksListBusiness {
             }
         }
     }
+    
+    
+    func fetchNotebooks() async -> [Notebook]? {
+        
+        await withCheckedContinuation { continuation in
+            
+            guard
+                let modelContext = modelContext
+            else {
+                continuation.resume(returning: nil)
+                return
+            }
+            
+            let allListPredicate = #Predicate<NotebookData> { _ in
+                true
+            }
+            let descriptor = FetchDescriptor(predicate: allListPredicate)
+    //        let descriptor = FetchDescriptor(predicate: allListPredicate, sortBy: [SortDescriptor(\NotebookData.orderID)])
+            
+            do {
+                let results: [NotebookData] = try modelContext.fetch(descriptor)
+                // prepare dict
+                var dict = [UUID: NotebookData]()
+                for result in results {
+                    dict[result.id] = result
+                }
+                
+                // topLevel
+                let topLevels: [NotebookData] = results.filter { $0.parent == nil }
+                    .sorted { $0.orderID < $1.orderID }
+                
+                // notebooks
+                var notebooksList = [Notebook]()
+                for topNote in topLevels {
+                    notebooksList.append(Notebook(topNote))
+                }
+                // populate childnotes
+                for notebook in notebooksList {
+                    notebook.populateChildren(dict)
+                }
+                
+                continuation.resume(returning: notebooksList)
+            } catch let err {
+                print(err)
+                continuation.resume(returning: nil)
+            }
+            
+        }
+    }
+    
     
     // MARK: - Insert
     func addFirst(notebook: Notebook) {
