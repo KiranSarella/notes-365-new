@@ -105,7 +105,7 @@ class TimelineContent {
     }
     
     func getTimeline() -> Timeline {
-        return Timeline(fileUUID: notebookID, fileName: filename, filePath: getAbsolutePath(), content: content)
+        return Timeline(changesID: id, fileUUID: notebookID, fileName: filename, filePath: getAbsolutePath(), content: content)
     }
     
    

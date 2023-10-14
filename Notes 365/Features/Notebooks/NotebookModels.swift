@@ -198,45 +198,6 @@ class Notebook: Identifiable {
         
     }
     
-//    required convenience init(from decoder: Decoder) throws {
-//
-//        let container = try decoder.container(keyedBy: CodingKeys.self)
-//
-//        let id = try! container.decode(UUID.self, forKey: .id)
-//        let name = try! container.decode(String.self, forKey: .name)
-//        
-//        self.init(id: id, name: name)
-//        
-//        do {
-//            createdDate = try container.decode(Date.self, forKey: .createdDate)
-//        } catch {
-//            let date = (try? FileManager.default.attributesOfItem(atPath: fileURL.path(percentEncoded: false)))?[.creationDate] as? Date
-//            
-//            createdDate = date ?? Date()
-//        }
-//        
-//        do {
-//            modifiedDate = try container.decode(Date.self, forKey: .modifiedDate)
-//        } catch {
-//            let date = (try? FileManager.default.attributesOfItem(atPath: fileURL.path(percentEncoded: false)))?[.modificationDate] as? Date
-//            
-//            modifiedDate = date ?? Date()
-//        }
-//        
-//        deletedDate = try? container.decode(Date.self, forKey: .deletedDate)
-//        
-//        children = try? container.decode([Notebook].self, forKey: .friends)
-//        
-//        // set parent reference
-//        if let children = children {
-//            for child in children {
-//                child.parent = self
-//            }
-//        }
-//        
-////        NotebooksCache.shared.flatNotebooks[self.id.uuidString] = self
-//    }
-    
     var containChildNotebooks: Bool {
         guard let children = children, children.count > 0 else { return false }
         return true
@@ -262,29 +223,6 @@ extension Notebook: Equatable, Hashable {
     }
 }
 
-
-//extension Notebook {
-//
-//    enum CodingKeys: String, CodingKey {
-//        case id
-//        case name
-//        case friends
-//        case createdDate
-//        case modifiedDate
-//        case deletedDate
-//    }
-//
-//    func encode(to encoder: Encoder) throws {
-//        var container = encoder.container(keyedBy: CodingKeys.self)
-//
-//        try container.encode(id, forKey: .id)
-//        try container.encode(name, forKey: .name)
-//        try container.encode(children, forKey: .friends)
-//        try container.encode(createdDate, forKey: .createdDate)
-//        try container.encode((modifiedDate), forKey: .modifiedDate)
-//        try container.encode(deletedDate, forKey: .deletedDate)
-//    }
-//}
 
 extension Notebook {
     
@@ -349,31 +287,3 @@ extension Notebook {
         return paths.reversed()
     }
 }
-
-
-//extension Notebook {
-//    
-//    nonisolated func loadContent() async -> String? {
-//        do {
-//            let fileHandle = try FileHandle(forReadingFrom: fileURL)
-//            guard
-//                let data = try fileHandle.readToEnd(),
-//                let readString = String(data: data, encoding: .utf8) else { return nil }
-//            
-//            fileHandle.closeFile()
-//            return readString
-//        } catch let error as NSError {
-//            print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
-//            return nil
-//        }
-//    }
-//    
-//    func saveContent(content: String) {
-//        do {
-//            // Write to the file
-//            try content.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
-//        } catch let error as NSError {
-//            print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
-//        }
-//    }
-//}

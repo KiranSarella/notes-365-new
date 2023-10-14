@@ -205,6 +205,10 @@ struct ContentView: View {
             .onAppear {
                 todayVersionBusiness.modelContext = modelContext
                 notebooksListState.modelContext = modelContext
+                
+                timelineDetailState.timelineBusiness.modelContext = modelContext
+                // used to create new timeline
+                timelineDetailState.timelineBusiness.updateTodayTimelineIndex()
             }
             
 ////                Section(isExpanded: $notebooksExpanded) {

@@ -3,11 +3,10 @@
 
 
 ## Timeline pending tasks
-[ ] path in heading
-[ ] discard option in timeline
+[-] discard option in timeline
 
 ## Notebooks pending tasks
-[ ] Inside notebooks - not updating on list issue
+[ ] show loader till notebooks hierarchy was prepared
 [ ] on mac list - hover show options
 [ ] search notebooks list
 [ ] recently modified

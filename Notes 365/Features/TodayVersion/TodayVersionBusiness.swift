@@ -122,7 +122,7 @@ class TodayVersionBusiness {
         return nil
     }
     
-    // get base content from todaysVersion/<date>/uuid.md
+
     static func removeBaseVersion(for id: UUID, modelContext: ModelContext) {
         let predicate = #Predicate<TodayVersion> {
             $0.notebookID == id

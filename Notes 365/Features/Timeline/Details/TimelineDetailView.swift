@@ -112,12 +112,13 @@ struct TimelineDetailView: View {
             .listStyle(PlainListStyle())
         }
         .onAppear {
-            timelineDetailState.timelineBusiness.modelContext = modelContext
-            timelineDetailState.timelineBusiness.updateTodayTimelineIndex()
             
             if loadedFirstTime == false {
                 loadedFirstTime = true
-                
+//                
+//                timelineDetailState.timelineBusiness.modelContext = modelContext
+//                timelineDetailState.timelineBusiness.updateTodayTimelineIndex()
+//                
                 timelineDetailState.startReloadingContent()
             }
         }

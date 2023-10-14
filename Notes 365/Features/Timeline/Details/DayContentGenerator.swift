@@ -9,7 +9,7 @@ import Foundation
 
 
 struct DayContentGenerator: AsyncSequence, AsyncIteratorProtocol {
-    typealias Element = Timeline
+    typealias Element = Timeline?
     var linesIterator: IndexingIterator<Array<UUID>>
     var timelineBusiness: TimelineBusiness
     
@@ -19,7 +19,7 @@ struct DayContentGenerator: AsyncSequence, AsyncIteratorProtocol {
     }
     
     mutating func next() async -> Element? {
-        
+        print(#function)
         if Task.isCancelled { return nil }
         
         if let line = linesIterator.next() {
@@ -42,7 +42,11 @@ struct DayContentGenerator: AsyncSequence, AsyncIteratorProtocol {
             return nil
         }
         
-        guard let timelineContent = await timelineBusiness.fetchTimelineContentAsync(for: uuid) else { return nil }
+        print(#function, uuid)
+        
+        guard let timelineContent = await timelineBusiness.fetchTimelineContentAsync(for: uuid) else {
+            print("==no content changes==")
+            return nil }
         
         if Task.isCancelled {
             return nil
@@ -53,6 +57,8 @@ struct DayContentGenerator: AsyncSequence, AsyncIteratorProtocol {
         if Task.isCancelled {
             return nil
         }
+        
+        print(timelineContent.id, timelineContent.content.count)
         
         return timeline
     }

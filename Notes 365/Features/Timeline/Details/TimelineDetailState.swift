@@ -188,9 +188,18 @@ class TimelineDetailState {
     var isFirstAppear = true
     var generatorTask: Task<(), Never>? = nil
     
-    var canDelete: Bool {
-        false
-        //        dayDate.date.isSameDayAs(Date())
+    var canDiscard: Bool {
+        
+        switch calendarState {
+        case .day(let dayDate):
+            return dayDate.date.isSameDayAs(Date())
+        case .week(_):
+            return false
+        case .month(_):
+            return false
+        }
+        
+//        dayDate.date.isSameDayAs(Date())
     }
     
     var cancellableSet = Set<AnyCancellable>()
@@ -249,6 +258,7 @@ class TimelineDetailState {
             }
             self.timelineIndexes.append(result)
             print("timelineIndexes: ", timelineIndexes.count)
+            print(result.id, result.changes)
             processFirstDay(reqID: reqID)
         } else {
             self.currentState = .empty
@@ -365,10 +375,12 @@ class TimelineDetailState {
             
             let dayIndex = DayIndex(timelineIndex: timelineIndex)
             generatorTask = Task {
-                for await timeline in DayContentGenerator(lines: timelineIndex.changes, timelineBusiness: timelineBusiness) {
+                for await timelineResult in DayContentGenerator(lines: timelineIndex.changes, timelineBusiness: timelineBusiness) {
                     if Task.isCancelled == true { return }
-                    DispatchQueue.main.async {
-                        dayIndex.timelines.append(timeline)
+                    if let timelineResult = timelineResult {
+                        DispatchQueue.main.async {
+                            dayIndex.timelines.append(timelineResult)
+                        }
                     }
                 }
                 continuation.resume(returning: dayIndex)
@@ -378,17 +390,23 @@ class TimelineDetailState {
     
     // MARK: - Discard Note Changes
     func removeTimelineChanges(_ timeline: Timeline) {
-        //        // remove from UI
-        //        timelineList.removeAll { item in
-        //            item.id == timeline.id
-        //        }
-        //
-        //        if timelineList.count == 0 {
-        //            currentState = .empty
-        //        }
+        // remove from UI
+        dayIndexs.first?.timelines.removeAll { item in
+            item.id == timeline.id
+        }
+
+        var timelineIndexId: UUID?
         
+        if dayIndexs.first?.timelines.count == 0 {
+            // delete timelineindex also
+            timelineIndexId = dayIndexs.first?.id
+            
+            dayIndexs.removeAll()
+            currentState = .empty
+        }
+
         // remove physical files
-        //        timelineBusiness.removeTimelineChanges(timeline)
+        timelineBusiness.removeTimelineChanges(timeline, timelineIndexId)
     }
     
 }

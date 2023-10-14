@@ -35,71 +35,18 @@ class TimelineBusiness {
     }
     
     func updateTodayTimelineIndex() {
-        todayTimelineIndex = nil
         
         if let todayIndex = fetchDayTimelineIndex(year: today.getYear(), month: today.getMonth(), day: today.getDay()) {
+            print("today index: ", todayIndex.id, todayIndex.changes)
             self.todayTimelineIndex = todayIndex
+            
+//            hardRemoveTimelineIndex(todayIndex)
+//            
         } else {
-//            self.todayTimelineIndex = TimelineIndex()
+            todayTimelineIndex = nil
         }
-         
     }
-    
-    
-    func fetchTimeline(for year: Int) -> [TimelineContent]? {
-        guard let modelContext = modelContext else { return nil }
-        
-        let predicate = #Predicate<TimelineContent> {
-            $0.year == year
-        }
-        
-        let descriptor = FetchDescriptor(predicate: predicate, 
-                                         sortBy: [SortDescriptor(\TimelineContent.modifiedDate, order: .reverse)])
 
-        do {
-            return try modelContext.fetch(descriptor)
-        } catch let err {
-            print(err)
-            return nil
-        }
-    }
-    
-    func fetchMonthTimeline(for year: Int, _ month: Int) -> [TimelineContent]? {
-        guard let modelContext = modelContext else { return nil }
-        
-        let predicate = #Predicate<TimelineContent> {
-            $0.year == year && $0.month == month
-        }
-        
-        let descriptor = FetchDescriptor(predicate: predicate, 
-                                         sortBy: [SortDescriptor(\TimelineContent.modifiedDate, order: .reverse)])
-
-        do {
-            return try modelContext.fetch(descriptor)
-        } catch let err {
-            print(err)
-            return nil
-        }
-    }
-    
-    func fetchDayTimeline(for year: Int, _ month: Int, _ day: Int) -> TimelineContent? {
-        guard let modelContext = modelContext else { return nil }
-        
-        let predicate = #Predicate<TimelineContent> {
-            $0.year == year && $0.month == month && $0.day == day
-        }
-        
-        let descriptor = FetchDescriptor(predicate: predicate,
-                                         sortBy: [SortDescriptor(\TimelineContent.modifiedDate, order: .reverse)])
-
-        do {
-            return try modelContext.fetch(descriptor).first
-        } catch let err {
-            print(err)
-            return nil
-        }
-    }
-    
     func fetchTimelineContent(for id: UUID) -> TimelineContent? {
         guard let modelContext = modelContext else { return nil }
         
@@ -201,6 +148,24 @@ class TimelineBusiness {
 //        }
 //    }
     
+    func fetchDayTimelineIndex(id: UUID) -> TimelineIndex? {
+        guard let modelContext = modelContext else { return nil }
+        
+        let predicate = #Predicate<TimelineIndex> {
+            $0.id == id
+        }
+        
+        var descriptor = FetchDescriptor(predicate: predicate)
+        descriptor.fetchLimit = 1
+        descriptor.includePendingChanges = true
+        
+        do {
+            return try modelContext.fetch(descriptor).first
+        } catch let err {
+            print(err)
+            return nil
+        }
+    }
     
     /// day - year, month. day numbers
     func fetchDayTimelineIndex(year: Int, month: Int, day: Int) -> TimelineIndex? {
@@ -287,14 +252,41 @@ class TimelineBusiness {
     
     
     // MARK: - Remove Timeline
-//    func removeTimelineChanges(_ timeline: Timeline) {
-//        // remove timeline file
-//        removeContent(today: today, fileName: timeline.fileUUID.uuidString)
-//        // remove row from metadata file
-//        removeFromMetadata(uuid: timeline.fileUUID.uuidString)
-//        // remove base version
-//        TodayVersionBusiness.removeBaseVersion(for: timeline.fileUUID, modelContext: modelContext!)
-//    }
+    func removeTimelineChanges(_ timeline: Timeline, _ timelineIndexID: UUID?) {
+        
+        guard let modelContext = modelContext else { return }
+        
+        if let timelineContent = fetchTimelineContent(for: timeline.changesID) {
+            print(#function, timeline.changesID)
+            modelContext.delete(timelineContent)
+        }
+        
+        if let timelineIndexID = timelineIndexID {
+            removeTimelineIndex(id: timelineIndexID)
+        }
+        
+        // remove base version
+        TodayVersionBusiness.removeBaseVersion(for: timeline.fileUUID, modelContext: modelContext)
+        
+        // update todayTimelineIndex
+        updateTodayTimelineIndex()
+    }
+    
+    func removeTimelineIndex(id: UUID) {
+        guard let modelContext = modelContext else { return }
+        
+        if let timelineIndex = fetchDayTimelineIndex(id: id) {
+            print(#function, timelineIndex.id)
+            modelContext.delete(timelineIndex)
+        }
+    }
+    
+    func hardRemoveTimelineIndex(_ timelineIndex: TimelineIndex) {
+        guard let modelContext = modelContext else { return }
+        
+        modelContext.delete(timelineIndex)
+        try? modelContext.save()
+    }
     
 //    func removeContent(today: Date, fileName: String) {
 //        let folderPath = "\(timelineFolderPath)/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
@@ -312,63 +304,63 @@ class TimelineBusiness {
 //        }
 //    }
     
-    func removeFromMetadata(uuid: String, today: Date = Date()) {
-        
-        let timelinePath = "\(timelineFolderPath)/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
-        let metadataFilePath = timelinePath + "/" + "metadata"
-        
-        var metadata: String = ""
-        
-        guard let basePathURL = EnvironmentState.shared.basePathURL else { return }
-        
-        let metaFileURL = basePathURL.appendingPathComponent(timelinePath, isDirectory: false)
-        
-        if FileManager.default.fileExists(atPath: metaFileURL.path) {
-            /*
-             read metadata file
-             form object from it
-             remove this file metadata to this object
-             write metadat to file
-             
-             format:
-             UUID Timestamp timezone filename filepath
-             */
-            
-            metadata = readBinaryFile(fileName: "metadata", folderPath: timelinePath) ?? ""
-            var lines = metadata.components(separatedBy: "\n")
-            // find index
-            var searchIndex: Int?
-            for i in 0..<lines.count {
-                let line = lines[i]
-                let words = line.components(separatedBy: "\t")
-                if words.first == uuid {
-                    searchIndex = i
-                    break
-                }
-            }
-            
-            if let searchIndex = searchIndex {
-                // remove object
-                lines.remove(at: searchIndex)
-                // clean existing metadata and add each one again
-                metadata = ""
-                for line in lines {
-                    if line.count > 0 {
-                        metadata = metadata.appending(line)
-                        metadata = metadata.appending("\n")
-                    }
-                }
-            }
-        }
-        
-        let fileURL = basePathURL.appendingPathComponent(timelinePath).appendingPathComponent("metadata")
-        do {
-            // Write to the file
-            try metadata.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
-        } catch let error as NSError {
-            print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
-        }
-    }
+//    func removeFromMetadata(uuid: String, today: Date = Date()) {
+//        
+//        let timelinePath = "\(timelineFolderPath)/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
+//        let metadataFilePath = timelinePath + "/" + "metadata"
+//        
+//        var metadata: String = ""
+//        
+//        guard let basePathURL = EnvironmentState.shared.basePathURL else { return }
+//        
+//        let metaFileURL = basePathURL.appendingPathComponent(timelinePath, isDirectory: false)
+//        
+//        if FileManager.default.fileExists(atPath: metaFileURL.path) {
+//            /*
+//             read metadata file
+//             form object from it
+//             remove this file metadata to this object
+//             write metadat to file
+//             
+//             format:
+//             UUID Timestamp timezone filename filepath
+//             */
+//            
+//            metadata = readBinaryFile(fileName: "metadata", folderPath: timelinePath) ?? ""
+//            var lines = metadata.components(separatedBy: "\n")
+//            // find index
+//            var searchIndex: Int?
+//            for i in 0..<lines.count {
+//                let line = lines[i]
+//                let words = line.components(separatedBy: "\t")
+//                if words.first == uuid {
+//                    searchIndex = i
+//                    break
+//                }
+//            }
+//            
+//            if let searchIndex = searchIndex {
+//                // remove object
+//                lines.remove(at: searchIndex)
+//                // clean existing metadata and add each one again
+//                metadata = ""
+//                for line in lines {
+//                    if line.count > 0 {
+//                        metadata = metadata.appending(line)
+//                        metadata = metadata.appending("\n")
+//                    }
+//                }
+//            }
+//        }
+//        
+//        let fileURL = basePathURL.appendingPathComponent(timelinePath).appendingPathComponent("metadata")
+//        do {
+//            // Write to the file
+//            try metadata.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
+//        } catch let error as NSError {
+//            print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
+//        }
+//    }
     
 }
 
@@ -401,6 +393,7 @@ extension TimelineBusiness {
         print(#function, notebookName)
         guard let modelContext = modelContext else { return }
         
+        
         // get updated content from notebook business
         guard let notebookContent = NotebookContentBusiness.fetchNotebookContent(for: uuid, in: modelContext) else { return }
         // ask todayVersion object to get baseversion
@@ -413,13 +406,15 @@ extension TimelineBusiness {
             return
         }
         
-        // if already exists, then upate
+        // if already exists, then update
         if let timelineContent = getTimelineContent(today: today, uuid: uuid) {
             timelineContent.content = newChanges
             timelineContent.filename = notebookName
             timelineContent.path = notebookPath
             
             timelineContent.modifiedDate = today //Date()
+            
+            appendTimelineContentToIndex(timelineContent: timelineContent.id)
         } else {
             // else insert
             let timelineContent = TimelineContent()
@@ -435,21 +430,11 @@ extension TimelineBusiness {
             
             modelContext.insert(timelineContent)
             
-            // update timeline index
-            if let todayTimelineIndex = todayTimelineIndex {
-                todayTimelineIndex.changes.append(timelineContent.id)
-            } else {
-                // create today timelineasdf
-                let newTimelineIndex = TimelineIndex()
-                newTimelineIndex.year = today.getYear()
-                newTimelineIndex.month = today.getMonth()
-                newTimelineIndex.day = today.getDay()
-                newTimelineIndex.changes.append(timelineContent.id)
-                // save to db
-                modelContext.insert(newTimelineIndex)
-                todayTimelineIndex = newTimelineIndex
-            }
+            appendTimelineContentToIndex(timelineContent: timelineContent.id)
         }
+        
+        
+       
         
         do {
             try modelContext.save()
@@ -468,6 +453,30 @@ extension TimelineBusiness {
          var path = [String]()
          var modifiedDate = Date()
          */
+    }
+    
+    func appendTimelineContentToIndex(timelineContent: UUID) {
+        guard let modelContext = modelContext else { return }
+        
+        // validate timelineIndex date
+        // update timeline index
+        if let todayTimelineIndex = todayTimelineIndex, todayTimelineIndex.date.isSameDayAs(Date()) {
+            // append if not exists only
+            if !todayTimelineIndex.changes.contains(timelineContent) {
+                todayTimelineIndex.changes.append(timelineContent)
+            }
+            
+        } else {
+            // create today timelineasdf
+            let newTimelineIndex = TimelineIndex()
+            newTimelineIndex.year = today.getYear()
+            newTimelineIndex.month = today.getMonth()
+            newTimelineIndex.day = today.getDay()
+            newTimelineIndex.changes.append(timelineContent)
+            // save to db
+            modelContext.insert(newTimelineIndex)
+            todayTimelineIndex = newTimelineIndex
+        }
     }
     
     // MARK: - TimelineIndex
