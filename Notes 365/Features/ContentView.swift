@@ -132,13 +132,7 @@ struct ContentView: View {
     @State var showDetail = false
     
 //    @State private var editorState = NotebookEditorState()
-    
-    private var notebooksListSync = NotebooksListSync(basePathURL: EnvironmentState.shared.basePathURL)
-//    private var timelineSync = TimelineSync(basePathURL: EnvironmentState.shared.basePathURL)
-    private var todayVersionSync = TodayVersionSync(basePathURL: EnvironmentState.shared.basePathURL)
-    private var notebooksContentSync = NotebooksContentSync(basePathURL: EnvironmentState.shared.basePathURL)
-    private var deletedListSync = DeletedListSync(basePathURL: EnvironmentState.shared.basePathURL)
-    
+     
     @State var navigationSplitViewVisibility = NavigationSplitViewVisibility.all
     
     

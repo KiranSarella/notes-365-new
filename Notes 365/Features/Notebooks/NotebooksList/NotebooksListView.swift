@@ -130,6 +130,9 @@ struct NotebooksListView: View {
                                 }
                             })
                             .searchable(text: $usersState.searchText, placement: .navigationBarDrawer(displayMode: .always))
+                            .onChange(of: usersState.searchText) { oldValue, newValue in
+                                usersState.searchTextPublisher.send(newValue)
+                            }
                             
                             
                         }

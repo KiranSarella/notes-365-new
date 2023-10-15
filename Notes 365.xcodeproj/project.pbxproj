@@ -21,7 +21,6 @@
 		5C29FECD2A98B377001DC601 /* PreviewViewUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C29FECC2A98B377001DC601 /* PreviewViewUI.swift */; };
 		5C29FED32A98D8FD001DC601 /* EditorSymbolsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C29FED22A98D8FD001DC601 /* EditorSymbolsState.swift */; };
 		5C29FED52A98D91D001DC601 /* ReadonlyEditorCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C29FED42A98D91D001DC601 /* ReadonlyEditorCache.swift */; };
-		5C4A7B572A7BC626004C436F /* DeletedListSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4A7B562A7BC626004C436F /* DeletedListSync.swift */; };
 		5C4ADCE32A9757EF000A037E /* EditorSymbolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4ADCE22A9757EF000A037E /* EditorSymbolsView.swift */; };
 		5CA77C162A24AE220030EFB2 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C152A24AE220030EFB2 /* Collections */; };
 		5CA77C182A24AE220030EFB2 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C172A24AE220030EFB2 /* DequeModule */; };
@@ -97,11 +96,7 @@
 		9F93E15029E6A2AC00210E99 /* MarkdownEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93E14F29E6A2AC00210E99 /* MarkdownEditorView.swift */; };
 		9F93E15529ED0D0F00210E99 /* TodayVersionSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93E15429ED0D0F00210E99 /* TodayVersionSync.swift */; };
 		9F93E15629ED0D0F00210E99 /* TodayVersionSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93E15429ED0D0F00210E99 /* TodayVersionSync.swift */; };
-		9F9DBF7229F122E80088B0CA /* NotebooksListSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9DBF7129F122E80088B0CA /* NotebooksListSync.swift */; };
-		9F9DBF7329F122E80088B0CA /* NotebooksListSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9DBF7129F122E80088B0CA /* NotebooksListSync.swift */; };
 		9FA7BE2A29F0FFA000CB5D6F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCDE2920CCCE003DE332 /* Extensions.swift */; };
-		9FA7E34C29F299A0007AB408 /* NotebooksContentSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA7E34B29F299A0007AB408 /* NotebooksContentSync.swift */; };
-		9FA7E34D29F299A0007AB408 /* NotebooksContentSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA7E34B29F299A0007AB408 /* NotebooksContentSync.swift */; };
 		9FB0A47B29DD26580093FBD2 /* NotebooksListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0A47A29DD26580093FBD2 /* NotebooksListTests.swift */; };
 		9FB0A47D29DD27470093FBD2 /* CloudServiceTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D2925299EC27E00B37F51 /* CloudServiceTwo.swift */; };
 		9FB0A47E29DD274F0093FBD2 /* InitialCloudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1687CB29AD0E7F0085A0CA /* InitialCloudSync.swift */; };
@@ -159,7 +154,6 @@
 		5C29FECC2A98B377001DC601 /* PreviewViewUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewUI.swift; sourceTree = "<group>"; };
 		5C29FED22A98D8FD001DC601 /* EditorSymbolsState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorSymbolsState.swift; sourceTree = "<group>"; };
 		5C29FED42A98D91D001DC601 /* ReadonlyEditorCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadonlyEditorCache.swift; sourceTree = "<group>"; };
-		5C4A7B562A7BC626004C436F /* DeletedListSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletedListSync.swift; sourceTree = "<group>"; };
 		5C4ADCE22A9757EF000A037E /* EditorSymbolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSymbolsView.swift; sourceTree = "<group>"; };
 		5C9732212A8B74C200C42E28 /* iCloud-sync.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "iCloud-sync.md"; sourceTree = "<group>"; };
 		5C9B5CFF2A8FED2A00396102 /* TextKit.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TextKit.md; sourceTree = "<group>"; };
@@ -244,8 +238,6 @@
 		9F93E14F29E6A2AC00210E99 /* MarkdownEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownEditorView.swift; sourceTree = "<group>"; };
 		9F93E15429ED0D0F00210E99 /* TodayVersionSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayVersionSync.swift; sourceTree = "<group>"; };
 		9F93E15829EE620900210E99 /* Release Notes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Release Notes.md"; sourceTree = "<group>"; };
-		9F9DBF7129F122E80088B0CA /* NotebooksListSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListSync.swift; sourceTree = "<group>"; };
-		9FA7E34B29F299A0007AB408 /* NotebooksContentSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksContentSync.swift; sourceTree = "<group>"; };
 		9FB0A47129D9246D0093FBD2 /* architecture-decissions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "architecture-decissions.md"; sourceTree = "<group>"; };
 		9FB0A47A29DD26580093FBD2 /* NotebooksListTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListTests.swift; sourceTree = "<group>"; };
 		9FB0A47F29DD873E0093FBD2 /* NotebookContentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentTests.swift; sourceTree = "<group>"; };
@@ -579,8 +571,6 @@
 				5CCCF7F02AC15E0D00F5923E /* NotebookContent.swift */,
 				9FB6C69F2927695000C8EC76 /* NotebookContentBusiness.swift */,
 				5CDE34BC2AB2D885002D88ED /* NotebooksCache.swift */,
-				9F9DBF7129F122E80088B0CA /* NotebooksListSync.swift */,
-				9FA7E34B29F299A0007AB408 /* NotebooksContentSync.swift */,
 				9FB6C69429275BF900C8EC76 /* NotebooksList */,
 				9FB6C69629275C1500C8EC76 /* NotebookEditor */,
 				9FB0A47829DBDAC00093FBD2 /* __tests */,
@@ -645,7 +635,6 @@
 				9F45BD252920CCCE003DE332 /* NotebooksListView.swift */,
 				9F45BD292920CCCE003DE332 /* NotebooksListState.swift */,
 				9F45BD042920CCCE003DE332 /* NotebooksListBusiness.swift */,
-				5C4A7B562A7BC626004C436F /* DeletedListSync.swift */,
 				9FBB0B482A0913B300F407AF /* CommonDropDelegate.swift */,
 				9F6CA8DD2A041D27009061A0 /* ReorderLIst.md */,
 			);
@@ -825,7 +814,6 @@
 				5C29FECD2A98B377001DC601 /* PreviewViewUI.swift in Sources */,
 				5C29FED32A98D8FD001DC601 /* EditorSymbolsState.swift in Sources */,
 				9F92CF0529B7525500B8D3C4 /* MailView.swift in Sources */,
-				9F9DBF7229F122E80088B0CA /* NotebooksListSync.swift in Sources */,
 				9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */,
 				5CFCF5E62ABEDFA400351EEA /* NotebookModels.swift in Sources */,
 				9FB6C69C29275E0300C8EC76 /* NotebookEditorState.swift in Sources */,
@@ -853,7 +841,6 @@
 				5C0FEF762AD01CC100056DC7 /* DayCalendarState.swift in Sources */,
 				9F45BD662920CDA9003DE332 /* NoteChangeHeadingView.swift in Sources */,
 				9F14B4AE298F98900079D23B /* FontPicker.swift in Sources */,
-				9FA7E34C29F299A0007AB408 /* NotebooksContentSync.swift in Sources */,
 				9FB6C6A02927695000C8EC76 /* NotebookContentBusiness.swift in Sources */,
 				5C0FEF852AD01CF200056DC7 /* CalendarState.swift in Sources */,
 				9F45BDAA2920CE52003DE332 /* NamedColor.swift in Sources */,
@@ -865,7 +852,6 @@
 				9F14B4B02990D46D0079D23B /* ThemeDetailState.swift in Sources */,
 				9F45BCA22920CAAE003DE332 /* Notes_365App.swift in Sources */,
 				9F45BD9E2920CE21003DE332 /* SpeechHelpr.swift in Sources */,
-				5C4A7B572A7BC626004C436F /* DeletedListSync.swift in Sources */,
 				5C0FEF882AD0262E00056DC7 /* TimelineCalendarView.swift in Sources */,
 				9FB6C69829275D0600C8EC76 /* FormatOptionsView.swift in Sources */,
 				5CCCF7F12AC15E0D00F5923E /* NotebookContent.swift in Sources */,
@@ -925,12 +911,10 @@
 				9FB0A48529DE8DEF0093FBD2 /* NamedColor.swift in Sources */,
 				9F45BDBF2920EB14003DE332 /* NotebooksListBusiness.swift in Sources */,
 				9FB21DF4295DBE5900CFEDA8 /* ChooseEnvironment.swift in Sources */,
-				9F9DBF7329F122E80088B0CA /* NotebooksListSync.swift in Sources */,
 				9F45BDD329226BD9003DE332 /* NotebooksListState.swift in Sources */,
 				9FA7BE2A29F0FFA000CB5D6F /* Extensions.swift in Sources */,
 				9F8EE98B293EB32D0021409E /* CloudDataManager.swift in Sources */,
 				9FB0A48129DE7E390093FBD2 /* NotebookEditorState.swift in Sources */,
-				9FA7E34D29F299A0007AB408 /* NotebooksContentSync.swift in Sources */,
 				9FB0A48429DE8DD90093FBD2 /* MarkdownTheme.swift in Sources */,
 				9F45BDBA2920E73C003DE332 /* StringDiffTests.swift in Sources */,
 			);

@@ -78,6 +78,8 @@ class NotebooksListState {
         listSourceType == .deletedItems || listSourceType == .notebooks(.recentlyModified)
     }
     
+    let searchTextPublisher = PassthroughSubject<String, Never>()
+    
     var firstTimeAppear = true
     
 //    var timelineCreatorBusiness = TimelineBusiness(path: EnvironmentState.shared.basePathURL)
@@ -616,23 +618,23 @@ extension NotebooksListState {
     
     func setupSearchText() {
         
-//        $searchText
-//            .map({ (string) -> String? in
-//                if string.count < 2 {
-////                    self.usersDB.notes = []
-//                    self.searchResultCount = 0
-//                    return nil
-//                }
-//                return string
-//            })
-//            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
-//            .receive(on: RunLoop.main)
-//            .compactMap{ $0 }
-//            .sink { status in
-////                print(status)
-//            } receiveValue: { [self] (searchField) in
-//                searchItems(searchField)
-//            }.store(in: &subscription)
+        searchTextPublisher
+            .map({ (string) -> String? in
+                if string.count < 2 {
+//                    self.usersDB.notes = []
+                    self.searchResultCount = 0
+                    return nil
+                }
+                return string
+            })
+            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
+            .receive(on: RunLoop.main)
+            .compactMap{ $0 }
+            .sink { status in
+//                print(status)
+            } receiveValue: { [self] (searchField) in
+                searchItems(searchField)
+            }.store(in: &subscription)
     }
     
     var activeSearch: Bool {
