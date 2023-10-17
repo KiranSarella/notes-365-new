@@ -19,7 +19,8 @@ import Combine
 struct NotebookEditorView: View {
     
     var listDisplayState: ListSourceType
-    var notebookM: Notebook
+//    @Binding var notebookM: Notebook
+//    var notebookM: Notebook
     @Bindable var editorState: NotebookEditorState
 
     @State var autoSaveTimer: Timer.TimerPublisher = Timer.publish(every: 10, on: .main, in: .common)
@@ -43,7 +44,7 @@ struct NotebookEditorView: View {
                 }
                 Spacer()
             } else {
-                MarkdownEditorView(fileName: notebookM.name, isDeleted: isDeleted, contentEditedDate: $editorState.contentEditedDate, theme: $editorState.theme, baseContent: $editorState.baseContent, handler: { getText in
+                MarkdownEditorView(fileName: editorState.notebook!.name, isDeleted: isDeleted, contentEditedDate: $editorState.contentEditedDate, theme: $editorState.theme, baseContent: $editorState.baseContent, handler: { getText in
                     // attach ref.
                     editorState.getTextHandler = getText
                 })
@@ -62,7 +63,7 @@ struct NotebookEditorView: View {
         .onAppear {
             Task {
                 // new notebook steps
-                await editorState.loadContent(for: notebookM)
+                await editorState.loadContent()
                 editorState.getNewContent = {
                     return await MainActor.run {
                         editorState.getTextHandler!()
@@ -71,25 +72,25 @@ struct NotebookEditorView: View {
             }
         }
         .onDisappear {
-//            Task {
-//                await editorState.saveContentChanges()
-//            }
-        }
-        .onChange(of: notebookM) { newValue in
             Task {
-                // existing notebook steps
-                // save existing changes if required
                 await editorState.saveContentChanges()
-                
-                // new notebook steps
-                await editorState.loadContent(for: newValue)
-                editorState.getNewContent = {
-                    return await MainActor.run {
-                        editorState.getTextHandler!()
-                    }
-                }
             }
         }
+//        .onChange(of: editorState.notebook) { newValue in
+//            Task {
+//                // existing notebook steps
+//                // save existing changes if required
+//                await editorState.saveContentChanges()
+//                
+//                // new notebook steps
+//                await editorState.loadContent(for: newValue)
+//                editorState.getNewContent = {
+//                    return await MainActor.run {
+//                        editorState.getTextHandler!()
+//                    }
+//                }
+//            }
+//        }
         .onReceive(autoSaveTimer, perform: { _ in
             Task {
                 await editorState.saveContentChanges()

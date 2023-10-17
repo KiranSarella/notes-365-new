@@ -27,7 +27,7 @@ class NotebookEditorState {
     var notebookContent: NotebookContent? = nil
     
     @ObservationIgnored
-    unowned private(set) var notebook: Notebook! = nil
+    private(set) var notebook: Notebook?
     
 //    var getNotebook: (()->(Notebook?))?
     var getNewContent: (() async -> (String))? = nil
@@ -52,20 +52,29 @@ class NotebookEditorState {
 //            }
     }
     
-    func setupNewNotebook(_ notebook: Notebook) {
+    func setupNewNotebook( _ notebook: inout Notebook) {
         self.notebook = notebook
     }
     
     @MainActor
-    func loadContent(for notebook: Notebook) async {
-        setupNewNotebook(notebook)
+    func loadContent() async {
+        
+        guard let modelContext = modelContext, let notebook = notebook else { return }
+        
         self.isFetchingData = true
         
-        if let result = NotebookContentBusiness.fetchNotebookContent(for: notebook.id, in: modelContext!) {
+        if let result = NotebookContentBusiness.fetchNotebookContent(for: notebook.id, in: modelContext) {
             notebookContent = result
             self.baseContent = result.content
         } else {
             notebookContent = NotebookContent(notebookID: notebook.id)
+            // insert new object
+            modelContext.insert(notebookContent!)
+            do {
+                try modelContext.save()
+            } catch let err {
+                print(err)
+            }
         }
         
 //        let content = await self.notebook.loadContent() ?? ""
@@ -83,7 +92,8 @@ class NotebookEditorState {
         // ignore autosave if content was not edited
         guard 
             let contentEditedDate = contentEditedDate,
-            let modelContext = modelContext
+            let modelContext = modelContext,
+            let notebook = notebook
         else { return }
         if contentEditedDate >= lastSavedDate {
             // get new content
@@ -94,13 +104,16 @@ class NotebookEditorState {
                 print(#function)
                 guard let notebookContent = notebookContent else { return }
                 notebookContent.content = txt
-                modelContext.insert(notebookContent)
+//                modelContext.insert(notebookContent)
+                
+                notebook.modifiedDate = Date()
+                notebook.saveNotebookData(modelContext)
+                
                 do {
                     try modelContext.save()
                 } catch let err {
                     print(err)
                 }
-                
                 
                 // TODO: send notification after some delay - based on result.
                 let info = [

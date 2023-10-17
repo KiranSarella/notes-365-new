@@ -34,11 +34,6 @@ public enum NotebookListOption: String, CaseIterable, Identifiable {
             return "tags"
         }
     }
-    
-//    static func getCalendarType(id: String?) -> CalendarType? {
-//        guard let id = id else { return nil }
-//        return CalendarType(rawValue: id)
-//    }
 }
 
 
@@ -68,10 +63,7 @@ struct NotebooksListView: View {
     }
     
     var body: some View {
-        
-//        Text("Loading..")
-//            .opacity(usersState.isLoaded ? 0 : 1)
-        
+
         VStack {
             if usersState.isLoading {
                 ProgressView()
@@ -97,26 +89,37 @@ struct NotebooksListView: View {
                     if usersState.listSourceType == .deletedItems ||
                         usersState.listSourceType == .notebooks(.recentlyModified) {
                         
-                        SearchedListView(selectedNotebook: $selectedNotebook, usersState: usersState)
-//                            .padding(.bottom, 20)
-//                            .listStyle(SidebarListStyle())
-                            .autocorrectionDisabled()
-                        
-    //                                    .listStyle(SidebarListStyle())
-                            .navigationTitle("Notebooks")
-                            .navigationBarTitleDisplayMode(.large)
-                        
-                        if usersState.listSourceType == .deletedItems {
-                            Text("Notebooks will be permanently deleted after 30 days.")
-                                .font(.caption2)
-                                .foregroundColor(.gray)
+                        NavigationStack(path: $colors) {
+                            SearchedListView(selectedNotebook: $selectedNotebook, usersState: usersState)
+    //                            .padding(.bottom, 20)
+                                .autocorrectionDisabled()
+                                .navigationTitle("Notebooks")
+                                .navigationBarTitleDisplayMode(.large)
+                                .onChange(of: selectedNotebook, { oldValue, newValue in
+                                    if let newValue = newValue {
+                                        // ** do navigation to editor
+                                        editorState.setupNewNotebook(&selectedNotebook!)
+                                        colors.append(newValue)
+                                    }
+                                })
+                            
+                            if usersState.listSourceType == .deletedItems {
+                                Text("Notebooks will be permanently deleted after 30 days.")
+                                    .font(.caption2)
+                                    .foregroundColor(.gray)
+                            }
                         }
+                        .navigationDestination(for: Notebook.self) { color in
+                            NotebookEditorView(listDisplayState: usersState.listSourceType, editorState: editorState)
+                        }
+                        
+                        
                             
                     } else {
                         
                         NavigationStack(path: $colors) {
                          
-                        SearchedListView(selectedNotebook: $selectedNotebook, usersState: usersState)
+                            SearchedListView(selectedNotebook: $selectedNotebook, usersState: usersState)
                             .padding(.bottom, 20)
 //                            .listStyle(SidebarListStyle())
                             .autocorrectionDisabled()
@@ -126,6 +129,8 @@ struct NotebooksListView: View {
                             .navigationBarTitleDisplayMode(.large)
                             .onChange(of: selectedNotebook, { oldValue, newValue in
                                 if let newValue = newValue {
+                                    // ** do navigation to editor
+                                    editorState.setupNewNotebook(&selectedNotebook!)
                                     colors.append(newValue)
                                 }
                             })
@@ -133,59 +138,11 @@ struct NotebooksListView: View {
                             .onChange(of: usersState.searchText) { oldValue, newValue in
                                 usersState.searchTextPublisher.send(newValue)
                             }
-                            
-                            
                         }
                         .navigationDestination(for: Notebook.self) { color in
-                            
-//                            if let notebook = usersState.getNotebook(uuid: color) {
-        
-                                NotebookEditorView(listDisplayState: usersState.listSourceType, notebookM: color, editorState: editorState)
-        
-        //                        NotebookEditorView(notebookM: notebook, editorState: editorState)
-//                            } else {
-//                                Text("canvas")
-//                            }
-                            
+                            NotebookEditorView(listDisplayState: usersState.listSourceType, editorState: editorState)
                         }
-//                        .navigationDestination(for: Notebook.ID.self) { color in
-//                            
-//                            if let notebook = usersState.getNotebook(uuid: color) {
-//        
-//                                NotebookEditorView(listDisplayState: usersState.listSourceType, notebookM: notebook, editorState: editorState)
-//        
-//        //                        NotebookEditorView(notebookM: notebook, editorState: editorState)
-//                            } else {
-//                                Text("canvas")
-//                            }
-//                            
-//                        }
-                        
-                        
                     }
-                    
-                  
-                    //                .onChange(of: usersState.searchText) { newValue in
-                    //                    selectedNotebook = nil`
-                    //                }
-                    /*
-                     ** IMP
-                     
-                     .listStyle(SidebarListStyle())
-                     
-                     this is required to show disclosureGroup when first item have no childs.
-                     and only working with SidebarListStyle.
-                     
-
-                     */
-                    
-//                    if UIDevice.current.userInterfaceIdiom == .pad {
-//                        VStack {
-//                            getToolbarView()
-//                            Spacer()
-//                        }
-//                        .frame(height: 40)
-//                    }
                 }
 //                .frame(minWidth: 280, maxWidth: 500)
                 .confirmationDialog("Are you sure?", isPresented: $usersState.presentDeleteConfirmation) {

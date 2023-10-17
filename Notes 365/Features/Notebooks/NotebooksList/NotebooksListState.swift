@@ -747,6 +747,9 @@ extension NotebooksListState {
                     visibleChildsStatus.insert(anyVisibleChildren)
                 }
             }
+            
+            print(note.name, note.modifiedDate)
+            
             // check if search str contains in file name
             if note.modifiedDate >= Calendar.current.date(byAdding: .day, value: -2, to: Date())! {
                 note.canShow = true
