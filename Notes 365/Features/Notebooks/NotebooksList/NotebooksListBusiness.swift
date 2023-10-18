@@ -164,8 +164,60 @@ class NotebooksListBusiness {
                 }
                 
                 // topLevel
-                let topLevels: [NotebookData] = results.filter { $0.parent == nil }
+                var topLevels: [NotebookData] = results.filter { $0.parent == nil }
                     .sorted { $0.orderID < $1.orderID }
+                topLevels.removeAll(where: { $0.isDeleted })
+                
+                // notebooks
+                var notebooksList = [Notebook]()
+                for topNote in topLevels {
+                    notebooksList.append(Notebook(topNote))
+                }
+                // populate childnotes
+                for notebook in notebooksList {
+                    notebook.populateChildren(dict)
+                }
+                
+                continuation.resume(returning: notebooksList)
+            } catch let err {
+                print(err)
+                continuation.resume(returning: nil)
+            }
+            
+        }
+    }
+    
+    func fetchDeletedNotebooks() async -> [Notebook]? {
+        
+        await withCheckedContinuation { continuation in
+            
+            guard
+                let modelContext = modelContext
+            else {
+                continuation.resume(returning: nil)
+                return
+            }
+            
+            let allListPredicate = #Predicate<NotebookData> { _ in
+                true
+            }
+            let descriptor = FetchDescriptor(predicate: allListPredicate)
+    //        let descriptor = FetchDescriptor(predicate: allListPredicate, sortBy: [SortDescriptor(\NotebookData.orderID)])
+            
+            do {
+                let results: [NotebookData] = try modelContext.fetch(descriptor)
+                // prepare dict
+                var dict = [UUID: NotebookData]()
+                for result in results {
+                    dict[result.id] = result
+                }
+                
+                // deleted topLevel
+                var topLevels: [NotebookData] = results.filter { $0.isDeleted == true }
+                    
+                topLevels.sort { n1, n2 in
+                    n1.deletedDate! > n2.deletedDate!
+                }
                 
                 // notebooks
                 var notebooksList = [Notebook]()

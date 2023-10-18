@@ -64,15 +64,10 @@ class NotebooksListState {
 //    @Published var isShowingRecentlyDeleted = false
     var deletedResultCount: Int = 0
     
-    var presentDeleteConfirmation = false
-    var deletingNotebook: Notebook? = nil
-    
-    private var backupNotebooks = [Notebook]()
-    private var backupExpandedIds = Set<String>()
+//    private var backupNotebooks = [Notebook]()
+//    private var backupExpandedIds = Set<String>()
     
     let notebooksPath = Constants.notebooksFolderName
-    
-    var selectedNotebook: Notebook? = nil
     
     var canEnableDone: Bool {
         listSourceType == .deletedItems || listSourceType == .notebooks(.recentlyModified)
@@ -107,18 +102,11 @@ class NotebooksListState {
         
         setupSearchText()
         
-        registerNotebookChangesNotification()
         isLoading = false
-        
-        
     }
     
-    deinit {
-//        timelineCreatorBusiness.removeNotebookChangesNotification()
-        removeNotebookChangesNotification()
-    }
     
-    @MainActor
+//    @MainActor
 //    func loadData() async {
 //        isLoaded = false
 //        // create notesHierarchy with actual notebook objects
@@ -212,10 +200,23 @@ class NotebooksListState {
             isLoading = true
 //            try? await Task.sleep(nanoseconds: 1_000_000_000)
             self.notebooks = await notebookBusiness.fetchNotebooks() ?? []
+            self.deletedNotebooks = await notebookBusiness.fetchDeletedNotebooks() ?? []
             isLoading = false
         }
         
     }
+    
+//    func fetchDeletedNotebooks() {
+//        
+//        Task {
+//            isLoading = true
+////            try? await Task.sleep(nanoseconds: 1_000_000_000)
+//            self.deletedNotebooks = await notebookBusiness.fetchDeletedNotebooks() ?? []
+//            isLoading = false
+//        }
+//    }
+    
+    
     
     
 //    func fetchExpandedIds() {
@@ -452,49 +453,46 @@ class NotebooksListState {
     }
     
     
-    func deleteNotebook(ref notebook: Notebook) {
-        // delete from hierarchy
-        if let parent = notebook.parent {
-            // delete notebook ref
-            parent.children?.removeAll(where: { $0 == notebook })
-        } else {
-            // base level
-            // delete notebook ref
-            notebooks.removeAll(where: { $0 == notebook })
-            // delete object
-            notebooks.removeAll(where: { $0.id == notebook.id })
-        }
-        // delete physical file
-        notebookBusiness.deleteNotebook(notebook: notebook)
-        // persist
-        notebookBusiness.persist(notebooks: notebooks)
-    }
+//    func deleteNotebook(ref notebook: Notebook) {
+//        // delete from hierarchy
+//        if let parent = notebook.parent {
+//            // delete notebook ref
+//            parent.children?.removeAll(where: { $0 == notebook })
+//        } else {
+//            // base level
+//            // delete notebook ref
+//            notebooks.removeAll(where: { $0 == notebook })
+//            // delete object
+//            notebooks.removeAll(where: { $0.id == notebook.id })
+//        }
+//        // delete physical file
+//        notebookBusiness.deleteNotebook(notebook: notebook)
+//        // persist
+//        notebookBusiness.persist(notebooks: notebooks)
+//    }
     
-    func deleteNotebookNew(ref notebook: Notebook) {
+    func delete(notebook: Notebook) {
+        
+        guard let modelContext = modelContext else { return }
+        
         // delete from hierarchy
         if let parent = notebook.parent {
-            // delete notebook ref
+            // inner item
+            // delete notebook
             parent.children?.removeAll(where: { $0 == notebook })
         } else {
             // base level
-            // delete notebook ref
+            // delete notebook
             notebooks.removeAll(where: { $0 == notebook })
-            // delete object
-            notebooks.removeAll(where: { $0.id == notebook.id })
         }
+          
+        // mark deleted date
+        notebook.deletedDate = Date()
+        // persist 
+        notebook.saveNotebookData(modelContext)
+        
         // add to deleted list
         deletedNotebooks.insert(notebook, at: 0)
-        // save restore path
-//        deletedNotebookRestorePaths[notebook.id.uuidString] = notebook.path
-        
-//        // reconstruct list
-//        let deletedNotesList = NotebooksHierarchy.constructHierarchy(notebooks: deletedNotebooks, expandedIds: expandedIds)
-//        deletedNotes = deletedNotesList
-        
-        // persist
-        notebookBusiness.persist(notebooks: notebooks)
-//        notebookBusiness.persistDeleted(notebooks: deletedNotebooks)
-//        notebookBusiness.persistDeletedRestorePath(notebooks: deletedNotebookRestorePaths)
     }
     
     
@@ -524,11 +522,6 @@ class NotebooksListState {
 //        notebookBusiness.persist(notebooks: notebooks)
     }
 
-    func updateModifiedDate(for notebook: Notebook) {
-        notebook.modifiedDate = Date()
-        // persist changes
-        notebookBusiness.persist(notebooks: notebooks)
-    }
     
     func move(notebooks: inout [Notebook], from source: IndexSet, to destination: Int) {
         // move references
@@ -785,26 +778,7 @@ extension NotebooksListState {
         listSourceType = .notebooks(.recentlyModified)
     }
     
-    
-    func registerNotebookChangesNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookChangesNotification(_:)), name: Notification.Name.notebookContentUpdated, object: nil)
-    }
-    
-    func removeNotebookChangesNotification() {
-        NotificationCenter.default.removeObserver(self, name: Notification.Name.notebookContentUpdated, object: nil)
-    }
-    
-    @objc func handleNotebookChangesNotification(_ notification: Notification) {
-//        print(#function)
-        guard
-            let uuid = notification.userInfo?["id"] as? String,
-            let notebook = selectedNotebook
-        else { return }
-        
-        if notebook.id.uuidString == uuid {
-            updateModifiedDate(for: notebook)
-        }
-    }
+
 }
 
 // MARK: - recently deleted
@@ -824,28 +798,29 @@ extension NotebooksListState {
 //            showRecentlyDeleted()
 //        }
 //    }
-    
+//    
     func hideRecentlyDeleted() {
         
-        expandedIds = backupExpandedIds
+//        expandedIds = backupExpandedIds
 //        notesHierarchy.notes = backupNotebooks
         
-        backupNotebooks = [Notebook]()
-        backupExpandedIds = []
+//        backupNotebooks = [Notebook]()
+//        backupExpandedIds = []
         
         listSourceType = .notebooks(.none)
     }
     
     func showRecentlyDeleted() {
         // backup normal hierarchy state
-        backupExpandedIds = expandedIds
-        backupNotebooks = notebooks
+//        backupExpandedIds = expandedIds
+//        backupNotebooks = notebooks
         
 //        let deletednotesList = NotebooksHierarchy.constructHierarchy(notebooks: deletedNotebooks, expandedIds: [])
 //        notesHierarchy.notes = deletednotesList
         
 //        deletedResultCount = deletednotesList.count
         
+        deletedResultCount = deletedNotebooks.count
         listSourceType = .deletedItems
     }
     

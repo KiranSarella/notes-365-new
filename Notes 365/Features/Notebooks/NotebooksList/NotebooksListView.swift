@@ -144,22 +144,9 @@ struct NotebooksListView: View {
                         }
                     }
                 }
-//                .frame(minWidth: 280, maxWidth: 500)
-                .confirmationDialog("Are you sure?", isPresented: $usersState.presentDeleteConfirmation) {
-                    Button("Delete", role: .destructive) {
-                        guard let temp = usersState.deletingNotebook else { return }
-                        usersState.deleteNotebook(ref: temp)
-                        usersState.deletingNotebook = nil
-                    }
-                } message: {
-                    Text("You cannot undo this action")
-                }
                 .onDisappear {
                     usersState.saveExpandedIds()
                 }
-//                .onChange(of: selectedNotebook) { newValue in
-//                    usersState.selectedNotebook = newValue
-//                }
             }
             
         }
@@ -202,12 +189,6 @@ struct NotebooksListView: View {
 //            if appearDate != Date() {
 //                usersState.checkOldItemsToDelete()
 //            }
-        }
-        .onChange(of: usersState.deletingNotebook) { newValue in
-            if newValue != nil {
-                // if deleting a note, de-select it before deleting
-                selectedNotebook = nil
-            }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { (_) in
               print("UIApplication: willEnterForegroundNotification")
@@ -276,9 +257,9 @@ struct NotebooksListView: View {
                 }
 //                usersState.deletingNotebook = selectedNotebook
 //                usersState.presentDeleteConfirmation = true
-                guard let temp = usersState.deletingNotebook else { return }
-                usersState.deleteNotebookNew(ref: temp)
-                usersState.deletingNotebook = nil
+//                guard var temp = usersState.deletingNotebook else { return }
+//                usersState.deleteNotebookNew(ref: &temp)
+//                usersState.deletingNotebook = nil
                 
             }) {
                 Image(systemName: "trash")
@@ -336,7 +317,7 @@ struct SearchedListView: View {
             List(selection: $selectedNotebook) {
                 
                 if usersState.listSourceType == .deletedItems {
-                    DeletedNotebooksListGroupView(usersState: usersState, notebooks: $usersState.notebooks)
+                    NotebooksListGroupView(usersState: usersState, notebooks: $usersState.deletedNotebooks)
                 } else {
                     NotebooksListGroupView(usersState: usersState, notebooks: $usersState.notebooks)
                 }
@@ -559,7 +540,7 @@ struct NotebooksListGroupView: View {
             ForEach($notebooks, id: \.self) { $notebook in
                 MyTableDeletedRow(usersState: usersState, notebook: $notebook)
             }
-            .onMove(perform: move)
+//            .onMove(perform: move)
         }
         
         
@@ -705,11 +686,15 @@ struct RowView: View {
                         Button(role: .destructive) {
 //                            store.delete(message)
                             
-                            usersState.deletingNotebook = notebook
+                            Task {
+                                usersState.delete(notebook: notebook)
+                            }
                             
-//                            guard let temp = usersState.deletingNotebook else { return }
-                            usersState.deleteNotebookNew(ref: notebook)
-                            usersState.deletingNotebook = nil
+//                            usersState.deletingNotebook = notebook
+//                            
+////                            guard let temp = usersState.deletingNotebook else { return }
+//                            
+//                            usersState.deletingNotebook = nil
                             
                         } label: {
                             Label("Delete", systemImage: "trash")
@@ -743,11 +728,16 @@ struct RowView: View {
                     
                     // trash
                     Button(role: .destructive, action: {
-                        usersState.deletingNotebook = notebook
-    //                    usersState.presentDeleteConfirmation = true
+                        Task {
+                            usersState.delete(notebook: notebook)
+                        }
                         
-                        usersState.deleteNotebookNew(ref: notebook)
-                        usersState.deletingNotebook = nil
+                        
+//                        usersState.deletingNotebook = notebook
+//    //                    usersState.presentDeleteConfirmation = true
+//                        
+//                        
+//                        usersState.deletingNotebook = nil
                         
                     }) {
                         HStack {
@@ -776,13 +766,9 @@ struct RowView: View {
                     }
                     // trash
                     Button(role: .destructive, action: {
-                        usersState.deletingNotebook = notebook
-    //                    usersState.presentDeleteConfirmation = true
-                        
-                        
-                        usersState.deleteNotebookNew(ref: notebook)
-                        usersState.deletingNotebook = nil
-                        
+                        Task {
+                            usersState.delete(notebook: notebook)
+                        }
                     }) {
                         HStack {
                             Text("Delete")

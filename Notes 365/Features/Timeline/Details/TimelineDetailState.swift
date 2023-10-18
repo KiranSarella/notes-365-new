@@ -376,7 +376,10 @@ class TimelineDetailState {
             let dayIndex = DayIndex(timelineIndex: timelineIndex)
             generatorTask = Task {
                 for await timelineResult in DayContentGenerator(lines: timelineIndex.changes, timelineBusiness: timelineBusiness) {
-                    if Task.isCancelled == true { return }
+                    if Task.isCancelled { return }
+                    print("timelineResut: ", timelineResult?.fileName)
+                    print(generatorTask?.isCancelled)
+                    print(Task.isCancelled)
                     if let timelineResult = timelineResult {
                         DispatchQueue.main.async {
                             dayIndex.timelines.append(timelineResult)

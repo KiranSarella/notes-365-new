@@ -22,6 +22,10 @@ class NotebookData {
     var deletedDate: Date?
     var modifiedDate: Date = Date()
     
+    var isDeleted: Bool {
+        deletedDate != nil
+    }
+    
     init(id: UUID, name: String) {
         self.id = id
         self.name = name
@@ -185,6 +189,8 @@ class Notebook: Identifiable {
         children = [Notebook]()
         for cid in cArr {
             if let noteD = dict[cid] {
+                // if deleted, discard that node and heirarchy
+                if noteD.isDeleted { continue } // continue vs return - remember
                 let note = Notebook(noteD)
                 note.parent = self
                 children?.append(note)
