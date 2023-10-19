@@ -77,16 +77,25 @@ struct TimelineCalendarView: View {
         .onChange(of: calendarState.selectedDayDate) { oldValue, newValue in
             if let newValue = newValue {
                 timelineCalendarState = .day(newValue)
+                // remove old selections
+                calendarState.selectedWeekDate = nil
+                calendarState.selectedMonthDate = nil
             }
         }
         .onChange(of: calendarState.selectedWeekDate) { oldValue, newValue in
             if let newValue = newValue {
                 timelineCalendarState = .week(newValue)
+                // remove old selections
+                calendarState.selectedDayDate = nil
+                calendarState.selectedMonthDate = nil
             }
         }
         .onChange(of: calendarState.selectedMonthDate) { oldValue, newValue in
             if let newValue = newValue {
                 timelineCalendarState = .month(newValue)
+                // remove old selections
+                calendarState.selectedDayDate = nil
+                calendarState.selectedWeekDate = nil
             }
         }
         .onChange(of: calendarState.calenderType) { oldValue, newValue in

@@ -36,29 +36,32 @@ struct DayContentGenerator: AsyncSequence, AsyncIteratorProtocol {
     @MainActor
     func prepareContent(for uuid: UUID) async -> Timeline? {
         
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        print(#function, uuid, "before")
+//        try? await Task.sleep(nanoseconds: 1_000_000_000)
         
-        if Task.isCancelled {
-            return nil
-        }
-        
-        print(#function, uuid)
+//        if Task.isCancelled {
+//            print("Task.isCancelled - zero")
+//            return nil
+//        }
         
         guard let timelineContent = await timelineBusiness.fetchTimelineContentAsync(for: uuid) else {
             print("==no content changes==")
-            return nil }
+            return nil
+        }
         
         if Task.isCancelled {
+            print("Task.isCancelled - one")
             return nil
         }
         
         let timeline = timelineContent.getTimeline()
         
         if Task.isCancelled {
+            print("Task.isCancelled - two")
             return nil
         }
         
-        print(timelineContent.id, timelineContent.content.count)
+        print(timelineContent.id, "content size: ", timelineContent.content.count)
         
         return timeline
     }

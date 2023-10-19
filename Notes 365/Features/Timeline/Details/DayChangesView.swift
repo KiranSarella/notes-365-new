@@ -63,61 +63,12 @@ struct DayChangesView: View {
                 Spacer()
             }
             .listRowSeparator(.hidden)
-            
-            //                if dayState.canLoadMore {
-            //                    // load more view
-            //
-            //                }
-            //
-            //            VStack {
-            //                VStack {
-            //                    Text("Load more")
-            //                }
-            //                .background(Color.green)
-            //                .frame(height: 50)
-            //                .onAppear {
-            //                    print("load more appear")
-            //                    if isFirstTimeAppear == false {
-            //                        print("reached end")
-            //                        dayState.tryLoadMore()
-            //                    }
-            //                    if isFirstTimeAppear {
-            //                        self.isFirstTimeAppear = false
-            //                    }
-            //                }
-            //            }
-            
-            //            }
-            
-            
-            //            .navigationTitle(dayState.dayDate.date.formattedDate())
         }
-        //        .onChange(of: dayState.dayDate) { newValue in
-        //            Task {
-        //                dayState.generatorTask?.cancel()
-        //                DispatchQueue.main.async {
-        //                    dayState.currentState = .loading
-        //                    dayState.timelineList.removeAll()
-        //                }
-        //                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-        //                    // your code here
-        //                    dayState.readDayData(dayDate: newValue)
-        //                }
-        ////                try? await Task.sleep(nanoseconds: 3_000_000_000)
-        //
-        //            }
-        //        }
         .onChange(of: discardTimeline, { oldValue, newValue in
             guard let newValue = newValue else { return }
             dayState.removeTimelineChanges(newValue)
             discardTimeline = nil
         })
-        .onAppear {
-            //            dayState.readDayData(dayDate: dayState.dayDate)
-        }
-        .onDisappear {
-            dayState.generatorTask?.cancel()
-        }
     }
 }
 

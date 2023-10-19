@@ -123,7 +123,13 @@ struct TimelineDetailView: View {
             }
         }
         .onDisappear(perform: {
-            timelineDetailState.clearDisplay()
+            
+//            timelineDetailState.setToday()
+//            timelineDetailState.startReloadingContent()
+            
+//            Task {
+                timelineDetailState.clearDisplay()
+//            }
         })
         .onChange(of: timelineDetailState.calendarState, { oldValue, newValue in
             timelineDetailState.startReloadingContent()

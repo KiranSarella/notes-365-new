@@ -1,13 +1,12 @@
 
 
 ## Notebooks pending tasks
-[ ] search notebooks list
-[ ] recently modified
-[ ] deleted list
+[ ] perminent delete notebook and its nested hierarchy and each notebook content
 [ ] on mac list - hover show options
 
 ## timeline
 [ ] optimization - reload only if today, this week, this month
+[ ] task cancellation not working issue
 
 # Xcode 15 
 [ ] update onChange to new syntax

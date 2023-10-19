@@ -69,7 +69,7 @@ extension String {
 }
 
 enum CurrentState {
-    case new
+    case stop
     case loading
     case data
     case empty
@@ -82,7 +82,7 @@ enum CurrentState {
             return ""
         case .empty:
             return "No notes were added/updated on the given day(s)"
-        case .new:
+        case .stop:
             return ""
         }
     }
@@ -169,14 +169,14 @@ class TimelineDetailState {
     var timelineBusiness = TimelineBusiness()
     var calendarState = TimelineCalendarState.day(DayDate(date: Date()))
     
-    var selectedDate = Date()
+//    var selectedDate = Date()
     
     // load more
     var canLoadMore = false
     var loadingDayChanges = false
     var loadingDate = Date()
     
-    var currentState = CurrentState.new
+    var currentState = CurrentState.stop
     
     var cancellable: Cancellable? = nil
     
@@ -211,7 +211,7 @@ class TimelineDetailState {
     }
     
     func setToday() {
-        selectedDate = Date()
+        calendarState = .day(DayDate(date: Date()))
     }
     
     deinit {
@@ -220,19 +220,20 @@ class TimelineDetailState {
     }
     
     func clearDisplay() {
+        print(#function)
         generatorTask?.cancel()
-        DispatchQueue.main.async {
-            self.timelineIndexes.removeAll()
-            self.dayIndexs.removeAll()
-        }
+        self.timelineIndexes.removeAll()
+        self.dayIndexs.removeAll()
+        currentTaskID = UUID()
+        self.currentState = .stop
+        self.canLoadMore = false
     }
     
     func startReloadingContent() {
+        print(#function)
         Task {
             clearDisplay()
-            currentTaskID = UUID()
             self.currentState = .loading
-            self.canLoadMore = false
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 // start fetching data
                 switch self.calendarState {
@@ -312,7 +313,7 @@ class TimelineDetailState {
     // MARK: - Day Note Changes
     
     func tryLoadMore() {
-        
+        print(#function, loadingDayChanges)
         // have to maintain queue? - what if day content is single line?
         if loadingDayChanges {
             return
@@ -323,7 +324,8 @@ class TimelineDetailState {
     func processFirstDay(reqID: UUID) {
         print(#function)
         // load first day
-        Task {
+        self.generatorTask = Task {
+            
             print("timelineIndexes: before - ", timelineIndexes.count)
             if let current = timelineIndexes.first {
                 let dayIndex = await readDayDataOnly(timelineIndex: current)
@@ -356,7 +358,7 @@ class TimelineDetailState {
         print(#function)
         if timelineIndexes.count > 0 {
             // load first day
-            Task {
+            self.generatorTask = Task {
                 loadingDayChanges = true
                 let dayIndex = await readDayDataOnly(timelineIndex: timelineIndexes.removeFirst())
                 DispatchQueue.main.async {
@@ -369,27 +371,61 @@ class TimelineDetailState {
         }
     }
     
+    
     func readDayDataOnly(timelineIndex: TimelineIndex) async -> DayIndex {
         
-        await withCheckedContinuation { continuation in
+        print(#function)
+        print(timelineIndex.changes)
+        let dayIndex = DayIndex(timelineIndex: timelineIndex)
+        // prepare each note change item
+        for await timelineResult in DayContentGenerator(lines: timelineIndex.changes, timelineBusiness: self.timelineBusiness) where !Task.isCancelled {
+            if Task.isCancelled { break }
             
-            let dayIndex = DayIndex(timelineIndex: timelineIndex)
-            generatorTask = Task {
-                for await timelineResult in DayContentGenerator(lines: timelineIndex.changes, timelineBusiness: timelineBusiness) {
-                    if Task.isCancelled { return }
-                    print("timelineResut: ", timelineResult?.fileName)
-                    print(generatorTask?.isCancelled)
-                    print(Task.isCancelled)
-                    if let timelineResult = timelineResult {
-                        DispatchQueue.main.async {
-                            dayIndex.timelines.append(timelineResult)
-                        }
-                    }
-                }
-                continuation.resume(returning: dayIndex)
+//            try? await Task.sleep(nanoseconds: 1_000_000_000)
+            
+//            print("timelineResut: ", timelineResult?.fileName)
+//            print(self.generatorTask?.isCancelled)
+//            print(Task.isCancelled)
+            if let timelineResult = timelineResult {
+                dayIndex.timelines.append(timelineResult)
+//                DispatchQueue.main.async {
+//                    dayIndex.timelines.append(timelineResult)
+//                }
             }
         }
+        // after processing all note changes in a day, return all data
+//        continuation.resume(returning: dayIndex)
+        
+        print("self.generatorTask = nil")
+//                self.generatorTask = nil
+        return dayIndex
     }
+    
+//    func readDayDataOnly(timelineIndex: TimelineIndex) async -> DayIndex {
+//        await withCheckedContinuation { continuation in
+//            print(#function)
+//            print(timelineIndex.changes)
+//            let dayIndex = DayIndex(timelineIndex: timelineIndex)
+//            self.generatorTask = Task.detached {
+//                // prepare each note change item
+//                for await timelineResult in DayContentGenerator(lines: timelineIndex.changes, timelineBusiness: self.timelineBusiness) where !Task.isCancelled {
+//                    if Task.isCancelled { return }
+////                    print("timelineResut: ", timelineResult?.fileName)
+////                    print(self.generatorTask?.isCancelled)
+////                    print(Task.isCancelled)
+//                    if let timelineResult = timelineResult {
+//                        DispatchQueue.main.async {
+//                            dayIndex.timelines.append(timelineResult)
+//                        }
+//                    }
+//                }
+//                // after processing all note changes in a day, return all data
+//                continuation.resume(returning: dayIndex)
+//                print("self.generatorTask = nil")
+////                self.generatorTask = nil
+//            }
+//        }
+//    }
     
     // MARK: - Discard Note Changes
     func removeTimelineChanges(_ timeline: Timeline) {
