@@ -35,13 +35,33 @@ class NotebookEditorState {
     
     @ObservationIgnored
     var cancellableTheme: Cancellable? = nil
-    @ObservationIgnored
-    var cancellableTimer: Cancellable? = nil
     
+    @ObservationIgnored
+    private var autoSaveTimer: Timer? = nil
     
     init() {
         theme = ThemeState.shared.theme
 //        observeThemeChanges()
+        
+//        startAutoSaveTimer()
+    }
+    
+    deinit {
+        autoSaveTimer?.invalidate()
+    }
+    
+    func startAutoSaveTimer() {
+        autoSaveTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { timer in
+            Task {
+                await self.saveContentChanges()
+            }
+        }
+        // it is autofiring
+//        autoSaveTimer?.fire()
+    }
+    
+    func cancelAutoSaveTimer() {
+        autoSaveTimer?.invalidate()
     }
     
     func observeThemeChanges() {
@@ -89,6 +109,7 @@ class NotebookEditorState {
     }
     
     func saveContentChanges() async {
+        print(#function)
         // ignore autosave if content was not edited
         guard 
             let contentEditedDate = contentEditedDate,

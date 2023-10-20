@@ -80,22 +80,11 @@ class NotebooksListState {
 //    var timelineCreatorBusiness = TimelineBusiness(path: EnvironmentState.shared.basePathURL)
     
     init() {
-//        timelineCreatorBusiness.registerNotebookChangesNotification()
-//        timelineCreatorBusiness.updateTodayTimelineIndex()
-        
         isLoading = true
         // get saved expandedIds
         if let expandedList = UserDefaults.standard.object(forKey: "notes365.expandedIds") as? [String] {
             expandedIds = Set(expandedList)
         }
-        // create notesHierarchy with actual notebook objects
-//        notebooks = notebookBusiness.retrieveNotebooks() ?? []
-//        let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
-//        notesHierarchy = NotebooksHierarchy(notes: notesList)
-        
-        // construct deleted notebooks list
-//        deletedNotebooks = notebookBusiness.retrieveDeletedNotebooks() ?? []
-//        checkOldItemsToDelete()
         
         // observe after initial hierarcy is constructed
         NotificationCenter.default.addObserver(self, selector: #selector(listenExpandCollapseNotification(_:)), name: .ExpandCollapseNotification, object: nil)
@@ -105,123 +94,27 @@ class NotebooksListState {
         isLoading = false
     }
     
-    
-//    @MainActor
-//    func loadData() async {
-//        isLoaded = false
-//        // create notesHierarchy with actual notebook objects
-//        if let notebooks = await notebookBusiness.readDocument() {
-//            let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
-//            usersDB = NotebooksHierarchy(notes: notesList)
-//        }
-//
-//        notebookBusiness.newContentAvailalble = { [self] in
-//            print("notebookBusiness.newContentAvailalble")
-//            dump(notebookBusiness.notebooks)
-//            let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebookBusiness.notebooks, expandedIds: self.expandedIds)
-//            usersDB = NotebooksHierarchy(notes: notesList)
-//        }
-//
-//        isLoaded = true
-//    }
-    
     func initialFetch() {
         // get saved expandedIds
         if let expandedList = UserDefaults.standard.object(forKey: "notes365.expandedIds") as? [String] {
             expandedIds = Set(expandedList)
         }
-        
-        // create notesHierarchy with actual notebook objects
-        notebooks = notebookBusiness.retrieveNotebooks() ?? []
-//        let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
-//        notesHierarchy = NotebooksHierarchy(notes: notesList)
     }
-
-    func reloadNotebooksListIfNewRequired() {
-        // if notebooks list is empty, try to reload on demand
-        if notebookBusiness.isReloadRequired() {
-            isLoading = true
-            // create notesHierarchy with actual notebook objects
-            guard let list = notebookBusiness.retrieveNotebooks() else {
-                isLoading = false
-                return
-            }
-            // clear
-//            notesHierarchy.notes.removeAll()
-            // update
-            notebooks = list
-//            let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
-//            notesHierarchy = NotebooksHierarchy(notes: notesList)
-            isLoading = false
-        }
-    }
-    
-//    func forceReload() {
-//        isLoading = true
-//        // clear
-////        notesHierarchy.notes.removeAll()
-//        // create notesHierarchy with actual notebook objects
-////        notebooks = notebookBusiness.retrieveNotebooks() ?? []
-////        // construct deleted notebooks list
-////        deletedNotebooks = notebookBusiness.retrieveDeletedNotebooks() ?? []
-////        
-//        // reconstruct hierarchy
-////        let notesList = NotebooksHierarchy.constructHierarchy(notebooks: notebooks, expandedIds: expandedIds)
-////        notesHierarchy = NotebooksHierarchy(notes: notesList)
-//        
-//        switch listSourceType {
-//        case .notebooks(let notebooksFilterType):
-//            switch notebooksFilterType {
-//            case .none:
-//                break
-//            case .searching:
-//                // ??
-//                break
-//            case .recentlyModified:
-//                showRecentlyModified()
-//            }
-//        case .deletedItems:
-//            showRecentlyDeleted()
-//            checkOldItemsToDelete()
-//        }
-//        
-//        
-//        isLoading = false
-//    }
     
     func saveExpandedIds() {
         UserDefaults.standard.set(Array(expandedIds), forKey: "notes365.expandedIds")
     }
     
-    
     func fetchNotebooks() {
-        
         Task {
             isLoading = true
 //            try? await Task.sleep(nanoseconds: 1_000_000_000)
             self.notebooks = await notebookBusiness.fetchNotebooks() ?? []
             self.deletedNotebooks = await notebookBusiness.fetchDeletedNotebooks() ?? []
             isLoading = false
+            checkOldItemsToDelete()
         }
-        
     }
-    
-//    func fetchDeletedNotebooks() {
-//        
-//        Task {
-//            isLoading = true
-////            try? await Task.sleep(nanoseconds: 1_000_000_000)
-//            self.deletedNotebooks = await notebookBusiness.fetchDeletedNotebooks() ?? []
-//            isLoading = false
-//        }
-//    }
-    
-    
-    
-    
-//    func fetchExpandedIds() {
-//        expandedIds = UserDefaults.standard.object(forKey: "notes365.expandedIds") as? Set<UUID> ?? Set<UUID>()
-//    }
     
     var isEmpty: Bool {
         notebooks.count == 0
@@ -236,17 +129,7 @@ class NotebooksListState {
             notebook.orderID = 0
             notebooks = [notebook]
             notebook.saveNotebookData(modelContext)
-//            modelContext?.insert(notebook)
-            
         }
-//        fetchNotebooks()
-        
-//        // create file
-//        notebookBusiness.addFirst(notebook: notebook)
-//        // add to heirarchy
-//        notebooks.append(notebook)
-//        // persist hierarchy
-//        notebookBusiness.persist(notebooks: notebooks)
     }
     
     func insertBelow(ref notebook: Notebook) {
@@ -441,16 +324,16 @@ class NotebooksListState {
         return newNotebook
     }
     
-    private func getNotebook(levels selectedLevels: [Int], index selectedIndex: Int) -> Notebook? {
-        
-        // goto last level list
-        var notebooksList: [Notebook]? = notebooks
-        for level in selectedLevels {
-            notebooksList = notebooksList?[level].children
-        }
-        // get notebook from last list
-        return notebooksList?[selectedIndex]
-    }
+//    private func getNotebook(levels selectedLevels: [Int], index selectedIndex: Int) -> Notebook? {
+//        
+//        // goto last level list
+//        var notebooksList: [Notebook]? = notebooks
+//        for level in selectedLevels {
+//            notebooksList = notebooksList?[level].children
+//        }
+//        // get notebook from last list
+//        return notebooksList?[selectedIndex]
+//    }
     
     
 //    func deleteNotebook(ref notebook: Notebook) {
@@ -486,9 +369,11 @@ class NotebooksListState {
             notebooks.removeAll(where: { $0 == notebook })
         }
           
+        guard let newDate = Calendar.current.date(byAdding: .month, value: -2, to: Date()) else { return }
+        
         // mark deleted date
-        notebook.deletedDate = Date()
-        // persist 
+        notebook.deletedDate = newDate//Date()
+        // persist
         notebook.saveNotebookData(modelContext)
         
         // add to deleted list
@@ -523,19 +408,19 @@ class NotebooksListState {
     }
 
     
-    func move(notebooks: inout [Notebook], from source: IndexSet, to destination: Int) {
-        // move references
-        if notebooks.first?.parent?.children != nil {
-            notebooks.first?.parent?.children?.move(fromOffsets: source, toOffset: destination)
-        } else {
-            self.notebooks.move(fromOffsets: source, toOffset: destination)
-        }
-        // move structs
-        notebooks.move(fromOffsets: source, toOffset: destination)
-        
-        // persist refernce list
-        notebookBusiness.persist(notebooks: self.notebooks)
-    }
+//    func move(notebooks: inout [Notebook], from source: IndexSet, to destination: Int) {
+//        // move references
+//        if notebooks.first?.parent?.children != nil {
+//            notebooks.first?.parent?.children?.move(fromOffsets: source, toOffset: destination)
+//        } else {
+//            self.notebooks.move(fromOffsets: source, toOffset: destination)
+//        }
+//        // move structs
+//        notebooks.move(fromOffsets: source, toOffset: destination)
+//        
+//        // persist refernce list
+//        notebookBusiness.persist(notebooks: self.notebooks)
+//    }
     
     
     private func isAlreadyExists(fileName: String, in siblings: [Notebook]) -> Bool {
@@ -717,18 +602,14 @@ extension NotebooksListState {
     
     func showRecentlyModified() {
         // as notebooks can be modify, only backup expanded ids
-        
         var resultsCount = 0
-        
         func canAddNotebook(note: inout Notebook) -> Bool {
-            
             // for expansion: isExpanded
             // go deep first, if deep return true, then mark current as true
             // if deep is false, then check current name condition
             
             // for canShow:
             // if name contains search str - true else false
-            
             
             // check nested items
             var visibleChildsStatus = Set<Bool>()
@@ -788,44 +669,17 @@ extension NotebooksListState {
 //        isShowingRecentlyDeleted ? "trash.fill" : "trash.square"
         listSourceType == .deletedItems ? "trash" : "trash"
     }
-    
-    
-//    func showHideRecentlyDeleted() {
-//
-//        if listSourceType == .deletedItems {
-//            hideRecentlyDeleted()
-//        } else {
-//            showRecentlyDeleted()
-//        }
-//    }
-//    
+  
     func hideRecentlyDeleted() {
-        
-//        expandedIds = backupExpandedIds
-//        notesHierarchy.notes = backupNotebooks
-        
-//        backupNotebooks = [Notebook]()
-//        backupExpandedIds = []
-        
         listSourceType = .notebooks(.none)
     }
     
     func showRecentlyDeleted() {
-        // backup normal hierarchy state
-//        backupExpandedIds = expandedIds
-//        backupNotebooks = notebooks
-        
-//        let deletednotesList = NotebooksHierarchy.constructHierarchy(notebooks: deletedNotebooks, expandedIds: [])
-//        notesHierarchy.notes = deletednotesList
-        
-//        deletedResultCount = deletednotesList.count
-        
         deletedResultCount = deletedNotebooks.count
         listSourceType = .deletedItems
     }
     
     func checkOldItemsToDelete() {
-        
         // delete date exceeded notebooks
         notebookBusiness.deleteDateExceededNotebooks(deletedNotebooks: &deletedNotebooks)
     }

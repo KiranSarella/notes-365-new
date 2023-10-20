@@ -111,28 +111,14 @@ struct ContentView: View {
     
     @State private var icloudSyncing = false
     
-//    @State private var notesListSyncing = false
-//    @State private var notesContentSyncing = false
-    
     @State private var selectedModeID: Mode.ID? = Mode.timeline.id
     @State private var sidebarItemSelected: SidebarItem.ID? = SidebarItem.timeline.id
     
-    
-    // timeline related
-//    @State var calendarState = CalendarState.shared
     // notebooks related
 //    @State private var selectedNotebookM: Notebook.ID?
     @State private var selectedNotebookM: Notebook?
     @State var notebooksListState = NotebooksListState()
     
-//    @State var selectedCalenderType: CalendarType.ID? = CalendarType.day.id
-//    
-//    @State var selectedCalender: CalendarType? = CalendarType.day
-    
-    @State var showDetail = false
-    
-//    @State private var editorState = NotebookEditorState()
-     
     @State var navigationSplitViewVisibility = NavigationSplitViewVisibility.all
     
     
@@ -386,7 +372,7 @@ struct ContentView: View {
         case .timeline:
             TimelineDetailView(timelineDetailState: $timelineDetailState)
         case .notebooks:
-            NotebooksListView(usersState: notebooksListState, selectedNotebook: $selectedNotebookM)
+            NotebooksListView(notebooksListState: notebooksListState, selectedNotebook: $selectedNotebookM)
         }
         
         

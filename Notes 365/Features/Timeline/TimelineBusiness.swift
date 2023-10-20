@@ -287,81 +287,6 @@ class TimelineBusiness {
         modelContext.delete(timelineIndex)
         try? modelContext.save()
     }
-    
-//    func removeContent(today: Date, fileName: String) {
-//        let folderPath = "\(timelineFolderPath)/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
-//        
-//        let fileURL = basePathURL
-//            .appendingPathComponent(folderPath)
-//            .appendingPathComponent(fileName)
-//            .appendingPathExtension("md")
-//        //        print(fileURL.path(percentEncoded: false))
-//        
-//        do {
-//            try FileManager.default.removeItem(at: fileURL)
-//        } catch let error as NSError {
-//            print("Failed deleting from URL: \(fileURL), Error: " + error.localizedDescription)
-//        }
-//    }
-    
-//    func removeFromMetadata(uuid: String, today: Date = Date()) {
-//        
-//        let timelinePath = "\(timelineFolderPath)/\(today.getYear())/\(today.getMonth())/\(today.getDay())"
-//        let metadataFilePath = timelinePath + "/" + "metadata"
-//        
-//        var metadata: String = ""
-//        
-//        guard let basePathURL = EnvironmentState.shared.basePathURL else { return }
-//        
-//        let metaFileURL = basePathURL.appendingPathComponent(timelinePath, isDirectory: false)
-//        
-//        if FileManager.default.fileExists(atPath: metaFileURL.path) {
-//            /*
-//             read metadata file
-//             form object from it
-//             remove this file metadata to this object
-//             write metadat to file
-//             
-//             format:
-//             UUID Timestamp timezone filename filepath
-//             */
-//            
-//            metadata = readBinaryFile(fileName: "metadata", folderPath: timelinePath) ?? ""
-//            var lines = metadata.components(separatedBy: "\n")
-//            // find index
-//            var searchIndex: Int?
-//            for i in 0..<lines.count {
-//                let line = lines[i]
-//                let words = line.components(separatedBy: "\t")
-//                if words.first == uuid {
-//                    searchIndex = i
-//                    break
-//                }
-//            }
-//            
-//            if let searchIndex = searchIndex {
-//                // remove object
-//                lines.remove(at: searchIndex)
-//                // clean existing metadata and add each one again
-//                metadata = ""
-//                for line in lines {
-//                    if line.count > 0 {
-//                        metadata = metadata.appending(line)
-//                        metadata = metadata.appending("\n")
-//                    }
-//                }
-//            }
-//        }
-//        
-//        let fileURL = basePathURL.appendingPathComponent(timelinePath).appendingPathComponent("metadata")
-//        do {
-//            // Write to the file
-//            try metadata.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
-//        } catch let error as NSError {
-//            print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
-//        }
-//    }
-    
 }
 
 // MARK: - Timeline Creation
@@ -401,7 +326,10 @@ extension TimelineBusiness {
         // do string diff
         // save to timeline path
         let newChanges = StringDiff.getChanges(old: baseVersion, new: notebookContent.content)
+//            .trimmingCharacters(in: .newlines)
         
+        // how to detect if a line is deleted?
+        print(newChanges)
         if newChanges.count == 0 {
             return
         }
@@ -532,23 +460,4 @@ extension TimelineBusiness {
         }
     }
     
-    
-    func readBinaryFile(fileName: String, folderPath: String) -> String? {
-        
-        guard let basePathURL = EnvironmentState.shared.basePathURL else { return nil }
-        
-        let fileURL = basePathURL
-            .appendingPathComponent(folderPath)
-            .appendingPathComponent(fileName)
-        
-        var readString: String?
-        do {
-            // Read the file contents
-            readString = try String(contentsOf: fileURL)
-        } catch let error as NSError {
-            print("Failed reading from URL: \(fileURL), Error: " + error.localizedDescription)
-        }
-        
-        return readString
-    }
 }

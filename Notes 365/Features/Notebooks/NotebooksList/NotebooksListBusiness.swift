@@ -33,111 +33,6 @@ class NotebooksListBusiness {
         self.basePathURL = basePathURL
     }
     
-    func isReloadRequired() -> Bool {
-        
-        // get modifiedDate of the physical file
-        let plistURL = basePathURL.appending(path: Constants.notebooksPListName).appendingPathExtension("plist")
-
-        if let modifiedDate = fileModificationDate(url: plistURL) {
-            if modifiedDate > listSyncDate {
-                // reload data
-                return true
-            } else {
-                // no new data exits
-                return false
-            }
-        } else {
-            return true
-        }
-    }
-    
-    
-//    func reloadNotebooksListIfRequired(completion:([Notebook]?)->()) {
-//
-//        // get modifiedDate of the physical file
-//        let plistURL = basePathURL.appending(path: Constants.notebooksPListName).appendingPathExtension("plist")
-//
-//        if let modifiedDate = fileModificationDate(url: plistURL) {
-//            if modifiedDate > syncDate {
-//                // reload data
-//                if let notebooks = retrieveNotebooks() {
-//                    syncDate = Date()
-//                    completion(notebooks)
-//                } else {
-//                    syncDate = Date()
-//                    completion(nil)
-//                }
-//            } else {
-//                // no new data exits
-//                completion(nil)
-//            }
-//        } else {
-//            completion(nil)
-//        }
-//    }
-    
-    func fileModificationDate(url: URL) -> Date? {
-        do {
-            let attr = try FileManager.default.attributesOfItem(atPath: url.path(percentEncoded: false))
-            return attr[FileAttributeKey.modificationDate] as? Date
-        } catch {
-            return nil
-        }
-    }
-    
-//    func reloadNotebooksList(completion:()->()) {
-//
-//        if let notebooks = retrieveNotebooks() {
-//            self.notebooks = notebooks
-//            syncDate = Date()
-//            completion()
-//        } else {
-//            self.notebooks = [Notebook]()
-//            syncDate = Date()
-//            completion()
-//        }
-//    }
-    
-//    func getNotebooks() -> [Notebook] {
-//        return notebooks
-//    }
-//
-//
-    
-    private func createRequiredFoldersIfNotExists() {
-        if !itemExists(atPath: notebooksPath) {
-            // create notebooks folder
-            // create timeline folder
-            // create base/dummy notebook (for consistent top and later level implementations)
-            
-            createFolder(Constants.notebooksFolderName)
-            createFolder(Constants.timelineFolderName)
-            createFolder(Constants.todayBaseVersionFolderName)
-        }
-    }
-    
-    // both folder and file
-    private func itemExists(atPath path: String) -> Bool {
-        let itemURL = basePathURL.appendingPathComponent(path, isDirectory: false)
-        return FileManager.default.fileExists(atPath: itemURL.path)
-    }
-    
-    private func createFolder(_ folderName: String) {
-
-        let directoryURL = basePathURL.appendingPathComponent(folderName, isDirectory: true)
-
-        if FileManager.default.fileExists(atPath: directoryURL.path) {
-//            print("folder already exists ", directoryURL.path)
-        } else {
-            do {
-                try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true, attributes: nil)
-            } catch {
-                print(error.localizedDescription)
-            }
-        }
-    }
-    
-    
     func fetchNotebooks() async -> [Notebook]? {
         
         await withCheckedContinuation { continuation in
@@ -238,158 +133,35 @@ class NotebooksListBusiness {
         }
     }
     
-    
-    // MARK: - Insert
-    func addFirst(notebook: Notebook) {
-        // create first notebook inside "/notesbooks"
-        createRequiredFoldersIfNotExists()
-        // create empty file
-        writeToFile(content: "", fileName: notebook.id.uuidString, folderPath: notebooksPath, ext: "md")
-    }
-    
-    // return - (newNotebook, parent, ref notebook Index)
-    func insertBelow(notebook: Notebook) {
-        writeToFile(content: "", fileName: notebook.id.uuidString, folderPath: notebooksPath, ext: "md")
-    }
-    
-    func insertInside(notebook: Notebook) {
-        // create phycical file
-        writeToFile(content: "", fileName: notebook.id.uuidString, folderPath: notebooksPath, ext: "md")
-    }
-    
-    // create/update file with content
-    private func writeToFile(content: String, fileName: String, folderPath: String, ext: String) {
-
-        let folderURL = basePathURL.appendingPathComponent(folderPath)
-        let fileURL = folderURL.appendingPathComponent(fileName).appendingPathExtension(ext)
-
+    func fetchNotebook(for uuid: UUID) -> NotebookData? {
+        
+        guard let modelContext = self.modelContext else { return nil }
+        // if already exists, then upate
+        let predicate = #Predicate<NotebookData> {
+            $0.id == uuid
+        }
+        
+        var descriptor = FetchDescriptor(predicate: predicate)
+        descriptor.fetchLimit = 1
+        
         do {
-            // create intermediate folders if not exists
-            if itemExists(atPath: folderPath) == false {
-                createFolder(folderPath)
-            }
-            // Write to the file
-            try content.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
-        } catch let error as NSError {
-            print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
+            let results = try modelContext.fetch(descriptor)
+            return results.first
+        } catch let err {
+            print(err)
+            return nil
         }
     }
-    
-    // MARK: - Delete
-    func deleteNotebook(notebook: Notebook) {
-        let filePath = notebooksPath + "/" + notebook.id.uuidString + ".md"
-        // delete file.md
-        deleteItem(at: filePath)
-        
-        // if contains child notebooks (and nested childs), delete all them recursively
-        
-    }
-    
-    private func deleteItem(at path: String) {
-        let directoryURL = basePathURL.appendingPathComponent(path, isDirectory: true)
-
-        do {
-            try FileManager.default.removeItem(at: directoryURL)
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-    
 }
 
-
-// MARK: - Persist Notebooks Hierarchy
-extension NotebooksListBusiness {
-    
-    // It will save only notebooks list hierarchy to plist, not notebook content.
-    func persist(notebooks: [Notebook]) {
-        print(#function)
-//        do {
-//            // generate data
-//            let plistData = try PropertyListEncoder().encode(notebooks)
-//            // prepare path
-//            let fileURL = basePathURL.appendingPathComponent(Constants.notebooksPListName).appendingPathExtension("plist")
-//            // save file
-//            do {
-//                // Write to the file
-//                try plistData.write(to: fileURL)
-//                self.listSyncDate = Date()
-//            } catch let error as NSError {
-//                print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
-//            }
-//        } catch {
-//            print("Save Failed")
-//        }
-    }
-    
-    // retrives notebooks hierarcy from plist, not the notebook content.
-    func retrieveNotebooks() -> [Notebook]? {
-        
-//        let plistURL = basePathURL.appending(path: Constants.notebooksPListName).appendingPathExtension("plist")
-//        
-//        do {
-//            // Read the file contents
-//            let plistData = try Data(contentsOf: plistURL)
-//            let notebooksList = try PropertyListDecoder().decode([Notebook].self, from: plistData)
-//            self.listSyncDate = Date()
-//            return notebooksList
-//        } catch let error as NSError {
-//            print("Failed reading from URL: \(plistURL), Error: " + error.localizedDescription)
-//        }
-        return nil
-    }
-    
-}
 
 // MARK: - Deleted Notebooks
 extension NotebooksListBusiness {
     
-    func restore(notebook: Notebook) {
-        // if parent is not nil, reach its root parent, then restore this parent.
-        
-        
-        
-    }
-    
-    // It will save only notebooks list hierarchy to plist, not notebook content.
-    func persistDeleted(notebooks: [Notebook]) {
-        listSyncDate = Date()
-        
-//        do {
-//            // generate data
-//            let plistData = try PropertyListEncoder().encode(notebooks)
-//            // prepare path
-//            let fileURL = basePathURL.appendingPathComponent(Constants.deletedNotebooksPListName).appendingPathExtension("plist")
-//            // save file
-//            do {
-//                // Write to the file
-//                try plistData.write(to: fileURL)
-//            } catch let error as NSError {
-//                print("Failed writing to URL: \(fileURL), Error: " + error.localizedDescription)
-//            }
-//        } catch {
-//            print("Save Failed")
-//        }
-    }
-    
-    // retrives notebooks hierarcy from plist, not the notebook content.
-    func retrieveDeletedNotebooks() -> [Notebook]? {
-        
-        let plistURL = basePathURL.appending(path: Constants.deletedNotebooksPListName).appendingPathExtension("plist")
-        
-//        do {
-//            // Read the file contents
-//            let plistData = try Data(contentsOf: plistURL)
-//            let notebooksList = try PropertyListDecoder().decode([Notebook].self, from: plistData)
-//            return notebooksList
-//        } catch let error as NSError {
-//            print("Failed reading from URL: \(plistURL), Error: " + error.localizedDescription)
-//        }
-        return nil
-    }
-    
     func deleteDateExceededNotebooks(deletedNotebooks: inout [Notebook]) {
         // delete files that are 30 days old
+        
+        guard let modelContext = modelContext else { return }
         
         var oldNotebooks = [Notebook]()
         var remainingNotebooks = [Notebook]()
@@ -403,40 +175,35 @@ extension NotebooksListBusiness {
             }
         }
         
-        // pyisically delete items
-        for notebook in oldNotebooks {
-            guard let deletedDate = notebook.deletedDate else { return }
-            if numberOfDaysBetween(deletedDate, and: Date()) > deleteDays {
-                delete(path: notebook.fileURL)
-                // nested items delete
-                if notebook.children != nil && notebook.children!.isEmpty == false {
-                    deleteNestedPerminantly(deletedNotebooks: notebook.children!)
-                }
+        // delete content items
+         for notebook in oldNotebooks {
+            // delete notebook info from list
+            modelContext.delete(notebook.notebookData)
+            // delete notebook content
+            NotebookContentBusiness.deleteNotebookContent(for: notebook.id, in: modelContext)
+            
+            // nested items delete
+            if let children = notebook.children {
+                deleteNestedPerminantly(deletedNotebooks: children)
             }
         }
         
         deletedNotebooks = remainingNotebooks
-        
-        persistDeleted(notebooks: deletedNotebooks)
     }
     
     func deleteNestedPerminantly(deletedNotebooks: [Notebook]) {
+        guard let modelContext = modelContext else { return }
+        
         for notebook in deletedNotebooks {
-            delete(path: notebook.fileURL)
+            // delete notebook info from list
+            modelContext.delete(notebook.notebookData)
+            // delete notebook content
+            NotebookContentBusiness.deleteNotebookContent(for: notebook.id, in: modelContext)
+            
             // nested items delete
-            if notebook.children != nil && notebook.children!.isEmpty == false {
-                deleteNestedPerminantly(deletedNotebooks: notebook.children!)
+            if let children = notebook.children {
+                deleteNestedPerminantly(deletedNotebooks: children)
             }
-        }
-    }
-    
-    func delete(path: URL) {
-        // delete all files including nested files
-        do {
-            print("deleting: ", path.absoluteString)
-            try FileManager.default.removeItem(at: path)
-        } catch (let error) {
-            print(error)
         }
     }
     

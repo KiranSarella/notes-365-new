@@ -19,13 +19,8 @@ import Combine
 struct NotebookEditorView: View {
     
     var listDisplayState: ListSourceType
-//    @Binding var notebookM: Notebook
-//    var notebookM: Notebook
     @Bindable var editorState: NotebookEditorState
 
-    @State var autoSaveTimer: Timer.TimerPublisher = Timer.publish(every: 10, on: .main, in: .common)
-    @State var connectedTimer: Cancellable? = nil
-    
     var isDeleted: Bool {
         listDisplayState == .deletedItems
     }
@@ -49,13 +44,8 @@ struct NotebookEditorView: View {
                     editorState.getTextHandler = getText
                 })
                 .onAppear(perform: {
-                    self.instantiateTimer()
-                })
-                .onDisappear(perform: {
-                    Task {
-                        self.cancelTimer()
-                        await editorState.saveContentChanges()
-                    }
+                    self.editorState.startAutoSaveTimer()
+//                    self.instantiateTimer()
                 })
             }
         }
@@ -73,44 +63,11 @@ struct NotebookEditorView: View {
         }
         .onDisappear {
             Task {
+                self.editorState.cancelAutoSaveTimer()
                 await editorState.saveContentChanges()
             }
         }
-//        .onChange(of: editorState.notebook) { newValue in
-//            Task {
-//                // existing notebook steps
-//                // save existing changes if required
-//                await editorState.saveContentChanges()
-//                
-//                // new notebook steps
-//                await editorState.loadContent(for: newValue)
-//                editorState.getNewContent = {
-//                    return await MainActor.run {
-//                        editorState.getTextHandler!()
-//                    }
-//                }
-//            }
-//        }
-        .onReceive(autoSaveTimer, perform: { _ in
-            Task {
-                await editorState.saveContentChanges()
-            }
-        })
     }
     
     
-}
-
-
-// MARK: - Auto Save timer
-extension NotebookEditorView {
-    
-    func instantiateTimer() {
-        self.autoSaveTimer = Timer.publish(every: 5, on: .main, in: .common)
-        self.connectedTimer = self.autoSaveTimer.connect()
-    }
-    
-    func cancelTimer() {
-        self.connectedTimer?.cancel()
-    }
 }

@@ -40,7 +40,7 @@ public enum NotebookListOption: String, CaseIterable, Identifiable {
 struct NotebooksListView: View {
 
     @Environment(\.modelContext) private var modelContext
-    @Bindable var usersState: NotebooksListState
+    @Bindable var notebooksListState: NotebooksListState
 //    @Binding var selectedNotebook: Notebook.ID?
     @Binding var selectedNotebook: Notebook?
     @Environment(\.isSearching) private var isSearching
@@ -65,32 +65,20 @@ struct NotebooksListView: View {
     var body: some View {
 
         VStack {
-            if usersState.isLoading {
+            if notebooksListState.isLoading {
                 ProgressView()
-            } else if usersState.listSourceType == .notebooks(.none) && usersState.isEmpty {
-                AddNotesView(usersState: usersState)
+            } else if notebooksListState.listSourceType == .notebooks(.none) && notebooksListState.isEmpty {
+                AddNotesView(notebooksListState: notebooksListState)
                     .padding([.top], -100)
             } else {
                 VStack {
-                    //                List(selection: $selectedNotebook) {
-                    //                    NotebooksListGroupView(notebooks: $usersState.usersDB.notes)
-                    //                }
                     
-//                    // calendar type picker
-//                    Picker("", selection: $calenderType) {
-//                        ForEach(NotebookListOption.allCases, id: \.self) { calendarType in
-//                            Text(calendarType.name).tag(calendarType)
-//                        }
-//                    }
-//                    .padding()
-//                    .pickerStyle(SegmentedPickerStyle())
-                    
-                    
-                    if usersState.listSourceType == .deletedItems ||
-                        usersState.listSourceType == .notebooks(.recentlyModified) {
+                    if notebooksListState.listSourceType == .deletedItems ||
+                        notebooksListState.listSourceType == .notebooks(.recentlyModified) {
                         
                         NavigationStack(path: $colors) {
-                            SearchedListView(selectedNotebook: $selectedNotebook, usersState: usersState)
+                            
+                            SearchedListView(selectedNotebook: $selectedNotebook, notebooksListState: notebooksListState)
     //                            .padding(.bottom, 20)
                                 .autocorrectionDisabled()
                                 .navigationTitle("Notebooks")
@@ -100,31 +88,29 @@ struct NotebooksListView: View {
                                         // ** do navigation to editor
                                         editorState.setupNewNotebook(&selectedNotebook!)
                                         colors.append(newValue)
+                                        
+                                        print(selectedNotebook?.name, selectedNotebook?.id)
+                                        print(newValue.name, newValue.id)
                                     }
                                 })
                             
-                            if usersState.listSourceType == .deletedItems {
+                            if notebooksListState.listSourceType == .deletedItems {
                                 Text("Notebooks will be permanently deleted after 30 days.")
                                     .font(.caption2)
                                     .foregroundColor(.gray)
                             }
                         }
                         .navigationDestination(for: Notebook.self) { color in
-                            NotebookEditorView(listDisplayState: usersState.listSourceType, editorState: editorState)
+                            NotebookEditorView(listDisplayState: notebooksListState.listSourceType, editorState: editorState)
                         }
-                        
                         
                             
                     } else {
-                        
                         NavigationStack(path: $colors) {
                          
-                            SearchedListView(selectedNotebook: $selectedNotebook, usersState: usersState)
+                            SearchedListView(selectedNotebook: $selectedNotebook, notebooksListState: notebooksListState)
                             .padding(.bottom, 20)
-//                            .listStyle(SidebarListStyle())
                             .autocorrectionDisabled()
-                        
-    //                                    .listStyle(SidebarListStyle())
                             .navigationTitle("Notebooks")
                             .navigationBarTitleDisplayMode(.large)
                             .onChange(of: selectedNotebook, { oldValue, newValue in
@@ -132,20 +118,23 @@ struct NotebooksListView: View {
                                     // ** do navigation to editor
                                     editorState.setupNewNotebook(&selectedNotebook!)
                                     colors.append(newValue)
+                                    
+                                    print(selectedNotebook?.name, selectedNotebook?.id)
+                                    print(newValue.name, newValue.id)
                                 }
                             })
-                            .searchable(text: $usersState.searchText, placement: .navigationBarDrawer(displayMode: .always))
-                            .onChange(of: usersState.searchText) { oldValue, newValue in
-                                usersState.searchTextPublisher.send(newValue)
+                            .searchable(text: $notebooksListState.searchText, placement: .navigationBarDrawer(displayMode: .always))
+                            .onChange(of: notebooksListState.searchText) { oldValue, newValue in
+                                notebooksListState.searchTextPublisher.send(newValue)
                             }
                         }
                         .navigationDestination(for: Notebook.self) { color in
-                            NotebookEditorView(listDisplayState: usersState.listSourceType, editorState: editorState)
+                            NotebookEditorView(listDisplayState: notebooksListState.listSourceType, editorState: editorState)
                         }
                     }
                 }
                 .onDisappear {
-                    usersState.saveExpandedIds()
+                    notebooksListState.saveExpandedIds()
                 }
             }
             
@@ -153,46 +142,18 @@ struct NotebooksListView: View {
         .onAppear {
             
             selectedNotebook = nil
-//            usersState.timelineCreatorBusiness.modelContext = modelContext
             editorState.modelContext = modelContext
-            usersState.modelContext = modelContext
+            notebooksListState.modelContext = modelContext
             
-            usersState.notebookBusiness.modelContext = modelContext
+            notebooksListState.notebookBusiness.modelContext = modelContext
             
-            if usersState.notebooks.count == 0 {
-                usersState.fetchNotebooks()
+            if notebooksListState.notebooks.count == 0 {
+                notebooksListState.fetchNotebooks()
             }
-            
-            
-            
-            
-//            
-//            // to get new data not on first launch, user have to go back and come -  for now
-//            if firstTimeAppear {
-//                // if some how, list loading failed, force list load again.
-//                if usersState.isEmpty {
-//                    usersState.forceReload()
-//                } else {
-//                    if usersState.listSourceType == .notebooks(.none) {
-//                        // because, if new sync data available, then refresh is not happening until next app launch
-//                        // or
-//                        // when background sync done, need to get update.
-//                        // to get latest data
-//                        usersState.reloadNotebooksListIfNewRequired()
-//                    }
-//                }
-//                
-//                firstTimeAppear = false
-//            }
-//            
-//            // if app is in background until next day. so, on next appear if next day, check deleted items
-//            if appearDate != Date() {
-//                usersState.checkOldItemsToDelete()
-//            }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { (_) in
               print("UIApplication: willEnterForegroundNotification")
-            usersState.fetchNotebooks()
+            notebooksListState.fetchNotebooks()
         }
 //        onChange(of: scenePhase, { oldPhase, newPhase in
 //            if newPhase == .active {
@@ -215,64 +176,6 @@ struct NotebooksListView: View {
        
         return false
     }
-    
-    func getToolbarView() -> some View {
-        // tool bar
-        HStack(alignment: .center, spacing: 20) {
-            Group {
-                // insert below
-                Button(action: {
-                    if selectedNotebook == nil {
-                        return
-                    }
-                    
-//                    if let notebook = NotebooksCache.shared.flatNotebooks[selectedNotebook!.uuidString] {
-////                        usersState.insertBelow(ref: notebook)
-////                        usersState.insertBelow(ref: selectedNotebook!)
-//                    }
-                    
-                }) {
-                    //                Image(systemName: "arrow.down")
-                    //                    .renderingMode(.original)
-                    Text("Add Below")
-                }
-                // insert inside
-                Button(action: {
-                    if selectedNotebook == nil {
-                        return
-                    }
-//                    usersState.insertInside(ref: selectedNotebook!)
-                }) {
-                    //                Image(systemName: "arrow.turn.down.right")
-                    //                    .renderingMode(.original)
-                    Text("Add Inside")
-                }
-            }
-            .buttonStyle(.bordered)
-            Spacer()
-            // trash
-            Button(action: {
-                if selectedNotebook == nil {
-                    return
-                }
-//                usersState.deletingNotebook = selectedNotebook
-//                usersState.presentDeleteConfirmation = true
-//                guard var temp = usersState.deletingNotebook else { return }
-//                usersState.deleteNotebookNew(ref: &temp)
-//                usersState.deletingNotebook = nil
-                
-            }) {
-                Image(systemName: "trash")
-                    .renderingMode(.original)
-            }
-        }
-        .disabled(disableActions)
-        .buttonStyle(PlainButtonStyle())
-        .backgroundStyle(.bar)
-        .padding()
-        
-    }
-    
 }
 
 struct SearchedListView: View {
@@ -282,104 +185,52 @@ struct SearchedListView: View {
     @Environment(\.isSearching) private var isSearching
 //    @Binding var selectedNotebook: Notebook.ID?
     @Binding var selectedNotebook: Notebook?
-    @Bindable var usersState: NotebooksListState
+    @Bindable var notebooksListState: NotebooksListState
     
     @Namespace var topID
     @Namespace var bottomID
     
     var body: some View {
         
-        switch usersState.listSourceType {
+        switch notebooksListState.listSourceType {
         case .notebooks(let filterType):
             switch filterType {
             case .none:
                 EmptyView()
             case .searching:
-                if usersState.activeSearch {
-                    Text("Search Results: \(usersState.searchResultCount)")
+                if notebooksListState.activeSearch {
+                    Text("Search Results: \(notebooksListState.searchResultCount)")
                             .font(.caption)
                             .padding(2)
                 }
             case .recentlyModified:
-                Text("Recently Modified: \(usersState.modifiedResultCount)")
+                Text("Recently Modified: \(notebooksListState.modifiedResultCount)")
                         .font(.caption)
                         .padding(2)
             }
         case .deletedItems:
-            Text("Deleted Items: \(usersState.deletedResultCount)")
+            Text("Deleted Items: \(notebooksListState.deletedResultCount)")
                     .font(.caption)
                     .padding(2)
         }
         
-//        VStack {
-        
-        
-            List(selection: $selectedNotebook) {
-                
-                if usersState.listSourceType == .deletedItems {
-                    NotebooksListGroupView(usersState: usersState, notebooks: $usersState.deletedNotebooks)
-                } else {
-                    NotebooksListGroupView(usersState: usersState, notebooks: $usersState.notebooks)
-                }
-                
-//                .id(usersState.notebooks.last?.id)
-                
-                //            if usersState.notesHierarchy.deletedNotes.count > 0 {
-                //                Section {
-                //                    DisclosureGroup {
-                //                        NotebooksListGroupView(notebooks: $usersState.notesHierarchy.deletedNotes)
-                //                    } label: {
-                //                        HStack {
-                //                            Image(systemName: "trash")
-                //                                .foregroundColor(.red)
-                //                            Text("Recently Deleted")
-                //                                .font(.subheadline)
-                //                                .fontWeight(.thin)
-                //                                .foregroundColor(.red)
-                //                        }
-                //
-                //                    }
-                //                }
-                //                .tint(.gray)
-                //            }
-                
-                
-                //            Section {
-                //                DisclosureGroup {
-                //                    Text("Note 1")
-                //                } label: {
-                //                    Text("Recently Deleted")
-                //                        .fontWeight(.bold)
-                //                        .foregroundColor(.gray)
-                //                        .padding(.top, 14)
-                //                }
-                //            } header: {
-                //                Text("Recently Deleted")
-                //                    .fontWeight(.bold)
-                //
-                //            }
-                
-                
-                
-                //            DisclosureGroup("recently deleted") {
-                //                Text("Note 1")
-                //            }
-                //            Section("Recently Deleted") {
-                //                Text("Note 1")
-                //            }
+        List(selection: $selectedNotebook) {
+            if notebooksListState.listSourceType == .deletedItems {
+                NotebooksListGroupView(notebooksListState: notebooksListState, notebooks: $notebooksListState.deletedNotebooks)
+            } else {
+                NotebooksListGroupView(notebooksListState: notebooksListState, notebooks: $notebooksListState.notebooks)
             }
-            .scrollDismissesKeyboard(.interactively)
-        
+        }
+        .scrollDismissesKeyboard(.interactively)
         .toolbar {
-            
-            if usersState.canEnableDone {
+            if notebooksListState.canEnableDone {
                 // Done button change
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
-                        if usersState.listSourceType == .deletedItems {
-                            usersState.hideRecentlyDeleted()
-                        } else if usersState.listSourceType == .notebooks(.recentlyModified) {
-                            usersState.hideRecentlyModified()
+                        if notebooksListState.listSourceType == .deletedItems {
+                            notebooksListState.hideRecentlyDeleted()
+                        } else if notebooksListState.listSourceType == .notebooks(.recentlyModified) {
+                            notebooksListState.hideRecentlyModified()
                         }
                     }
                 }
@@ -388,14 +239,14 @@ struct SearchedListView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
                         Button {
-                            usersState.showRecentlyModified()
+                            notebooksListState.showRecentlyModified()
                         } label: {
                             Text("Recently Modified")
                         }
                         .foregroundColor(.primary)
                         
                         Button {
-                            usersState.showRecentlyDeleted()
+                            notebooksListState.showRecentlyDeleted()
                         } label: {
                             Text("Deleted Notebooks")
                         }
@@ -403,53 +254,22 @@ struct SearchedListView: View {
                         
                     } label: {
                         Image(systemName: "ellipsis.circle")
-                    }//.disabled(usersState.canEnableDone)
+                    }
                 }
             }
-            
-            
-            
-            
-            
-            
-//
-//            Button {
-//                usersState.showHideRecentlyModified()
-//            } label: {
-//                Image(systemName: usersState.recentButtonIcon)
-//                    .foregroundColor(usersState.listSourceType == .notebooks(.recentlyModified) ? Color.green : Color.accentColor)
-//            }
-//            .disabled(usersState.listSourceType == ListSourceType.deletedItems ? true : false)
-//
-//            Button {
-//                usersState.showHideRecentlyDeleted()
-//            } label: {
-//                Image(systemName: usersState.recentlyDeletedButtonIcon)
-//                    .foregroundColor(usersState.listSourceType == .deletedItems ? Color.green : Color.accentColor)
-//            }
         }
         .onChange(of: isSearching) { newValue in
             // on search active
             if newValue {
                 // end editMode
                 editMode?.wrappedValue = .inactive
-                usersState.listSourceType = .notebooks(.searching)
+                notebooksListState.listSourceType = .notebooks(.searching)
             }
             
-            usersState.isSearching = newValue
-//            print("isSearching, ", newValue)
-//            selectedNotebook = nil
-//            if newValue {
-//                usersState.takeBackup()
-//            } else {
-//                usersState.restoreBackup()
-//            }
+            notebooksListState.isSearching = newValue
         }
         .onChange(of: editMode?.wrappedValue) { newValue in
             selectedNotebook = nil
-//            if newValue == .active {
-//
-//            }
         }
     }
     
@@ -484,134 +304,44 @@ struct MyDisclosureStyle: DisclosureGroupStyle {
 struct AddNotesView: View {
     
     @Environment(\.modelContext) private var modelContext
-    @Bindable var usersState: NotebooksListState
+    @Bindable var notebooksListState: NotebooksListState
     
     var body: some View {
         VStack(alignment: .center) {
             // show add first notebook button
             Button {
-                usersState.addFirstNotes()
+                notebooksListState.addFirstNotes()
             } label: {
                 Text(" + Notebook ")
             }.padding()
             Text("add your first notebook")
                 .font(Font.subheadline)
-            
-            
-//            VStack {
-//                Text("Instead use refresh, if already exits on iCloud")
-//                Button {
-//                    // get plist on demand
-//                    usersState.initialFetch()
-//                } label: {
-//                    Text("refresh")
-//                }
-//            }
-//            .padding(10)
-            
-
-            
-//            Text("or")
-//                .font(Font.callout)
-//
-//            Button {
-//
-//            } label: {
-//                Text("Sync from iCloud")
-//            }.padding()
         }
     }
 }
 
 
 struct NotebooksListGroupView: View {
-    @Bindable var usersState: NotebooksListState
+    @Bindable var notebooksListState: NotebooksListState
     @Binding var notebooks: [Notebook]
-    @State private var isTargeted: Bool = true
     var body: some View {
         
-        if usersState.listSourceType == .notebooks(.none) ||
-            (usersState.listSourceType == .notebooks(.searching) && usersState.activeSearch == false) {
+        if notebooksListState.listSourceType == .notebooks(.none) ||
+            (notebooksListState.listSourceType == .notebooks(.searching) && notebooksListState.activeSearch == false) {
             ForEach($notebooks, id: \.self) { $notebook in
-                MyTableRow(usersState: usersState, notebook: $notebook)
+                MyTableRow(notebooksListState: notebooksListState, notebook: $notebook)
             }
-            .onMove(perform: move) 
         } else {
             ForEach($notebooks, id: \.self) { $notebook in
-                MyTableDeletedRow(usersState: usersState, notebook: $notebook)
+                MyTableDeletedRow(notebooksListState: notebooksListState, notebook: $notebook)
             }
-//            .onMove(perform: move)
         }
-        
-        
-//        .onDrop(of: [.text], isTargeted: $isTargeted, perform: { providers in
-//            print("ON DROP")
-//            return true
-//        })
-        
-        
-//        .onInsert(of: [UTType.text]) { pos, prov in
-//            print("\n-----> ignoring insert in model1")
-//        }
-    }
-    
-    @State private var operationTag = 1
-    @State private var draggedItem: Notebook?
-    @State private var isDragging = false
-    @State private var isCustomPreview = true
-    
-    
-    private func makeDropDelegate(user: Notebook) -> DropDelegate {
-//        print("makeDropDelegate \(user.name)")
-        let operation: DropOperation
-        switch operationTag {
-        case 1:
-            operation = .move
-        default:
-            operation = .copy
-        }
-        return CommonDropDelegate(
-            currentItem: user,
-            operation: operation,
-            items: $notebooks,
-            draggedItem: $draggedItem,
-            onEntered: { _ in
-                print("Drop entered - \(user.name)")
-                withAnimation { isDragging = true }
-            },
-            onExit: {
-                print("drop exit")
-                withAnimation { isDragging = false }
-            },
-            onPerform: {
-                print("drop -onPerform")
-                withAnimation { isDragging = false }
-            }
-        )
-    }
-    
-    private func makeItemProvider(user: Notebook) -> NSItemProvider {
-        print(#function)
-        print(user.name)
-        isDragging = true
-        draggedItem = user
-        return NSItemProvider(object: user.id.uuidString as NSItemProviderWriting)
-    }
-    
-    func move(from source: IndexSet, to destination: Int) {
-        print(#function, source, destination)
-        
-//        notebooks.move(fromOffsets: source, toOffset: destination)
-//
-//        notebooks.first?.notebook.parent?.children?.move(fromOffsets: source, toOffset: destination)
-//
-        usersState.move(notebooks: &notebooks, from: source, to: destination)
     }
 }
 
 struct MyTableRow: View {
     
-    @Bindable var usersState: NotebooksListState
+    @Bindable var notebooksListState: NotebooksListState
     @Binding var notebook: Notebook
     
     var body: some View {
@@ -619,13 +349,13 @@ struct MyTableRow: View {
         // normal
         if notebook.containChildNotebooks {
             DisclosureGroup(isExpanded: $notebook.isExpanded) {
-                NotebooksListGroupView(usersState: usersState, notebooks: $notebook.children.unwrap()!)
+                NotebooksListGroupView(notebooksListState: notebooksListState, notebooks: $notebook.children.unwrap()!)
             } label: {
-                RowView(usersState: usersState, notebook: $notebook)
+                RowView(notebooksListState: notebooksListState, notebook: $notebook)
                     .id(notebook.id)
             }
         } else {
-            RowView(usersState: usersState, notebook: $notebook)
+            RowView(notebooksListState: notebooksListState, notebook: $notebook)
                 .id(notebook.id)
         }
     }
@@ -633,19 +363,19 @@ struct MyTableRow: View {
 
 struct MyTableDeletedRow: View {
     
-    @Bindable var usersState: NotebooksListState
+    @Bindable var notebooksListState: NotebooksListState
     @Binding var notebook: Notebook
     
     var body: some View {
         if notebook.containChildNotebooks {
             DisclosureGroup(isExpanded: $notebook.isExpanded) {
-                NotebooksListGroupView(usersState: usersState, notebooks: $notebook.children.unwrap()!)
+                NotebooksListGroupView(notebooksListState: notebooksListState, notebooks: $notebook.children.unwrap()!)
             } label: {
-                RowView(usersState: usersState, notebook: $notebook)
+                DeletedRowView(notebooksListState: notebooksListState, notebook: $notebook)
                     .opacity(notebook.canShow ? 1 : 0.4)
             }
         } else {
-            RowView(usersState: usersState, notebook: $notebook)
+            DeletedRowView(notebooksListState: notebooksListState, notebook: $notebook)
                 .opacity(notebook.canShow ? 1 : 0.4)
         }
     }
@@ -654,7 +384,7 @@ struct MyTableDeletedRow: View {
 struct RowView: View {
     
     @Environment(\.modelContext) private var modelContext
-    @Bindable var usersState: NotebooksListState
+    @Bindable var notebooksListState: NotebooksListState
     @Binding var notebook: Notebook
     @State private var name: String = ""
     @FocusState private var isFocused: Bool
@@ -684,24 +414,12 @@ struct RowView: View {
                 Text(notebook.name)
                     .swipeActions(edge: .trailing) {
                         Button(role: .destructive) {
-//                            store.delete(message)
-                            
                             Task {
-                                usersState.delete(notebook: notebook)
+                                notebooksListState.delete(notebook: notebook)
                             }
-                            
-//                            usersState.deletingNotebook = notebook
-//                            
-////                            guard let temp = usersState.deletingNotebook else { return }
-//                            
-//                            usersState.deletingNotebook = nil
-                            
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }
-//                        Button { store.flag(message) } label: {
-//                            Label("Flag", systemImage: "flag")
-//                        }
                     }
             }
         }
@@ -711,7 +429,7 @@ struct RowView: View {
         }
         .contextMenu {
             
-            if usersState.listSourceType == .deletedItems {
+            if notebooksListState.listSourceType == .deletedItems {
                 Group {
                     // restore
                     Button(action: {
@@ -729,16 +447,8 @@ struct RowView: View {
                     // trash
                     Button(role: .destructive, action: {
                         Task {
-                            usersState.delete(notebook: notebook)
+                            notebooksListState.delete(notebook: notebook)
                         }
-                        
-                        
-//                        usersState.deletingNotebook = notebook
-//    //                    usersState.presentDeleteConfirmation = true
-//                        
-//                        
-//                        usersState.deletingNotebook = nil
-                        
                     }) {
                         HStack {
                             Text("Delete")
@@ -754,20 +464,20 @@ struct RowView: View {
                     RenameButton()
                     // insert below
                     Button(action: {
-                        usersState.insertBelow(ref: notebook)
+                        notebooksListState.insertBelow(ref: notebook)
                     }) {
                         Text("Add Below")
                     }
                     // insert inside
                     Button(action: {
-                        usersState.insertInside(ref: notebook)
+                        notebooksListState.insertInside(ref: notebook)
                     }) {
                         Text("Add Inside")
                     }
                     // trash
                     Button(role: .destructive, action: {
                         Task {
-                            usersState.delete(notebook: notebook)
+                            notebooksListState.delete(notebook: notebook)
                         }
                     }) {
                         HStack {
@@ -798,8 +508,7 @@ struct RowView: View {
                 return
             }
             do {
-                try usersState.rename(for: notebook, newValue: name)
-//                usersState.navTitle = name
+                try notebooksListState.rename(for: notebook, newValue: name)
                 isEditing = false
             } catch NotebookBusinessError.alreadyExists {
                 showFileExistsAlert = true
@@ -825,77 +534,156 @@ struct RowView: View {
     
 }
 
-// MARK: - Deleted Notebooks
-
-struct DeletedNotebooksListGroupView: View {
-    @Bindable var usersState: NotebooksListState
-    @Binding var notebooks: [Notebook]
-    @State private var isTargeted: Bool = true
-    var body: some View {
-        Text("todo")
-//        ForEach($notebooks, id: \.self) { $notebook in
-//            if notebook.containChildNotebooks {
-//                DisclosureGroup(isExpanded: $notebook.isExpanded) {
-//                    DeletedNotebooksListGroupView(usersState: usersState, notebooks: $notebook.children.unwrap()!)
-//                } label: {
-//                    DeletedRowView(usersState: usersState, notebook: $notebook)
-//                }
-//            } else {
-//                DeletedRowView(notebook: $notebook)
-//            }
-//        }
-    }
-}
-
 
 struct DeletedRowView: View {
-    @Bindable var usersState: NotebooksListState
+    
+    @Environment(\.modelContext) private var modelContext
+    @Bindable var notebooksListState: NotebooksListState
     @Binding var notebook: Notebook
+    @State private var name: String = ""
+    @FocusState private var isFocused: Bool
+    
+    @State private var showFileExistsAlert = false
+    @State private var showInvalidCharsAlert = false
+    
+    @State private var isEditing = false {
+        didSet {
+            isFocused = isEditing
+        }
+    }
+    
+    var disableActions: Bool {
+        return false
+    }
     
     var body: some View {
         HStack {
-            Text(notebook.name)
+            if isEditing {
+                TextField(text: $name) {
+                    Text("Notebook")
+                }
+                .background(Color.gray)
+                .focused($isFocused)
+            } else {
+                Text(notebook.name)
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+                            Task {
+                                notebooksListState.delete(notebook: notebook)
+                            }
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
+            }
         }
-        
-        
-//        .contextMenu {
-//
-//            Group {
-//                // restore
-//                Button(action: {
-////                        usersState.insertBelow(ref: notebook)
-//                }) {
-//                    Label("Restore", image: "arrow.uturn.backward")
-////                        HStack {
-////                            Text("Restore")
-////                            Spacer()
-////                            Image(systemName: "arrow.uturn.backward")
-////                                .renderingMode(.original)
-////                        }
-//                }
-//
-//                // trash
-//                Button(role: .destructive, action: {
-////                    usersState.deletingNotebook = notebook
-//////                    usersState.presentDeleteConfirmation = true
-////
-////                    usersState.deleteNotebookNew(ref: notebook)
-////                    usersState.deletingNotebook = nil
-//
-//                }) {
-//                    HStack {
-//                        Text("Delete")
-//                        Spacer()
-//                        Image(systemName: "trash")
-//                            .renderingMode(.original)
-//                    }
-//                }
-//            }
-//        }
-        
-        
-        
+        .onAppear {
+            name = notebook.name
+//            isFocused = false
+        }
+        .contextMenu {
+            
+            if notebooksListState.listSourceType == .deletedItems {
+                Group {
+                    // restore
+                    Button(action: {
+//                        usersState.insertBelow(ref: notebook)
+                    }) {
+                        Label("Restore", image: "arrow.uturn.backward")
+//                        HStack {
+//                            Text("Restore")
+//                            Spacer()
+//                            Image(systemName: "arrow.uturn.backward")
+//                                .renderingMode(.original)
+//                        }
+                    }
+                    
+                    // trash
+                    Button(role: .destructive, action: {
+                        Task {
+                            notebooksListState.delete(notebook: notebook)
+                        }
+                    }) {
+                        HStack {
+                            Text("Delete")
+                            Spacer()
+                            Image(systemName: "trash")
+                                .renderingMode(.original)
+                        }
+                    }
+                }
+                .disabled(disableActions)
+            } else {
+                Group {
+                    RenameButton()
+                    // insert below
+                    Button(action: {
+                        notebooksListState.insertBelow(ref: notebook)
+                    }) {
+                        Text("Add Below")
+                    }
+                    // insert inside
+                    Button(action: {
+                        notebooksListState.insertInside(ref: notebook)
+                    }) {
+                        Text("Add Inside")
+                    }
+                    // trash
+                    Button(role: .destructive, action: {
+                        Task {
+                            notebooksListState.delete(notebook: notebook)
+                        }
+                    }) {
+                        HStack {
+                            Text("Delete")
+                            Spacer()
+                            Image(systemName: "trash")
+                                .renderingMode(.original)
+                        }
+                    }
+                }
+                .disabled(disableActions)
+            }
+            
+            
+        }
+        .renameAction {
+            isEditing = true
+        }
+        .onChange(of: isEditing, perform: { newValue in
+            if newValue == false {
+                // on escape, reset content
+                name = notebook.name
+            }
+        })
+        .onSubmit {
+            if name == notebook.name {
+                isEditing = false
+                return
+            }
+            do {
+                try notebooksListState.rename(for: notebook, newValue: name)
+                isEditing = false
+            } catch NotebookBusinessError.alreadyExists {
+                showFileExistsAlert = true
+                isEditing = true
+            } catch NotebookBusinessError.invalidCharacters {
+                showInvalidCharsAlert = true
+                isEditing = true
+            } catch {
+//                name = notebook.name
+            }
+        }
+        .confirmationDialog("Failed to rename file", isPresented: $showFileExistsAlert) {
+            
+        } message: {
+            Text("filename already exists")
+        }
+        .confirmationDialog("Failed to rename file", isPresented: $showInvalidCharsAlert) {
+            
+        } message: {
+            Text("filename contains unsupported characters")
+        }
     }
     
 }
-

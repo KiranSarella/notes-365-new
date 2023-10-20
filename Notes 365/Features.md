@@ -1,12 +1,15 @@
 
 
 ## Notebooks pending tasks
-[ ] perminent delete notebook and its nested hierarchy and each notebook content
+[-] perminent delete notebook and its nested hierarchy and each notebook content
 [ ] on mac list - hover show options
+[ ] not saving while removed lines issue
+[ ] expanded ids - persist logic
+[ ] move notebooks - persist?
 
 ## timeline
 [ ] optimization - reload only if today, this week, this month
-[ ] task cancellation not working issue
+[ ] dynamic path
 
 # Xcode 15 
 [ ] update onChange to new syntax
