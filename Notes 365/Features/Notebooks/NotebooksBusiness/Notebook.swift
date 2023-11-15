@@ -1,52 +1,208 @@
 //
-//  Notebook.swift
+//  Models.swift
 //  Notes 365
 //
-//  Created by Kiran Sarella on 15/11/22.
+//  Created by kiran ipc on 14/11/23.
 //
 
-import UIKit
+import Foundation
 import SwiftData
 
-@Model
-class NotebookData {
+
+/*
+ getParent() -> Notebook
+ // have to maintain [childID: parentID] dictionary
+ // - when new child added, insert here
+ // - no persistance is required, in-mem instant only
+ // - when grouping changed
+ 
+ getChildren() -> [Notebook]
+ 
+ */
+
+@Observable
+class Notebook: Identifiable {
     
     var id: UUID = UUID()
-    var parent: UUID?
     var name: String = ""
-    var orderID: Int = 0
-    
-    var children: [UUID]?
+
+    var childrenIds: [UUID]?
+    // private(set)
+    var children: [Notebook]?
     
     var createdDate: Date = Date()
-    var deletedDate: Date?
+    var deletedDate: Date? = nil
     var modifiedDate: Date = Date()
     
-    var isDeleted: Bool {
-        deletedDate != nil
+    var orderID: Int = 0
+    
+    var parentId: UUID?
+    private(set) var parent: Notebook?
+    
+    var notebookData: NotebookData
+    
+    var isExpanded: Bool = false
+    var isDeleted: Bool = false
+    var canShow: Bool = true
+    
+    func sortChildren() {
+        if children != nil {
+            children!.sort(by: { n1, n2 in
+                n1.orderID < n2.orderID
+            })
+            
+            // apply to nested
+            for i in 0..<children!.count {
+                children![i].sortChildren()
+            }
+        }
     }
+    
+    func onlySelfSortChildren() {
+        if children != nil {
+            
+            print("## before")
+            for c in children! {
+                print(c.orderID)
+            }
+//
+//            children!.sort(by: { n1, n2 in
+//                n1.orderID < n2.orderID
+//            })
+//
+//            print("## after")
+//            for c in children! {
+//                print(c.orderID)
+//            }
+            
+            print("# manual")
+            if let sortedArr = children?.sorted(by: { $0.orderID < $1.orderID }) {
+                
+                children = sortedArr
+                
+                for c in sortedArr {
+                    print(c.orderID)
+                }
+                print("---")
+                for c in children! {
+                    print(c.orderID)
+                }
+            }
+            
+        }
+    }
+    
+    init(_ notebookData: NotebookData) {
+        
+        self.notebookData = notebookData
+        
+        self.id = notebookData.id
+        self.name = notebookData.name
+        self.orderID = notebookData.orderID
+        self.createdDate = notebookData.createdDate
+        self.modifiedDate = notebookData.modifiedDate
+        self.deletedDate = notebookData.deletedDate
+        
+        // lazy load actual parent and chldrens ?
+        self.parentId = notebookData.parent
+        self.childrenIds = notebookData.children
+        
+        // self.parent = // asign parent external
+        //        self.children = // get children objects
+    }
+    
     
     init(id: UUID, name: String) {
         self.id = id
         self.name = name
-        
-        createdDate = Date()
-        deletedDate = nil
-        modifiedDate = Date()
+        notebookData = NotebookData(id: id, name: name)
+    }
+    
+    // MARK: - parent
+    func updateParent(_ newValue: Notebook?) {
+        self.parent = newValue
+        self.parentId = newValue?.id
+    }
+    
+  
+}
+
+extension Notebook: Equatable, Hashable {
+    static func == (lhs: Notebook, rhs: Notebook) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }
 
+
+// MARK: - children
 extension Notebook {
     
-    func generateNotebookData() -> NotebookData {
-        let notedata = NotebookData(id: id, name: name)
-        notedata.parent = parent?.id
-        notedata.orderID = orderID
-        notedata.createdDate = createdDate
-        notedata.modifiedDate = modifiedDate
-        
-        return notedata
+    func setChildren(notebooks newList: [Notebook]?) {
+        self.children = newList
+        updateChildrenIds()
     }
+    
+    func appendChildren(notebook newValue: Notebook) {
+        self.children?.append(newValue)
+        updateChildrenIds()
+    }
+    
+    func insertChild(notebook newValue: Notebook, at position: Int) {
+        self.children?.insert(newValue, at: position)
+        updateChildrenIds()
+    }
+    
+    func deleteChildren(where id: UUID) {
+        children?.removeAll(where: { $0.id == id })
+        updateChildrenIds()
+    }
+    
+    private func updateChildrenIds() {
+        self.childrenIds = children?.map { $0.id }
+    }
+    
+    func populateChildren(_ dict: [UUID: NotebookData]) {
+        
+        guard let cArr = notebookData.children else { return }
+        
+        children = [Notebook]()
+        for cid in cArr {
+            if let noteD = dict[cid] {
+                // if deleted, discard that node and heirarchy
+                if noteD.isDeleted { continue } // continue vs return - remember
+                let note = Notebook(noteD)
+                note.parent = self
+                children?.append(note)
+            }
+        }
+        // populate inner list
+        // populate childnotes
+        for cNote in children! {
+            cNote.populateChildren(dict)
+        }
+        
+    }
+    
+    var containChildNotebooks: Bool {
+        childrenCount > 0
+    }
+    
+    var childrenCount: Int {
+        guard let children = children, children.count > 0 else { return 0 }
+        return children.count
+    }
+    
+    func linkSelfToChildren() {
+        _ = children?.map { $0.parent = self }
+    }
+ 
+}
+
+extension Notebook {
     
     func syncNotebookData() {
         
@@ -80,155 +236,6 @@ extension Notebook {
         }
     }
 }
-
-/*
- getParent() -> Notebook
- // have to maintain [childID: parentID] dictionary
- // - when new child added, insert here
- // - no persistance is required, in-mem instant only
- // - when grouping changed
- 
- getChildren() -> [Notebook]
- 
- */
-
-@Observable
-class Notebook: Identifiable {
-    
-    var id: UUID = UUID()
-    var name: String = ""
-
-    var children: [Notebook]?
-    
-    var createdDate: Date = Date()
-    var deletedDate: Date? = nil
-    var modifiedDate: Date = Date()
-    
-    var orderID: Int = 0
-    
-    var parent: Notebook?
-    
-    var notebookData: NotebookData
-    
-    var isExpanded: Bool = false
-    var isDeleted: Bool = false
-    var canShow: Bool = true
-    
-    func sortChildren() {
-        if children != nil {
-            children!.sort(by: { n1, n2 in
-                n1.orderID < n2.orderID
-            })
-            
-            // apply to nested
-            for i in 0..<children!.count {
-                children![i].sortChildren()
-            }
-        }
-    }
-    
-    func onlySelfSortChildren() {
-        if children != nil {
-            
-            print("## before")
-            for c in children! {
-                print(c.orderID)
-            }
-//            
-//            children!.sort(by: { n1, n2 in
-//                n1.orderID < n2.orderID
-//            })
-//            
-//            print("## after")
-//            for c in children! {
-//                print(c.orderID)
-//            }
-            
-            print("# manual")
-            if let sortedArr = children?.sorted(by: { $0.orderID < $1.orderID }) {
-                
-                children = sortedArr
-                
-                for c in sortedArr {
-                    print(c.orderID)
-                }
-                print("---")
-                for c in children! {
-                    print(c.orderID)
-                }
-            }
-            
-        }
-    }
-    
-    init(_ notebookData: NotebookData) {
-        
-        self.notebookData = notebookData
-        
-        self.id = notebookData.id
-        self.name = notebookData.name
-        self.orderID = notebookData.orderID
-//        self.parent = // get parent object
-//        self.children = // get children objects
-        self.createdDate = notebookData.createdDate
-        self.modifiedDate = notebookData.modifiedDate
-        self.deletedDate = notebookData.deletedDate
-        
-    }
-    
-    init(id: UUID, name: String) {
-        self.id = id
-        self.name = name
-        notebookData = NotebookData(id: id, name: name)
-    }
-    
-    func populateChildren(_ dict: [UUID: NotebookData]) {
-        
-        guard let cArr = notebookData.children else { return }
-        
-        children = [Notebook]()
-        for cid in cArr {
-            if let noteD = dict[cid] {
-                // if deleted, discard that node and heirarchy
-                if noteD.isDeleted { continue } // continue vs return - remember
-                let note = Notebook(noteD)
-                note.parent = self
-                children?.append(note)
-            }
-        }
-        // populate inner list
-        // populate childnotes
-        for cNote in children! {
-            cNote.populateChildren(dict)
-        }
-        
-    }
-    
-    var containChildNotebooks: Bool {
-        guard let children = children, children.count > 0 else { return false }
-        return true
-    }
-    
-    var fileURL: URL {
-        let path = Constants.notebooksFolderName + "/" + filePath
-        let basePathUrl = EnvironmentState.shared.basePathURL!
-        let fileURL = basePathUrl.appendingPathComponent(path)
-//        print(fileURL)
-        return fileURL
-    }
-    
-}
-
-extension Notebook: Equatable, Hashable {
-    static func == (lhs: Notebook, rhs: Notebook) -> Bool {
-        return lhs.id == rhs.id
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-}
-
 
 extension Notebook {
     

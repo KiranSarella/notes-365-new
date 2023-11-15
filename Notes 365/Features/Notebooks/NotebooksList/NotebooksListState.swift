@@ -140,7 +140,7 @@ class NotebooksListState {
         
         if notebook.parent != nil {
             // set parent
-            newNotebook.parent = notebook.parent
+            newNotebook.updateParent(notebook.parent)
             
             if notebook.parent!.children != nil {
                 // if children contains
@@ -159,7 +159,7 @@ class NotebooksListState {
 //                modelContext.insert(newNotebook)
 //                notebook.parent!.onlySelfSortChildren()
                 // insert to hierachy create object
-                notebook.parent!.children!.insert(newNotebook, at: insertIndex)
+                notebook.parent!.insertChild(notebook: newNotebook, at: insertIndex)
                 newNotebook.saveNotebookData(modelContext)
                 
 //                sortedChildren.insert(newNotebook, at: index + 1) // not working
@@ -196,7 +196,7 @@ class NotebooksListState {
 //                notebook.parent?.onlySelfSortChildren()
                 
             } else {
-                notebook.parent?.children = [newNotebook]
+                notebook.parent?.setChildren(notebooks: [newNotebook])
             }
             // update parent as its childen udpated
             notebook.parent!.updateNotebookData(modelContext)
@@ -259,14 +259,14 @@ class NotebooksListState {
         // create new notebook
         let newNotebook = generateNotebook(parent: notebook)
         // set its parent
-        newNotebook.parent = notebook
+        newNotebook.updateParent(notebook)
         
         if notebook.children == nil {
             // first child
-            notebook.children = [newNotebook]
+            notebook.setChildren(notebooks: [newNotebook])
         } else {
             // already contains children
-            notebook.children?.append(newNotebook)
+            notebook.appendChildren(notebook: newNotebook)
         }
         // save new notebook
         newNotebook.saveNotebookData(modelContext)
@@ -362,7 +362,7 @@ class NotebooksListState {
         if let parent = notebook.parent {
             // inner item
             // delete notebook
-            parent.children?.removeAll(where: { $0 == notebook })
+            parent.deleteChildren(where: notebook.id)
         } else {
             // base level
             // delete notebook
