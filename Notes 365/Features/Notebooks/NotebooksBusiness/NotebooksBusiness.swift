@@ -44,10 +44,7 @@ class NotebooksBusiness {
     }
     
     // MARK: - Insert
-//    func insertNotebook(at position: Int) throws -> Notebook {
-//        
-//    }
-    
+
     func getNextOrderId(at siblings: [Notebook]) -> Int {
         if var lastOrderId = siblings.last?.orderID {
             lastOrderId += 1
@@ -73,18 +70,10 @@ class NotebooksBusiness {
         let newNotebook = Notebook(id: UUID(), name: newNotebookName)
         newNotebook.updateParent(parent)
         // insert in hierarchy
-        if parent.containChildNotebooks {
-            if let position = position {
-                if position > parent.childrenCount {
-                    parent.insertChild(notebook: newNotebook, at: position)
-                } else {
-                    throw NotebooksBusinessError.invalidPosition
-                }
-            } else {
-                parent.appendChildren(notebook: newNotebook)
-            }
+        if let position = position {
+            try parent.insertChild(notebook: newNotebook, at: position)
         } else {
-            parent.setChildren(notebooks: [newNotebook])
+            parent.appendChildren(notebook: newNotebook)
         }
         // persist
         try newNotebook.insert(in: storage)
@@ -92,6 +81,37 @@ class NotebooksBusiness {
         
         return newNotebook
     }
+    
+//    func createNotebook(below position: Int) throws -> Notebook {
+//        // get top level notebooks
+//        // create new notebook at postion
+//        // insert at position
+//        // update orderID for each after element
+//        // save all
+//        
+//        let topLevelList = try getTopLevelNotebooksWithoutChildren()
+//        
+//        if position < topLevelList.count {
+//            let newNotebook = Notebook(id: UUID(), name: generateUntitledName(atLevel: topLevelList))
+//            newNotebook.orderID = topLevelList[position].orderID + 1
+//            try newNotebook.insert(in: storage)
+//            
+//            for i in position..<topLevelList.count {
+//                
+//            }
+//            
+//            
+//        } else if position == topLevelList.count {
+//            // append at last
+//            return try createNotebook()
+//        }
+//        else {
+//            throw NotebooksBusinessError.invalidPosition
+//        }
+//        
+//
+//        
+//    }
     
     func getNotebook(for id: UUID) throws -> Notebook {
         let notebook = try storage.getNotebook(for: id)

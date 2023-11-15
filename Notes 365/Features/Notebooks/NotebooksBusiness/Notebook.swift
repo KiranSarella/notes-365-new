@@ -147,13 +147,25 @@ extension Notebook {
     }
     
     func appendChildren(notebook newValue: Notebook) {
-        self.children?.append(newValue)
-        updateChildrenIds()
+        if self.containChildNotebooks {
+            self.children?.append(newValue)
+            updateChildrenIds()
+        } else {
+            setChildren(notebooks: [newValue])
+        }
     }
     
-    func insertChild(notebook newValue: Notebook, at position: Int) {
-        self.children?.insert(newValue, at: position)
-        updateChildrenIds()
+    func insertChild(notebook newValue: Notebook, at position: Int) throws {
+        if position <= childrenCount {
+            if containChildNotebooks {
+                self.children?.insert(newValue, at: position)
+                updateChildrenIds()
+            } else {
+                self.setChildren(notebooks: [newValue])
+            }
+        } else {
+            throw NotebooksBusinessError.invalidPosition
+        }
     }
     
     func deleteChildren(where id: UUID) {

@@ -87,7 +87,6 @@ class NotebooksStorageAdapter: NotebooksStorageProvider {
     }
     
     func insert(notebook: Notebook) throws {
-        print(#function)
         try storage.insert(notebookData: notebook.generateNotebookData())
     }
     

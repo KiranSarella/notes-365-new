@@ -159,7 +159,7 @@ class NotebooksListState {
 //                modelContext.insert(newNotebook)
 //                notebook.parent!.onlySelfSortChildren()
                 // insert to hierachy create object
-                notebook.parent!.insertChild(notebook: newNotebook, at: insertIndex)
+                try! notebook.parent!.insertChild(notebook: newNotebook, at: insertIndex)
                 newNotebook.saveNotebookData(modelContext)
                 
 //                sortedChildren.insert(newNotebook, at: index + 1) // not working
