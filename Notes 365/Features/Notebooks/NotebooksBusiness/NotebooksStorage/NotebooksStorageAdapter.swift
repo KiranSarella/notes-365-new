@@ -6,28 +6,18 @@
 //
 
 import Foundation
+import SwiftData
 
-
-protocol NotebooksStorageGateway {
+class NotebooksStorageAdapter: NotebooksStorageProvider {
     
-    func fetchNotebooks() async throws -> [Notebook]?
-    func fetchDeletedNotebooks() async throws -> [Notebook]?
-    func insert(notebook: Notebook) throws
-    func update(notebook: Notebook) throws
-    func getNotebook(for id: UUID) throws -> Notebook
-    func getTopLevelNotebooks() throws -> [Notebook]
-    func getChildren(forParent id: UUID) throws -> [Notebook]
-}
-
-class NotebooksStorageAdapter: NotebooksStorageGateway {
+    let storage: NotebooksStorage
     
+    init(modelContext: ModelContext) {
+        storage = NotebooksStorage(modelContext: modelContext)
+    }
     
-    let storage = NotebooksStorage()
-    
-    func fetchNotebooks() async throws -> [Notebook]? {
-        
+    func fetchNotebooks() async throws -> [Notebook] {
         try await withCheckedThrowingContinuation { continuation in
-            
             do {
                 let notebooksData = try storage.fetchNotebooks()
                 let notebooks = convertToNotebooks(from: notebooksData)
@@ -45,12 +35,10 @@ class NotebooksStorageAdapter: NotebooksStorageGateway {
         for result in notebooksData {
             dict[result.id] = result
         }
-        
         // topLevel
         var topLevels: [NotebookData] = notebooksData.filter { $0.parent == nil }
             .sorted { $0.orderID < $1.orderID }
         topLevels.removeAll(where: { $0.isDeleted })
-        
         // notebooks
         var notebooksList = [Notebook]()
         for topNote in topLevels {
@@ -60,15 +48,12 @@ class NotebooksStorageAdapter: NotebooksStorageGateway {
         for notebook in notebooksList {
             notebook.populateChildren(dict)
         }
-        
         return notebooksList
     }
     
     
-    func fetchDeletedNotebooks() async throws -> [Notebook]? {
-        
+    func fetchDeletedNotebooks() async throws -> [Notebook] {
         try await withCheckedThrowingContinuation({ continuation in
-            
             do {
                 let notebooksData: [NotebookData] = try storage.fetchNotebooks()
                 let deletedNotebooks = prepareDeletedNotebooksOnly(from: notebooksData)
@@ -86,11 +71,9 @@ class NotebooksStorageAdapter: NotebooksStorageGateway {
         for result in notebooksData {
             dict[result.id] = result
         }
-        
         // deleted topLevel
         var topLevels = notebooksData.filter { $0.isDeleted == true }
         topLevels.sort { $0.deletedDate! > $1.deletedDate! }
-        
         // notebooks
         var notebooksList = [Notebook]()
         for topNote in topLevels {
@@ -100,11 +83,11 @@ class NotebooksStorageAdapter: NotebooksStorageGateway {
         for notebook in notebooksList {
             notebook.populateChildren(dict)
         }
-        
         return notebooksList
     }
     
     func insert(notebook: Notebook) throws {
+        print(#function)
         try storage.insert(notebookData: notebook.generateNotebookData())
     }
     
@@ -141,7 +124,6 @@ extension Notebook {
         notedata.createdDate = createdDate
         notedata.modifiedDate = modifiedDate
         notedata.deletedDate = deletedDate
-        
         return notedata
     }
     

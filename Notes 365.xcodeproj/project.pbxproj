@@ -15,17 +15,20 @@
 		5C0FEF862AD01CF200056DC7 /* CalendarType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0FEF832AD01CF200056DC7 /* CalendarType.swift */; };
 		5C0FEF872AD025A500056DC7 /* WeekCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0FEF6D2AD01CC000056DC7 /* WeekCalendarView.swift */; };
 		5C0FEF882AD0262E00056DC7 /* TimelineCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCFB2920CCCE003DE332 /* TimelineCalendarView.swift */; };
+		5C10D79B2B04C248006FB80D /* NotebooksStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D7982B04C248006FB80D /* NotebooksStorage.swift */; };
+		5C10D79D2B04C248006FB80D /* NotebooksStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D79A2B04C248006FB80D /* NotebooksStorageAdapter.swift */; };
+		5C10D7A12B04C26D006FB80D /* NotebooksBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D7A02B04C26D006FB80D /* NotebooksBusiness.swift */; };
+		5C10D7A32B04C272006FB80D /* NotebooksStorageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D7A22B04C272006FB80D /* NotebooksStorageProvider.swift */; };
+		5C10D7A52B04C281006FB80D /* BusinessFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D7A42B04C281006FB80D /* BusinessFactory.swift */; };
+		5C10D7A72B04C291006FB80D /* NotebooksBusinessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D7A62B04C290006FB80D /* NotebooksBusinessTests.swift */; };
 		5C117C3F2A8E77FF00B0F3BE /* LayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C117C3E2A8E77FF00B0F3BE /* LayoutManager.swift */; };
 		5C16B9B92B0359EA00BF8592 /* NotebookContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE8C48A2B0305CD00F19217 /* NotebookContent.swift */; };
 		5C16B9BB2B035A0200BF8592 /* NotebookContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE8C48A2B0305CD00F19217 /* NotebookContent.swift */; };
-		5C16B9BE2B037BC300BF8592 /* NotebooksBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3681E62B034CFD0040F1E8 /* NotebooksBusiness.swift */; };
 		5C1CD5AB2ABC350B00D47814 /* TimelineDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1CD5AA2ABC350B00D47814 /* TimelineDetailView.swift */; };
 		5C286D192AD994BC00F836D3 /* DayChangesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C286D182AD994BC00F836D3 /* DayChangesView.swift */; };
 		5C29FECD2A98B377001DC601 /* PreviewViewUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C29FECC2A98B377001DC601 /* PreviewViewUI.swift */; };
 		5C29FED32A98D8FD001DC601 /* EditorSymbolsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C29FED22A98D8FD001DC601 /* EditorSymbolsState.swift */; };
 		5C29FED52A98D91D001DC601 /* ReadonlyEditorCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C29FED42A98D91D001DC601 /* ReadonlyEditorCache.swift */; };
-		5C3681E52B034CE20040F1E8 /* NotebooksStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3681E42B034CE20040F1E8 /* NotebooksStorage.swift */; };
-		5C3681E82B03533C0040F1E8 /* NotebooksStorageGateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3681E72B03533C0040F1E8 /* NotebooksStorageGateway.swift */; };
 		5C4ADCE32A9757EF000A037E /* EditorSymbolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4ADCE22A9757EF000A037E /* EditorSymbolsView.swift */; };
 		5CA77C162A24AE220030EFB2 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C152A24AE220030EFB2 /* Collections */; };
 		5CA77C182A24AE220030EFB2 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C172A24AE220030EFB2 /* DequeModule */; };
@@ -44,7 +47,6 @@
 		5CFCF5E62ABEDFA400351EEA /* NotebookData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFCF5E52ABEDF7000351EEA /* NotebookData.swift */; };
 		5CFCF5E92ABEFDAF00351EEA /* Fakery in Frameworks */ = {isa = PBXBuildFile; productRef = 5CFCF5E82ABEFDAF00351EEA /* Fakery */; };
 		9F09CEB129267FBC00609D99 /* TodayVersionBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F09CEB029267FBC00609D99 /* TodayVersionBusiness.swift */; };
-		9F09CEB229267FBC00609D99 /* TodayVersionBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F09CEB029267FBC00609D99 /* TodayVersionBusiness.swift */; };
 		9F14B491298A684F0079D23B /* ThemeDetailView+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B490298A684F0079D23B /* ThemeDetailView+iOS.swift */; };
 		9F14B4AE298F98900079D23B /* FontPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B4AD298F98900079D23B /* FontPicker.swift */; };
 		9F14B4B02990D46D0079D23B /* ThemeDetailState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B4AF2990D46D0079D23B /* ThemeDetailState.swift */; };
@@ -85,10 +87,6 @@
 		9F45BDA92920CE52003DE332 /* ScaleFontView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD452920CCCF003DE332 /* ScaleFontView.swift */; };
 		9F45BDAA2920CE52003DE332 /* NamedColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD462920CCCF003DE332 /* NamedColor.swift */; };
 		9F45BDAB2920CE52003DE332 /* ThemesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD472920CCCF003DE332 /* ThemesListView.swift */; };
-		9F45BDBA2920E73C003DE332 /* StringDiffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD302920CCCE003DE332 /* StringDiffTests.swift */; };
-		9F45BDBB2920E824003DE332 /* StringDiff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD2E2920CCCE003DE332 /* StringDiff.swift */; };
-		9F45BDBF2920EB14003DE332 /* NotebooksListBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD042920CCCE003DE332 /* NotebooksListBusiness.swift */; };
-		9F45BDD329226BD9003DE332 /* NotebooksListState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD292920CCCE003DE332 /* NotebooksListState.swift */; };
 		9F57BAE7299688BC0076FD9D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F57BAE6299688BC0076FD9D /* Constants.swift */; };
 		9F7D291D299A7C1500B37F51 /* MarkdownDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D291C299A7C1500B37F51 /* MarkdownDocument.swift */; };
 		9F7D291F299BABAC00B37F51 /* EditorViewUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D291E299BABAC00B37F51 /* EditorViewUI.swift */; };
@@ -102,12 +100,8 @@
 		9F93E15029E6A2AC00210E99 /* MarkdownEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93E14F29E6A2AC00210E99 /* MarkdownEditorView.swift */; };
 		9F93E15529ED0D0F00210E99 /* TodayVersionSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93E15429ED0D0F00210E99 /* TodayVersionSync.swift */; };
 		9F93E15629ED0D0F00210E99 /* TodayVersionSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93E15429ED0D0F00210E99 /* TodayVersionSync.swift */; };
-		9FA7BE2A29F0FFA000CB5D6F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCDE2920CCCE003DE332 /* Extensions.swift */; };
-		9FB0A47B29DD26580093FBD2 /* NotebooksListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0A47A29DD26580093FBD2 /* NotebooksListTests.swift */; };
 		9FB0A47D29DD27470093FBD2 /* CloudServiceTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D2925299EC27E00B37F51 /* CloudServiceTwo.swift */; };
 		9FB0A47E29DD274F0093FBD2 /* InitialCloudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1687CB29AD0E7F0085A0CA /* InitialCloudSync.swift */; };
-		9FB0A48029DD873E0093FBD2 /* NotebookContentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB0A47F29DD873E0093FBD2 /* NotebookContentTests.swift */; };
-		9FB0A48129DE7E390093FBD2 /* NotebookEditorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB6C69B29275E0300C8EC76 /* NotebookEditorState.swift */; };
 		9FB0A48229DE8D950093FBD2 /* NotebookContentBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB6C69F2927695000C8EC76 /* NotebookContentBusiness.swift */; };
 		9FB0A48329DE8DD00093FBD2 /* FormatOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB6C69929275D5100C8EC76 /* FormatOptions.swift */; };
 		9FB0A48429DE8DD90093FBD2 /* MarkdownTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD402920CCCF003DE332 /* MarkdownTheme.swift */; };
@@ -153,7 +147,12 @@
 		5C0FEF812AD01CF200056DC7 /* CalendarNavigatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarNavigatorView.swift; sourceTree = "<group>"; };
 		5C0FEF822AD01CF200056DC7 /* CalendarState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarState.swift; sourceTree = "<group>"; };
 		5C0FEF832AD01CF200056DC7 /* CalendarType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarType.swift; sourceTree = "<group>"; };
-		5C10D7932B048309006FB80D /* NotebooksBusiness */ = {isa = PBXFileReference; lastKnownFileType = text; name = NotebooksBusiness; path = "Notes 365/NotebooksBusiness"; sourceTree = SOURCE_ROOT; };
+		5C10D7982B04C248006FB80D /* NotebooksStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksStorage.swift; sourceTree = "<group>"; };
+		5C10D79A2B04C248006FB80D /* NotebooksStorageAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksStorageAdapter.swift; sourceTree = "<group>"; };
+		5C10D7A02B04C26D006FB80D /* NotebooksBusiness.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksBusiness.swift; sourceTree = "<group>"; };
+		5C10D7A22B04C272006FB80D /* NotebooksStorageProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksStorageProvider.swift; sourceTree = "<group>"; };
+		5C10D7A42B04C281006FB80D /* BusinessFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusinessFactory.swift; sourceTree = "<group>"; };
+		5C10D7A62B04C290006FB80D /* NotebooksBusinessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksBusinessTests.swift; sourceTree = "<group>"; };
 		5C117C3D2A8E662800B0F3BE /* Features.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Features.md; sourceTree = "<group>"; };
 		5C117C3E2A8E77FF00B0F3BE /* LayoutManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutManager.swift; sourceTree = "<group>"; };
 		5C1CD5AA2ABC350B00D47814 /* TimelineDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineDetailView.swift; sourceTree = "<group>"; };
@@ -161,9 +160,6 @@
 		5C29FECC2A98B377001DC601 /* PreviewViewUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewUI.swift; sourceTree = "<group>"; };
 		5C29FED22A98D8FD001DC601 /* EditorSymbolsState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorSymbolsState.swift; sourceTree = "<group>"; };
 		5C29FED42A98D91D001DC601 /* ReadonlyEditorCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadonlyEditorCache.swift; sourceTree = "<group>"; };
-		5C3681E42B034CE20040F1E8 /* NotebooksStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksStorage.swift; sourceTree = "<group>"; };
-		5C3681E62B034CFD0040F1E8 /* NotebooksBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksBusiness.swift; sourceTree = "<group>"; };
-		5C3681E72B03533C0040F1E8 /* NotebooksStorageGateway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksStorageGateway.swift; sourceTree = "<group>"; };
 		5C4ADCE22A9757EF000A037E /* EditorSymbolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSymbolsView.swift; sourceTree = "<group>"; };
 		5C9732212A8B74C200C42E28 /* iCloud-sync.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "iCloud-sync.md"; sourceTree = "<group>"; };
 		5C9B5CFF2A8FED2A00396102 /* TextKit.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TextKit.md; sourceTree = "<group>"; };
@@ -324,6 +320,24 @@
 			path = MonthsTimeline;
 			sourceTree = "<group>";
 		};
+		5C10D7942B04C13D006FB80D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5C10D7972B04C248006FB80D /* NotebooksStorage */ = {
+			isa = PBXGroup;
+			children = (
+				5C10D79A2B04C248006FB80D /* NotebooksStorageAdapter.swift */,
+				5CFCF5E52ABEDF7000351EEA /* NotebookData.swift */,
+				5CCCF7F02AC15E0D00F5923E /* NotebookContentData.swift */,
+				5C10D7982B04C248006FB80D /* NotebooksStorage.swift */,
+			);
+			path = NotebooksStorage;
+			sourceTree = "<group>";
+		};
 		5C4ADCE12A97576F000A037E /* EditorSymbols */ = {
 			isa = PBXGroup;
 			children = (
@@ -336,15 +350,14 @@
 		5CC209F42B0263B5000E6192 /* NotebooksBusiness */ = {
 			isa = PBXGroup;
 			children = (
-				5C10D7932B048309006FB80D /* NotebooksBusiness */,
 				5CE8C4872B03048E00F19217 /* Notebook.swift */,
 				5CE8C48A2B0305CD00F19217 /* NotebookContent.swift */,
+				5C10D7A02B04C26D006FB80D /* NotebooksBusiness.swift */,
 				9F45BD042920CCCE003DE332 /* NotebooksListBusiness.swift */,
-				5C3681E62B034CFD0040F1E8 /* NotebooksBusiness.swift */,
-				5C3681E72B03533C0040F1E8 /* NotebooksStorageGateway.swift */,
-				5C3681E42B034CE20040F1E8 /* NotebooksStorage.swift */,
+				5C10D7A22B04C272006FB80D /* NotebooksStorageProvider.swift */,
+				5C10D7A42B04C281006FB80D /* BusinessFactory.swift */,
+				5C10D7972B04C248006FB80D /* NotebooksStorage */,
 				9FB6C69F2927695000C8EC76 /* NotebookContentBusiness.swift */,
-				5CE8C4862B03042600F19217 /* Persistance */,
 			);
 			path = NotebooksBusiness;
 			sourceTree = "<group>";
@@ -373,15 +386,6 @@
 				9F45BCFA2920CCCE003DE332 /* NoteChangeHeadingView.swift */,
 			);
 			path = Details;
-			sourceTree = "<group>";
-		};
-		5CE8C4862B03042600F19217 /* Persistance */ = {
-			isa = PBXGroup;
-			children = (
-				5CFCF5E52ABEDF7000351EEA /* NotebookData.swift */,
-				5CCCF7F02AC15E0D00F5923E /* NotebookContentData.swift */,
-			);
-			path = Persistance;
 			sourceTree = "<group>";
 		};
 		9F188D822930E5E80078D413 /* ThemeDetail */ = {
@@ -416,6 +420,7 @@
 				9F45BCB22920CAB0003DE332 /* Notes 365Tests */,
 				9F45BCBC2920CAB0003DE332 /* Notes 365UITests */,
 				9F45BC9F2920CAAE003DE332 /* Products */,
+				5C10D7942B04C13D006FB80D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -461,7 +466,9 @@
 			isa = PBXGroup;
 			children = (
 				9F45BCB32920CAB0003DE332 /* Notes_365Tests.swift */,
-				9FB21DEF295D71C100CFEDA8 /* Notebooks */,
+				5C10D7A62B04C290006FB80D /* NotebooksBusinessTests.swift */,
+				9FB0A47829DBDAC00093FBD2 /* __tests */,
+				9F45BD2F2920CCCE003DE332 /* __tests */,
 				9FB21DEE295CA38E00CFEDA8 /* TestPlan.xctestplan */,
 			);
 			path = "Notes 365Tests";
@@ -481,7 +488,8 @@
 			children = (
 				9F45BD302920CCCE003DE332 /* StringDiffTests.swift */,
 			);
-			path = __tests;
+			name = __tests;
+			path = "../Notes 365/Features/Timeline/StringDiff/__tests";
 			sourceTree = "<group>";
 		};
 		9F45BD332920CCCF003DE332 /* Preferences */ = {
@@ -560,7 +568,6 @@
 		9F93E14E29E68CCA00210E99 /* StringDiff */ = {
 			isa = PBXGroup;
 			children = (
-				9F45BD2F2920CCCE003DE332 /* __tests */,
 				9F45BD2E2920CCCE003DE332 /* StringDiff.swift */,
 			);
 			path = StringDiff;
@@ -608,8 +615,6 @@
 				5CDE34BC2AB2D885002D88ED /* NotebooksCache.swift */,
 				9FB6C69429275BF900C8EC76 /* NotebooksList */,
 				9FB6C69629275C1500C8EC76 /* NotebookEditor */,
-				9FB0A47829DBDAC00093FBD2 /* __tests */,
-				9FB0A47929DBDC8C0093FBD2 /* __UITests */,
 			);
 			path = Notebooks;
 			sourceTree = "<group>";
@@ -622,13 +627,6 @@
 				9F45BDE329238D29003DE332 /* NotebooksHierarchyTests.swift */,
 			);
 			path = __tests;
-			sourceTree = "<group>";
-		};
-		9FB0A47929DBDC8C0093FBD2 /* __UITests */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = __UITests;
 			sourceTree = "<group>";
 		};
 		9FB0A48829DF12980093FBD2 /* Timeline */ = {
@@ -654,13 +652,6 @@
 				9F93E15429ED0D0F00210E99 /* TodayVersionSync.swift */,
 			);
 			path = TodayVersion;
-			sourceTree = "<group>";
-		};
-		9FB21DEF295D71C100CFEDA8 /* Notebooks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Notebooks;
 			sourceTree = "<group>";
 		};
 		9FB6C69429275BF900C8EC76 /* NotebooksList */ = {
@@ -844,12 +835,11 @@
 			files = (
 				9F1687CC29AD0E7F0085A0CA /* InitialCloudSync.swift in Sources */,
 				5C0FEF802AD01CC100056DC7 /* MonthCalendarView.swift in Sources */,
-				5C3681E52B034CE20040F1E8 /* NotebooksStorage.swift in Sources */,
 				5C0FEF872AD025A500056DC7 /* WeekCalendarView.swift in Sources */,
 				5C29FECD2A98B377001DC601 /* PreviewViewUI.swift in Sources */,
 				5C29FED32A98D8FD001DC601 /* EditorSymbolsState.swift in Sources */,
+				5C10D79D2B04C248006FB80D /* NotebooksStorageAdapter.swift in Sources */,
 				9F92CF0529B7525500B8D3C4 /* MailView.swift in Sources */,
-				5C3681E82B03533C0040F1E8 /* NotebooksStorageGateway.swift in Sources */,
 				9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */,
 				5CFCF5E62ABEDFA400351EEA /* NotebookData.swift in Sources */,
 				9FB6C69C29275E0300C8EC76 /* NotebookEditorState.swift in Sources */,
@@ -864,7 +854,6 @@
 				9F45BDA52920CE41003DE332 /* ColorPickerWindow.swift in Sources */,
 				9F45BD892920CDE0003DE332 /* EditorViewDelegate+iOS.swift in Sources */,
 				9F7D2922299CF2AF00B37F51 /* CloudService.swift in Sources */,
-				5C16B9BE2B037BC300BF8592 /* NotebooksBusiness.swift in Sources */,
 				9F45BDAB2920CE52003DE332 /* ThemesListView.swift in Sources */,
 				9F45BD712920CDE0003DE332 /* MarkdownPattern.swift in Sources */,
 				9F45BCA42920CAAE003DE332 /* ContentView.swift in Sources */,
@@ -885,11 +874,14 @@
 				9F45BDAA2920CE52003DE332 /* NamedColor.swift in Sources */,
 				9F45BDA82920CE41003DE332 /* MarkdownTheme.swift in Sources */,
 				5C4ADCE32A9757EF000A037E /* EditorSymbolsView.swift in Sources */,
+				5C10D7A12B04C26D006FB80D /* NotebooksBusiness.swift in Sources */,
 				9F45BD8E2920CDE9003DE332 /* NotebooksListState.swift in Sources */,
 				9F45BD792920CDE0003DE332 /* NotebookEditorView.swift in Sources */,
 				9F45BD922920CDED003DE332 /* StringDiff.swift in Sources */,
+				5C10D7A32B04C272006FB80D /* NotebooksStorageProvider.swift in Sources */,
 				9F14B4B02990D46D0079D23B /* ThemeDetailState.swift in Sources */,
 				9F45BCA22920CAAE003DE332 /* Notes_365App.swift in Sources */,
+				5C10D79B2B04C248006FB80D /* NotebooksStorage.swift in Sources */,
 				9F45BD9E2920CE21003DE332 /* SpeechHelpr.swift in Sources */,
 				5C0FEF882AD0262E00056DC7 /* TimelineCalendarView.swift in Sources */,
 				9FB6C69829275D0600C8EC76 /* FormatOptionsView.swift in Sources */,
@@ -903,6 +895,7 @@
 				5CC4C01F2A908D7000A4BE41 /* EditorView.swift in Sources */,
 				5CDE34BD2AB2D885002D88ED /* NotebooksCache.swift in Sources */,
 				5CFCF5E42ABEDF4D00351EEA /* NotebooksListView.swift in Sources */,
+				5C10D7A52B04C281006FB80D /* BusinessFactory.swift in Sources */,
 				9F3DB0C4292DF82300704860 /* FeedbackView+iPadOS.swift in Sources */,
 				9F188D812930E49F0078D413 /* MarkdownHeading.swift in Sources */,
 				9F93E15029E6A2AC00210E99 /* MarkdownEditorView.swift in Sources */,
@@ -939,24 +932,16 @@
 				9F93E14629E3FB4E00210E99 /* Constants.swift in Sources */,
 				9FB0A48729DE8E150093FBD2 /* ThemeBusiness.swift in Sources */,
 				9FB0A47D29DD27470093FBD2 /* CloudServiceTwo.swift in Sources */,
-				9F09CEB229267FBC00609D99 /* TodayVersionBusiness.swift in Sources */,
 				9F93E15629ED0D0F00210E99 /* TodayVersionSync.swift in Sources */,
 				9FB0A47E29DD274F0093FBD2 /* InitialCloudSync.swift in Sources */,
 				9FB0A48329DE8DD00093FBD2 /* FormatOptions.swift in Sources */,
 				9FB0A48629DE8E030093FBD2 /* ThemeState.swift in Sources */,
 				9F45BCB42920CAB0003DE332 /* Notes_365Tests.swift in Sources */,
-				9FB0A48029DD873E0093FBD2 /* NotebookContentTests.swift in Sources */,
-				9F45BDBB2920E824003DE332 /* StringDiff.swift in Sources */,
-				9FB0A47B29DD26580093FBD2 /* NotebooksListTests.swift in Sources */,
 				9FB0A48529DE8DEF0093FBD2 /* NamedColor.swift in Sources */,
-				9F45BDBF2920EB14003DE332 /* NotebooksListBusiness.swift in Sources */,
 				9FB21DF4295DBE5900CFEDA8 /* ChooseEnvironment.swift in Sources */,
-				9F45BDD329226BD9003DE332 /* NotebooksListState.swift in Sources */,
-				9FA7BE2A29F0FFA000CB5D6F /* Extensions.swift in Sources */,
+				5C10D7A72B04C291006FB80D /* NotebooksBusinessTests.swift in Sources */,
 				9F8EE98B293EB32D0021409E /* CloudDataManager.swift in Sources */,
-				9FB0A48129DE7E390093FBD2 /* NotebookEditorState.swift in Sources */,
 				9FB0A48429DE8DD90093FBD2 /* MarkdownTheme.swift in Sources */,
-				9F45BDBA2920E73C003DE332 /* StringDiffTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1197,8 +1182,8 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = Z5MSV52AV7;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sarella.Notes-365Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1221,8 +1206,8 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = Z5MSV52AV7;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sarella.Notes-365Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1389,8 +1374,8 @@
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = Z5MSV52AV7;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sarella.Notes-365Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -15,30 +15,25 @@ public enum StorageError: Error {
 
 class NotebooksStorage {
     
-    var modelContext: ModelContext?
+    var modelContext: ModelContext
+    
+    init(modelContext: ModelContext) {
+        self.modelContext = modelContext
+    }
     
     func fetchNotebooks() throws -> [NotebookData] {
-        
-        guard let modelContext = modelContext else { return [] }
-        
         let allListPredicate = #Predicate<NotebookData> { _ in true }
         let descriptor = FetchDescriptor(predicate: allListPredicate)
-        
         return try modelContext.fetch(descriptor)
     }
     
     func fetchDeletedNotebooks() throws -> [NotebookData] {
-        
-        guard let modelContext = modelContext else { return [] }
-        
         let allListPredicate = #Predicate<NotebookData> { _ in true }
         let descriptor = FetchDescriptor(predicate: allListPredicate)
-        
         return try modelContext.fetch(descriptor)
     }
     
     func fetchNotebook(for id: UUID) throws -> NotebookData {
-        guard let modelContext = modelContext else { throw StorageError.contextNotAvailable }
         let predicate = #Predicate<NotebookData> { $0.id == id }
         var descriptor = FetchDescriptor(predicate: predicate)
         descriptor.fetchLimit = 1
@@ -51,22 +46,18 @@ class NotebooksStorage {
     }
     
     func fetchChildren(forParent id: UUID) throws -> [NotebookData] {
-        guard let modelContext = modelContext else { throw StorageError.contextNotAvailable }
         let predicate = #Predicate<NotebookData> { $0.parent == id }
         let descriptor = FetchDescriptor(predicate: predicate)
         return try modelContext.fetch(descriptor)
     }
     
     func fetchTopLevelNotebooks() throws -> [NotebookData] {
-        guard let modelContext = modelContext else { throw StorageError.contextNotAvailable }
         let predicate = #Predicate<NotebookData> { $0.parent == nil }
         let descriptor = FetchDescriptor(predicate: predicate)
         return try modelContext.fetch(descriptor)
     }
     
-    
     func insert(notebookData: NotebookData) throws {
-        guard let modelContext = modelContext else { throw StorageError.contextNotAvailable }
         modelContext.insert(notebookData)
         try modelContext.save()
     }
