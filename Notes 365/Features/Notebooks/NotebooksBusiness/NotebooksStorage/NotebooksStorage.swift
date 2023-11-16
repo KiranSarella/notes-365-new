@@ -33,6 +33,13 @@ class NotebooksStorage {
         return try modelContext.fetch(descriptor)
     }
     
+    func fetchRootNotebook() throws -> NotebookData? {
+        let predicate = #Predicate<NotebookData> { $0.parent == nil }
+        var descriptor = FetchDescriptor(predicate: predicate)
+        descriptor.fetchLimit = 1
+        return try modelContext.fetch(descriptor).first
+    }
+    
     func fetchNotebook(for id: UUID) throws -> NotebookData {
         let predicate = #Predicate<NotebookData> { $0.id == id }
         var descriptor = FetchDescriptor(predicate: predicate)
@@ -57,8 +64,16 @@ class NotebooksStorage {
         return try modelContext.fetch(descriptor)
     }
     
+    
+    
     func insert(notebookData: NotebookData) throws {
         modelContext.insert(notebookData)
         try modelContext.save()
+    }
+   
+    func update(notebookData: NotebookData) throws {
+        let oldNotebookData = try fetchNotebook(for: notebookData.id)
+        oldNotebookData.sync(from: notebookData)
+        try oldNotebookData.modelContext?.save()
     }
 }

@@ -5,44 +5,47 @@ final class NotebooksBusinessTests: XCTestCase {
     
     var notebooksBusiness = BusinessFactory.createNotebooksFactory(mock: true)
     
+    override func setUp() async throws {
+        notebooksBusiness = BusinessFactory.createNotebooksFactory(mock: true)
+    }
+    
     func testExample() throws {
         XCTAssertTrue(true)
     }
     
     func testShouldFetchEmptyNotebooksForEmptyStorage() async throws {
-        let notebooks = await notebooksBusiness.fetchNotebooks()
-        XCTAssertTrue(notebooks.isEmpty)
+        let notebooksHierarchy = try await notebooksBusiness.fetchNotebooksHierarchy()
+        XCTAssertNil(notebooksHierarchy)
     }
     
-    func testShouldMatchStartingOrderIdWithFirstNotebook() throws {
+    func testShouldCreateRootNotebookAfterFirstNotebookCreated() async throws {
         let notebook = try notebooksBusiness.createNotebook()
-        XCTAssertEqual(notebook.orderID, notebooksBusiness.startingOrderId)
+        XCTAssertEqual(notebook.name, "Notebook 1")
+        let root = try notebooksBusiness.getRootNotebookOnly()
+        XCTAssertNotNil(root)
     }
     
     func testShouldGetSingleNotebookAfterFirstNotebookCreated() async throws {
         let notebook = try notebooksBusiness.createNotebook()
-        XCTAssertEqual(notebook.orderID, notebooksBusiness.startingOrderId)
         XCTAssertEqual(notebook.name, "Notebook 1")
         
-        let notebooks = await notebooksBusiness.fetchNotebooks()
-        XCTAssertFalse(notebooks.isEmpty)
-        XCTAssertEqual(notebooks.count, 1)
-        XCTAssertEqual(notebooks.first!, notebook)
+        let notebooksHierarchy = try await notebooksBusiness.fetchNotebooksHierarchy()
+        XCTAssertNotNil(notebooksHierarchy)
+        XCTAssertNotNil(notebooksHierarchy?.children)
+        XCTAssertEqual(notebooksHierarchy!.childrenCount, 1)
+        XCTAssertEqual(notebooksHierarchy!.children!.first!, notebook)
     }
     
     func testShouldGetTwoNotebooksAfterTwoNotebooksCreated() async throws {
         let notebook1 = try notebooksBusiness.createNotebook()
         let notebook2 = try notebooksBusiness.createNotebook()
-        XCTAssertEqual(notebook1.orderID, notebooksBusiness.startingOrderId)
-        XCTAssertEqual(notebook1.name, "Notebook 1")
-        XCTAssertEqual(notebook2.orderID, notebook1.orderID + 1)
-        XCTAssertEqual(notebook2.name, "Notebook 2")
-        
-        let notebooks = await notebooksBusiness.fetchNotebooks()
-        XCTAssertFalse(notebooks.isEmpty)
-        XCTAssertEqual(notebooks.count, 2)
-        XCTAssertEqual(notebooks.first!, notebook1)
-        XCTAssertEqual(notebooks[1], notebook2)
+       
+        let notebooksHierarchy = try await notebooksBusiness.fetchNotebooksHierarchy()
+        XCTAssertNotNil(notebooksHierarchy)
+        XCTAssertNotNil(notebooksHierarchy?.children)
+        XCTAssertEqual(notebooksHierarchy!.childrenCount, 2)
+        XCTAssertEqual(notebooksHierarchy!.children!.first!, notebook1)
+        XCTAssertEqual(notebooksHierarchy!.children![1], notebook2)
     }
     
     func testShouldInsertNotebookInsideFirstLevelParent() async throws {
@@ -52,7 +55,7 @@ final class NotebooksBusinessTests: XCTestCase {
         
         XCTAssertEqual(child.parent, parent)
         
-        let storedParent = try notebooksBusiness.getNotebook(for: parent.id)
+        let storedParent = try notebooksBusiness.getNotebookWithChildren(for: parent.id)
         XCTAssertTrue(storedParent.containChildNotebooks)
         XCTAssertEqual(storedParent.childrenCount, 1)
         XCTAssertEqual(storedParent.children!.first, child)
@@ -65,7 +68,7 @@ final class NotebooksBusinessTests: XCTestCase {
         let child2 = try notebooksBusiness.createNotebook(inside: parent.id, at: 1)
         try parent.insertChild(notebook: child2, at: 1)
         
-        let storedParent = try notebooksBusiness.getNotebook(for: parent.id)
+        let storedParent = try notebooksBusiness.getNotebookWithChildren(for: parent.id)
         XCTAssertTrue(storedParent.containChildNotebooks)
         XCTAssertEqual(storedParent.childrenCount, parent.childrenCount)
         XCTAssertEqual(storedParent.children!.first, child1)
@@ -80,9 +83,29 @@ final class NotebooksBusinessTests: XCTestCase {
         let notebookLevel3 = try notebooksBusiness.createNotebook(inside: parentAtLevel2.id, at: nil)
         parentAtLevel2.appendChildren(notebook: notebookLevel3)
         
-        let p2 = try notebooksBusiness.getNotebook(for: parentAtLevel2.id)
+        let p2 = try notebooksBusiness.getNotebookWithChildren(for: parentAtLevel2.id)
         XCTAssertEqual(p2, parentAtLevel2)
         XCTAssertNotNil(p2.children?.first)
         XCTAssertEqual(p2.children!.first, notebookLevel3)
+    }
+    
+    func testShoundNotFetchRootNotebookForEmptyStorage() throws {
+        let rootNotebook = try notebooksBusiness.getRootNotebookOnly()
+        XCTAssertNil(rootNotebook)
+    }
+    
+    func testShouldReturnRootNotebookAfterCreation() throws {
+        let rootNotebook = try notebooksBusiness.createRootNotebook()
+        XCTAssertEqual(rootNotebook.name, "root")
+    }
+    
+    func testRaiseExceptionWhenTryingToCreateRootNotebookIfAlreadyExits() throws {
+        let _ = try notebooksBusiness.createRootNotebook()
+        XCTAssertThrowsError(try notebooksBusiness.createRootNotebook())
+    }
+    
+    func testShouldCreateRootAndChildNotebook() throws {
+        let n1 = try notebooksBusiness.createNotebook()
+        XCTAssertNotNil(n1.parent)
     }
 }

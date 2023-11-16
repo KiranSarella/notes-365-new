@@ -60,7 +60,7 @@ class NotebooksListBusiness {
                 
                 // topLevel
                 var topLevels: [NotebookData] = results.filter { $0.parent == nil }
-                    .sorted { $0.orderID < $1.orderID }
+//                    .sorted { $0.orderID < $1.orderID }
                 topLevels.removeAll(where: { $0.isDeleted })
                 
                 // notebooks
@@ -70,7 +70,7 @@ class NotebooksListBusiness {
                 }
                 // populate childnotes
                 for notebook in notebooksList {
-                    notebook.populateChildren(dict)
+                    notebook.populateChildren(from: dict)
                 }
                 
                 continuation.resume(returning: notebooksList)
@@ -121,7 +121,7 @@ class NotebooksListBusiness {
                 }
                 // populate childnotes
                 for notebook in notebooksList {
-                    notebook.populateChildren(dict)
+                    notebook.populateChildren(from: dict)
                 }
                 
                 continuation.resume(returning: notebooksList)

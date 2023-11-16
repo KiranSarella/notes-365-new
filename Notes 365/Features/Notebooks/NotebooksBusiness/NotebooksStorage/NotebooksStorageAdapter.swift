@@ -10,18 +10,23 @@ import SwiftData
 
 class NotebooksStorageAdapter: NotebooksStorageProvider {
     
+    
     let storage: NotebooksStorage
     
     init(modelContext: ModelContext) {
         storage = NotebooksStorage(modelContext: modelContext)
     }
     
-    func fetchNotebooks() async throws -> [Notebook] {
+    func getRootNotebook() throws -> Notebook? {
+        try storage.fetchRootNotebook()?.notebook()
+    }
+    
+    func fetchNotebooksHierarchy() async throws -> Notebook? {
         try await withCheckedThrowingContinuation { continuation in
             do {
                 let notebooksData = try storage.fetchNotebooks()
-                let notebooks = convertToNotebooks(from: notebooksData)
-                continuation.resume(returning: notebooks)
+                let notebooksHierarchy = formNotebooksHierarchy(from: notebooksData)
+                continuation.resume(returning: notebooksHierarchy)
             } catch let err {
                 print(err)
                 continuation.resume(throwing: err)
@@ -29,26 +34,16 @@ class NotebooksStorageAdapter: NotebooksStorageProvider {
         }
     }
     
-    private func convertToNotebooks(from notebooksData: [NotebookData]) -> [Notebook] {
+    private func formNotebooksHierarchy(from notebooksData: [NotebookData]) -> Notebook? {
         // prepare dict
         var dict = [UUID: NotebookData]()
         for result in notebooksData {
             dict[result.id] = result
         }
-        // topLevel
-        var topLevels: [NotebookData] = notebooksData.filter { $0.parent == nil }
-            .sorted { $0.orderID < $1.orderID }
-        topLevels.removeAll(where: { $0.isDeleted })
-        // notebooks
-        var notebooksList = [Notebook]()
-        for topNote in topLevels {
-            notebooksList.append(Notebook(topNote))
-        }
-        // populate childnotes
-        for notebook in notebooksList {
-            notebook.populateChildren(dict)
-        }
-        return notebooksList
+        guard let rootNotebookData = notebooksData.first(where: { $0.parent == nil }) else { return nil }
+        let rootNotebook = rootNotebookData.notebook()
+        rootNotebook.populateChildren(from: dict)
+        return rootNotebook
     }
     
     
@@ -81,7 +76,7 @@ class NotebooksStorageAdapter: NotebooksStorageProvider {
         }
         // populate childnotes
         for notebook in notebooksList {
-            notebook.populateChildren(dict)
+            notebook.populateChildren(from: dict)
         }
         return notebooksList
     }
@@ -91,7 +86,7 @@ class NotebooksStorageAdapter: NotebooksStorageProvider {
     }
     
     func update(notebook: Notebook) throws {
-        
+        try storage.update(notebookData: notebook.generateNotebookData())
     }
     
     func getNotebook(for id: UUID) throws -> Notebook {
@@ -119,11 +114,17 @@ extension Notebook {
         let notedata = NotebookData(id: id, name: name)
         notedata.parent = parentId
         notedata.children = childrenIds
-        notedata.orderID = orderID
+//        notedata.orderID = orderID
         notedata.createdDate = createdDate
         notedata.modifiedDate = modifiedDate
         notedata.deletedDate = deletedDate
         return notedata
     }
     
+}
+
+extension NotebookData {
+    func notebook() -> Notebook {
+        Notebook(self)
+    }
 }

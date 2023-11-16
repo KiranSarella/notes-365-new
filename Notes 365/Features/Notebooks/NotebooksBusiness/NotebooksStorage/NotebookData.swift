@@ -14,7 +14,7 @@ class NotebookData {
     var id: UUID = UUID()
     var parent: UUID?
     var name: String = ""
-    var orderID: Int = 0
+//    var orderID: Int = 0
     
     var children: [UUID]?
     
@@ -34,4 +34,17 @@ class NotebookData {
         deletedDate = nil
         modifiedDate = Date()
     }
+}
+
+extension NotebookData {
+    
+    func sync(from newData: NotebookData) {
+        self.parent = newData.parent
+        self.children = newData.children
+        self.name = newData.name
+        self.deletedDate = newData.deletedDate
+        self.modifiedDate = newData.modifiedDate
+    }
+    
+    
 }

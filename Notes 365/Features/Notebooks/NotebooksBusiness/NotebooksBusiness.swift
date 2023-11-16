@@ -10,6 +10,7 @@ import SwiftData
 
 public enum NotebooksBusinessError: Error {
     case invalidPosition
+    case rootAlreadyExists
 }
 
 class NotebooksBusiness {
@@ -25,13 +26,8 @@ class NotebooksBusiness {
         self.storage = storage
     }
     
-    func fetchNotebooks() async -> [Notebook] {
-        do {
-            return try await storage.fetchNotebooks()
-        } catch let err {
-            print(err)
-            return []
-        }
+    func fetchNotebooksHierarchy() async throws -> Notebook? {
+        return try await storage.fetchNotebooksHierarchy()
     }
     
     func fetchDeletedNotebooks() async -> [Notebook] {
@@ -45,26 +41,34 @@ class NotebooksBusiness {
     
     // MARK: - Insert
 
-    func getNextOrderId(at siblings: [Notebook]) -> Int {
-        if var lastOrderId = siblings.last?.orderID {
-            lastOrderId += 1
-            return lastOrderId
-        } else {
-            return startingOrderId
-        }
+//    func getNextOrderId(at siblings: [Notebook]) -> Int {
+//        if var lastOrderId = siblings.last?.orderID {
+//            lastOrderId += 1
+//            return lastOrderId
+//        } else {
+//            return startingOrderId
+//        }
+//    }
+    
+    func getRootNotebookOnly() throws -> Notebook? {
+        try storage.getRootNotebook()
     }
     
-    func createNotebook() throws -> Notebook {
-        // get top level notebooks
-        let siblings = try getTopLevelNotebooksWithoutChildren()
-        let notebook = Notebook(id: UUID(), name: generateUntitledName(atLevel: siblings))
-        notebook.orderID = getNextOrderId(at: siblings)
+    func createRootNotebook() throws -> Notebook {
+        
+        if let _ = try getRootNotebookOnly() { throw NotebooksBusinessError.rootAlreadyExists }
+        let notebook = Notebook(id: UUID(), name: "root")
         try notebook.insert(in: storage)
         return notebook
     }
     
+    func createNotebook() throws -> Notebook {
+        let root = try getRootNotebookOnly() ?? createRootNotebook()
+        return try createNotebook(inside: root.id, at: nil)
+    }
+    
     func createNotebook(inside parentId: UUID, at position: Int?) throws -> Notebook {
-        let parent = try getNotebook(for: parentId)
+        let parent = try getNotebookWithChildren(for: parentId)
         // create
         let newNotebookName = generateUntitledName(atLevel: parent.children ?? [])
         let newNotebook = Notebook(id: UUID(), name: newNotebookName)
@@ -113,7 +117,7 @@ class NotebooksBusiness {
 //        
 //    }
     
-    func getNotebook(for id: UUID) throws -> Notebook {
+    func getNotebookWithChildren(for id: UUID) throws -> Notebook {
         let notebook = try storage.getNotebook(for: id)
         try notebook.populateChildren(from: storage)
         notebook.linkSelfToChildren()

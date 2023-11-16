@@ -34,7 +34,7 @@ class Notebook: Identifiable {
     var deletedDate: Date? = nil
     var modifiedDate: Date = Date()
     
-    var orderID: Int = 0
+//    var orderID: Int = 0
     
     var parentId: UUID?
     private(set) var parent: Notebook?
@@ -46,50 +46,50 @@ class Notebook: Identifiable {
     var canShow: Bool = true
     
     func sortChildren() {
-        if children != nil {
-            children!.sort(by: { n1, n2 in
-                n1.orderID < n2.orderID
-            })
-            
-            // apply to nested
-            for i in 0..<children!.count {
-                children![i].sortChildren()
-            }
-        }
-    }
-    
-    func onlySelfSortChildren() {
-        if children != nil {
-            
-            print("## before")
-            for c in children! {
-                print(c.orderID)
-            }
-//
+//        if children != nil {
 //            children!.sort(by: { n1, n2 in
 //                n1.orderID < n2.orderID
 //            })
-//
-//            print("## after")
+//            
+//            // apply to nested
+//            for i in 0..<children!.count {
+//                children![i].sortChildren()
+//            }
+//        }
+    }
+    
+    func onlySelfSortChildren() {
+//        if children != nil {
+//            
+//            print("## before")
 //            for c in children! {
 //                print(c.orderID)
 //            }
-            
-            print("# manual")
-            if let sortedArr = children?.sorted(by: { $0.orderID < $1.orderID }) {
-                
-                children = sortedArr
-                
-                for c in sortedArr {
-                    print(c.orderID)
-                }
-                print("---")
-                for c in children! {
-                    print(c.orderID)
-                }
-            }
-            
-        }
+////
+////            children!.sort(by: { n1, n2 in
+////                n1.orderID < n2.orderID
+////            })
+////
+////            print("## after")
+////            for c in children! {
+////                print(c.orderID)
+////            }
+//            
+//            print("# manual")
+//            if let sortedArr = children?.sorted(by: { $0.orderID < $1.orderID }) {
+//                
+//                children = sortedArr
+//                
+//                for c in sortedArr {
+//                    print(c.orderID)
+//                }
+//                print("---")
+//                for c in children! {
+//                    print(c.orderID)
+//                }
+//            }
+//            
+//        }
     }
     
     init(_ notebookData: NotebookData) {
@@ -98,7 +98,7 @@ class Notebook: Identifiable {
         
         self.id = notebookData.id
         self.name = notebookData.name
-        self.orderID = notebookData.orderID
+//        self.orderID = notebookData.orderID
         self.createdDate = notebookData.createdDate
         self.modifiedDate = notebookData.modifiedDate
         self.deletedDate = notebookData.deletedDate
@@ -177,9 +177,9 @@ extension Notebook {
         self.childrenIds = children?.map { $0.id }
     }
     
-    func populateChildren(_ dict: [UUID: NotebookData]) {
+    func populateChildren(from dict: [UUID: NotebookData]) {
         
-        guard let cArr = notebookData.children else { return }
+        guard let cArr = childrenIds, !cArr.isEmpty else { return }
         
         children = [Notebook]()
         for cid in cArr {
@@ -194,7 +194,7 @@ extension Notebook {
         // populate inner list
         // populate childnotes
         for cNote in children! {
-            cNote.populateChildren(dict)
+            cNote.populateChildren(from: dict)
         }
         
     }
@@ -220,7 +220,7 @@ extension Notebook {
         
         notebookData.id = id
         notebookData.name = name
-        notebookData.orderID = orderID
+//        notebookData.orderID = orderID
         notebookData.parent = parent?.id
         notebookData.children = children?.map { $0.id }
         

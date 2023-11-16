@@ -9,7 +9,8 @@ import Foundation
 
 protocol NotebooksStorageProvider {
     
-    func fetchNotebooks() async throws -> [Notebook]
+    func getRootNotebook() throws -> Notebook?
+    func fetchNotebooksHierarchy() async throws -> Notebook?
     func fetchDeletedNotebooks() async throws -> [Notebook]
     func insert(notebook: Notebook) throws
     func update(notebook: Notebook) throws
