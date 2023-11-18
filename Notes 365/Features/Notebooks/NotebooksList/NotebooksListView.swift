@@ -38,7 +38,7 @@ public enum NotebookListOption: String, CaseIterable, Identifiable {
 
 
 struct NotebooksListView: View {
-
+    
     @Environment(\.modelContext) private var modelContext
     @Bindable var notebooksListState: NotebooksListState
 //    @Binding var selectedNotebook: Notebook.ID?
@@ -145,11 +145,11 @@ struct NotebooksListView: View {
             editorState.modelContext = modelContext
             notebooksListState.modelContext = modelContext
             
-            notebooksListState.notebookBusiness.modelContext = modelContext
+            notebooksListState.loadNotebooks()
             
-            if notebooksListState.notebooks.count == 0 {
-                notebooksListState.fetchNotebooks()
-            }
+//            if notebooksListState.notebooks.count == 0 {
+//                notebooksListState.loadNotebooks()
+//            }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { (_) in
               print("UIApplication: willEnterForegroundNotification")
@@ -218,7 +218,7 @@ struct SearchedListView: View {
             if notebooksListState.listSourceType == .deletedItems {
                 NotebooksListGroupView(notebooksListState: notebooksListState, notebooks: $notebooksListState.deletedNotebooks)
             } else {
-                NotebooksListGroupView(notebooksListState: notebooksListState, notebooks: $notebooksListState.notebooks)
+                NotebooksListGroupView(notebooksListState: notebooksListState, notebooks: $notebooksListState.notebooksHierarchy.children)
             }
         }
         .scrollDismissesKeyboard(.interactively)
@@ -349,7 +349,7 @@ struct MyTableRow: View {
         // normal
         if notebook.containChildNotebooks {
             DisclosureGroup(isExpanded: $notebook.isExpanded) {
-                NotebooksListGroupView(notebooksListState: notebooksListState, notebooks: $notebook.children.unwrap()!)
+                NotebooksListGroupView(notebooksListState: notebooksListState, notebooks: $notebook.children)
             } label: {
                 RowView(notebooksListState: notebooksListState, notebook: $notebook)
                     .id(notebook.id)
@@ -369,7 +369,7 @@ struct MyTableDeletedRow: View {
     var body: some View {
         if notebook.containChildNotebooks {
             DisclosureGroup(isExpanded: $notebook.isExpanded) {
-                NotebooksListGroupView(notebooksListState: notebooksListState, notebooks: $notebook.children.unwrap()!)
+                NotebooksListGroupView(notebooksListState: notebooksListState, notebooks: $notebook.children)
             } label: {
                 DeletedRowView(notebooksListState: notebooksListState, notebook: $notebook)
                     .opacity(notebook.canShow ? 1 : 0.4)

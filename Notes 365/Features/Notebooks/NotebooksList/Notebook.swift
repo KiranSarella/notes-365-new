@@ -28,7 +28,7 @@ class Notebook: Identifiable {
 
     var childrenIds: [UUID]?
     // private(set)
-    var children: [Notebook]?
+    var children: [Notebook] = [Notebook]()
     
     var createdDate: Date = Date()
     var modifiedDate: Date = Date()
@@ -142,14 +142,14 @@ extension Notebook: Equatable, Hashable {
 // MARK: - children
 extension Notebook {
     
-    func setChildren(notebooks newList: [Notebook]?) {
+    func setChildren(notebooks newList: [Notebook]) {
         self.children = newList
         updateChildrenIds()
     }
     
     func appendChildren(notebook newValue: Notebook) {
         if self.containChildNotebooks {
-            self.children?.append(newValue)
+            self.children.append(newValue)
             updateChildrenIds()
         } else {
             setChildren(notebooks: [newValue])
@@ -159,7 +159,7 @@ extension Notebook {
     func insertChild(notebook newValue: Notebook, at position: Int) throws {
         if position <= childrenCount {
             if containChildNotebooks {
-                self.children?.insert(newValue, at: position)
+                self.children.insert(newValue, at: position)
                 updateChildrenIds()
             } else {
                 self.setChildren(notebooks: [newValue])
@@ -170,15 +170,15 @@ extension Notebook {
     }
     
     func deleteChildren(where id: UUID) {
-        children?.removeAll(where: { $0.id == id })
+        children.removeAll(where: { $0.id == id })
         updateChildrenIds()
     }
     
     private func updateChildrenIds() {
-        self.childrenIds = children?.map { $0.id }
+        self.childrenIds = children.map { $0.id }
     }
     
-    func populateChildren(from dict: [UUID: NotebookData]) {
+    func populateChildren(from dict: [UUID: NotebookB]) {
         
         guard let cArr = childrenIds, !cArr.isEmpty else { return }
         
@@ -187,17 +187,16 @@ extension Notebook {
             if let noteD = dict[cid] {
                 // if deleted, discard that node and heirarchy
                 if noteD.isDeleted { continue } // continue vs return - remember
-                let note = Notebook(noteD)
+                let note = noteD.notebook()
                 note.parent = self
-                children?.append(note)
+                children.append(note)
             }
         }
         // populate inner list
         // populate childnotes
-        for cNote in children! {
+        for cNote in children {
             cNote.populateChildren(from: dict)
         }
-        
     }
     
     var containChildNotebooks: Bool {
@@ -205,12 +204,11 @@ extension Notebook {
     }
     
     var childrenCount: Int {
-        guard let children = children, children.count > 0 else { return 0 }
         return children.count
     }
     
     func linkSelfToChildren() {
-        _ = children?.map { $0.parent = self }
+        _ = children.map { $0.parent = self }
     }
  
 }
@@ -223,7 +221,7 @@ extension Notebook {
         notebookData.name = name
 //        notebookData.orderID = orderID
         notebookData.parent = parent?.id
-        notebookData.children = children?.map { $0.id }
+        notebookData.children = children.map { $0.id }
         
         notebookData.createdDate = createdDate
         notebookData.modifiedDate = modifiedDate

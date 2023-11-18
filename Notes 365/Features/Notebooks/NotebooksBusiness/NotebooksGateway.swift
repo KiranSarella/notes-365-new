@@ -7,21 +7,23 @@
 
 import Foundation
 
-protocol NotebooksGateway {
+protocol NotebooksRequester {
     
-    func fetchNotebooksHierarchy() async throws -> Notebook?
+    func fetchAllNotebooks() async throws -> [NotebookB]
     
-    func fetchDeletedNotebooks() async -> [Notebook]
+//    func fetchDeletedNotebooks() async -> [NotebookB]
     
-    func getRootNotebookOnly() throws -> Notebook?
+    func getRootNotebookOnly() throws -> NotebookB?
     
-    func createRootNotebook() throws -> Notebook
+    func createRootNotebook() throws -> NotebookB
     
-    func createNotebook() throws -> Notebook
+    func createNotebook() throws -> NotebookB
     
-    func createNotebook(inside parentId: UUID, at position: Int?) throws -> Notebook
+//    func createNotebook(inside parentId: UUID, at position: Int?) throws -> Notebook
+    
+    func createNotebook(inside parent: NotebookB, at position: Int?, children: [NotebookB]?) throws -> NotebookB
 }
 
-extension NotebooksBusiness: NotebooksGateway {
+extension NotebooksBusiness: NotebooksRequester {
     
 }

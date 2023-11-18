@@ -41,12 +41,14 @@ class NotebooksListState {
     
     var modelContext: ModelContext?
     
-    let notebookBusiness = NotebooksListBusiness(EnvironmentState.shared.basePathURL)
+    let notebooksBusiness = BusinessFactory.createNotebooksFactoryNew(mock: true)
     
     var subscription: Set<AnyCancellable> = []
     var expandedIds = Set<String>()
     
     var notebooks = [Notebook]()
+    
+    var notebooksHierarchy: Notebook = Notebook(id: UUID(), name: "")
     var deletedNotebooks = [Notebook]()
     
     var isLoading = false
@@ -94,6 +96,53 @@ class NotebooksListState {
         isLoading = false
     }
     
+    func loadNotebooks() {
+        Task {
+            do {
+                let results = try await notebooksBusiness.fetchAllNotebooks()
+                showNotebooksList(notebooksB: results)
+            } catch let error {
+                print(error)
+            }
+        }
+    }
+    
+    func showNotebooksList(notebooksB: [NotebookB]) {
+        
+        // prepare dict
+        var dict = [UUID: NotebookB]()
+        for result in notebooksB {
+            dict[result.id] = result
+        }
+        // topLevel
+        guard let rootB = notebooksB.first(where: { $0.parentId == nil }) else {
+            isLoading = false
+            return
+        }
+//                    .sorted { $0.orderID < $1.orderID }
+//            topLevels.removeAll(where: { $0.isDeleted })
+        
+        // notebooks
+        let rootNode: Notebook = rootB.notebook()
+        rootNode.populateChildren(from: dict)
+        
+        self.notebooksHierarchy = rootNode
+        isLoading = false
+    }
+    
+    private func formNotebooksHierarchy(from notebooksData: [NotebookB]) -> Notebook? {
+        // prepare dict
+        var dict = [UUID: NotebookB]()
+        for result in notebooksData {
+            dict[result.id] = result
+        }
+        guard let rootNotebookData = notebooksData.first(where: { $0.parentId == nil }) else { return nil }
+        let rootNotebook = rootNotebookData.notebook()
+        rootNotebook.populateChildren(from: dict)
+        return rootNotebook
+    }
+   
+    
     func initialFetch() {
         // get saved expandedIds
         if let expandedList = UserDefaults.standard.object(forKey: "notes365.expandedIds") as? [String] {
@@ -105,224 +154,68 @@ class NotebooksListState {
         UserDefaults.standard.set(Array(expandedIds), forKey: "notes365.expandedIds")
     }
     
+    func waitTillFetching() {
+        isLoading = true
+    }
+    
     func fetchNotebooks() {
-        Task {
-            isLoading = true
-//            try? await Task.sleep(nanoseconds: 1_000_000_000)
-            self.notebooks = await notebookBusiness.fetchNotebooks() ?? []
-            self.deletedNotebooks = await notebookBusiness.fetchDeletedNotebooks() ?? []
-            isLoading = false
-            checkOldItemsToDelete()
-        }
+//        Task {
+//            isLoading = true
+////            try? await Task.sleep(nanoseconds: 1_000_000_000)
+//            self.notebooks = await notebookBusiness.fetchNotebooks() ?? []
+//            self.deletedNotebooks = await notebookBusiness.fetchDeletedNotebooks() ?? []
+//            isLoading = false
+//            checkOldItemsToDelete()
+//        }
     }
     
     var isEmpty: Bool {
-        notebooks.count == 0
+        notebooksHierarchy.childrenCount == 0
+//        notebooks.count == 0
     }
     
     func addFirstNotes() {
-        
-        guard let modelContext = modelContext else { return }
-        
-        withAnimation {
-            let notebook = generateNotebook(parent: nil)
-//            notebook.orderID = 0
-            notebooks = [notebook]
-            notebook.saveNotebookData(modelContext)
+        do {
+            let _ = try notebooksBusiness.createNotebook().notebook()
+            loadNotebooks()
+//            withAnimation {
+//                notebooks = [newNotebook]
+//            }
+        } catch let error {
+            print(error)
         }
     }
     
     func insertBelow(ref notebook: Notebook) {
         
-        guard let modelContext = modelContext else { return }
+        guard let parent = notebook.parent else { return }
+        let children = parent.children.map { $0.notebookB() }
+        guard let position: Int = parent.children.firstIndex(of: notebook) else { return }
         
-        let newNotebook = generateNotebook(parent: notebook.parent)
-        
-        if notebook.parent != nil {
-            // set parent
-            newNotebook.updateParent(notebook.parent)
+        do {
+            let newNotebookB = try notebooksBusiness.createNotebook(inside: parent.notebookB(), at: position, children: children)
             
-            if notebook.parent!.children != nil {
-                // if children contains
-//                notebook.parent?.children?.append(newNotebook)
-                
-                // get index of current notebook
-//                let sortedArr = sortedChildren.sorted { $0.orderID < $1.orderID }
-//                notebook.parent!.onlySelfSortChildren()
-                guard let index = notebook.parent!.children!.firstIndex(of: notebook) else { return }
-                let insertIndex = index + 1
-                print("insertIndex: ", insertIndex)
-                
-//                // order number
-//                newNotebook.orderID = insertIndex
-                // save
-//                modelContext.insert(newNotebook)
-//                notebook.parent!.onlySelfSortChildren()
-                // insert to hierachy create object
-                try! notebook.parent!.insertChild(notebook: newNotebook, at: insertIndex)
-                newNotebook.saveNotebookData(modelContext)
-                
-//                sortedChildren.insert(newNotebook, at: index + 1) // not working
-                
-//                let start = index + 2
-//                for i in start..<sortedChildren.count {
-//                    sortedChildren[i].name = "\(i) " + Faker().name.name()
-//                    sortedChildren[i].orderID = i
-////                    children[i].orderID = i
-//                }
-//                
-//                notebook.parent!.children = sortedChildren
-//                
-//                // print order ids
-//                for i in 0..<sortedChildren.count {
-//                    print(sortedChildren[i].orderID, sortedChildren[i].name)
-//                }
-                
-//                notebook.parent?.onlySelfSortChildren()
-                // update order number to rest of the notebooks
-//                let start = insertIndex + 1
-//                if start < notebook.parent!.children!.count {
-//                    for i in start..<notebook.parent!.children!.count {
-//    //                    notebook.parent!.children![i].name = "\(i) " + notebook.parent!.children![i].name
-//                        notebook.parent!.children![i].orderID = i
-//                    }
-//                    // print order ids
-//                    for i in 0..<notebook.parent!.children!.count {
-//                        print(notebook.parent!.children![i].orderID, notebook.parent!.children![i].name)
-//                    }
-//                }
-                
-                
-//                notebook.parent?.onlySelfSortChildren()
-                
-            } else {
-                notebook.parent?.setChildren(notebooks: [newNotebook])
-            }
-            // update parent as its childen udpated
-            notebook.parent!.updateNotebookData(modelContext)
+            let newNotebook = newNotebookB.notebook()
+            try notebook.parent?.insertChild(notebook: newNotebook, at: position)
             
-        } else {
-            // no parent, so root objects
-            // get index of current notebook
-            let index = notebooks.firstIndex(of: notebook)!
-            // order number
-//            newNotebook.name = "\(index + 1) " + newNotebook.name
-//            newNotebook.orderID = index + 1
-            // insert to hierachy create object
-            notebooks.insert(newNotebook, at: index + 1)
-            newNotebook.saveNotebookData(modelContext)
-            // update order number to rest of the notebooks
-//            let start = index + 2
-//            for i in 0..<notebooks.count {
-////                notebooks[i].name = "\(i) " + newNotebook.name
-//                notebooks[i].orderID = i
-//            }
-//            // print order ids
-//            for notebook in notebooks {
-//                print(notebook.orderID, notebook.name)
-//            }
+        } catch let error {
+            print(error)
         }
-//        
-//        if notebook.parent != nil {
-//            
-//            
-//            
-//            if notebook.parent?.children == nil {
-//                
-//                
-//            } else {
-//                
-//            }
-//            
-//            
-//            
-//        } else {
-//            
-//        }
-//        
-        
-//        notebooks.append(newNotebook)
-//        try? modelContext.save()
-//        modelContext.insert(newNotebook)
-        
-//        // create actual notebook
-//        let (childNotebook, parent, index) = insertBelow(notebook: notebook)
-//        // persist
-//        notebookBusiness.persist(notebooks: notebooks)
     }
-    
-
     
     func insertInside(ref notebook: Notebook) {
-        
-        guard let modelContext = modelContext else { return }
-        // create new notebook
-        let newNotebook = generateNotebook(parent: notebook)
-        // set its parent
-        newNotebook.updateParent(notebook)
-        
-        if notebook.children == nil {
-            // first child
-            notebook.setChildren(notebooks: [newNotebook])
-        } else {
-            // already contains children
+        let children = notebook.children.map { $0.notebookB() }
+        do {
+            let newNotebookB = try notebooksBusiness.createNotebook(inside: notebook.notebookB(), at: nil, children: children)
+            let newNotebook = newNotebookB.notebook()
+            newNotebook.updateParent(notebook)
             notebook.appendChildren(notebook: newNotebook)
+        } catch let error {
+            print(error)
         }
-        // save new notebook
-        newNotebook.saveNotebookData(modelContext)
-        // update children order list
-        notebook.updateNotebookData(modelContext)
-        
-//        try? modelContext?.save()
-        
-//        // create actual notebook in the storage and hierarchy
-//        let childNotebook = insertInside(notebook: notebook)
-//        // persist
-//        notebookBusiness.persist(notebooks: notebooks)
     }
     
-//    private func insertInside(notebook: Notebook, below index: Int? = nil) -> Notebook {
-//        let fullPath = notebooksPath
-//        let newNotebook = generateNotebook(parent: notebook)
-//        
-//        //        let newNotebook = createNotebook(atPath: fullPath)
-//        newNotebook.parent = notebook
-//        
-//        if let index = index {
-//            // create object
-//            notebook.children!.insert(newNotebook, at: index + 1)
-//            // ..folder already exists
-//        } else if notebook.children == nil {
-//            // create object
-//            notebook.children = [newNotebook]
-//            // create folder
-//            //            dataManager.createFolder(fullPath)
-//        } else {
-//            // create object
-//            notebook.children?.append(newNotebook)
-//            // ..folder already exists
-//        }
-//        // create phycical file
-//        notebookBusiness.insertInside(notebook: newNotebook)
-//        return newNotebook
-//    }
-    
-    func generateNotebook(parent: Notebook?) -> Notebook {
-        
-        // generate non existed file name at that level
-        var fileName = ""
-        if let parent = parent {
-            fileName = generateFileName(at: parent.children)
-        } else {
-            fileName = generateFileName(at: notebooks)
-        }
-        
-        let newNotebook = Notebook(id: UUID(), name: fileName)
-        // store reference
-        NotebooksCache.shared.store(notebook: newNotebook)
-        
-        return newNotebook
-    }
+   
     
 //    private func getNotebook(levels selectedLevels: [Int], index selectedIndex: Int) -> Notebook? {
 //        
@@ -389,7 +282,7 @@ class NotebooksListState {
         
         // check if already same file name exists
         if let parent = notebook.parent {
-            if isAlreadyExists(fileName: newValue, in: parent.children!) {
+            if isAlreadyExists(fileName: newValue, in: parent.children) {
                 throw NotebookBusinessError.alreadyExists
             }
         } else {
@@ -545,9 +438,9 @@ extension NotebooksListState {
                 var visibleChildsStatus = Set<Bool>()
                 // if children exists
                 if note.children != nil {
-                    let count = note.children!.count
+                    let count = note.children.count
                     for i in 0..<count {
-                        let anyVisibleChildren = canAddNotebook(note: &note.children![i])
+                        let anyVisibleChildren = canAddNotebook(note: &note.children[i])
                         visibleChildsStatus.insert(anyVisibleChildren)
                     }
                 }
@@ -614,10 +507,10 @@ extension NotebooksListState {
             // check nested items
             var visibleChildsStatus = Set<Bool>()
             // if children exists
-            if note.children != nil {
-                let count = note.children!.count
+            if note.containChildNotebooks {
+                let count = note.children.count
                 for i in 0..<count {
-                    let anyVisibleChildren = canAddNotebook(note: &note.children![i])
+                    let anyVisibleChildren = canAddNotebook(note: &note.children[i])
                     visibleChildsStatus.insert(anyVisibleChildren)
                 }
             }
@@ -681,7 +574,40 @@ extension NotebooksListState {
     
     func checkOldItemsToDelete() {
         // delete date exceeded notebooks
-        notebookBusiness.deleteDateExceededNotebooks(deletedNotebooks: &deletedNotebooks)
+//        notebookBusiness.deleteDateExceededNotebooks(deletedNotebooks: &deletedNotebooks)
+    }
+    
+}
+
+
+extension NotebookB {
+    
+    func notebook() -> Notebook {
+        
+        let notebook = Notebook(id: id, name: name)
+        notebook.createdDate = createdDate
+        notebook.modifiedDate = modifiedDate
+        notebook.deletedDate = deletedDate
+        
+        notebook.parentId = parentId
+        notebook.childrenIds = childrenIds
+        
+        return notebook
+    }
+    
+}
+
+extension Notebook {
+    
+    func notebookB() -> NotebookB {
+        let notebookB = NotebookB(id: id, name: name)
+        notebookB.parentId = parent?.id
+        notebookB.childrenIds = children.map { $0.id }
+        
+        notebookB.createdDate = createdDate
+        notebookB.modifiedDate = modifiedDate
+        notebookB.deletedDate = deletedDate
+        return notebookB
     }
     
 }

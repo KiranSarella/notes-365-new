@@ -30,10 +30,8 @@
 		5C29FED52A98D91D001DC601 /* ReadonlyEditorCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C29FED42A98D91D001DC601 /* ReadonlyEditorCache.swift */; };
 		5C4ADCE32A9757EF000A037E /* EditorSymbolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4ADCE22A9757EF000A037E /* EditorSymbolsView.swift */; };
 		5C540FF72B07C0AD00981FB5 /* NotebooksController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C540FF62B07C0AD00981FB5 /* NotebooksController.swift */; };
-		5C540FF92B07C44A00981FB5 /* NotebooksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C540FF82B07C44A00981FB5 /* NotebooksViewModel.swift */; };
-		5C540FFB2B07C53300981FB5 /* NotebooksUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C540FFA2B07C53300981FB5 /* NotebooksUI.swift */; };
 		5C7D4AF22B07DCEA00BB1908 /* NotebooksGateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7D4AF12B07DCEA00BB1908 /* NotebooksGateway.swift */; };
-		5C7D4AF62B08AD9500BB1908 /* NotebookModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7D4AF52B08AD9500BB1908 /* NotebookModels.swift */; };
+		5C7D4AF82B08E00C00BB1908 /* NotebookB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7D4AF72B08E00C00BB1908 /* NotebookB.swift */; };
 		5CA77C162A24AE220030EFB2 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C152A24AE220030EFB2 /* Collections */; };
 		5CA77C182A24AE220030EFB2 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C172A24AE220030EFB2 /* DequeModule */; };
 		5CA77C1A2A24AE220030EFB2 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C192A24AE220030EFB2 /* OrderedCollections */; };
@@ -164,10 +162,8 @@
 		5C29FED42A98D91D001DC601 /* ReadonlyEditorCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadonlyEditorCache.swift; sourceTree = "<group>"; };
 		5C4ADCE22A9757EF000A037E /* EditorSymbolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSymbolsView.swift; sourceTree = "<group>"; };
 		5C540FF62B07C0AD00981FB5 /* NotebooksController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksController.swift; sourceTree = "<group>"; };
-		5C540FF82B07C44A00981FB5 /* NotebooksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksViewModel.swift; sourceTree = "<group>"; };
-		5C540FFA2B07C53300981FB5 /* NotebooksUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksUI.swift; sourceTree = "<group>"; };
 		5C7D4AF12B07DCEA00BB1908 /* NotebooksGateway.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksGateway.swift; sourceTree = "<group>"; };
-		5C7D4AF52B08AD9500BB1908 /* NotebookModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookModels.swift; sourceTree = "<group>"; };
+		5C7D4AF72B08E00C00BB1908 /* NotebookB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookB.swift; sourceTree = "<group>"; };
 		5C9732212A8B74C200C42E28 /* iCloud-sync.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "iCloud-sync.md"; sourceTree = "<group>"; };
 		5C9B5CFF2A8FED2A00396102 /* TextKit.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TextKit.md; sourceTree = "<group>"; };
 		5CC209F52B026475000E6192 /* NotebooksPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksPresenter.swift; sourceTree = "<group>"; };
@@ -355,7 +351,7 @@
 		5C7D4AF32B07DDB900BB1908 /* Business */ = {
 			isa = PBXGroup;
 			children = (
-				5CE8C4872B03048E00F19217 /* Notebook.swift */,
+				5C7D4AF72B08E00C00BB1908 /* NotebookB.swift */,
 				5CE8C48A2B0305CD00F19217 /* NotebookContent.swift */,
 				5C10D7A02B04C26D006FB80D /* NotebooksBusiness.swift */,
 				9F45BD042920CCCE003DE332 /* NotebooksListBusiness.swift */,
@@ -635,7 +631,6 @@
 				9F45BDCA29214D48003DE332 /* notebooks.md */,
 				5C10D7A42B04C281006FB80D /* BusinessFactory.swift */,
 				5CC209F42B0263B5000E6192 /* NotebooksBusiness */,
-				5C540FF62B07C0AD00981FB5 /* NotebooksController.swift */,
 				9FB6C69429275BF900C8EC76 /* NotebooksList */,
 				9FB6C69629275C1500C8EC76 /* NotebookEditor */,
 			);
@@ -680,14 +675,13 @@
 		9FB6C69429275BF900C8EC76 /* NotebooksList */ = {
 			isa = PBXGroup;
 			children = (
+				5C540FF62B07C0AD00981FB5 /* NotebooksController.swift */,
 				5CC209F52B026475000E6192 /* NotebooksPresenter.swift */,
-				5C540FF82B07C44A00981FB5 /* NotebooksViewModel.swift */,
-				5C540FFA2B07C53300981FB5 /* NotebooksUI.swift */,
-				5C7D4AF52B08AD9500BB1908 /* NotebookModels.swift */,
-				9F45BD252920CCCE003DE332 /* NotebooksListView.swift */,
+				5CE8C4872B03048E00F19217 /* Notebook.swift */,
 				9F45BD292920CCCE003DE332 /* NotebooksListState.swift */,
-				5CDE34BC2AB2D885002D88ED /* NotebooksCache.swift */,
+				9F45BD252920CCCE003DE332 /* NotebooksListView.swift */,
 				9F6CA8DD2A041D27009061A0 /* ReorderLIst.md */,
+				5CDE34BC2AB2D885002D88ED /* NotebooksCache.swift */,
 			);
 			path = NotebooksList;
 			sourceTree = "<group>";
@@ -867,7 +861,6 @@
 				5C10D79D2B04C248006FB80D /* NotebooksStorageAdapter.swift in Sources */,
 				9F92CF0529B7525500B8D3C4 /* MailView.swift in Sources */,
 				9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */,
-				5C540FFB2B07C53300981FB5 /* NotebooksUI.swift in Sources */,
 				5CFCF5E62ABEDFA400351EEA /* NotebookData.swift in Sources */,
 				9FB6C69C29275E0300C8EC76 /* NotebookEditorState.swift in Sources */,
 				5C7D4AF22B07DCEA00BB1908 /* NotebooksGateway.swift in Sources */,
@@ -888,8 +881,6 @@
 				9F45BDA42920CE41003DE332 /* ThemePreviewView.swift in Sources */,
 				5CE8C4882B03048E00F19217 /* Notebook.swift in Sources */,
 				9F7D291D299A7C1500B37F51 /* MarkdownDocument.swift in Sources */,
-				5C7D4AF62B08AD9500BB1908 /* NotebookModels.swift in Sources */,
-				5C540FF92B07C44A00981FB5 /* NotebooksViewModel.swift in Sources */,
 				9FBB0B5D2A0E952E00F407AF /* MarkdownEditorViewState.swift in Sources */,
 				5CCCF7F52AC2CB6B00F5923E /* TimelineStorage.swift in Sources */,
 				9F93E15529ED0D0F00210E99 /* TodayVersionSync.swift in Sources */,
@@ -897,6 +888,7 @@
 				5C286D192AD994BC00F836D3 /* DayChangesView.swift in Sources */,
 				9F14B491298A684F0079D23B /* ThemeDetailView+iOS.swift in Sources */,
 				5C0FEF762AD01CC100056DC7 /* DayCalendarState.swift in Sources */,
+				5C7D4AF82B08E00C00BB1908 /* NotebookB.swift in Sources */,
 				9F45BD662920CDA9003DE332 /* NoteChangeHeadingView.swift in Sources */,
 				9F14B4AE298F98900079D23B /* FontPicker.swift in Sources */,
 				9FB6C6A02927695000C8EC76 /* NotebookContentBusiness.swift in Sources */,

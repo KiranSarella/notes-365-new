@@ -60,7 +60,7 @@ class BusinessFactory {
         return NotebooksBusiness(storage: storage)
     }
     
-    static func createNotebooksFactoryNew(mock: Bool = false) -> NotebooksGateway {
+    static func createNotebooksFactoryNew(mock: Bool = false) -> NotebooksRequester {
         let storage = try! BusinessFactory.createNotebooksStorage(mock: mock)
         return NotebooksBusiness(storage: storage)
     }

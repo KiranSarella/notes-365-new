@@ -33,125 +33,125 @@ class NotebooksListBusiness {
         self.basePathURL = basePathURL
     }
     
-    func fetchNotebooks() async -> [Notebook]? {
-        
-        await withCheckedContinuation { continuation in
-            
-            guard
-                let modelContext = modelContext
-            else {
-                continuation.resume(returning: nil)
-                return
-            }
-            
-            let allListPredicate = #Predicate<NotebookData> { _ in
-                true
-            }
-            let descriptor = FetchDescriptor(predicate: allListPredicate)
-    //        let descriptor = FetchDescriptor(predicate: allListPredicate, sortBy: [SortDescriptor(\NotebookData.orderID)])
-            
-            do {
-                let results: [NotebookData] = try modelContext.fetch(descriptor)
-                // prepare dict
-                var dict = [UUID: NotebookData]()
-                for result in results {
-                    dict[result.id] = result
-                }
-                
-                // topLevel
-                var topLevels: [NotebookData] = results.filter { $0.parent == nil }
-//                    .sorted { $0.orderID < $1.orderID }
-                topLevels.removeAll(where: { $0.isDeleted })
-                
-                // notebooks
-                var notebooksList = [Notebook]()
-                for topNote in topLevels {
-                    notebooksList.append(Notebook(topNote))
-                }
-                // populate childnotes
-                for notebook in notebooksList {
-                    notebook.populateChildren(from: dict)
-                }
-                
-                continuation.resume(returning: notebooksList)
-            } catch let err {
-                print(err)
-                continuation.resume(returning: nil)
-            }
-            
-        }
-    }
+//    func fetchNotebooks() async -> [Notebook]? {
+//        
+//        await withCheckedContinuation { continuation in
+//            
+//            guard
+//                let modelContext = modelContext
+//            else {
+//                continuation.resume(returning: nil)
+//                return
+//            }
+//            
+//            let allListPredicate = #Predicate<NotebookData> { _ in
+//                true
+//            }
+//            let descriptor = FetchDescriptor(predicate: allListPredicate)
+//    //        let descriptor = FetchDescriptor(predicate: allListPredicate, sortBy: [SortDescriptor(\NotebookData.orderID)])
+//            
+//            do {
+//                let results: [NotebookData] = try modelContext.fetch(descriptor)
+//                // prepare dict
+//                var dict = [UUID: NotebookData]()
+//                for result in results {
+//                    dict[result.id] = result
+//                }
+//                
+//                // topLevel
+//                var topLevels: [NotebookData] = results.filter { $0.parent == nil }
+////                    .sorted { $0.orderID < $1.orderID }
+//                topLevels.removeAll(where: { $0.isDeleted })
+//                
+//                // notebooks
+//                var notebooksList = [Notebook]()
+//                for topNote in topLevels {
+//                    notebooksList.append(Notebook(topNote))
+//                }
+//                // populate childnotes
+//                for notebook in notebooksList {
+//                    notebook.populateChildren(from: dict)
+//                }
+//                
+//                continuation.resume(returning: notebooksList)
+//            } catch let err {
+//                print(err)
+//                continuation.resume(returning: nil)
+//            }
+//            
+//        }
+//    }
     
-    func fetchDeletedNotebooks() async -> [Notebook]? {
-        
-        await withCheckedContinuation { continuation in
-            
-            guard
-                let modelContext = modelContext
-            else {
-                continuation.resume(returning: nil)
-                return
-            }
-            
-            let allListPredicate = #Predicate<NotebookData> { _ in
-                true
-            }
-            let descriptor = FetchDescriptor(predicate: allListPredicate)
-    //        let descriptor = FetchDescriptor(predicate: allListPredicate, sortBy: [SortDescriptor(\NotebookData.orderID)])
-            
-            do {
-                let results: [NotebookData] = try modelContext.fetch(descriptor)
-                // prepare dict
-                var dict = [UUID: NotebookData]()
-                for result in results {
-                    dict[result.id] = result
-                }
-                
-                // deleted topLevel
-                var topLevels: [NotebookData] = results.filter { $0.isDeleted == true }
-                    
-                topLevels.sort { n1, n2 in
-                    n1.deletedDate! > n2.deletedDate!
-                }
-                
-                // notebooks
-                var notebooksList = [Notebook]()
-                for topNote in topLevels {
-                    notebooksList.append(Notebook(topNote))
-                }
-                // populate childnotes
-                for notebook in notebooksList {
-                    notebook.populateChildren(from: dict)
-                }
-                
-                continuation.resume(returning: notebooksList)
-            } catch let err {
-                print(err)
-                continuation.resume(returning: nil)
-            }
-            
-        }
-    }
+//    func fetchDeletedNotebooks() async -> [Notebook]? {
+//        
+//        await withCheckedContinuation { continuation in
+//            
+//            guard
+//                let modelContext = modelContext
+//            else {
+//                continuation.resume(returning: nil)
+//                return
+//            }
+//            
+//            let allListPredicate = #Predicate<NotebookData> { _ in
+//                true
+//            }
+//            let descriptor = FetchDescriptor(predicate: allListPredicate)
+//    //        let descriptor = FetchDescriptor(predicate: allListPredicate, sortBy: [SortDescriptor(\NotebookData.orderID)])
+//            
+//            do {
+//                let results: [NotebookData] = try modelContext.fetch(descriptor)
+//                // prepare dict
+//                var dict = [UUID: NotebookData]()
+//                for result in results {
+//                    dict[result.id] = result
+//                }
+//                
+//                // deleted topLevel
+//                var topLevels: [NotebookData] = results.filter { $0.isDeleted == true }
+//                    
+//                topLevels.sort { n1, n2 in
+//                    n1.deletedDate! > n2.deletedDate!
+//                }
+//                
+//                // notebooks
+//                var notebooksList = [Notebook]()
+//                for topNote in topLevels {
+//                    notebooksList.append(Notebook(topNote))
+//                }
+//                // populate childnotes
+//                for notebook in notebooksList {
+//                    notebook.populateChildren(from: dict)
+//                }
+//                
+//                continuation.resume(returning: notebooksList)
+//            } catch let err {
+//                print(err)
+//                continuation.resume(returning: nil)
+//            }
+//            
+//        }
+//    }
     
-    func fetchNotebook(for uuid: UUID) -> NotebookData? {
-        
-        guard let modelContext = self.modelContext else { return nil }
-        // if already exists, then upate
-        let predicate = #Predicate<NotebookData> {
-            $0.id == uuid
-        }
-        
-        var descriptor = FetchDescriptor(predicate: predicate)
-        descriptor.fetchLimit = 1
-        
-        do {
-            let results = try modelContext.fetch(descriptor)
-            return results.first
-        } catch let err {
-            print(err)
-            return nil
-        }
-    }
+//    func fetchNotebook(for uuid: UUID) -> NotebookData? {
+//        
+//        guard let modelContext = self.modelContext else { return nil }
+//        // if already exists, then upate
+//        let predicate = #Predicate<NotebookData> {
+//            $0.id == uuid
+//        }
+//        
+//        var descriptor = FetchDescriptor(predicate: predicate)
+//        descriptor.fetchLimit = 1
+//        
+//        do {
+//            let results = try modelContext.fetch(descriptor)
+//            return results.first
+//        } catch let err {
+//            print(err)
+//            return nil
+//        }
+//    }
 }
 
 
@@ -183,8 +183,8 @@ extension NotebooksListBusiness {
             NotebookContentBusiness.deleteNotebookContent(for: notebook.id, in: modelContext)
             
             // nested items delete
-            if let children = notebook.children {
-                deleteNestedPerminantly(deletedNotebooks: children)
+             if notebook.containChildNotebooks {
+                 deleteNestedPerminantly(deletedNotebooks: notebook.children)
             }
         }
         
@@ -201,8 +201,8 @@ extension NotebooksListBusiness {
             NotebookContentBusiness.deleteNotebookContent(for: notebook.id, in: modelContext)
             
             // nested items delete
-            if let children = notebook.children {
-                deleteNestedPerminantly(deletedNotebooks: children)
+            if notebook.containChildNotebooks {
+                deleteNestedPerminantly(deletedNotebooks: notebook.children)
             }
         }
     }

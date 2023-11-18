@@ -26,22 +26,24 @@ class NotebooksBusiness {
         self.storage = storage
     }
     
-    func fetchNotebooksHierarchy() async throws -> Notebook? {
-        return try await storage.fetchNotebooksHierarchy()
+    
+    
+    func fetchAllNotebooks() async throws -> [NotebookB] {
+        return try await storage.fetchAllNotebooks()
     }
     
-    func fetchDeletedNotebooks() async -> [Notebook] {
-        do {
-            return try await storage.fetchDeletedNotebooks()
-        } catch let err {
-            print(err)
-            return []
-        }
-    }
+//    func fetchDeletedNotebooks() async -> [NotebookB] {
+//        do {
+//            return try await storage.fetchDeletedNotebooks()
+//        } catch let err {
+//            print(err)
+//            return []
+//        }
+//    }
     
     // MARK: - Insert
 
-//    func getNextOrderId(at siblings: [Notebook]) -> Int {
+//    func getNextOrderId(at siblings: [NotebookB]) -> Int {
 //        if var lastOrderId = siblings.last?.orderID {
 //            lastOrderId += 1
 //            return lastOrderId
@@ -50,34 +52,33 @@ class NotebooksBusiness {
 //        }
 //    }
     
-    func getRootNotebookOnly() throws -> Notebook? {
+    func getRootNotebookOnly() throws -> NotebookB? {
         try storage.getRootNotebook()
     }
     
-    func createRootNotebook() throws -> Notebook {
+    func createRootNotebook() throws -> NotebookB {
         
         if let _ = try getRootNotebookOnly() { throw NotebooksBusinessError.rootAlreadyExists }
-        let notebook = Notebook(id: UUID(), name: "root")
+        let notebook = NotebookB(id: UUID(), name: "root")
         try notebook.insert(in: storage)
         return notebook
     }
     
-    func createNotebook() throws -> Notebook {
+    func createNotebook() throws -> NotebookB {
         let root = try getRootNotebookOnly() ?? createRootNotebook()
-        return try createNotebook(inside: root.id, at: nil)
+        return try createNotebook(inside: root, at: nil, children: nil)
     }
     
-    func createNotebook(inside parentId: UUID, at position: Int?) throws -> Notebook {
-        let parent = try getNotebookWithChildren(for: parentId)
+    func createNotebook(inside parent: NotebookB, at position: Int?, children: [NotebookB]?) throws -> NotebookB {
         // create
-        let newNotebookName = generateUntitledName(atLevel: parent.children ?? [])
-        let newNotebook = Notebook(id: UUID(), name: newNotebookName)
-        newNotebook.updateParent(parent)
+        let newNotebookName = generateUntitledName(atLevel: children ?? [])
+        let newNotebook = NotebookB(id: UUID(), name: newNotebookName)
+        newNotebook.parentId = parent.id
         // insert in hierarchy
         if let position = position {
-            try parent.insertChild(notebook: newNotebook, at: position)
+            try parent.insertChild(id: newNotebook.id, at: position)
         } else {
-            parent.appendChildren(notebook: newNotebook)
+            parent.appendChildren(id: newNotebook.id)
         }
         // persist
         try newNotebook.insert(in: storage)
@@ -86,50 +87,32 @@ class NotebooksBusiness {
         return newNotebook
     }
     
-//    func createNotebook(below position: Int) throws -> Notebook {
-//        // get top level notebooks
-//        // create new notebook at postion
-//        // insert at position
-//        // update orderID for each after element
-//        // save all
-//        
-//        let topLevelList = try getTopLevelNotebooksWithoutChildren()
-//        
-//        if position < topLevelList.count {
-//            let newNotebook = Notebook(id: UUID(), name: generateUntitledName(atLevel: topLevelList))
-//            newNotebook.orderID = topLevelList[position].orderID + 1
-//            try newNotebook.insert(in: storage)
-//            
-//            for i in position..<topLevelList.count {
-//                
-//            }
-//            
-//            
-//        } else if position == topLevelList.count {
-//            // append at last
-//            return try createNotebook()
+//    func createNotebook(inside parentId: UUID, at position: Int?) throws -> NotebookB {
+//        let parent = try getNotebookWithChildren(for: parentId)
+//        // create
+//        let newNotebookName = generateUntitledName(atLevel: parent.children ?? [])
+//        let newNotebook = NotebookB(id: UUID(), name: newNotebookName)
+//        newNotebook.updateParent(parent)
+//        // insert in hierarchy
+//        if let position = position {
+//            try parent.insertChild(notebook: newNotebook, at: position)
+//        } else {
+//            parent.appendChildren(notebook: newNotebook)
 //        }
-//        else {
-//            throw NotebooksBusinessError.invalidPosition
-//        }
+//        // persist
+//        try newNotebook.insert(in: storage)
+//        try parent.update(in: storage)
 //        
-//
-//        
+//        return newNotebook
 //    }
     
-    func getNotebookWithChildren(for id: UUID) throws -> Notebook {
-        let notebook = try storage.getNotebook(for: id)
-        try notebook.populateChildren(from: storage)
-        notebook.linkSelfToChildren()
-        return notebook
-    }
     
-    func getTopLevelNotebooksWithoutChildren() throws -> [Notebook] {
+    func getTopLevelNotebooksWithoutChildren() throws -> [NotebookB] {
         let notebooks = try storage.getTopLevelNotebooks()
         return notebooks
     }
    
-    private func generateUntitledName(atLevel siblings: [Notebook]) -> String {
+    private func generateUntitledName(atLevel siblings: [NotebookB]) -> String {
         
         var fileNameAlreadyExists: Bool {
             siblings.contains(where: { $0.name == fileName })
@@ -150,7 +133,7 @@ class NotebooksBusiness {
     
 }
 
-extension Notebook {
+extension NotebookB {
     
     func insert(in storage: NotebooksStorageProvider) throws {
         try storage.insert(notebook: self)
@@ -158,10 +141,6 @@ extension Notebook {
     
     func update(in storage: NotebooksStorageProvider) throws {
         try storage.update(notebook: self)
-    }
-    
-    func populateChildren(from storage: NotebooksStorageProvider) throws {
-        setChildren(notebooks: try storage.getChildren(forParent: id))
     }
     
 }
