@@ -31,8 +31,9 @@ class Notebook: Identifiable {
     var children: [Notebook]?
     
     var createdDate: Date = Date()
-    var deletedDate: Date? = nil
     var modifiedDate: Date = Date()
+    var deletedDate: Date? = nil
+    
     
 //    var orderID: Int = 0
     
