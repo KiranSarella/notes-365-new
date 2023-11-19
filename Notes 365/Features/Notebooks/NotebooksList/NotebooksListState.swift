@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 import Combine
 import SwiftData
-import Fakery
 
 enum ListState {
     case all
@@ -28,31 +27,21 @@ enum ListSourceType: Equatable {
     case deletedItems
 }
 
-
-
 @Observable
 class NotebooksListState {
-    
     let notebooksBusiness: NotebooksRequester
-//    let notebooksBusiness = BusinessFactory.createNotebooksFactoryNew(mock: true)
-    
     var subscription: Set<AnyCancellable> = []
     var expandedIds = Set<String>()
-    
-    var notebooks = [Notebook]()
-    
+//    var notebooks = [Notebook]()
     var notebooksHierarchy: Notebook = Notebook(id: UUID(), name: "")
     var deletedNotebooks = [Notebook]()
-    
     var isLoading = false
     var listSourceType = ListSourceType.notebooks(.none)
-    
     var searchText: String = ""
     var isSearching = false
     var searchResultCount: Int = 0
     var modifiedResultCount: Int = 0
     var deletedResultCount: Int = 0
-    
     var canEnableDone: Bool {
         listSourceType == .deletedItems || listSourceType == .notebooks(.recentlyModified)
     }
@@ -108,10 +97,11 @@ class NotebooksListState {
         UserDefaults.standard.set(Array(expandedIds), forKey: "notes365.expandedIds")
     }
     
-//    func removeAllExpandedIds() {
-//        expandedIds.removeAll()
-//        saveExpandedIds()
-//    }
+    func collapseAll() {
+        // TODO: - when to clear all expanded ids?
+        expandedIds.removeAll()
+        saveExpandedIds()
+    }
     
     func waitTillFetching() {
         isLoading = true
@@ -221,7 +211,7 @@ extension NotebooksListState {
             })
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
             .receive(on: RunLoop.main)
-            .compactMap{ $0 }
+            .compactMap { $0 }
             .sink { status in
 //                print(status)
             } receiveValue: { [self] (searchField) in
@@ -234,36 +224,24 @@ extension NotebooksListState {
     }
     
     func searchItems(_ text: String) {
-        
-        if isSearching == false {
-            return
-        }
-        
+        if isSearching == false { return }
         if text.count == 0 {
             searchResultCount = 0
         } else {
-
             var resultsCount = 0
-            
             func canAddNotebook(note: inout Notebook) -> Bool {
-                
                 // for expansion: isExpanded
                 // go deep first, if deep return true, then mark current as true
                 // if deep is false, then check current name condition
-                
                 // for canShow:
                 // if name contains search str - true else false
-                
                 
                 // check nested items
                 var visibleChildsStatus = Set<Bool>()
                 // if children exists
-                if note.children != nil {
-                    let count = note.children.count
-                    for i in 0..<count {
-                        let anyVisibleChildren = canAddNotebook(note: &note.children[i])
-                        visibleChildsStatus.insert(anyVisibleChildren)
-                    }
+                for i in 0..<note.childrenCount {
+                    let anyVisibleChildren = canAddNotebook(note: &note.children[i])
+                    visibleChildsStatus.insert(anyVisibleChildren)
                 }
                 // check if search str contains in file name
                 if note.name.lowercased().contains(text.lowercased()) {
@@ -272,29 +250,19 @@ extension NotebooksListState {
                 } else {
                     note.canShow = false
                 }
-                
                 // if any child notebooks are visible, expanded should be yes
                 if visibleChildsStatus.contains(true) {
                     note.isExpanded = true
                 } else {
                     note.isExpanded = false
                 }
-                
                 // status is used for parent node
                 if note.isExpanded || note.canShow {
                     return true
                 }
-                
                 return false
             }
-            
-            var notebooksList = self.notebooks
-            
-            for i in 0..<notebooksList.count {
-                _ = canAddNotebook(note: &notebooksList[i])
-            }
-            // update
-            self.notebooks = notebooksList
+            _ = canAddNotebook(note: &notebooksHierarchy)
             searchResultCount = resultsCount
         }
     }
@@ -360,16 +328,8 @@ extension NotebooksListState {
             
             return false
         }
-        
-        var notebooksList = self.notebooks
-        
-        for i in 0..<notebooksList.count {
-            _ = canAddNotebook(note: &notebooksList[i])
-        }
-
-        self.notebooks = notebooksList
+        _ = canAddNotebook(note: &notebooksHierarchy)
         modifiedResultCount = resultsCount
-        
         listSourceType = .notebooks(.recentlyModified)
     }
     
