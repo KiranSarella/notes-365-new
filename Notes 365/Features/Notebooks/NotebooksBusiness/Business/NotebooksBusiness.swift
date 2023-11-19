@@ -41,17 +41,6 @@ class NotebooksBusiness {
 //        }
 //    }
     
-    // MARK: - Insert
-
-//    func getNextOrderId(at siblings: [NotebookB]) -> Int {
-//        if var lastOrderId = siblings.last?.orderID {
-//            lastOrderId += 1
-//            return lastOrderId
-//        } else {
-//            return startingOrderId
-//        }
-//    }
-    
     func getRootNotebookOnly() throws -> NotebookB? {
         try storage.getRootNotebook()
     }
@@ -66,24 +55,22 @@ class NotebooksBusiness {
     
     func createNotebook() throws -> NotebookB {
         let root = try getRootNotebookOnly() ?? createRootNotebook()
-        return try createNotebook(inside: root, at: nil, children: nil)
+        return try createNotebook(inside: root, below: nil, children: nil)
     }
     
-    func createNotebook(inside parent: NotebookB, at position: Int?, children: [NotebookB]?) throws -> NotebookB {
+    func createNotebook(inside parent: NotebookB, below notebookId: UUID?, children: [NotebookB]?) throws -> NotebookB {
         // create
         let newNotebookName = generateUntitledName(atLevel: children ?? [])
         let newNotebook = NotebookB(id: UUID(), name: newNotebookName)
         newNotebook.parentId = parent.id
         // insert in hierarchy
-        if let position = position {
-            try parent.insertChild(id: newNotebook.id, at: position)
+        if let notebookId = notebookId {
+            try parent.insertChild(id: newNotebook.id, below: notebookId)
         } else {
             parent.appendChildren(id: newNotebook.id)
         }
-        // persist
         try newNotebook.insert(in: storage)
         try parent.update(in: storage)
-        
         return newNotebook
     }
     
@@ -106,6 +93,10 @@ class NotebooksBusiness {
 //        return newNotebook
 //    }
     
+    
+    func getNotebook(id: UUID) throws -> NotebookB {
+        return try storage.getNotebook(for: id)
+    }
     
     func getTopLevelNotebooksWithoutChildren() throws -> [NotebookB] {
         let notebooks = try storage.getTopLevelNotebooks()
@@ -130,7 +121,24 @@ class NotebooksBusiness {
         return fileName
     }
     
+    func deleteNotebook(notebook: NotebookB, parent: NotebookB) throws {
+        parent.deleteChildren(where: notebook.id)
+        try parent.update(in: storage)
+        notebook.deletedDate = Date()
+        try notebook.update(in: storage)
+    }
     
+    private func isAlreadyFilenameExists(fileName: String, in siblings: [NotebookB]) -> Bool {
+        return siblings.contains(where: { $0.name == fileName })
+    }
+    
+    func rename(notebook: NotebookB, newValue: String, siblings: [NotebookB]) throws {
+        if isAlreadyFilenameExists(fileName: newValue, in: siblings) {
+            throw NotebookBusinessError.alreadyExists
+        }
+        notebook.name = newValue
+        try notebook.update(in: storage)
+    }
 }
 
 extension NotebookB {

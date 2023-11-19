@@ -140,11 +140,8 @@ struct NotebooksListView: View {
             
         }
         .onAppear {
-            
             selectedNotebook = nil
             editorState.modelContext = modelContext
-            notebooksListState.modelContext = modelContext
-            
             notebooksListState.loadNotebooks()
             
 //            if notebooksListState.notebooks.count == 0 {
@@ -153,7 +150,7 @@ struct NotebooksListView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { (_) in
               print("UIApplication: willEnterForegroundNotification")
-            notebooksListState.fetchNotebooks()
+            notebooksListState.loadNotebooks()
         }
 //        onChange(of: scenePhase, { oldPhase, newPhase in
 //            if newPhase == .active {
@@ -236,7 +233,7 @@ struct SearchedListView: View {
                 }
             } else {
                 // menu options
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .topBarTrailing) {
                     Menu {
                         Button {
                             notebooksListState.showRecentlyModified()
@@ -255,6 +252,14 @@ struct SearchedListView: View {
                     } label: {
                         Image(systemName: "ellipsis.circle")
                     }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        notebooksListState.createNotebook()
+                    } label: {
+                        Image(systemName: "square.and.pencil")
+                    }
+
                 }
             }
         }
@@ -310,7 +315,7 @@ struct AddNotesView: View {
         VStack(alignment: .center) {
             // show add first notebook button
             Button {
-                notebooksListState.addFirstNotes()
+                notebooksListState.createNotebook()
             } label: {
                 Text(" + Notebook ")
             }.padding()

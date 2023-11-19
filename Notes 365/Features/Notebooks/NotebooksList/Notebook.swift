@@ -156,17 +156,9 @@ extension Notebook {
         }
     }
     
-    func insertChild(notebook newValue: Notebook, at position: Int) throws {
-        if position <= childrenCount {
-            if containChildNotebooks {
-                self.children.insert(newValue, at: position)
-                updateChildrenIds()
-            } else {
-                self.setChildren(notebooks: [newValue])
-            }
-        } else {
-            throw NotebooksBusinessError.invalidPosition
-        }
+    func insertChild(notebook newValue: Notebook, below noteId: UUID) throws {
+        guard let position: Int = children.firstIndex(where: {$0.id == noteId}) else { throw NotebooksBusinessError.invalidPosition }
+        self.children.insert(newValue, at: position + 1)
     }
     
     func deleteChildren(where id: UUID) {
@@ -178,24 +170,19 @@ extension Notebook {
         self.childrenIds = children.map { $0.id }
     }
     
-    func populateChildren(from dict: [UUID: NotebookB]) {
-        
+    func populateChildren(from dict: [UUID: NotebookB], expandedIds: Set<String>) {
         guard let cArr = childrenIds, !cArr.isEmpty else { return }
-        
         children = [Notebook]()
         for cid in cArr {
             if let noteD = dict[cid] {
-                // if deleted, discard that node and heirarchy
-                if noteD.isDeleted { continue } // continue vs return - remember
                 let note = noteD.notebook()
                 note.parent = self
+                note.isExpanded = expandedIds.contains(note.id.uuidString)
                 children.append(note)
             }
         }
-        // populate inner list
-        // populate childnotes
         for cNote in children {
-            cNote.populateChildren(from: dict)
+            cNote.populateChildren(from: dict, expandedIds: expandedIds)
         }
     }
     

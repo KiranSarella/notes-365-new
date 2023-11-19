@@ -21,7 +21,10 @@ protocol NotebooksRequester {
     
 //    func createNotebook(inside parentId: UUID, at position: Int?) throws -> Notebook
     
-    func createNotebook(inside parent: NotebookB, at position: Int?, children: [NotebookB]?) throws -> NotebookB
+    func createNotebook(inside parent: NotebookB, below notebookId: UUID?, children: [NotebookB]?) throws -> NotebookB
+    
+    func deleteNotebook(notebook: NotebookB, parent: NotebookB) throws
+    func rename(notebook: NotebookB, newValue: String, siblings: [NotebookB]) throws
 }
 
 extension NotebooksBusiness: NotebooksRequester {

@@ -183,9 +183,7 @@ struct ContentView: View {
             }
             .navigationTitle("Notes 365")
             .onAppear {
-                todayVersionBusiness.modelContext = modelContext
-                notebooksListState.modelContext = modelContext
-                
+                todayVersionBusiness.modelContext = modelContext                
                 timelineDetailState.timelineBusiness.modelContext = modelContext
                 // used to create new timeline
                 timelineDetailState.timelineBusiness.updateTodayTimelineIndex()

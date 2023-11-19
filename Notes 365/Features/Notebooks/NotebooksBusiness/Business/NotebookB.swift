@@ -68,16 +68,9 @@ extension NotebookB {
         }
     }
     
-    func insertChild(id newValue: UUID, at position: Int) throws {
-        if position <= childrenCount {
-            if containChildNotebooks {
-                self.childrenIds?.insert(newValue, at: position)
-            } else {
-                self.setChildren(ids: [newValue])
-            }
-        } else {
-            throw NotebooksBusinessError.invalidPosition
-        }
+    func insertChild(id newValue: UUID, below noteId: UUID) throws {
+        guard let position: Int = childrenIds?.firstIndex(of: noteId) else { throw NotebooksBusinessError.invalidPosition }
+        self.childrenIds?.insert(newValue, at: position + 1)
     }
     
     func deleteChildren(where id: UUID) {

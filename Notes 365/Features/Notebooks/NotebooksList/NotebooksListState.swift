@@ -37,10 +37,6 @@ enum ListSourceType: Equatable {
 @Observable
 class NotebooksListState {
     
-//    static let shared: NotebooksListState = NotebooksListState()
-    
-    var modelContext: ModelContext?
-    
     let notebooksBusiness = BusinessFactory.createNotebooksFactoryNew(mock: true)
     
     var subscription: Set<AnyCancellable> = []
@@ -52,34 +48,19 @@ class NotebooksListState {
     var deletedNotebooks = [Notebook]()
     
     var isLoading = false
-//    var notesHierarchy: NotebooksHierarchy
-    
     var listSourceType = ListSourceType.notebooks(.none)
     
     var searchText: String = ""
     var isSearching = false
     var searchResultCount: Int = 0
-    
-//    @Published var isShowingRecent = false
     var modifiedResultCount: Int = 0
-    
-//    @Published var isShowingRecentlyDeleted = false
     var deletedResultCount: Int = 0
-    
-//    private var backupNotebooks = [Notebook]()
-//    private var backupExpandedIds = Set<String>()
-    
-    let notebooksPath = Constants.notebooksFolderName
     
     var canEnableDone: Bool {
         listSourceType == .deletedItems || listSourceType == .notebooks(.recentlyModified)
     }
-    
     let searchTextPublisher = PassthroughSubject<String, Never>()
-    
     var firstTimeAppear = true
-    
-//    var timelineCreatorBusiness = TimelineBusiness(path: EnvironmentState.shared.basePathURL)
     
     init() {
         isLoading = true
@@ -107,24 +88,21 @@ class NotebooksListState {
         }
     }
     
-    func showNotebooksList(notebooksB: [NotebookB]) {
-        
+    private func showNotebooksList(notebooksB: [NotebookB]) {
         // prepare dict
-        var dict = [UUID: NotebookB]()
+        var activeNotebooks = [UUID: NotebookB]()
         for result in notebooksB {
-            dict[result.id] = result
+            if result.isDeleted { continue }
+            activeNotebooks[result.id] = result
         }
         // topLevel
         guard let rootB = notebooksB.first(where: { $0.parentId == nil }) else {
             isLoading = false
             return
         }
-//                    .sorted { $0.orderID < $1.orderID }
-//            topLevels.removeAll(where: { $0.isDeleted })
-        
         // notebooks
         let rootNode: Notebook = rootB.notebook()
-        rootNode.populateChildren(from: dict)
+        rootNode.populateChildren(from: activeNotebooks, expandedIds: expandedIds)
         
         self.notebooksHierarchy = rootNode
         isLoading = false
@@ -138,11 +116,10 @@ class NotebooksListState {
         }
         guard let rootNotebookData = notebooksData.first(where: { $0.parentId == nil }) else { return nil }
         let rootNotebook = rootNotebookData.notebook()
-        rootNotebook.populateChildren(from: dict)
+        rootNotebook.populateChildren(from: dict, expandedIds: expandedIds)
         return rootNotebook
     }
    
-    
     func initialFetch() {
         // get saved expandedIds
         if let expandedList = UserDefaults.standard.object(forKey: "notes365.expandedIds") as? [String] {
@@ -158,46 +135,43 @@ class NotebooksListState {
         isLoading = true
     }
     
-    func fetchNotebooks() {
-//        Task {
-//            isLoading = true
-////            try? await Task.sleep(nanoseconds: 1_000_000_000)
-//            self.notebooks = await notebookBusiness.fetchNotebooks() ?? []
-//            self.deletedNotebooks = await notebookBusiness.fetchDeletedNotebooks() ?? []
-//            isLoading = false
-//            checkOldItemsToDelete()
-//        }
-    }
-    
     var isEmpty: Bool {
         notebooksHierarchy.childrenCount == 0
-//        notebooks.count == 0
     }
     
-    func addFirstNotes() {
+    private func addFirstNotes() {
         do {
             let _ = try notebooksBusiness.createNotebook().notebook()
             loadNotebooks()
-//            withAnimation {
-//                notebooks = [newNotebook]
-//            }
         } catch let error {
             print(error)
         }
     }
     
+    var isRootCreated: Bool {
+        notebooksHierarchy.name == "root"
+    }
+    
+    func createNotebook() {
+        if isRootCreated {
+            if let lastNotebook = notebooksHierarchy.children.last {
+                insertBelow(ref: lastNotebook)
+            } else {
+                insertInside(ref: notebooksHierarchy)
+            }
+        } else {
+            addFirstNotes()
+        }
+    }
+    
     func insertBelow(ref notebook: Notebook) {
-        
         guard let parent = notebook.parent else { return }
         let children = parent.children.map { $0.notebookB() }
-        guard let position: Int = parent.children.firstIndex(of: notebook) else { return }
-        
         do {
-            let newNotebookB = try notebooksBusiness.createNotebook(inside: parent.notebookB(), at: position, children: children)
-            
+            let newNotebookB = try notebooksBusiness.createNotebook(inside: parent.notebookB(), below: notebook.id, children: children)
             let newNotebook = newNotebookB.notebook()
-            try notebook.parent?.insertChild(notebook: newNotebook, at: position)
-            
+            newNotebook.updateParent(parent)
+            try notebook.parent?.insertChild(notebook: newNotebook, below: notebook.id)
         } catch let error {
             print(error)
         }
@@ -206,7 +180,7 @@ class NotebooksListState {
     func insertInside(ref notebook: Notebook) {
         let children = notebook.children.map { $0.notebookB() }
         do {
-            let newNotebookB = try notebooksBusiness.createNotebook(inside: notebook.notebookB(), at: nil, children: children)
+            let newNotebookB = try notebooksBusiness.createNotebook(inside: notebook.notebookB(), below: nil, children: children)
             let newNotebook = newNotebookB.notebook()
             newNotebook.updateParent(notebook)
             notebook.appendChildren(notebook: newNotebook)
@@ -214,20 +188,6 @@ class NotebooksListState {
             print(error)
         }
     }
-    
-   
-    
-//    private func getNotebook(levels selectedLevels: [Int], index selectedIndex: Int) -> Notebook? {
-//        
-//        // goto last level list
-//        var notebooksList: [Notebook]? = notebooks
-//        for level in selectedLevels {
-//            notebooksList = notebooksList?[level].children
-//        }
-//        // get notebook from last list
-//        return notebooksList?[selectedIndex]
-//    }
-    
     
 //    func deleteNotebook(ref notebook: Notebook) {
 //        // delete from hierarchy
@@ -248,121 +208,25 @@ class NotebooksListState {
 //    }
     
     func delete(notebook: Notebook) {
-        
-        guard let modelContext = modelContext else { return }
-        
-        // delete from hierarchy
-        if let parent = notebook.parent {
-            // inner item
-            // delete notebook
-            parent.deleteChildren(where: notebook.id)
-        } else {
-            // base level
-            // delete notebook
-            notebooks.removeAll(where: { $0 == notebook })
+        guard let parent = notebook.parent else { return }
+        do {
+            try notebooksBusiness.deleteNotebook(notebook: notebook.notebookB(), parent: parent.notebookB())
+        } catch let error {
+            print(error)
+            return
         }
-          
-        guard let newDate = Calendar.current.date(byAdding: .month, value: -2, to: Date()) else { return }
-        
+        // delete from UI
+        notebook.parent?.deleteChildren(where: notebook.id)
+//        guard let newDate = Calendar.current.date(byAdding: .month, value: -2, to: Date()) else { return }
         // mark deleted date
-        notebook.deletedDate = newDate//Date()
-        // persist
-        notebook.saveNotebookData(modelContext)
-        
+        notebook.deletedDate = Date()
         // add to deleted list
         deletedNotebooks.insert(notebook, at: 0)
     }
     
-    
     func rename(for notebook: Notebook, newValue: String) throws {
-//        // validate characters
-//        if newValue.contains(":") {
-//            throw NotebookBusinessError.invalidCharacters
-//        }
-        
-        // check if already same file name exists
-        if let parent = notebook.parent {
-            if isAlreadyExists(fileName: newValue, in: parent.children) {
-                throw NotebookBusinessError.alreadyExists
-            }
-        } else {
-            if isAlreadyExists(fileName: newValue, in: notebooks) {
-                throw NotebookBusinessError.alreadyExists
-            }
-        }
-        // store name
+        try notebooksBusiness.rename(notebook: notebook.notebookB(), newValue: newValue, siblings: notebook.parent!.children.map({$0.notebookB()}))
         notebook.name = newValue
-        // update in notebooksData and save
-        notebook.notebookData.name = newValue
-        try modelContext?.save()
-        
-//        // persist changes
-//        notebookBusiness.persist(notebooks: notebooks)
-    }
-
-    
-//    func move(notebooks: inout [Notebook], from source: IndexSet, to destination: Int) {
-//        // move references
-//        if notebooks.first?.parent?.children != nil {
-//            notebooks.first?.parent?.children?.move(fromOffsets: source, toOffset: destination)
-//        } else {
-//            self.notebooks.move(fromOffsets: source, toOffset: destination)
-//        }
-//        // move structs
-//        notebooks.move(fromOffsets: source, toOffset: destination)
-//        
-//        // persist refernce list
-//        notebookBusiness.persist(notebooks: self.notebooks)
-//    }
-    
-    
-    private func isAlreadyExists(fileName: String, in siblings: [Notebook]) -> Bool {
-        return siblings.contains(where: { $0.name == fileName })
-    }
-    
-    private func generateFileName(at siblings: [Notebook]?) -> String {
-        var count = 1
-        var fileName = "Notebook \(count)"
-        if let siblings = siblings {
-            while isAlreadyExists(fileName: fileName, in: siblings) {
-                count += 1
-                fileName = "Notebook \(count)"
-            }
-        }
-        return fileName
-    }
-    
-    // MARK: -
-    
-    func getFolderNamesPath(levels: [Int]) -> String {
-        notebooksPath
-    }
-    
-    
-    // MARK: -
-    func saveSelectionState() {
-        
-    }
-    
-    func getNotebook(uuid: UUID) -> Notebook? {
-        
-        let tripPredicate = #Predicate<NotebookData> {
-            $0.id == uuid
-        }
-        
-        var descriptor = FetchDescriptor(predicate: tripPredicate)
-        descriptor.fetchLimit = 1
-
-        do {
-            let trips = try modelContext?.fetch(descriptor)
-            if let noteData = trips?.first {
-                return Notebook(noteData)
-            }
-        } catch let err {
-            print(err)
-        }
-        
-        return nil
     }
     
 }
@@ -383,8 +247,6 @@ extension NotebooksListState {
         } else {
             expandedIds.remove(id.uuidString)
         }
-        
-        //        print(expandedIds)
     }
     
     func setupSearchText() {
