@@ -38,22 +38,24 @@ struct Notes_365App: App {
 //        }
 //    }()
     
-    var container: ModelContainer = {
-        let conf = ModelConfiguration("iCloud.com.sarella.notes365-local")
-//        return try! ModelContainer(for: Notebook.self, NotebookContent.self, configurations: conf)
-        return try! ModelContainer(for:
-                                    NotebookData.self,
-                                   NotebookContent.self,
-                                   TodayVersion.self,
-                                   TimelineIndex.self,
-                                   TimelineContent.self)
+//    var container: ModelContainer = {
+//        
+//        SharedContext.shared.resetContext(mock: true)
+//        SharedContext.shared.getModelContext()
+//        
+//    }()
+    
+    var context: ModelContext = {
+        SharedContext.shared.resetContext(mock: true)
+        return SharedContext.shared.getModelContext()
     }()
     
     var body: some Scene {
         WindowGroup {
             ContentWrapperView()
         }
-        .modelContainer(container)
+        .modelContext(context)
+//        .modelContainer(container)
 //        .modelContainer(
 //            for: [Notebook2.self]
 //        )

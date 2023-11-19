@@ -15,6 +15,8 @@ protocol NotebooksRequester {
     
     func getRootNotebookOnly() throws -> NotebookB?
     
+    func getNotebook(id: UUID) throws -> NotebookB
+    
     func createRootNotebook() throws -> NotebookB
     
     func createNotebook() throws -> NotebookB

@@ -3,10 +3,11 @@ import XCTest
 
 final class NotebooksBusinessTests: XCTestCase {
     
-    var notebooksBusiness = BusinessFactory.createNotebooksFactory(mock: true)
+    var notebooksBusiness = BusinessFactory.createNotebooksFactory()
     
     override func setUp() async throws {
-        notebooksBusiness = BusinessFactory.createNotebooksFactory(mock: true)
+        SharedContext.shared.resetContext(mock: true)
+        notebooksBusiness = BusinessFactory.createNotebooksFactory()
     }
     
     func testExample() throws {
@@ -45,7 +46,7 @@ final class NotebooksBusinessTests: XCTestCase {
     
     func testShouldInsertNotebookInsideFirstLevelParent() async throws {
         let parent = try notebooksBusiness.createNotebook()
-        let child = try notebooksBusiness.createNotebook(inside: parent, at: nil, children: nil)
+        let child = try notebooksBusiness.createNotebook(inside: parent, below: nil, children: nil)
         
         let notebookB = try notebooksBusiness.getNotebook(id: parent.id)
         XCTAssertTrue(notebookB.containChildNotebooks)

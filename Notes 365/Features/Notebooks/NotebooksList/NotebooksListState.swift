@@ -17,10 +17,6 @@ enum ListState {
     case search
 }
 
-extension  Notification.Name {
-    public static let ExpandCollapseNotification = Notification.Name("com.notes365.ExpandCollapseNotification")
-}
-
 enum NotebooksFilterType {
     case none
     case searching
@@ -37,7 +33,8 @@ enum ListSourceType: Equatable {
 @Observable
 class NotebooksListState {
     
-    let notebooksBusiness = BusinessFactory.createNotebooksFactoryNew(mock: true)
+    let notebooksBusiness: NotebooksRequester
+//    let notebooksBusiness = BusinessFactory.createNotebooksFactoryNew(mock: true)
     
     var subscription: Set<AnyCancellable> = []
     var expandedIds = Set<String>()
@@ -62,33 +59,32 @@ class NotebooksListState {
     let searchTextPublisher = PassthroughSubject<String, Never>()
     var firstTimeAppear = true
     
-    init() {
+    init(notebookBusiness: NotebooksRequester) {
+        self.notebooksBusiness = notebookBusiness
         isLoading = true
         // get saved expandedIds
         if let expandedList = UserDefaults.standard.object(forKey: "notes365.expandedIds") as? [String] {
             expandedIds = Set(expandedList)
+            print("expandedIds.count: ", expandedIds.count)
         }
-        
-        // observe after initial hierarcy is constructed
-        NotificationCenter.default.addObserver(self, selector: #selector(listenExpandCollapseNotification(_:)), name: .ExpandCollapseNotification, object: nil)
         
         setupSearchText()
         
         isLoading = false
     }
     
-    func loadNotebooks() {
-        Task {
-            do {
-                let results = try await notebooksBusiness.fetchAllNotebooks()
-                showNotebooksList(notebooksB: results)
-            } catch let error {
-                print(error)
-            }
+    func loadNotebooks() async {
+        do {
+            isLoading = true
+            let results = try await notebooksBusiness.fetchAllNotebooks()
+            showNotebooksList(notebooksB: results)
+        } catch let error {
+            print(error)
+            isLoading = false
         }
     }
     
-    private func showNotebooksList(notebooksB: [NotebookB]) {
+     func showNotebooksList(notebooksB: [NotebookB]) {
         // prepare dict
         var activeNotebooks = [UUID: NotebookB]()
         for result in notebooksB {
@@ -107,29 +103,15 @@ class NotebooksListState {
         self.notebooksHierarchy = rootNode
         isLoading = false
     }
-    
-    private func formNotebooksHierarchy(from notebooksData: [NotebookB]) -> Notebook? {
-        // prepare dict
-        var dict = [UUID: NotebookB]()
-        for result in notebooksData {
-            dict[result.id] = result
-        }
-        guard let rootNotebookData = notebooksData.first(where: { $0.parentId == nil }) else { return nil }
-        let rootNotebook = rootNotebookData.notebook()
-        rootNotebook.populateChildren(from: dict, expandedIds: expandedIds)
-        return rootNotebook
-    }
    
-    func initialFetch() {
-        // get saved expandedIds
-        if let expandedList = UserDefaults.standard.object(forKey: "notes365.expandedIds") as? [String] {
-            expandedIds = Set(expandedList)
-        }
-    }
-    
     func saveExpandedIds() {
         UserDefaults.standard.set(Array(expandedIds), forKey: "notes365.expandedIds")
     }
+    
+//    func removeAllExpandedIds() {
+//        expandedIds.removeAll()
+//        saveExpandedIds()
+//    }
     
     func waitTillFetching() {
         isLoading = true
@@ -139,10 +121,10 @@ class NotebooksListState {
         notebooksHierarchy.childrenCount == 0
     }
     
-    private func addFirstNotes() {
+    private func addFirstNotes() async {
         do {
             let _ = try notebooksBusiness.createNotebook().notebook()
-            loadNotebooks()
+            await loadNotebooks()
         } catch let error {
             print(error)
         }
@@ -152,7 +134,9 @@ class NotebooksListState {
         notebooksHierarchy.name == "root"
     }
     
-    func createNotebook() {
+    var isCreatingNotebook = false
+    
+    func createNotebook() async {
         if isRootCreated {
             if let lastNotebook = notebooksHierarchy.children.last {
                 insertBelow(ref: lastNotebook)
@@ -160,7 +144,7 @@ class NotebooksListState {
                 insertInside(ref: notebooksHierarchy)
             }
         } else {
-            addFirstNotes()
+            await addFirstNotes()
         }
     }
     
@@ -189,24 +173,6 @@ class NotebooksListState {
         }
     }
     
-//    func deleteNotebook(ref notebook: Notebook) {
-//        // delete from hierarchy
-//        if let parent = notebook.parent {
-//            // delete notebook ref
-//            parent.children?.removeAll(where: { $0 == notebook })
-//        } else {
-//            // base level
-//            // delete notebook ref
-//            notebooks.removeAll(where: { $0 == notebook })
-//            // delete object
-//            notebooks.removeAll(where: { $0.id == notebook.id })
-//        }
-//        // delete physical file
-//        notebookBusiness.deleteNotebook(notebook: notebook)
-//        // persist
-//        notebookBusiness.persist(notebooks: notebooks)
-//    }
-    
     func delete(notebook: Notebook) {
         guard let parent = notebook.parent else { return }
         do {
@@ -234,18 +200,11 @@ class NotebooksListState {
 // MARK: - Notebooks Filter
 extension NotebooksListState {
     
-    @objc func listenExpandCollapseNotification(_ sender: Notification) {
-        guard let userInfo = sender.userInfo else { return }
-        
-        guard
-            let id = userInfo["id"] as? UUID,
-            let isExpanded = userInfo["isExpanded"] as? Bool
-        else { return }
-        
+    func updateExpandedIds(id: String, isExpanded: Bool) {
         if isExpanded {
-            expandedIds.insert(id.uuidString)
+            expandedIds.insert(id)
         } else {
-            expandedIds.remove(id.uuidString)
+            expandedIds.remove(id)
         }
     }
     

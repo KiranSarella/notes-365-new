@@ -142,7 +142,10 @@ struct NotebooksListView: View {
         .onAppear {
             selectedNotebook = nil
             editorState.modelContext = modelContext
-            notebooksListState.loadNotebooks()
+            Task {
+                await notebooksListState.loadNotebooks()
+            }
+            
             
 //            if notebooksListState.notebooks.count == 0 {
 //                notebooksListState.loadNotebooks()
@@ -150,7 +153,9 @@ struct NotebooksListView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { (_) in
               print("UIApplication: willEnterForegroundNotification")
-            notebooksListState.loadNotebooks()
+            Task {
+                await notebooksListState.loadNotebooks()
+            }
         }
 //        onChange(of: scenePhase, { oldPhase, newPhase in
 //            if newPhase == .active {
@@ -255,11 +260,16 @@ struct SearchedListView: View {
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        notebooksListState.createNotebook()
+                        Task {
+                            notebooksListState.isCreatingNotebook = true
+                            await notebooksListState.createNotebook()
+                            try await Task.sleep(nanoseconds: 2_000_000_000)
+                            notebooksListState.isCreatingNotebook = false
+                        }
                     } label: {
                         Image(systemName: "square.and.pencil")
                     }
-
+                    .disabled(notebooksListState.isCreatingNotebook)
                 }
             }
         }
@@ -280,31 +290,31 @@ struct SearchedListView: View {
     
 }
 
-struct MyDisclosureStyle: DisclosureGroupStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        VStack {
-            Button {
-                withAnimation {
-                    configuration.isExpanded.toggle()
-                }
-            } label: {
-                HStack(alignment: .firstTextBaseline) {
-                    configuration.label
-                    Spacer()
-                    Text(configuration.isExpanded ? "hide" : "show")
-                        .foregroundColor(.accentColor)
-                        .font(.caption.lowercaseSmallCaps())
-                        .animation(nil, value: configuration.isExpanded)
-                }
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            if configuration.isExpanded {
-                configuration.content
-            }
-        }
-    }
-}
+//struct MyDisclosureStyle: DisclosureGroupStyle {
+//    func makeBody(configuration: Configuration) -> some View {
+//        VStack {
+//            Button {
+//                withAnimation {
+//                    configuration.isExpanded.toggle()
+//                }
+//            } label: {
+//                HStack(alignment: .firstTextBaseline) {
+//                    configuration.label
+//                    Spacer()
+//                    Text(configuration.isExpanded ? "hide" : "show")
+//                        .foregroundColor(.accentColor)
+//                        .font(.caption.lowercaseSmallCaps())
+//                        .animation(nil, value: configuration.isExpanded)
+//                }
+//                .contentShape(Rectangle())
+//            }
+//            .buttonStyle(.plain)
+//            if configuration.isExpanded {
+//                configuration.content
+//            }
+//        }
+//    }
+//}
 
 struct AddNotesView: View {
     
@@ -315,7 +325,9 @@ struct AddNotesView: View {
         VStack(alignment: .center) {
             // show add first notebook button
             Button {
-                notebooksListState.createNotebook()
+                Task {
+                   await notebooksListState.createNotebook()
+                }
             } label: {
                 Text(" + Notebook ")
             }.padding()
@@ -358,6 +370,9 @@ struct MyTableRow: View {
             } label: {
                 RowView(notebooksListState: notebooksListState, notebook: $notebook)
                     .id(notebook.id)
+            }
+            .onChange(of: notebook.isExpanded) { oldValue, newValue in
+                notebooksListState.updateExpandedIds(id: notebook.id.uuidString, isExpanded: newValue)
             }
         } else {
             RowView(notebooksListState: notebooksListState, notebook: $notebook)

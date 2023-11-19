@@ -117,7 +117,7 @@ struct ContentView: View {
     // notebooks related
 //    @State private var selectedNotebookM: Notebook.ID?
     @State private var selectedNotebookM: Notebook?
-    @State var notebooksListState = NotebooksListState()
+    @State var notebooksListState = NotebooksListState(notebookBusiness: BusinessFactory.createNotebooksFactory())
     
     @State var navigationSplitViewVisibility = NavigationSplitViewVisibility.all
     

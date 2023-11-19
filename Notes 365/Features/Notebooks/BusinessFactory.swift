@@ -15,53 +15,39 @@ import SwiftData
 // Factory Creator
 class BusinessFactory {
     
-    static func createModelContext(mock: Bool) throws -> ModelContext {
-        if mock {
-            let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: true)
-            let container = try ModelContainer(for: 
-                                                NotebookData.self,
-                                               NotebookContent.self,
-                                               TodayVersion.self,
-                                               TimelineIndex.self,
-                                               TimelineContent.self, 
-                                               configurations: modelConfiguration)
-            return ModelContext(container)
-        } else {
-            let container = try ModelContainer(for:
-                                                NotebookData.self,
-                                               NotebookContent.self,
-                                               TodayVersion.self,
-                                               TimelineIndex.self,
-                                               TimelineContent.self)
-            return ModelContext(container)
-        }
+//    static func createModelContext(mock: Bool) throws -> ModelContext {
+//        if mock {
+//            let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: true)
+//            let container = try ModelContainer(for: 
+//                                                NotebookData.self,
+//                                               NotebookContent.self,
+//                                               TodayVersion.self,
+//                                               TimelineIndex.self,
+//                                               TimelineContent.self, 
+//                                               configurations: modelConfiguration)
+//            return ModelContext(container)
+//        } else {
+//            if let modelContext = SharedContext.shared.modelContext {
+//                return modelContext
+//            } else {
+//                let container = try ModelContainer(for:
+//                                                    NotebookData.self,
+//                                                   NotebookContent.self,
+//                                                   TodayVersion.self,
+//                                                   TimelineIndex.self,
+//                                                   TimelineContent.self)
+//                return ModelContext(container)
+//            }
+//        }
+//    }
+    
+    static func createNotebooksStorage() -> NotebooksStorageProvider {
+        let modelContext = SharedContext.shared.getModelContext()
+        return NotebooksStorageAdapter(modelContext: modelContext)
     }
     
-    static func createNotebooksStorage(mock: Bool) throws -> NotebooksStorageProvider {
-        if mock {
-            do {
-                let modelContext = try BusinessFactory.createModelContext(mock: true)
-                return NotebooksStorageAdapter(modelContext: modelContext)
-            } catch let error {
-                fatalError(error.localizedDescription)
-            }
-        } else {
-            do {
-                let modelContext = try BusinessFactory.createModelContext(mock: false)
-                return NotebooksStorageAdapter(modelContext: modelContext)
-            } catch let error {
-                fatalError(error.localizedDescription)
-            }
-        }
-    }
-    
-    static func createNotebooksFactory(mock: Bool = false) -> NotebooksBusiness {
-        let storage = try! BusinessFactory.createNotebooksStorage(mock: mock)
-        return NotebooksBusiness(storage: storage)
-    }
-    
-    static func createNotebooksFactoryNew(mock: Bool = false) -> NotebooksRequester {
-        let storage = try! BusinessFactory.createNotebooksStorage(mock: mock)
+    static func createNotebooksFactory() -> NotebooksRequester {
+        let storage = BusinessFactory.createNotebooksStorage()
         return NotebooksBusiness(storage: storage)
     }
     
@@ -80,3 +66,59 @@ class BusinessFactory {
 //        
 //    }
 //}
+
+class SharedContext {
+    static let shared = SharedContext()
+    private var modelContext: ModelContext?
+    var mock: Bool = false
+    
+    func getModelContext() -> ModelContext {
+        if let modelContext = modelContext {
+            return modelContext
+        } else {
+            if mock {
+                createMockContext()
+            } else {
+                createContext()
+            }
+            return modelContext!
+        }
+    }
+    
+    func resetContext(mock: Bool = false) {
+        self.mock = mock
+        if self.mock {
+            createMockContext()
+        } else {
+            createContext()
+        }
+    }
+    
+    func createMockContext() {
+        let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try! ModelContainer(for:
+                                            NotebookData.self,
+                                           NotebookContent.self,
+                                           TodayVersion.self,
+                                           TimelineIndex.self,
+                                           TimelineContent.self,
+                                           configurations: modelConfiguration)
+        modelContext = ModelContext(container)
+    }
+    
+    func createContext() {
+        let container = try! ModelContainer(for:
+                                            NotebookData.self,
+                                           NotebookContent.self,
+                                           TodayVersion.self,
+                                           TimelineIndex.self,
+                                           TimelineContent.self)
+        
+    }
+    
+    func createICloudContext() {
+        let conf = ModelConfiguration("iCloud.com.sarella.notes365-local")
+        let container = try! ModelContainer(for: NotebookData.self, NotebookContent.self, configurations: conf)
+        modelContext = ModelContext(container)
+    }
+}

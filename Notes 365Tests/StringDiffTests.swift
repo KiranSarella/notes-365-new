@@ -6,6 +6,7 @@
 //
 
 import XCTest
+@testable import Notes_365
 
 final class StringDiffTests: XCTestCase {
 
