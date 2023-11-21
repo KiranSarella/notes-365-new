@@ -320,7 +320,10 @@ extension TimelineBusiness {
         
         
         // get updated content from notebook business
-        guard let notebookContent = NotebookContentBusiness.fetchNotebookContent(for: uuid, in: modelContext) else { return }
+//        guard let notebookContent = NotebookContentBusiness.fetchNotebookContent(for: uuid, in: modelContext) else { return }
+        
+        let notebookContent = NotebookContent(notebookID: UUID(), content: "dummy")
+        
         // ask todayVersion object to get baseversion
         let baseVersion = TodayVersionBusiness.getBaseVersion(for: uuid, modelContext: modelContext) ?? ""
         // do string diff

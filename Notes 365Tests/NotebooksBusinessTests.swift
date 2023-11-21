@@ -51,7 +51,7 @@ final class NotebooksBusinessTests: XCTestCase {
         let notebookB = try notebooksBusiness.getNotebook(id: parent.id)
         XCTAssertTrue(notebookB.containChildNotebooks)
         XCTAssertEqual(notebookB.childrenCount, 1)
-        XCTAssertEqual(notebookB.childrenIds!.first, child.id)
+        XCTAssertEqual(notebookB.childrenIds.first, child.id)
     }
     
     

@@ -46,9 +46,11 @@ class TodayVersionBusiness {
         else { return }
         
         // ask NotebookBusiness object for content
-        let notebookContent = NotebookContentBusiness.fetchNotebookContent(for: uuid, in: modelContext)
+        let notebookContent = NotebookContent(notebookID: uuid, content: "dummy")
+        
+//        NotebookContentBusiness.fetchNotebookContent(for: uuid, in: modelContext)
         // create base version
-        TodayVersionBusiness.createBaseVersionIfNotExists(for: uuid, with: notebookContent?.content ?? "", modelContext)
+        TodayVersionBusiness.createBaseVersionIfNotExists(for: uuid, with: notebookContent.content, modelContext)
     }
     
     static func cleanBaseVersionIfNeeded(modelContext: ModelContext) {
