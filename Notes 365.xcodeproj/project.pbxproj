@@ -33,6 +33,8 @@
 		5C7D4AF82B08E00C00BB1908 /* NotebookB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7D4AF72B08E00C00BB1908 /* NotebookB.swift */; };
 		5C8FADF92B0A06F600B80BD9 /* StringDiffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD302920CCCE003DE332 /* StringDiffTests.swift */; };
 		5C8FADFB2B0A072600B80BD9 /* NotebooksListStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8FADFA2B0A072600B80BD9 /* NotebooksListStateTests.swift */; };
+		5C90604C2B0E23F20068DD65 /* BaseBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C90604B2B0E23F20068DD65 /* BaseBackgroundView.swift */; };
+		5C9060502B0E254D0068DD65 /* bg1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5C90604F2B0E254D0068DD65 /* bg1.jpg */; };
 		5CA77C162A24AE220030EFB2 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C152A24AE220030EFB2 /* Collections */; };
 		5CA77C182A24AE220030EFB2 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C172A24AE220030EFB2 /* DequeModule */; };
 		5CA77C1A2A24AE220030EFB2 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C192A24AE220030EFB2 /* OrderedCollections */; };
@@ -175,6 +177,8 @@
 		5C7D4AF12B07DCEA00BB1908 /* NotebooksRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksRequester.swift; sourceTree = "<group>"; };
 		5C7D4AF72B08E00C00BB1908 /* NotebookB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookB.swift; sourceTree = "<group>"; };
 		5C8FADFA2B0A072600B80BD9 /* NotebooksListStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListStateTests.swift; sourceTree = "<group>"; };
+		5C90604B2B0E23F20068DD65 /* BaseBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseBackgroundView.swift; sourceTree = "<group>"; };
+		5C90604F2B0E254D0068DD65 /* bg1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bg1.jpg; sourceTree = "<group>"; };
 		5C9732212A8B74C200C42E28 /* iCloud-sync.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "iCloud-sync.md"; sourceTree = "<group>"; };
 		5C9B5CFF2A8FED2A00396102 /* TextKit.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TextKit.md; sourceTree = "<group>"; };
 		5CC4C01E2A908D7000A4BE41 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
@@ -673,6 +677,8 @@
 		9FB0A47429DBD6830093FBD2 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				5C90604B2B0E23F20068DD65 /* BaseBackgroundView.swift */,
+				5C90604F2B0E254D0068DD65 /* bg1.jpg */,
 				9F45BCA32920CAAE003DE332 /* ContentView.swift */,
 				9F45BCCF2920CCCE003DE332 /* SidebarSelection.swift */,
 				9F57BAE6299688BC0076FD9D /* Constants.swift */,
@@ -878,6 +884,7 @@
 				9FE9D0C329347FFA006CCC1E /* CodingDocument.md in Resources */,
 				9F45BCAA2920CAB0003DE332 /* Preview Assets.xcassets in Resources */,
 				9F1AAE34292CA89E00B4D254 /* PreviewContent.md in Resources */,
+				5C9060502B0E254D0068DD65 /* bg1.jpg in Resources */,
 				9F45BCA62920CAB0003DE332 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -914,6 +921,7 @@
 				9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */,
 				5CFCF5E62ABEDFA400351EEA /* NotebookData.swift in Sources */,
 				9FB6C69C29275E0300C8EC76 /* NotebookContentState.swift in Sources */,
+				5C90604C2B0E23F20068DD65 /* BaseBackgroundView.swift in Sources */,
 				5C7D4AF22B07DCEA00BB1908 /* NotebooksRequester.swift in Sources */,
 				9F3DB0CA292E23D900704860 /* ThemesListState.swift in Sources */,
 				9F7D2926299EC27E00B37F51 /* CloudServiceTwo.swift in Sources */,

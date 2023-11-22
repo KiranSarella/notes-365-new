@@ -110,6 +110,7 @@ struct TimelineDetailView: View {
                 }
             }
             .listStyle(PlainListStyle())
+            .scrollContentBackground(.hidden)
         }
         .onAppear {
             
