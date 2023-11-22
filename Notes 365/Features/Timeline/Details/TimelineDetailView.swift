@@ -18,9 +18,23 @@ struct TimelineDetailView: View {
 //        timelineDetailState.calendarState
 //    }
     
+    
+    let dummyContent = """
+    Donec id elit non mi porta gravida at eget metus. Nulla vitae elit libero, a pharetra augue. Sed posuere consectetur est at lobortis. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Sed posuere consectetur est at lobortis. Aenean lacinia bibendum nulla sed consectetur.
+    
+    Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Donec id elit non mi porta gravida at eget metus. Vestibulum id ligula porta felis euismod semper.
+
+    Cras justo odio, dapibus ac facilisis in, egestas eget quam. Nullam id dolor id nibh ultricies vehicula ut id elit. Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit sit amet non magna.
+
+    Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Curabitur blandit tempus porttitor. Donec id elit non mi porta gravida at eget metus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+"""
+    
     var body: some View {
         VStack {
-            List {
+//            TimelineToolBar(timelineDetailState: $timelineDetailState)
+//                .frame(height: 60)
+            TimelineCustomToolBar(timelineDetailState: $timelineDetailState)
+            ScrollView(.vertical) {
                 // header
                 VStack {
                     // day/week/month header view
@@ -83,6 +97,11 @@ struct TimelineDetailView: View {
                     .frame(height: 100)
                     .listRowSeparator(.hidden)
                 }
+                
+                
+                Text(dummyContent)
+                    .font(.title)
+                    .padding()
                 
                 // contents
                 ForEach($timelineDetailState.dayIndexs) { $day in
@@ -167,14 +186,98 @@ struct TimelineDetailView: View {
                     Image(systemName: "calendar")
                 }
                 .foregroundColor(.primary)
-                .popover(isPresented: $isShowingCalendar) {
-                    TimelineCalendarView(timelineCalendarState: $timelineDetailState.calendarState)
-                        .frame(minWidth: 320)
-                        .padding()
-                }
+//                .popover(isPresented: $isShowingCalendar) {
+//                    TimelineCalendarView(timelineCalendarState: $timelineDetailState.calendarState)
+//                        .frame(minWidth: 320)
+//                        .padding()
+//                }
             }
         }
         
     }
 }
 
+struct TimelineCustomToolBar: View {
+    
+    @Binding var timelineDetailState: TimelineDetailState
+    @State private var isShowingCalendar = false
+    
+    var body: some View {
+        HStack {
+            Spacer()
+            Group {
+                Button {
+                    timelineDetailState.calendarState.previousStep()
+                } label: {
+                    Image(systemName: "chevron.left")
+                }
+                Button {
+                    timelineDetailState.calendarState.nextStep()
+                } label: {
+                    Image(systemName: "chevron.right")
+                }
+                Button {
+                    isShowingCalendar = true
+                } label: {
+                    Image(systemName: "calendar")
+                }
+                .popover(isPresented: $isShowingCalendar) {
+                    TimelineCalendarView(timelineCalendarState: $timelineDetailState.calendarState)
+                        .frame(minWidth: 320)
+                        .padding()
+                }
+            }
+//            .frame(width: 50, height: 50)
+            .padding()
+            
+            
+        }
+        .frame(height: 60)
+    }
+}
+
+struct TimelineToolBar: View {
+    
+    @Binding var timelineDetailState: TimelineDetailState
+    @State private var isShowingCalendar = false
+    
+    var body: some View {
+        NavigationStack {
+            List {
+                
+            }
+            .toolbar {
+                    // menu options
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            timelineDetailState.calendarState.previousStep()
+                        } label: {
+                            Image(systemName: "chevron.left")
+                        }
+                        .foregroundColor(.primary)
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            timelineDetailState.calendarState.nextStep()
+                        } label: {
+                            Image(systemName: "chevron.right")
+                        }
+                        .foregroundColor(.primary)
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            isShowingCalendar = true
+                        } label: {
+                            Image(systemName: "calendar")
+                        }
+                        .foregroundColor(.primary)
+                        .popover(isPresented: $isShowingCalendar) {
+                            TimelineCalendarView(timelineCalendarState: $timelineDetailState.calendarState)
+                                .frame(minWidth: 320)
+                                .padding()
+                        }
+                    }
+                }
+        }
+    }
+}

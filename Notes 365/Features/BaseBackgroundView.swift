@@ -10,9 +10,12 @@ import SwiftUI
 struct BaseBackgroundView: View {
     var body: some View {
         ZStack {
-            Image("bg1")
-                .resizable()
+            Color.init(hex: 027148)
+//            Image("bg1")
+//                .resizable()
                 .edgesIgnoringSafeArea(.all)
+//                .aspectRatio(contentMode: .fill)
+//                .clipped()
             
             BaseContentView()
         }
@@ -24,13 +27,16 @@ struct BaseBackgroundView: View {
 }
 
 struct BaseContentView: View {
+    
+    @State private var sidebarItemSelected: SidebarItem.ID = SidebarItem.timeline.id
+    
     var body: some View {
         HStack {
-            SidebarView()
+            SidebarView(sidebarItemSelected: $sidebarItemSelected)
                 .frame(width: 400)
                 .padding()
             
-            DetailView()
+            DetailView(sidebarItemSelected: $sidebarItemSelected)
                 .padding()
             Spacer()
         }
@@ -39,9 +45,11 @@ struct BaseContentView: View {
 
 struct SidebarView: View {
     
-    @State private var sidebarItemSelected: SidebarItem.ID? = SidebarItem.timeline.id
+    @Binding var sidebarItemSelected: SidebarItem.ID
+    @State private var showThemes = false
+    @State private var showFormattingSymbols = false
+    @State private var showFeedback = false
     
-    @State var settingsExpanded = true
     
     var body: some View {
         ScrollView(.vertical) {
@@ -57,7 +65,7 @@ struct SidebarView: View {
                     
                     HStack {
                         Button {
-                           
+                            sidebarItemSelected = SidebarItem.timeline.id
                         } label: {
                             Label("Timeline", systemImage: "rectangle.stack")
                         }
@@ -66,7 +74,7 @@ struct SidebarView: View {
                     
                     HStack {
                         Button {
-                            
+                            sidebarItemSelected = SidebarItem.notebooks.id
                         } label: {
                             Label("Notebooks", systemImage: "books.vertical")
                         }
@@ -75,16 +83,7 @@ struct SidebarView: View {
                     
                     HStack {
                         Button {
-                            //                    showThemes = true
-                        } label: {
-                            Label("Themes", systemImage: "paintbrush")
-                        }
-                        Spacer()
-                    }.padding()
-                   
-                    HStack {
-                        Button {
-                            //                    showThemes = true
+                            showThemes = true
                         } label: {
                             Label("Themes", systemImage: "paintbrush")
                         }
@@ -94,7 +93,7 @@ struct SidebarView: View {
                     
                     HStack {
                         Button {
-                            //                    showThemes = true
+                            showFormattingSymbols = true
                         } label: {
                             Label("Symbols Guide", systemImage: "textformat")
                         }
@@ -105,7 +104,7 @@ struct SidebarView: View {
                     
                     HStack {
                         Button {
-                            //                    showFormattingSymbols = true
+                            showFeedback = true
                         } label: {
                             Label("Feedback", systemImage: "hand.thumbsup")
                         }
@@ -116,12 +115,21 @@ struct SidebarView: View {
                 }
                 Spacer()
             }
+            .foregroundColor(.white)
+            .sheet(isPresented: $showThemes) {
+                SettingsView_iPadOS(showModel: $showThemes)
+            }
+            .sheet(isPresented: $showFormattingSymbols) {
+                EditorSymbolsView()
+            }
+            .sheet(isPresented: $showFeedback) {
+                FeedbackView_iPadOS()
+            }
+           
             
 //            .background(.thinMaterial)
         }
-        .foregroundColor(.white)
-            
-       
+        
         
            
         
@@ -131,16 +139,31 @@ struct SidebarView: View {
 //            Text("Notebooks")
 //        }.scrollContentBackground(.hidden)
     }
+    
 }
 
 struct DetailView: View {
     
+    @Binding var sidebarItemSelected: SidebarItem.ID
     @State private var timelineDetailState = TimelineDetailState()
     
     var body: some View {
         
-        TimelineDetailView(timelineDetailState: $timelineDetailState)
+        if sidebarItemSelected == SidebarItem.timeline.rawValue {
+            TimelineDetailView(timelineDetailState: $timelineDetailState)
+                .foregroundColor(.white)
+    //            .padding()
+    //            .background(.ultraThinMaterial)
+    //            .blur(radius: 10)
+
+        } else {
+            NotebooksBaseDetailView()
+                .foregroundColor(.white)
+        }
         
+       
+        
+     
         
         
 //        VStack {
@@ -149,5 +172,12 @@ struct DetailView: View {
 //                .foregroundStyle(.white)
 //            
 //        }
+    }
+}
+
+
+struct NotebooksBaseDetailView: View {
+    var body: some View {
+        Text("notebooks base")
     }
 }
