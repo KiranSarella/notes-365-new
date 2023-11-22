@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 import SwiftData
 
-@Model
 class NotebookContentB: Identifiable, Codable {
     
     var notebookID: UUID = UUID()

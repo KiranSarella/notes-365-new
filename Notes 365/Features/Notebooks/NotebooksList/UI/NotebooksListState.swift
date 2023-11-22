@@ -66,6 +66,14 @@ class NotebooksListState {
         isLoading = false
     }
     
+    func stopLoading() {
+        Task {
+            await MainActor.run {
+                self.isLoading = false
+            }
+        }
+    }
+    
     func loadNotebooks() async {
         do {
             isLoading = true
@@ -73,7 +81,8 @@ class NotebooksListState {
             showNotebooksList(notebooksB: results)
         } catch let error {
             print(error)
-            isLoading = false
+//            isLoading = false
+            stopLoading()
         }
     }
     
@@ -90,7 +99,8 @@ class NotebooksListState {
         }
         // topLevel
         guard let rootB = notebooksB.first(where: { $0.parentId == nil }) else {
-            isLoading = false
+//            isLoading = false
+            stopLoading()
             return
         }
         // notebooks

@@ -145,13 +145,23 @@ struct ContentView: View {
     
     @State private var timelineDetailState = TimelineDetailState()
     
+    @State private var presentedParks: [SidebarItem] = []
+    
     var body: some View {
+        
+        
         NavigationSplitView(columnVisibility: $navigationSplitViewVisibility) {
+            
+            
+//            .listStyle(SidebarListStyle())
+            
+            
             
             List(selection: $sidebarItemSelected) {
                 
                 Label("Timeline", systemImage: "rectangle.stack")
                     .tag(SidebarItem.timeline.id)
+                
                 Label("Notebooks", systemImage: "books.vertical")
                     .tag(SidebarItem.notebooks.id)
                 
@@ -217,7 +227,81 @@ struct ContentView: View {
             case .timeline:
                 TimelineDetailView(timelineDetailState: $timelineDetailState)
             case .notebooks:
-                NotebooksListView(notebooksListState: notebooksListState, selectedNotebook: $selectedNotebookM)
+                
+//                Text("destination")
+//                NestedContentView(sidebarItemSelected: $sidebarItemSelected)
+                
+                
+                NotebookDetailBaseView()
+//                WrapperDetailView()
+//            NotebooksLevelView()
+                
+//                NotebooksListView(notebooksListState: notebooksListState, selectedNotebook: $selectedNotebookM)
+                
+//                NavigationStack(path: $presentedParks) {
+//                    List {
+//    //                    Label("Timeline", systemImage: "rectangle.stack")
+//    //                        .tag(SidebarItem.timeline.id)
+//                        
+////                        Button {
+////                            sidebarItemSelected = SidebarItem.timeline.id
+////                        } label: {
+////                            Label("Timeline", systemImage: "rectangle.stack")
+////                        }
+//
+//                        Label("Sorted Algorithms", systemImage: "folder")
+//                        NavigationLink(" Notebooks 1", value: SidebarItem.notebooks)
+//                        
+//                        NavigationLink("􀈕 Crasing nested", value: SidebarItem.timeline)
+//                        
+//                        Text("Top 10 goals")
+//                        
+//                        Text("Top 10 goals")
+//                        
+//    //                    NavigationLink {
+//    //                        List {
+//    //                            Text("one")
+//    //                            Text("two")
+//    //                            Text("three")
+//    //                        }
+//    //                    } label: {
+//    //                        Text("Notebooks - New")
+//    //                    }
+//                    }
+//                    .navigationDestination(for: SidebarItem.self) { selection in
+//                        
+//                        if selection  == .notebooks {
+//                            List {
+//                                Text("one")
+//                                Button("notes") {
+//                                    sidebarItemSelected = SidebarItem.notebooks.id
+//                                }
+//                                Button("timeline") {
+//                                    sidebarItemSelected = SidebarItem.timeline.id
+//                                }
+//                                Text("Purus Ridiculus Ullamcorper")
+//                                Text("Vestibulum Mollis")
+//                                
+//                                NavigationLink(value: SidebarItem.notebooks) {
+//                                    Label("Sorted Algorithms", systemImage: "folder")
+//                                }
+//                                
+//                                NavigationLink(value: SidebarItem.notebooks) {
+//                                    Label("next", systemImage: "folder")
+//                                }
+//                                
+//                                
+//
+//                            }
+//                            .listStyle(SidebarListStyle())
+//                            .navigationTitle(sidebarItemSelected ?? "folder 1")
+//                        } else {
+//                            NestedContentView(sidebarItemSelected: $sidebarItemSelected)
+//    //                        NotebooksListView(notebooksListState: notebooksListState, selectedNotebook: $selectedNotebookM)
+//                        }
+//                    }
+//                }
+                
             }
         }
     }
@@ -229,3 +313,84 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
+
+
+struct NestedContentView: View {
+    
+    @Binding var sidebarItemSelected: SidebarItem.ID?
+    
+    struct FileItem: Hashable, Identifiable, CustomStringConvertible {
+        var id: Self { self }
+        var name: String
+        var children: [FileItem]? = nil
+        var description: String {
+            switch children {
+            case nil:
+                return "📄 \(name)"
+            case .some(let children):
+                return children.isEmpty ? "📂 \(name)" : "📁 \(name)"
+            }
+        }
+    }
+    let fileHierarchyData: [FileItem] = [
+      FileItem(name: "users", children:
+        [FileItem(name: "user1234", children:
+          [FileItem(name: "Photos", children:
+            [FileItem(name: "photo001photo001photo001photo001photo001.jpg"),
+             FileItem(name: "photo002.jpg")]),
+           FileItem(name: "Movies", children:
+             [FileItem(name: "movie001movie001movie00movie00movie001.mp4")]),
+              FileItem(name: "Documents", children: [])
+          ]),
+         FileItem(name: "newuser", children:
+           [FileItem(name: "Documents", children: [])
+           ])
+        ]),
+        FileItem(name: "private", children: 
+            [
+              FileItem(name: "users", children:
+                [FileItem(name: "user1234", children:
+                  [FileItem(name: "Photos", children:
+                    [FileItem(name: "photo001photo001photo001photo001photo001.jpg"),
+                     FileItem(name: "photo002.jpg")]),
+                   FileItem(name: "Movies", children:
+                     [FileItem(name: "movie001movie001movie00movie00movie001.mp4")]),
+                      FileItem(name: "Documents", children: [
+                        FileItem(name: "users", children:
+                          [FileItem(name: "user1234", children:
+                            [FileItem(name: "Photos", children:
+                              [FileItem(name: "photo001photo001photo001photo001photo001.jpg"),
+                               FileItem(name: "photo002.jpg")]),
+                             FileItem(name: "Movies", children:
+                               [FileItem(name: "movie001movie001movie00movie00movie001.mp4")]),
+                                FileItem(name: "Documents", children: [])
+                            ]),
+                           FileItem(name: "newuser", children:
+                             [FileItem(name: "Documents", children: [])
+                             ])
+                          ]),
+                          FileItem(name: "private", children: nil)
+                      ])
+                  ]),
+                 FileItem(name: "newuser", children:
+                   [FileItem(name: "Documents", children: [])
+                   ])
+                ]),
+                FileItem(name: "private", children: nil)
+            ])
+    ]
+    var body: some View {
+        List(fileHierarchyData, children: \.children) { item in
+            if item.children == nil {
+                Button(item.description) {
+                    sidebarItemSelected = SidebarItem.notebooks.id
+                }
+            } else {
+                Text(item.description)
+            }
+            
+        }
+        .listStyle(SidebarListStyle())
+        .navigationTitle("Nested list")
+    }
+}

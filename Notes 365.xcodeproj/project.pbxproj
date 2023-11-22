@@ -47,6 +47,7 @@
 		5CE6FDF82B0BC19600ED9425 /* PDFFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE6FDF72B0BC19600ED9425 /* PDFFile.swift */; };
 		5CE6FE212B0CD65700ED9425 /* NotebooksListBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD042920CCCE003DE332 /* NotebooksListBusiness.swift */; };
 		5CE8C4882B03048E00F19217 /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE8C4872B03048E00F19217 /* Notebook.swift */; };
+		5CF4F5182B0DE4EB008F13F3 /* NotebooksLevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF4F5172B0DE4EB008F13F3 /* NotebooksLevelView.swift */; };
 		5CF612B72B0B06B700D397C6 /* SharedContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF612B62B0B06B700D397C6 /* SharedContext.swift */; };
 		5CF612BD2B0B08A400D397C6 /* NotebookContentStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF612BC2B0B08A400D397C6 /* NotebookContentStorage.swift */; };
 		5CF612BF2B0B0DC000D397C6 /* NotebookContentStorageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF612BE2B0B0DC000D397C6 /* NotebookContentStorageProvider.swift */; };
@@ -187,6 +188,7 @@
 		5CE8C4872B03048E00F19217 /* Notebook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notebook.swift; sourceTree = "<group>"; };
 		5CE8C48A2B0305CD00F19217 /* NotebookContentB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentB.swift; sourceTree = "<group>"; };
 		5CEC4D1B2AD3A4EA00750268 /* DayContentGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayContentGenerator.swift; sourceTree = "<group>"; };
+		5CF4F5172B0DE4EB008F13F3 /* NotebooksLevelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksLevelView.swift; sourceTree = "<group>"; };
 		5CF612B62B0B06B700D397C6 /* SharedContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedContext.swift; sourceTree = "<group>"; };
 		5CF612BC2B0B08A400D397C6 /* NotebookContentStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentStorage.swift; sourceTree = "<group>"; };
 		5CF612BE2B0B0DC000D397C6 /* NotebookContentStorageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentStorageProvider.swift; sourceTree = "<group>"; };
@@ -419,6 +421,7 @@
 				5CE8C4872B03048E00F19217 /* Notebook.swift */,
 				9F45BD292920CCCE003DE332 /* NotebooksListState.swift */,
 				9F45BD252920CCCE003DE332 /* NotebooksListView.swift */,
+				5CF4F5172B0DE4EB008F13F3 /* NotebooksLevelView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -979,6 +982,7 @@
 				9F3DB0C2292DE09500704860 /* SettingsView.swift in Sources */,
 				9F45BD642920CDA3003DE332 /* Timeline.swift in Sources */,
 				5C117C3F2A8E77FF00B0F3BE /* LayoutManager.swift in Sources */,
+				5CF4F5182B0DE4EB008F13F3 /* NotebooksLevelView.swift in Sources */,
 				9F09CEB129267FBC00609D99 /* TodayVersionBusiness.swift in Sources */,
 				9F3DB0CC292E340200704860 /* ThemeState.swift in Sources */,
 				5CF612D12B0B980700D397C6 /* EditorView+TextStorage.swift in Sources */,

@@ -72,7 +72,6 @@ struct NotebooksListView: View {
                     .padding([.top], -100)
             } else {
                 VStack {
-                    
                     if notebooksListState.listSourceType == .deletedItems ||
                         notebooksListState.listSourceType == .notebooks(.recentlyModified) {
                         
@@ -143,14 +142,16 @@ struct NotebooksListView: View {
         .onAppear {
             selectedNotebook = nil
             
-            Task {
-                await notebooksListState.loadNotebooks()
-            }
-            
-            
-//            if notebooksListState.notebooks.count == 0 {
-//                notebooksListState.loadNotebooks()
+//            Task {
+//                await notebooksListState.loadNotebooks()
 //            }
+            
+            
+            if notebooksListState.isEmpty {
+                Task {
+                    await notebooksListState.loadNotebooks()
+                }
+            }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { (_) in
               print("UIApplication: willEnterForegroundNotification")
@@ -432,16 +433,30 @@ struct RowView: View {
                 .background(Color.gray)
                 .focused($isFocused)
             } else {
-                Text(notebook.name)
-                    .swipeActions(edge: .trailing) {
-                        Button(role: .destructive) {
-                            Task {
-                                notebooksListState.delete(notebook: notebook)
+                if notebook.containChildNotebooks {
+                    Label(notebook.name, systemImage: "folder")
+                        .swipeActions(edge: .trailing) {
+                            Button(role: .destructive) {
+                                Task {
+                                    notebooksListState.delete(notebook: notebook)
+                                }
+                            } label: {
+                                Label("Delete", systemImage: "trash")
                             }
-                        } label: {
-                            Label("Delete", systemImage: "trash")
                         }
-                    }
+                } else {
+                    Text(notebook.name)
+                        .swipeActions(edge: .trailing) {
+                            Button(role: .destructive) {
+                                Task {
+                                    notebooksListState.delete(notebook: notebook)
+                                }
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                        }
+                }
+                    
             }
         }
         .onAppear {
