@@ -50,22 +50,21 @@ struct NotebooksLevelView: View {
     
     var body: some View {
         VStack {
-            ScrollView(.vertical) {
-//                List {
-                VStack {
-                    LazyVGrid(columns: columns, alignment: .leading) {
-                        ForEach(currentLevelState.folders) { folder in
-                            NavigationLink(value: folder) {
-                                FolderCellView(folder: folder)
-                            }
+            List {
+                Section {
+                    ForEach(currentLevelState.folders) { folder in
+                        NavigationLink(value: folder) {
+                            Label(folder.name, systemImage: "folder")
                         }
                     }
                 }
-                VStack {
+                Section {
                     ForEach(currentLevelState.files) { file in
-                        NavigationLink(value: file) {
-                            FileCellView(file: file)
-                                .padding(.horizontal)
+                        Button {
+                            path.append(file)
+                        } label: {
+                            Text(file.name)
+                                .foregroundStyle(Color.primary)
                         }
                     }
                 }
@@ -77,7 +76,6 @@ struct NotebooksLevelView: View {
                 } else {
                     NotebookContentView(isReadOnly: false, notebookId: notebook.id, editorState: notebookContentState)
                 }
-                
             }
         }
         .toolbar(content: {

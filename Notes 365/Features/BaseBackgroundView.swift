@@ -189,8 +189,6 @@ struct NotebooksBaseDetailView: View {
     @Binding var path: NavigationPath
     
     var body: some View {
-//        Text("notebooks base")
         NotebookDetailBaseView(notebooksState: $notebooksListState, path: $path)
-            .padding()
     }
 }

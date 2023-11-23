@@ -36,16 +36,16 @@ struct NotebookContentView: View {
                 .onChange(of: editorState.output) { oldValue, newValue in
                     print(newValue)
                 }
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button {
-                            dismiss()
-                        } label: {
-                            Text("Done")
-                        }
-
-                    }
-                }
+//                .toolbar {
+//                    ToolbarItem(placement: .topBarLeading) {
+//                        Button {
+//                            dismiss()
+//                        } label: {
+//                            Text("Done")
+//                        }
+//
+//                    }
+//                }
             }
         }
 //        .navigationTitle(notebookM?.name ?? "")
