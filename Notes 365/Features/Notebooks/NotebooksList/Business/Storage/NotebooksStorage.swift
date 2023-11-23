@@ -52,6 +52,12 @@ class NotebooksStorage {
         }
     }
     
+    func fetchActiveChildren(forParent id: UUID) throws -> [NotebookData] {
+        let predicate = #Predicate<NotebookData> { $0.parent == id && $0.deletedDate == nil }
+        let descriptor = FetchDescriptor(predicate: predicate)
+        return try modelContext.fetch(descriptor)
+    }
+    
     func fetchChildren(forParent id: UUID) throws -> [NotebookData] {
         let predicate = #Predicate<NotebookData> { $0.parent == id }
         let descriptor = FetchDescriptor(predicate: predicate)

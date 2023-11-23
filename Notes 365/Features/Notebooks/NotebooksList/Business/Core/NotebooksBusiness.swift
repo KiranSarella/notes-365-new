@@ -65,7 +65,7 @@ class NotebooksBusiness {
     }
     
     func fetchItems(at parent: UUID) throws -> [NotebookB] {
-        return try storage.getChildren(forParent: parent)
+        return try storage.getActiveChildren(forParent: parent)
     }
     
     func getTopLevelNotebooksWithoutChildren() throws -> [NotebookB] {
@@ -91,7 +91,7 @@ class NotebooksBusiness {
         return fileName
     }
     
-    func deleteNotebook(notebook: NotebookB, parent: NotebookB) throws {
+    func deleteNotebook(notebook: NotebookB) throws {
         notebook.deletedDate = Date()
         try notebook.update(in: storage)
     }

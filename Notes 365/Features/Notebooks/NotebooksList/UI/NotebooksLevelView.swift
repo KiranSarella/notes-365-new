@@ -20,7 +20,7 @@ struct NotebookDetailBaseView: View {
     
     var body: some View {
         NavigationStack(path: $path) {
-            NotebooksLevelView(path: $path, notebook: notebooksState.root)
+            NotebooksLevelView(navigationTitle: "Notebooks", path: $path, notebook: notebooksState.root)
         }
         
 //        NavigationStack(path: $path) {
@@ -40,7 +40,7 @@ struct NotebooksLevelView: View {
     
     var columns = [GridItem(.adaptive(minimum: 200))]
     
-    @State var navigationTitle: String = ""
+    var navigationTitle: String
     
     @State var currentLevelState = CurrentLevelState()
     @Binding var path: NavigationPath
@@ -50,39 +50,51 @@ struct NotebooksLevelView: View {
     
     var body: some View {
         VStack {
-            List {
-                Section {
-                    ForEach(currentLevelState.folders) { folder in
-                        NavigationLink(value: folder) {
-                            Label(folder.name, systemImage: "folder")
+            if currentLevelState.isEmpty {
+                VStack(alignment: .center) {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Text("Empty Folder")
+                            .font(.headline)
+                        Spacer()
+                    }
+                    Spacer()
+                }
+            } else {
+                List {
+                    Section {
+                        ForEach(currentLevelState.folders) { folder in
+                            NavigationLink(value: folder) {
+                                FolderCellView(currentLevelState: $currentLevelState, name: folder.name, notebook: folder)
+                            }
+                        }
+                    }
+                    Section {
+                        ForEach(currentLevelState.files) { file in
+                            Button {
+                                path.append(file)
+                            } label: {
+                                FileCellView(currentLevelState: $currentLevelState, name: file.name, notebook: file)
+                            }
                         }
                     }
                 }
-                Section {
-                    ForEach(currentLevelState.files) { file in
-                        Button {
-                            path.append(file)
-                        } label: {
-                            Text(file.name)
-                                .foregroundStyle(Color.primary)
-                        }
-                    }
-                }
+                
             }
-            .navigationTitle(navigationTitle)
-            .navigationDestination(for: Notebook.self) { notebook in
-                if notebook.isFolder {
-                    NotebooksLevelView(path: $path, notebook: notebook)
-                } else {
-                    NotebookContentView(isReadOnly: false, notebookId: notebook.id, editorState: notebookContentState)
-                }
+        }
+        .navigationTitle(navigationTitle)
+        .navigationDestination(for: Notebook.self) { notebook in
+            if notebook.isFolder {
+                NotebooksLevelView(navigationTitle: notebook.name, path: $path, notebook: notebook)
+            } else {
+                NotebookContentView(isReadOnly: false, notebookId: notebook.id, editorState: notebookContentState)
             }
         }
         .toolbar(content: {
             toolbarItems()
         })
         .onAppear {
-            navigationTitle = notebook.name
             if currentLevelState.isEmpty {
                 currentLevelState.loadItems(for: notebook)
             }
@@ -139,10 +151,6 @@ struct NotebooksLevelView: View {
                 }
                 .disabled(currentLevelState.isCreatingNotebook)
             }
-          
-        
-        
-            
     }
 
     
@@ -171,34 +179,159 @@ extension Fruit: Hashable {
     
 }
 
+
 struct FolderCellView: View {
-    let folder: Notebook
-    var body: some View {
-        HStack {
-            Image(systemName: "folder")
-                .font(.system(size: 40))
-                .fontWeight(.light)
-            Text(folder.name)
-                .font(.body)
-                .foregroundStyle(Color.primary)
-                .padding()
+    @Binding var currentLevelState: CurrentLevelState
+    @State var name: String
+    var notebook: Notebook
+    @FocusState private var isFocused: Bool
+    @State private var isEditing = false {
+        didSet {
+            isFocused = isEditing
         }
-        .padding()
+    }
+    @State private var errorMessage: String = ""
+    @State private var showAlert = false
+    
+    var body: some View {
+        VStack {
+            if isEditing {
+                TextField(text: $name) {
+                    Text("Notebook")
+                }
+                .background(Color.gray)
+                .focused($isFocused)
+            } else {
+                Label(notebook.name, systemImage: "folder")
+                    .contextMenu {
+                        RenameButton()
+                        Button(role: .destructive) {
+                            currentLevelState.deleteFolder(notebook: notebook)
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
+                    .renameAction {
+                        isEditing = true
+                    }
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+                            currentLevelState.deleteFolder(notebook: notebook)
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
+            }
+        }
+        .onChange(of: isEditing, { oldValue, newValue in
+            if newValue == false {
+                // on escape, reset content
+                name = notebook.name
+            }
+        })
+        .onSubmit {
+            if name == notebook.name {
+                isEditing = false
+                return
+            }
+            do {
+                try currentLevelState.rename(for: notebook, newValue: name)
+                isEditing = false
+            } catch NotebookBusinessError.alreadyExists {
+                errorMessage = "filename already exists"
+                showAlert = true
+                isEditing = true
+            } catch NotebookBusinessError.invalidCharacters {
+                errorMessage = "filename contains unsupported characters"
+                showAlert = true
+                isEditing = true
+            } catch {
+//                name = notebook.name
+            }
+        }
+        .confirmationDialog("rename failed", isPresented: $showAlert) {
+            
+        } message: {
+            Text(errorMessage)
+        }
     }
 }
+
 
 struct FileCellView: View {
-    let file: Notebook
-
-    var body: some View {
-        HStack {
-            Text(file.name)
-                .font(.body)
-                .foregroundStyle(Color.primary)
-            Spacer()
+    @Binding var currentLevelState: CurrentLevelState
+    @State var name: String
+    var notebook: Notebook
+    @FocusState private var isFocused: Bool
+    @State private var isEditing = false {
+        didSet {
+            isFocused = isEditing
         }
-        .padding()
+    }
+    @State private var errorMessage: String = ""
+    @State private var showAlert = false
+    
+    var body: some View {
+        VStack {
+            if isEditing {
+                TextField(text: $name) {
+                    Text("Notebook")
+                }
+                .background(Color.gray)
+                .focused($isFocused)
+            } else {
+                Text(notebook.name)
+                    .foregroundStyle(Color.primary)
+                    .contextMenu {
+                        RenameButton()
+                        Button(role: .destructive) {
+                            currentLevelState.deleteFile(notebook: notebook)
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
+                    .renameAction {
+                        isEditing = true
+                    }
+                    .swipeActions(edge: .trailing) {
+                        Button(role: .destructive) {
+                            currentLevelState.deleteFile(notebook: notebook)
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
+            }
+        }
+        .onChange(of: isEditing, { oldValue, newValue in
+            if newValue == false {
+                // on escape, reset content
+                name = notebook.name
+            }
+        })
+        .onSubmit {
+            if name == notebook.name {
+                isEditing = false
+                return
+            }
+            do {
+                try currentLevelState.rename(for: notebook, newValue: name)
+                isEditing = false
+            } catch NotebookBusinessError.alreadyExists {
+                errorMessage = "filename already exists"
+                showAlert = true
+                isEditing = true
+            } catch NotebookBusinessError.invalidCharacters {
+                errorMessage = "filename contains unsupported characters"
+                showAlert = true
+                isEditing = true
+            } catch {
+//                name = notebook.name
+            }
+        }
+        .confirmationDialog("rename failed", isPresented: $showAlert) {
+            
+        } message: {
+            Text(errorMessage)
+        }
     }
 }
-
-

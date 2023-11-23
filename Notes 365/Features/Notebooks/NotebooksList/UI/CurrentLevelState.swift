@@ -65,4 +65,34 @@ class CurrentLevelState {
             print(error)
         }
     }
+    
+    func rename(for notebook: Notebook, newValue: String) throws {
+        let siblings = self.siblings.map { $0.notebookB() }
+        try notebooksBusiness.rename(notebook: notebook.notebookB(),
+                                     newValue: newValue,
+                                     siblings: siblings)
+        notebook.name = newValue
+    }
+    
+    func deleteFile(notebook: Notebook) {
+        do {
+            try notebooksBusiness.deleteNotebook(notebook: notebook.notebookB())
+        } catch let error {
+            print(error)
+            return
+        }
+        // delete from UI
+        files.removeAll(where: { $0.id == notebook.id })
+    }
+    
+    func deleteFolder(notebook: Notebook) {
+        do {
+            try notebooksBusiness.deleteNotebook(notebook: notebook.notebookB())
+        } catch let error {
+            print(error)
+            return
+        }
+        // delete from UI
+        folders.removeAll(where: { $0.id == notebook.id })
+    }
 }

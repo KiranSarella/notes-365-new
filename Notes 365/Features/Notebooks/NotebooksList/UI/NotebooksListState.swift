@@ -226,7 +226,7 @@ class NotebooksListState {
     func delete(notebook: Notebook) {
         guard let parent = notebook.parent else { return }
         do {
-            try notebooksBusiness.deleteNotebook(notebook: notebook.notebookB(), parent: parent.notebookB())
+            try notebooksBusiness.deleteNotebook(notebook: notebook.notebookB())
         } catch let error {
             print(error)
             return

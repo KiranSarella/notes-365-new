@@ -15,7 +15,7 @@ protocol NotebooksRequester {
     func createRootNotebook() throws -> NotebookB
     func createFolder(inside parent: NotebookB, siblings: [NotebookB]) throws -> NotebookB
     func createFile(inside parent: NotebookB, siblings: [NotebookB]) throws -> NotebookB
-    func deleteNotebook(notebook: NotebookB, parent: NotebookB) throws
+    func deleteNotebook(notebook: NotebookB) throws
     func rename(notebook: NotebookB, newValue: String, siblings: [NotebookB]) throws
 }
 

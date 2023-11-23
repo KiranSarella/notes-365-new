@@ -117,6 +117,10 @@ class NotebooksStorageAdapter: NotebooksStorageProvider {
         return notebookDataChilds.map { NotebookB($0) }
     }
     
+    func getActiveChildren(forParent id: UUID) throws -> [NotebookB] {
+        let notebookDataChilds = try storage.fetchActiveChildren(forParent: id)
+        return notebookDataChilds.map { NotebookB($0) }
+    }
     
 }
 
