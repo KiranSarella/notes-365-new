@@ -26,6 +26,10 @@ class Notebook: Identifiable {
     var id: UUID = UUID()
     var name: String = ""
 
+    var parentId: UUID?
+    private(set) var parent: Notebook?
+    
+    var isFolder: Bool = true
     var childrenIds: [UUID]?
     // private(set)
     var children: [Notebook] = [Notebook]()
@@ -34,12 +38,6 @@ class Notebook: Identifiable {
     var modifiedDate: Date = Date()
     var deletedDate: Date? = nil
     
-    
-//    var orderID: Int = 0
-    
-    var parentId: UUID?
-    private(set) var parent: Notebook?
-    
     var notebookData: NotebookData
     
     var isExpanded: Bool = false
@@ -47,71 +45,24 @@ class Notebook: Identifiable {
     var canShow: Bool = true
     
     func sortChildren() {
-//        if children != nil {
-//            children!.sort(by: { n1, n2 in
-//                n1.orderID < n2.orderID
-//            })
-//            
-//            // apply to nested
-//            for i in 0..<children!.count {
-//                children![i].sortChildren()
-//            }
+//        children
+//            .sort { n1, n2 in  n1.isFolder }
+////            .sort { n1, n2 in   n1.createdDate < n2.createdDate }
+//        children.sort { n1, n2 in
+//            n1.createdDate < n2.createdDate
+//        }
+        
+        children.sort { n1, n2 in
+            n1.priority < n2.priority// && n1.createdDate < n2.createdDate
+        }
+//        children.sort { n1, n2 in
+//            n1.isFolder && n1.createdDate < n2.createdDate
 //        }
     }
     
-    func onlySelfSortChildren() {
-//        if children != nil {
-//            
-//            print("## before")
-//            for c in children! {
-//                print(c.orderID)
-//            }
-////
-////            children!.sort(by: { n1, n2 in
-////                n1.orderID < n2.orderID
-////            })
-////
-////            print("## after")
-////            for c in children! {
-////                print(c.orderID)
-////            }
-//            
-//            print("# manual")
-//            if let sortedArr = children?.sorted(by: { $0.orderID < $1.orderID }) {
-//                
-//                children = sortedArr
-//                
-//                for c in sortedArr {
-//                    print(c.orderID)
-//                }
-//                print("---")
-//                for c in children! {
-//                    print(c.orderID)
-//                }
-//            }
-//            
-//        }
+    var priority: Int {
+        isFolder ? 0 : 1
     }
-    
-    init(_ notebookData: NotebookData) {
-        
-        self.notebookData = notebookData
-        
-        self.id = notebookData.id
-        self.name = notebookData.name
-//        self.orderID = notebookData.orderID
-        self.createdDate = notebookData.createdDate
-        self.modifiedDate = notebookData.modifiedDate
-        self.deletedDate = notebookData.deletedDate
-        
-        // lazy load actual parent and chldrens ?
-        self.parentId = notebookData.parent
-        self.childrenIds = notebookData.children
-        
-        // self.parent = // asign parent external
-        //        self.children = // get children objects
-    }
-    
     
     init(id: UUID, name: String) {
         self.id = id
@@ -124,8 +75,6 @@ class Notebook: Identifiable {
         self.parent = newValue
         self.parentId = newValue?.id
     }
-    
-  
 }
 
 extension Notebook: Equatable, Hashable {
@@ -138,36 +87,20 @@ extension Notebook: Equatable, Hashable {
     }
 }
 
+extension Notebook: CustomStringConvertible {
+    var description: String { name }
+}
 
 // MARK: - children
 extension Notebook {
     
-    func setChildren(notebooks newList: [Notebook]) {
-        self.children = newList
-        updateChildrenIds()
-    }
-    
-    func appendChildren(notebook newValue: Notebook) {
-        if self.containChildNotebooks {
-            self.children.append(newValue)
-            updateChildrenIds()
-        } else {
-            setChildren(notebooks: [newValue])
-        }
-    }
-    
-    func insertChild(notebook newValue: Notebook, below noteId: UUID) throws {
-        guard let position: Int = children.firstIndex(where: {$0.id == noteId}) else { throw NotebooksBusinessError.invalidPosition }
-        self.children.insert(newValue, at: position + 1)
+    func insertChild(notebook newValue: Notebook) {
+        self.children.append(newValue)
+        sortChildren()
     }
     
     func deleteChildren(where id: UUID) {
         children.removeAll(where: { $0.id == id })
-        updateChildrenIds()
-    }
-    
-    private func updateChildrenIds() {
-        self.childrenIds = children.map { $0.id }
     }
     
     func populateChildren(from dict: [UUID: NotebookB], expandedIds: Set<String>) {
@@ -183,6 +116,7 @@ extension Notebook {
         }
         for cNote in children {
             cNote.populateChildren(from: dict, expandedIds: expandedIds)
+            cNote.sortChildren()
         }
     }
     
@@ -192,10 +126,6 @@ extension Notebook {
     
     var childrenCount: Int {
         return children.count
-    }
-    
-    func linkSelfToChildren() {
-        _ = children.map { $0.parent = self }
     }
  
 }
@@ -208,7 +138,6 @@ extension Notebook {
         notebookData.name = name
 //        notebookData.orderID = orderID
         notebookData.parent = parent?.id
-        notebookData.children = children.map { $0.id }
         
         notebookData.createdDate = createdDate
         notebookData.modifiedDate = modifiedDate

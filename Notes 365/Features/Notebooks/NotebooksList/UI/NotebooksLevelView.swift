@@ -15,13 +15,17 @@ struct Item: Identifiable {
 
 struct NotebookDetailBaseView: View {
     
-    
-    @State private var path = NavigationPath()
+    @Binding var notebooksState: NotebooksListState
+    @Binding var path: NavigationPath
     
     var body: some View {
         NavigationStack(path: $path) {
-            NotebooksLevelView(path: $path)
+            NotebooksLevelView(path: $path, notebook: notebooksState.root)
         }
+        
+//        NavigationStack(path: $path) {
+//            NotebooksLevelView(path: $path, notebook: <#Notebook#>)
+//        }
 //        .onDisappear {
 //            path = NavigationPath()
 //        }
@@ -30,82 +34,120 @@ struct NotebookDetailBaseView: View {
 
 struct NotebooksLevelView: View {
     
-    let folders = [Item(id: UUID(), name: "sorting algorithms"),
-                   Item(id: UUID(), name: "searcing algorithms"),
-                   Item(id: UUID(), name: "string algorithms")]
-    
-    let files = [Item(id: UUID(), name: "double linked list"),
-                Item(id: UUID(), name: "queue"),
-                Item(id: UUID(), name: "b+ tree")]
-    
-    let fruits: [Fruit] = [
-        Fruit(name: "apple", color: .green),
-        Fruit(name: "orange", color: .orange),
-        Fruit(name: "teal", color: .teal),
-        Fruit(name: "grape", color: .purple),
-        Fruit(name: "papaya", color: .yellow),
-        Fruit(name: "pineapple", color: .green),
-        Fruit(name: "apple", color: .red)
-    ]
-    
     var items: [GridItem] {
       Array(repeating: .init(.adaptive(minimum: 120)), count: 10)
     }
     
-    var columns = Array(repeating: GridItem(), count: 3)
+    var columns = [GridItem(.adaptive(minimum: 200))]
     
-    var navigationTitle: String = "Algorithms"
+    @State var navigationTitle: String = ""
     
-    let rows = [
-           GridItem(.fixed(30), spacing: 1),
-           GridItem(.fixed(60), spacing: 10),
-           GridItem(.fixed(90), spacing: 20),
-           GridItem(.fixed(10), spacing: 50)
-       ]
-    
+    @State var currentLevelState = CurrentLevelState()
     @Binding var path: NavigationPath
+    @State private var notebookContentState = NotebookContentState(business: BusinessFactory.createNotebookContentBusinessFactory())
+    
+    var notebook: Notebook
     
     var body: some View {
-        
-        ScrollView(.vertical) {
-            VStack {
-                LazyVGrid(columns: columns) {
-                    ForEach(fruits) { fruit in
-                        NavigationLink(value: fruit) {
-                            FruitCellView(fruit: fruit)
-                                .border(.yellow, width: 2)
-//                                .clipShape(.capsule)
-                                .padding()
+        VStack {
+            ScrollView(.vertical) {
+//                List {
+                VStack {
+                    LazyVGrid(columns: columns, alignment: .leading) {
+                        ForEach(currentLevelState.folders) { folder in
+                            NavigationLink(value: folder) {
+                                FolderCellView(folder: folder)
+                            }
                         }
-                        
-//                            NavigationLink {
-//
-//                            } label: {
-//                                FruitCellView(fruit: fruit)
-//                                    .border(.yellow, width: 2)
-//    //                                .clipShape(.capsule)
-//                                    .padding()
-//                            }
                     }
                 }
-                Spacer()
-            }.padding()
-            
-            VStack {
-                ForEach(fruits) { fruit in
-                    FruitCellView(fruit: fruit)
-                        .border(.yellow, width: 2)
-                        .padding()
+                VStack {
+                    ForEach(currentLevelState.files) { file in
+                        NavigationLink(value: file) {
+                            FileCellView(file: file)
+                                .padding(.horizontal)
+                        }
+                    }
                 }
-            }.padding(.horizontal)
+            }
+            .navigationTitle(navigationTitle)
+            .navigationDestination(for: Notebook.self) { notebook in
+                if notebook.isFolder {
+                    NotebooksLevelView(path: $path, notebook: notebook)
+                } else {
+                    NotebookContentView(isReadOnly: false, notebookId: notebook.id, editorState: notebookContentState)
+                }
+                
+            }
         }
-        .navigationTitle(navigationTitle)
-        .navigationDestination(for: Fruit.self) { fruit in
-            NotebooksLevelView(navigationTitle: fruit.name, path: $path)
+        .toolbar(content: {
+            toolbarItems()
+        })
+        .onAppear {
+            navigationTitle = notebook.name
+            if currentLevelState.isEmpty {
+                currentLevelState.loadItems(for: notebook)
+            }
         }
-            
-        
     }
+    
+    @ToolbarContentBuilder
+    private func toolbarItems() ->  some ToolbarContent {
+            // menu options
+            ToolbarItem(placement: .topBarTrailing) {
+                Menu {
+                    Button {
+//                        notebooksListState.showRecentlyModified()
+                    } label: {
+                        Text("Recently Modified")
+                    }
+                    .foregroundColor(.primary)
+                    Button {
+//                        notebooksListState.showRecentlyDeleted()
+                    } label: {
+                        Text("Deleted Notebooks")
+                    }
+                    .foregroundColor(.primary)
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+               
+                Button {
+                    Task {
+                        currentLevelState.isCreatingNotebook = true
+                        currentLevelState.createFolder()
+                        try await Task.sleep(nanoseconds: 1_000_000_000)
+                        currentLevelState.isCreatingNotebook = false
+                    }
+                } label: {
+                    Image(systemName: "folder.badge.plus")
+                }
+                .disabled(currentLevelState.isCreatingNotebook)
+            }
+            
+        ToolbarItem(placement: .topBarTrailing) {
+               
+                Button {
+                    Task {
+                        currentLevelState.isCreatingNotebook = true
+                        currentLevelState.createFile()
+                        try await Task.sleep(nanoseconds: 1_000_000_000)
+                        currentLevelState.isCreatingNotebook = false
+                    }
+                } label: {
+                    Image(systemName: "square.and.pencil")
+                }
+                .disabled(currentLevelState.isCreatingNotebook)
+            }
+          
+        
+        
+            
+    }
+
+    
 }
 //
 //#Preview {
@@ -131,19 +173,34 @@ extension Fruit: Hashable {
     
 }
 
-struct FruitCellView: View {
-    let fruit: Fruit
-
+struct FolderCellView: View {
+    let folder: Notebook
     var body: some View {
         HStack {
-            Text(fruit.name)
+            Image(systemName: "folder")
+                .font(.system(size: 40))
+                .fontWeight(.light)
+            Text(folder.name)
                 .font(.body)
-            Spacer()
-            Circle()
-                .fill(fruit.color)
-                .frame(width: 40, height: 40)
+                .foregroundStyle(Color.primary)
+                .padding()
         }
         .padding()
     }
 }
+
+struct FileCellView: View {
+    let file: Notebook
+
+    var body: some View {
+        HStack {
+            Text(file.name)
+                .font(.body)
+                .foregroundStyle(Color.primary)
+            Spacer()
+        }
+        .padding()
+    }
+}
+
 

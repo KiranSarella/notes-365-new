@@ -126,8 +126,7 @@ extension NotebookB {
     func generateNotebookData() -> NotebookData {
         let notedata = NotebookData(id: id, name: name)
         notedata.parent = parentId
-        notedata.children = childrenIds
-//        notedata.orderID = orderID
+        notedata.isFolder = isFolder
         notedata.createdDate = createdDate
         notedata.modifiedDate = modifiedDate
         notedata.deletedDate = deletedDate

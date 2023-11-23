@@ -12,6 +12,7 @@ struct NotebookContentView: View {
     var isReadOnly: Bool
     var notebookId: UUID
     @Bindable var editorState: NotebookContentState
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -34,6 +35,16 @@ struct NotebookContentView: View {
                 })
                 .onChange(of: editorState.output) { oldValue, newValue in
                     print(newValue)
+                }
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Text("Done")
+                        }
+
+                    }
                 }
             }
         }

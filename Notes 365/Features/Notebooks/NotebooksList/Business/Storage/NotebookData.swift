@@ -12,11 +12,9 @@ import SwiftData
 class NotebookData {
     
     var id: UUID = UUID()
-    var parent: UUID?
     var name: String = ""
-//    var orderID: Int = 0
-    
-    var children = [UUID]()
+    var parent: UUID?
+    var isFolder: Bool = false
     
     var createdDate: Date = Date()
     var deletedDate: Date?
@@ -40,7 +38,7 @@ extension NotebookData {
     
     func sync(from newData: NotebookData) {
         self.parent = newData.parent
-        self.children = newData.children
+        self.isFolder = newData.isFolder
         self.name = newData.name
         self.deletedDate = newData.deletedDate
         self.modifiedDate = newData.modifiedDate

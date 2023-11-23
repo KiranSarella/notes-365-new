@@ -36,7 +36,6 @@ public enum NotebookListOption: String, CaseIterable, Identifiable {
     }
 }
 
-
 struct NotebooksListView: View {
     
     @Environment(\.modelContext) private var modelContext
@@ -67,9 +66,10 @@ struct NotebooksListView: View {
         VStack {
             if notebooksListState.isLoading {
                 ProgressView()
-            } else if notebooksListState.listSourceType == .notebooks(.none) && notebooksListState.isEmpty {
-                AddNotesView(notebooksListState: notebooksListState)
-                    .padding([.top], -100)
+//            } 
+//            else if notebooksListState.listSourceType == .notebooks(.none) && notebooksListState.isEmpty {
+//                AddNotesView(notebooksListState: notebooksListState)
+//                    .padding([.top], -100)
             } else {
                 VStack {
                     if notebooksListState.listSourceType == .deletedItems ||
@@ -107,7 +107,6 @@ struct NotebooksListView: View {
                             
                     } else {
                         NavigationStack(path: $colors) {
-                         
                             SearchedListView(selectedNotebook: $selectedNotebook, notebooksListState: notebooksListState)
                             .padding(.bottom, 20)
                             .autocorrectionDisabled()
@@ -115,12 +114,12 @@ struct NotebooksListView: View {
                             .navigationBarTitleDisplayMode(.large)
                             .onChange(of: selectedNotebook, { oldValue, newValue in
                                 if let newValue = newValue {
-                                    // ** do navigation to editor
-                                    notebookContentState.showNotebookDetail(for: selectedNotebook!.id)
-                                    colors.append(newValue)
-                                    
-                                    print(selectedNotebook?.name, selectedNotebook?.id)
-                                    print(newValue.name, newValue.id)
+                                    if newValue.isFolder {
+                                        newValue.isExpanded.toggle()
+                                    } else {
+                                        notebookContentState.showNotebookDetail(for: selectedNotebook!.id)
+                                        colors.append(newValue)
+                                    }
                                 }
                             })
                             .searchable(text: $notebooksListState.searchText, placement: .navigationBarDrawer(displayMode: .always))
@@ -194,6 +193,8 @@ struct SearchedListView: View {
     @Namespace var topID
     @Namespace var bottomID
     
+    @State var currentFolder: Notebook?
+    
     var body: some View {
         
         switch notebooksListState.listSourceType {
@@ -218,13 +219,18 @@ struct SearchedListView: View {
                     .padding(2)
         }
         
-        List(selection: $selectedNotebook) {
-            if notebooksListState.listSourceType == .deletedItems {
-                NotebooksListGroupView(notebooksListState: notebooksListState, notebooks: $notebooksListState.deletedNotebooks)
-            } else {
-                NotebooksListGroupView(notebooksListState: notebooksListState, notebooks: $notebooksListState.notebooksHierarchy.children)
-            }
+        VStack {
+            Text("emtpy")
         }
+        
+        
+//        List(selection: $selectedNotebook) {
+//            if notebooksListState.listSourceType == .deletedItems {
+//                NotebooksListGroupView(notebooksListState: notebooksListState, notebooks: $notebooksListState.deletedNotebooks)
+//            } else {
+//                NotebooksListGroupView(notebooksListState: notebooksListState, notebooks: $notebooksListState.root.children)
+//            }
+//        }
         .scrollDismissesKeyboard(.interactively)
         .toolbar {
             if notebooksListState.canEnableDone {
@@ -260,11 +266,29 @@ struct SearchedListView: View {
                         Image(systemName: "ellipsis.circle")
                     }
                 }
+                
+                
                 ToolbarItem(placement: .topBarTrailing) {
+                   
                     Button {
                         Task {
                             notebooksListState.isCreatingNotebook = true
-                            await notebooksListState.createNotebook()
+                            notebooksListState.createFolder(inside: currentFolder)
+                            try await Task.sleep(nanoseconds: 2_000_000_000)
+                            notebooksListState.isCreatingNotebook = false
+                        }
+                    } label: {
+                        Image(systemName: "folder.badge.plus")
+                    }
+                    .disabled(notebooksListState.isCreatingNotebook)
+                }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                   
+                    Button {
+                        Task {
+                            notebooksListState.isCreatingNotebook = true
+                            notebooksListState.createFile(inside: currentFolder)
                             try await Task.sleep(nanoseconds: 2_000_000_000)
                             notebooksListState.isCreatingNotebook = false
                         }
@@ -273,6 +297,7 @@ struct SearchedListView: View {
                     }
                     .disabled(notebooksListState.isCreatingNotebook)
                 }
+                
             }
         }
         .onChange(of: isSearching) { newValue in
@@ -328,7 +353,7 @@ struct AddNotesView: View {
             // show add first notebook button
             Button {
                 Task {
-                   await notebooksListState.createNotebook()
+//                    notebooksListState.createFile(at: nil)
                 }
             } label: {
                 Text(" + Notebook ")
@@ -364,15 +389,22 @@ struct MyTableRow: View {
     @Binding var notebook: Notebook
     
     var body: some View {
-        
         // normal
-        if notebook.containChildNotebooks {
+        if notebook.isFolder {
             DisclosureGroup(isExpanded: $notebook.isExpanded) {
-                NotebooksListGroupView(notebooksListState: notebooksListState, notebooks: $notebook.children)
+                Text("test")
+//                NotebooksListGroupView(notebooksListState: notebooksListState, notebooks: $notebook.children)
             } label: {
-                RowView(notebooksListState: notebooksListState, notebook: $notebook)
-                    .id(notebook.id)
+                Label(notebook.name, systemImage: "folder")
             }
+//
+//            
+//            DisclosureGroup(isExpanded: $notebook.isExpanded) {
+//                NotebooksListGroupView(notebooksListState: notebooksListState, notebooks: $notebook.children)
+//            } label: {
+//                RowView(notebooksListState: notebooksListState, notebook: $notebook)
+//                    .id(notebook.id)
+//            }
             .onChange(of: notebook.isExpanded) { oldValue, newValue in
                 notebooksListState.updateExpandedIds(id: notebook.id.uuidString, isExpanded: newValue)
             }
@@ -391,7 +423,8 @@ struct MyTableDeletedRow: View {
     var body: some View {
         if notebook.containChildNotebooks {
             DisclosureGroup(isExpanded: $notebook.isExpanded) {
-                NotebooksListGroupView(notebooksListState: notebooksListState, notebooks: $notebook.children)
+                Text("sdf")
+//                NotebooksListGroupView(notebooksListState: notebooksListState, notebooks: $notebook.children)
             } label: {
                 DeletedRowView(notebooksListState: notebooksListState, notebook: $notebook)
                     .opacity(notebook.canShow ? 1 : 0.4)
@@ -433,7 +466,7 @@ struct RowView: View {
                 .background(Color.gray)
                 .focused($isFocused)
             } else {
-                if notebook.containChildNotebooks {
+                if notebook.isFolder {
                     Label(notebook.name, systemImage: "folder")
                         .swipeActions(edge: .trailing) {
                             Button(role: .destructive) {
@@ -499,17 +532,17 @@ struct RowView: View {
                 Group {
                     RenameButton()
                     // insert below
-                    Button(action: {
-                        notebooksListState.insertBelow(ref: notebook)
-                    }) {
-                        Text("Add Below")
-                    }
-                    // insert inside
-                    Button(action: {
-                        notebooksListState.insertInside(ref: notebook)
-                    }) {
-                        Text("Add Inside")
-                    }
+//                    Button(action: {
+//                        notebooksListState.insertBelow(ref: notebook)
+//                    }) {
+//                        Text("Add Below")
+//                    }
+//                    // insert inside
+//                    Button(action: {
+//                        notebooksListState.insertInside(ref: notebook)
+//                    }) {
+//                        Text("Add Inside")
+//                    }
                     // trash
                     Button(role: .destructive, action: {
                         Task {
@@ -653,17 +686,17 @@ struct DeletedRowView: View {
                 Group {
                     RenameButton()
                     // insert below
-                    Button(action: {
-                        notebooksListState.insertBelow(ref: notebook)
-                    }) {
-                        Text("Add Below")
-                    }
-                    // insert inside
-                    Button(action: {
-                        notebooksListState.insertInside(ref: notebook)
-                    }) {
-                        Text("Add Inside")
-                    }
+//                    Button(action: {
+//                        notebooksListState.insertBelow(ref: notebook)
+//                    }) {
+//                        Text("Add Below")
+//                    }
+//                    // insert inside
+//                    Button(action: {
+//                        notebooksListState.insertInside(ref: notebook)
+//                    }) {
+//                        Text("Add Inside")
+//                    }
                     // trash
                     Button(role: .destructive, action: {
                         Task {

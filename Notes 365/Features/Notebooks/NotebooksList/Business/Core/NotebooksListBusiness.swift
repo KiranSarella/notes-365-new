@@ -118,7 +118,7 @@ extension NotebooksListBusiness {
             
             // nested items delete
              if notebook.containChildNotebooks {
-                 deleteNestedPerminantly(deletedNotebooks: notebook.children)
+                 deleteNestedPerminantly(deletedNotebooks: notebook.children ?? [])
             }
         }
         
@@ -136,7 +136,7 @@ extension NotebooksListBusiness {
             
             // nested items delete
             if notebook.containChildNotebooks {
-                deleteNestedPerminantly(deletedNotebooks: notebook.children)
+                deleteNestedPerminantly(deletedNotebooks: notebook.children ?? [])
             }
         }
     }

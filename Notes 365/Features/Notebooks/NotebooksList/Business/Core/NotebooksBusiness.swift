@@ -15,9 +15,6 @@ public enum NotebooksBusinessError: Error {
 
 class NotebooksBusiness {
     
-    let startingOrderId = 1
-    private var listSyncDate: Date = Date()
-    
     private let deleteDays = 30
 
     var storage: NotebooksStorageProvider
@@ -26,76 +23,49 @@ class NotebooksBusiness {
         self.storage = storage
     }
     
-    
-    
     func fetchAllNotebooks() async throws -> [NotebookB] {
         return try await storage.fetchAllNotebooks()
     }
+
     
-//    func fetchDeletedNotebooks() async -> [NotebookB] {
-//        do {
-//            return try await storage.fetchDeletedNotebooks()
-//        } catch let err {
-//            print(err)
-//            return []
-//        }
-//    }
     
     func getRootNotebookOnly() throws -> NotebookB? {
         try storage.getRootNotebook()
     }
     
     func createRootNotebook() throws -> NotebookB {
-        
         if let _ = try getRootNotebookOnly() { throw NotebooksBusinessError.rootAlreadyExists }
         let notebook = NotebookB(id: UUID(), name: "root")
         try notebook.insert(in: storage)
         return notebook
     }
     
-    func createNotebook() throws -> NotebookB {
-        let root = try getRootNotebookOnly() ?? createRootNotebook()
-        return try createNotebook(inside: root, below: nil, children: nil)
-    }
-    
-    func createNotebook(inside parent: NotebookB, below notebookId: UUID?, children: [NotebookB]?) throws -> NotebookB {
+    func createFolder(inside parent: NotebookB, siblings: [NotebookB]) throws -> NotebookB {
         // create
-        let newNotebookName = generateUntitledName(atLevel: children ?? [])
+        let newNotebookName = generateUntitledName(atLevel: siblings, prefix: "Folder")
         let newNotebook = NotebookB(id: UUID(), name: newNotebookName)
         newNotebook.parentId = parent.id
-        // insert in hierarchy
-        if let notebookId = notebookId {
-            try parent.insertChild(id: newNotebook.id, below: notebookId)
-        } else {
-            parent.appendChildren(id: newNotebook.id)
-        }
+        newNotebook.isFolder = true
         try newNotebook.insert(in: storage)
-        try parent.update(in: storage)
         return newNotebook
     }
     
-//    func createNotebook(inside parentId: UUID, at position: Int?) throws -> NotebookB {
-//        let parent = try getNotebookWithChildren(for: parentId)
-//        // create
-//        let newNotebookName = generateUntitledName(atLevel: parent.children ?? [])
-//        let newNotebook = NotebookB(id: UUID(), name: newNotebookName)
-//        newNotebook.updateParent(parent)
-//        // insert in hierarchy
-//        if let position = position {
-//            try parent.insertChild(notebook: newNotebook, at: position)
-//        } else {
-//            parent.appendChildren(notebook: newNotebook)
-//        }
-//        // persist
-//        try newNotebook.insert(in: storage)
-//        try parent.update(in: storage)
-//        
-//        return newNotebook
-//    }
-    
+    func createFile(inside parent: NotebookB, siblings: [NotebookB]) throws -> NotebookB {
+        // create
+        let newNotebookName = generateUntitledName(atLevel: siblings, prefix: "Notebook")
+        let newNotebook = NotebookB(id: UUID(), name: newNotebookName)
+        newNotebook.parentId = parent.id
+        newNotebook.isFolder = false
+        try newNotebook.insert(in: storage)
+        return newNotebook
+    }
     
     func getNotebook(id: UUID) throws -> NotebookB {
         return try storage.getNotebook(for: id)
+    }
+    
+    func fetchItems(at parent: UUID) throws -> [NotebookB] {
+        return try storage.getChildren(forParent: parent)
     }
     
     func getTopLevelNotebooksWithoutChildren() throws -> [NotebookB] {
@@ -103,14 +73,14 @@ class NotebooksBusiness {
         return notebooks
     }
    
-    private func generateUntitledName(atLevel siblings: [NotebookB]) -> String {
+    private func generateUntitledName(atLevel siblings: [NotebookB], prefix: String) -> String {
         
         var fileNameAlreadyExists: Bool {
             siblings.contains(where: { $0.name == fileName })
         }
         
         var fileName = ""
-        let nameGenerator = NameGenerator(prefix: "Notebook")
+        let nameGenerator = NameGenerator(prefix: prefix)
         if siblings.isEmpty {
             fileName = nameGenerator.generateName()
         } else {
@@ -122,8 +92,6 @@ class NotebooksBusiness {
     }
     
     func deleteNotebook(notebook: NotebookB, parent: NotebookB) throws {
-        parent.deleteChildren(where: notebook.id)
-        try parent.update(in: storage)
         notebook.deletedDate = Date()
         try notebook.update(in: storage)
     }

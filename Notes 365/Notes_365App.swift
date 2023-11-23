@@ -20,8 +20,8 @@ struct Notes_365App: App {
     
     var body: some Scene {
         WindowGroup {
-            BaseBackgroundView()
-//            ContentWrapperView()
+//            BaseBackgroundView()
+            ContentWrapperView()
         }
         .modelContext(context)
         .commands {

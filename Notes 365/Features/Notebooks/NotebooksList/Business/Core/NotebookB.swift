@@ -12,28 +12,25 @@ class NotebookB: Identifiable {
     
     var id: UUID = UUID()
     var name: String = ""
-
-    var childrenIds = [UUID]()
+    var parentId: UUID?
+    var isFolder: Bool = false
     
     var createdDate: Date = Date()
     var modifiedDate: Date = Date()
     var deletedDate: Date? = nil
-    var parentId: UUID?
     
     var isDeleted: Bool {
         deletedDate != nil
     }
     
     init(_ notebookData: NotebookData) {
-        
         self.id = notebookData.id
         self.name = notebookData.name
+        self.parentId = notebookData.parent
+        self.isFolder = notebookData.isFolder
         self.createdDate = notebookData.createdDate
         self.modifiedDate = notebookData.modifiedDate
         self.deletedDate = notebookData.deletedDate
-        
-        self.parentId = notebookData.parent
-        self.childrenIds = notebookData.children
     }
     
     init(id: UUID, name: String) {
@@ -49,40 +46,6 @@ extension NotebookB: Equatable, Hashable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
-    }
-}
-
-
-// MARK: - children
-extension NotebookB {
-    
-    func setChildren(ids newList: [UUID]) {
-        self.childrenIds = newList
-    }
-    
-    func appendChildren(id newValue: UUID) {
-        if self.containChildNotebooks {
-            self.childrenIds.append(newValue)
-        } else {
-            setChildren(ids: [newValue])
-        }
-    }
-    
-    func insertChild(id newValue: UUID, below noteId: UUID) throws {
-        guard let position: Int = childrenIds.firstIndex(of: noteId) else { throw NotebooksBusinessError.invalidPosition }
-        self.childrenIds.insert(newValue, at: position + 1)
-    }
-    
-    func deleteChildren(where id: UUID) {
-        childrenIds.removeAll(where: { $0 == id })
-    }
-    
-    var containChildNotebooks: Bool {
-        childrenCount > 0
-    }
-    
-    var childrenCount: Int {
-        return childrenIds.count
     }
 }
 

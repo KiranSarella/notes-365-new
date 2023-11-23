@@ -35,6 +35,7 @@
 		5C8FADFB2B0A072600B80BD9 /* NotebooksListStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8FADFA2B0A072600B80BD9 /* NotebooksListStateTests.swift */; };
 		5C90604C2B0E23F20068DD65 /* BaseBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C90604B2B0E23F20068DD65 /* BaseBackgroundView.swift */; };
 		5C9060502B0E254D0068DD65 /* bg1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5C90604F2B0E254D0068DD65 /* bg1.jpg */; };
+		5C9060522B0F46060068DD65 /* CurrentLevelState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9060512B0F46060068DD65 /* CurrentLevelState.swift */; };
 		5CA77C162A24AE220030EFB2 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C152A24AE220030EFB2 /* Collections */; };
 		5CA77C182A24AE220030EFB2 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C172A24AE220030EFB2 /* DequeModule */; };
 		5CA77C1A2A24AE220030EFB2 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C192A24AE220030EFB2 /* OrderedCollections */; };
@@ -179,6 +180,7 @@
 		5C8FADFA2B0A072600B80BD9 /* NotebooksListStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListStateTests.swift; sourceTree = "<group>"; };
 		5C90604B2B0E23F20068DD65 /* BaseBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseBackgroundView.swift; sourceTree = "<group>"; };
 		5C90604F2B0E254D0068DD65 /* bg1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bg1.jpg; sourceTree = "<group>"; };
+		5C9060512B0F46060068DD65 /* CurrentLevelState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLevelState.swift; sourceTree = "<group>"; };
 		5C9732212A8B74C200C42E28 /* iCloud-sync.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "iCloud-sync.md"; sourceTree = "<group>"; };
 		5C9B5CFF2A8FED2A00396102 /* TextKit.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TextKit.md; sourceTree = "<group>"; };
 		5CC4C01E2A908D7000A4BE41 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
@@ -426,6 +428,7 @@
 				9F45BD292920CCCE003DE332 /* NotebooksListState.swift */,
 				9F45BD252920CCCE003DE332 /* NotebooksListView.swift */,
 				5CF4F5172B0DE4EB008F13F3 /* NotebooksLevelView.swift */,
+				5C9060512B0F46060068DD65 /* CurrentLevelState.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -981,6 +984,7 @@
 				5CFCF5E42ABEDF4D00351EEA /* NotebooksListView.swift in Sources */,
 				5C10D7A52B04C281006FB80D /* BusinessFactory.swift in Sources */,
 				9F3DB0C4292DF82300704860 /* FeedbackView+iPadOS.swift in Sources */,
+				5C9060522B0F46060068DD65 /* CurrentLevelState.swift in Sources */,
 				9F188D812930E49F0078D413 /* MarkdownHeading.swift in Sources */,
 				9F93E15029E6A2AC00210E99 /* SmartEditor.swift in Sources */,
 				9FB21DF3295D89E000CFEDA8 /* ChooseEnvironment.swift in Sources */,

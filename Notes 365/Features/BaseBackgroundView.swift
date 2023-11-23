@@ -33,11 +33,14 @@ struct BaseContentView: View {
     var body: some View {
         HStack {
             SidebarView(sidebarItemSelected: $sidebarItemSelected)
-                .frame(width: 400)
+                .frame(width: 340)
                 .padding()
             
+            Spacer()
+                .frame(width: 10)
+            
             DetailView(sidebarItemSelected: $sidebarItemSelected)
-                .padding()
+//                .padding()
             Spacer()
         }
     }
@@ -147,6 +150,9 @@ struct DetailView: View {
     @Binding var sidebarItemSelected: SidebarItem.ID
     @State private var timelineDetailState = TimelineDetailState()
     
+    
+    @State private var path = NavigationPath()
+    
     var body: some View {
         
         if sidebarItemSelected == SidebarItem.timeline.rawValue {
@@ -157,8 +163,9 @@ struct DetailView: View {
     //            .blur(radius: 10)
 
         } else {
-            NotebooksBaseDetailView()
-                .foregroundColor(.white)
+            Text("asdf")
+//            NotebooksBaseDetailView(notebooksListState: <#Binding<NotebooksListState>#>, path: $path)
+//                .foregroundColor(.white)
         }
         
        
@@ -177,7 +184,13 @@ struct DetailView: View {
 
 
 struct NotebooksBaseDetailView: View {
+    
+    @Binding var notebooksListState: NotebooksListState
+    @Binding var path: NavigationPath
+    
     var body: some View {
-        Text("notebooks base")
+//        Text("notebooks base")
+        NotebookDetailBaseView(notebooksState: $notebooksListState, path: $path)
+            .padding()
     }
 }

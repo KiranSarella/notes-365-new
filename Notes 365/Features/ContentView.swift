@@ -147,6 +147,8 @@ struct ContentView: View {
     
     @State private var presentedParks: [SidebarItem] = []
     
+    @State private var path = NavigationPath()
+    
     var body: some View {
         
         
@@ -219,6 +221,11 @@ struct ContentView: View {
                     ThemeState.shared.updateColorScheme(newValue)
                 }
             })
+            .onChange(of: sidebarItemSelected) { oldValue, newValue in
+                if newValue == SidebarItem.timeline.rawValue {
+                    path = NavigationPath()
+                }
+            }
         }
         detail: {
             let selectedItem = SidebarItem(rawValue: sidebarItemSelected ?? SidebarItem.timeline.id)!
@@ -226,17 +233,20 @@ struct ContentView: View {
                 
             case .timeline:
                 TimelineDetailView(timelineDetailState: $timelineDetailState)
+                    
             case .notebooks:
+                
+                NotebooksBaseDetailView(notebooksListState: $notebooksListState, path: $path)
                 
 //                Text("destination")
 //                NestedContentView(sidebarItemSelected: $sidebarItemSelected)
+//                NotebooksListView(notebooksListState: notebooksListState, selectedNotebook: $selectedNotebookM)
                 
                 
-                NotebookDetailBaseView()
+//                NotebookDetailBaseView(path: $path)
 //                WrapperDetailView()
 //            NotebooksLevelView()
                 
-//                NotebooksListView(notebooksListState: notebooksListState, selectedNotebook: $selectedNotebookM)
                 
 //                NavigationStack(path: $presentedParks) {
 //                    List {
@@ -379,18 +389,54 @@ struct NestedContentView: View {
                 FileItem(name: "private", children: nil)
             ])
     ]
-    var body: some View {
-        List(fileHierarchyData, children: \.children) { item in
-            if item.children == nil {
-                Button(item.description) {
-                    sidebarItemSelected = SidebarItem.notebooks.id
-                }
-            } else {
-                Text(item.description)
-            }
-            
+    
+    @State var notebookContentState = NotebookContentState(business: BusinessFactory.createNotebookContentBusinessFactory())
+    
+    @State var showDetail: FileItem?
+    
+    
+    @State var selecteItem: FileItem.ID?
+    
+    func getColor(itemId: FileItem) -> Color {
+        if selecteItem == nil {
+            return Color.black
         }
-        .listStyle(SidebarListStyle())
-        .navigationTitle("Nested list")
+        if itemId == selecteItem! {
+            return Color.red
+        }
+        
+        return Color.black
+    }
+    
+    var body: some View {
+        
+        NavigationStack {
+            List(fileHierarchyData, children: \.children, selection: $selecteItem) { item in
+                if item.children == nil {
+//                    Button(item.description) {
+//                        showDetail = item
+//                    }
+//                    .fullScreenCover(item: $showDetail) { item in
+//                        NavigationStack {
+//                            NotebookContentView(isReadOnly: false, notebookId: UUID(), editorState: notebookContentState)
+//                        }
+//                    }
+                    
+                    NavigationLink(item.description) {
+                        NotebookContentView(isReadOnly: false, notebookId: UUID(), editorState: notebookContentState)
+                    }
+                    
+                    
+                } else {
+                    Text(item.description)
+                        .foregroundStyle(getColor(itemId: item))
+                }
+                
+            }
+            .listStyle(SidebarListStyle())
+            .navigationTitle("Nested list")
+        }
+        
+        
     }
 }

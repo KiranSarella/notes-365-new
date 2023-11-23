@@ -33,7 +33,7 @@ class NotebooksListState {
     var subscription: Set<AnyCancellable> = []
     var expandedIds = Set<String>()
     //    var notebooks = [Notebook]()
-    var notebooksHierarchy: Notebook = Notebook(id: UUID(), name: "")
+    var root: Notebook = Notebook(id: UUID(), name: "")
     var deletedNotebooks = [Notebook]()
     var isLoading = false
     var listSourceType = ListSourceType.notebooks(.none)
@@ -64,6 +64,8 @@ class NotebooksListState {
         setupSearchText()
         
         isLoading = false
+        
+        loadRoot()
     }
     
     func stopLoading() {
@@ -106,7 +108,8 @@ class NotebooksListState {
         // notebooks
         let rootNode: Notebook = rootB.notebook()
         rootNode.populateChildren(from: activeNotebooks, expandedIds: expandedIds)
-        self.notebooksHierarchy = rootNode
+        rootNode.sortChildren()
+        self.root = rootNode
         // deleted notebooks
         for deletedNote in deletedNotes {
             deletedNote.populateChildren(from: activeNotebooks, expandedIds: [])
@@ -130,56 +133,91 @@ class NotebooksListState {
     }
     
     var isEmpty: Bool {
-        notebooksHierarchy.childrenCount == 0
+        root.childrenCount == 0
     }
     
-    private func addFirstNotes() async {
-        do {
-            let _ = try notebooksBusiness.createNotebook().notebook()
-            await loadNotebooks()
-        } catch let error {
-            print(error)
-        }
-    }
+//    private func addFirstNotes() async {
+//        do {
+//            let _ = try notebooksBusiness.createNotebook().notebook()
+//            await loadNotebooks()
+//        } catch let error {
+//            print(error)
+//        }
+//    }
     
     var isRootCreated: Bool {
-        notebooksHierarchy.name == "root"
+        root.name == "root"
     }
     
     var isCreatingNotebook = false
     
-    func createNotebook() async {
-        if isRootCreated {
-            if let lastNotebook = notebooksHierarchy.children.last {
-                insertBelow(ref: lastNotebook)
-            } else {
-                insertInside(ref: notebooksHierarchy)
-            }
-        } else {
-            await addFirstNotes()
-        }
-    }
     
-    func insertBelow(ref notebook: Notebook) {
-        guard let parent = notebook.parent else { return }
-        let children = parent.children.map { $0.notebookB() }
+    func loadRoot() {
         do {
-            let newNotebookB = try notebooksBusiness.createNotebook(inside: parent.notebookB(), below: notebook.id, children: children)
-            let newNotebook = newNotebookB.notebook()
-            newNotebook.updateParent(parent)
-            try notebook.parent?.insertChild(notebook: newNotebook, below: notebook.id)
+            if let rootResult = try notebooksBusiness.getRootNotebookOnly()?.notebook() {
+                root = rootResult
+            } else {
+                root = try notebooksBusiness.createRootNotebook().notebook()
+            }
         } catch let error {
             print(error)
         }
     }
     
-    func insertInside(ref notebook: Notebook) {
-        let children = notebook.children.map { $0.notebookB() }
+    func createFolder(inside parent: Notebook?) {
+        if let parent = parent {
+            generateFolder(inside: parent)
+        } else {
+            if isRootCreated {
+                generateFolder(inside: root)
+            } else {
+                do {
+                    root = try notebooksBusiness.createRootNotebook().notebook()
+                    generateFolder(inside: root)
+                } catch let error {
+                    print(error)
+                }
+            }
+        }
+    }
+    
+    private func generateFolder(inside parent: Notebook) {
+        let siblings = parent.children.map { $0.notebookB() }
         do {
-            let newNotebookB = try notebooksBusiness.createNotebook(inside: notebook.notebookB(), below: nil, children: children)
+            let newNotebookB = try notebooksBusiness.createFolder(inside: parent.notebookB(), siblings: siblings)
             let newNotebook = newNotebookB.notebook()
-            newNotebook.updateParent(notebook)
-            notebook.appendChildren(notebook: newNotebook)
+            newNotebook.updateParent(parent)
+            newNotebook.children = []
+            parent.insertChild(notebook: newNotebook)
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    func createFile(inside parent: Notebook?) {
+        if let parent = parent {
+            generateFile(inside: parent)
+        } else {
+            if isRootCreated {
+                generateFile(inside: root)
+            } else {
+                do {
+                    root = try notebooksBusiness.createRootNotebook().notebook()
+                    generateFile(inside: root)
+                } catch let error {
+                    print(error)
+                }
+            }
+        }
+    }
+    
+    private func generateFile(inside parent: Notebook) {
+        let siblings = parent.children.map { $0.notebookB() }
+        do {
+            let newNotebookB = try notebooksBusiness.createFile(inside: parent.notebookB(), siblings: siblings)
+            let newNotebook = newNotebookB.notebook()
+            newNotebook.updateParent(parent)
+            parent.insertChild(notebook: newNotebook)
         } catch let error {
             print(error)
         }
@@ -284,7 +322,7 @@ extension NotebooksListState {
                 }
                 return false
             }
-            _ = canAddNotebook(note: &notebooksHierarchy)
+            _ = canAddNotebook(note: &root)
             searchResultCount = resultsCount
         }
     }
@@ -350,7 +388,7 @@ extension NotebooksListState {
             
             return false
         }
-        _ = canAddNotebook(note: &notebooksHierarchy)
+        _ = canAddNotebook(note: &root)
         modifiedResultCount = resultsCount
         listSourceType = .notebooks(.recentlyModified)
     }
@@ -382,35 +420,26 @@ extension NotebooksListState {
     
 }
 
-
 extension NotebookB {
-    
     func notebook() -> Notebook {
-        
         let notebook = Notebook(id: id, name: name)
+        notebook.parentId = parentId
+        notebook.isFolder = isFolder
         notebook.createdDate = createdDate
         notebook.modifiedDate = modifiedDate
         notebook.deletedDate = deletedDate
-        
-        notebook.parentId = parentId
-        notebook.childrenIds = childrenIds
-        
         return notebook
     }
-    
 }
 
 extension Notebook {
-    
     func notebookB() -> NotebookB {
         let notebookB = NotebookB(id: id, name: name)
         notebookB.parentId = parent?.id
-        notebookB.childrenIds = children.map { $0.id }
-        
+        notebookB.isFolder = isFolder
         notebookB.createdDate = createdDate
         notebookB.modifiedDate = modifiedDate
         notebookB.deletedDate = deletedDate
         return notebookB
     }
-    
 }
