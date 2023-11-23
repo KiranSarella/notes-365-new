@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import os
 
 @Observable
 class CurrentLevelState {
@@ -26,6 +27,8 @@ class CurrentLevelState {
         folders + files
     }
     
+    let logger = Logger()
+    
     init() {
         
     }
@@ -37,6 +40,10 @@ class CurrentLevelState {
             let notebooks = items.map { $0.notebook() }
             folders = notebooks.filter { $0.isFolder }
             files = notebooks.filter { !$0.isFolder }
+            
+            print(folders.map { "\($0.name) - \($0.id.uuidString)"})
+            print(files.map { "\($0.name) - \($0.id.uuidString)"})
+            
         } catch let error {
             print(error)
         }

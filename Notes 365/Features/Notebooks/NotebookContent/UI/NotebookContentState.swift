@@ -29,11 +29,9 @@ class NotebookContentState {
         invalidateAutoSaveTimer()
     }
     
-    func showNotebookDetail(for notebookId: UUID) {
+    func loadContent(for notebookId: UUID) {
         self.notebookId = notebookId
-    }
-    
-    func loadContent() {
+        print(#function, notebookId.uuidString)
         do {
             input = try business.fetchNotebookContent(for: notebookId).notebookContent().content
             output = input
@@ -54,6 +52,7 @@ class NotebookContentState {
     }
     
     func saveChanges() {
+        print(#function, notebookId.uuidString)
         do {
             try business.update(notebookContent: NotebookContentB(notebookID: notebookId, content: output))
             lastSavedDate = Date()

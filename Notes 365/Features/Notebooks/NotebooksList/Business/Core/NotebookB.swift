@@ -31,6 +31,8 @@ class NotebookB: Identifiable {
         self.createdDate = notebookData.createdDate
         self.modifiedDate = notebookData.modifiedDate
         self.deletedDate = notebookData.deletedDate
+        print("notebookData")
+        print(id, name)
     }
     
     init(id: UUID, name: String) {

@@ -85,12 +85,8 @@ struct NotebooksListView: View {
                                 .onChange(of: selectedNotebook, { oldValue, newValue in
                                     if let newValue = newValue {
                                         // ** do navigation to editor
-                                        
-                                        notebookContentState.showNotebookDetail(for: selectedNotebook!.id)
+                                        notebookContentState.loadContent(for: selectedNotebook!.id)
                                         colors.append(newValue)
-                                        
-                                        print(selectedNotebook?.name, selectedNotebook?.id)
-                                        print(newValue.name, newValue.id)
                                     }
                                 })
                             
@@ -101,7 +97,7 @@ struct NotebooksListView: View {
                             }
                         }
                         .navigationDestination(for: Notebook.self) { color in
-                            NotebookContentView(isReadOnly: notebooksListState.isReadOnly, notebookId: color.id, editorState: notebookContentState)
+                            NotebookContentView(isReadOnly: notebooksListState.isReadOnly, notebookId: color.id, notebookContentState: notebookContentState)
                         }
                         
                             
@@ -117,7 +113,7 @@ struct NotebooksListView: View {
                                     if newValue.isFolder {
                                         newValue.isExpanded.toggle()
                                     } else {
-                                        notebookContentState.showNotebookDetail(for: selectedNotebook!.id)
+                                        notebookContentState.loadContent(for: selectedNotebook!.id)
                                         colors.append(newValue)
                                     }
                                 }
@@ -128,7 +124,7 @@ struct NotebooksListView: View {
                             }
                         }
                         .navigationDestination(for: Notebook.self) { color in
-                            NotebookContentView(isReadOnly: notebooksListState.isReadOnly, notebookId: color.id, editorState: notebookContentState)
+                            NotebookContentView(isReadOnly: notebooksListState.isReadOnly, notebookId: color.id, notebookContentState: notebookContentState)
                         }
                     }
                 }

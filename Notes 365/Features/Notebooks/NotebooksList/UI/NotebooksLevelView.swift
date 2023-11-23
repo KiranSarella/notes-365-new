@@ -20,7 +20,7 @@ struct NotebookDetailBaseView: View {
     
     var body: some View {
         NavigationStack(path: $path) {
-            NotebooksLevelView(navigationTitle: "Notebooks", path: $path, notebook: notebooksState.root)
+            NotebooksLevelView(navigationTitle: "Notebooks", path: $path, parent: notebooksState.root)
         }
         
 //        NavigationStack(path: $path) {
@@ -46,7 +46,7 @@ struct NotebooksLevelView: View {
     @Binding var path: NavigationPath
     @State private var notebookContentState = NotebookContentState(business: BusinessFactory.createNotebookContentBusinessFactory())
     
-    var notebook: Notebook
+    var parent: Notebook
     
     var body: some View {
         VStack {
@@ -86,9 +86,9 @@ struct NotebooksLevelView: View {
         .navigationTitle(navigationTitle)
         .navigationDestination(for: Notebook.self) { notebook in
             if notebook.isFolder {
-                NotebooksLevelView(navigationTitle: notebook.name, path: $path, notebook: notebook)
+                NotebooksLevelView(navigationTitle: notebook.name, path: $path, parent: notebook)
             } else {
-                NotebookContentView(isReadOnly: false, notebookId: notebook.id, editorState: notebookContentState)
+                NotebookContentView(isReadOnly: false, notebookId: notebook.id, notebookContentState: notebookContentState)
             }
         }
         .toolbar(content: {
@@ -96,7 +96,7 @@ struct NotebooksLevelView: View {
         })
         .onAppear {
             if currentLevelState.isEmpty {
-                currentLevelState.loadItems(for: notebook)
+                currentLevelState.loadItems(for: parent)
             }
         }
     }

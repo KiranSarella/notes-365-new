@@ -11,12 +11,11 @@ import Combine
 struct NotebookContentView: View {
     var isReadOnly: Bool
     var notebookId: UUID
-    @Bindable var editorState: NotebookContentState
-    @Environment(\.dismiss) var dismiss
+    @Bindable var notebookContentState: NotebookContentState
     
     var body: some View {
         VStack(alignment: .leading) {
-            if editorState.isFetchingData {
+            if notebookContentState.isFetchingData {
                 Spacer()
                 HStack(alignment: .center) {
                     Spacer()
@@ -28,12 +27,11 @@ struct NotebookContentView: View {
                 Spacer()
             } else {
                 
-                SmartEditor(fileName: "", isReadonly: isReadOnly, contentEditedDate: $editorState.contentEditedDate, input: $editorState.input, output: $editorState.output)
+                SmartEditor(fileName: "", isReadonly: isReadOnly, contentEditedDate: $notebookContentState.contentEditedDate, input: $notebookContentState.input, output: $notebookContentState.output)
                 .onAppear(perform: {
-//                    self.editorState.startAutoSaveTimer()
-//                    self.instantiateTimer()
+                    self.notebookContentState.startAutoSaveTimer()
                 })
-                .onChange(of: editorState.output) { oldValue, newValue in
+                .onChange(of: notebookContentState.output) { oldValue, newValue in
                     print(newValue)
                 }
 //                .toolbar {
@@ -52,7 +50,7 @@ struct NotebookContentView: View {
         .onAppear {
             Task {
                 // new notebook steps
-                await editorState.loadContent()
+                notebookContentState.loadContent(for: notebookId)
 //                editorState.getNewContent = {
 //                    return await MainActor.run {
 //                        editorState.getTextHandler!()

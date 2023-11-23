@@ -42,6 +42,8 @@ extension NotebookData {
         self.name = newData.name
         self.deletedDate = newData.deletedDate
         self.modifiedDate = newData.modifiedDate
+        print("sync-notebookData-notebookdata")
+        print(id, name)
     }
     
     

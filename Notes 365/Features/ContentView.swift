@@ -423,7 +423,7 @@ struct NestedContentView: View {
 //                    }
                     
                     NavigationLink(item.description) {
-                        NotebookContentView(isReadOnly: false, notebookId: UUID(), editorState: notebookContentState)
+                        NotebookContentView(isReadOnly: false, notebookId: UUID(), notebookContentState: notebookContentState)
                     }
                     
                     
