@@ -80,4 +80,13 @@ class NotebooksStorage {
         oldNotebookData.sync(from: notebookData)
         try oldNotebookData.modelContext?.save()
     }
+    
+    
+    // MARK: - Info
+    func getAllFilesInfo() throws -> [NotebookData] {
+        let predicate = #Predicate<NotebookData> { _ in true }
+        var descriptor = FetchDescriptor(predicate: predicate)
+        descriptor.propertiesToFetch = [\.id, \.parent, \.name, \.isFolder]
+        return try modelContext.fetch(descriptor)
+    }
 }

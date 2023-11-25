@@ -122,6 +122,10 @@ class NotebooksStorageAdapter: NotebooksStorageProvider {
         return notebookDataChilds.map { NotebookB($0) }
     }
     
+    func getAllFilesInfo() throws -> [NotebookB] {
+        return try storage.getAllFilesInfo().map { NotebookB($0) }
+    }
+    
 }
 
 

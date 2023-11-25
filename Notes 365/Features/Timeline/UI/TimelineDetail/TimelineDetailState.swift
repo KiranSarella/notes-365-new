@@ -124,7 +124,11 @@ enum TimelineCalendarState: Equatable {
 
 extension DayNotebookChange {
     func getTimeline() -> Timeline {
-        var t = Timeline(changesID: notebookId, fileUUID: notebookId, fileName: "Algorithms", filePath: "path > to > algorithms")
+        let fullPathInfo = NotebooksPathService.shared.path(for: notebookId)
+        var t = Timeline(changesID: notebookId, 
+                         fileUUID: notebookId,
+                         fileName: fullPathInfo?.name ?? "",
+                         filePath: fullPathInfo?.fullPath ?? "")
         t.content = content
         return t
     }
@@ -210,11 +214,14 @@ class TimelineDetailState {
     }
     
     func loadDayContent() {
-        do {
-            let results = try timelineBusiness.fetchDayTimelineNoteChanges(date: Date())
-            timelines = results.map { $0.getTimeline() }
-        } catch let error {
-            print(error)
+        Task {
+            do {
+                await NotebooksPathService.shared.refreshNotebooksInfo()
+                let results = try timelineBusiness.fetchDayTimelineNoteChanges(date: Date())
+                timelines = results.map { $0.getTimeline() }
+            } catch let error {
+                print(error)
+            }
         }
     }
     

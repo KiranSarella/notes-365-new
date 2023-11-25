@@ -27,8 +27,6 @@ class NotebooksBusiness {
         return try await storage.fetchAllNotebooks()
     }
 
-    
-    
     func getRootNotebookOnly() throws -> NotebookB? {
         try storage.getRootNotebook()
     }
@@ -135,3 +133,11 @@ class NameGenerator {
         return "\(prefix) \(sequence)"
     }
 }
+
+extension NotebooksBusiness {
+    
+    func getAllFilesInfo() -> [NotebookB] {
+        return (try? storage.getAllFilesInfo()) ?? []
+    }
+}
+

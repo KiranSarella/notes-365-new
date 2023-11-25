@@ -17,6 +17,8 @@ protocol NotebooksRequester {
     func createFile(inside parent: NotebookB, siblings: [NotebookB]) throws -> NotebookB
     func deleteNotebook(notebook: NotebookB) throws
     func rename(notebook: NotebookB, newValue: String, siblings: [NotebookB]) throws
+    
+    func getAllFilesInfo() -> [NotebookB]
 }
 
 extension NotebooksBusiness: NotebooksRequester { }

@@ -13,7 +13,6 @@ public enum NotebookContentStorageError: Error {
 }
 
 class NotebookContentStorage {
-    
     var modelContext: ModelContext
     
     init(modelContext: ModelContext) {

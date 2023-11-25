@@ -10,7 +10,6 @@ import SwiftUI
 import SwiftData
 
 class NotebookContentB: Identifiable, Codable {
-    
     var notebookID: UUID = UUID()
     var content: String = ""
     
@@ -20,15 +19,11 @@ class NotebookContentB: Identifiable, Codable {
     }
     
     required convenience init(from decoder: Decoder) throws {
-
         let container = try decoder.container(keyedBy: CodingKeys.self)
-
         let notebookID = try! container.decode(UUID.self, forKey: .notebookID)
         let content = try! container.decode(String.self, forKey: .content)
-        
         self.init(notebookID: notebookID, content: content)
     }
-    
     
 }
 

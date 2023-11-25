@@ -18,4 +18,6 @@ protocol NotebooksStorageProvider {
     func getTopLevelNotebooks() throws -> [NotebookB]
     func getChildren(forParent id: UUID) throws -> [NotebookB]
     func getActiveChildren(forParent id: UUID) throws -> [NotebookB]
+    // info
+    func getAllFilesInfo() throws -> [NotebookB]
 }
