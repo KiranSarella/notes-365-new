@@ -9,16 +9,12 @@ import SwiftUI
 import Foundation
 
 struct DayChangesView: View {
-    
     var date: Date
     @Binding var timelines: [Timeline]
     @Binding var dayState: TimelineDetailState
     @State var discardTimeline: Timeline?
-    
     @State var isFirstTimeAppear = true
-    
     var body: some View {
-        
         VStack(spacing: 0) {
             // day heading
             VStack {
@@ -32,14 +28,14 @@ struct DayChangesView: View {
                 .padding(.vertical)
             }
             .listRowSeparator(.hidden)
-            
             // each note change content list
             ForEach($timelines) { $noteChange in
                 VStack {
                     // notebook heading view
                     NoteChangeHeadingView(noteChange: noteChange, showDiscard: dayState.canDiscard, discardTimeline: $discardTimeline)
                     .listRowSeparator(.hidden)
-                    .padding(.bottom, 10)
+                    .padding()
+//                    .padding(.bottom, 10)
                     // content
                     HStack {
                         ReadOnlyMarkDownViewTwo(timeline: $noteChange)

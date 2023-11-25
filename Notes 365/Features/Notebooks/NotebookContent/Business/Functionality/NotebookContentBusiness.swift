@@ -15,7 +15,7 @@ class NotebookContentBusinessNew {
         self.storage = storage
     }
     
-    func fetchNotebookContent(for id: UUID) throws -> NotebookContentB {
+    func retrieveOrInstantiateNotebookContent(for id: UUID) throws -> NotebookContentB {
         let result = try storage.fetchNotebookContent(for: id)
         if let result = result {
             sendLoadedNotification(result)
@@ -28,7 +28,7 @@ class NotebookContentBusinessNew {
     }
     
     /// send notification, so that some one can create day base version
-    func sendLoadedNotification(_ notebookContent: NotebookContentB) {
+    private func sendLoadedNotification(_ notebookContent: NotebookContentB) {
         let info = [
             "id": notebookContent.notebookID
         ]
@@ -57,12 +57,11 @@ class NotebookContentBusinessNew {
     /// send edited notification
     /// - notebook.modifiedDate = Date()
     /// - create timeline
-    func sendUpdatedNotification(_ notebookContent: NotebookContentB) {
+    private func sendUpdatedNotification(_ notebookContent: NotebookContentB) {
         // TODO: send notification after some delay - based on result.
         let info = [
-            "id": notebookContent.notebookID,
-            "notebookName": "get from cache",
-            "notebookPath": ["get from cache"]
+            "notebook_id": notebookContent.notebookID,
+            "content": notebookContent.content
         ] as [String : Any]
         NotificationCenter.default.post(name: Notification.Name.notebookContentUpdated, object: nil, userInfo: info)
     }

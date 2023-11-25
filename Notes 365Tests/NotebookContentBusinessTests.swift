@@ -22,16 +22,15 @@ final class NotebookContentBusinessTests: XCTestCase {
     }
 
     func testShouldNotReturnContentForNotSaved() throws {
-        let notebookContent = try business.fetchNotebookContent(for: UUID())
+        let notebookContent = try business.retrieveOrInstantiateNotebookContent(for: UUID())
         XCTAssertNil(notebookContent)
     }
 
     func testShouldReturnContentForSaved() throws {
         let notebookContent = NotebookContentB(notebookID: UUID(), content: "version 1")
         try business.insert(notebookContent: notebookContent)
-        let result = try business.fetchNotebookContent(for: notebookContent.notebookID)
-        XCTAssertNotNil(result)
-        XCTAssertEqual(result!.content, notebookContent.content)
+        let result = try business.retrieveOrInstantiateNotebookContent(for: notebookContent.notebookID)
+        XCTAssertEqual(result.content, notebookContent.content)
     }
     
     func testShouldNotUpdateForNotInserted() throws {
@@ -44,7 +43,7 @@ final class NotebookContentBusinessTests: XCTestCase {
         try business.insert(notebookContent: notebookContent)
         notebookContent.content = "version 2"
         XCTAssertNoThrow(try business.update(notebookContent: notebookContent))
-        let result = try business.fetchNotebookContent(for: notebookContent.notebookID)
+        let result = try business.retrieveOrInstantiateNotebookContent(for: notebookContent.notebookID)
         XCTAssertNotNil(result)
         XCTAssertEqual(result!.content, notebookContent.content)
     }

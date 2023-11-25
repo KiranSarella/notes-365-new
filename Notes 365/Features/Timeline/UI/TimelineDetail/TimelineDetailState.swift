@@ -6,15 +6,11 @@
 //
 
 import Foundation
-import SwiftData
 import SwiftUI
 import Combine
 
-
 extension Date {
-    
     func getWeekStartEndDates() -> (Date, Date) {
-        
         guard
             let weekInterval = Calendar.current.dateInterval(of: .weekOfMonth, for: self)
         else { fatalError() }
@@ -26,7 +22,6 @@ extension Date {
     }
     
     func getMonthStartEndDates() -> (Date, Date) {
-        
         guard
             let monthInterval = Calendar.current.dateInterval(of: .month, for: self)
         else { fatalError() }
@@ -39,7 +34,6 @@ extension Date {
 }
 
 class ContentCache {
-    
     var contentsDB = [UUID: AttributedString]()
 }
 
@@ -128,7 +122,13 @@ enum TimelineCalendarState: Equatable {
 }
 
 
-
+extension DayNotebookChange {
+    func getTimeline() -> Timeline {
+        var t = Timeline(changesID: notebookId, fileUUID: notebookId, fileName: "Algorithms", filePath: "path > to > algorithms")
+        t.content = content
+        return t
+    }
+}
 
 
 extension TimelineCalendarState {
@@ -165,31 +165,20 @@ extension TimelineCalendarState {
 
 @Observable
 class TimelineDetailState {
-    
-    var timelineBusiness = TimelineBusiness()
+    let timelineBusiness: TimelineInteractor
     var calendarState = TimelineCalendarState.day(DayDate(date: Date()))
-    
-//    var selectedDate = Date()
-    
     // load more
     var canLoadMore = false
     var loadingDayChanges = false
     var loadingDate = Date()
-    
     var currentState = CurrentState.stop
-    
     var cancellable: Cancellable? = nil
-    
     var dayIndexs = [DayIndex]()
-    
     var timelineIndexes = [TimelineIndex]()
-    
-    
+    var timelines = [Timeline]()
     var isFirstAppear = true
     var generatorTask: Task<(), Never>? = nil
-    
     var canDiscard: Bool {
-        
         switch calendarState {
         case .day(let dayDate):
             return dayDate.date.isSameDayAs(Date())
@@ -198,25 +187,16 @@ class TimelineDetailState {
         case .month(_):
             return false
         }
-        
 //        dayDate.date.isSameDayAs(Date())
     }
-    
     var cancellableSet = Set<AnyCancellable>()
-    
     var currentTaskID = UUID()
-    
-    init() {
-        timelineBusiness.registerNotebookChangesNotification()
+    init(timelineBusiness: TimelineInteractor) {
+        self.timelineBusiness = timelineBusiness
     }
     
     func setToday() {
         calendarState = .day(DayDate(date: Date()))
-    }
-    
-    deinit {
-        cancellable?.cancel()
-        timelineBusiness.removeNotebookChangesNotification()
     }
     
     func clearDisplay() {
@@ -229,85 +209,94 @@ class TimelineDetailState {
         self.canLoadMore = false
     }
     
-    func startReloadingContent() {
-        print(#function)
-        Task {
-            clearDisplay()
-            self.currentState = .loading
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                // start fetching data
-                switch self.calendarState {
-                case .day(let dayDate):
-                    self.startFetchingDayIndex(dayDate: dayDate, reqID: self.currentTaskID)
-                case .week(let weekDate):
-                    self.startFetchingWeekIndex(weekDate: weekDate, reqID: self.currentTaskID)
-                case .month(let monthDate):
-                    self.startFetchingMonthIndex(monthDate: monthDate, reqID: self.currentTaskID)
-                }
-            }
+    func loadDayContent() {
+        do {
+            let results = try timelineBusiness.fetchDayTimelineNoteChanges(date: Date())
+            timelines = results.map { $0.getTimeline() }
+        } catch let error {
+            print(error)
         }
+    }
+    
+    func startReloadingContent() {
+//        print(#function)
+//        Task {
+//            clearDisplay()
+//            self.currentState = .loading
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//                // start fetching data
+//                switch self.calendarState {
+//                case .day(let dayDate):
+//                    self.startFetchingDayIndex(dayDate: dayDate, reqID: self.currentTaskID)
+//                case .week(let weekDate):
+//                    self.startFetchingWeekIndex(weekDate: weekDate, reqID: self.currentTaskID)
+//                case .month(let monthDate):
+//                    self.startFetchingMonthIndex(monthDate: monthDate, reqID: self.currentTaskID)
+//                }
+//            }
+//        }
     }
     
     
     // MARK: - Timeline Index
     
     func startFetchingDayIndex(dayDate: DayDate, reqID: UUID) {
-        print(#function, dayDate.date)
-        if let result = self.timelineBusiness.fetchDayTimelineIndex(year: dayDate.date.getYear(), month: dayDate.date.getMonth(), day: dayDate.date.getDay()) {
-            if reqID != currentTaskID {
-                return
-            }
-            self.timelineIndexes.append(result)
-            print("timelineIndexes: ", timelineIndexes.count)
-            print(result.id, result.changes)
-            processFirstDay(reqID: reqID)
-        } else {
-            self.currentState = .empty
-        }
+//        print(#function, dayDate.date)
+//        if let result = self.timelineBusiness.fetchDayTimelineIndex(year: dayDate.date.getYear(), month: dayDate.date.getMonth(), day: dayDate.date.getDay()) {
+//            if reqID != currentTaskID {
+//                return
+//            }
+//            self.timelineIndexes.append(result)
+//            print("timelineIndexes: ", timelineIndexes.count)
+//            print(result.id, result.changes)
+//            processFirstDay(reqID: reqID)
+//        } else {
+//            self.currentState = .empty
+//        }
     }
     
     func startFetchingWeekIndex(weekDate: WeekDate, reqID: UUID) {
-        let date = weekDate.start
-        print(#function, date)
-        // why loop instead of between query
-        // because a week might contain two months
-        for i in 0..<7 {
-            let date = Calendar.current.date(byAdding: .day, value: i, to: date)!
-            if let timelineIndex = self.timelineBusiness.fetchDayTimelineIndex(year: date.getYear(),
-                                                                               month: date.getMonth(),
-                                                                               day: date.getDay()) {
-                if reqID != currentTaskID {
-                    return
-                }
-                self.timelineIndexes.append(timelineIndex)
-            }
-        }
-        
-        print("timelineIndexes: ", timelineIndexes.count)
-        
-        if self.timelineIndexes.count > 0 {
-            processFirstDay(reqID: reqID)
-        } else {
-            self.currentState = .empty
-        }
+//        let date = weekDate.start
+//        print(#function, date)
+//        // why loop instead of between query
+//        // because a week might contain two months
+//        for i in 0..<7 {
+//            let date = Calendar.current.date(byAdding: .day, value: i, to: date)!
+//            if let timelineIndex = self.timelineBusiness.fetchDayTimelineIndex(year: date.getYear(),
+//                                                                               month: date.getMonth(),
+//                                                                               day: date.getDay()) {
+//                if reqID != currentTaskID {
+//                    return
+//                }
+//                self.timelineIndexes.append(timelineIndex)
+//            }
+//        }
+//        
+//        print("timelineIndexes: ", timelineIndexes.count)
+//        
+//        if self.timelineIndexes.count > 0 {
+//            processFirstDay(reqID: reqID)
+//        } else {
+//            self.currentState = .empty
+//        }
     }
     
     func startFetchingMonthIndex(monthDate: MonthDate, reqID: UUID) {
-        let date = monthDate.start
-        print(#function, date)
-        
-        if let results = self.timelineBusiness.fetchMonthTimelineIndex(year: date.getYear(), month: date.getMonth()), results.count > 0 {
-            
-            if reqID != currentTaskID {
-                return
-            }
-            self.timelineIndexes = results.sorted { $0.day < $1.day }
-            
-            print("timelineIndexes: ", timelineIndexes.count)
-            processFirstDay(reqID: reqID)
-        } else {
-            self.currentState = .empty
-        }
+//        let date = monthDate.start
+//        print(#function, date)
+//        
+//        if let results = self.timelineBusiness.fetchMonthTimelineIndex(year: date.getYear(), month: date.getMonth()), results.count > 0 {
+//            
+//            if reqID != currentTaskID {
+//                return
+//            }
+//            self.timelineIndexes = results.sorted { $0.day < $1.day }
+//            
+//            print("timelineIndexes: ", timelineIndexes.count)
+//            processFirstDay(reqID: reqID)
+//        } else {
+//            self.currentState = .empty
+//        }
     }
     
     // MARK: - Day Note Changes
@@ -322,84 +311,84 @@ class TimelineDetailState {
     }
     
     func processFirstDay(reqID: UUID) {
-        print(#function)
-        // load first day
-        self.generatorTask = Task {
-            
-            print("timelineIndexes: before - ", timelineIndexes.count)
-            if let current = timelineIndexes.first {
-                let dayIndex = await readDayDataOnly(timelineIndex: current)
-                
-                if reqID != currentTaskID {
-                    return
-                }
-                if timelineIndexes.count == 0 {
-                    return
-                }
-                
-                timelineIndexes.removeFirst()
-                print("timelineIndexes: after - ", timelineIndexes.count)
-                DispatchQueue.main.async {
-                    self.dayIndexs.append(dayIndex)
-                    self.currentState = .data
-                }
-                // can load more
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    if self.timelineIndexes.count > 0 {
-                        self.canLoadMore = true
-                    }
-                }
-            }
-            
-        }
+//        print(#function)
+//        // load first day
+//        self.generatorTask = Task {
+//            
+//            print("timelineIndexes: before - ", timelineIndexes.count)
+//            if let current = timelineIndexes.first {
+//                let dayIndex = await readDayDataOnly(timelineIndex: current)
+//                
+//                if reqID != currentTaskID {
+//                    return
+//                }
+//                if timelineIndexes.count == 0 {
+//                    return
+//                }
+//                
+//                timelineIndexes.removeFirst()
+//                print("timelineIndexes: after - ", timelineIndexes.count)
+//                DispatchQueue.main.async {
+//                    self.dayIndexs.append(dayIndex)
+//                    self.currentState = .data
+//                }
+//                // can load more
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//                    if self.timelineIndexes.count > 0 {
+//                        self.canLoadMore = true
+//                    }
+//                }
+//            }
+//            
+//        }
     }
     
     func processNextDay() {
-        print(#function)
-        if timelineIndexes.count > 0 {
-            // load first day
-            self.generatorTask = Task {
-                loadingDayChanges = true
-                let dayIndex = await readDayDataOnly(timelineIndex: timelineIndexes.removeFirst())
-                DispatchQueue.main.async {
-                    self.dayIndexs.append(dayIndex)
-                    self.loadingDayChanges = false
-                }
-            }
-        } else {
-            canLoadMore = false
-        }
-    }
-    
-    
-    func readDayDataOnly(timelineIndex: TimelineIndex) async -> DayIndex {
-        
-        print(#function)
-        print(timelineIndex.changes)
-        let dayIndex = DayIndex(timelineIndex: timelineIndex)
-        // prepare each note change item
-        for await timelineResult in DayContentGenerator(lines: timelineIndex.changes, timelineBusiness: self.timelineBusiness) where !Task.isCancelled {
-            if Task.isCancelled { break }
-            
-//            try? await Task.sleep(nanoseconds: 1_000_000_000)
-            
-//            print("timelineResut: ", timelineResult?.fileName)
-//            print(self.generatorTask?.isCancelled)
-//            print(Task.isCancelled)
-            if let timelineResult = timelineResult {
-                dayIndex.timelines.append(timelineResult)
+//        print(#function)
+//        if timelineIndexes.count > 0 {
+//            // load first day
+//            self.generatorTask = Task {
+//                loadingDayChanges = true
+//                let dayIndex = await readDayDataOnly(timelineIndex: timelineIndexes.removeFirst())
 //                DispatchQueue.main.async {
-//                    dayIndex.timelines.append(timelineResult)
+//                    self.dayIndexs.append(dayIndex)
+//                    self.loadingDayChanges = false
 //                }
-            }
-        }
-        // after processing all note changes in a day, return all data
-//        continuation.resume(returning: dayIndex)
-        
-        print("self.generatorTask = nil")
-//                self.generatorTask = nil
-        return dayIndex
+//            }
+//        } else {
+//            canLoadMore = false
+//        }
     }
+    
+    
+//    func readDayDataOnly(timelineIndex: TimelineIndex) async -> DayIndex {
+//        
+//        print(#function)
+//        print(timelineIndex.changes)
+//        let dayIndex = DayIndex(timelineIndex: timelineIndex)
+//        // prepare each note change item
+//        for await timelineResult in DayContentGenerator(lines: timelineIndex.changes, timelineBusiness: self.timelineBusiness) where !Task.isCancelled {
+//            if Task.isCancelled { break }
+//            
+////            try? await Task.sleep(nanoseconds: 1_000_000_000)
+//            
+////            print("timelineResut: ", timelineResult?.fileName)
+////            print(self.generatorTask?.isCancelled)
+////            print(Task.isCancelled)
+//            if let timelineResult = timelineResult {
+//                dayIndex.timelines.append(timelineResult)
+////                DispatchQueue.main.async {
+////                    dayIndex.timelines.append(timelineResult)
+////                }
+//            }
+//        }
+//        // after processing all note changes in a day, return all data
+////        continuation.resume(returning: dayIndex)
+//        
+//        print("self.generatorTask = nil")
+////                self.generatorTask = nil
+//        return dayIndex
+//    }
     
 //    func readDayDataOnly(timelineIndex: TimelineIndex) async -> DayIndex {
 //        await withCheckedContinuation { continuation in
@@ -445,7 +434,7 @@ class TimelineDetailState {
         }
 
         // remove physical files
-        timelineBusiness.removeTimelineChanges(timeline, timelineIndexId)
+//        timelineBusiness.removeTimelineChanges(timeline, timelineIndexId)
     }
     
 }

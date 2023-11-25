@@ -7,24 +7,6 @@
 
 import SwiftUI
 
-//struct TimelineCalendarView: View {
-//    
-//    @Binding var selectedDate:Date
-//    
-//    var body: some View {
-//        VStack {
-//            DatePicker(
-//                    "Start Date",
-//                    selection: $selectedDate,
-//                    displayedComponents: [.date]
-//                )
-//                .datePickerStyle(.graphical)
-//            
-//            Spacer()
-//        }
-//    }
-//}
-
 ///
 /// events: calender type, selected day, selected week, selected month
 struct TimelineCalendarView: View {
@@ -44,7 +26,7 @@ struct TimelineCalendarView: View {
             HStack(alignment: .bottom) {
                 switch calendarState.calenderType {
                 case .day:
-                    DayCalendarView2(dayDate: $calendarState.dayDate, selectedDayDate: $calendarState.selectedDayDate)
+                    DayCalendarView(dayDate: $calendarState.dayDate, selectedDayDate: $calendarState.selectedDayDate)
                 case .week:
                     WeekCalendarView(weekDate: $calendarState.weekDate, selectedWeekDate: $calendarState.selectedWeekDate)
                 case .month:

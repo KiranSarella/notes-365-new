@@ -53,7 +53,6 @@ public struct DayDate: Identifiable {
             return "Yesterday"
         } else {
             return "Day \(date.getDayNumber()), \(date.getYear())"
-            
 //            if UIDevice.current.userInterfaceIdiom == .phone {
 //                return date.formatted(date: .abbreviated, time: .omitted)
 //            } else {

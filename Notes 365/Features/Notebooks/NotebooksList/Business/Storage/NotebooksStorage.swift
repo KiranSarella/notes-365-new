@@ -70,8 +70,6 @@ class NotebooksStorage {
         return try modelContext.fetch(descriptor)
     }
     
-    
-    
     func insert(notebookData: NotebookData) throws {
         modelContext.insert(notebookData)
         try modelContext.save()

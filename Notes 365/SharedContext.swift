@@ -11,7 +11,7 @@ import SwiftData
 class SharedContext {
     static let shared = SharedContext()
     private var modelContext: ModelContext?
-    var mock: Bool = false
+    var mock: Bool = true
     
     func getModelContext() -> ModelContext {
         if let modelContext = modelContext {
@@ -43,18 +43,22 @@ class SharedContext {
                                            TodayVersion.self,
                                            TimelineIndex.self,
                                            TimelineContent.self,
+                                            DayNotebookChangeData.self,
                                            configurations: modelConfiguration)
         modelContext = ModelContext(container)
     }
     
     func createContext() {
+        let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: false)
         let container = try! ModelContainer(for:
                                             NotebookData.self,
                                            NotebookContentData.self,
                                            TodayVersion.self,
                                            TimelineIndex.self,
-                                           TimelineContent.self)
-        
+                                           TimelineContent.self,
+                                            DayNotebookChangeData.self,
+                                           configurations: modelConfiguration)
+        modelContext = ModelContext(container)
     }
     
     func createICloudContext() {

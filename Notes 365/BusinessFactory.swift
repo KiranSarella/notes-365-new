@@ -61,6 +61,13 @@ class BusinessFactory {
         return NotebookContentBusinessNew(storage: storage)
     }
     
+    
+    static func timelineInteractor() -> TimelineInteractor {
+        let modelContext = SharedContext.shared.getModelContext()
+        let storage = TimelineStorageAdapter(modelContext: modelContext)
+        return TimelineBusiness(storage: storage)
+    }
+    
 }
 
 //class NotebooksBusinessGenerator: NotebooksBusinessFactory {

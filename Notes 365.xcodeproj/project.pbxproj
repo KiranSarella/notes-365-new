@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C051B952B11C3B1005C99B7 /* TimelineInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C051B942B11C3B1005C99B7 /* TimelineInteractor.swift */; };
+		5C051B972B11D440005C99B7 /* WeekCalendarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C051B962B11D440005C99B7 /* WeekCalendarState.swift */; };
+		5C051B992B11D599005C99B7 /* MonthCalendarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C051B982B11D599005C99B7 /* MonthCalendarState.swift */; };
 		5C0FEF762AD01CC100056DC7 /* DayCalendarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0FEF682AD01CC000056DC7 /* DayCalendarState.swift */; };
-		5C0FEF792AD01CC100056DC7 /* DayCalendarView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0FEF6B2AD01CC000056DC7 /* DayCalendarView2.swift */; };
+		5C0FEF792AD01CC100056DC7 /* DayCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0FEF6B2AD01CC000056DC7 /* DayCalendarView.swift */; };
 		5C0FEF802AD01CC100056DC7 /* MonthCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0FEF742AD01CC100056DC7 /* MonthCalendarView.swift */; };
 		5C0FEF842AD01CF200056DC7 /* CalendarNavigatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0FEF812AD01CF200056DC7 /* CalendarNavigatorView.swift */; };
 		5C0FEF852AD01CF200056DC7 /* CalendarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0FEF822AD01CF200056DC7 /* CalendarState.swift */; };
@@ -29,6 +32,14 @@
 		5C29FED32A98D8FD001DC601 /* EditorSymbolsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C29FED22A98D8FD001DC601 /* EditorSymbolsState.swift */; };
 		5C29FED52A98D91D001DC601 /* ReadonlyEditorCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C29FED42A98D91D001DC601 /* ReadonlyEditorCache.swift */; };
 		5C4ADCE32A9757EF000A037E /* EditorSymbolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4ADCE22A9757EF000A037E /* EditorSymbolsView.swift */; };
+		5C5668092B109B4C00CB873F /* TimelineIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5668082B109B4C00CB873F /* TimelineIndex.swift */; };
+		5C56680B2B109B7F00CB873F /* TimelineContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C56680A2B109B7F00CB873F /* TimelineContent.swift */; };
+		5C56680D2B109DB800CB873F /* TimelineStorageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C56680C2B109DB800CB873F /* TimelineStorageProvider.swift */; };
+		5C56680F2B10A2A700CB873F /* TimelineContentCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C56680E2B10A2A700CB873F /* TimelineContentCreator.swift */; };
+		5C5668112B10B1B100CB873F /* DayNotebookChangeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5668102B10B1B100CB873F /* DayNotebookChangeData.swift */; };
+		5C5668132B10B1E200CB873F /* DayNotebookChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5668122B10B1E200CB873F /* DayNotebookChange.swift */; };
+		5C5668152B10B88800CB873F /* DayTimelineData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5668142B10B88800CB873F /* DayTimelineData.swift */; };
+		5C5668172B10C84A00CB873F /* TimelineStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5668162B10C84A00CB873F /* TimelineStorageAdapter.swift */; };
 		5C7D4AF22B07DCEA00BB1908 /* NotebooksRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7D4AF12B07DCEA00BB1908 /* NotebooksRequester.swift */; };
 		5C7D4AF82B08E00C00BB1908 /* NotebookB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7D4AF72B08E00C00BB1908 /* NotebookB.swift */; };
 		5C8FADF92B0A06F600B80BD9 /* StringDiffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD302920CCCE003DE332 /* StringDiffTests.swift */; };
@@ -154,8 +165,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5C051B942B11C3B1005C99B7 /* TimelineInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineInteractor.swift; sourceTree = "<group>"; };
+		5C051B962B11D440005C99B7 /* WeekCalendarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekCalendarState.swift; sourceTree = "<group>"; };
+		5C051B982B11D599005C99B7 /* MonthCalendarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthCalendarState.swift; sourceTree = "<group>"; };
 		5C0FEF682AD01CC000056DC7 /* DayCalendarState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayCalendarState.swift; sourceTree = "<group>"; };
-		5C0FEF6B2AD01CC000056DC7 /* DayCalendarView2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayCalendarView2.swift; sourceTree = "<group>"; };
+		5C0FEF6B2AD01CC000056DC7 /* DayCalendarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayCalendarView.swift; sourceTree = "<group>"; };
 		5C0FEF6D2AD01CC000056DC7 /* WeekCalendarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekCalendarView.swift; sourceTree = "<group>"; };
 		5C0FEF742AD01CC100056DC7 /* MonthCalendarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthCalendarView.swift; sourceTree = "<group>"; };
 		5C0FEF812AD01CF200056DC7 /* CalendarNavigatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarNavigatorView.swift; sourceTree = "<group>"; };
@@ -175,6 +189,14 @@
 		5C29FED22A98D8FD001DC601 /* EditorSymbolsState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorSymbolsState.swift; sourceTree = "<group>"; };
 		5C29FED42A98D91D001DC601 /* ReadonlyEditorCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadonlyEditorCache.swift; sourceTree = "<group>"; };
 		5C4ADCE22A9757EF000A037E /* EditorSymbolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSymbolsView.swift; sourceTree = "<group>"; };
+		5C5668082B109B4C00CB873F /* TimelineIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineIndex.swift; sourceTree = "<group>"; };
+		5C56680A2B109B7F00CB873F /* TimelineContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineContent.swift; sourceTree = "<group>"; };
+		5C56680C2B109DB800CB873F /* TimelineStorageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineStorageProvider.swift; sourceTree = "<group>"; };
+		5C56680E2B10A2A700CB873F /* TimelineContentCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineContentCreator.swift; sourceTree = "<group>"; };
+		5C5668102B10B1B100CB873F /* DayNotebookChangeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayNotebookChangeData.swift; sourceTree = "<group>"; };
+		5C5668122B10B1E200CB873F /* DayNotebookChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayNotebookChange.swift; sourceTree = "<group>"; };
+		5C5668142B10B88800CB873F /* DayTimelineData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayTimelineData.swift; sourceTree = "<group>"; };
+		5C5668162B10C84A00CB873F /* TimelineStorageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineStorageAdapter.swift; sourceTree = "<group>"; };
 		5C7D4AF12B07DCEA00BB1908 /* NotebooksRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksRequester.swift; sourceTree = "<group>"; };
 		5C7D4AF72B08E00C00BB1908 /* NotebookB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookB.swift; sourceTree = "<group>"; };
 		5C8FADFA2B0A072600B80BD9 /* NotebooksListStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListStateTests.swift; sourceTree = "<group>"; };
@@ -322,29 +344,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5C0FEF662AD01CC000056DC7 /* DaysTimeline */ = {
+		5C051B932B11C346005C99B7 /* ContentCreator */ = {
+			isa = PBXGroup;
+			children = (
+				5C56680E2B10A2A700CB873F /* TimelineContentCreator.swift */,
+				9F45BD2E2920CCCE003DE332 /* StringDiff.swift */,
+			);
+			path = ContentCreator;
+			sourceTree = "<group>";
+		};
+		5C0FEF662AD01CC000056DC7 /* DaysCalendar */ = {
 			isa = PBXGroup;
 			children = (
 				5C0FEF682AD01CC000056DC7 /* DayCalendarState.swift */,
-				5C0FEF6B2AD01CC000056DC7 /* DayCalendarView2.swift */,
+				5C0FEF6B2AD01CC000056DC7 /* DayCalendarView.swift */,
 			);
-			path = DaysTimeline;
+			path = DaysCalendar;
 			sourceTree = "<group>";
 		};
-		5C0FEF6C2AD01CC000056DC7 /* WeeksTimeline */ = {
+		5C0FEF6C2AD01CC000056DC7 /* WeeksCalendar */ = {
 			isa = PBXGroup;
 			children = (
+				5C051B962B11D440005C99B7 /* WeekCalendarState.swift */,
 				5C0FEF6D2AD01CC000056DC7 /* WeekCalendarView.swift */,
 			);
-			path = WeeksTimeline;
+			path = WeeksCalendar;
 			sourceTree = "<group>";
 		};
-		5C0FEF712AD01CC100056DC7 /* MonthsTimeline */ = {
+		5C0FEF712AD01CC100056DC7 /* MonthsCalendar */ = {
 			isa = PBXGroup;
 			children = (
 				5C0FEF742AD01CC100056DC7 /* MonthCalendarView.swift */,
+				5C051B982B11D599005C99B7 /* MonthCalendarState.swift */,
 			);
-			path = MonthsTimeline;
+			path = MonthsCalendar;
 			sourceTree = "<group>";
 		};
 		5C10D7942B04C13D006FB80D /* Frameworks */ = {
@@ -373,7 +406,51 @@
 			path = EditorSymbols;
 			sourceTree = "<group>";
 		};
-		5C7D4AF32B07DDB900BB1908 /* Core */ = {
+		5C5668042B10691F00CB873F /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				9F45BCF62920CCCE003DE332 /* Timeline.swift */,
+				5CC8C2602AD67D6200ABAC1F /* Calendars */,
+				5CC8C2612AD67D6D00ABAC1F /* TimelineDetail */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		5C5668052B10692500CB873F /* Business */ = {
+			isa = PBXGroup;
+			children = (
+				5C051B942B11C3B1005C99B7 /* TimelineInteractor.swift */,
+				5C5668062B10693000CB873F /* Functionality */,
+				5C5668072B10696E00CB873F /* Storage */,
+			);
+			path = Business;
+			sourceTree = "<group>";
+		};
+		5C5668062B10693000CB873F /* Functionality */ = {
+			isa = PBXGroup;
+			children = (
+				9FB6C6A829279BEC00C8EC76 /* TimelineBusiness.swift */,
+				5C5668122B10B1E200CB873F /* DayNotebookChange.swift */,
+				5C051B932B11C346005C99B7 /* ContentCreator */,
+				5C56680C2B109DB800CB873F /* TimelineStorageProvider.swift */,
+			);
+			path = Functionality;
+			sourceTree = "<group>";
+		};
+		5C5668072B10696E00CB873F /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				5C5668162B10C84A00CB873F /* TimelineStorageAdapter.swift */,
+				5CCCF7F42AC2CB6B00F5923E /* TimelineStorage.swift */,
+				5C5668102B10B1B100CB873F /* DayNotebookChangeData.swift */,
+				5C5668142B10B88800CB873F /* DayTimelineData.swift */,
+				5C5668082B109B4C00CB873F /* TimelineIndex.swift */,
+				5C56680A2B109B7F00CB873F /* TimelineContent.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		5C7D4AF32B07DDB900BB1908 /* Functionality */ = {
 			isa = PBXGroup;
 			children = (
 				5C10D7A02B04C26D006FB80D /* NotebooksBusiness.swift */,
@@ -381,14 +458,14 @@
 				5C7D4AF72B08E00C00BB1908 /* NotebookB.swift */,
 				5C10D7A22B04C272006FB80D /* NotebooksStorageProvider.swift */,
 			);
-			path = Core;
+			path = Functionality;
 			sourceTree = "<group>";
 		};
 		5CC209F42B0263B5000E6192 /* Business */ = {
 			isa = PBXGroup;
 			children = (
 				5C7D4AF12B07DCEA00BB1908 /* NotebooksRequester.swift */,
-				5C7D4AF32B07DDB900BB1908 /* Core */,
+				5C7D4AF32B07DDB900BB1908 /* Functionality */,
 				5C10D7972B04C248006FB80D /* Storage */,
 			);
 			path = Business;
@@ -401,14 +478,14 @@
 				5C0FEF822AD01CF200056DC7 /* CalendarState.swift */,
 				9F45BCFB2920CCCE003DE332 /* TimelineCalendarView.swift */,
 				5C0FEF812AD01CF200056DC7 /* CalendarNavigatorView.swift */,
-				5C0FEF662AD01CC000056DC7 /* DaysTimeline */,
-				5C0FEF6C2AD01CC000056DC7 /* WeeksTimeline */,
-				5C0FEF712AD01CC100056DC7 /* MonthsTimeline */,
+				5C0FEF662AD01CC000056DC7 /* DaysCalendar */,
+				5C0FEF6C2AD01CC000056DC7 /* WeeksCalendar */,
+				5C0FEF712AD01CC100056DC7 /* MonthsCalendar */,
 			);
 			path = Calendars;
 			sourceTree = "<group>";
 		};
-		5CC8C2612AD67D6D00ABAC1F /* Details */ = {
+		5CC8C2612AD67D6D00ABAC1F /* TimelineDetail */ = {
 			isa = PBXGroup;
 			children = (
 				5CD2F4EF2ACC7FD500E8B465 /* TimelineDetailState.swift */,
@@ -417,7 +494,7 @@
 				5C286D182AD994BC00F836D3 /* DayChangesView.swift */,
 				9F45BCFA2920CCCE003DE332 /* NoteChangeHeadingView.swift */,
 			);
-			path = Details;
+			path = TimelineDetail;
 			sourceTree = "<group>";
 		};
 		5CF612B52B0B055200D397C6 /* UI */ = {
@@ -447,7 +524,7 @@
 			isa = PBXGroup;
 			children = (
 				5CF612CA2B0B33F700D397C6 /* NotebookContentRequester.swift */,
-				5CF612C92B0B33E300D397C6 /* Core */,
+				5CF612C92B0B33E300D397C6 /* Functionality */,
 				5CF612BA2B0B075800D397C6 /* Storage */,
 			);
 			path = Business;
@@ -463,7 +540,7 @@
 			path = Storage;
 			sourceTree = "<group>";
 		};
-		5CF612C92B0B33E300D397C6 /* Core */ = {
+		5CF612C92B0B33E300D397C6 /* Functionality */ = {
 			isa = PBXGroup;
 			children = (
 				9FB6C69F2927695000C8EC76 /* NotebookContentBusiness.swift */,
@@ -471,7 +548,7 @@
 				5CE8C48A2B0305CD00F19217 /* NotebookContentB.swift */,
 				5CF612BE2B0B0DC000D397C6 /* NotebookContentStorageProvider.swift */,
 			);
-			path = Core;
+			path = Functionality;
 			sourceTree = "<group>";
 		};
 		5CF612D22B0B983900D397C6 /* EditorCore */ = {
@@ -542,6 +619,7 @@
 				9F8EE98C293F4B7E0021409E /* Notes-365-Info.plist */,
 				9F45BCA12920CAAE003DE332 /* Notes_365App.swift */,
 				5CF612B62B0B06B700D397C6 /* SharedContext.swift */,
+				5C10D7A42B04C281006FB80D /* BusinessFactory.swift */,
 				9FB0A47129D9246D0093FBD2 /* architecture-decissions.md */,
 				5C9732212A8B74C200C42E28 /* iCloud-sync.md */,
 				5C117C3D2A8E662800B0F3BE /* Features.md */,
@@ -656,14 +734,6 @@
 			path = Speech;
 			sourceTree = "<group>";
 		};
-		9F93E14E29E68CCA00210E99 /* StringDiff */ = {
-			isa = PBXGroup;
-			children = (
-				9F45BD2E2920CCCE003DE332 /* StringDiff.swift */,
-			);
-			path = StringDiff;
-			sourceTree = "<group>";
-		};
 		9FB0A47329DB22940093FBD2 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
@@ -704,7 +774,6 @@
 			isa = PBXGroup;
 			children = (
 				9F45BDCA29214D48003DE332 /* notebooks.md */,
-				5C10D7A42B04C281006FB80D /* BusinessFactory.swift */,
 				5CDE34BC2AB2D885002D88ED /* NotebooksCache.swift */,
 				9FB6C69429275BF900C8EC76 /* NotebooksList */,
 				9FB6C69629275C1500C8EC76 /* NotebookContent */,
@@ -716,12 +785,8 @@
 			isa = PBXGroup;
 			children = (
 				9FB0A48C29DF13360093FBD2 /* timeline.md */,
-				9F45BCF62920CCCE003DE332 /* Timeline.swift */,
-				5CCCF7F42AC2CB6B00F5923E /* TimelineStorage.swift */,
-				9FB6C6A829279BEC00C8EC76 /* TimelineBusiness.swift */,
-				5CC8C2612AD67D6D00ABAC1F /* Details */,
-				5CC8C2602AD67D6200ABAC1F /* Calendars */,
-				9F93E14E29E68CCA00210E99 /* StringDiff */,
+				5C5668042B10691F00CB873F /* UI */,
+				5C5668052B10692500CB873F /* Business */,
 			);
 			path = Timeline;
 			sourceTree = "<group>";
@@ -918,9 +983,11 @@
 				5C0FEF872AD025A500056DC7 /* WeekCalendarView.swift in Sources */,
 				5C29FECD2A98B377001DC601 /* PreviewViewUI.swift in Sources */,
 				5C29FED32A98D8FD001DC601 /* EditorSymbolsState.swift in Sources */,
+				5C5668112B10B1B100CB873F /* DayNotebookChangeData.swift in Sources */,
 				5C10D79D2B04C248006FB80D /* NotebooksStorageAdapter.swift in Sources */,
 				9F92CF0529B7525500B8D3C4 /* MailView.swift in Sources */,
 				5CE6FDF82B0BC19600ED9425 /* PDFFile.swift in Sources */,
+				5C56680D2B109DB800CB873F /* TimelineStorageProvider.swift in Sources */,
 				9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */,
 				5CFCF5E62ABEDFA400351EEA /* NotebookData.swift in Sources */,
 				9FB6C69C29275E0300C8EC76 /* NotebookContentState.swift in Sources */,
@@ -933,6 +1000,7 @@
 				9F3DB0CE292E704D00704860 /* ColorPickerButton.swift in Sources */,
 				5C1CD5AB2ABC350B00D47814 /* TimelineDetailView.swift in Sources */,
 				5CE6FE212B0CD65700ED9425 /* NotebooksListBusiness.swift in Sources */,
+				5C56680B2B109B7F00CB873F /* TimelineContent.swift in Sources */,
 				5CD2F4F02ACC7FD500E8B465 /* TimelineDetailState.swift in Sources */,
 				9F45BDA92920CE52003DE332 /* ScaleFontView.swift in Sources */,
 				5CCCF7F32AC2B0B300F5923E /* TodayVersion.swift in Sources */,
@@ -947,17 +1015,20 @@
 				5CE8C4882B03048E00F19217 /* Notebook.swift in Sources */,
 				9FBB0B5D2A0E952E00F407AF /* MarkdownEditorViewState.swift in Sources */,
 				5CCCF7F52AC2CB6B00F5923E /* TimelineStorage.swift in Sources */,
+				5C5668152B10B88800CB873F /* DayTimelineData.swift in Sources */,
 				9F93E15529ED0D0F00210E99 /* TodayVersionSync.swift in Sources */,
 				9F3DB0C6292E1D9200704860 /* ThemeBusiness.swift in Sources */,
 				5C286D192AD994BC00F836D3 /* DayChangesView.swift in Sources */,
 				9F14B491298A684F0079D23B /* ThemeDetailView+iOS.swift in Sources */,
 				5C0FEF762AD01CC100056DC7 /* DayCalendarState.swift in Sources */,
+				5C5668172B10C84A00CB873F /* TimelineStorageAdapter.swift in Sources */,
 				5C7D4AF82B08E00C00BB1908 /* NotebookB.swift in Sources */,
 				9F45BD662920CDA9003DE332 /* NoteChangeHeadingView.swift in Sources */,
 				9F14B4AE298F98900079D23B /* FontPicker.swift in Sources */,
 				5CF612D62B0B98CF00D397C6 /* EditorView+Layout.swift in Sources */,
 				9FB6C6A02927695000C8EC76 /* NotebookContentBusiness.swift in Sources */,
 				5C0FEF852AD01CF200056DC7 /* CalendarState.swift in Sources */,
+				5C5668092B109B4C00CB873F /* TimelineIndex.swift in Sources */,
 				9F45BDAA2920CE52003DE332 /* NamedColor.swift in Sources */,
 				9F45BDA82920CE41003DE332 /* MarkdownTheme.swift in Sources */,
 				5C4ADCE32A9757EF000A037E /* EditorSymbolsView.swift in Sources */,
@@ -968,16 +1039,19 @@
 				9F45BD922920CDED003DE332 /* StringDiff.swift in Sources */,
 				5C10D7A32B04C272006FB80D /* NotebooksStorageProvider.swift in Sources */,
 				9F14B4B02990D46D0079D23B /* ThemeDetailState.swift in Sources */,
+				5C051B952B11C3B1005C99B7 /* TimelineInteractor.swift in Sources */,
 				9F45BCA22920CAAE003DE332 /* Notes_365App.swift in Sources */,
 				5C10D79B2B04C248006FB80D /* NotebooksStorage.swift in Sources */,
 				9F45BD9E2920CE21003DE332 /* SpeechHelpr.swift in Sources */,
 				5C0FEF882AD0262E00056DC7 /* TimelineCalendarView.swift in Sources */,
 				9FB6C69829275D0600C8EC76 /* FormatOptionsView.swift in Sources */,
 				5CCCF7F12AC15E0D00F5923E /* NotebookContentData.swift in Sources */,
+				5C051B992B11D599005C99B7 /* MonthCalendarState.swift in Sources */,
 				9F45BD932920CDF9003DE332 /* SidebarSelection.swift in Sources */,
 				9F45BDA12920CE2F003DE332 /* PreferencesView.swift in Sources */,
 				9FB6C6A929279BEC00C8EC76 /* TimelineBusiness.swift in Sources */,
 				5C16B9BB2B035A0200BF8592 /* NotebookContentB.swift in Sources */,
+				5C5668132B10B1E200CB873F /* DayNotebookChange.swift in Sources */,
 				9F8EE98A293EB3090021409E /* CloudDataManager.swift in Sources */,
 				5CC4C01F2A908D7000A4BE41 /* EditorView.swift in Sources */,
 				5CDE34BD2AB2D885002D88ED /* NotebooksCache.swift in Sources */,
@@ -994,6 +1068,7 @@
 				9F3DB0C2292DE09500704860 /* SettingsView.swift in Sources */,
 				9F45BD642920CDA3003DE332 /* Timeline.swift in Sources */,
 				5C117C3F2A8E77FF00B0F3BE /* LayoutManager.swift in Sources */,
+				5C56680F2B10A2A700CB873F /* TimelineContentCreator.swift in Sources */,
 				5CF4F5182B0DE4EB008F13F3 /* NotebooksLevelView.swift in Sources */,
 				9F09CEB129267FBC00609D99 /* TodayVersionBusiness.swift in Sources */,
 				9F3DB0CC292E340200704860 /* ThemeState.swift in Sources */,
@@ -1001,6 +1076,7 @@
 				5C0FEF862AD01CF200056DC7 /* CalendarType.swift in Sources */,
 				9F3DB0D0292E70BA00704860 /* ColorPickerWindowManager.swift in Sources */,
 				9F57BAE7299688BC0076FD9D /* Constants.swift in Sources */,
+				5C051B972B11D440005C99B7 /* WeekCalendarState.swift in Sources */,
 				9F1687D029AE21B20085A0CA /* NotebooksChangeMonitor.swift in Sources */,
 				9F7D291F299BABAC00B37F51 /* EditorViewUI.swift in Sources */,
 				9FB6C69A29275D5100C8EC76 /* FormatOptions.swift in Sources */,
@@ -1011,7 +1087,7 @@
 				5C29FED52A98D91D001DC601 /* ReadonlyEditorCache.swift in Sources */,
 				5CC8C25F2AD67D4100ABAC1F /* DayContentGenerator.swift in Sources */,
 				5CF612CC2B0B343200D397C6 /* NotebookContent.swift in Sources */,
-				5C0FEF792AD01CC100056DC7 /* DayCalendarView2.swift in Sources */,
+				5C0FEF792AD01CC100056DC7 /* DayCalendarView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

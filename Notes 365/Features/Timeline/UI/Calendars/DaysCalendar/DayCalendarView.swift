@@ -7,23 +7,16 @@
 
 import SwiftUI
 
-struct DayCalendarView2: View {
-    
+struct DayCalendarView: View {
     @State private var dayState = DayCalendarState()
     @Binding var dayDate: DayDate
     @Binding var selectedDayDate: DayDate?
     
     var body: some View {
         VStack {
-            // current month, prev, next actions
             HeaderView()
                 .padding(.bottom, 4)
                 .environment(dayState)
-
-            // grid view 7 x 7
-            // 7 columns
-            // titles: sun, mon...
-            // detail rows: 6
             DayGridView(dayDate: $dayDate)
                 .environment(dayState)
         }
@@ -42,11 +35,8 @@ struct DayCalendarView2: View {
 }
 
 fileprivate struct HeaderView: View {
-    
     @Environment(DayCalendarState.self) var dayState
-     
     var body: some View {
-        
         CalendarNavigatorView(label: dayState.dateTitle, previous: {
             dayState.previousMonth()
         }, today: {
@@ -59,21 +49,14 @@ fileprivate struct HeaderView: View {
 }
 
 fileprivate struct DayGridView: View {
-    
     var columns = Array(repeating: GridItem(), count: 7)
     var weekdaySymbols = Calendar.current.shortWeekdaySymbols
-    
     @Environment(DayCalendarState.self) var dayState
-
     @Binding var dayDate: DayDate
-    
     @State private var displayCounter: Int = 0
-    
     var body: some View {
-        
         VStack {
             LazyVGrid(columns: columns) {
-                // mon, tue,..
                 ForEach(weekdaySymbols, id: \.self) { weekdaySymbol in
                     Text(String(weekdaySymbol.first!))
                         .padding(.bottom, 4)
@@ -83,34 +66,21 @@ fileprivate struct DayGridView: View {
                 // grid numbers
                 ForEach(dayState.dayitems) { dayItem in
                     Button {
-                        if !dayItem.canShow {
-                            return
-                        }
-                        
+                        if !dayItem.canShow { return }
                         dayState.makeSelection(dayItem)
                     } label: {
                         DayGridItem(dayItem: dayItem, isSelected: dayState.isSelected(dayItem))
                     }
                 }.buttonStyle(PlainButtonStyle())
-//                Spacer()
             }
             Spacer()
         }
-//        .frame(height: 270)
-//        .onChange(of: dayState.selectedDate, perform: { newValue in
-//            // update for detail view
-//            dayDate = DayDate(date: newValue)
-////            CalendarState.shared.dayDate = dayDate
-//        })
     }
-    
 }
 
 struct DayGridItem: View {
-    
     let dayItem: DayDateItem
     let isSelected: Bool
-    
     var textColor: Color {
         if dayItem.canShow == false {
             return .clear
@@ -120,20 +90,16 @@ struct DayGridItem: View {
             return .primary
         }
     }
-    
     var body: some View {
-//        HStack(alignment: .center) {
-            Text("\(dayItem.day)")
-                .padding([.horizontal], 2)
-                .padding([.vertical], 6)
-                .foregroundColor(textColor)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.accentColor, lineWidth: isSelected ? 1 : 0)
-                        .frame(width: 26, height: 26)
-                )
-//        }
-        
+        Text("\(dayItem.day)")
+            .padding([.horizontal], 2)
+            .padding([.vertical], 6)
+            .foregroundColor(textColor)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.accentColor, lineWidth: isSelected ? 1 : 0)
+                    .frame(width: 26, height: 26)
+            )
     }
 }
 

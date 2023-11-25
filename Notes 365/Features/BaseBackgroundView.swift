@@ -148,7 +148,7 @@ struct SidebarView: View {
 struct DetailView: View {
     
     @Binding var sidebarItemSelected: SidebarItem.ID
-    @State private var timelineDetailState = TimelineDetailState()
+    @State private var timelineDetailState = TimelineDetailState(timelineBusiness: BusinessFactory.timelineInteractor())
     
     
     @State private var path = NavigationPath()

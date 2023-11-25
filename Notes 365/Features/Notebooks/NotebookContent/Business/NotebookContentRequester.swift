@@ -8,7 +8,7 @@
 import Foundation
 
 protocol NotebookContentRequester {
-    func fetchNotebookContent(for id: UUID) throws -> NotebookContentB
+    func retrieveOrInstantiateNotebookContent(for id: UUID) throws -> NotebookContentB
     func deleteNotebookContent(for id: UUID) throws
     func insert(notebookContent: NotebookContentB) throws
     func update(notebookContent: NotebookContentB) throws

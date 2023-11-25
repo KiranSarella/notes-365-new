@@ -33,7 +33,7 @@ class NotebookContentState {
         self.notebookId = notebookId
         print(#function, notebookId.uuidString)
         do {
-            input = try business.fetchNotebookContent(for: notebookId).notebookContent().content
+            input = try business.retrieveOrInstantiateNotebookContent(for: notebookId).notebookContent().content
             output = input
             lastSavedDate = Date()
         } catch let error {

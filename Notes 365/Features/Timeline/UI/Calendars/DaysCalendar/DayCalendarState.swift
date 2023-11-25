@@ -8,13 +8,10 @@
 import SwiftUI
 
 struct DayDateItem: Identifiable {
-    
     let id = UUID()
-    
     private(set) var day: Int = 0
     private(set) var isToday: Bool = false
     var canShow: Bool = false
-    
     var date: Date
     
     init(date: Date, canShow: Bool) {
@@ -29,45 +26,28 @@ extension DayDateItem: Hashable {}
 
 @Observable
 class DayCalendarState {
-    
     var dateTitle: String = Date().string(withFormat: "MMMM, YYYY")
     var dayitems = [DayDateItem]()
-    
     var dayDate: DayDate
     var selectedDayDate: DayDate?
-    
-//    private(set) var displayingDate: Date = Date()
-    
     var displayCounte: Int = 0
-    
     private var calendar = Calendar.current
     
     init() {
         dayDate = DayDate(date: Date())
         selectedDayDate = nil
-//        updateDisplay()
     }
-    
-//    func setDisplayDate(_ newDate: Date) {
-//        displayingDate = newDate
-//        selectedDate = displayingDate
-//        updateDisplay()
-//    }
     
     func isSelected(_ dayItem: DayDateItem) -> Bool {
         if !dayItem.canShow { return false }
-        
         guard let selectedDayDate = selectedDayDate else { return false }
-        
         return dayItem.date.isSameDayAs(selectedDayDate.date)
     }
-    
     
     func updateDisplay() {
         // title
         dateTitle = dayDate.date.string(withFormat: "MMMM, YYYY")
         // date items
-        
         // for given date get
         let dates = getCalenderDates(dayDate.date)
         var newItems = [DayDateItem]()
@@ -80,19 +60,14 @@ class DayCalendarState {
     }
     
     private func getCalenderDates(_ inputDate: Date) -> [Date] {
-        
         guard
             let monthInterval = Calendar.current.dateInterval(of: .month, for: inputDate),
             let monthFirstWeek = Calendar.current.dateInterval(of: .weekOfMonth, for: monthInterval.start)
         else { fatalError() }
-        
         let startDate = monthFirstWeek.start
         let endDate = Calendar.current.date(byAdding: .day, value: 41, to: monthFirstWeek.start)!
-        
         var nextDate = startDate
-        
         var dates = [startDate]
-        
         while nextDate < endDate {
             nextDate = Calendar.current.date(byAdding: .day, value: 1, to: nextDate)!
             dates.append(nextDate)
