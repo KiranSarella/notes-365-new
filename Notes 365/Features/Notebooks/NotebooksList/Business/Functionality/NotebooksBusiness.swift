@@ -35,6 +35,7 @@ class NotebooksBusiness {
         if let _ = try getRootNotebookOnly() { throw NotebooksBusinessError.rootAlreadyExists }
         let notebook = NotebookB(id: UUID(), name: "root")
         try notebook.insert(in: storage)
+        defer { sendNotebookInserted(notebook) }
         return notebook
     }
     
@@ -45,6 +46,7 @@ class NotebooksBusiness {
         newNotebook.parentId = parent.id
         newNotebook.isFolder = true
         try newNotebook.insert(in: storage)
+        defer { sendNotebookInserted(newNotebook) }
         return newNotebook
     }
     

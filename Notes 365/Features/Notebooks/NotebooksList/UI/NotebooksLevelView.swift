@@ -215,6 +215,11 @@ struct FolderCellView: View {
                         isEditing = true
                     }
                     .swipeActions(edge: .trailing) {
+                        Button {
+                            isEditing = true
+                        } label: {
+                            Label("Rename", systemImage: "pencil")
+                        }
                         Button(role: .destructive) {
                             currentLevelState.deleteFolder(notebook: notebook)
                         } label: {

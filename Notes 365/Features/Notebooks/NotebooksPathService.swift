@@ -40,7 +40,7 @@ class NotebooksPathService {
             if let folderId = filePathInfo.parentId {
                 appendFoldersPath(startingFrom: folderId, in: &pathComponents)
             }
-            let fullPath = pathComponents.joined(separator: "  \u{203A}   ")
+            let fullPath = pathComponents.reversed().joined(separator: "  \u{203A}   ")
             let fullPathInfo = FullPathInfo(name: filePathInfo.name, fullPath: fullPath)
             defer {
                 fullPathsCache[notebookId] = fullPathInfo
