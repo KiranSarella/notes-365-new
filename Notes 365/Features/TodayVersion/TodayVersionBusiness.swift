@@ -8,10 +8,6 @@
 import Foundation
 import SwiftData
 
-extension Notification.Name {
-    public static let notebookContentLoaded = Notification.Name("com.notes365.notebookContentLoaded")
-}
-
 class TodayVersionBusiness {
     
     static let baseVersionFolderName = Constants.todayBaseVersionFolderName

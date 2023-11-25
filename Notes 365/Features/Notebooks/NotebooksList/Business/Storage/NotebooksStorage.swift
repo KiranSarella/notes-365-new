@@ -73,12 +73,14 @@ class NotebooksStorage {
     func insert(notebookData: NotebookData) throws {
         modelContext.insert(notebookData)
         try modelContext.save()
+        logger.info("inserted: \(notebookData)")
     }
    
     func update(notebookData: NotebookData) throws {
         let oldNotebookData = try fetchNotebook(for: notebookData.id)
         oldNotebookData.sync(from: notebookData)
         try oldNotebookData.modelContext?.save()
+        logger.info("updated: \(oldNotebookData)")
     }
     
     

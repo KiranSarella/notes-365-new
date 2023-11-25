@@ -27,8 +27,6 @@ class CurrentLevelState {
         folders + files
     }
     
-    let logger = Logger()
-    
     init() {
         
     }

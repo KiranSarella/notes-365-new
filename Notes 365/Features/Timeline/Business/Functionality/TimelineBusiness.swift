@@ -32,10 +32,7 @@ class TimelineBusiness {
     
 }
 
-// MARK: - Timeline Creation
-extension Notification.Name {
-    public static let notebookContentUpdated = Notification.Name("com.notes365.notebookContentUpdated")
-}
+
 
 extension TimelineBusiness {
     

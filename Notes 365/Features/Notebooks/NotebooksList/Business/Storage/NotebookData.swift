@@ -35,16 +35,17 @@ class NotebookData {
 }
 
 extension NotebookData {
-    
     func sync(from newData: NotebookData) {
         self.parent = newData.parent
         self.isFolder = newData.isFolder
         self.name = newData.name
         self.deletedDate = newData.deletedDate
         self.modifiedDate = newData.modifiedDate
-        print("sync-notebookData-notebookdata")
-        print(id, name)
     }
-    
-    
+}
+
+extension NotebookData: CustomStringConvertible {
+    var description: String {
+        "\(id.uuidString), \(name), pid: \(parent?.uuidString ?? "nil"), isFolder: \(isFolder)"
+    }
 }

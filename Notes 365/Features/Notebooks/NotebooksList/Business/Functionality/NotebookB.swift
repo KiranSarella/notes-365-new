@@ -31,8 +31,7 @@ class NotebookB: Identifiable {
         self.createdDate = notebookData.createdDate
         self.modifiedDate = notebookData.modifiedDate
         self.deletedDate = notebookData.deletedDate
-        print("notebookData")
-        print(id, name)
+        logger.info("notebookData to notebookB: \(self.description)")
     }
     
     init(id: UUID, name: String) {
@@ -51,3 +50,8 @@ extension NotebookB: Equatable, Hashable {
     }
 }
 
+extension NotebookB: CustomStringConvertible {
+    var description: String {
+        "\(id.uuidString), \(name), pid: \(parentId?.uuidString ?? "nil"), isFolder: \(isFolder)"
+    }
+}

@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 import Combine
 import SwiftData
-import os
 
 enum ListState {
     case all
@@ -52,8 +51,6 @@ class NotebooksListState {
     var isReadOnly: Bool {
         listSourceType == .deletedItems
     }
-    
-    let logger = Logger()
     
     init(notebookBusiness: NotebooksRequester) {
         self.notebooksBusiness = notebookBusiness
@@ -160,10 +157,10 @@ class NotebooksListState {
         do {
             if let rootResult = try notebooksBusiness.getRootNotebookOnly()?.notebook() {
                 root = rootResult
-                logger.debug("\(self.root.id.uuidString)")
+                logger.debug("root exists: \(self.root.id.uuidString)")
             } else {
                 root = try notebooksBusiness.createRootNotebook().notebook()
-                logger.debug("\(self.root.id.uuidString)")
+                logger.debug("created root: \(self.root.id.uuidString)")
             }
         } catch let error {
             print(error)
@@ -229,27 +226,27 @@ class NotebooksListState {
         }
     }
     
-    func delete(notebook: Notebook) {
-        guard let parent = notebook.parent else { return }
-        do {
-            try notebooksBusiness.deleteNotebook(notebook: notebook.notebookB())
-        } catch let error {
-            print(error)
-            return
-        }
-        // delete from UI
-        notebook.parent?.deleteChildren(where: notebook.id)
-        //        guard let newDate = Calendar.current.date(byAdding: .month, value: -2, to: Date()) else { return }
-        // mark deleted date
-        notebook.deletedDate = Date()
-        // add to deleted list
-        deletedNotebooks.insert(notebook, at: 0)
-    }
+//    func delete(notebook: Notebook) {
+//        guard let parent = notebook.parent else { return }
+//        do {
+//            try notebooksBusiness.deleteNotebook(notebook: notebook.notebookB())
+//        } catch let error {
+//            print(error)
+//            return
+//        }
+//        // delete from UI
+//        notebook.parent?.deleteChildren(where: notebook.id)
+//        //        guard let newDate = Calendar.current.date(byAdding: .month, value: -2, to: Date()) else { return }
+//        // mark deleted date
+//        notebook.deletedDate = Date()
+//        // add to deleted list
+//        deletedNotebooks.insert(notebook, at: 0)
+//    }
     
-    func rename(for notebook: Notebook, newValue: String) throws {
-        try notebooksBusiness.rename(notebook: notebook.notebookB(), newValue: newValue, siblings: notebook.parent!.children.map({$0.notebookB()}))
-        notebook.name = newValue
-    }
+//    func rename(for notebook: Notebook, newValue: String) throws {
+//        try notebooksBusiness.rename(notebook: notebook.notebookB(), newValue: newValue, siblings: notebook.parent!.children.map({$0.notebookB()}))
+//        notebook.name = newValue
+//    }
     
 }
 
@@ -441,7 +438,7 @@ extension NotebookB {
 extension Notebook {
     func notebookB() -> NotebookB {
         let notebookB = NotebookB(id: id, name: name)
-        notebookB.parentId = parent?.id
+        notebookB.parentId = parentId
         notebookB.isFolder = isFolder
         notebookB.createdDate = createdDate
         notebookB.modifiedDate = modifiedDate

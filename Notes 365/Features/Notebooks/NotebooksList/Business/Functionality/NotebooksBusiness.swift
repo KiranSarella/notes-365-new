@@ -55,6 +55,7 @@ class NotebooksBusiness {
         newNotebook.parentId = parent.id
         newNotebook.isFolder = false
         try newNotebook.insert(in: storage)
+        defer { sendNotebookInserted(newNotebook) }
         return newNotebook
     }
     
@@ -104,7 +105,49 @@ class NotebooksBusiness {
         }
         notebook.name = newValue
         try notebook.update(in: storage)
+        do { sendNotebookRenamed(notebook) }
     }
+}
+
+extension NotebooksBusiness {
+    
+    private func sendNotebookRenamed(_ notebook: NotebookB) {
+        var info = [
+            "notebook_id": notebook.id,
+            "name": notebook.name,
+            "isFolder": notebook.isFolder
+        ] as [String : Any]
+        if let parentId = notebook.parentId {
+            info["parent_id"] = parentId
+        }
+        NotificationCenter.default.post(name: Notification.Name.notebookRenamed, object: nil, userInfo: info)
+        logger.info("sendNotebookRenamed - \(notebook.description)")
+    }
+    
+    private func sendNotebookInserted(_ notebook: NotebookB) {
+        var info = [
+            "notebook_id": notebook.id,
+            "name": notebook.name,
+            "isFolder": notebook.isFolder
+        ] as [String : Any]
+        if let parentId = notebook.parentId {
+            info["parent_id"] = parentId
+        }
+        NotificationCenter.default.post(name: Notification.Name.notebookInserted, object: nil, userInfo: info)
+        logger.info("sendNotebookInserted - \(notebook.description)")
+    }
+    
+    private func sendNotebooksMoved(_ notebooks: [NotebookB], parentId: UUID) {
+        let fileIds = notebooks.filter { n in !n.isFolder }
+        let folderIds = notebooks.filter { n in n.isFolder }
+        let info = [
+            "folder_ids": folderIds,
+            "file_ids": fileIds,
+            "parent_id": parentId,
+        ] as [String : Any]
+        NotificationCenter.default.post(name: Notification.Name.notebooksMoved, object: nil, userInfo: info)
+    }
+    
 }
 
 extension NotebookB {

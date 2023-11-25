@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 fileprivate struct LocationInfo {
     let parentId: UUID?
@@ -19,16 +20,14 @@ struct FullPathInfo {
 
 class NotebooksPathService {
     static let shared = NotebooksPathService()
-    
     fileprivate var filesPathInfo = [UUID: LocationInfo]()
     fileprivate var foldersPathInfo = [UUID: LocationInfo]()
-    
     var fullPathsCache = [UUID: FullPathInfo]()
-    
     var isLoaded = false
     
-    init() {
-//        updateInfo()
+    private init() { 
+        observeNotebookRenamed()
+        observeNotebookInserted()
     }
     
     func path(for notebookId: UUID) -> FullPathInfo? {
@@ -48,6 +47,10 @@ class NotebooksPathService {
             }
             return fullPathInfo
         }
+    }
+    
+    private func invalidateCacheFullPath() {
+        fullPathsCache.removeAll()
     }
     
     private func appendFoldersPath(startingFrom folderId: UUID, in pathComponents: inout [String]) {
@@ -78,8 +81,71 @@ class NotebooksPathService {
             }
         }
     }
+
 }
 
+// MARK: - Handle Rename
+extension NotebooksPathService {
+    func observeNotebookRenamed() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookRenamed(_:)), name: Notification.Name.notebookRenamed, object: nil)
+    }
+    
+    func removeNotebookRenamedObserver() {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.notebookRenamed, object: nil)
+    }
+    
+    @objc func handleNotebookRenamed(_ notification: Notification) {
+        guard
+            let notebookId = notification.userInfo?["notebook_id"] as? UUID,
+            let name = notification.userInfo?["name"] as? String,
+            let isFolder = notification.userInfo?["isFolder"] as? Bool
+        else { return }
+                
+        if isFolder {
+            if let info = foldersPathInfo[notebookId] {
+                foldersPathInfo[notebookId] = LocationInfo(parentId: info.parentId, name: name)
+            }
+        } else {
+            if let info = filesPathInfo[notebookId] {
+                filesPathInfo[notebookId] = LocationInfo(parentId: info.parentId, name: name)
+            }
+        }
+        invalidateCacheFullPath()
+    }
+}
+
+// MARK: - Handle Insert
+extension NotebooksPathService {
+    func observeNotebookInserted() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookInserted(_:)), name: Notification.Name.notebookInserted, object: nil)
+    }
+    
+    func removeNotebookInsertedObserver() {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.notebookInserted, object: nil)
+    }
+    
+    @objc func handleNotebookInserted(_ notification: Notification) {
+        guard
+            let notebookId = notification.userInfo?["notebook_id"] as? UUID,
+            let name = notification.userInfo?["name"] as? String,
+            let isFolder = notification.userInfo?["isFolder"] as? Bool,
+            let parentId = notification.userInfo?["parent_id"] as? UUID
+        else { return }
+                
+        if isFolder {
+            foldersPathInfo[notebookId] = LocationInfo(parentId: parentId, name: name)
+        } else {
+            filesPathInfo[notebookId] = LocationInfo(parentId: parentId, name: name)
+        }
+        invalidateCacheFullPath()
+    }
+}
+
+extension NotebooksPathService {
+    func observeAppStateChanged() {
+//        NotificationCenter.default.addObserver(self, selector: "asdf", name: UIApplication.willEnterForegroundNotification, object: nil)
+    }
+}
 
 extension NotebookB {
     fileprivate var locationInfo: LocationInfo {

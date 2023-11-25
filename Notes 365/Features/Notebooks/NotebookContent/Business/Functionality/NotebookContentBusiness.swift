@@ -18,11 +18,11 @@ class NotebookContentBusinessNew {
     func retrieveOrInstantiateNotebookContent(for id: UUID) throws -> NotebookContentB {
         let result = try storage.fetchNotebookContent(for: id)
         if let result = result {
-            sendLoadedNotification(result)
+            defer { sendLoadedNotification(result) }
             return result
         } else {
             let result = try createNotebookContent(for: id)
-            sendLoadedNotification(result)
+            defer { sendLoadedNotification(result) }
             return result
         }
     }
@@ -51,7 +51,7 @@ class NotebookContentBusinessNew {
     
     func update(notebookContent: NotebookContentB) throws {
         try notebookContent.update(in: storage)
-        sendUpdatedNotification(notebookContent)
+        do { sendUpdatedNotification(notebookContent) }
     }
     
     /// send edited notification

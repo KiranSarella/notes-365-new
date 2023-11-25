@@ -11,6 +11,7 @@
 		5C051B972B11D440005C99B7 /* WeekCalendarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C051B962B11D440005C99B7 /* WeekCalendarState.swift */; };
 		5C051B992B11D599005C99B7 /* MonthCalendarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C051B982B11D599005C99B7 /* MonthCalendarState.swift */; };
 		5C051B9B2B11FFF6005C99B7 /* NotebooksPathService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C051B9A2B11FFF6005C99B7 /* NotebooksPathService.swift */; };
+		5C051B9D2B1240D4005C99B7 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C051B9C2B1240D4005C99B7 /* Logger.swift */; };
 		5C0FEF762AD01CC100056DC7 /* DayCalendarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0FEF682AD01CC000056DC7 /* DayCalendarState.swift */; };
 		5C0FEF792AD01CC100056DC7 /* DayCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0FEF6B2AD01CC000056DC7 /* DayCalendarView.swift */; };
 		5C0FEF802AD01CC100056DC7 /* MonthCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0FEF742AD01CC100056DC7 /* MonthCalendarView.swift */; };
@@ -169,6 +170,7 @@
 		5C051B962B11D440005C99B7 /* WeekCalendarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekCalendarState.swift; sourceTree = "<group>"; };
 		5C051B982B11D599005C99B7 /* MonthCalendarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthCalendarState.swift; sourceTree = "<group>"; };
 		5C051B9A2B11FFF6005C99B7 /* NotebooksPathService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksPathService.swift; sourceTree = "<group>"; };
+		5C051B9C2B1240D4005C99B7 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		5C0FEF682AD01CC000056DC7 /* DayCalendarState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayCalendarState.swift; sourceTree = "<group>"; };
 		5C0FEF6B2AD01CC000056DC7 /* DayCalendarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayCalendarView.swift; sourceTree = "<group>"; };
 		5C0FEF6D2AD01CC000056DC7 /* WeekCalendarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekCalendarView.swift; sourceTree = "<group>"; };
@@ -755,6 +757,7 @@
 				9F45BCA32920CAAE003DE332 /* ContentView.swift */,
 				9F45BCCF2920CCCE003DE332 /* SidebarSelection.swift */,
 				9F57BAE6299688BC0076FD9D /* Constants.swift */,
+				5C051B9C2B1240D4005C99B7 /* Logger.swift */,
 				9F45BCDE2920CCCE003DE332 /* Extensions.swift */,
 				9F7D2923299EB9D700B37F51 /* MainBusiness.swift */,
 				9FB0A47329DB22940093FBD2 /* Storage */,
@@ -1078,6 +1081,7 @@
 				9F57BAE7299688BC0076FD9D /* Constants.swift in Sources */,
 				5C051B972B11D440005C99B7 /* WeekCalendarState.swift in Sources */,
 				9F1687D029AE21B20085A0CA /* NotebooksChangeMonitor.swift in Sources */,
+				5C051B9D2B1240D4005C99B7 /* Logger.swift in Sources */,
 				9F7D291F299BABAC00B37F51 /* EditorViewUI.swift in Sources */,
 				9FB6C69A29275D5100C8EC76 /* FormatOptions.swift in Sources */,
 				5CC4C0212A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift in Sources */,

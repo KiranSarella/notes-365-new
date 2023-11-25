@@ -27,7 +27,7 @@ class Notebook: Identifiable {
     var name: String = ""
 
     var parentId: UUID?
-    private(set) var parent: Notebook?
+//    private(set) var parent: Notebook?
     
     var isFolder: Bool = true
     var childrenIds: [UUID]?
@@ -72,7 +72,7 @@ class Notebook: Identifiable {
     
     // MARK: - parent
     func updateParent(_ newValue: Notebook?) {
-        self.parent = newValue
+//        self.parent = newValue
         self.parentId = newValue?.id
     }
 }
@@ -109,7 +109,7 @@ extension Notebook {
         for cid in cArr {
             if let noteD = dict[cid] {
                 let note = noteD.notebook()
-                note.parent = self
+                note.parentId = self.id
                 note.isExpanded = expandedIds.contains(note.id.uuidString)
                 children.append(note)
             }
@@ -132,98 +132,98 @@ extension Notebook {
 
 extension Notebook {
     
-    func syncNotebookData() {
-        
-        notebookData.id = id
-        notebookData.name = name
-//        notebookData.orderID = orderID
-        notebookData.parent = parent?.id
-        
-        notebookData.createdDate = createdDate
-        notebookData.modifiedDate = modifiedDate
-        notebookData.deletedDate = deletedDate
-    }
-    
-    func saveNotebookData(_ modelContext: ModelContext) {
-        syncNotebookData()
-        do {
-            modelContext.insert(notebookData)
-            try modelContext.save()
-        } catch let error {
-            print(error)
-        }
-    }
-    
-    func updateNotebookData(_ modelContext: ModelContext) {
-        syncNotebookData()
-        do {
-            try modelContext.save()
-        } catch let error {
-            print(error)
-        }
-    }
+//    func syncNotebookData() {
+//        
+//        notebookData.id = id
+//        notebookData.name = name
+////        notebookData.orderID = orderID
+//        notebookData.parent = parent?.id
+//        
+//        notebookData.createdDate = createdDate
+//        notebookData.modifiedDate = modifiedDate
+//        notebookData.deletedDate = deletedDate
+//    }
+//    
+//    func saveNotebookData(_ modelContext: ModelContext) {
+//        syncNotebookData()
+//        do {
+//            modelContext.insert(notebookData)
+//            try modelContext.save()
+//        } catch let error {
+//            print(error)
+//        }
+//    }
+//    
+//    func updateNotebookData(_ modelContext: ModelContext) {
+//        syncNotebookData()
+//        do {
+//            try modelContext.save()
+//        } catch let error {
+//            print(error)
+//        }
+//    }
 }
 
 extension Notebook {
     
-    var uuidPath: [UUID] {
-        
-        var uuids = [UUID]()
-        // add self
-        uuids.append(self.id)
-        // add parents
-        var parentRef = self.parent
-        while parentRef != nil {
-            uuids.append(parentRef!.id)
-            parentRef = parentRef?.parent
-        }
-        
-        return uuids.reversed()
-    }
+//    var uuidPath: [UUID] {
+//        
+//        var uuids = [UUID]()
+//        // add self
+//        uuids.append(self.id)
+//        // add parents
+//        var parentRef = self.parent
+//        while parentRef != nil {
+//            uuids.append(parentRef!.id)
+//            parentRef = parentRef?.parent
+//        }
+//        
+//        return uuids.reversed()
+//    }
     
-    var filePath: String {
-        return self.id.uuidString + ".md"
-    }
+//    var filePath: String {
+//        return self.id.uuidString + ".md"
+//    }
     
     
-    var oldFilePath: String {
-        
-        // add self
-        var path: String = self.name + ".md"
-        // add parents
-        var parentRef = self.parent
-        while parentRef != nil {
-            path = parentRef!.name + "/" + path
-            parentRef = parentRef?.parent
-        }
-        // return
-        return path
-    }
+//    var oldFilePath: String {
+//        
+//        // add self
+//        var path: String = self.name + ".md"
+//        // add parents
+//        var parentRef = self.parent
+//        while parentRef != nil {
+//            path = parentRef!.name + "/" + path
+//            parentRef = parentRef?.parent
+//        }
+//        // return
+//        return path
+//    }
     
-    var folderPath: String {
-        // add self
-        var path: String = self.name
-        // add parents
-        var parentRef = self.parent
-        while parentRef != nil {
-            path = parentRef!.name + "/" + path
-            parentRef = parentRef?.parent
-        }
-        // return
-        return path
-    }
-    
-    var folderPaths: [String] {
-        // add self
-        var paths = [self.name]
-        // add parents
-        var parentRef = self.parent
-        while parentRef != nil {
-            paths.append(parentRef!.name)
-            // next
-            parentRef = parentRef?.parent
-        }
-        // return
-        return paths.reversed()
-    }
+//    var folderPath: String {
+//        // add self
+//        var path: String = self.name
+//        // add parents
+//        var parentRef = self.parent
+//        while parentRef != nil {
+//            path = parentRef!.name + "/" + path
+//            parentRef = parentRef?.parent
+//        }
+//        // return
+//        return path
+//    }
+//    
+//    var folderPaths: [String] {
+//        // add self
+//        var paths = [self.name]
+//        // add parents
+//        var parentRef = self.parent
+//        while parentRef != nil {
+//            paths.append(parentRef!.name)
+//            // next
+//            parentRef = parentRef?.parent
+//        }
+//        // return
+//        return paths.reversed()
+//    }
 }
