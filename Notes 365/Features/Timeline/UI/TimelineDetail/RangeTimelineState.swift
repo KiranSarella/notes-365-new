@@ -27,7 +27,8 @@ class RangeTimelineState {
     var daysContentExists:Set<Bool> = []
     var canLoadMore = false
     var statusMessage: String?
-    
+    var atleastOneDayExists = false
+    var currentDayLoaded = false
     
     func startloading(days: [Date]) {
         resetFields()
@@ -40,6 +41,7 @@ class RangeTimelineState {
         currentLoadingDate = Date()
         daysContentExists = []
         canLoadMore = false
+        atleastOneDayExists = false
         statusMessage = "Loading.."
     }
     
@@ -47,22 +49,25 @@ class RangeTimelineState {
         logger.info("loadNextDay")
         if givenDays.count == 0 {
             canLoadMore = false
+            logger.info("all loaded.")
             if !daysContentExists.contains(true) {
                 statusMessage = "No Content"
+                logger.info("no content")
             }
         } else {
             currentLoadingDate = givenDays.removeFirst()
+            currentDayLoaded = false
             showingDays.append(currentLoadingDate)
         }
     }
     
-//    func tryLoadMore() {
-//        logger.info("tryLoadMore - currentDayLoaded: \(self.currentDayLoaded)")
-//        // have to maintain queue? - what if day content is single line?
-//        if currentDayLoaded == false {
-//            return
-//        }
-//        loadNextDay()
-//    }
+    func tryLoadMore() {
+        logger.info("tryLoadMore - currentDayLoaded: \(self.currentDayLoaded)")
+        // have to maintain queue? - what if day content is single line?
+        if currentDayLoaded == false {
+            return
+        }
+        loadNextDay()
+    }
     
 }

@@ -43,13 +43,18 @@ struct RangeTimelineView: View {
             })
             .onChange(of: state.currentDateLoadingState) { oldValue, newValue in
                 logger.info("currentDayContentsCount: \(newValue.timmelinesCount)")
+                state.currentDayLoaded = true
                 if newValue.timmelinesCount > 0 {
                     state.daysContentExists.insert(true)
                     state.statusMessage = nil
+                    state.atleastOneDayExists = true
+                    state.canLoadMore = true
                 } else {
                     state.daysContentExists.insert(false)
                 }
+//                if state.atleastOneDayExists == false {
                 state.loadNextDay()
+//                }
             }
 //            .onChange(of: state.currentDayLoaded) { oldValue, newValue in
 //                if newValue {
@@ -80,8 +85,8 @@ struct LoadMoreViewNew: View {
                 .foregroundStyle(.gray)
                 .frame(height: 80)
                 .onAppear {
-                    print("load more appear")
-//                    state.tryLoadMore()
+                    logger.info("load more view appear")
+                    state.tryLoadMore()
                 }
             }
             .listRowSeparator(.hidden)
