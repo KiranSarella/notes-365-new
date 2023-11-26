@@ -1,0 +1,90 @@
+//
+//  RangeTimelineView.swift
+//  Notes 365
+//
+//  Created by kiran ipc on 26/11/23.
+//
+
+import SwiftUI
+
+struct RangeTimelineView: View {
+    @Binding var selectedDates: [Date]
+    @State private var state = RangeTimelineState()
+    
+    var body: some View {
+        
+        VStack {
+            if state.statusMessage != nil {
+                HStack {
+                    Spacer()
+                    Text(state.statusMessage ?? "")
+                        .listRowSeparator(.hidden)
+                        .fontWeight(.medium)
+                        .foregroundColor(.gray)
+                    Spacer()
+                }
+                .frame(height: 100)
+                .listRowSeparator(.hidden)
+            }
+        }
+        
+        ScrollView(.vertical, showsIndicators: false) {
+            VStack {
+                ForEach(state.showingDays, id: \.self) { date in
+                    SingleDayView(date: date, currentDateLoadingState: $state.currentDateLoadingState)
+                }
+//                LoadMoreViewNew(state: $state)
+            }
+            .onAppear {
+                state.startloading(days: selectedDates)
+            }
+            .onChange(of: selectedDates, { oldValue, newValue in
+                state.startloading(days: newValue)
+            })
+            .onChange(of: state.currentDateLoadingState) { oldValue, newValue in
+                logger.info("currentDayContentsCount: \(newValue.timmelinesCount)")
+                if newValue.timmelinesCount > 0 {
+                    state.daysContentExists.insert(true)
+                    state.statusMessage = nil
+                } else {
+                    state.daysContentExists.insert(false)
+                }
+                state.loadNextDay()
+            }
+//            .onChange(of: state.currentDayLoaded) { oldValue, newValue in
+//                if newValue {
+//                    state.loadNextDay()
+//                }
+//            }
+        }
+        .listStyle(PlainListStyle())
+        .scrollContentBackground(.hidden)
+    }
+}
+
+//#Preview {
+//    RangeTimelineView()
+//}
+
+struct LoadMoreViewNew: View {
+    @Binding var state: RangeTimelineState
+    var body: some View {
+        if state.canLoadMore {
+            VStack {
+                HStack {
+                    Spacer()
+                    Text("Loading..")
+                    Spacer()
+                }
+                .progressViewStyle(CircularProgressViewStyle())
+                .foregroundStyle(.gray)
+                .frame(height: 80)
+                .onAppear {
+                    print("load more appear")
+//                    state.tryLoadMore()
+                }
+            }
+            .listRowSeparator(.hidden)
+        }
+    }
+}

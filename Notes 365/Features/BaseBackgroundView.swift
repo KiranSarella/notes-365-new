@@ -154,20 +154,22 @@ struct DetailView: View {
     @State private var path = NavigationPath()
     
     var body: some View {
+        Text("asdf")
         
-        if sidebarItemSelected == SidebarItem.timeline.rawValue {
-            TimelineDetailView(timelineDetailState: $timelineDetailState)
-                .foregroundColor(.white)
-    //            .padding()
-    //            .background(.ultraThinMaterial)
-    //            .blur(radius: 10)
-
-        } else {
-            Text("asdf")
-//            NotebooksBaseDetailView(notebooksListState: <#Binding<NotebooksListState>#>, path: $path)
+        
+//        if sidebarItemSelected == SidebarItem.timeline.rawValue {
+//            TimelineDetailView(timelineDetailState: $timelineDetailState)
 //                .foregroundColor(.white)
-        }
-        
+//    //            .padding()
+//    //            .background(.ultraThinMaterial)
+//    //            .blur(radius: 10)
+//
+//        } else {
+//            Text("asdf")
+////            NotebooksBaseDetailView(notebooksListState: <#Binding<NotebooksListState>#>, path: $path)
+////                .foregroundColor(.white)
+//        }
+//        
        
         
      

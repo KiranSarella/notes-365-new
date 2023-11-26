@@ -30,6 +30,9 @@ class TimelineBusiness {
         }
     }
     
+    func getFirstAvailableTimelineDate() -> Date? {
+        Date().dayBefore
+    }
 }
 
 

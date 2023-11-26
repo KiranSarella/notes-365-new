@@ -170,6 +170,9 @@ extension TimelineCalendarState {
 @Observable
 class TimelineDetailState {
     let timelineBusiness: TimelineInteractor
+    
+    var selectedDates = [Date()]
+    
     var calendarState = TimelineCalendarState.day(DayDate(date: Date()))
     // load more
     var canLoadMore = false

@@ -181,7 +181,7 @@ struct ContentView: View {
             switch selectedItem {
                 
             case .timeline:
-                TimelineDetailView(timelineDetailState: $timelineDetailState)
+                TimelineDetailView(state: $timelineDetailState)
                     
             case .notebooks:
                 NotebooksBaseDetailView(notebooksListState: $notebooksListState, path: $path)
