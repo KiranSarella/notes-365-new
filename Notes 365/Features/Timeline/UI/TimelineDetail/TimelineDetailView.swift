@@ -17,20 +17,24 @@ struct TimelineDetailView: View {
             ScrollView(.vertical) {
                 TimelinecurrentDateHeaderView(timelineDetailState: $timelineDetailState)
                 LoadingStatusMessageView(timelineDetailState: $timelineDetailState)
-                DayChangesView(date: Date(), timelines: $timelineDetailState.timelines, dayState: $timelineDetailState)
-                    .listRowSeparator(.hidden)
+                
+                DayTimelineContentView(initialDate: Date())
+                
+//
+//                DayChangesView(date: timelineDetailState.calendarState, timelines: $timelineDetailState.timelines, dayState: $timelineDetailState)
+//                    .listRowSeparator(.hidden)
             
 //                ForEach($timelineDetailState.dayIndexs) { $day in
 //                    DayChangesView(date: day.date, timelines: $day.timelines, dayState: $timelineDetailState)
 //                        .listRowSeparator(.hidden)
 //                }
-                LoadMoreView(timelineDetailState: $timelineDetailState)
+//                LoadMoreView(timelineDetailState: $timelineDetailState)
             }
             .listStyle(PlainListStyle())
             .scrollContentBackground(.hidden)
         }
         .onAppear {
-            timelineDetailState.loadDayContent()
+//            timelineDetailState.loadDayContent()
 //            if loadedFirstTime == false {
 //                loadedFirstTime = true
 //                timelineDetailState.startReloadingContent()

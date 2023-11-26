@@ -123,7 +123,7 @@ enum TimelineCalendarState: Equatable {
 
 
 extension DayNotebookChange {
-    func getTimeline() -> Timeline {
+    var timeline: Timeline {
         let fullPathInfo = NotebooksPathService.shared.path(for: notebookId)
         var t = Timeline(changesID: notebookId, 
                          fileUUID: notebookId,
@@ -218,7 +218,7 @@ class TimelineDetailState {
             do {
                 await NotebooksPathService.shared.refreshNotebooksInfo()
                 let results = try timelineBusiness.fetchDayTimelineNoteChanges(date: Date())
-                timelines = results.map { $0.getTimeline() }
+                timelines = results.map { $0.timeline }
             } catch let error {
                 print(error)
             }

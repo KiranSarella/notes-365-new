@@ -151,14 +151,11 @@ extension EditorUICoordinator: UITextViewDelegate {
 
 
 struct ReadOnlyMarkDownView: View {
-    
     @State var editorView = EditorView()
     var content: String?
     var width: CGFloat
     @State var height: CGFloat = 100
-    
     var body: some View {
-        
         EditorViewUI(output: Binding.constant(""), text: Binding.constant(content ?? "no content"),
                      editorView: $editorView,
                      contentEditedDate: Binding.constant(Date()),
@@ -169,9 +166,6 @@ struct ReadOnlyMarkDownView: View {
             DispatchQueue.main.async {
                 editorView.textView.sizeToFit()
                 height = editorView.textView.contentSize.height
-//                print("height: ", height)
-//                print("contentSize: ", editorView.textView.contentSize)
-//                print("intrinsicContentSize: ", editorView.textView.intrinsicContentSize)
             }
         }
         .frame(height: height)
@@ -179,32 +173,32 @@ struct ReadOnlyMarkDownView: View {
 }
 
 
-struct ReadOnlySymbolsView: View {
-    
-    @State var editorView = EditorView()
-    var content: String?
-    var width: CGFloat
-    @State var height: CGFloat = 100
-    @Binding var editorType: EditorType
-    
-    var body: some View {
-        
-        EditorViewUI(output: Binding.constant(""), text: Binding.constant(content ?? "no content"),
-                     editorView: $editorView,
-                     contentEditedDate: Binding.constant(Date()),
-                     isEditable: false,
-                     isEditor: false,
-                     editorType: editorType
-        )
-        .onAppear {
-            editorView.textView.backgroundColor = .clear
-        }
-        .frame(height: height)
-        .onChange(of: editorType) { newValue in
-            editorView.editorType = newValue
-        }
-    }
-}
+//struct ReadOnlySymbolsView: View {
+//    
+//    @State var editorView = EditorView()
+//    var content: String?
+//    var width: CGFloat
+//    @State var height: CGFloat = 100
+//    @Binding var editorType: EditorType
+//    
+//    var body: some View {
+//        
+//        EditorViewUI(output: Binding.constant(""), text: Binding.constant(content ?? "no content"),
+//                     editorView: $editorView,
+//                     contentEditedDate: Binding.constant(Date()),
+//                     isEditable: false,
+//                     isEditor: false,
+//                     editorType: editorType
+//        )
+//        .onAppear {
+//            editorView.textView.backgroundColor = .clear
+//        }
+//        .frame(height: height)
+//        .onChange(of: editorType) { newValue in
+//            editorView.editorType = newValue
+//        }
+//    }
+//}
 
 
 extension NSAttributedString {

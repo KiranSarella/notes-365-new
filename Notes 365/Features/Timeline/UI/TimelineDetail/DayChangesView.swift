@@ -32,13 +32,14 @@ struct DayChangesView: View {
             ForEach($timelines) { $noteChange in
                 VStack {
                     // notebook heading view
-                    NoteChangeHeadingView(noteChange: noteChange, showDiscard: dayState.canDiscard, discardTimeline: $discardTimeline)
+                    NoteChangeHeadingView(noteChange: noteChange)
                     .listRowSeparator(.hidden)
                     .padding()
 //                    .padding(.bottom, 10)
                     // content
                     HStack {
-                        ReadOnlyMarkDownViewTwo(timeline: $noteChange)
+                        Text("asdf")
+//                        ReadOnlyMarkDownViewTwo(timeline: $noteChange)
                         .listRowSeparator(.hidden)
                         .textSelection(.enabled)
                         .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working

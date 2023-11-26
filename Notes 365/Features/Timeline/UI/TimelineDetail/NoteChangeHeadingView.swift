@@ -11,9 +11,9 @@ struct NoteChangeHeadingView: View {
     @Environment(\.colorScheme) var colorScheme
     @State private var isFocused = false
     var noteChange: Timeline
-    var showDiscard = false
+//    var showDiscard = false
     
-    @Binding var discardTimeline: Timeline?
+//    @Binding var discardTimeline: Timeline?
     
     func getAbsolutePath() -> String {
         var components = noteChange.filePath.components(separatedBy: "/")
@@ -57,24 +57,24 @@ struct NoteChangeHeadingView: View {
 //                Text("two")
 //            }
             
-            if showDiscard && isFocused {
-                
-                Button {
-                    // inform delete action to parent
-                    print("## Discard")
-                    print(noteChange.fileName)
-                    print(noteChange.id, noteChange.content)
-                    
-                    discardTimeline = noteChange
-                } label: {
-                    Text("Discard")
-    //                Image(systemName: "trash")
-                        .foregroundColor(.red)
-                }
-                .help("Ignore changes in timeline")
-                .padding()
-//                .opacity(showDiscard && isFocused ? 1 : 0)
-            }
+//            if showDiscard && isFocused {
+//                
+//                Button {
+//                    // inform delete action to parent
+//                    print("## Discard")
+//                    print(noteChange.fileName)
+//                    print(noteChange.id, noteChange.content)
+//                    
+//                    discardTimeline = noteChange
+//                } label: {
+//                    Text("Discard")
+//    //                Image(systemName: "trash")
+//                        .foregroundColor(.red)
+//                }
+//                .help("Ignore changes in timeline")
+//                .padding()
+////                .opacity(showDiscard && isFocused ? 1 : 0)
+//            }
             
 
         }

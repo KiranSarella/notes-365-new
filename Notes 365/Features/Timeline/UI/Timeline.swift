@@ -108,7 +108,6 @@ public struct Timeline: Identifiable {
     var needUpdate = true
     var isNotebookExists = true
     // UI optimazation related
-    var editorView: EditorView = EditorView()
     var height: CGFloat = 0
     var isConfigured = false
     var themeID: UUID = UUID()
@@ -129,7 +128,7 @@ extension Timeline {
         self.attriburedString = AttributedString(newAttS)
     }
 
-    var isRefreshRequired: Bool {
-        (themeID != editorView.theme.id) || (width != editorView.textView.intrinsicContentSize.width)
-    }
+//    var isRefreshRequired: Bool {
+//        (themeID != editorView.theme.id) || (width != editorView.textView.intrinsicContentSize.width)
+//    }
 }
