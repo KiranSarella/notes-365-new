@@ -68,6 +68,12 @@ class BusinessFactory {
         return TimelineBusiness(storage: storage)
     }
     
+    static func dayVersionInteractor() -> DayVersionInteractor {
+        let modelContext = SharedContext.shared.getModelContext()
+        let storage = TodayVersionStorageAdapter(modelContext: modelContext)
+        return TodayVersionBusiness(storage: storage)
+    }
+    
 }
 
 //class NotebooksBusinessGenerator: NotebooksBusinessFactory {

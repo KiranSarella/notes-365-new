@@ -12,7 +12,6 @@ struct RangeTimelineView: View {
     @State private var state = RangeTimelineState()
     
     var body: some View {
-        
         VStack {
             if state.statusMessage != nil {
                 HStack {

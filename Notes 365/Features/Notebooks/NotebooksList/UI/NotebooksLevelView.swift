@@ -103,25 +103,25 @@ struct NotebooksLevelView: View {
     
     @ToolbarContentBuilder
     private func toolbarItems() ->  some ToolbarContent {
-            // menu options
-            ToolbarItem(placement: .topBarTrailing) {
-                Menu {
-                    Button {
-//                        notebooksListState.showRecentlyModified()
-                    } label: {
-                        Text("Recently Modified")
-                    }
-                    .foregroundColor(.primary)
-                    Button {
-//                        notebooksListState.showRecentlyDeleted()
-                    } label: {
-                        Text("Deleted Notebooks")
-                    }
-                    .foregroundColor(.primary)
-                } label: {
-                    Image(systemName: "ellipsis.circle")
-                }
-            }
+//            // menu options
+//            ToolbarItem(placement: .topBarTrailing) {
+//                Menu {
+//                    Button {
+////                        notebooksListState.showRecentlyModified()
+//                    } label: {
+//                        Text("Recently Modified")
+//                    }
+//                    .foregroundColor(.primary)
+//                    Button {
+////                        notebooksListState.showRecentlyDeleted()
+//                    } label: {
+//                        Text("Deleted Notebooks")
+//                    }
+//                    .foregroundColor(.primary)
+//                } label: {
+//                    Image(systemName: "ellipsis.circle")
+//                }
+//            }
             ToolbarItem(placement: .topBarTrailing) {
                
                 Button {

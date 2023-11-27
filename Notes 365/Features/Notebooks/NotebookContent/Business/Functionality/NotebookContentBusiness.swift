@@ -29,9 +29,11 @@ class NotebookContentBusinessNew {
     
     /// send notification, so that some one can create day base version
     private func sendLoadedNotification(_ notebookContent: NotebookContentB) {
+        logger.info("sendLoadedNotification")
         let info = [
-            "id": notebookContent.notebookID
-        ]
+            "notebook_id": notebookContent.notebookID,
+            "notebook_content": notebookContent.content
+        ] as [String : Any]
         NotificationCenter.default.post(name: Notification.Name.notebookContentLoaded, object: nil, userInfo: info)
     }
     

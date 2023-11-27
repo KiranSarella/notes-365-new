@@ -46,6 +46,7 @@
 		5C5668132B10B1E200CB873F /* DayNotebookChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5668122B10B1E200CB873F /* DayNotebookChange.swift */; };
 		5C5668152B10B88800CB873F /* DayTimelineData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5668142B10B88800CB873F /* DayTimelineData.swift */; };
 		5C5668172B10C84A00CB873F /* TimelineStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5668162B10C84A00CB873F /* TimelineStorageAdapter.swift */; };
+		5C7CFAB62B151E5D00777AB2 /* DateTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7CFAB52B151E5D00777AB2 /* DateTime.swift */; };
 		5C7D4AF22B07DCEA00BB1908 /* NotebooksRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7D4AF12B07DCEA00BB1908 /* NotebooksRequester.swift */; };
 		5C7D4AF82B08E00C00BB1908 /* NotebookB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7D4AF72B08E00C00BB1908 /* NotebookB.swift */; };
 		5C8FADF92B0A06F600B80BD9 /* StringDiffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD302920CCCE003DE332 /* StringDiffTests.swift */; };
@@ -56,6 +57,13 @@
 		5CA77C162A24AE220030EFB2 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C152A24AE220030EFB2 /* Collections */; };
 		5CA77C182A24AE220030EFB2 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C172A24AE220030EFB2 /* DequeModule */; };
 		5CA77C1A2A24AE220030EFB2 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C192A24AE220030EFB2 /* OrderedCollections */; };
+		5CBEF3112B14FDEF003A3972 /* HorizontalCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBEF3102B14FDEF003A3972 /* HorizontalCalendarView.swift */; };
+		5CBEF3132B14FE22003A3972 /* HorizontalCalendarViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBEF3122B14FE22003A3972 /* HorizontalCalendarViewState.swift */; };
+		5CBEF3182B15008E003A3972 /* TodayVersionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBEF3172B15008E003A3972 /* TodayVersionStorage.swift */; };
+		5CBEF31A2B15025E003A3972 /* TodayVersionStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBEF3192B15025E003A3972 /* TodayVersionStorageAdapter.swift */; };
+		5CBEF31C2B150359003A3972 /* TodayVersionStorageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBEF31B2B150359003A3972 /* TodayVersionStorageProvider.swift */; };
+		5CBEF31E2B150CE7003A3972 /* DayVersionInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBEF31D2B150CE7003A3972 /* DayVersionInteractor.swift */; };
+		5CBEF3202B151018003A3972 /* DayVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBEF31F2B151018003A3972 /* DayVersion.swift */; };
 		5CC4C01F2A908D7000A4BE41 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC4C01E2A908D7000A4BE41 /* EditorView.swift */; };
 		5CC4C0212A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC4C0202A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift */; };
 		5CC8C25F2AD67D4100ABAC1F /* DayContentGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEC4D1B2AD3A4EA00750268 /* DayContentGenerator.swift */; };
@@ -130,8 +138,6 @@
 		9F92CF0529B7525500B8D3C4 /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F92CF0429B7525500B8D3C4 /* MailView.swift */; };
 		9F93E14629E3FB4E00210E99 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F57BAE6299688BC0076FD9D /* Constants.swift */; };
 		9F93E15029E6A2AC00210E99 /* SmartEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93E14F29E6A2AC00210E99 /* SmartEditor.swift */; };
-		9F93E15529ED0D0F00210E99 /* TodayVersionSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93E15429ED0D0F00210E99 /* TodayVersionSync.swift */; };
-		9F93E15629ED0D0F00210E99 /* TodayVersionSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93E15429ED0D0F00210E99 /* TodayVersionSync.swift */; };
 		9FB0A47D29DD27470093FBD2 /* CloudServiceTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D2925299EC27E00B37F51 /* CloudServiceTwo.swift */; };
 		9FB0A47E29DD274F0093FBD2 /* InitialCloudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1687CB29AD0E7F0085A0CA /* InitialCloudSync.swift */; };
 		9FB0A48329DE8DD00093FBD2 /* FormatOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB6C69929275D5100C8EC76 /* FormatOptions.swift */; };
@@ -209,6 +215,7 @@
 		5C5668122B10B1E200CB873F /* DayNotebookChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayNotebookChange.swift; sourceTree = "<group>"; };
 		5C5668142B10B88800CB873F /* DayTimelineData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayTimelineData.swift; sourceTree = "<group>"; };
 		5C5668162B10C84A00CB873F /* TimelineStorageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineStorageAdapter.swift; sourceTree = "<group>"; };
+		5C7CFAB52B151E5D00777AB2 /* DateTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTime.swift; sourceTree = "<group>"; };
 		5C7D4AF12B07DCEA00BB1908 /* NotebooksRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksRequester.swift; sourceTree = "<group>"; };
 		5C7D4AF72B08E00C00BB1908 /* NotebookB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookB.swift; sourceTree = "<group>"; };
 		5C8FADFA2B0A072600B80BD9 /* NotebooksListStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListStateTests.swift; sourceTree = "<group>"; };
@@ -217,6 +224,13 @@
 		5C9060512B0F46060068DD65 /* CurrentLevelState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLevelState.swift; sourceTree = "<group>"; };
 		5C9732212A8B74C200C42E28 /* iCloud-sync.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "iCloud-sync.md"; sourceTree = "<group>"; };
 		5C9B5CFF2A8FED2A00396102 /* TextKit.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TextKit.md; sourceTree = "<group>"; };
+		5CBEF3102B14FDEF003A3972 /* HorizontalCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalCalendarView.swift; sourceTree = "<group>"; };
+		5CBEF3122B14FE22003A3972 /* HorizontalCalendarViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalCalendarViewState.swift; sourceTree = "<group>"; };
+		5CBEF3172B15008E003A3972 /* TodayVersionStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayVersionStorage.swift; sourceTree = "<group>"; };
+		5CBEF3192B15025E003A3972 /* TodayVersionStorageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayVersionStorageAdapter.swift; sourceTree = "<group>"; };
+		5CBEF31B2B150359003A3972 /* TodayVersionStorageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayVersionStorageProvider.swift; sourceTree = "<group>"; };
+		5CBEF31D2B150CE7003A3972 /* DayVersionInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayVersionInteractor.swift; sourceTree = "<group>"; };
+		5CBEF31F2B151018003A3972 /* DayVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayVersion.swift; sourceTree = "<group>"; };
 		5CC4C01E2A908D7000A4BE41 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
 		5CC4C0202A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MarkdownAttributedString+iOS.swift"; sourceTree = "<group>"; };
 		5CCCF7F02AC15E0D00F5923E /* NotebookContentData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentData.swift; sourceTree = "<group>"; };
@@ -307,7 +321,6 @@
 		9F93E14729E532D600210E99 /* TodayVersion.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TodayVersion.md; sourceTree = "<group>"; };
 		9F93E14929E59E3200210E99 /* MarkdownEditor.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MarkdownEditor.md; sourceTree = "<group>"; };
 		9F93E14F29E6A2AC00210E99 /* SmartEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartEditor.swift; sourceTree = "<group>"; };
-		9F93E15429ED0D0F00210E99 /* TodayVersionSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayVersionSync.swift; sourceTree = "<group>"; };
 		9F93E15829EE620900210E99 /* Release Notes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Release Notes.md"; sourceTree = "<group>"; };
 		9FB0A47129D9246D0093FBD2 /* architecture-decissions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "architecture-decissions.md"; sourceTree = "<group>"; };
 		9FB0A48C29DF13360093FBD2 /* timeline.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = timeline.md; sourceTree = "<group>"; };
@@ -481,6 +494,43 @@
 			path = Functionality;
 			sourceTree = "<group>";
 		};
+		5CBEF30F2B14FD2E003A3972 /* HorizontalCalendarView */ = {
+			isa = PBXGroup;
+			children = (
+				5CBEF3102B14FDEF003A3972 /* HorizontalCalendarView.swift */,
+				5CBEF3122B14FE22003A3972 /* HorizontalCalendarViewState.swift */,
+			);
+			path = HorizontalCalendarView;
+			sourceTree = "<group>";
+		};
+		5CBEF3142B15001F003A3972 /* Business */ = {
+			isa = PBXGroup;
+			children = (
+				5CBEF3162B150064003A3972 /* Functionality */,
+				5CBEF3152B15002E003A3972 /* Storage */,
+			);
+			path = Business;
+			sourceTree = "<group>";
+		};
+		5CBEF3152B15002E003A3972 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				5CBEF3192B15025E003A3972 /* TodayVersionStorageAdapter.swift */,
+				5CBEF3172B15008E003A3972 /* TodayVersionStorage.swift */,
+				5CCCF7F22AC2B0B300F5923E /* TodayVersion.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		5CBEF3162B150064003A3972 /* Functionality */ = {
+			isa = PBXGroup;
+			children = (
+				9F09CEB029267FBC00609D99 /* TodayVersionBusiness.swift */,
+				5CBEF31B2B150359003A3972 /* TodayVersionStorageProvider.swift */,
+			);
+			path = Functionality;
+			sourceTree = "<group>";
+		};
 		5CC209F42B0263B5000E6192 /* Business */ = {
 			isa = PBXGroup;
 			children = (
@@ -510,6 +560,7 @@
 			children = (
 				5CD2F4EF2ACC7FD500E8B465 /* TimelineDetailState.swift */,
 				5C1CD5AA2ABC350B00D47814 /* TimelineDetailView.swift */,
+				5CBEF30F2B14FD2E003A3972 /* HorizontalCalendarView */,
 				5C3DE6B12B13722C004E3621 /* RangeTimelineView.swift */,
 				5C3DE6B62B13A8A2004E3621 /* RangeTimelineState.swift */,
 				5C3DE6B32B13A181004E3621 /* SingleDay */,
@@ -644,6 +695,7 @@
 				9F45BCA12920CAAE003DE332 /* Notes_365App.swift */,
 				5CF612B62B0B06B700D397C6 /* SharedContext.swift */,
 				5C10D7A42B04C281006FB80D /* BusinessFactory.swift */,
+				5C7CFAB52B151E5D00777AB2 /* DateTime.swift */,
 				9FB0A47129D9246D0093FBD2 /* architecture-decissions.md */,
 				5C9732212A8B74C200C42E28 /* iCloud-sync.md */,
 				5C117C3D2A8E662800B0F3BE /* Features.md */,
@@ -785,7 +837,7 @@
 				9FB0A47329DB22940093FBD2 /* Storage */,
 				9FB0A48829DF12980093FBD2 /* Timeline */,
 				9FB0A47529DBD6930093FBD2 /* Notebooks */,
-				9FB0A48D29DF13930093FBD2 /* TodayVersion */,
+				9FB0A48D29DF13930093FBD2 /* DayVersions */,
 				9F93E14829E59CDA00210E99 /* SmartEditor */,
 				9F45BD332920CCCF003DE332 /* Preferences */,
 				9F45BD382920CCCF003DE332 /* Theams */,
@@ -816,15 +868,15 @@
 			path = Timeline;
 			sourceTree = "<group>";
 		};
-		9FB0A48D29DF13930093FBD2 /* TodayVersion */ = {
+		9FB0A48D29DF13930093FBD2 /* DayVersions */ = {
 			isa = PBXGroup;
 			children = (
 				9F93E14729E532D600210E99 /* TodayVersion.md */,
-				5CCCF7F22AC2B0B300F5923E /* TodayVersion.swift */,
-				9F09CEB029267FBC00609D99 /* TodayVersionBusiness.swift */,
-				9F93E15429ED0D0F00210E99 /* TodayVersionSync.swift */,
+				5CBEF31F2B151018003A3972 /* DayVersion.swift */,
+				5CBEF31D2B150CE7003A3972 /* DayVersionInteractor.swift */,
+				5CBEF3142B15001F003A3972 /* Business */,
 			);
-			path = TodayVersion;
+			path = DayVersions;
 			sourceTree = "<group>";
 		};
 		9FB6C69429275BF900C8EC76 /* NotebooksList */ = {
@@ -1031,26 +1083,29 @@
 				5CD2F4F02ACC7FD500E8B465 /* TimelineDetailState.swift in Sources */,
 				9F45BDA92920CE52003DE332 /* ScaleFontView.swift in Sources */,
 				5CCCF7F32AC2B0B300F5923E /* TodayVersion.swift in Sources */,
+				5CBEF3202B151018003A3972 /* DayVersion.swift in Sources */,
 				5CF612B72B0B06B700D397C6 /* SharedContext.swift in Sources */,
 				9F45BDA52920CE41003DE332 /* ColorPickerWindow.swift in Sources */,
+				5CBEF3112B14FDEF003A3972 /* HorizontalCalendarView.swift in Sources */,
 				9F45BD892920CDE0003DE332 /* EditorViewDelegate+iOS.swift in Sources */,
 				9F7D2922299CF2AF00B37F51 /* CloudService.swift in Sources */,
 				9F45BDAB2920CE52003DE332 /* ThemesListView.swift in Sources */,
 				9F45BD712920CDE0003DE332 /* SymbolPattern.swift in Sources */,
 				9F45BCA42920CAAE003DE332 /* ContentView.swift in Sources */,
+				5CBEF3132B14FE22003A3972 /* HorizontalCalendarViewState.swift in Sources */,
 				9F45BDA42920CE41003DE332 /* ThemePreviewView.swift in Sources */,
 				5C3DE6B52B13A19D004E3621 /* SingleDayState.swift in Sources */,
 				5CE8C4882B03048E00F19217 /* Notebook.swift in Sources */,
 				9FBB0B5D2A0E952E00F407AF /* MarkdownEditorViewState.swift in Sources */,
 				5CCCF7F52AC2CB6B00F5923E /* TimelineStorage.swift in Sources */,
 				5C5668152B10B88800CB873F /* DayTimelineData.swift in Sources */,
-				9F93E15529ED0D0F00210E99 /* TodayVersionSync.swift in Sources */,
 				9F3DB0C6292E1D9200704860 /* ThemeBusiness.swift in Sources */,
 				5C286D192AD994BC00F836D3 /* DayChangesView.swift in Sources */,
 				9F14B491298A684F0079D23B /* ThemeDetailView+iOS.swift in Sources */,
 				5C0FEF762AD01CC100056DC7 /* DayCalendarState.swift in Sources */,
 				5C5668172B10C84A00CB873F /* TimelineStorageAdapter.swift in Sources */,
 				5C7D4AF82B08E00C00BB1908 /* NotebookB.swift in Sources */,
+				5CBEF31C2B150359003A3972 /* TodayVersionStorageProvider.swift in Sources */,
 				9F45BD662920CDA9003DE332 /* NoteChangeHeadingView.swift in Sources */,
 				9F14B4AE298F98900079D23B /* FontPicker.swift in Sources */,
 				5CF612D62B0B98CF00D397C6 /* EditorView+Layout.swift in Sources */,
@@ -1112,10 +1167,14 @@
 				5CC4C0212A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift in Sources */,
 				5C3DE6B22B13722C004E3621 /* RangeTimelineView.swift in Sources */,
 				9F7D2924299EB9D700B37F51 /* MainBusiness.swift in Sources */,
+				5CBEF3182B15008E003A3972 /* TodayVersionStorage.swift in Sources */,
+				5CBEF31E2B150CE7003A3972 /* DayVersionInteractor.swift in Sources */,
 				9FB6C69E2927615700C8EC76 /* SpeechState.swift in Sources */,
 				5CF612C12B0B0DD600D397C6 /* NotebookContentStorageAdapter.swift in Sources */,
+				5C7CFAB62B151E5D00777AB2 /* DateTime.swift in Sources */,
 				5C29FED52A98D91D001DC601 /* ReadonlyEditorCache.swift in Sources */,
 				5CC8C25F2AD67D4100ABAC1F /* DayContentGenerator.swift in Sources */,
+				5CBEF31A2B15025E003A3972 /* TodayVersionStorageAdapter.swift in Sources */,
 				5CF612CC2B0B343200D397C6 /* NotebookContent.swift in Sources */,
 				5C0FEF792AD01CC100056DC7 /* DayCalendarView.swift in Sources */,
 			);
@@ -1128,7 +1187,6 @@
 				9F93E14629E3FB4E00210E99 /* Constants.swift in Sources */,
 				9FB0A48729DE8E150093FBD2 /* ThemeBusiness.swift in Sources */,
 				9FB0A47D29DD27470093FBD2 /* CloudServiceTwo.swift in Sources */,
-				9F93E15629ED0D0F00210E99 /* TodayVersionSync.swift in Sources */,
 				5C8FADFB2B0A072600B80BD9 /* NotebooksListStateTests.swift in Sources */,
 				9FB0A47E29DD274F0093FBD2 /* InitialCloudSync.swift in Sources */,
 				9FB0A48329DE8DD00093FBD2 /* FormatOptions.swift in Sources */,

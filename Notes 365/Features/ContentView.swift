@@ -39,7 +39,7 @@ struct ContentWrapperView: View {
                         // do any operations
                         chooseEnv.enableConfigured()
                         // clean base version
-                        TodayVersionBusiness.cleanBaseVersionIfNeeded(modelContext: modelContext)
+                        DayVersion.shared.cleanBaseVersionIfNeeded()
                         #else
                         statusMessage = "checking iCloud settings"
                         // choose environment
@@ -97,7 +97,7 @@ struct ContentView: View {
     @State private var selectedNotebookM: Notebook?
     @State var notebooksListState = NotebooksListState(notebookBusiness: BusinessFactory.createNotebooksFactory())
     @State var navigationSplitViewVisibility = NavigationSplitViewVisibility.all
-    var todayVersionBusiness = TodayVersionBusiness()
+    var todayVersionBusiness = BusinessFactory.dayVersionInteractor()
     var bottomViewBackgroundColor: Color {
         if UIDevice.current.userInterfaceIdiom == .phone {
             return Color(uiColor: UIColor.systemGroupedBackground)
@@ -143,9 +143,6 @@ struct ContentView: View {
             .navigationTitle("Notes 365")
             .onAppear {
                 BusinessFactory.timelineInteractor().setupTimeineCreationProcess()
-                
-                todayVersionBusiness.modelContext = modelContext
-//                timelineDetailState.timelineBusiness.modelContext = modelContext
 //                // used to create new timeline
 //                timelineDetailState.timelineBusiness.updateTodayTimelineIndex()
             }

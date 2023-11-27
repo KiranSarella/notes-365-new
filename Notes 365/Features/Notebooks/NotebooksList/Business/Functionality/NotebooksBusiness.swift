@@ -182,6 +182,7 @@ class NameGenerator {
 extension NotebooksBusiness {
     
     func getAllFilesInfo() -> [NotebookB] {
+//        []
         return (try? storage.getAllFilesInfo()) ?? []
     }
 }

@@ -31,6 +31,7 @@ class RangeTimelineState {
     var currentDayLoaded = false
     
     func startloading(days: [Date]) {
+        logger.info("startLoadingDays - \(days)")
         resetFields()
         givenDays = days
         loadNextDay()

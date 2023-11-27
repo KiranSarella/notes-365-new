@@ -46,7 +46,7 @@ class TimelineContentCreator {
     
     func prepareTimelineContent(notebookId: UUID, content: String) -> DayNotebookChange? {
         print(#function, notebookId)
-        let dayBaseVersion = ""
+        let dayBaseVersion = DayVersion.shared.getTodayVersion(for: notebookId) ?? ""
         let diff = StringDiff.getChanges(old: dayBaseVersion, new: content)
 //            .trimmingCharacters(in: .newlines)
         // TODO: - how to detect if a line is deleted?
@@ -56,35 +56,5 @@ class TimelineContentCreator {
         var dayNotebookChange = DayNotebookChange(notebookId: notebookId, date: Date())
         dayNotebookChange.content = diff
         return dayNotebookChange
-        
-        
-        
-//        // if already exists, then update
-//        if let timelineContent = getTimelineContent(today: today, uuid: uuid) {
-//            timelineContent.content = newChanges
-//            timelineContent.filename = notebookName
-//            timelineContent.path = notebookPath
-//            
-//            timelineContent.modifiedDate = today //Date()
-//            
-//            appendTimelineContentToIndex(timelineContent: timelineContent.id)
-//        } else {
-//            // else insert
-//            let timelineContent = TimelineContent()
-//            // index
-//            timelineContent.year = today.getYear()
-//            timelineContent.month = today.getMonth()
-//            timelineContent.day = today.getDay()
-//            timelineContent.notebookID = uuid
-//            // data
-//            timelineContent.content = newChanges
-//            timelineContent.filename = notebookName
-//            timelineContent.path = notebookPath
-//            
-//            modelContext.insert(timelineContent)
-//            
-//            appendTimelineContentToIndex(timelineContent: timelineContent.id)
-//        }
-//        
     }
 }
