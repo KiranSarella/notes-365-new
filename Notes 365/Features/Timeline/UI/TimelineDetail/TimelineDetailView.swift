@@ -83,73 +83,120 @@ struct TimelineDetailView: View {
     }
 }
 
-struct HorizontalCalendarView: View {
+enum TimelineDateRangeType {
+    case today
+    case previousSevenDays
+    case month
+}
+
+struct TimelineDateRange: Identifiable {
+    let id = UUID()
+    let title: String
+    let type: TimelineDateRangeType
+    let date: Date
+}
+
+extension TimelineDateRange: Equatable {
     
-    @Binding var selectedDates: [Date]
-    let buttons = ["Today", "Previous 7 Days", "November", "October"]
+}
+
+
+@Observable
+class HorizontalCalendarViewState {
+    let timelineBusiness = BusinessFactory.timelineInteractor()
+    var dateRanges = [TimelineDateRange]()
+    var selectedDateRange: TimelineDateRange?
     
-//    ["Today", "Previous 7 Days", "Previous 30 Days", "October", "September", "August", "July", "June", "May 23", "April 23", "Janurary", "December 22", "November 22", "October 22"]
-    
-    @State private var selected: String?
-    
-    func isSelected(input: String) -> Bool {
-        guard let selected = selected else { return false }
-        return selected == input
+    init() {
+        dateRanges = constructDateRanges()
+        selectedDateRange = dateRanges.first
     }
     
-//    func getButtonStyle(_ input: String) -> any PrimitiveButtonStyle {
-//        guard let selected = selected else { return BorderedButtonStyle() }
-//        if selected == input {
-//            return BorderedProminentButtonStyle()
-//        } else {
-//            return BorderedButtonStyle()
-//        }
-//    }
+    func constructDateRanges() -> [TimelineDateRange] {
+        logger.info("constructDateRanges")
+        var ranges = [TimelineDateRange]()
+        ranges.append(TimelineDateRange(title: "Today", type: .today, date: Date()))
+        guard let firstEntryDate = timelineBusiness.getFirstAvailableTimelineDate() else {
+            return ranges
+        }
+        logger.info("firstEntryDate: \(firstEntryDate)")
+        if Date().dayBefore >= firstEntryDate {
+            ranges.append(TimelineDateRange(title: "Previous 7 Days", type: .previousSevenDays, date: Date().dayBefore))
+            logger.info("\(ranges.last?.title ?? "")")
+        }
+        
+        var firstMonthDate = Date().startOfMonth()
+        if firstMonthDate >= firstEntryDate {
+            var count = 10
+            while count > 0 && firstMonthDate >= firstEntryDate {
+                ranges.append(TimelineDateRange(title: firstMonthDate.monthName, type: .month, date: firstMonthDate))
+                logger.info("\(ranges.last?.title ?? "")")
+                firstMonthDate = firstMonthDate.monthBefore
+                count -= 1
+            }
+        }
+        
+        return ranges
+    }
+    
+    func isSelected(input: TimelineDateRange) -> Bool {
+        guard let selectedDateRange = selectedDateRange else { return false }
+        return selectedDateRange == input
+    }
+    
+    func getDates(for dateRange: TimelineDateRange) -> [Date] {
+        switch dateRange.type {
+        case .today:
+            return [Date()]
+        case .previousSevenDays:
+            var today = Date()
+            var dates = [Date]()
+            for _ in 0..<7 {
+                today = today.dayBefore
+                dates.append(today)
+            }
+            return dates
+        case .month:
+            return dateRange.date.getDaysOfMonth()
+        }
+    }
+}
+
+struct HorizontalCalendarView: View {
+    
+    @State private var state = HorizontalCalendarViewState()
+    @Binding var selectedDates: [Date]
     
     var body: some View {
         ScrollViewReader { scrollProxy in
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    ForEach(buttons, id: \.self) { button in
+                    ForEach(state.dateRanges) { dateRange in
                         VStack {
-                            if isSelected(input: button) {
+                            if state.isSelected(input: dateRange) {
                                 Button {
                                     
                                 } label: {
-                                    Text(button)
+                                    Text(dateRange.title)
                                 }
                                 .buttonStyle(.borderedProminent)
                             } else {
                                 Button {
-                                    selected = button
-                                    if button == "Today" {
-                                        selectedDates = [Date()]
-                                    } else if button == "Previous 7 Days" {
-                                        var today = Date()
-                                        var dates = [Date]()
-                                        for _ in 0..<7 {
-                                            today = today.dayBefore
-                                            dates.append(today)
-                                        }
-                                        selectedDates = dates
-                                    } else {
-                                        selectedDates = Date().getDaysOfMonth()
-                                    }
+                                    state.selectedDateRange = dateRange
+                                    selectedDates = state.getDates(for: dateRange)
                                 } label: {
-                                    Text(button)
+                                    Text(dateRange.title)
                                 }
                                 .buttonStyle(.bordered)
                             }
                         }
                         .padding(5)
-                        .id(button)
+                        .id(dateRange.id)
                     }
                 }
                 .padding(.horizontal)
-//                .buttonStyle(.borderedProminent)
-//                .background(Color.white)
             }.onAppear {
-                selected = buttons.first
+//                selected = buttons.first
             }
         }
 

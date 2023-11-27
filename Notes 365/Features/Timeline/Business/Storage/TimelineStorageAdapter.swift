@@ -24,6 +24,10 @@ class TimelineStorageAdapter: TimelineStorageProvider {
         try storage.save(dayNotebookChange: dayNotebookChange.dayNotebookData())
     }
     
+    func getFirstAvailableTimelineDate() throws -> Date? {
+        try storage.getFirstAvailableTimelineDate()
+    }
+    
 }
 
 extension DayNotebookChangeData {

@@ -31,7 +31,12 @@ class TimelineBusiness {
     }
     
     func getFirstAvailableTimelineDate() -> Date? {
-        Date().dayBefore
+        do {
+            return try storage.getFirstAvailableTimelineDate()
+        } catch let error {
+            print(error)
+            return nil
+        }
     }
 }
 

@@ -58,6 +58,13 @@ class TimelineStorage {
         try dayNotebookChange.modelContext?.save()
     }
     
+    func getFirstAvailableTimelineDate() throws -> Date? {
+        let predicate = #Predicate<DayNotebookChangeData> { _ in true }
+        let sortByDate = SortDescriptor(\DayNotebookChangeData.updatedTime)
+        var descriptor = FetchDescriptor(predicate: predicate)
+        descriptor.fetchLimit = 1
+        return try modelContext.fetch(descriptor).first?.updatedTime
+    }
     
 //    func fetchTimelineRecords(for ids: Set<String>) throws -> [DayNotebookChangeData] {
 //        let predicate = #Predicate<DayNotebookChangeData> {

@@ -11,6 +11,7 @@ protocol TimelineInteractor {
     func fetchDayTimelineNoteChanges(date: Date) throws -> [DayNotebookChange]
     func setupTimeineCreationProcess()
     func stopTimelineCreationProcess()
+    func getFirstAvailableTimelineDate() -> Date?
 }
 
 extension TimelineBusiness: TimelineInteractor {

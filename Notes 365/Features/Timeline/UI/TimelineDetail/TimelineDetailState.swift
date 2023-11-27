@@ -200,6 +200,7 @@ class TimelineDetailState {
     var currentTaskID = UUID()
     init(timelineBusiness: TimelineInteractor) {
         self.timelineBusiness = timelineBusiness
+//        getFirstAvailableTimelineDate()
     }
     
     func setToday() {
@@ -227,6 +228,13 @@ class TimelineDetailState {
             }
         }
     }
+    
+//    func getFirstAvailableTimelineDate() {
+//        let firstEntryDate = timelineBusiness.getFirstAvailableTimelineDate()
+//        logger.info("getFirstAvailableTimelineDate - \(firstEntryDate?.string(format: "yyyy-MM-dd") ?? "")")
+//    }
+    
+   
     
     func startReloadingContent() {
 //        print(#function)

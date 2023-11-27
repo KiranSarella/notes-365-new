@@ -152,4 +152,12 @@ extension Date {
     var isLastDayOfMonth: Bool {
         return dayAfter.month != month
     }
+    
+    var monthName: String {
+        Calendar.current.standaloneMonthSymbols[month]
+    }
+    
+    var monthBefore: Date {
+        return Calendar.current.date(byAdding: .month, value: -1, to: noon)!
+    }
 }
