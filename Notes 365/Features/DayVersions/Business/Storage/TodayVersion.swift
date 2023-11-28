@@ -9,7 +9,10 @@ import Foundation
 import SwiftData
 
 @Model
-class TodayVersion: Identifiable {
+class TodayVersion {
+    var id: String {
+        "\(date.string(format: "yyyy-MM-dd"))-\(notebookID)"
+    }
     var notebookID: UUID = UUID()
     var content: String = ""
     var date: Date = DateTime.now()

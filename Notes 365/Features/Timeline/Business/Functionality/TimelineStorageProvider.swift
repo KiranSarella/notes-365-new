@@ -11,4 +11,5 @@ protocol TimelineStorageProvider {
     func fetchDayTimelineRecords(for date: Date) throws -> [DayNotebookChange]
     func save(dayNotebookChange: DayNotebookChange) throws
     func getFirstAvailableTimelineDate() throws -> Date?
+    func delete(dayNotebookChange: DayNotebookChange) throws
 }

@@ -28,6 +28,11 @@ class TimelineStorageAdapter: TimelineStorageProvider {
         try storage.getFirstAvailableTimelineDate()
     }
     
+    func delete(dayNotebookChange: DayNotebookChange) throws {
+//        storage.delete(dayNotebookChange: dayNotebookChange.dayNotebookData())
+        try storage.delete(for: dayNotebookChange.id)
+    }
+    
 }
 
 extension DayNotebookChangeData {

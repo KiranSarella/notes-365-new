@@ -23,8 +23,9 @@ class TodayVersionStorage {
     }
     
     func isBaseVersionExists(for notebookId: UUID) throws -> Bool {
+        let today = DateTime.now()
         let predicate = #Predicate<TodayVersion> {
-            $0.notebookID == notebookId
+            $0.notebookID == notebookId && $0.date == today
         }
         var descriptor = FetchDescriptor(predicate: predicate)
         descriptor.fetchLimit = 1
@@ -38,8 +39,9 @@ class TodayVersionStorage {
     }
     
     func getTodayVersion(for notebookId: UUID) throws -> String? {
+        let today = DateTime.now()
         let predicate = #Predicate<TodayVersion> {
-            $0.notebookID == notebookId
+            $0.notebookID == notebookId && $0.date == today
         }
         var descriptor = FetchDescriptor(predicate: predicate)
         descriptor.fetchLimit = 1

@@ -19,10 +19,12 @@ class TimelineBusiness {
     }
     
     func fetchDayTimelineNoteChanges(date: Date) throws -> [DayNotebookChange] {
-        try storage.fetchDayTimelineRecords(for: date)
+        logger.info("\(#function)")
+        return try storage.fetchDayTimelineRecords(for: date)
     }
     
     func save(dayNotebookChange: DayNotebookChange) {
+        logger.info("\(#function)")
         do {
             try storage.save(dayNotebookChange: dayNotebookChange)
         } catch let error {
@@ -31,11 +33,21 @@ class TimelineBusiness {
     }
     
     func getFirstAvailableTimelineDate() -> Date? {
+        logger.info("\(#function)")
         do {
             return try storage.getFirstAvailableTimelineDate()
         } catch let error {
             print(error)
             return nil
+        }
+    }
+    
+    func delete(dayNotebookChange: DayNotebookChange) {
+        logger.info("\(#function)")
+        do {
+            try storage.delete(dayNotebookChange: dayNotebookChange)
+        } catch let error {
+            logger.error("\(error)")
         }
     }
 }
@@ -45,10 +57,12 @@ class TimelineBusiness {
 extension TimelineBusiness {
     
     func setupTimeineCreationProcess() {
+        logger.info("\(#function)")
         TimelineContentCreator.shared.startProviding(for: self)
     }
     
     func stopTimelineCreationProcess() {
+        logger.info("\(#function)")
         TimelineContentCreator.shared.stopProviding()
     }
 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 
 struct HorizontalCalendarView: View {
+    
     @Binding var state: HorizontalCalendarViewState
     @Binding var selectedDates: [Date]
     
@@ -20,7 +21,7 @@ struct HorizontalCalendarView: View {
                         VStack {
                             if state.isSelected(input: dateRange) {
                                 Button {
-                                    
+                                    state.selectedDateRange = dateRange
                                 } label: {
                                     Text(dateRange.title)
                                 }
@@ -41,11 +42,12 @@ struct HorizontalCalendarView: View {
                 .padding(.horizontal)
             }
             .onAppear(perform: {
-//                if state.dateRanges.isEmpty {
+                if state.dateRanges.isEmpty || !state.loadedDate.isSameDayAs(DateTime.now()) {
                     state.dateRanges = state.constructDateRanges()
+                    state.loadedDate = DateTime.now()
                     logger.info("dateRanges.count - \(state.dateRanges.count)")
                     state.selectedDateRange = state.dateRanges.first
-//                }
+                }
             })
             .onChange(of: state.selectedDateRange, { oldValue, newValue in
                 logger.info("onChange - selectedDateRange: ")

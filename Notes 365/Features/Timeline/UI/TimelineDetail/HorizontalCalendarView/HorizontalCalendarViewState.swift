@@ -14,6 +14,7 @@ class HorizontalCalendarViewState {
     let timelineBusiness = BusinessFactory.timelineInteractor()
     var dateRanges = [TimelineDateRange]()
     var selectedDateRange: TimelineDateRange?
+    var loadedDate: Date = DateTime.now()
     
     init() {
         

@@ -41,6 +41,8 @@ class TimelineContentCreator {
                 
         if let dayNotebookChange = prepareTimelineContent(notebookId: notebookId, content: content) {
             timelineBusiness?.save(dayNotebookChange: dayNotebookChange)
+        } else {
+            timelineBusiness?.delete(dayNotebookChange: DayNotebookChange(notebookId: notebookId, date: DateTime.now()))
         }
     }
     
@@ -48,7 +50,7 @@ class TimelineContentCreator {
         print(#function, notebookId)
         let dayBaseVersion = DayVersion.shared.getTodayVersion(for: notebookId) ?? ""
         let diff = StringDiff.getChanges(old: dayBaseVersion, new: content)
-//            .trimmingCharacters(in: .newlines)
+            .trimmingCharacters(in: .newlines)
         // TODO: - how to detect if a line is deleted?
         if diff.count == 0 {
             return nil
