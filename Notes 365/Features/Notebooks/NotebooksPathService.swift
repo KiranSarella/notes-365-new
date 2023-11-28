@@ -8,12 +8,12 @@
 import Foundation
 import UIKit
 
-fileprivate struct LocationInfo {
+struct LocationInfo: Hashable {
     let parentId: UUID?
     let name: String
 }
 
-struct FullPathInfo {
+struct FullPathInfo: Hashable {
     let name: String
     let fullPath: String
 }
@@ -30,11 +30,22 @@ class NotebooksPathService {
         observeNotebookInserted()
     }
     
-    func path(for notebookId: UUID) -> FullPathInfo? {
+    func path(for notebookId: UUID) async -> FullPathInfo? {
         if let fullPathInfo = fullPathsCache[notebookId] {
             return fullPathInfo
         } else {
-            guard let filePathInfo = filesPathInfo[notebookId] else { return nil }
+            let newPath = await generatePath(notebookId: notebookId)
+            if let newPath = newPath {
+                fullPathsCache[notebookId] = newPath
+            }
+            return newPath
+        }
+    }
+    
+    func generatePath(notebookId: UUID) async -> FullPathInfo? {
+        return await withCheckedContinuation { continution in
+            guard let filePathInfo = self.filesPathInfo[notebookId]
+            else { return continution.resume(returning: nil) }
             var pathComponents = [String]()
             pathComponents.append(filePathInfo.name)
             if let folderId = filePathInfo.parentId {
@@ -42,10 +53,12 @@ class NotebooksPathService {
             }
             let fullPath = pathComponents.reversed().joined(separator: "  \u{203A}   ")
             let fullPathInfo = FullPathInfo(name: filePathInfo.name, fullPath: fullPath)
-            defer {
-                fullPathsCache[notebookId] = fullPathInfo
-            }
-            return fullPathInfo
+            
+//                defer {
+//                    fullPathsCache[notebookId] = fullPathInfo
+//                }
+            continution.resume(returning: fullPathInfo)
+//                return fullPathInfo
         }
     }
     
@@ -74,10 +87,11 @@ class NotebooksPathService {
         let notebooksBusiness = BusinessFactory.createNotebooksFactory()
         let results = notebooksBusiness.getAllFilesInfo()
         for result in results {
+            if result.parentId == nil { continue }
             if result.isFolder {
-                foldersPathInfo[result.id] = result.locationInfo
+                foldersPathInfo[result.id] = result.locationInfo()
             } else {
-                filesPathInfo[result.id] = result.locationInfo
+                filesPathInfo[result.id] = result.locationInfo()
             }
         }
     }
@@ -148,7 +162,12 @@ extension NotebooksPathService {
 }
 
 extension NotebookB {
-    fileprivate var locationInfo: LocationInfo {
+    
+    func locationInfo() -> LocationInfo {
         LocationInfo(parentId: parentId, name: name)
     }
+    
+//    fileprivate var locationInfo: LocationInfo {
+//        LocationInfo(parentId: parentId, name: name)
+//    }
 }

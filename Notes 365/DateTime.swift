@@ -10,12 +10,24 @@ import Foundation
 class DateTime {
     static let shared = DateTime()
     
-    private(set) var date = Date().dayBefore.dayBefore
+    private(set) var date = Date()
     
     static func now() -> Date {
         DateTime.shared.date
     }
     
+    static func change(now value: Date) {
+        DateTime.shared.date = value
+    }
+    
+    static func changeToNextDay() {
+        DateTime.shared.date = DateTime.now().dayAfter
+    }
+    
+    static func changeToBeforeDay() {
+        DateTime.shared.date = DateTime.now().dayBefore
+    }
+    
     // DateTime.now()
-    // DateTime.static.now
+    // DateTime.now
 }

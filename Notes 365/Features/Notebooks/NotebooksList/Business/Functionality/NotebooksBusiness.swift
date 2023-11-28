@@ -24,6 +24,7 @@ class NotebooksBusiness {
     }
     
     func fetchAllNotebooks() async throws -> [NotebookB] {
+        logger.info("\(#function)")
         return try await storage.fetchAllNotebooks()
     }
 
@@ -182,8 +183,12 @@ class NameGenerator {
 extension NotebooksBusiness {
     
     func getAllFilesInfo() -> [NotebookB] {
-//        []
-        return (try? storage.getAllFilesInfo()) ?? []
+        do {
+           return try storage.getAllFilesInfo()
+        } catch let error {
+            logger.error("\(error)")
+        }
+        return []
     }
 }
 

@@ -29,9 +29,10 @@ class SingleDayViewState {
             do {
                 await NotebooksPathService.shared.refreshNotebooksInfo()
                 let results = try timelineBusiness.fetchDayTimelineNoteChanges(date: date)
-                self.timelines = results.map { $0.timeline }
-                logger.info("\(date) - timelines count: \(self.timelines.count)")
-//                try? await Task.sleep(nanoseconds: 3_000_000_000)
+                for result in results {
+                    let r = await result.getTimeline()
+                    timelines.append(r)
+                }
                 isLoaded = true
             } catch let error {
                 logger.error("\(error)")

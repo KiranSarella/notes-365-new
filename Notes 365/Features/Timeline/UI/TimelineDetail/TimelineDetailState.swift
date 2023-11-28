@@ -123,15 +123,25 @@ enum TimelineCalendarState: Equatable {
 
 
 extension DayNotebookChange {
-    var timeline: Timeline {
-        let fullPathInfo = NotebooksPathService.shared.path(for: notebookId)
-        var t = Timeline(changesID: notebookId, 
+    func getTimeline() async -> Timeline {
+        let fullPathInfo = await NotebooksPathService.shared.path(for: notebookId)
+        var t = Timeline(changesID: notebookId,
                          fileUUID: notebookId,
                          fileName: fullPathInfo?.name ?? "",
                          filePath: fullPathInfo?.fullPath ?? "")
         t.content = content
         return t
     }
+    
+//    var timeline: Timeline {
+//        let fullPathInfo = NotebooksPathService.shared.path(for: notebookId)
+//        var t = Timeline(changesID: notebookId, 
+//                         fileUUID: notebookId,
+//                         fileName: fullPathInfo?.name ?? "",
+//                         filePath: fullPathInfo?.fullPath ?? "")
+//        t.content = content
+//        return t
+//    }
 }
 
 
@@ -217,17 +227,20 @@ class TimelineDetailState {
         self.canLoadMore = false
     }
     
-    func loadDayContent() {
-        Task {
-            do {
-                await NotebooksPathService.shared.refreshNotebooksInfo()
-                let results = try timelineBusiness.fetchDayTimelineNoteChanges(date: Date())
-                timelines = results.map { $0.timeline }
-            } catch let error {
-                print(error)
-            }
-        }
-    }
+//    func loadDayContent() {
+//        Task {
+//            do {
+//                await NotebooksPathService.shared.refreshNotebooksInfo()
+//                let results = try self.timelineBusiness.fetchDayTimelineNoteChanges(date: Date())
+//                for result in results {
+//                    let r = await result.getTimeline()
+//                    timelines.append(r)
+//                }
+//            } catch let error {
+//                print(error)
+//            }
+//        }
+//    }
     
 //    func getFirstAvailableTimelineDate() {
 //        let firstEntryDate = timelineBusiness.getFirstAvailableTimelineDate()
