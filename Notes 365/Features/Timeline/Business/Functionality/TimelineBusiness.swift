@@ -11,7 +11,7 @@ import SwiftData
 class TimelineBusiness {
     var todayTimelineIndex: TimelineIndex?
     var count = -5
-    var today = Date()
+    var today = DateTime.now()
     var storage: TimelineStorageProvider
     
     init(storage: TimelineStorageProvider) {

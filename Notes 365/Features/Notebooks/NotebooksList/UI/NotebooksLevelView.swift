@@ -10,7 +10,7 @@ import SwiftUI
 struct Item: Identifiable {
     let id: UUID
     var name: String
-    var createdDate: Date = Date()
+    var createdDate: Date = DateTime.now()
 }
 
 struct NotebookDetailBaseView: View {

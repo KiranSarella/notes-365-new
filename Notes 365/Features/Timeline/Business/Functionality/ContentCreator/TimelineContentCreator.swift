@@ -53,7 +53,7 @@ class TimelineContentCreator {
         if diff.count == 0 {
             return nil
         }
-        var dayNotebookChange = DayNotebookChange(notebookId: notebookId, date: Date())
+        var dayNotebookChange = DayNotebookChange(notebookId: notebookId, date: DateTime.now())
         dayNotebookChange.content = diff
         return dayNotebookChange
     }

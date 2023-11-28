@@ -57,3 +57,10 @@ filename
 path
 date
 
+
+steps
+1. get first created date
+2. populate notebooks paths cache
+3. load content
+
+

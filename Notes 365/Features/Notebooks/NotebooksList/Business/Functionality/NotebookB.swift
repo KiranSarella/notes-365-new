@@ -15,8 +15,8 @@ class NotebookB: Identifiable {
     var parentId: UUID?
     var isFolder: Bool = false
     
-    var createdDate: Date = Date()
-    var modifiedDate: Date = Date()
+    var createdDate: Date = DateTime.now()
+    var modifiedDate: Date = DateTime.now()
     var deletedDate: Date? = nil
     
     var isDeleted: Bool {

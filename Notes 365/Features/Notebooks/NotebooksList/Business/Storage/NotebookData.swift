@@ -16,9 +16,9 @@ class NotebookData {
     var parent: UUID?
     var isFolder: Bool = false
     
-    var createdDate: Date = Date()
+    var createdDate: Date = DateTime.now()
     var deletedDate: Date?
-    var modifiedDate: Date = Date()
+    var modifiedDate: Date = DateTime.now()
     
     var isDeleted: Bool {
         deletedDate != nil
@@ -28,9 +28,9 @@ class NotebookData {
         self.id = id
         self.name = name
         
-        createdDate = Date()
+        createdDate = DateTime.now()
         deletedDate = nil
-        modifiedDate = Date()
+        modifiedDate = DateTime.now()
     }
 }
 

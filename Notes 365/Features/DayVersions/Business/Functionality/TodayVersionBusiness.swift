@@ -35,6 +35,7 @@ class TodayVersionBusiness {
     }
     
     func cleanBaseVersionIfNeeded() {
+        logger.info("\(#function)")
         let date = Date.yesterday
         do {
             try storage.deleteAllVersions(belowDate: date)

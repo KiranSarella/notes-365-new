@@ -94,7 +94,7 @@ class NotebooksBusiness {
     }
     
     func deleteNotebook(notebook: NotebookB) throws {
-        notebook.deletedDate = Date()
+        notebook.deletedDate = DateTime.now()
         try notebook.update(in: storage)
     }
     

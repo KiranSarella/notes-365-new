@@ -22,10 +22,12 @@ class DateTime {
     
     static func changeToNextDay() {
         DateTime.shared.date = DateTime.now().dayAfter
+        logger.info("\(#function) - \(DateTime.shared.date)")
     }
     
     static func changeToBeforeDay() {
         DateTime.shared.date = DateTime.now().dayBefore
+        logger.info("\(#function) - \(DateTime.shared.date)")
     }
     
     // DateTime.now()

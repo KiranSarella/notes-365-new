@@ -12,7 +12,7 @@ struct ContentWrapperView: View {
     @State private var didError = false
     @State private var errorDetail: Error?
     @State private var showRefresh = false
-    @State private var statusMessage = "Loading.."
+    @State private var statusMessage = "Loading.. wrapper"
     @Environment(\.modelContext) private var modelContext
     var body: some View {
         // do initial checks and configurations
@@ -115,6 +115,8 @@ struct ContentView: View {
     @State private var timelineDetailState = TimelineDetailState(timelineBusiness: BusinessFactory.timelineInteractor())
     @State private var presentedParks: [SidebarItem] = []
     @State private var path = NavigationPath()
+    @State private var horizontalCalendarViewState = HorizontalCalendarViewState()
+    
     var body: some View {
         NavigationSplitView(columnVisibility: $navigationSplitViewVisibility) {
             List(selection: $sidebarItemSelected) {
@@ -178,7 +180,7 @@ struct ContentView: View {
             switch selectedItem {
                 
             case .timeline:
-                TimelineDetailView(state: $timelineDetailState)
+                TimelineDetailView(state: $timelineDetailState, horizontalCalendarViewState: $horizontalCalendarViewState)
                     
             case .notebooks:
                 NotebooksBaseDetailView(notebooksListState: $notebooksListState, path: $path)
@@ -268,120 +270,3 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-
-
-struct NestedContentView: View {
-    
-    @Binding var sidebarItemSelected: SidebarItem.ID?
-    
-    struct FileItem: Hashable, Identifiable, CustomStringConvertible {
-        var id: Self { self }
-        var name: String
-        var children: [FileItem]? = nil
-        var description: String {
-            switch children {
-            case nil:
-                return "📄 \(name)"
-            case .some(let children):
-                return children.isEmpty ? "📂 \(name)" : "📁 \(name)"
-            }
-        }
-    }
-    let fileHierarchyData: [FileItem] = [
-      FileItem(name: "users", children:
-        [FileItem(name: "user1234", children:
-          [FileItem(name: "Photos", children:
-            [FileItem(name: "photo001photo001photo001photo001photo001.jpg"),
-             FileItem(name: "photo002.jpg")]),
-           FileItem(name: "Movies", children:
-             [FileItem(name: "movie001movie001movie00movie00movie001.mp4")]),
-              FileItem(name: "Documents", children: [])
-          ]),
-         FileItem(name: "newuser", children:
-           [FileItem(name: "Documents", children: [])
-           ])
-        ]),
-        FileItem(name: "private", children: 
-            [
-              FileItem(name: "users", children:
-                [FileItem(name: "user1234", children:
-                  [FileItem(name: "Photos", children:
-                    [FileItem(name: "photo001photo001photo001photo001photo001.jpg"),
-                     FileItem(name: "photo002.jpg")]),
-                   FileItem(name: "Movies", children:
-                     [FileItem(name: "movie001movie001movie00movie00movie001.mp4")]),
-                      FileItem(name: "Documents", children: [
-                        FileItem(name: "users", children:
-                          [FileItem(name: "user1234", children:
-                            [FileItem(name: "Photos", children:
-                              [FileItem(name: "photo001photo001photo001photo001photo001.jpg"),
-                               FileItem(name: "photo002.jpg")]),
-                             FileItem(name: "Movies", children:
-                               [FileItem(name: "movie001movie001movie00movie00movie001.mp4")]),
-                                FileItem(name: "Documents", children: [])
-                            ]),
-                           FileItem(name: "newuser", children:
-                             [FileItem(name: "Documents", children: [])
-                             ])
-                          ]),
-                          FileItem(name: "private", children: nil)
-                      ])
-                  ]),
-                 FileItem(name: "newuser", children:
-                   [FileItem(name: "Documents", children: [])
-                   ])
-                ]),
-                FileItem(name: "private", children: nil)
-            ])
-    ]
-    
-    @State var notebookContentState = NotebookContentState(business: BusinessFactory.createNotebookContentBusinessFactory())
-    
-    @State var showDetail: FileItem?
-    
-    
-    @State var selecteItem: FileItem.ID?
-    
-    func getColor(itemId: FileItem) -> Color {
-        if selecteItem == nil {
-            return Color.black
-        }
-        if itemId == selecteItem! {
-            return Color.red
-        }
-        
-        return Color.black
-    }
-    
-    var body: some View {
-        
-        NavigationStack {
-            List(fileHierarchyData, children: \.children, selection: $selecteItem) { item in
-                if item.children == nil {
-//                    Button(item.description) {
-//                        showDetail = item
-//                    }
-//                    .fullScreenCover(item: $showDetail) { item in
-//                        NavigationStack {
-//                            NotebookContentView(isReadOnly: false, notebookId: UUID(), editorState: notebookContentState)
-//                        }
-//                    }
-                    
-                    NavigationLink(item.description) {
-                        NotebookContentView(isReadOnly: false, notebookId: UUID(), notebookContentState: notebookContentState)
-                    }
-                    
-                    
-                } else {
-                    Text(item.description)
-                        .foregroundStyle(getColor(itemId: item))
-                }
-                
-            }
-            .listStyle(SidebarListStyle())
-            .navigationTitle("Nested list")
-        }
-        
-        
-    }
-}

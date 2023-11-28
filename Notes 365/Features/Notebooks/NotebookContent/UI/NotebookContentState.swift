@@ -16,8 +16,8 @@ class NotebookContentState {
     var isFetchingData = true
     var input: String = ""
     var output: String = ""
-    var contentEditedDate: Date? = Date()
-    var lastSavedDate: Date = Date()
+    var contentEditedDate: Date? = DateTime.now()
+    var lastSavedDate: Date = DateTime.now()
     @ObservationIgnored
     private var autoSaveTimer: Timer? = nil
     
@@ -35,7 +35,7 @@ class NotebookContentState {
         do {
             input = try business.retrieveOrInstantiateNotebookContent(for: notebookId).notebookContent().content
             output = input
-            lastSavedDate = Date()
+            lastSavedDate = DateTime.now()
         } catch let error {
             print(error)
             fatalError(error.localizedDescription)
@@ -55,7 +55,7 @@ class NotebookContentState {
         print(#function, notebookId.uuidString)
         do {
             try business.update(notebookContent: NotebookContentB(notebookID: notebookId, content: output))
-            lastSavedDate = Date()
+            lastSavedDate = DateTime.now()
         } catch let error {
             print(error)
             fatalError(error.localizedDescription)

@@ -16,24 +16,23 @@ class HorizontalCalendarViewState {
     var selectedDateRange: TimelineDateRange?
     
     init() {
-        dateRanges = constructDateRanges()
-//        selectedDateRange = dateRanges.first
+        
     }
     
     func constructDateRanges() -> [TimelineDateRange] {
         logger.info("constructDateRanges")
         var ranges = [TimelineDateRange]()
-        ranges.append(TimelineDateRange(title: "Today", type: .today, date: Date()))
+        ranges.append(TimelineDateRange(title: "Today", type: .today, date: DateTime.now()))
         guard let firstEntryDate = timelineBusiness.getFirstAvailableTimelineDate() else {
             return ranges
         }
         logger.info("firstEntryDate: \(firstEntryDate)")
-        if Date().dayBefore >= firstEntryDate {
-            ranges.append(TimelineDateRange(title: "Previous 7 Days", type: .previousSevenDays, date: Date().dayBefore))
+        if DateTime.now().dayBefore >= firstEntryDate {
+            ranges.append(TimelineDateRange(title: "Previous 7 Days", type: .previousSevenDays, date: DateTime.now().dayBefore))
             logger.info("\(ranges.last?.title ?? "")")
         }
         
-        var firstMonthDate = Date().startOfMonth()
+        var firstMonthDate = DateTime.now().startOfMonth()
         if firstMonthDate >= firstEntryDate {
             var count = 10
             while count > 0 && firstMonthDate >= firstEntryDate {
@@ -55,9 +54,9 @@ class HorizontalCalendarViewState {
     func getDates(for dateRange: TimelineDateRange) -> [Date] {
         switch dateRange.type {
         case .today:
-            return [Date()]
+            return [DateTime.now()]
         case .previousSevenDays:
-            var today = Date()
+            var today = DateTime.now()
             var dates = [Date]()
             for _ in 0..<7 {
                 today = today.dayBefore

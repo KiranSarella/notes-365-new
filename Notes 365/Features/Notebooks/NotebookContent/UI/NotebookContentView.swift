@@ -60,6 +60,8 @@ struct NotebookContentView: View {
         }
         .onDisappear {
             Task {
+                notebookContentState.invalidateAutoSaveTimer()
+                notebookContentState.saveChangesIfModified()
 //                self.editorState.cancelAutoSaveTimer()
 //                await editorState.saveContentChanges()
             }

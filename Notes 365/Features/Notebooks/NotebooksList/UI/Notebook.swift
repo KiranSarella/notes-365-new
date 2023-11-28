@@ -34,8 +34,8 @@ class Notebook: Identifiable {
     // private(set)
     var children: [Notebook] = [Notebook]()
     
-    var createdDate: Date = Date()
-    var modifiedDate: Date = Date()
+    var createdDate: Date = DateTime.now()
+    var modifiedDate: Date = DateTime.now()
     var deletedDate: Date? = nil
     
     var notebookData: NotebookData

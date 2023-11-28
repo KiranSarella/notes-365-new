@@ -21,7 +21,7 @@ public enum NotebookBusinessError: Error {
 class NotebooksListBusiness {
     
     var basePathURL: URL
-    private var listSyncDate: Date = Date()
+    private var listSyncDate: Date = DateTime.now()
     
     private let deleteDays = 30
     
@@ -102,7 +102,7 @@ extension NotebooksListBusiness {
         
         for notebook in deletedNotebooks {
             guard let deletedDate = notebook.deletedDate else { return }
-            if numberOfDaysBetween(deletedDate, and: Date()) > deleteDays {
+            if numberOfDaysBetween(deletedDate, and: DateTime.now()) > deleteDays {
                 oldNotebooks.append(notebook)
             } else {
                 remainingNotebooks.append(notebook)

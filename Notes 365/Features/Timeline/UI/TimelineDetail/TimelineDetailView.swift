@@ -11,12 +11,13 @@ struct TimelineDetailView: View {
     @Binding var state: TimelineDetailState
     @State private var isShowingCalendar = false
     @State private var loadedFirstTime = false
+    @Binding var horizontalCalendarViewState: HorizontalCalendarViewState
     
     var body: some View {
         GeometryReader { geometry in
          
         VStack {
-            HorizontalCalendarView(selectedDates: $state.selectedDates)
+            HorizontalCalendarView(state: $horizontalCalendarViewState, selectedDates: $state.selectedDates)
             ScrollView(.vertical, showsIndicators: false) {
 //                TimelinecurrentDateHeaderView(timelineDetailState: $timelineDetailState)
 //                LoadingStatusMessageView(timelineDetailState: $timelineDetailState)
@@ -62,60 +63,6 @@ extension TimelineDateRange: Equatable {
 }
 
 
-struct TimelinecurrentDateHeaderView: View {
-    @Binding var timelineDetailState: TimelineDetailState
-    var body: some View {
-        // header
-        VStack {
-            // day/week/month header view
-            switch timelineDetailState.calendarState {
-            case .day(let dayDate):
-                // header view
-                HStack {
-                    Spacer()
-                    Text(dayDate.formattedDate)
-                        .listRowSeparator(.hidden)
-                        .padding(.horizontal)
-                        .font(.largeTitle)
-                        .fontDesign(.rounded)
-                        .fontWeight(.heavy)
-                    Spacer()
-                }
-                .listRowSeparator(.hidden)
-                if timelineDetailState.currentState != .data {
-                    Text(dayDate.date.string(withFormat: "EEEE, d MMMM"))
-                        .font(.subheadline)
-                        .listRowSeparator(.hidden)
-                }
-            case .week(let weekDate):
-                // header view
-                HStack {
-                    Spacer()
-                    Text(weekDate.weekNumberHeading)
-                        .listRowSeparator(.hidden)
-                        .padding(.horizontal)
-                        .font(.largeTitle)
-                        .fontDesign(.rounded)
-                        .fontWeight(.heavy)
-                    Spacer()
-                }
-            case .month(let monthDate):
-                HStack {
-                    Spacer()
-                    Text(monthDate.start.string(format: "MMMM, YYYY"))
-                        .listRowSeparator(.hidden)
-                        .padding(.horizontal)
-                        .font(.largeTitle)
-                        .fontDesign(.rounded)
-                        .fontWeight(.heavy)
-                    Spacer()
-                }
-            }
-        }
-        .listRowSeparator(.hidden)
-    }
-}
-
 struct LoadingStatusMessageView: View {
     @Binding var timelineDetailState: TimelineDetailState
     var body: some View {
@@ -142,7 +89,7 @@ struct LoadMoreView: View {
             VStack {
                 HStack {
                     Spacer()
-                    Text("Loading..")
+                    Text("Loading.. in (timeline detail)")
                     Spacer()
                 }
                 .progressViewStyle(CircularProgressViewStyle())

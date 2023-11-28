@@ -6,7 +6,8 @@
 //
 import SwiftUI
 
-struct DayTimelineModel {
+struct DayTimelineModel: Identifiable {
+    let id = UUID()
     let date: Date
     var timelines = [Timeline]()
     

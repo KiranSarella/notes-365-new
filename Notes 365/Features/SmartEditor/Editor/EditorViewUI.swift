@@ -110,7 +110,7 @@ extension EditorUICoordinator: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         print(#function)
-        parent.contentEditedDate = Date()
+        parent.contentEditedDate = DateTime.now()
         output = textView.text
 //        _text.wrappedValue = textView.text
 //        self.parent.text = textView.text
@@ -158,7 +158,7 @@ struct ReadOnlyMarkDownView: View {
     var body: some View {
         EditorViewUI(output: Binding.constant(""), text: Binding.constant(content ?? "no content"),
                      editorView: $editorView,
-                     contentEditedDate: Binding.constant(Date()),
+                     contentEditedDate: Binding.constant(DateTime.now()),
                      isEditable: false,
                      isEditor: false
         )

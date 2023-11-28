@@ -17,9 +17,9 @@ extension Date {
     }
     
     func localDate() -> Date {
-        let nowUTC = Date()
+        let nowUTC = DateTime.now()
         let timeZoneOffset = Double(TimeZone.current.secondsFromGMT(for: nowUTC))
-        guard let localDate = Calendar.current.date(byAdding: .second, value: Int(timeZoneOffset), to: nowUTC) else {return Date()}
+        guard let localDate = Calendar.current.date(byAdding: .second, value: Int(timeZoneOffset), to: nowUTC) else {return DateTime.now()}
         
         return localDate
     }
@@ -142,7 +142,7 @@ public extension Date {
     static func isCurrentMonth(_ date: Date) -> Bool {
         // check same year
         // check same month
-        let today = Date()
+        let today = DateTime.now()
         
         if date.getYear() == today.getYear() && date.getMonth() == today.getMonth() {
             return true
@@ -263,8 +263,8 @@ extension Date {
 
 
 extension Date {
-    static var yesterday: Date { return Date().dayBefore }
-    static var tomorrow:  Date { return Date().dayAfter }
+    static var yesterday: Date { return DateTime.now().dayBefore }
+    static var tomorrow:  Date { return DateTime.now().dayAfter }
     var dayBefore: Date {
         return Calendar.current.date(byAdding: .day, value: -1, to: noon)!
     }

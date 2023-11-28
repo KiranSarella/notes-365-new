@@ -15,6 +15,8 @@ struct FeedbackView_iPadOS: View {
     @State private var result: Result<MFMailComposeResult, Error>? = nil
     @State private var isShowingMailView = false
     
+    @State var today = DateTime.now()
+    
     var enableSendButton: Bool {
         canSendMail && (feedbackState.message.count > 0)
     }
@@ -26,6 +28,25 @@ struct FeedbackView_iPadOS: View {
     var body: some View {
         
         NavigationStack {
+            
+            HStack {
+                Button {
+                    DateTime.changeToBeforeDay()
+                    today = DateTime.now()
+                } label: {
+                    Text("before day")
+                }
+                
+                Text(today, style: .date)
+                
+                Button {
+                    DateTime.changeToNextDay()
+                    today = DateTime.now()
+                } label: {
+                    Text("next day")
+                }
+            }
+            .padding()
             
             VStack {
                 VStack(alignment: .leading) {

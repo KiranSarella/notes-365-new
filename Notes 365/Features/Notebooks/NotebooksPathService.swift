@@ -20,6 +20,7 @@ struct FullPathInfo: Hashable {
 
 class NotebooksPathService {
     static let shared = NotebooksPathService()
+    let notebooksBusiness = BusinessFactory.createNotebooksFactory()
     fileprivate var filesPathInfo = [UUID: LocationInfo]()
     fileprivate var foldersPathInfo = [UUID: LocationInfo]()
     var fullPathsCache = [UUID: FullPathInfo]()
@@ -78,21 +79,23 @@ class NotebooksPathService {
         if isLoaded {
             return
         }
-        updateNotebooksInfo()
-        try? await Task.sleep(nanoseconds: 2_000_000_000)
+        await updateNotebooksInfo()
+//        try? await Task.sleep(nanoseconds: 2_000_000_000)
         isLoaded = true
     }
     
-    private func updateNotebooksInfo() {
-        let notebooksBusiness = BusinessFactory.createNotebooksFactory()
-        let results = notebooksBusiness.getAllFilesInfo()
-        for result in results {
-            if result.parentId == nil { continue }
-            if result.isFolder {
-                foldersPathInfo[result.id] = result.locationInfo()
-            } else {
-                filesPathInfo[result.id] = result.locationInfo()
+    private func updateNotebooksInfo() async {
+        return await withCheckedContinuation { c in
+            let results = notebooksBusiness.getAllFilesInfo()
+            for result in results {
+                if result.parentId == nil { continue }
+                if result.isFolder {
+                    foldersPathInfo[result.id] = result.locationInfo()
+                } else {
+                    filesPathInfo[result.id] = result.locationInfo()
+                }
             }
+            c.resume()
         }
     }
 

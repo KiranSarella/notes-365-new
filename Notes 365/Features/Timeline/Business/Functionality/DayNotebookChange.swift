@@ -16,7 +16,7 @@ struct DayNotebookChange: Identifiable {
     var year: Int
     var month: Int
     var day: Int
-    var updatedTime: Date = Date()
+    var updatedTime: Date = DateTime.now()
     var content: String = ""
     
     init(notebookId: UUID, year: Int, month: Int, day: Int) {

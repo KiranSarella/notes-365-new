@@ -29,8 +29,8 @@ struct RangeTimelineView: View {
         
         ScrollView(.vertical, showsIndicators: false) {
             VStack {
-                ForEach(state.showingDays, id: \.self) { date in
-                    SingleDayView(date: date, currentDateLoadingState: $state.currentDateLoadingState)
+                ForEach(state.dayTimelineModels) { dayTimelines in
+                    SingleDayView(dayTimelines: dayTimelines)
                 }
 //                LoadMoreViewNew(state: $state)
             }
@@ -40,21 +40,21 @@ struct RangeTimelineView: View {
             .onChange(of: selectedDates, { oldValue, newValue in
                 state.startloading(days: newValue)
             })
-            .onChange(of: state.currentDateLoadingState) { oldValue, newValue in
-                logger.info("currentDayContentsCount: \(newValue.timmelinesCount)")
-                state.currentDayLoaded = true
-                if newValue.timmelinesCount > 0 {
-                    state.daysContentExists.insert(true)
-                    state.statusMessage = nil
-                    state.atleastOneDayExists = true
-                    state.canLoadMore = true
-                } else {
-                    state.daysContentExists.insert(false)
-                }
-//                if state.atleastOneDayExists == false {
-                state.loadNextDay()
+//            .onChange(of: state.currentDateLoadingState) { oldValue, newValue in
+//                logger.info("currentDayContentsCount: \(newValue.timmelinesCount)")
+//                state.currentDayLoaded = true
+//                if newValue.timmelinesCount > 0 {
+//                    state.daysContentExists.insert(true)
+//                    state.statusMessage = nil
+//                    state.atleastOneDayExists = true
+//                    state.canLoadMore = true
+//                } else {
+//                    state.daysContentExists.insert(false)
 //                }
-            }
+////                if state.atleastOneDayExists == false {
+//                state.loadNextDay()
+////                }
+//            }
 //            .onChange(of: state.currentDayLoaded) { oldValue, newValue in
 //                if newValue {
 //                    state.loadNextDay()
@@ -77,7 +77,7 @@ struct LoadMoreViewNew: View {
             VStack {
                 HStack {
                     Spacer()
-                    Text("Loading..")
+                    Text("Loading.. range timeline")
                     Spacer()
                 }
                 .progressViewStyle(CircularProgressViewStyle())

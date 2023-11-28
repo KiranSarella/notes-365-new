@@ -20,7 +20,7 @@ class TimelineContent {
     var notebookID: UUID = UUID()
     var filename = ""
     var path = [String]()
-    var modifiedDate = Date()
+    var modifiedDate = DateTime.now()
     
     func getAbsolutePath() -> String {
         // https://www.compart.com/en/unicode/U+203A

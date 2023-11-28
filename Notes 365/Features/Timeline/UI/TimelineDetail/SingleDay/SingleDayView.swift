@@ -10,28 +10,25 @@ import SwiftUI
 
 
 struct SingleDayView: View {
-    var date: Date
-    @Binding var currentDateLoadingState: CurrentDateLoadingState
-    @State private var state = SingleDayViewState()
+//    var date: Date
+//    @Binding var currentDateLoadingState: CurrentDateLoadingState
+//    @State private var state = SingleDayViewState()
+    var dayTimelines: DayTimelineModel
     
     var body: some View {
         VStack(spacing: 0) {
-            if state.isLoaded && state.timelines.count > 0 {
-                DayHeaderView(date: date)
-                SingleDayChangesListView(timelines: state.timelines)
-            } else {
-//                Text("Loading..")
-            }
+            DayHeaderView(date: dayTimelines.date)
+            SingleDayChangesListView(timelines: dayTimelines.timelines)
         }
-        .onAppear {
-            state.loadDay(date)
-        }
-        .onChange(of: state.isLoaded) { oldValue, newValue in
-            logger.info("isLoaded")
-            if newValue {
-                currentDateLoadingState = CurrentDateLoadingState(date: date, timmelinesCount: state.timelines.count)
-            }
-        }
+//        .onAppear {
+//            state.loadDay(date)
+//        }
+//        .onChange(of: state.isLoaded) { oldValue, newValue in
+//            logger.info("isLoaded")
+//            if newValue {
+//                currentDateLoadingState = CurrentDateLoadingState(date: date, timmelinesCount: state.timelines.count)
+//            }
+//        }
     }
 }
 

@@ -18,7 +18,7 @@ class DayNotebookChangeData {
     var year: Int = 0
     var month: Int = 0
     var day: Int = 0
-    var updatedTime: Date = Date()
+    var updatedTime: Date = DateTime.now()
     var content: String = ""
     
     init(notebookId: UUID, year: Int, month: Int, day: Int) {

@@ -370,7 +370,7 @@ extension NotebooksListState {
             print(note.name, note.modifiedDate)
             
             // check if search str contains in file name
-            if note.modifiedDate >= Calendar.current.date(byAdding: .day, value: -2, to: Date())! {
+            if note.modifiedDate >= Calendar.current.date(byAdding: .day, value: -2, to: DateTime.now())! {
                 note.canShow = true
                 resultsCount += 1
             } else {

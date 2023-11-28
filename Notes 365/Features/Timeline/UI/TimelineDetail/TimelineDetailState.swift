@@ -71,7 +71,7 @@ enum CurrentState {
     var message: String {
         switch self {
         case .loading:
-            return "Loading.."
+            return "Loading.. current state"
         case .data:
             return ""
         case .empty:
@@ -106,21 +106,6 @@ public struct DayChanges: Identifiable {
     var notes = [Timeline]()
 }
 
-//@Observable
-//class TimelineCalendarState {
-//    var calenderType: CalendarType = .day
-//    var dayDate: DayDate? = DayDate(date: Date())
-//    var weekDate: WeekDate? = WeekDate(date: Date())
-//    var monthDate: MonthDate? = MonthDate(date: Date())
-//}
-
-
-enum TimelineCalendarState: Equatable {
-    case day(DayDate)
-    case week(WeekDate)
-    case month(MonthDate)
-}
-
 
 extension DayNotebookChange {
     func getTimeline() async -> Timeline {
@@ -145,49 +130,16 @@ extension DayNotebookChange {
 }
 
 
-extension TimelineCalendarState {
-    
-    mutating func previousStep() {
-        switch self {
-        case .day(let dayDate):
-            let dayDate = DayDate(date: Calendar.current.date(byAdding: .day, value: -1, to: dayDate.date)!)
-            self = .day(dayDate)
-        case .week(let weekDate):
-            let weekDate = WeekDate(date: Calendar.current.date(byAdding: .day, value: -7, to: weekDate.start)!)
-            self = .week(weekDate)
-        case .month(let monthDate):
-            let monthDate = MonthDate(date: Calendar.current.date(byAdding: .month, value: -1, to: monthDate.start)!)
-            self = .month(monthDate)
-        }
-    }
-    
-    mutating func nextStep() {
-        switch self {
-        case .day(let dayDate):
-            let dayDate = DayDate(date: Calendar.current.date(byAdding: .day, value: 1, to: dayDate.date)!)
-            self = .day(dayDate)
-        case .week(let weekDate):
-            let weekDate = WeekDate(date: Calendar.current.date(byAdding: .day, value: 7, to: weekDate.start)!)
-            self = .week(weekDate)
-        case .month(let monthDate):
-            let monthDate = MonthDate(date: Calendar.current.date(byAdding: .month, value: 1, to: monthDate.start)!)
-            self = .month(monthDate)
-        }
-    }
-    
-}
-
 @Observable
 class TimelineDetailState {
     let timelineBusiness: TimelineInteractor
     
-    var selectedDates = [Date()]
+    var selectedDates: [Date] = []
     
-    var calendarState = TimelineCalendarState.day(DayDate(date: Date()))
     // load more
     var canLoadMore = false
     var loadingDayChanges = false
-    var loadingDate = Date()
+    var loadingDate = DateTime.now()
     var currentState = CurrentState.stop
     var cancellable: Cancellable? = nil
     var dayIndexs = [DayIndex]()
@@ -195,26 +147,11 @@ class TimelineDetailState {
     var timelines = [Timeline]()
     var isFirstAppear = true
     var generatorTask: Task<(), Never>? = nil
-    var canDiscard: Bool {
-        switch calendarState {
-        case .day(let dayDate):
-            return dayDate.date.isSameDayAs(Date())
-        case .week(_):
-            return false
-        case .month(_):
-            return false
-        }
-//        dayDate.date.isSameDayAs(Date())
-    }
+    
     var cancellableSet = Set<AnyCancellable>()
     var currentTaskID = UUID()
     init(timelineBusiness: TimelineInteractor) {
         self.timelineBusiness = timelineBusiness
-//        getFirstAvailableTimelineDate()
-    }
-    
-    func setToday() {
-        calendarState = .day(DayDate(date: Date()))
     }
     
     func clearDisplay() {
@@ -268,67 +205,6 @@ class TimelineDetailState {
 //        }
     }
     
-    
-    // MARK: - Timeline Index
-    
-    func startFetchingDayIndex(dayDate: DayDate, reqID: UUID) {
-//        print(#function, dayDate.date)
-//        if let result = self.timelineBusiness.fetchDayTimelineIndex(year: dayDate.date.getYear(), month: dayDate.date.getMonth(), day: dayDate.date.getDay()) {
-//            if reqID != currentTaskID {
-//                return
-//            }
-//            self.timelineIndexes.append(result)
-//            print("timelineIndexes: ", timelineIndexes.count)
-//            print(result.id, result.changes)
-//            processFirstDay(reqID: reqID)
-//        } else {
-//            self.currentState = .empty
-//        }
-    }
-    
-    func startFetchingWeekIndex(weekDate: WeekDate, reqID: UUID) {
-//        let date = weekDate.start
-//        print(#function, date)
-//        // why loop instead of between query
-//        // because a week might contain two months
-//        for i in 0..<7 {
-//            let date = Calendar.current.date(byAdding: .day, value: i, to: date)!
-//            if let timelineIndex = self.timelineBusiness.fetchDayTimelineIndex(year: date.getYear(),
-//                                                                               month: date.getMonth(),
-//                                                                               day: date.getDay()) {
-//                if reqID != currentTaskID {
-//                    return
-//                }
-//                self.timelineIndexes.append(timelineIndex)
-//            }
-//        }
-//        
-//        print("timelineIndexes: ", timelineIndexes.count)
-//        
-//        if self.timelineIndexes.count > 0 {
-//            processFirstDay(reqID: reqID)
-//        } else {
-//            self.currentState = .empty
-//        }
-    }
-    
-    func startFetchingMonthIndex(monthDate: MonthDate, reqID: UUID) {
-//        let date = monthDate.start
-//        print(#function, date)
-//        
-//        if let results = self.timelineBusiness.fetchMonthTimelineIndex(year: date.getYear(), month: date.getMonth()), results.count > 0 {
-//            
-//            if reqID != currentTaskID {
-//                return
-//            }
-//            self.timelineIndexes = results.sorted { $0.day < $1.day }
-//            
-//            print("timelineIndexes: ", timelineIndexes.count)
-//            processFirstDay(reqID: reqID)
-//        } else {
-//            self.currentState = .empty
-//        }
-    }
     
     // MARK: - Day Note Changes
     

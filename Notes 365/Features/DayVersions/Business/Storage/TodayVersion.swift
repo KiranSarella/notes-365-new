@@ -12,7 +12,7 @@ import SwiftData
 class TodayVersion: Identifiable {
     var notebookID: UUID = UUID()
     var content: String = ""
-    var date: Date = Date()
+    var date: Date = DateTime.now()
     
     init(notebookID: UUID, content: String = "") {
         self.notebookID = notebookID
