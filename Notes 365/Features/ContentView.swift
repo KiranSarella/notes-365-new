@@ -89,7 +89,6 @@ struct ContentView: View {
     @State private var showThemes = false
     @State private var showFormattingSymbols = false
     @State private var showFeedback = false
-    @State private var icloudSyncing = false
     @State private var selectedModeID: Mode.ID? = Mode.timeline.id
     @State private var sidebarItemSelected: SidebarItem.ID? = SidebarItem.timeline.id
     // notebooks related
@@ -98,14 +97,7 @@ struct ContentView: View {
     @State var notebooksListState = NotebooksListState(notebookBusiness: BusinessFactory.createNotebooksFactory())
     @State var navigationSplitViewVisibility = NavigationSplitViewVisibility.all
     var todayVersionBusiness = BusinessFactory.dayVersionInteractor()
-    var bottomViewBackgroundColor: Color {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            return Color(uiColor: UIColor.systemGroupedBackground)
-        } else if UIDevice.current.userInterfaceIdiom == .pad {
-            return Color(uiColor: UIColor.secondarySystemBackground)
-        }
-        return Color(uiColor: UIColor.systemGroupedBackground)
-    }
+    
     @State var timelineExpanded = true
     @State var notebooksExpanded = true
     @State var settingsExpanded = true
@@ -124,6 +116,8 @@ struct ContentView: View {
                     .tag(SidebarItem.timeline.id)
                 Label("Notebooks", systemImage: "books.vertical")
                     .tag(SidebarItem.notebooks.id)
+                Label("Search", systemImage: "magnifyingglass")
+                    .tag(SidebarItem.search.id)
                 Section("Settings", isExpanded: $settingsExpanded) {
                     Button {
                         showThemes = true
@@ -158,9 +152,6 @@ struct ContentView: View {
             .sheet(isPresented: $showFeedback) {
                 FeedbackView_iPadOS()
             }
-            //            }
-            //            .frame(minWidth: 180)
-            //            .background(bottomViewBackgroundColor)
             .onAppear {
                 ThemeState.shared.updateColorScheme(colorScheme)
             }
@@ -178,87 +169,12 @@ struct ContentView: View {
         detail: {
             let selectedItem = SidebarItem(rawValue: sidebarItemSelected ?? SidebarItem.timeline.id)!
             switch selectedItem {
-                
             case .timeline:
                 TimelineDetailView(state: $timelineDetailState, horizontalCalendarViewState: $horizontalCalendarViewState)
-                    
             case .notebooks:
                 NotebooksBaseDetailView(notebooksListState: $notebooksListState, path: $path)
-                
-//                Text("destination")
-//                NestedContentView(sidebarItemSelected: $sidebarItemSelected)
-//                NotebooksListView(notebooksListState: notebooksListState, selectedNotebook: $selectedNotebookM)
-                
-                
-//                NotebookDetailBaseView(path: $path)
-//                WrapperDetailView()
-//            NotebooksLevelView()
-                
-                
-//                NavigationStack(path: $presentedParks) {
-//                    List {
-//    //                    Label("Timeline", systemImage: "rectangle.stack")
-//    //                        .tag(SidebarItem.timeline.id)
-//                        
-////                        Button {
-////                            sidebarItemSelected = SidebarItem.timeline.id
-////                        } label: {
-////                            Label("Timeline", systemImage: "rectangle.stack")
-////                        }
-//
-//                        Label("Sorted Algorithms", systemImage: "folder")
-//                        NavigationLink(" Notebooks 1", value: SidebarItem.notebooks)
-//                        
-//                        NavigationLink("􀈕 Crasing nested", value: SidebarItem.timeline)
-//                        
-//                        Text("Top 10 goals")
-//                        
-//                        Text("Top 10 goals")
-//                        
-//    //                    NavigationLink {
-//    //                        List {
-//    //                            Text("one")
-//    //                            Text("two")
-//    //                            Text("three")
-//    //                        }
-//    //                    } label: {
-//    //                        Text("Notebooks - New")
-//    //                    }
-//                    }
-//                    .navigationDestination(for: SidebarItem.self) { selection in
-//                        
-//                        if selection  == .notebooks {
-//                            List {
-//                                Text("one")
-//                                Button("notes") {
-//                                    sidebarItemSelected = SidebarItem.notebooks.id
-//                                }
-//                                Button("timeline") {
-//                                    sidebarItemSelected = SidebarItem.timeline.id
-//                                }
-//                                Text("Purus Ridiculus Ullamcorper")
-//                                Text("Vestibulum Mollis")
-//                                
-//                                NavigationLink(value: SidebarItem.notebooks) {
-//                                    Label("Sorted Algorithms", systemImage: "folder")
-//                                }
-//                                
-//                                NavigationLink(value: SidebarItem.notebooks) {
-//                                    Label("next", systemImage: "folder")
-//                                }
-//                                
-//                                
-//
-//                            }
-//                            .listStyle(SidebarListStyle())
-//                            .navigationTitle(sidebarItemSelected ?? "folder 1")
-//                        } else {
-//                            NestedContentView(sidebarItemSelected: $sidebarItemSelected)
-//    //                        NotebooksListView(notebooksListState: notebooksListState, selectedNotebook: $selectedNotebookM)
-//                        }
-//                    }
-//                }
-                
+            case .search:
+                ContentSearchView()
             }
         }
     }

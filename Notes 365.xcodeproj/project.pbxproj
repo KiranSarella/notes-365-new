@@ -10,6 +10,12 @@
 		5C051B952B11C3B1005C99B7 /* TimelineInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C051B942B11C3B1005C99B7 /* TimelineInteractor.swift */; };
 		5C051B9B2B11FFF6005C99B7 /* NotebooksPathService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C051B9A2B11FFF6005C99B7 /* NotebooksPathService.swift */; };
 		5C051B9D2B1240D4005C99B7 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C051B9C2B1240D4005C99B7 /* Logger.swift */; };
+		5C08EA392B1892DC0095DE86 /* ContentSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C08EA382B1892DC0095DE86 /* ContentSearchView.swift */; };
+		5C08EA3E2B1895980095DE86 /* ContentSearchStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C08EA3D2B1895980095DE86 /* ContentSearchStorage.swift */; };
+		5C08EA402B1897440095DE86 /* ContentSearchProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C08EA3F2B1897440095DE86 /* ContentSearchProvider.swift */; };
+		5C08EA422B1897EA0095DE86 /* ContentSearchAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C08EA412B1897EA0095DE86 /* ContentSearchAdapter.swift */; };
+		5C08EA442B1898B00095DE86 /* ContentSearchBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C08EA432B1898B00095DE86 /* ContentSearchBusiness.swift */; };
+		5C08EA462B1899C60095DE86 /* ContentSearchInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C08EA452B1899C60095DE86 /* ContentSearchInteractor.swift */; };
 		5C10D79B2B04C248006FB80D /* NotebooksStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D7982B04C248006FB80D /* NotebooksStorage.swift */; };
 		5C10D79D2B04C248006FB80D /* NotebooksStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D79A2B04C248006FB80D /* NotebooksStorageAdapter.swift */; };
 		5C10D7A12B04C26D006FB80D /* NotebooksBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D7A02B04C26D006FB80D /* NotebooksBusiness.swift */; };
@@ -167,6 +173,12 @@
 		5C051B942B11C3B1005C99B7 /* TimelineInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineInteractor.swift; sourceTree = "<group>"; };
 		5C051B9A2B11FFF6005C99B7 /* NotebooksPathService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksPathService.swift; sourceTree = "<group>"; };
 		5C051B9C2B1240D4005C99B7 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		5C08EA382B1892DC0095DE86 /* ContentSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentSearchView.swift; sourceTree = "<group>"; };
+		5C08EA3D2B1895980095DE86 /* ContentSearchStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentSearchStorage.swift; sourceTree = "<group>"; };
+		5C08EA3F2B1897440095DE86 /* ContentSearchProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentSearchProvider.swift; sourceTree = "<group>"; };
+		5C08EA412B1897EA0095DE86 /* ContentSearchAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentSearchAdapter.swift; sourceTree = "<group>"; };
+		5C08EA432B1898B00095DE86 /* ContentSearchBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentSearchBusiness.swift; sourceTree = "<group>"; };
+		5C08EA452B1899C60095DE86 /* ContentSearchInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentSearchInteractor.swift; sourceTree = "<group>"; };
 		5C10D7982B04C248006FB80D /* NotebooksStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksStorage.swift; sourceTree = "<group>"; };
 		5C10D79A2B04C248006FB80D /* NotebooksStorageAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksStorageAdapter.swift; sourceTree = "<group>"; };
 		5C10D7A02B04C26D006FB80D /* NotebooksBusiness.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksBusiness.swift; sourceTree = "<group>"; };
@@ -351,6 +363,43 @@
 				9F45BD2E2920CCCE003DE332 /* StringDiff.swift */,
 			);
 			path = ContentCreator;
+			sourceTree = "<group>";
+		};
+		5C08EA372B1892C50095DE86 /* ContentSearch */ = {
+			isa = PBXGroup;
+			children = (
+				5C08EA382B1892DC0095DE86 /* ContentSearchView.swift */,
+				5C08EA3A2B18952F0095DE86 /* Business */,
+			);
+			path = ContentSearch;
+			sourceTree = "<group>";
+		};
+		5C08EA3A2B18952F0095DE86 /* Business */ = {
+			isa = PBXGroup;
+			children = (
+				5C08EA452B1899C60095DE86 /* ContentSearchInteractor.swift */,
+				5C08EA3B2B1895660095DE86 /* Functionality */,
+				5C08EA3C2B1895760095DE86 /* Storage */,
+			);
+			path = Business;
+			sourceTree = "<group>";
+		};
+		5C08EA3B2B1895660095DE86 /* Functionality */ = {
+			isa = PBXGroup;
+			children = (
+				5C08EA432B1898B00095DE86 /* ContentSearchBusiness.swift */,
+				5C08EA3F2B1897440095DE86 /* ContentSearchProvider.swift */,
+			);
+			path = Functionality;
+			sourceTree = "<group>";
+		};
+		5C08EA3C2B1895760095DE86 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				5C08EA412B1897EA0095DE86 /* ContentSearchAdapter.swift */,
+				5C08EA3D2B1895980095DE86 /* ContentSearchStorage.swift */,
+			);
+			path = Storage;
 			sourceTree = "<group>";
 		};
 		5C10D7942B04C13D006FB80D /* Frameworks */ = {
@@ -766,6 +815,7 @@
 				5C051B9C2B1240D4005C99B7 /* Logger.swift */,
 				9F45BCDE2920CCCE003DE332 /* Extensions.swift */,
 				9F7D2923299EB9D700B37F51 /* MainBusiness.swift */,
+				5C08EA372B1892C50095DE86 /* ContentSearch */,
 				9FB0A47329DB22940093FBD2 /* Storage */,
 				9FB0A48829DF12980093FBD2 /* Timeline */,
 				9FB0A47529DBD6930093FBD2 /* Notebooks */,
@@ -1000,6 +1050,7 @@
 				5C90604C2B0E23F20068DD65 /* BaseBackgroundView.swift in Sources */,
 				5C7D4AF22B07DCEA00BB1908 /* NotebooksRequester.swift in Sources */,
 				9F3DB0CA292E23D900704860 /* ThemesListState.swift in Sources */,
+				5C08EA392B1892DC0095DE86 /* ContentSearchView.swift in Sources */,
 				9F7D2926299EC27E00B37F51 /* CloudServiceTwo.swift in Sources */,
 				5CF612BD2B0B08A400D397C6 /* NotebookContentStorage.swift in Sources */,
 				5C3DE6AF2B132155004E3621 /* SingleDayView.swift in Sources */,
@@ -1020,9 +1071,12 @@
 				9F45BDAB2920CE52003DE332 /* ThemesListView.swift in Sources */,
 				9F45BD712920CDE0003DE332 /* SymbolPattern.swift in Sources */,
 				9F45BCA42920CAAE003DE332 /* ContentView.swift in Sources */,
+				5C08EA442B1898B00095DE86 /* ContentSearchBusiness.swift in Sources */,
 				5CBEF3132B14FE22003A3972 /* HorizontalCalendarViewState.swift in Sources */,
+				5C08EA402B1897440095DE86 /* ContentSearchProvider.swift in Sources */,
 				9F45BDA42920CE41003DE332 /* ThemePreviewView.swift in Sources */,
 				5C3DE6B52B13A19D004E3621 /* SingleDayState.swift in Sources */,
+				5C08EA3E2B1895980095DE86 /* ContentSearchStorage.swift in Sources */,
 				5CE8C4882B03048E00F19217 /* Notebook.swift in Sources */,
 				9FBB0B5D2A0E952E00F407AF /* MarkdownEditorViewState.swift in Sources */,
 				5CCCF7F52AC2CB6B00F5923E /* TimelineStorage.swift in Sources */,
@@ -1044,6 +1098,7 @@
 				5C10D7A12B04C26D006FB80D /* NotebooksBusiness.swift in Sources */,
 				9F45BD8E2920CDE9003DE332 /* NotebooksListState.swift in Sources */,
 				5CF612CF2B0B79F000D397C6 /* NotebookContentRequester.swift in Sources */,
+				5C08EA462B1899C60095DE86 /* ContentSearchInteractor.swift in Sources */,
 				9F45BD792920CDE0003DE332 /* NotebookContentView.swift in Sources */,
 				9F45BD922920CDED003DE332 /* StringDiff.swift in Sources */,
 				5C10D7A32B04C272006FB80D /* NotebooksStorageProvider.swift in Sources */,
@@ -1083,6 +1138,7 @@
 				9F57BAE7299688BC0076FD9D /* Constants.swift in Sources */,
 				9F1687D029AE21B20085A0CA /* NotebooksChangeMonitor.swift in Sources */,
 				5C051B9D2B1240D4005C99B7 /* Logger.swift in Sources */,
+				5C08EA422B1897EA0095DE86 /* ContentSearchAdapter.swift in Sources */,
 				9F7D291F299BABAC00B37F51 /* EditorViewUI.swift in Sources */,
 				9FB6C69A29275D5100C8EC76 /* FormatOptions.swift in Sources */,
 				5CC4C0212A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift in Sources */,

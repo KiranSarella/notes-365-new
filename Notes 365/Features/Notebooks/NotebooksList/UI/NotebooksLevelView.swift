@@ -299,6 +299,11 @@ struct FileCellView: View {
                         isEditing = true
                     }
                     .swipeActions(edge: .trailing) {
+                        Button {
+                            isEditing = true
+                        } label: {
+                            Label("Rename", systemImage: "pencil")
+                        }
                         Button(role: .destructive) {
                             currentLevelState.deleteFile(notebook: notebook)
                         } label: {

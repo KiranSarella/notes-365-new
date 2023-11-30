@@ -74,6 +74,12 @@ class BusinessFactory {
         return TodayVersionBusiness(storage: storage)
     }
     
+    static func contentSearchInteractor() -> ContentSearchInteractor {
+        let modelContext = SharedContext.shared.getModelContext()
+        let storage = ContentSearchStorageAdapter(modelContext: modelContext)
+        return ContentSearchBusiness(storage: storage)
+    }
+    
 }
 
 //class NotebooksBusinessGenerator: NotebooksBusinessFactory {

@@ -13,6 +13,7 @@ public enum SidebarItem: String, CaseIterable, Identifiable {
     
     case timeline
     case notebooks
+    case search
 //    case themes
 //    case formatingSymbols
 //    case feedback
@@ -46,11 +47,11 @@ public enum Mode: String, CaseIterable, Identifiable {
     
 }
 
-//
-//extension Mode: Comparable {
-//
-//    public static func < (lhs: Mode, rhs: Mode) -> Bool {
-//        return lhs.id == rhs.id
-//    }
-//
-//}
+
+extension Mode: Comparable {
+
+    public static func < (lhs: Mode, rhs: Mode) -> Bool {
+        return lhs.id == rhs.id
+    }
+
+}

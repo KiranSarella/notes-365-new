@@ -52,3 +52,9 @@ extension NotebookContentB {
         try container.encode(content, forKey: .content)
     }
 }
+
+extension NotebookContentB: CustomStringConvertible {
+    var description: String {
+        "\(notebookID)\n\(content)"
+    }
+}
