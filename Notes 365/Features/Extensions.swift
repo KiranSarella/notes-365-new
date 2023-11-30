@@ -282,7 +282,7 @@ extension Date {
     }
     
     var monthName: String {
-        Calendar.current.standaloneMonthSymbols[month]
+        Calendar.current.standaloneMonthSymbols[month - 1]
     }
     
     var monthBefore: Date {

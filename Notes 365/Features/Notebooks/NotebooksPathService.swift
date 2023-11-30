@@ -14,6 +14,7 @@ struct LocationInfo: Hashable {
 }
 
 struct FullPathInfo: Hashable {
+    let id: UUID
     let name: String
     let fullPath: String
 }
@@ -21,14 +22,48 @@ struct FullPathInfo: Hashable {
 class NotebooksPathService {
     static let shared = NotebooksPathService()
     let notebooksBusiness = BusinessFactory.createNotebooksFactory()
+    
     fileprivate var filesPathInfo = [UUID: LocationInfo]()
     fileprivate var foldersPathInfo = [UUID: LocationInfo]()
     var fullPathsCache = [UUID: FullPathInfo]()
+    var pathsCache = [UUID: String]()
     var isLoaded = false
     
     private init() { 
         observeNotebookRenamed()
         observeNotebookInserted()
+    }
+    
+    func fileName(for notebookId: UUID) -> String? {
+        filesPathInfo[notebookId]?.name
+    }
+    
+    func fullPath(for notebookId: UUID) -> String? {
+        if let fullPathInfo = pathsCache[notebookId] {
+            logger.info("cached - \(fullPathInfo)")
+            return fullPathInfo
+        } else {
+            let newPath = generateFullPath(notebookId: notebookId)
+            if let newPath = newPath {
+                pathsCache[notebookId] = newPath
+            }
+            logger.info("generated - \(newPath ?? "")")
+            return newPath
+        }
+    }
+    
+    func generateFullPath(notebookId: UUID) -> String? {
+        if let filePathInfo = self.filesPathInfo[notebookId] {
+            var pathComponents = [String]()
+            pathComponents.append(filePathInfo.name)
+            if let folderId = filePathInfo.parentId {
+                appendFoldersPath(startingFrom: folderId, in: &pathComponents)
+            }
+            let fullPath = pathComponents.reversed().joined(separator: "  \u{203A}  ")
+            return fullPath
+        } else {
+            return nil
+        }
     }
     
     func path(for notebookId: UUID) async -> FullPathInfo? {
@@ -37,7 +72,7 @@ class NotebooksPathService {
         } else {
             let newPath = await generatePath(notebookId: notebookId)
             if let newPath = newPath {
-                fullPathsCache[notebookId] = newPath
+                pathsCache[notebookId] = "uhi > kuhku"//newPath
             }
             return newPath
         }
@@ -45,21 +80,24 @@ class NotebooksPathService {
     
     func generatePath(notebookId: UUID) async -> FullPathInfo? {
         return await withCheckedContinuation { continution in
-            guard let filePathInfo = self.filesPathInfo[notebookId]
-            else { return continution.resume(returning: nil) }
-            var pathComponents = [String]()
-            pathComponents.append(filePathInfo.name)
-            if let folderId = filePathInfo.parentId {
-                appendFoldersPath(startingFrom: folderId, in: &pathComponents)
+            if let filePathInfo = self.filesPathInfo[notebookId] {
+                
+                var pathComponents = [String]()
+                pathComponents.append(filePathInfo.name)
+                if let folderId = filePathInfo.parentId {
+                    appendFoldersPath(startingFrom: folderId, in: &pathComponents)
+                }
+                let fullPath = pathComponents.reversed().joined(separator: "  \u{203A}   ")
+                let fullPathInfo = FullPathInfo(id: notebookId, name: filePathInfo.name, fullPath: fullPath)
+//                fullPathsCache[notebookId] = fullPathInfo
+    //                defer {
+    //                    fullPathsCache[notebookId] = fullPathInfo
+    //                }
+                continution.resume(returning: fullPathInfo)
+    //                return fullPathInfo
+            } else {
+                continution.resume(returning: nil)
             }
-            let fullPath = pathComponents.reversed().joined(separator: "  \u{203A}   ")
-            let fullPathInfo = FullPathInfo(name: filePathInfo.name, fullPath: fullPath)
-            
-//                defer {
-//                    fullPathsCache[notebookId] = fullPathInfo
-//                }
-            continution.resume(returning: fullPathInfo)
-//                return fullPathInfo
         }
     }
     

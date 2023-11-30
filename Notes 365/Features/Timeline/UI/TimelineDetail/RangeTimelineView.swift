@@ -12,25 +12,24 @@ struct RangeTimelineView: View {
     @State private var state = RangeTimelineState()
     
     var body: some View {
-//        VStack {
-//            if state.statusMessage != nil {
-//                HStack {
-//                    Spacer()
-//                    Text(state.statusMessage ?? "")
-//                        .listRowSeparator(.hidden)
-//                        .fontWeight(.medium)
-//                        .foregroundColor(.gray)
-//                    Spacer()
-//                }
-//                .frame(height: 100)
-//                .listRowSeparator(.hidden)
-//            }
-//        }
-        
         ScrollView(.vertical, showsIndicators: false) {
             VStack {
                 ForEach(state.dayTimelineModels) { dayTimelines in
                     SingleDayView(dayTimelines: dayTimelines)
+                }
+                VStack {
+                    if state.statusMessage != nil {
+                        HStack {
+                            Spacer()
+                            Text(state.statusMessage ?? "")
+                                .listRowSeparator(.hidden)
+                                .fontWeight(.medium)
+                                .foregroundColor(.gray)
+                            Spacer()
+                        }
+                        .frame(height: 100)
+                        .listRowSeparator(.hidden)
+                    }
                 }
 //                LoadMoreViewNew(state: $state)
             }

@@ -33,6 +33,7 @@ struct NotebookContentView: View {
                 })
                 .onChange(of: notebookContentState.output) { oldValue, newValue in
                     print(newValue)
+                    notebookContentState.contentEditedDate = DateTime.now()
                 }
 //                .toolbar {
 //                    ToolbarItem(placement: .topBarLeading) {

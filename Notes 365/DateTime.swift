@@ -12,9 +12,20 @@ class DateTime {
     
     private(set) var date = Date().dayBefore.dayBefore.dayBefore
     
+    #if DEBUG
     static func now() -> Date {
-        DateTime.shared.date
+        let onlyDateString = DateTime.shared.date.string(format: "yyyy-MM-dd")
+        let onlyTimeString = Date().string(format: "HH:mm:ss")
+        let newDateString = "\(onlyDateString) \(onlyTimeString)"
+        let format = "yyyy-MM-dd HH:mm:ss"
+        
+        return newDateString.toLocalDate(withFormat: format)!// ?? DateTime.shared.date
     }
+    #else
+    static func now() -> Date {
+        Date()
+    }
+    #endif
     
     static func change(now value: Date) {
         DateTime.shared.date = value

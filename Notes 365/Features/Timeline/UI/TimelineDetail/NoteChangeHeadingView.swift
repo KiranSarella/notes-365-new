@@ -11,17 +11,22 @@ struct NoteChangeHeadingView: View {
     @Environment(\.colorScheme) var colorScheme
     @State private var isFocused = false
     var noteChange: Timeline
+    @State var fullPath: String?
 //    var showDiscard = false
     
 //    @Binding var discardTimeline: Timeline?
     
-    func getAbsolutePath() -> String {
-        var components = noteChange.filePath.components(separatedBy: "/")
-//        if components.count > 0 {
-//            components.removeFirst()
-//        }
-        // https://www.compart.com/en/unicode/U+203A
-        return components.joined(separator: "  \u{203A}   ")
+//    func getAbsolutePath() -> String {
+//        var components = noteChange.filePath.components(separatedBy: "/")
+////        if components.count > 0 {
+////            components.removeFirst()
+////        }
+//        // https://www.compart.com/en/unicode/U+203A
+//        return components.joined(separator: "  \u{203A}   ")
+//    }
+    
+    func getFullPath() {
+        fullPath = NotebooksPathService.shared.fullPath(for: noteChange.fileUUID)
     }
     
     var body: some View {
@@ -33,8 +38,8 @@ struct NoteChangeHeadingView: View {
 //                    .strikethrough(noteChange.isNotebookExists ? false : true)
                     .font(.title)
                     .foregroundColor(.primary)
-//                Text(noteChange.filePath)
-                Text(getAbsolutePath())
+                Text(fullPath ?? "")
+//                Text(getAbsolutePath())
                     .lineLimit(1)
                     .font(.footnote)
                     .foregroundColor(.secondary)
@@ -83,6 +88,11 @@ struct NoteChangeHeadingView: View {
         .cornerRadius(4)
         .onHover { subscriptionStatus in
             isFocused = subscriptionStatus
+        }
+        .onAppear {
+            if fullPath == nil {
+                getFullPath()
+            }
         }
     }
 }
