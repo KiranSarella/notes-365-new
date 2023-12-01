@@ -22,10 +22,9 @@ class TodayVersionStorage {
         try modelContext.delete(model: TodayVersion.self, where: predicate)
     }
     
-    func isBaseVersionExists(for notebookId: UUID) throws -> Bool {
-        let today = DateTime.now()
+    func isBaseVersionExists(for verionId: String) throws -> Bool {
         let predicate = #Predicate<TodayVersion> {
-            $0.notebookID == notebookId && $0.date == today
+            $0.id == verionId
         }
         var descriptor = FetchDescriptor(predicate: predicate)
         descriptor.fetchLimit = 1
@@ -38,19 +37,18 @@ class TodayVersionStorage {
         try modelContext.save()
     }
     
-    func getTodayVersion(for notebookId: UUID) throws -> String? {
-        let today = DateTime.now()
+    func getTodayVersion(for versionId: String) throws -> String? {
         let predicate = #Predicate<TodayVersion> {
-            $0.notebookID == notebookId && $0.date == today
+            $0.id == versionId
         }
         var descriptor = FetchDescriptor(predicate: predicate)
         descriptor.fetchLimit = 1
         return try modelContext.fetch(descriptor).first?.content
     }
     
-    func removeDayVersion(for notebookId: UUID) throws {
+    func removeDayVersion(for verionId: String) throws {
         let predicate = #Predicate<TodayVersion> {
-            $0.notebookID == notebookId
+            $0.id == verionId
         }
         try modelContext.delete(model: TodayVersion.self, where: predicate)
     }

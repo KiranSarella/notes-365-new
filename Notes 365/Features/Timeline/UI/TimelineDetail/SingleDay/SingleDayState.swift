@@ -16,6 +16,13 @@ struct DayTimelineModel: Identifiable {
     }
 }
 
+struct DiscardTimelineInfo: Equatable {
+    let dayId: UUID
+    let date: Date
+    let fileId: UUID
+    let changeId: String
+}
+
 @Observable
 class SingleDayViewState {
     let timelineBusiness: TimelineInteractor = BusinessFactory.timelineInteractor()

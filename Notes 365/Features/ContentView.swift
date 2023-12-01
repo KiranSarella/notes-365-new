@@ -39,7 +39,7 @@ struct ContentWrapperView: View {
                         // do any operations
                         chooseEnv.enableConfigured()
                         // clean base version
-                        DayVersion.shared.cleanBaseVersionIfNeeded()
+                        DayVersion.shared.cleanOlderDayVersions()
                         #else
                         statusMessage = "checking iCloud settings"
                         // choose environment
@@ -54,7 +54,7 @@ struct ContentWrapperView: View {
                         // do any operations
                         chooseEnv.enableConfigured()
                         // clean base version
-                        TodayVersionBusiness.cleanBaseVersionIfNeeded()
+                        TodayVersionBusiness.cleanOlderDayVersions()
                         #endif
                     } catch let error {
                         errorDetail = error
@@ -138,11 +138,9 @@ struct ContentView: View {
             }
             .navigationTitle("Notes 365")
             .onAppear {
+                BusinessFactory.dayVersionInteractor().setupDayVersionCreationProcess()
                 BusinessFactory.timelineInteractor().setupTimeineCreationProcess()
-//                // used to create new timeline
-//                timelineDetailState.timelineBusiness.updateTodayTimelineIndex()
             }
-            
             .sheet(isPresented: $showThemes) {
                 SettingsView_iPadOS(showModel: $showThemes)
             }

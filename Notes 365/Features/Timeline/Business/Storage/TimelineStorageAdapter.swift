@@ -28,9 +28,8 @@ class TimelineStorageAdapter: TimelineStorageProvider {
         try storage.getFirstAvailableTimelineDate()
     }
     
-    func delete(dayNotebookChange: DayNotebookChange) throws {
-//        storage.delete(dayNotebookChange: dayNotebookChange.dayNotebookData())
-        try storage.delete(for: dayNotebookChange.id)
+    func delete(dayNotebookChangeId: String) throws {
+        try storage.delete(for: dayNotebookChangeId)
     }
     
 }

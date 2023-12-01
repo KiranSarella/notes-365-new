@@ -31,8 +31,9 @@ struct DayChangesView: View {
             // each note change content list
             ForEach($timelines) { $noteChange in
                 VStack {
+                    Text("test")
                     // notebook heading view
-                    NoteChangeHeadingView(noteChange: noteChange)
+//                    NoteChangeHeadingView(noteChange: noteChange, discardTimeline: $discardTimeline)
                     .listRowSeparator(.hidden)
                     .padding()
 //                    .padding(.bottom, 10)

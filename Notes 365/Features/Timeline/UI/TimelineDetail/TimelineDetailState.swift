@@ -112,7 +112,7 @@ extension DayNotebookChange {
         let fileName = NotebooksPathService.shared.fileName(for: notebookId)
 //        let fullPathInfo = await NotebooksPathService.shared.path(for: notebookId)
         let fullPathInfo: FullPathInfo? = FullPathInfo(id: notebookId, name: "test 1", fullPath: "empty > path")
-        var t = Timeline(changesID: notebookId,
+        var t = Timeline(changeID: id,
                          fileUUID: notebookId,
                          fileName: fileName ?? "",
                          filePath: fullPathInfo?.fullPath ?? "")

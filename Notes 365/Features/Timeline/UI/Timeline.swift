@@ -99,7 +99,7 @@ class DayIndex: Identifiable {
 
 public struct Timeline: Identifiable {
     public let id: UUID = UUID()
-    var changesID: UUID
+    var changeID: String
     var fileUUID: UUID
     var fileName: String
     var filePath: String

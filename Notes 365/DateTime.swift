@@ -10,7 +10,7 @@ import Foundation
 class DateTime {
     static let shared = DateTime()
     
-    private(set) var date = Date().dayBefore.dayBefore.dayBefore
+    private(set) var date = Date().dayBefore
     
     #if DEBUG
     static func now() -> Date {

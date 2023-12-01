@@ -13,32 +13,13 @@ class TodayVersionBusiness {
     
     init(storage: TodayVersionStorageProvider) {
         self.storage = storage
-        observeNotebooksLoadedNotification()
     }
     
-    func observeNotebooksLoadedNotification() {
-        logger.info("observeNotebooksLoadedNotification")
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookLoaded(_:)), name: Notification.Name.notebookContentLoaded, object: nil)
-    }
-    
-    func removeObservingNotebooksLoaded() {
-        NotificationCenter.default.removeObserver(self, name: Notification.Name.notebookContentLoaded, object: nil)
-    }
-    
-    @objc func handleNotebookLoaded(_ notification: Notification) {
-        logger.info("handleNotebookLoaded")
-        guard
-            let notebookId = notification.userInfo?["notebook_id"] as? UUID,
-            let notebookConent = notification.userInfo?["notebook_content"] as? String
-        else { return }
-        createBaseVersionIfNotExists(for: notebookId, with: notebookConent)
-    }
-    
-    func cleanBaseVersionIfNeeded() {
+    func cleanOlderDayVersions() {
         logger.info("\(#function)")
-        let date = Date.yesterday
+        let yesterday = DateTime.now().dayBefore
         do {
-            try storage.deleteAllVersions(belowDate: date)
+            try storage.deleteAllVersions(belowDate: yesterday)
         } catch let error {
             logger.error("\(error)")
         }
@@ -52,7 +33,9 @@ class TodayVersionBusiness {
         }
         let todayVersion = TodayVersion(notebookID: notebookId, content: content)
         do {
+            logger.debug("\(todayVersion)")
             try storage.create(todayVersion: todayVersion)
+            logger.info("new base version created")
         } catch let error {
             logger.error("\(error)")
         }
@@ -60,7 +43,8 @@ class TodayVersionBusiness {
     
     func isBaseVersionExists(notebookId: UUID) -> Bool {
         do {
-            return try storage.isBaseVersionExists(for: notebookId)
+            let todayVersionId = TodayVersion(notebookID: notebookId).id
+            return try storage.isBaseVersionExists(for: todayVersionId)
         } catch let err {
             logger.error("\(err)")
         }
@@ -70,7 +54,8 @@ class TodayVersionBusiness {
     func getTodayVersion(for notebookId: UUID) -> String? {
         logger.info("getTodayVersion - \(notebookId)")
         do {
-            return try storage.getTodayVersion(for: notebookId)
+            let todayVersionId = TodayVersion(notebookID: notebookId).id
+            return try storage.getTodayVersion(for: todayVersionId)
         } catch let err {
             logger.error("\(err)")
         }
@@ -80,7 +65,8 @@ class TodayVersionBusiness {
     func removeDayVersion(for notebookId: UUID) {
         logger.info("removeDayVersion - \(notebookId)")
         do {
-            try storage.removeDayVersion(for: notebookId)
+            let todayVersionId = TodayVersion(notebookID: notebookId).id
+            try storage.removeDayVersion(for: todayVersionId)
         } catch let error {
             print(error)
         }
@@ -88,3 +74,16 @@ class TodayVersionBusiness {
     
 }
 
+
+extension TodayVersionBusiness {
+    
+    func setupDayVersionCreationProcess() {
+        logger.info("\(#function)")
+        DayVersionCreator.shared.startProviding(for: self)
+    }
+    
+    func stopDayVersionCreationProcess() {
+        logger.info("\(#function)")
+        DayVersionCreator.shared.stopProviding()
+    }
+}

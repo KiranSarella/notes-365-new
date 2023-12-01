@@ -45,6 +45,7 @@
 		5C7CFAB62B151E5D00777AB2 /* DateTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7CFAB52B151E5D00777AB2 /* DateTime.swift */; };
 		5C7D4AF22B07DCEA00BB1908 /* NotebooksRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7D4AF12B07DCEA00BB1908 /* NotebooksRequester.swift */; };
 		5C7D4AF82B08E00C00BB1908 /* NotebookB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7D4AF72B08E00C00BB1908 /* NotebookB.swift */; };
+		5C7DDE5C2B19D8A200EE89A6 /* DayVersionCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7DDE5B2B19D8A200EE89A6 /* DayVersionCreator.swift */; };
 		5C8FADF92B0A06F600B80BD9 /* StringDiffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD302920CCCE003DE332 /* StringDiffTests.swift */; };
 		5C8FADFB2B0A072600B80BD9 /* NotebooksListStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8FADFA2B0A072600B80BD9 /* NotebooksListStateTests.swift */; };
 		5C90604C2B0E23F20068DD65 /* BaseBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C90604B2B0E23F20068DD65 /* BaseBackgroundView.swift */; };
@@ -209,6 +210,7 @@
 		5C7CFAB52B151E5D00777AB2 /* DateTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTime.swift; sourceTree = "<group>"; };
 		5C7D4AF12B07DCEA00BB1908 /* NotebooksRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksRequester.swift; sourceTree = "<group>"; };
 		5C7D4AF72B08E00C00BB1908 /* NotebookB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookB.swift; sourceTree = "<group>"; };
+		5C7DDE5B2B19D8A200EE89A6 /* DayVersionCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayVersionCreator.swift; sourceTree = "<group>"; };
 		5C8FADFA2B0A072600B80BD9 /* NotebooksListStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListStateTests.swift; sourceTree = "<group>"; };
 		5C90604B2B0E23F20068DD65 /* BaseBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseBackgroundView.swift; sourceTree = "<group>"; };
 		5C9060512B0F46060068DD65 /* CurrentLevelState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLevelState.swift; sourceTree = "<group>"; };
@@ -441,6 +443,7 @@
 			isa = PBXGroup;
 			children = (
 				9F45BCF62920CCCE003DE332 /* Timeline.swift */,
+				5CBEF30F2B14FD2E003A3972 /* HorizontalCalendarView */,
 				5CC8C2612AD67D6D00ABAC1F /* TimelineDetail */,
 			);
 			path = UI;
@@ -523,6 +526,7 @@
 			isa = PBXGroup;
 			children = (
 				9F09CEB029267FBC00609D99 /* TodayVersionBusiness.swift */,
+				5C7DDE5B2B19D8A200EE89A6 /* DayVersionCreator.swift */,
 				5CBEF31B2B150359003A3972 /* TodayVersionStorageProvider.swift */,
 			);
 			path = Functionality;
@@ -543,7 +547,6 @@
 			children = (
 				5CD2F4EF2ACC7FD500E8B465 /* TimelineDetailState.swift */,
 				5C1CD5AA2ABC350B00D47814 /* TimelineDetailView.swift */,
-				5CBEF30F2B14FD2E003A3972 /* HorizontalCalendarView */,
 				5C3DE6B12B13722C004E3621 /* RangeTimelineView.swift */,
 				5C3DE6B62B13A8A2004E3621 /* RangeTimelineState.swift */,
 				5C3DE6B32B13A181004E3621 /* SingleDay */,
@@ -1126,6 +1129,7 @@
 				9FB21DF3295D89E000CFEDA8 /* ChooseEnvironment.swift in Sources */,
 				9F45BD502920CD45003DE332 /* Extensions.swift in Sources */,
 				5CF612BF2B0B0DC000D397C6 /* NotebookContentStorageProvider.swift in Sources */,
+				5C7DDE5C2B19D8A200EE89A6 /* DayVersionCreator.swift in Sources */,
 				9F3DB0C2292DE09500704860 /* SettingsView.swift in Sources */,
 				9F45BD642920CDA3003DE332 /* Timeline.swift in Sources */,
 				5C117C3F2A8E77FF00B0F3BE /* LayoutManager.swift in Sources */,

@@ -58,10 +58,10 @@ class TimelineStorage {
         try dayNotebookChange.modelContext?.save()
     }
     
-    func delete(dayNotebookChange: DayNotebookChangeData) {
-        print(#function, dayNotebookChange)
-        modelContext.delete(dayNotebookChange)
-    }
+//    func delete(dayNotebookChange: DayNotebookChangeData) {
+//        print(#function, dayNotebookChange)
+//        modelContext.delete(dayNotebookChange)
+//    }
     
     func delete(for timelineChangeId: String) throws {
         let contentPredicate = #Predicate<DayNotebookChangeData> {
@@ -71,6 +71,15 @@ class TimelineStorage {
         descriptor.fetchLimit = 1
         try modelContext.delete(model: DayNotebookChangeData.self, where: contentPredicate)
     }
+    
+//    func discard(timelineChangeId: String) throws {
+//        let contentPredicate = #Predicate<DayNotebookChangeData> {
+//            $0.id == timelineChangeId
+//        }
+//        var descriptor = FetchDescriptor(predicate: contentPredicate)
+//        descriptor.fetchLimit = 1
+//        try modelContext.delete(model: DayNotebookChangeData.self, where: contentPredicate)
+//    }
     
     func getFirstAvailableTimelineDate() throws -> Date? {
         let predicate = #Predicate<DayNotebookChangeData> { _ in true }

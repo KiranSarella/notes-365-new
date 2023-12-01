@@ -10,16 +10,23 @@ import SwiftData
 
 @Model
 class TodayVersion {
-    var id: String {
-        "\(date.string(format: "yyyy-MM-dd"))-\(notebookID)"
-    }
+    var id: String = UUID().uuidString
     var notebookID: UUID = UUID()
     var content: String = ""
     var date: Date = DateTime.now()
     
     init(notebookID: UUID, content: String = "") {
+        self.id = "\(date.string(format: "yyyy-MM-dd"))-\(notebookID)"
         self.notebookID = notebookID
         self.content = content
     }
 }
 
+extension TodayVersion: CustomStringConvertible {
+    var description: String {
+        var str = ""
+        str.append("\(id)\n")
+        str.append("\(content)\n")
+        return str
+    }
+}

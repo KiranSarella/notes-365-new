@@ -9,8 +9,8 @@ import Foundation
 
 protocol TodayVersionStorageProvider {
     func deleteAllVersions(belowDate: Date) throws
-    func isBaseVersionExists(for notebookId: UUID) throws -> Bool
+    func isBaseVersionExists(for versionId: String) throws -> Bool
     func create(todayVersion: TodayVersion) throws
-    func getTodayVersion(for notebookId: UUID) throws -> String?
-    func removeDayVersion(for notebookId: UUID) throws
+    func getTodayVersion(for versionId: String) throws -> String?
+    func removeDayVersion(for versionId: String) throws
 }

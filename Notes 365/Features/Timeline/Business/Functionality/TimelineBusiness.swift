@@ -13,6 +13,7 @@ class TimelineBusiness {
     var count = -5
     var today = DateTime.now()
     var storage: TimelineStorageProvider
+    let dayVersionBusiness = BusinessFactory.dayVersionInteractor()
     
     init(storage: TimelineStorageProvider) {
         self.storage = storage
@@ -42,12 +43,20 @@ class TimelineBusiness {
         }
     }
     
-    func delete(dayNotebookChange: DayNotebookChange) {
+    func clean(dayNotebookChange: DayNotebookChange) {
         logger.info("\(#function)")
         do {
-            try storage.delete(dayNotebookChange: dayNotebookChange)
+            try storage.delete(dayNotebookChangeId: dayNotebookChange.id)
         } catch let error {
             logger.error("\(error)")
+        }
+    }
+    
+    func discard(changeId: String, date: Date, fileId: UUID) throws {
+        logger.info("\(#function)")
+        try storage.delete(dayNotebookChangeId: changeId)
+        if date.isSameDayAs(DateTime.now()) {
+            dayVersionBusiness.removeDayVersion(for: fileId)
         }
     }
 }

@@ -26,14 +26,17 @@ class TimelineContentCreator {
     }
     
     func observeNotebookContentChanges() {
+        logger.debug("observeNotebookContentChanges")
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookChangesNotification(_:)), name: Notification.Name.notebookContentUpdated, object: nil)
     }
     
     func removeObservingNotebookContentChanges() {
+        logger.debug("removeObservingNotebookContentChanges")
         NotificationCenter.default.removeObserver(self, name: Notification.Name.notebookContentUpdated, object: nil)
     }
     
     @objc func handleNotebookChangesNotification(_ notification: Notification) {
+        logger.debug("handleNotebookChangesNotification")
         guard
             let notebookId = notification.userInfo?["notebook_id"] as? UUID,
             let content = notification.userInfo?["content"] as? String
@@ -42,16 +45,16 @@ class TimelineContentCreator {
         if let dayNotebookChange = prepareTimelineContent(notebookId: notebookId, content: content) {
             timelineBusiness?.save(dayNotebookChange: dayNotebookChange)
         } else {
-            timelineBusiness?.delete(dayNotebookChange: DayNotebookChange(notebookId: notebookId, date: DateTime.now()))
+            timelineBusiness?.clean(dayNotebookChange: DayNotebookChange(notebookId: notebookId, date: DateTime.now()))
         }
     }
     
     func prepareTimelineContent(notebookId: UUID, content: String) -> DayNotebookChange? {
-        print(#function, notebookId)
+        logger.debug("\(#function) \(notebookId)")
         let dayBaseVersion = DayVersion.shared.getTodayVersion(for: notebookId) ?? ""
         let diff = StringDiff.getChanges(old: dayBaseVersion, new: content)
             .trimmingCharacters(in: .newlines)
-        // TODO: - how to detect if a line is deleted?
+        logger.debug("diff: \n\(diff)")
         if diff.count == 0 {
             return nil
         }

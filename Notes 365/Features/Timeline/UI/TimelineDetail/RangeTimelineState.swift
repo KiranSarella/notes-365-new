@@ -113,5 +113,33 @@ class RangeTimelineState {
         }
         return timelines
     }
+ 
+    func discardTimelineChanges(info: DiscardTimelineInfo) {
+        logger.info("\(#function)")
+        // do business
+        
+        do {
+            try timelineBusiness.discard(changeId: info.changeId, date: info.date, fileId: info.fileId)
+            
+            // remove from UI
+            if let index = dayTimelineModels.firstIndex(where: { $0.id == info.dayId }) {
+                if dayTimelineModels[index].timelines.count > 1 {
+                    // remove timeline inside a day
+                    dayTimelineModels[index].timelines.removeAll { t in
+                        t.fileUUID == info.fileId
+                    }
+                } else {
+                    // remove day itself
+                    dayTimelineModels.remove(at: index)
+                }
+            }
+        } catch let error {
+            logger.error("\(error)")
+        }
+        
+        
+        
+        
+    }
     
 }

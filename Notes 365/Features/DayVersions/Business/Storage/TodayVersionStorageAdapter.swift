@@ -20,19 +20,19 @@ class TodayVersionStorageAdapter: TodayVersionStorageProvider {
         try storage.deleteAllVersions(belowDate: belowDate)
     }
     
-    func isBaseVersionExists(for notebookId: UUID) throws -> Bool {
-        try storage.isBaseVersionExists(for: notebookId)
+    func isBaseVersionExists(for versionId: String) throws -> Bool {
+        try storage.isBaseVersionExists(for: versionId)
     }
     
     func create(todayVersion: TodayVersion) throws {
         try storage.create(todayVersion: todayVersion)
     }
     
-    func getTodayVersion(for notebookId: UUID) throws -> String? {
-        try storage.getTodayVersion(for: notebookId)
+    func getTodayVersion(for versionId: String) throws -> String? {
+        try storage.getTodayVersion(for: versionId)
     }
     
-    func removeDayVersion(for notebookId: UUID) throws {
-        try storage.removeDayVersion(for: notebookId)
+    func removeDayVersion(for versionId: String) throws {
+        try storage.removeDayVersion(for: versionId)
     }
 }

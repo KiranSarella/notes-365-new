@@ -12,6 +12,7 @@ protocol TimelineInteractor {
     func setupTimeineCreationProcess()
     func stopTimelineCreationProcess()
     func getFirstAvailableTimelineDate() -> Date?
+    func discard(changeId: String, date: Date, fileId: UUID) throws
 }
 
 extension TimelineBusiness: TimelineInteractor {

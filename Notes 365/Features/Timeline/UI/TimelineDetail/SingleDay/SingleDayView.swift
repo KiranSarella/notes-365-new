@@ -10,18 +10,24 @@ import SwiftUI
 
 
 struct SingleDayView: View {
-//    var date: Date
-//    @Binding var currentDateLoadingState: CurrentDateLoadingState
-//    @State private var state = SingleDayViewState()
-    var dayTimelines: DayTimelineModel
+    @Binding var dayTimelines: DayTimelineModel
+    @Binding var discardTimelineInfo: DiscardTimelineInfo?
+    @State var discardTimeline: Timeline?
     
     var body: some View {
         VStack(spacing: 0) {
             DayHeaderView(date: dayTimelines.date)
-            SingleDayChangesListView(timelines: dayTimelines.timelines)
+            SingleDayChangesListView(timelines: dayTimelines.timelines, discardTimeline: $discardTimeline)
+        }
+        .onChange(of: discardTimeline) { oldValue, newValue in
+            if let newValue = newValue {
+                discardTimelineInfo =
+                DiscardTimelineInfo(dayId: dayTimelines.id, date: dayTimelines.date, fileId: newValue.fileUUID, changeId: newValue.changeID)
+            }
         }
 //        .onAppear {
-//            state.loadDay(date)
+////            state.loadDay(date)
+////            dayTimelines.timelines.removeFirst()
 //        }
 //        .onChange(of: state.isLoaded) { oldValue, newValue in
 //            logger.info("isLoaded")
@@ -53,11 +59,12 @@ struct DayHeaderView: View {
 
 struct SingleDayChangesListView: View {
     var timelines: [Timeline]
+    @Binding var discardTimeline: Timeline?
     var body: some View {
         // each note change content list
         ForEach(timelines) { noteChange in
             VStack {
-                NoteChangeHeadingView(noteChange: noteChange)
+                NoteChangeHeadingView(noteChange: noteChange, discardTimeline: $discardTimeline)
                 .listRowSeparator(.hidden)
                 .padding()
                 HStack {

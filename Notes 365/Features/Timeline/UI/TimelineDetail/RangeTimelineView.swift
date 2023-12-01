@@ -10,12 +10,13 @@ import SwiftUI
 struct RangeTimelineView: View {
     @Binding var selectedDates: [Date]
     @State private var state = RangeTimelineState()
+    @State var discardTimelineInfo: DiscardTimelineInfo?
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack {
-                ForEach(state.dayTimelineModels) { dayTimelines in
-                    SingleDayView(dayTimelines: dayTimelines)
+                ForEach($state.dayTimelineModels) { $dayTimelines in
+                    SingleDayView(dayTimelines: $dayTimelines, discardTimelineInfo: $discardTimelineInfo)
                 }
                 VStack {
                     if state.statusMessage != nil {
@@ -39,6 +40,11 @@ struct RangeTimelineView: View {
             .onChange(of: selectedDates, { oldValue, newValue in
                 state.startloading(days: newValue)
             })
+            .onChange(of: discardTimelineInfo) { oldValue, newValue in
+                if let newValue = newValue {
+                    state.discardTimelineChanges(info: newValue)
+                }
+            }
 //            .onChange(of: state.currentDateLoadingState) { oldValue, newValue in
 //                logger.info("currentDayContentsCount: \(newValue.timmelinesCount)")
 //                state.currentDayLoaded = true
