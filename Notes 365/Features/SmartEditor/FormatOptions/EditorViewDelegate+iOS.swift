@@ -141,6 +141,8 @@ extension EditorView: EditorViewDelegate {
             self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
             textView.selectedRange = NSRange(location: selectedRange.location + 2, length: selectedRange.length)
         }
+        
+        textView.delegate?.textViewDidChange?(textView)
     }
     
     func markHighlight() {
@@ -161,6 +163,8 @@ extension EditorView: EditorViewDelegate {
             self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
             textView.selectedRange = NSRange(location: selectedRange.location + 2, length: selectedRange.length)
         }
+        
+        textView.delegate?.textViewDidChange?(textView)
     }
     
     
@@ -182,6 +186,7 @@ extension EditorView: EditorViewDelegate {
             self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
             textView.selectedRange = NSRange(location: selectedRange.location + 1, length: selectedRange.length)
         }
+        textView.delegate?.textViewDidChange?(textView)
     }
     
     func headingFontChanged(fontName: String) {
@@ -212,6 +217,7 @@ extension EditorView: EditorViewDelegate {
             self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
             textView.selectedRange = NSRange(location: selectedRange.location + 2, length: selectedRange.length)
         }
+        textView.delegate?.textViewDidChange?(textView)
     }
     
     func markInline() {
@@ -231,6 +237,7 @@ extension EditorView: EditorViewDelegate {
             self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
             textView.selectedRange = NSRange(location: selectedRange.location + 1, length: selectedRange.length)
         }
+        textView.delegate?.textViewDidChange?(textView)
     }
     
     func markCodeblock() {
@@ -238,8 +245,10 @@ extension EditorView: EditorViewDelegate {
         // get string from the selected Range
         let str = textView.text as NSString?   // So we cast String? to NSString?
         if let substr = str?.substring(with: selectedRange), substr.count > 0 {
+            let firstLine = if substr.first!.isNewline { "" } else { "\n" }
+            let lastLine = if substr.last!.isNewline { "" } else { "\n" }
             // append
-            let newStr = "```\n\(substr)\n```"
+            let newStr = "\(firstLine)```\(firstLine)\(substr)\(lastLine)```\(lastLine)"
             // add spaces if not exists
             self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
             textView.selectedRange = NSRange(location: selectedRange.location, length: selectedRange.length + 8)
@@ -250,6 +259,7 @@ extension EditorView: EditorViewDelegate {
             self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
             textView.selectedRange = NSRange(location: selectedRange.location + 4, length: selectedRange.length)
         }
+        textView.delegate?.textViewDidChange?(textView)
     }
     
     func markBlockQuote() {
@@ -269,6 +279,7 @@ extension EditorView: EditorViewDelegate {
             self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
             textView.selectedRange = NSRange(location: selectedRange.location + 1, length: selectedRange.length)
         }
+        textView.delegate?.textViewDidChange?(textView)
     }
     
     
@@ -325,8 +336,7 @@ extension EditorView: EditorViewDelegate {
             
             self.textView.textStorage.replaceCharacters(in: selectedRange, with: cleanStr)
         }
-        
-        
+        textView.delegate?.textViewDidChange?(textView)
     }
     
     
@@ -391,7 +401,7 @@ extension EditorView: EditorViewDelegate {
                 textView.selectedRange = NSRange(location: selectedRange.location + 7, length: selectedRange.length)
             }
         }
-        
+        textView.delegate?.textViewDidChange?(textView)
     }
     
 }
