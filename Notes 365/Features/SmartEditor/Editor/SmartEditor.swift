@@ -11,7 +11,6 @@ import UniformTypeIdentifiers
 struct SmartEditor: View {
     var fileName: String
     var isReadonly: Bool
-    @State var markdownEditorState = MarkdownEditorViewState()
     @FocusState private var isTextFieldFocused: Bool
     @State private var editorView = EditorView()
     @State private var editorType = EditorType.smart
@@ -19,12 +18,10 @@ struct SmartEditor: View {
     @Binding var contentEditedDate: Date?
     @Binding var input: String
     @Binding var output: String
-//    var handler: (( @escaping () -> String) -> ())
-    @State private var showingExporter = false
+    @State private var showingPDFExporter = false
     @State private var pdfFileData: PDFFile = PDFFile(data: Data())
     
     var body: some View {
-        
         VStack(alignment: .leading) {
             // formatting bar view
             FormattingOptionsView(editorView: $editorView, contentEditedDate: $contentEditedDate)
@@ -37,15 +34,12 @@ struct SmartEditor: View {
                 .focused($isTextFieldFocused)
                 .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
         }
-        .onAppear {
-            markdownEditorState.fileName = self.fileName
-//            handler({
-//                return editorView.text
-//            })
-        }
-        .onChange(of: markdownEditorState.fileName, { oldValue, newValue in
-            editorView.fileName = newValue
-        })
+//        .onAppear {
+//            markdownEditorState.fileName = self.fileName
+//        }
+//        .onChange(of: markdownEditorState.fileName, { oldValue, newValue in
+//            editorView.fileName = newValue
+//        })
         .onChange(of: input, { oldValue, newValue in
             isTextFieldFocused = false
             showSymbols = false
@@ -85,7 +79,7 @@ struct SmartEditor: View {
                     Button {
                         if let pdfData = editorView.generatePDFData() {
                             pdfFileData = PDFFile(data: pdfData)
-                            showingExporter = true
+                            showingPDFExporter = true
                         } else {
                             print("pdf export failed")
                         }
@@ -101,7 +95,7 @@ struct SmartEditor: View {
         }
         .pickerStyle(SegmentedPickerStyle())
         .navigationBarTitleDisplayMode(.inline)
-        .fileExporter(isPresented: $showingExporter, document: pdfFileData, contentType: .pdf, defaultFilename: fileName) { result in
+        .fileExporter(isPresented: $showingPDFExporter, document: pdfFileData, contentType: .pdf, defaultFilename: fileName) { result in
             switch result {
             case .success(let url):
                 print("Saved to \(url)")

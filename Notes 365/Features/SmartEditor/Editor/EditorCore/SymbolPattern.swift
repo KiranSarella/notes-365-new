@@ -53,7 +53,7 @@ public enum SymbolPattern: String {
 //    case codeBlock = #"^(`{3}.*[\n\r][^]*?^`{3})$"#
     case codeBlockBalanceChecker = #"^`{3}$"#
     
-    case blockQuote = #"^(\>)([^\s])(.*)"#
+    case blockQuote = #"^(\>) ([^\s])(.*)"#
 //    case blockQuote = #"\n(\>)(.*)"#
     
     case link = #"\[([^\[]+)\]\(([^\)]+)\)"#

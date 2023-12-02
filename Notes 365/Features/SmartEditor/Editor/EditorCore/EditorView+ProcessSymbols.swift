@@ -636,39 +636,22 @@ extension EditorView {
     }
     
     func processBlockQuote(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-  
         let pattern = SymbolPattern.blockQuote.rawValue
-        
         let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
-        
         regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
-            
             let font =  theme.font
-            
             let fullRange = NSRange(location: match!.range.location, length: match!.range.length)
-            
             innerAttributedString.addAttribute(.font,
                                                value: font,
                                                 range: NSRange(location: match!.range.location, length: match!.range.length))
-            
             innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
                                                value:  theme.blockQuoteColor.uiColor,
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
-            
-            
             // add id key
             innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
                                                     value: 0,
-                                                    range: NSRange(location: match!.range.location, length: 1))
-
-//            // add id key
-//            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
-//                                                    value: 0,
-//                                                    range: NSRange(location: match!.range.location + match!.range.length, length: 1))
-
-
-
+                                                    range: NSRange(location: match!.range.location, length: 2))
             let info: [String: Any] = [
                 "range": NSRange(location: match!.range.location, length: match!.range.length),
                 "type": "blockQuote"
@@ -677,18 +660,17 @@ extension EditorView {
             innerAttributedString.addAttribute(NSAttributedString.Key.markdownInfo,
                                                     value: info,
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
-
             innerAttributedString.addAttribute(.markdownRange, value: SymbolPattern.blockQuote, range: match!.range)
             
-            let lineRange = NSRange(location: match!.range.location + 1, length: match!.range.length - 1)
+//            let val = editorType == .smart ? 2 : 1
             
+            let lineRange = NSRange(location: match!.range.location + 2, length: match!.range.length - 2)
+            logger.debug("lineRange: \(lineRange)")
             let bgInfo = [
                 "code": "blockQuote",
                 "color": theme.blockQuoteColor.uiColor
             ] as [String : Any]
-            
             innerAttributedString.addAttribute(.blockQuoteBackground, value: bgInfo, range: lineRange)
-            
             let para = NSMutableParagraphStyle()
             para.firstLineHeadIndent = 20
             para.headIndent = 20

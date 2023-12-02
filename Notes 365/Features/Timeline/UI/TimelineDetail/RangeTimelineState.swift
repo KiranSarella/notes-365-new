@@ -78,7 +78,7 @@ class RangeTimelineState {
             canLoadMore = false
             logger.info("all loaded.")
             if dayTimelineModels.isEmpty {
-                statusMessage = "No Content -- "
+                statusMessage = "Empty"
                 logger.info("no content")
             } else {
                 statusMessage = nil

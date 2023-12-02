@@ -8,12 +8,10 @@
 import SwiftUI
 
 struct EditorSymbolsView: View {
-    
     @State var state = EditorSymbolsState()
     @State var showSymbols: Bool = true
     
     var body: some View {
-        
         NavigationStack {
             List($state.symbolsList) { $symbol in
                 Section(symbol.heading) {
@@ -28,17 +26,12 @@ struct EditorSymbolsView: View {
                 Toggle("Show Symbols", isOn: $showSymbols)
                     .padding(.horizontal)
             }
-            .onChange(of: showSymbols) { newShowSymbols in
-    //            state.editorType = (newShowSymbols == true) ? .markdown : .smart
+            .onChange(of: showSymbols, { old, new in
                 for i in 0..<state.symbolsList.count {
-                    state.symbolsList[i].editorView.editorType = newShowSymbols ? .markdown : .smart
+                    state.symbolsList[i].editorView.editorType = new ? .markdown : .smart
                 }
-            }
+            })
         }
-        
-        
-
-//        .listStyle(GroupedListStyle())
     }
 }
 
@@ -48,15 +41,11 @@ struct EditorSymbolsView_Previews: PreviewProvider {
     }
 }
 
-
 /// for text formatting options
 struct ReadOnlyMarkDownViewThree: View {
-    
     @Binding var timeline: ReadonlyEditorCache
     @Binding var showSymbols: Bool
-    
     var body: some View {
-        
         PreviewViewUI(text: timeline.content,
                      editorView: timeline.editorView,
                       editorType: showSymbols ? .markdown : .smart,
@@ -64,24 +53,18 @@ struct ReadOnlyMarkDownViewThree: View {
         )
         .frame(height: timeline.height)
         .onAppear {
-            
             if timeline.isConfigured && timeline.isRefreshRequired == false {
                 return
             }
-            
             DispatchQueue.main.async {
                 // set color
                 timeline.editorView.textView.backgroundColor = UIColor.clear
-                
                 timeline.editorView.textView.sizeToFit()
                 timeline.height = timeline.editorView.textView.intrinsicContentSize.height + 20
                 // refresh purpose
                 timeline.themeID = timeline.editorView.theme.id
                 timeline.width = timeline.editorView.textView.intrinsicContentSize.width
                 timeline.isConfigured = true
-//                print("height: ", height)
-//                print("contentSize: ", timeline.editorView.textView.contentSize)
-//                print("intrinsicContentSize: ", timeline.editorView.textView.intrinsicContentSize)
             }
         }
     }

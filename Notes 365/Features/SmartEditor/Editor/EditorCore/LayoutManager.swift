@@ -202,10 +202,8 @@ private extension LayoutManager {
             else {
               return
             }
-            
-            let color = color0.withAlphaComponent(0.15)
-//            let color = UIColor.lightGray
-
+//            let color = color0.withAlphaComponent(0.15)
+            let color = color0.withAlphaComponent(0.4)
             let verticalBarGlyphRange = glyphRange(forCharacterRange: range, actualCharacterRange: nil)
             enumerateLineFragments(forGlyphRange: verticalBarGlyphRange) { rect, _, _, _, _ in
 

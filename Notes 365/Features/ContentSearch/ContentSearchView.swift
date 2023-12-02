@@ -39,6 +39,7 @@ struct ContentSearchView: View {
                 Spacer()
             }
             .searchable(text: $searchText)
+            .navigationBarTitleDisplayMode(.inline)
             .onChange(of: searchText) { oldValue, newValue in
                 if newValue.count >= 3 {
                    results =  business.fetchSearchResults(for: newValue) ?? []
@@ -47,7 +48,6 @@ struct ContentSearchView: View {
                 }
             }
         }
-        
     }
 }
 
@@ -74,7 +74,7 @@ struct SearchDetailView: View {
             }
         }
         .navigationDestination(for: NotebookContentB.self) { item in
-            NotebookContentView(isReadOnly: false, notebookId: item.notebookID, notebookContentState: notebookContentState)
+            NotebookContentView(isReadOnly: false, notebookId: item.notebookID, fileName: notebookName, notebookContentState: notebookContentState)
         }
 //        .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
     }

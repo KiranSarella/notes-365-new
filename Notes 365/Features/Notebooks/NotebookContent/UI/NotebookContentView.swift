@@ -11,6 +11,7 @@ import Combine
 struct NotebookContentView: View {
     var isReadOnly: Bool
     var notebookId: UUID
+    var fileName: String
     @Bindable var notebookContentState: NotebookContentState
     
     var body: some View {
@@ -27,7 +28,7 @@ struct NotebookContentView: View {
                 Spacer()
             } else {
                 
-                SmartEditor(fileName: "", isReadonly: isReadOnly, contentEditedDate: $notebookContentState.contentEditedDate, input: $notebookContentState.input, output: $notebookContentState.output)
+                SmartEditor(fileName: fileName, isReadonly: isReadOnly, contentEditedDate: $notebookContentState.contentEditedDate, input: $notebookContentState.input, output: $notebookContentState.output)
                 .onAppear(perform: {
                     self.notebookContentState.startAutoSaveTimer()
                 })

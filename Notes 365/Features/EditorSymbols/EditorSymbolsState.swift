@@ -15,32 +15,21 @@ import SwiftUI
 
 @Observable
 class EditorSymbolsState {
-    
-//    @Published var theme: MarkdownTheme = ThemeState.shared.theme
-//    @Published var editorType = EditorType.markdown
-    
     var symbolsList = [ReadonlyEditorCache]()
-    
     init() {
-        
         symbolsList.append(prepareBoldSymbols())
         symbolsList.append(prepareItalicSymbols())
         symbolsList.append(prepareStrikethroughSymbols())
-        
         symbolsList.append(prepareHeadingSymbols())
-        
         symbolsList.append(prepareOrderedListSymbols())
         symbolsList.append(prepareDashedListSymbols())
         symbolsList.append(prepareHighlightSymbols())
-        
         symbolsList.append(prepareInlineCodeSymbols())
         symbolsList.append(prepareCodeBlockSymbols())
-        
         symbolsList.append(prepareBlockQuoteSymbols())
     }
     
     func prepareBoldSymbols() -> ReadonlyEditorCache {
-        
         let heading = "Bold"
         let content = """
         This is **bold**
@@ -49,7 +38,6 @@ class EditorSymbolsState {
     }
     
     func prepareItalicSymbols() -> ReadonlyEditorCache {
-        
         let heading = "Italic"
         let content = """
         This is *italic*
@@ -58,7 +46,6 @@ class EditorSymbolsState {
     }
     
     func prepareStrikethroughSymbols() -> ReadonlyEditorCache {
-        
         let heading = "Strikethrough"
         let content = """
         This is ~~strikethrough~~
@@ -67,7 +54,6 @@ class EditorSymbolsState {
     }
     
     func prepareHeadingSymbols() -> ReadonlyEditorCache {
-        
         let heading = "Headings"
         let content = """
         # Heading 1
@@ -81,7 +67,6 @@ class EditorSymbolsState {
     }
     
     func prepareOrderedListSymbols() -> ReadonlyEditorCache {
-        
         let heading = "Ordered List"
         let content = """
         1. Monday
@@ -92,7 +77,6 @@ class EditorSymbolsState {
     }
     
     func prepareDashedListSymbols() -> ReadonlyEditorCache {
-        
         let heading = "Dashed List"
         let content = """
         - macOS
@@ -103,7 +87,6 @@ class EditorSymbolsState {
     }
     
     func prepareHighlightSymbols() -> ReadonlyEditorCache {
-        
         let heading = "Highlight"
         let content = """
         This is ==highlight==
@@ -112,7 +95,6 @@ class EditorSymbolsState {
     }
     
     func prepareInlineCodeSymbols() -> ReadonlyEditorCache {
-        
         let heading = "Inline code"
         let content = """
         this is `inline`
@@ -121,7 +103,6 @@ class EditorSymbolsState {
     }
     
     func prepareCodeBlockSymbols() -> ReadonlyEditorCache {
-        
         let heading = "Code Block"
         let content = """
         ```
@@ -133,10 +114,9 @@ class EditorSymbolsState {
     }
     
     func prepareBlockQuoteSymbols() -> ReadonlyEditorCache {
-        
         let heading = "Block Quote"
         let content = """
-        >Curabitur blandit tempus porttitor. Nullam quis risus eget urna mollis ornare vel eu leo.
+        > Curabitur blandit tempus porttitor. Nullam quis risus eget urna mollis ornare vel eu leo.
         """
         return ReadonlyEditorCache(heading: heading, content: content)
     }

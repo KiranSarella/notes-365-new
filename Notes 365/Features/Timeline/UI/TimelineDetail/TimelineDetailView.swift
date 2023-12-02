@@ -25,8 +25,10 @@ struct TimelineDetailView: View {
 //                LoadMoreView(timelineDetailState: $timelineDetailState)
             }
             .listStyle(PlainListStyle())
-            .scrollContentBackground(.hidden)
+//            .scrollContentBackground(.hidden)
+            Spacer()
         }
+        .navigationBarTitleDisplayMode(.inline)
         .onAppear {
 //            timelineDetailState.loadDayContent()
 //            if loadedFirstTime == false {
