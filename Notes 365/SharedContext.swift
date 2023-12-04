@@ -39,11 +39,9 @@ class SharedContext {
         let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try! ModelContainer(for:
                                             NotebookData.self,
-                                           NotebookContentData.self,
-                                           TodayVersion.self,
-                                           TimelineIndex.self,
-                                           TimelineContent.self,
-                                            DayNotebookChangeData.self,
+                                            NotebookContentData.self,
+                                            DayVersionData.self,
+                                            TimelineData.self,
                                             ThemeData.self,
                                            configurations: modelConfiguration)
         modelContext = ModelContext(container)
@@ -53,11 +51,9 @@ class SharedContext {
         let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: false)
         let container = try! ModelContainer(for:
                                             NotebookData.self,
-                                           NotebookContentData.self,
-                                           TodayVersion.self,
-                                           TimelineIndex.self,
-                                           TimelineContent.self,
-                                            DayNotebookChangeData.self,
+                                            NotebookContentData.self,
+                                            DayVersionData.self,
+                                            TimelineData.self,
                                             ThemeData.self,
                                            configurations: modelConfiguration)
         modelContext = ModelContext(container)

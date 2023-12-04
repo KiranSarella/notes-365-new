@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 
-struct DayNotebookChange: Identifiable {
+struct TimelineB: Identifiable {
     var id: String {
         "\(year)-\(month)-\(day)-\(notebookId)"
     }

@@ -16,11 +16,11 @@ class TimelineStorageAdapter: TimelineStorageProvider {
         self.storage = TimelineStorage(modelContext: modelContext)
     }
     
-    func fetchDayTimelineRecords(for date: Date) throws -> [DayNotebookChange] {
+    func fetchDayTimelineRecords(for date: Date) throws -> [TimelineB] {
         try storage.fetchDayTimelineRecords(for: date).map { $0.dayNotebookChange() }
     }
     
-    func save(dayNotebookChange: DayNotebookChange) throws {
+    func save(dayNotebookChange: TimelineB) throws {
         try storage.save(dayNotebookChange: dayNotebookChange.dayNotebookData())
     }
     
@@ -34,23 +34,23 @@ class TimelineStorageAdapter: TimelineStorageProvider {
     
 }
 
-extension DayNotebookChangeData {
-    func dayNotebookChange() -> DayNotebookChange {
-        var dayNotebookChange = DayNotebookChange(notebookId: notebookId, year: year, month: month, day: day)
+extension TimelineData {
+    func dayNotebookChange() -> TimelineB {
+        var dayNotebookChange = TimelineB(notebookId: notebookId, year: year, month: month, day: day)
         dayNotebookChange.updatedTime = updatedTime
         dayNotebookChange.content = content
         return dayNotebookChange
     }
     
-    func sync(newValue: DayNotebookChangeData) {
+    func sync(newValue: TimelineData) {
         self.content = newValue.content
         self.updatedTime = newValue.updatedTime
     }
 }
 
-extension DayNotebookChange {
-    func dayNotebookData() -> DayNotebookChangeData {
-        let data = DayNotebookChangeData(notebookId: notebookId, year: year, month: month, day: day)
+extension TimelineB {
+    func dayNotebookData() -> TimelineData {
+        let data = TimelineData(notebookId: notebookId, year: year, month: month, day: day)
         data.content = content
         data.updatedTime = updatedTime
         return data

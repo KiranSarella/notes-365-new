@@ -45,11 +45,11 @@ class TimelineContentCreator {
         if let dayNotebookChange = prepareTimelineContent(notebookId: notebookId, content: content) {
             timelineBusiness?.save(dayNotebookChange: dayNotebookChange)
         } else {
-            timelineBusiness?.clean(dayNotebookChange: DayNotebookChange(notebookId: notebookId, date: DateTime.now()))
+            timelineBusiness?.clean(dayNotebookChange: TimelineB(notebookId: notebookId, date: DateTime.now()))
         }
     }
     
-    func prepareTimelineContent(notebookId: UUID, content: String) -> DayNotebookChange? {
+    func prepareTimelineContent(notebookId: UUID, content: String) -> TimelineB? {
         logger.debug("\(#function) \(notebookId)")
         let dayBaseVersion = DayVersion.shared.getTodayVersion(for: notebookId) ?? ""
         let diff = StringDiff.getChanges(old: dayBaseVersion, new: content)
@@ -58,7 +58,7 @@ class TimelineContentCreator {
         if diff.count == 0 {
             return nil
         }
-        var dayNotebookChange = DayNotebookChange(notebookId: notebookId, date: DateTime.now())
+        var dayNotebookChange = TimelineB(notebookId: notebookId, date: DateTime.now())
         dayNotebookChange.content = diff
         return dayNotebookChange
     }

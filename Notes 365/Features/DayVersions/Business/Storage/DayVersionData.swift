@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class TodayVersion {
+class DayVersionData {
     var id: String = UUID().uuidString
     var notebookID: UUID = UUID()
     var content: String = ""
@@ -22,7 +22,7 @@ class TodayVersion {
     }
 }
 
-extension TodayVersion: CustomStringConvertible {
+extension DayVersionData: CustomStringConvertible {
     var description: String {
         var str = ""
         str.append("\(id)\n")

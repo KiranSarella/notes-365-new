@@ -24,7 +24,7 @@ class TodayVersionStorageAdapter: TodayVersionStorageProvider {
         try storage.isBaseVersionExists(for: versionId)
     }
     
-    func create(todayVersion: TodayVersion) throws {
+    func create(todayVersion: DayVersionData) throws {
         try storage.create(todayVersion: todayVersion)
     }
     

@@ -9,11 +9,8 @@ import Foundation
 import SwiftData
 
 @Model
-class DayNotebookChangeData {
-//    var id: String {
-//        "\(year)-\(month)-\(day)-\(notebookId)"
-//    }
-    var id: String = UUID().uuidString
+class TimelineData {
+    var id: String = UUID().uuidString  // "\(year)-\(month)-\(day)-\(notebookId)"
     var notebookId: UUID = UUID()
     var year: Int = 0
     var month: Int = 0
@@ -30,7 +27,7 @@ class DayNotebookChangeData {
     }
 }
 
-extension DayNotebookChangeData: CustomStringConvertible {
+extension TimelineData: CustomStringConvertible {
     var description: String {
         id + "\n" + content
     }

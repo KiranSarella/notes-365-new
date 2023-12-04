@@ -99,19 +99,12 @@ enum SpeechState {
     }
 }
 
-public struct DayChanges: Identifiable {
-    public let id = UUID()
-    
-    var timelineIndex: TimelineIndex
-    var notes = [Timeline]()
-}
 
-
-extension DayNotebookChange {
+extension TimelineB {
     func getTimeline() async -> Timeline {
         let fileName = NotebooksPathService.shared.fileName(for: notebookId)
 //        let fullPathInfo = await NotebooksPathService.shared.path(for: notebookId)
-        let fullPathInfo: FullPathInfo? = FullPathInfo(id: notebookId, name: "test 1", fullPath: "empty > path")
+        let fullPathInfo: FullPathInfo? = FullPathInfo(id: notebookId, name: "test 1", fullPath: "")
         var t = Timeline(id: id,
                          fileUUID: notebookId,
                          fileName: fileName ?? "",

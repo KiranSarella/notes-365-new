@@ -74,7 +74,7 @@ struct EditorViewUI: UIViewRepresentable {
     }
     
     func updateUIView(_ editorView: EditorView, context: Context) {
-        print(#function)
+//        print(#function)
     }
     
     typealias NSViewType = EditorView

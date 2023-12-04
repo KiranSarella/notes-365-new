@@ -15,32 +15,6 @@ import SwiftData
 // Factory Creator
 class BusinessFactory {
     
-//    static func createModelContext(mock: Bool) throws -> ModelContext {
-//        if mock {
-//            let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: true)
-//            let container = try ModelContainer(for: 
-//                                                NotebookData.self,
-//                                               NotebookContent.self,
-//                                               TodayVersion.self,
-//                                               TimelineIndex.self,
-//                                               TimelineContent.self, 
-//                                               configurations: modelConfiguration)
-//            return ModelContext(container)
-//        } else {
-//            if let modelContext = SharedContext.shared.modelContext {
-//                return modelContext
-//            } else {
-//                let container = try ModelContainer(for:
-//                                                    NotebookData.self,
-//                                                   NotebookContent.self,
-//                                                   TodayVersion.self,
-//                                                   TimelineIndex.self,
-//                                                   TimelineContent.self)
-//                return ModelContext(container)
-//            }
-//        }
-//    }
-    
     static func createNotebooksStorage() -> NotebooksStorageProvider {
         let modelContext = SharedContext.shared.getModelContext()
         return NotebooksStorageAdapter(modelContext: modelContext)

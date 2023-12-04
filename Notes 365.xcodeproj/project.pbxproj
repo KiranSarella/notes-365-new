@@ -25,7 +25,6 @@
 		5C117C3F2A8E77FF00B0F3BE /* LayoutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C117C3E2A8E77FF00B0F3BE /* LayoutManager.swift */; };
 		5C16B9BB2B035A0200BF8592 /* NotebookContentB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE8C48A2B0305CD00F19217 /* NotebookContentB.swift */; };
 		5C1CD5AB2ABC350B00D47814 /* TimelineBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1CD5AA2ABC350B00D47814 /* TimelineBaseView.swift */; };
-		5C286D192AD994BC00F836D3 /* DayChangesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C286D182AD994BC00F836D3 /* DayChangesView.swift */; };
 		5C29FECD2A98B377001DC601 /* PreviewViewUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C29FECC2A98B377001DC601 /* PreviewViewUI.swift */; };
 		5C29FED32A98D8FD001DC601 /* EditorSymbolsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C29FED22A98D8FD001DC601 /* EditorSymbolsState.swift */; };
 		5C29FED52A98D91D001DC601 /* ReadonlyEditorCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C29FED42A98D91D001DC601 /* ReadonlyEditorCache.swift */; };
@@ -42,13 +41,10 @@
 		5C3DE6B52B13A19D004E3621 /* SingleDayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3DE6B42B13A19D004E3621 /* SingleDayState.swift */; };
 		5C3DE6B72B13A8A2004E3621 /* RangeTimelineState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3DE6B62B13A8A2004E3621 /* RangeTimelineState.swift */; };
 		5C4ADCE32A9757EF000A037E /* EditorSymbolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4ADCE22A9757EF000A037E /* EditorSymbolsView.swift */; };
-		5C5668092B109B4C00CB873F /* TimelineIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5668082B109B4C00CB873F /* TimelineIndex.swift */; };
-		5C56680B2B109B7F00CB873F /* TimelineContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C56680A2B109B7F00CB873F /* TimelineContent.swift */; };
 		5C56680D2B109DB800CB873F /* TimelineStorageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C56680C2B109DB800CB873F /* TimelineStorageProvider.swift */; };
 		5C56680F2B10A2A700CB873F /* TimelineContentCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C56680E2B10A2A700CB873F /* TimelineContentCreator.swift */; };
-		5C5668112B10B1B100CB873F /* DayNotebookChangeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5668102B10B1B100CB873F /* DayNotebookChangeData.swift */; };
-		5C5668132B10B1E200CB873F /* DayNotebookChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5668122B10B1E200CB873F /* DayNotebookChange.swift */; };
-		5C5668152B10B88800CB873F /* DayTimelineData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5668142B10B88800CB873F /* DayTimelineData.swift */; };
+		5C5668112B10B1B100CB873F /* TimelineData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5668102B10B1B100CB873F /* TimelineData.swift */; };
+		5C5668132B10B1E200CB873F /* TimelineB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5668122B10B1E200CB873F /* TimelineB.swift */; };
 		5C5668172B10C84A00CB873F /* TimelineStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5668162B10C84A00CB873F /* TimelineStorageAdapter.swift */; };
 		5C7CFAB62B151E5D00777AB2 /* DateTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7CFAB52B151E5D00777AB2 /* DateTime.swift */; };
 		5C7D4AF22B07DCEA00BB1908 /* NotebooksRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7D4AF12B07DCEA00BB1908 /* NotebooksRequester.swift */; };
@@ -70,10 +66,9 @@
 		5CBEF3202B151018003A3972 /* DayVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBEF31F2B151018003A3972 /* DayVersion.swift */; };
 		5CC4C01F2A908D7000A4BE41 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC4C01E2A908D7000A4BE41 /* EditorView.swift */; };
 		5CC4C0212A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC4C0202A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift */; };
-		5CC8C25F2AD67D4100ABAC1F /* DayContentGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEC4D1B2AD3A4EA00750268 /* DayContentGenerator.swift */; };
 		5CCABA802B1C9B7F009A9F2E /* ThemeInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCABA7F2B1C9B7F009A9F2E /* ThemeInteractor.swift */; };
 		5CCCF7F12AC15E0D00F5923E /* NotebookContentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCCF7F02AC15E0D00F5923E /* NotebookContentData.swift */; };
-		5CCCF7F32AC2B0B300F5923E /* TodayVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCCF7F22AC2B0B300F5923E /* TodayVersion.swift */; };
+		5CCCF7F32AC2B0B300F5923E /* DayVersionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCCF7F22AC2B0B300F5923E /* DayVersionData.swift */; };
 		5CCCF7F52AC2CB6B00F5923E /* TimelineStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCCF7F42AC2CB6B00F5923E /* TimelineStorage.swift */; };
 		5CD2F4F02ACC7FD500E8B465 /* TimelineDetailState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD2F4EF2ACC7FD500E8B465 /* TimelineDetailState.swift */; };
 		5CE6FDF82B0BC19600ED9425 /* PDFFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE6FDF72B0BC19600ED9425 /* PDFFile.swift */; };
@@ -180,7 +175,6 @@
 		5C117C3D2A8E662800B0F3BE /* Features.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Features.md; sourceTree = "<group>"; };
 		5C117C3E2A8E77FF00B0F3BE /* LayoutManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutManager.swift; sourceTree = "<group>"; };
 		5C1CD5AA2ABC350B00D47814 /* TimelineBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineBaseView.swift; sourceTree = "<group>"; };
-		5C286D182AD994BC00F836D3 /* DayChangesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayChangesView.swift; sourceTree = "<group>"; };
 		5C29FECC2A98B377001DC601 /* PreviewViewUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewUI.swift; sourceTree = "<group>"; };
 		5C29FED22A98D8FD001DC601 /* EditorSymbolsState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorSymbolsState.swift; sourceTree = "<group>"; };
 		5C29FED42A98D91D001DC601 /* ReadonlyEditorCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadonlyEditorCache.swift; sourceTree = "<group>"; };
@@ -197,13 +191,10 @@
 		5C3DE6B42B13A19D004E3621 /* SingleDayState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleDayState.swift; sourceTree = "<group>"; };
 		5C3DE6B62B13A8A2004E3621 /* RangeTimelineState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeTimelineState.swift; sourceTree = "<group>"; };
 		5C4ADCE22A9757EF000A037E /* EditorSymbolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSymbolsView.swift; sourceTree = "<group>"; };
-		5C5668082B109B4C00CB873F /* TimelineIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineIndex.swift; sourceTree = "<group>"; };
-		5C56680A2B109B7F00CB873F /* TimelineContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineContent.swift; sourceTree = "<group>"; };
 		5C56680C2B109DB800CB873F /* TimelineStorageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineStorageProvider.swift; sourceTree = "<group>"; };
 		5C56680E2B10A2A700CB873F /* TimelineContentCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineContentCreator.swift; sourceTree = "<group>"; };
-		5C5668102B10B1B100CB873F /* DayNotebookChangeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayNotebookChangeData.swift; sourceTree = "<group>"; };
-		5C5668122B10B1E200CB873F /* DayNotebookChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayNotebookChange.swift; sourceTree = "<group>"; };
-		5C5668142B10B88800CB873F /* DayTimelineData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayTimelineData.swift; sourceTree = "<group>"; };
+		5C5668102B10B1B100CB873F /* TimelineData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineData.swift; sourceTree = "<group>"; };
+		5C5668122B10B1E200CB873F /* TimelineB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineB.swift; sourceTree = "<group>"; };
 		5C5668162B10C84A00CB873F /* TimelineStorageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineStorageAdapter.swift; sourceTree = "<group>"; };
 		5C7CFAB52B151E5D00777AB2 /* DateTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTime.swift; sourceTree = "<group>"; };
 		5C7D4AF12B07DCEA00BB1908 /* NotebooksRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksRequester.swift; sourceTree = "<group>"; };
@@ -225,13 +216,12 @@
 		5CC4C0202A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MarkdownAttributedString+iOS.swift"; sourceTree = "<group>"; };
 		5CCABA7F2B1C9B7F009A9F2E /* ThemeInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeInteractor.swift; sourceTree = "<group>"; };
 		5CCCF7F02AC15E0D00F5923E /* NotebookContentData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentData.swift; sourceTree = "<group>"; };
-		5CCCF7F22AC2B0B300F5923E /* TodayVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayVersion.swift; sourceTree = "<group>"; };
+		5CCCF7F22AC2B0B300F5923E /* DayVersionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayVersionData.swift; sourceTree = "<group>"; };
 		5CCCF7F42AC2CB6B00F5923E /* TimelineStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineStorage.swift; sourceTree = "<group>"; };
 		5CD2F4EF2ACC7FD500E8B465 /* TimelineDetailState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineDetailState.swift; sourceTree = "<group>"; };
 		5CE6FDF72B0BC19600ED9425 /* PDFFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFFile.swift; sourceTree = "<group>"; };
 		5CE8C4872B03048E00F19217 /* Notebook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notebook.swift; sourceTree = "<group>"; };
 		5CE8C48A2B0305CD00F19217 /* NotebookContentB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentB.swift; sourceTree = "<group>"; };
-		5CEC4D1B2AD3A4EA00750268 /* DayContentGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayContentGenerator.swift; sourceTree = "<group>"; };
 		5CF4F5172B0DE4EB008F13F3 /* NotebooksLevelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksLevelView.swift; sourceTree = "<group>"; };
 		5CF612B62B0B06B700D397C6 /* SharedContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedContext.swift; sourceTree = "<group>"; };
 		5CF612BC2B0B08A400D397C6 /* NotebookContentStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentStorage.swift; sourceTree = "<group>"; };
@@ -479,7 +469,7 @@
 			isa = PBXGroup;
 			children = (
 				9FB6C6A829279BEC00C8EC76 /* TimelineBusiness.swift */,
-				5C5668122B10B1E200CB873F /* DayNotebookChange.swift */,
+				5C5668122B10B1E200CB873F /* TimelineB.swift */,
 				5C051B932B11C346005C99B7 /* ContentCreator */,
 				5C56680C2B109DB800CB873F /* TimelineStorageProvider.swift */,
 			);
@@ -491,10 +481,7 @@
 			children = (
 				5C5668162B10C84A00CB873F /* TimelineStorageAdapter.swift */,
 				5CCCF7F42AC2CB6B00F5923E /* TimelineStorage.swift */,
-				5C5668102B10B1B100CB873F /* DayNotebookChangeData.swift */,
-				5C5668142B10B88800CB873F /* DayTimelineData.swift */,
-				5C5668082B109B4C00CB873F /* TimelineIndex.swift */,
-				5C56680A2B109B7F00CB873F /* TimelineContent.swift */,
+				5C5668102B10B1B100CB873F /* TimelineData.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -533,7 +520,7 @@
 			children = (
 				5CBEF3192B15025E003A3972 /* TodayVersionStorageAdapter.swift */,
 				5CBEF3172B15008E003A3972 /* TodayVersionStorage.swift */,
-				5CCCF7F22AC2B0B300F5923E /* TodayVersion.swift */,
+				5CCCF7F22AC2B0B300F5923E /* DayVersionData.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -569,8 +556,6 @@
 				5C3DE6B32B13A181004E3621 /* SingleDay */,
 				5C3DE6B02B13709C004E3621 /* TimelineDetail.md */,
 				9F45BCFA2920CCCE003DE332 /* NoteChangeHeadingView.swift */,
-				5C286D182AD994BC00F836D3 /* DayChangesView.swift */,
-				5CEC4D1B2AD3A4EA00750268 /* DayContentGenerator.swift */,
 			);
 			path = TimelineDetail;
 			sourceTree = "<group>";
@@ -1012,7 +997,7 @@
 				9F1687CC29AD0E7F0085A0CA /* InitialCloudSync.swift in Sources */,
 				5C29FECD2A98B377001DC601 /* PreviewViewUI.swift in Sources */,
 				5C29FED32A98D8FD001DC601 /* EditorSymbolsState.swift in Sources */,
-				5C5668112B10B1B100CB873F /* DayNotebookChangeData.swift in Sources */,
+				5C5668112B10B1B100CB873F /* TimelineData.swift in Sources */,
 				5C10D79D2B04C248006FB80D /* NotebooksStorageAdapter.swift in Sources */,
 				5C34A1842B1B5CD400D036B7 /* ThemeData.swift in Sources */,
 				9F92CF0529B7525500B8D3C4 /* MailView.swift in Sources */,
@@ -1033,9 +1018,8 @@
 				5C1CD5AB2ABC350B00D47814 /* TimelineBaseView.swift in Sources */,
 				5C051B9B2B11FFF6005C99B7 /* NotebooksPathService.swift in Sources */,
 				5CE6FE212B0CD65700ED9425 /* NotebooksListBusiness.swift in Sources */,
-				5C56680B2B109B7F00CB873F /* TimelineContent.swift in Sources */,
 				5CD2F4F02ACC7FD500E8B465 /* TimelineDetailState.swift in Sources */,
-				5CCCF7F32AC2B0B300F5923E /* TodayVersion.swift in Sources */,
+				5CCCF7F32AC2B0B300F5923E /* DayVersionData.swift in Sources */,
 				5CBEF3202B151018003A3972 /* DayVersion.swift in Sources */,
 				5CF612B72B0B06B700D397C6 /* SharedContext.swift in Sources */,
 				5C34A18E2B1BA0EA00D036B7 /* ThemeB.swift in Sources */,
@@ -1050,9 +1034,7 @@
 				5C08EA3E2B1895980095DE86 /* ContentSearchStorage.swift in Sources */,
 				5CE8C4882B03048E00F19217 /* Notebook.swift in Sources */,
 				5CCCF7F52AC2CB6B00F5923E /* TimelineStorage.swift in Sources */,
-				5C5668152B10B88800CB873F /* DayTimelineData.swift in Sources */,
 				9F3DB0C6292E1D9200704860 /* ThemeBusiness.swift in Sources */,
-				5C286D192AD994BC00F836D3 /* DayChangesView.swift in Sources */,
 				9F14B491298A684F0079D23B /* ThemeOptionsView.swift in Sources */,
 				5C5668172B10C84A00CB873F /* TimelineStorageAdapter.swift in Sources */,
 				5C7D4AF82B08E00C00BB1908 /* NotebookB.swift in Sources */,
@@ -1061,7 +1043,6 @@
 				9F14B4AE298F98900079D23B /* FontPicker.swift in Sources */,
 				5CF612D62B0B98CF00D397C6 /* EditorView+Layout.swift in Sources */,
 				9FB6C6A02927695000C8EC76 /* NotebookContentBusiness.swift in Sources */,
-				5C5668092B109B4C00CB873F /* TimelineIndex.swift in Sources */,
 				5C34A18A2B1B936700D036B7 /* ThemeStorageProvider.swift in Sources */,
 				9F45BDA82920CE41003DE332 /* MarkdownTheme.swift in Sources */,
 				5C4ADCE32A9757EF000A037E /* EditorSymbolsView.swift in Sources */,
@@ -1082,7 +1063,7 @@
 				9FB6C6A929279BEC00C8EC76 /* TimelineBusiness.swift in Sources */,
 				5C16B9BB2B035A0200BF8592 /* NotebookContentB.swift in Sources */,
 				5C34A1882B1B918D00D036B7 /* DefaultThemes.swift in Sources */,
-				5C5668132B10B1E200CB873F /* DayNotebookChange.swift in Sources */,
+				5C5668132B10B1E200CB873F /* TimelineB.swift in Sources */,
 				9F8EE98A293EB3090021409E /* CloudDataManager.swift in Sources */,
 				5C3DE6B72B13A8A2004E3621 /* RangeTimelineState.swift in Sources */,
 				5CC4C01F2A908D7000A4BE41 /* EditorView.swift in Sources */,
@@ -1120,7 +1101,6 @@
 				5CF612C12B0B0DD600D397C6 /* NotebookContentStorageAdapter.swift in Sources */,
 				5C7CFAB62B151E5D00777AB2 /* DateTime.swift in Sources */,
 				5C29FED52A98D91D001DC601 /* ReadonlyEditorCache.swift in Sources */,
-				5CC8C25F2AD67D4100ABAC1F /* DayContentGenerator.swift in Sources */,
 				5CBEF31A2B15025E003A3972 /* TodayVersionStorageAdapter.swift in Sources */,
 				5CF612CC2B0B343200D397C6 /* NotebookContent.swift in Sources */,
 			);

@@ -14,7 +14,7 @@ struct Notes_365App: App {
     @Environment(\.scenePhase) private var scenePhase
     
     var context: ModelContext = {
-        SharedContext.shared.resetContext(mock: false)
+        SharedContext.shared.resetContext(mock: true)
         return SharedContext.shared.getModelContext()
     }()
     

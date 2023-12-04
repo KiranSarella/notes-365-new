@@ -31,7 +31,7 @@ class TodayVersionBusiness {
             logger.info("isBaseVersionExists: true")
             return
         }
-        let todayVersion = TodayVersion(notebookID: notebookId, content: content)
+        let todayVersion = DayVersionData(notebookID: notebookId, content: content)
         do {
             logger.debug("\(todayVersion)")
             try storage.create(todayVersion: todayVersion)
@@ -43,7 +43,7 @@ class TodayVersionBusiness {
     
     func isBaseVersionExists(notebookId: UUID) -> Bool {
         do {
-            let todayVersionId = TodayVersion(notebookID: notebookId).id
+            let todayVersionId = DayVersionData(notebookID: notebookId).id
             return try storage.isBaseVersionExists(for: todayVersionId)
         } catch let err {
             logger.error("\(err)")
@@ -54,7 +54,7 @@ class TodayVersionBusiness {
     func getTodayVersion(for notebookId: UUID) -> String? {
         logger.info("getTodayVersion - \(notebookId)")
         do {
-            let todayVersionId = TodayVersion(notebookID: notebookId).id
+            let todayVersionId = DayVersionData(notebookID: notebookId).id
             return try storage.getTodayVersion(for: todayVersionId)
         } catch let err {
             logger.error("\(err)")
@@ -65,7 +65,7 @@ class TodayVersionBusiness {
     func removeDayVersion(for notebookId: UUID) {
         logger.info("removeDayVersion - \(notebookId)")
         do {
-            let todayVersionId = TodayVersion(notebookID: notebookId).id
+            let todayVersionId = DayVersionData(notebookID: notebookId).id
             try storage.removeDayVersion(for: todayVersionId)
         } catch let error {
             print(error)

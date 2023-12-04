@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 class TimelineBusiness {
-    var todayTimelineIndex: TimelineIndex?
+    
     var count = -5
     var today = DateTime.now()
     var storage: TimelineStorageProvider
@@ -19,12 +19,12 @@ class TimelineBusiness {
         self.storage = storage
     }
     
-    func fetchDayTimelineNoteChanges(date: Date) throws -> [DayNotebookChange] {
+    func fetchDayTimelineNoteChanges(date: Date) throws -> [TimelineB] {
         logger.info("\(#function)")
         return try storage.fetchDayTimelineRecords(for: date)
     }
     
-    func save(dayNotebookChange: DayNotebookChange) {
+    func save(dayNotebookChange: TimelineB) {
         logger.info("\(#function)")
         do {
             try storage.save(dayNotebookChange: dayNotebookChange)
@@ -43,7 +43,7 @@ class TimelineBusiness {
         }
     }
     
-    func clean(dayNotebookChange: DayNotebookChange) {
+    func clean(dayNotebookChange: TimelineB) {
         logger.info("\(#function)")
         do {
             try storage.delete(dayNotebookChangeId: dayNotebookChange.id)
