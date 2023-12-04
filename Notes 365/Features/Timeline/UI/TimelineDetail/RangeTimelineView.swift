@@ -45,26 +45,6 @@ struct RangeTimelineView: View {
                     state.discardTimelineChanges(info: newValue)
                 }
             }
-//            .onChange(of: state.currentDateLoadingState) { oldValue, newValue in
-//                logger.info("currentDayContentsCount: \(newValue.timmelinesCount)")
-//                state.currentDayLoaded = true
-//                if newValue.timmelinesCount > 0 {
-//                    state.daysContentExists.insert(true)
-//                    state.statusMessage = nil
-//                    state.atleastOneDayExists = true
-//                    state.canLoadMore = true
-//                } else {
-//                    state.daysContentExists.insert(false)
-//                }
-////                if state.atleastOneDayExists == false {
-//                state.loadNextDay()
-////                }
-//            }
-//            .onChange(of: state.currentDayLoaded) { oldValue, newValue in
-//                if newValue {
-//                    state.loadNextDay()
-//                }
-//            }
         }
         .listStyle(PlainListStyle())
         .scrollContentBackground(.hidden)

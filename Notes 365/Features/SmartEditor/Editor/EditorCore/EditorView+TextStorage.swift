@@ -18,7 +18,7 @@ extension EditorView: NSTextStorageDelegate {
     
     public func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
      
-        print("editedRange", editedRange, "delta", delta, "editedMask", editedMask)
+//        print("editedRange", editedRange, "delta", delta, "editedMask", editedMask)
    
         let extendedRange = (textStorage.string as NSString).paragraphRange(for: editedRange)
         
@@ -76,78 +76,12 @@ extension EditorView: NSTextStorageDelegate {
         processBoldAndItalic(extendedRange: extendedRange, textStorage: textStorage)    // ***
         processStrikethrough(extendedRange: extendedRange, textStorage: textStorage)
 //        processLink(extendedRange: extendedRange, textStorage: textStorage)
-        
-        
         processInlineCode(extendedRange: extendedRange, textStorage: textStorage)
-        
         processHttp(extendedRange: extendedRange, textStorage: textStorage)
-        
         let fullRange = textStorage.fullRange()
         if fullRange.length > 0 {
             processCodeBlock(extendedRange: textStorage.fullRange(), textStorage: textStorage)
         }
-        
-        
-        
-        
-        // treat non `.markdownRange` as body
-        
-        
-        
-//        textStorage.enumerateAttribute(.markdownRange, in: extendedRange, options: []) { value, range, stop in
-//            guard let markdownPattern = value as? MarkdownPattern else { return }
-//
-//            /*
-//             case 1: ignore unknown font family types
-//             case 2: apply to remaining types
-//             */
-//
-////            let subAttrStr = textStorage.attributedSubstring(from: range)
-////            subAttrStr.string.contains(CharacterSet.alphanumerics)
-//
-//            if markdownPattern == .body {
-//
-//                textStorage.enumerateAttribute(.font, in: range) { value, range, stop in
-//
-//                    guard let font = value as? UIFont else { return }
-//
-//                    if font.fontName.contains(theme.bodyFontName) ||
-//                        font.fontName.contains(theme.codeFontName) ||
-//                        font.fontName.contains(theme.blockQuoteFontName) ||
-//                        font.fontName.contains(theme.headingFontName)
-//                    {
-//                        let bodyFont = UIFont(name: theme.bodyFontName, size: CGFloat(theme.bodyFontSize))!
-//
-//                        textStorage.addAttribute(.font, value: bodyFont, range: range)
-//                    }
-//                }
-//            }
-//
-//
-//
-//
-//
-//
-//            //            fontDescriptor = fontDescriptor.withFamily(bodyFont.familyName!)
-//            //            print(bodyFont.familyName!)
-//
-//            //            fontDescriptor = fontDescriptor.withFamily(bodyFont?.familyName ?? UIFont.systemFont(ofSize: 14).familyName!)
-//            //            fontDescriptor = fontDescriptor.withFamily(UIFont.systemFont(ofSize: 14).familyName!)
-//
-//            //            let newFont = UIFont(descriptor: fontDescriptor, size: CGFloat(theme.bodyFontSize))!
-//            //
-//            ////            let newFont = font.apply(newTraits: symbolicTraits, newPointSize: theme.bodyFontSize)
-//            //            textStorage.addAttribute(.font, value: newFont, range: range)
-//
-//            //            print("after:", newFont.fontDescriptor.symbolicTraits, range)
-//            //            print(newFont.fontDescriptor)
-//            //
-//            //            let newFont = font.apply(newTraits: .bold, newPointSize: getHeadingFontSize(level: 1))
-//            //            innerAttributedString.addAttribute(.font, value: newFont, range: range)
-//            //            textStorage.addAttribute(.foregroundColor, value: UIColor.textColor, range: range)
-//        }
-        
-        
     }
     
     

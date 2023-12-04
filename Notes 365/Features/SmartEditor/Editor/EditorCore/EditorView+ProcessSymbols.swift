@@ -13,19 +13,12 @@ import Combine
 extension EditorView {
     
     func processBold(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        
         let pattern = SymbolPattern.bold.rawValue
-        
 //        var boldFont = theme.font
 //        boldFont = boldFont.apply(newTraits: .bold)
-        
         let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
-        
         regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
-            
-            
-            
             let regExCharLenght = 2
             //            let frontPadding = 0
             let backPadding = 0

@@ -14,7 +14,7 @@ extension EditorView: NSLayoutManagerDelegate {
     
     public func layoutManager(_ layoutManager: NSLayoutManager, shouldGenerateGlyphs glyphs: UnsafePointer<CGGlyph>, properties props: UnsafePointer<NSLayoutManager.GlyphProperty>, characterIndexes charIndexes: UnsafePointer<Int>, font aFont: UIFont, forGlyphRange glyphRange: NSRange) -> Int {
         
-        logger.debug("\(#function)")
+//        logger.debug("\(#function)")
 //
 //        print(glyphRange)
 //
@@ -53,9 +53,6 @@ extension EditorView: NSLayoutManagerDelegate {
         for index in 0..<glyphRange.length {
             
             let charPtr = charIndexes[index]
-            
-
-            
             var isMarkdown: Bool {
                 let attrValue = textStorage.attribute(.markdown, at: charPtr, effectiveRange: &mutableGlymphRange)
                 return attrValue != nil

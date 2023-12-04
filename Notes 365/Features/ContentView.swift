@@ -105,7 +105,7 @@ struct ContentView: View {
     @State var allExpanded = true
     @State var pinsExpanded = true
     @State var selection: Int = 0
-    @State private var timelineDetailState = TimelineDetailState(timelineBusiness: BusinessFactory.timelineInteractor())
+    @State private var timelineDetailState = TimelineBaseViewState(timelineBusiness: BusinessFactory.timelineInteractor())
     @State private var presentedParks: [SidebarItem] = []
     @State private var path = NavigationPath()
     @State private var horizontalCalendarViewState = HorizontalCalendarViewState()
@@ -170,7 +170,7 @@ struct ContentView: View {
             let selectedItem = SidebarItem(rawValue: sidebarItemSelected ?? SidebarItem.timeline.id)!
             switch selectedItem {
             case .timeline:
-                TimelineDetailView(state: $timelineDetailState, horizontalCalendarViewState: $horizontalCalendarViewState)
+                TimelineBaseView(state: $timelineDetailState, horizontalCalendarViewState: $horizontalCalendarViewState)
             case .notebooks:
                 NotebooksBaseDetailView(notebooksListState: $notebooksListState, path: $path)
             case .search:

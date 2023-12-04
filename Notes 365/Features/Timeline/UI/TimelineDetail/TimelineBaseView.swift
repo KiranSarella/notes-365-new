@@ -7,43 +7,56 @@
 
 import SwiftUI
 
-struct TimelineDetailView: View {
-    @Binding var state: TimelineDetailState
-    @State private var isShowingCalendar = false
-    @State private var loadedFirstTime = false
+struct TimelineBaseView: View {
+    @Binding var state: TimelineBaseViewState
     @Binding var horizontalCalendarViewState: HorizontalCalendarViewState
+    @State private var loadedFirstTime = false
+    @State private var showCalendar = false
+    @State private var calendarDate = DateTime.now()
     
     var body: some View {
-        GeometryReader { geometry in
-         
         VStack {
             HorizontalCalendarView(state: $horizontalCalendarViewState, selectedDates: $state.selectedDates)
             ScrollView(.vertical, showsIndicators: false) {
-//                TimelinecurrentDateHeaderView(timelineDetailState: $timelineDetailState)
-//                LoadingStatusMessageView(timelineDetailState: $timelineDetailState)
                 RangeTimelineView(selectedDates: $state.selectedDates)
-//                LoadMoreView(timelineDetailState: $timelineDetailState)
             }
             .listStyle(PlainListStyle())
-//            .scrollContentBackground(.hidden)
             Spacer()
         }
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear {
-//            timelineDetailState.loadDayContent()
-//            if loadedFirstTime == false {
-//                loadedFirstTime = true
-//                timelineDetailState.startReloadingContent()
-//            }
-        }
-        .onDisappear(perform: {
-//            timelineDetailState.clearDisplay()
+        .onChange(of: calendarDate, { oldValue, newValue in
+            state.selectedDates = [newValue]
+            horizontalCalendarViewState.selectedDateRange = nil
         })
-        .onChange(of: state.selectedDates, { oldValue, newValue in
-            print(newValue)
-//            state.startReloadingContent()
-        })
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    showCalendar = true
+                } label: {
+                    Image(systemName: "calendar")
+                }
+                .popover(isPresented: $showCalendar, content: {
+                    CalendarView(calendarDate: $calendarDate)
+                })
+            }
         }
+        
+    }
+}
+
+struct CalendarView: View {
+    @Binding var calendarDate: Date
+    
+    var body: some View {
+        VStack {
+            DatePicker(
+                   "Start Date",
+                   selection: $calendarDate,
+                   displayedComponents: [.date]
+               )
+               .datePickerStyle(.graphical)
+        }
+        .frame(minWidth: 420)
     }
 }
 
@@ -66,7 +79,7 @@ extension TimelineDateRange: Equatable {
 
 
 struct LoadingStatusMessageView: View {
-    @Binding var timelineDetailState: TimelineDetailState
+    @Binding var timelineDetailState: TimelineBaseViewState
     var body: some View {
         // loading status message
         if timelineDetailState.currentState != .data {

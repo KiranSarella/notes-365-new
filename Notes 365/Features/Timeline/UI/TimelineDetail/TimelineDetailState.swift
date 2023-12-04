@@ -133,7 +133,7 @@ extension DayNotebookChange {
 
 
 @Observable
-class TimelineDetailState {
+class TimelineBaseViewState {
     let timelineBusiness: TimelineInteractor
     
     var selectedDates: [Date] = []

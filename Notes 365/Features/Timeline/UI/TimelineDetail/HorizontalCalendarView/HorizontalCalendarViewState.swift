@@ -24,26 +24,26 @@ class HorizontalCalendarViewState {
         logger.info("constructDateRanges")
         var ranges = [TimelineDateRange]()
         ranges.append(TimelineDateRange(title: "Today", type: .today, date: DateTime.now()))
-        guard let firstEntryDate = timelineBusiness.getFirstAvailableTimelineDate() else {
-            return ranges
-        }
-        logger.info("firstEntryDate: \(firstEntryDate)")
-        if DateTime.now().dayBefore >= firstEntryDate {
-            ranges.append(TimelineDateRange(title: "Previous 7 Days", type: .previousSevenDays, date: DateTime.now().dayBefore))
+//        guard let firstEntryDate = timelineBusiness.getFirstAvailableTimelineDate() else {
+//            return ranges
+//        }
+//        logger.info("firstEntryDate: \(firstEntryDate)")
+        // add previous 7 days by default
+        ranges.append(TimelineDateRange(title: "Previous 7 Days", type: .previousSevenDays, date: DateTime.now().dayBefore))
+        logger.info("\(ranges.last?.title ?? "")")
+        // add current month by default
+        var currenMonth = DateTime.now().startOfMonth()
+        ranges.append(TimelineDateRange(title: "This Month", type: .month, date: currenMonth))
+        logger.info("\(ranges.last?.title ?? "")")
+        // populate previous 6 months
+        currenMonth = currenMonth.monthBefore
+        var count = 6
+        while count > 0 {
+            ranges.append(TimelineDateRange(title: currenMonth.monthName, type: .month, date: currenMonth))
             logger.info("\(ranges.last?.title ?? "")")
+            currenMonth = currenMonth.monthBefore
+            count -= 1
         }
-        
-        var firstMonthDate = DateTime.now().startOfMonth()
-        if firstMonthDate >= firstEntryDate {
-            var count = 10
-            while count > 0 && firstMonthDate >= firstEntryDate {
-                ranges.append(TimelineDateRange(title: firstMonthDate.monthName, type: .month, date: firstMonthDate))
-                logger.info("\(ranges.last?.title ?? "")")
-                firstMonthDate = firstMonthDate.monthBefore
-                count -= 1
-            }
-        }
-        
         return ranges
     }
     

@@ -3,8 +3,6 @@
 import Foundation
 import UIKit
 
-//private let logger = Logger(label: "org.brians-brian.CommonplaceBookApp.LayoutManager")
-
 /// Custom layout manager that knows how to draw vertical bars next to block quotes.
 /// Implementation inspired by the Wordpress Aztec HTML editing component:
 /// https://github.com/wordpress-mobile/AztecEditor-iOS/blob/develop/Aztec/Classes/TextKit/LayoutManager.swift
