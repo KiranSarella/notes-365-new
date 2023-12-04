@@ -12,6 +12,7 @@ struct NotebookContentView: View {
     var isReadOnly: Bool
     var notebookId: UUID
     var fileName: String
+    var searchText: String?
     @Bindable var notebookContentState: NotebookContentState
     
     var body: some View {
@@ -27,8 +28,7 @@ struct NotebookContentView: View {
                 }
                 Spacer()
             } else {
-                
-                SmartEditor(fileName: fileName, isReadonly: isReadOnly, contentEditedDate: $notebookContentState.contentEditedDate, input: $notebookContentState.input, output: $notebookContentState.output)
+                SmartEditor(fileName: fileName, isReadonly: isReadOnly, searchText: searchText, contentEditedDate: $notebookContentState.contentEditedDate, input: $notebookContentState.input, output: $notebookContentState.output)
                 .onAppear(perform: {
                     self.notebookContentState.startAutoSaveTimer()
                 })
@@ -36,19 +36,8 @@ struct NotebookContentView: View {
                     print(newValue)
                     notebookContentState.contentEditedDate = DateTime.now()
                 }
-//                .toolbar {
-//                    ToolbarItem(placement: .topBarLeading) {
-//                        Button {
-//                            dismiss()
-//                        } label: {
-//                            Text("Done")
-//                        }
-//
-//                    }
-//                }
             }
         }
-//        .navigationTitle(notebookM?.name ?? "")
         .onAppear {
             Task {
                 // new notebook steps

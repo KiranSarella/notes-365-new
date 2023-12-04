@@ -77,23 +77,14 @@ extension EditorView: EditorViewDelegate {
     }
     
     func findAction() {
-        
-        
         textView.findInteraction?.presentFindNavigator(showingReplace: false)
-        
-        //        self.textView.usesFindBar = true
-        
-        //        button.tag = NSTextFinderAction.showFindInterface.rawValue
-        //        textview.performFindPanelAction(button)
-        
-        //        textView.performFindPanelAction(nil)
-        
-        
-        
-        //        self.textView.showFindIndicator(for: selectedRange)
     }
     
-    
+    func findAction(with searchText: String) {
+        textView.findInteraction?.presentFindNavigator(showingReplace: false)
+        textView.findInteraction?.searchText = searchText
+        textView.find(nil)
+    }
     
     func markBold() {
 

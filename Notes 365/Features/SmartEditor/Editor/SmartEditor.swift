@@ -11,6 +11,7 @@ import UniformTypeIdentifiers
 struct SmartEditor: View {
     var fileName: String
     var isReadonly: Bool
+    var searchText: String?
     @FocusState private var isTextFieldFocused: Bool
     @State private var editorView = EditorView()
     @State private var editorType = EditorType.smart
@@ -33,6 +34,14 @@ struct SmartEditor: View {
                 .font(Font.body)
                 .focused($isTextFieldFocused)
                 .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
+                .onAppear {
+                    if let searchText = searchText, !searchText.isEmpty  {
+                        Task {
+                            try? await Task.sleep(nanoseconds: 1_000_000_00)
+                            editorView.findAction(with: searchText)
+                        }
+                    }
+                }
         }
 //        .onAppear {
 //            markdownEditorState.fileName = self.fileName

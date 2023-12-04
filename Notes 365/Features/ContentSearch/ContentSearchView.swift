@@ -29,7 +29,7 @@ struct ContentSearchView: View {
                 List {
                     ForEach(results) { result in
                         Section {
-                            SearchDetailView(notebookContentState: $notebookContentState, result: result)
+                            SearchDetailView(notebookContentState: $notebookContentState, searchText: searchText, result: result)
                         }
                     }
     //                SearchDetailView()
@@ -53,6 +53,7 @@ struct ContentSearchView: View {
 
 struct SearchDetailView: View {
     @Binding var notebookContentState: NotebookContentState
+    var searchText: String
     let result: NotebookContentB
     var notebookName: String {
         return NotebooksPathService.shared.fileName(for: result.notebookID) ?? "-"
@@ -74,7 +75,7 @@ struct SearchDetailView: View {
             }
         }
         .navigationDestination(for: NotebookContentB.self) { item in
-            NotebookContentView(isReadOnly: false, notebookId: item.notebookID, fileName: notebookName, notebookContentState: notebookContentState)
+            NotebookContentView(isReadOnly: false, notebookId: item.notebookID, fileName: notebookName, searchText: searchText, notebookContentState: notebookContentState)
         }
 //        .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
     }
