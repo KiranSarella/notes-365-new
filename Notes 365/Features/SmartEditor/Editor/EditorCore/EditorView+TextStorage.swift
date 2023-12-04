@@ -18,7 +18,7 @@ extension EditorView: NSTextStorageDelegate {
     
     public func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
      
-//        print("editedRange", editedRange, "delta", delta, "editedMask", editedMask)
+        print("editedRange", editedRange, "delta", delta, "editedMask", editedMask)
    
         let extendedRange = (textStorage.string as NSString).paragraphRange(for: editedRange)
         

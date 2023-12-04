@@ -84,28 +84,28 @@ struct LoadingStatusMessageView: View {
     }
 }
 
-struct LoadMoreView: View {
-    @Binding var timelineDetailState: TimelineDetailState
-    var body: some View {
-        if timelineDetailState.canLoadMore {
-            VStack {
-                HStack {
-                    Spacer()
-                    Text("Loading.. in (timeline detail)")
-                    Spacer()
-                }
-                .progressViewStyle(CircularProgressViewStyle())
-                .foregroundStyle(.gray)
-                .frame(height: 80)
-                .onAppear {
-                    print("load more appear")
-                    timelineDetailState.tryLoadMore()
-                }
-            }
-            .listRowSeparator(.hidden)
-        }
-    }
-}
+//struct LoadMoreView: View {
+//    @Binding var timelineDetailState: TimelineDetailState
+//    var body: some View {
+//        if timelineDetailState.canLoadMore {
+//            VStack {
+//                HStack {
+//                    Spacer()
+//                    Text("Loading.. in (timeline detail)")
+//                    Spacer()
+//                }
+//                .progressViewStyle(CircularProgressViewStyle())
+//                .foregroundStyle(.gray)
+//                .frame(height: 80)
+//                .onAppear {
+//                    print("load more appear")
+//                    timelineDetailState.tryLoadMore()
+//                }
+//            }
+//            .listRowSeparator(.hidden)
+//        }
+//    }
+//}
 
 extension Date {
     func startOfMonth() -> Date {

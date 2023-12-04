@@ -43,12 +43,9 @@ extension EditorView: EditorViewDelegate {
     // https://www.hackingwithswift.com/example-code/uikit/how-to-render-an-nsattributedstring-to-a-pdf
     func generatePDFData() -> Data? {
         print(#function)
-
-//        let formatterView = textView.viewPrintFormatter()
-        
-        var pdfTheme = ThemeBusiness().getLightTheme()
+        var pdfTheme = BusinessFactory.themeInteractor().getLightTheme()
         pdfTheme.fontSize = pdfTheme.fontSize * 0.6
-        let attrStrGen = MarkdownAttriburedString(theme: pdfTheme)
+        let attrStrGen = MarkdownAttriburedString(theme: pdfTheme.markdownTheme)
         let attrStr = attrStrGen.getAttriburedString(forMarkdown: self.text)
         
         let printFormatter = UISimpleTextPrintFormatter(attributedText: attrStr)
@@ -56,52 +53,27 @@ extension EditorView: EditorViewDelegate {
         renderer.addPrintFormatter(printFormatter, startingAtPageAt: 0)
         // A4 size
         let pageSize = CGSize(width: 595.2, height: 841.8)
-
         // Use this to get US Letter size instead
         // let pageSize = CGSize(width: 612, height: 792)
-
         let padding: CGFloat = 40 // 72
         // create some sensible margins
         let pageMargins = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
-
         // calculate the printable rect from the above two
         let printableRect = CGRect(x: pageMargins.left, y: pageMargins.top, width: pageSize.width - pageMargins.left - pageMargins.right, height: pageSize.height - pageMargins.top - pageMargins.bottom)
-
         // and here's the overall paper rectangle
         let paperRect = CGRect(x: 0, y: 0, width: pageSize.width, height: pageSize.height)
         renderer.setValue(NSValue(cgRect: paperRect), forKey: "paperRect")
         renderer.setValue(NSValue(cgRect: printableRect), forKey: "printableRect")
         let pdfData = NSMutableData()
-
         UIGraphicsBeginPDFContextToData(pdfData, paperRect, nil)
         renderer.prepare(forDrawingPages: NSMakeRange(0, renderer.numberOfPages))
         let bounds = UIGraphicsGetPDFContextBounds()
-
         for i in 0  ..< renderer.numberOfPages {
             UIGraphicsBeginPDFPage()
-
             renderer.drawPage(at: i, in: bounds)
         }
-
         UIGraphicsEndPDFContext()
-        
         return pdfData as Data
-        
-        
-//        do {
-//
-//            let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-//            let documentsDirectory = urls[0]
-//            let fileUrl = documentsDirectory
-//                .appending(path: "exportedItems")
-//                .appending(path: "\(fileName).pdf")
-//            print(fileUrl)
-//            try pdfData.write(to: fileUrl)
-//            return fileUrl
-//        } catch {
-//            print(error.localizedDescription)
-//            return nil
-//        }
     }
     
     func findAction() {
@@ -268,13 +240,13 @@ extension EditorView: EditorViewDelegate {
         let str = textView.text as NSString?   // So we cast String? to NSString?
         if let substr = str?.substring(with: selectedRange), substr.count > 0 {
             // append
-            let newStr = ">\(substr)"
+            let newStr = "> \(substr)"
             // add spaces if not exists
             self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
             textView.selectedRange = NSRange(location: selectedRange.location, length: selectedRange.length + 1)
         } else {
             // append
-            let newStr = ">"
+            let newStr = "> "
             // add spaces if not exists
             self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
             textView.selectedRange = NSRange(location: selectedRange.location + 1, length: selectedRange.length)

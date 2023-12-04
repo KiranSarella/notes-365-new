@@ -44,6 +44,7 @@ class SharedContext {
                                            TimelineIndex.self,
                                            TimelineContent.self,
                                             DayNotebookChangeData.self,
+                                            ThemeData.self,
                                            configurations: modelConfiguration)
         modelContext = ModelContext(container)
     }
@@ -57,6 +58,7 @@ class SharedContext {
                                            TimelineIndex.self,
                                            TimelineContent.self,
                                             DayNotebookChangeData.self,
+                                            ThemeData.self,
                                            configurations: modelConfiguration)
         modelContext = ModelContext(container)
     }

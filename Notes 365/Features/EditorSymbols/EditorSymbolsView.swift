@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct EditorSymbolsView: View {
+    @Environment(\.dismiss) var dismiss
     @State var state = EditorSymbolsState()
     @State var showSymbols: Bool = true
     
@@ -23,8 +24,17 @@ struct EditorSymbolsView: View {
             }
             .navigationBarTitle("Aa")
             .toolbar {
-                Toggle("Show Symbols", isOn: $showSymbols)
-                    .padding(.horizontal)
+                ToolbarItem(placement: .topBarTrailing) {
+                    Toggle("Show Symbols", isOn: $showSymbols)
+                        .padding(.horizontal)
+                }
+#if targetEnvironment(macCatalyst)
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Close") {
+                        dismiss()
+                    }
+                }
+#endif
             }
             .onChange(of: showSymbols, { old, new in
                 for i in 0..<state.symbolsList.count {

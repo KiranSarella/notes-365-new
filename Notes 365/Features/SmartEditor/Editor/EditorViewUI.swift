@@ -8,11 +8,8 @@
 import SwiftUI
 
 struct EditorViewUI: UIViewRepresentable {
-    
     let theme: MarkdownTheme = ThemeState.shared.theme
-//    let text: String
     @Binding var output: String
-    
     @Binding var text: String
     @Binding var editorView: EditorView
     @Binding var contentEditedDate: Date?
@@ -97,65 +94,20 @@ class EditorUICoordinator: NSObject {
     init(_ parent: EditorViewUI, output: Binding<String>) {
         self.parent = parent
         _output = output
-//        self.parent.text = self.parent.editorView.text
     }
 }
-
 
 extension EditorUICoordinator: UITextViewDelegate {
-    
-//    func textViewDidBeginEditing(_ textView: UITextView) {
-//        parent.contentEditedDate = Date()
-//    }
-    
     func textViewDidChange(_ textView: UITextView) {
-        print(#function)
-        parent.contentEditedDate = DateTime.now()
         output = textView.text
-//        _text.wrappedValue = textView.text
-//        self.parent.text = textView.text
-//        self.parent.output = textView.text
+        parent.contentEditedDate = DateTime.now()
     }
-    
-    
-    
 }
-
-// MARK: - Modifier
-//
-//struct SetDisplayWithAttr: ViewModifier {
-//    
-//    fileprivate func calculateHeight(_ attrStr: NSAttributedString?, width: CGFloat) -> CGFloat {
-//        guard let attrStr = attrStr else {
-//            return 100
-//        }
-//        
-////        print("width: ", width)
-//        let rect = attrStr.boundingRect(with: CGSize(width: width, height: 10000), options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
-////        print("rect: ", rect)
-//        return rect.height + 50
-//    }
-//    
-//    let width: CGFloat
-//    let attrStr: NSAttributedString?
-//    
-//    func body(content: Content) -> some View {
-//        content.frame(height: calculateHeight(attrStr, width: width))
-//    }
-//}
-//
-//extension EditorViewUI {
-//    
-//    func setDisplay(width: CGFloat) -> some View {
-//        modifier(SetDisplayWithAttr(width: width, attrStr: self.editorView.textView.attributedText))
-//    }
-//}
-
 
 struct ReadOnlyMarkDownView: View {
     @State var editorView = EditorView()
     var content: String?
-    var width: CGFloat
+//    var width: CGFloat
     @State var height: CGFloat = 100
     var body: some View {
         EditorViewUI(output: Binding.constant(""), text: Binding.constant(content ?? "no content"),
@@ -173,35 +125,6 @@ struct ReadOnlyMarkDownView: View {
         .frame(height: height)
     }
 }
-
-
-//struct ReadOnlySymbolsView: View {
-//    
-//    @State var editorView = EditorView()
-//    var content: String?
-//    var width: CGFloat
-//    @State var height: CGFloat = 100
-//    @Binding var editorType: EditorType
-//    
-//    var body: some View {
-//        
-//        EditorViewUI(output: Binding.constant(""), text: Binding.constant(content ?? "no content"),
-//                     editorView: $editorView,
-//                     contentEditedDate: Binding.constant(Date()),
-//                     isEditable: false,
-//                     isEditor: false,
-//                     editorType: editorType
-//        )
-//        .onAppear {
-//            editorView.textView.backgroundColor = .clear
-//        }
-//        .frame(height: height)
-//        .onChange(of: editorType) { newValue in
-//            editorView.editorType = newValue
-//        }
-//    }
-//}
-
 
 extension NSAttributedString {
 

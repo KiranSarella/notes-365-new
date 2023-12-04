@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct PreviewViewUI: UIViewRepresentable {
-    
     let theme: MarkdownTheme = ThemeState.shared.theme
     let text: String
     var editorView: EditorView
@@ -16,15 +15,10 @@ struct PreviewViewUI: UIViewRepresentable {
     var isConfigured = false
    
     func makeUIView(context: Context) -> EditorView {
-        
-//        print(#function, isConfigured)
-        
         if isConfigured {
             return editorView
         }
-        
         editorView.editorType = editorType
-        
         editorView.textView.font = theme.font
         editorView.textView.textColor = theme.bodyColor.uiColor
         editorView.textView.keyboardDismissMode = .interactive
@@ -41,9 +35,7 @@ struct PreviewViewUI: UIViewRepresentable {
         editorView.textView.typingAttributes = attributes
         // set content
         editorView.textView.text = text
-
         editorView.setAsReadOnly()
-        
         return editorView
     }
     
@@ -53,43 +45,4 @@ struct PreviewViewUI: UIViewRepresentable {
     
     typealias NSViewType = EditorView
 }
-
-/// for timeline
-//struct ReadOnlyMarkDownViewTwo: View {
-//    
-//    var timelineData: Timeline
-//    @State private var timeline: Timeline
-//    
-//    var body: some View {
-//        
-//        PreviewViewUI(text: timeline.content ?? "no content",
-//                     editorView: timeline.editorView,
-//                      isConfigured: timeline.isConfigured
-//        )
-//        .frame(height: timeline.height)
-//        .onAppear {
-//            
-//            if timeline.isConfigured && timeline.isRefreshRequired == false {
-//                return
-//            }
-//            
-//            Task {
-//                DispatchQueue.main.async {
-//                    timeline.editorView.textView.sizeToFit()
-//                    timeline.height = timeline.editorView.textView.intrinsicContentSize.height + 80
-//                    // refresh purpose
-//                    timeline.themeID = timeline.editorView.theme.id
-//                    timeline.width = timeline.editorView.textView.intrinsicContentSize.width
-//                    timeline.isConfigured = true
-//    //                print("height: ", height)
-//    //                print("contentSize: ", timeline.editorView.textView.contentSize)
-//    //                print("intrinsicContentSize: ", timeline.editorView.textView.intrinsicContentSize)
-//                }
-//            }
-//            
-//            
-//        }
-//        
-//    }
-//}
 

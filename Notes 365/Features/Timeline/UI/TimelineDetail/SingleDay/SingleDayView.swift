@@ -22,7 +22,7 @@ struct SingleDayView: View {
         .onChange(of: discardTimeline) { oldValue, newValue in
             if let newValue = newValue {
                 discardTimelineInfo =
-                DiscardTimelineInfo(dayId: dayTimelines.id, date: dayTimelines.date, fileId: newValue.fileUUID, changeId: newValue.changeID)
+                DiscardTimelineInfo(dayId: dayTimelines.id, date: dayTimelines.date, fileId: newValue.fileUUID, changeId: newValue.id)
             }
         }
 //        .onAppear {
@@ -68,8 +68,8 @@ struct SingleDayChangesListView: View {
                 .listRowSeparator(.hidden)
                 .padding()
                 HStack {
-                    ReadOnlyMarkDownView(content: noteChange.content, width: 600)
-//                            ReadOnlyMarkDownViewTwo(timeline: noteChange)
+                    ReadOnlyMarkDownView(content: noteChange.content)
+                        .padding(.bottom)
                     .listRowSeparator(.hidden)
                     .textSelection(.enabled)
                     .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working

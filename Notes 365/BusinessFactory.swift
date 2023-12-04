@@ -80,6 +80,12 @@ class BusinessFactory {
         return ContentSearchBusiness(storage: storage)
     }
     
+    static func themeInteractor() -> ThemeInteractor {
+        let modelContext = SharedContext.shared.getModelContext()
+        let storage = ThemeStorageAdapter(modelContext: modelContext)
+        return ThemeBusiness(storage: storage)
+    }
+    
 }
 
 //class NotebooksBusinessGenerator: NotebooksBusinessFactory {

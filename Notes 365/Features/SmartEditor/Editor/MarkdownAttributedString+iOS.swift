@@ -11,44 +11,31 @@ import UIKit
 // using for view only - timeline
 //  bcz of paragraph issue -- forgot the actual reason?
 class MarkdownAttriburedString {
-    
     var theme: MarkdownTheme
-    
     
     init(theme: MarkdownTheme) {
         self.theme = theme
     }
     
     func getAttriburedStringAsync(forMarkdown content: String) async -> NSAttributedString {
-        
 //        print(#function)
-        
         let content = content.trimmingCharacters(in: .newlines)
-        
         if content.count == 0 {
             return NSAttributedString()
         }
-        
         // default attrubutes
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 10
-        
         let defaultAtts: [NSAttributedString.Key: Any] = [
             .font: theme.font,
             .foregroundColor: theme.bodyColor.uiColor,// theme.bodyColor.uiColor,
             .paragraphStyle: paragraphStyle
         ]
-        
         let attrStr = NSMutableAttributedString(string: content, attributes: defaultAtts)
-        
-        
         //        let fulR = attrStr.string.range(of: attrStr.string)
-        
         let fullRange = attrStr.fullRange()
         //        let fullRange = NSRange(location: 0, length: content.count)
-        
         //        let fullRange = NSRange(location: 0, length: content.count)
-        
         
         processHeadings(extendedRange: fullRange, textStorage: attrStr)
         processBlockQuote(extendedRange: fullRange, textStorage: attrStr)
@@ -146,47 +133,34 @@ class MarkdownAttriburedString {
         
         regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
-            
             let regExCharLenght = 2
             //            let frontPadding = 0
             let backPadding = 0
             let styleRange = NSRange(location: match!.range.location + regExCharLenght, length: match!.range.length - (2 * regExCharLenght) - backPadding)
-            
-            
             innerAttributedString.addAttribute(.font,
                                                value: boldFont,
                                                range: styleRange)
-            
             innerAttributedString.addAttribute(.foregroundColor,
                                                value: theme.styleColor.uiColor, range: styleRange)
-            
-            
             // markdown
             let startRange = NSRange(location: match!.range.location, length: regExCharLenght)
             let endRange = NSRange(location: match!.range.location + match!.range.length - regExCharLenght - backPadding , length: regExCharLenght)
-            
             // add id key
             innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
                                                value: 0,
                                                range: startRange)
-            
             // add id key
             innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
                                                value: 0,
                                                range: endRange)
-            
-          
-            
             // add id key
             innerAttributedString.addAttribute(NSAttributedString.Key.font,
                                                value: UIFont.systemFont(ofSize: 0.1),
                                                range: startRange)
-            
             // add id key
             innerAttributedString.addAttribute(NSAttributedString.Key.font,
                                                value: UIFont.systemFont(ofSize: 0.1),
                                                range: endRange)
-            
             let info: [String: Any] = [
                 "range": styleRange,
                 "type": "bold"
@@ -234,7 +208,14 @@ class MarkdownAttriburedString {
                 innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
                                                    value: 0,
                                                    range: endRange)
-                
+                // add id key
+                innerAttributedString.addAttribute(NSAttributedString.Key.font,
+                                                   value: UIFont.systemFont(ofSize: 0.1),
+                                                   range: startRange)
+                // add id key
+                innerAttributedString.addAttribute(NSAttributedString.Key.font,
+                                                   value: UIFont.systemFont(ofSize: 0.1),
+                                                   range: endRange)
                 let info: [String: Any] = [
                     "range": styleRange,
                     "type": "highlight"
@@ -873,7 +854,7 @@ class MarkdownAttriburedString {
             // add id key
             innerAttributedString.addAttribute(NSAttributedString.Key.font,
                                                value: UIFont.systemFont(ofSize: 0.1),
-                                               range: NSRange(location: match!.range.location, length: 1))
+                                               range: NSRange(location: match!.range.location, length: 2))
 
 //            // add id key
 //            innerAttributedString.addAttribute(NSAttributedString.Key.font,

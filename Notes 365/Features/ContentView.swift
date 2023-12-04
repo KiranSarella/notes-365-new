@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct ContentWrapperView: View {
+    let themes = ThemeState.shared
     @State var chooseEnv = ChooseEnvironment()
     @State private var didError = false
     @State private var errorDetail: Error?
     @State private var showRefresh = false
     @State private var statusMessage = "Loading.. wrapper"
-    @Environment(\.modelContext) private var modelContext
+    
     var body: some View {
         // do initial checks and configurations
         // show loading until all setup
@@ -85,7 +86,7 @@ struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.colorScheme) private var colorScheme
     @Environment(ChooseEnvironment.self) var chooseEnv
-    @Environment(\.modelContext) private var modelContext
+    
     @State private var showThemes = false
     @State private var showFormattingSymbols = false
     @State private var showFeedback = false
@@ -142,7 +143,8 @@ struct ContentView: View {
                 BusinessFactory.timelineInteractor().setupTimeineCreationProcess()
             }
             .sheet(isPresented: $showThemes) {
-                SettingsView_iPadOS(showModel: $showThemes)
+                ThemesBaseView()
+//                SettingsView_iPadOS(showModel: $showThemes)
             }
             .sheet(isPresented: $showFormattingSymbols) {
                 EditorSymbolsView()

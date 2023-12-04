@@ -74,7 +74,6 @@ extension FontPicker {
         }
         
         public func fontPickerViewControllerDidPickFont(_ viewController: UIFontPickerViewController) {
-            
             guard let fontDescriptor = viewController.selectedFontDescriptor else { return }
             let uifont = UIFont(descriptor: fontDescriptor, size: 28.0)
             self.didPickFont(uifont)

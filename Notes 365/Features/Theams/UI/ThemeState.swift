@@ -8,33 +8,24 @@
 import SwiftUI
 import Combine
 
-
-/*
- manages current theme
- listen to theme changes
- listen to system light, dark mode changes
- */
 @Observable
 class ThemeState {
-    
     static let shared = ThemeState()
-    
     private(set) var colorScheme: ColorScheme = .light
-    
     private(set) var theme: MarkdownTheme! = MarkdownTheme(id: UUID())
-    
     private var cancellable: Cancellable? = nil
+    var business = BusinessFactory.themeInteractor()
     
     init() {
-        loadTheme(colorScheme: colorScheme)
+//        loadTheme(colorScheme: colorScheme)
     }
     
     private func loadTheme(colorScheme: ColorScheme) {
         if colorScheme == .light {
-            theme = ThemeBusiness().getLightTheme()
+            theme = business.getLightTheme().markdownTheme
             themeChangedNotification()
         } else {
-            theme = ThemeBusiness().getDarkTheme()
+            theme = business.getDarkTheme().markdownTheme
             themeChangedNotification()
         }
     }
@@ -61,7 +52,6 @@ class ThemeState {
             themeChangedNotification()
         }
     }
-    
     
     // send notification
     func themeChangedNotification() {
