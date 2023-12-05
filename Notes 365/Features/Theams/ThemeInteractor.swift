@@ -8,15 +8,18 @@
 import Foundation
 
 protocol ThemeInteractor {
-    func fetchLightThemes() -> [Theme]
-    func fetchDarkThemes() -> [Theme]
+//    func fetchLightThemes() -> [Theme]
+//    func fetchDarkThemes() -> [Theme]
     
     func getLightTheme() -> Theme
     func getDarkTheme() -> Theme
-    func insert(theme: Theme) throws
-    func update(theme: Theme) throws
-    func setLightTheme(id: String)
-    func setDarkTheme(id: String)
+    func saveLightTheme(_ theme: Theme)
+    func saveDarkTheme(_ theme: Theme)
+    
+//    func insert(theme: Theme) throws
+//    func update(theme: Theme) throws
+//    func setLightTheme(id: String)
+//    func setDarkTheme(id: String)
 }
 
 extension ThemeBusiness: ThemeInteractor {

@@ -52,7 +52,6 @@
 		5C7DDE5C2B19D8A200EE89A6 /* DayVersionCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7DDE5B2B19D8A200EE89A6 /* DayVersionCreator.swift */; };
 		5C8FADF92B0A06F600B80BD9 /* StringDiffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD302920CCCE003DE332 /* StringDiffTests.swift */; };
 		5C8FADFB2B0A072600B80BD9 /* NotebooksListStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8FADFA2B0A072600B80BD9 /* NotebooksListStateTests.swift */; };
-		5C90604C2B0E23F20068DD65 /* BaseBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C90604B2B0E23F20068DD65 /* BaseBackgroundView.swift */; };
 		5C9060522B0F46060068DD65 /* CurrentLevelState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9060512B0F46060068DD65 /* CurrentLevelState.swift */; };
 		5CA77C162A24AE220030EFB2 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C152A24AE220030EFB2 /* Collections */; };
 		5CA77C182A24AE220030EFB2 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C172A24AE220030EFB2 /* DequeModule */; };
@@ -85,7 +84,6 @@
 		5CF612D12B0B980700D397C6 /* EditorView+TextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF612D02B0B980700D397C6 /* EditorView+TextStorage.swift */; };
 		5CF612D42B0B987F00D397C6 /* EditorView+ProcessSymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF612D32B0B987F00D397C6 /* EditorView+ProcessSymbols.swift */; };
 		5CF612D62B0B98CF00D397C6 /* EditorView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF612D52B0B98CF00D397C6 /* EditorView+Layout.swift */; };
-		5CFCF5E42ABEDF4D00351EEA /* NotebooksListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD252920CCCE003DE332 /* NotebooksListView.swift */; };
 		5CFCF5E62ABEDFA400351EEA /* NotebookData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFCF5E52ABEDF7000351EEA /* NotebookData.swift */; };
 		5CFCF5E92ABEFDAF00351EEA /* Fakery in Frameworks */ = {isa = PBXBuildFile; productRef = 5CFCF5E82ABEFDAF00351EEA /* Fakery */; };
 		9F09CEB129267FBC00609D99 /* TodayVersionBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F09CEB029267FBC00609D99 /* TodayVersionBusiness.swift */; };
@@ -111,9 +109,7 @@
 		9F45BD712920CDE0003DE332 /* SymbolPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD152920CCCE003DE332 /* SymbolPattern.swift */; };
 		9F45BD792920CDE0003DE332 /* NotebookContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD242920CCCE003DE332 /* NotebookContentView.swift */; };
 		9F45BD892920CDE0003DE332 /* EditorViewDelegate+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD172920CCCE003DE332 /* EditorViewDelegate+iOS.swift */; };
-		9F45BD8E2920CDE9003DE332 /* NotebooksListState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD292920CCCE003DE332 /* NotebooksListState.swift */; };
 		9F45BD922920CDED003DE332 /* StringDiff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD2E2920CCCE003DE332 /* StringDiff.swift */; };
-		9F45BD932920CDF9003DE332 /* SidebarSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCCF2920CCCE003DE332 /* SidebarSelection.swift */; };
 		9F45BD9E2920CE21003DE332 /* SpeechHelpr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCDC2920CCCE003DE332 /* SpeechHelpr.swift */; };
 		9F45BDA82920CE41003DE332 /* MarkdownTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD402920CCCF003DE332 /* MarkdownTheme.swift */; };
 		9F57BAE7299688BC0076FD9D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F57BAE6299688BC0076FD9D /* Constants.swift */; };
@@ -201,7 +197,6 @@
 		5C7D4AF72B08E00C00BB1908 /* NotebookB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookB.swift; sourceTree = "<group>"; };
 		5C7DDE5B2B19D8A200EE89A6 /* DayVersionCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayVersionCreator.swift; sourceTree = "<group>"; };
 		5C8FADFA2B0A072600B80BD9 /* NotebooksListStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListStateTests.swift; sourceTree = "<group>"; };
-		5C90604B2B0E23F20068DD65 /* BaseBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseBackgroundView.swift; sourceTree = "<group>"; };
 		5C9060512B0F46060068DD65 /* CurrentLevelState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLevelState.swift; sourceTree = "<group>"; };
 		5C9732212A8B74C200C42E28 /* iCloud-sync.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "iCloud-sync.md"; sourceTree = "<group>"; };
 		5C9B5CFF2A8FED2A00396102 /* TextKit.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TextKit.md; sourceTree = "<group>"; };
@@ -259,7 +254,6 @@
 		9F45BCB92920CAB0003DE332 /* Notes 365UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Notes 365UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F45BCBD2920CAB0003DE332 /* Notes_365UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes_365UITests.swift; sourceTree = "<group>"; };
 		9F45BCBF2920CAB0003DE332 /* Notes_365UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes_365UITestsLaunchTests.swift; sourceTree = "<group>"; };
-		9F45BCCF2920CCCE003DE332 /* SidebarSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarSelection.swift; sourceTree = "<group>"; };
 		9F45BCDC2920CCCE003DE332 /* SpeechHelpr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechHelpr.swift; sourceTree = "<group>"; };
 		9F45BCDE2920CCCE003DE332 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		9F45BCF62920CCCE003DE332 /* Timeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timeline.swift; sourceTree = "<group>"; };
@@ -268,8 +262,6 @@
 		9F45BD152920CCCE003DE332 /* SymbolPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolPattern.swift; sourceTree = "<group>"; };
 		9F45BD172920CCCE003DE332 /* EditorViewDelegate+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewDelegate+iOS.swift"; sourceTree = "<group>"; };
 		9F45BD242920CCCE003DE332 /* NotebookContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentView.swift; sourceTree = "<group>"; };
-		9F45BD252920CCCE003DE332 /* NotebooksListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListView.swift; sourceTree = "<group>"; };
-		9F45BD292920CCCE003DE332 /* NotebooksListState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListState.swift; sourceTree = "<group>"; };
 		9F45BD2E2920CCCE003DE332 /* StringDiff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringDiff.swift; sourceTree = "<group>"; };
 		9F45BD302920CCCE003DE332 /* StringDiffTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringDiffTests.swift; sourceTree = "<group>"; };
 		9F45BD402920CCCF003DE332 /* MarkdownTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownTheme.swift; sourceTree = "<group>"; };
@@ -565,8 +557,6 @@
 			children = (
 				9F6CA8DD2A041D27009061A0 /* ReorderLIst.md */,
 				5CE8C4872B03048E00F19217 /* Notebook.swift */,
-				9F45BD292920CCCE003DE332 /* NotebooksListState.swift */,
-				9F45BD252920CCCE003DE332 /* NotebooksListView.swift */,
 				5CF4F5172B0DE4EB008F13F3 /* NotebooksLevelView.swift */,
 				5C9060512B0F46060068DD65 /* CurrentLevelState.swift */,
 			);
@@ -783,9 +773,7 @@
 		9FB0A47429DBD6830093FBD2 /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				5C90604B2B0E23F20068DD65 /* BaseBackgroundView.swift */,
 				9F45BCA32920CAAE003DE332 /* ContentView.swift */,
-				9F45BCCF2920CCCE003DE332 /* SidebarSelection.swift */,
 				9F57BAE6299688BC0076FD9D /* Constants.swift */,
 				5C051B9C2B1240D4005C99B7 /* Logger.swift */,
 				9F45BCDE2920CCCE003DE332 /* Extensions.swift */,
@@ -1007,7 +995,6 @@
 				9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */,
 				5CFCF5E62ABEDFA400351EEA /* NotebookData.swift in Sources */,
 				9FB6C69C29275E0300C8EC76 /* NotebookContentState.swift in Sources */,
-				5C90604C2B0E23F20068DD65 /* BaseBackgroundView.swift in Sources */,
 				5C7D4AF22B07DCEA00BB1908 /* NotebooksRequester.swift in Sources */,
 				5C08EA392B1892DC0095DE86 /* ContentSearchView.swift in Sources */,
 				9F7D2926299EC27E00B37F51 /* CloudServiceTwo.swift in Sources */,
@@ -1047,7 +1034,6 @@
 				9F45BDA82920CE41003DE332 /* MarkdownTheme.swift in Sources */,
 				5C4ADCE32A9757EF000A037E /* EditorSymbolsView.swift in Sources */,
 				5C10D7A12B04C26D006FB80D /* NotebooksBusiness.swift in Sources */,
-				9F45BD8E2920CDE9003DE332 /* NotebooksListState.swift in Sources */,
 				5CF612CF2B0B79F000D397C6 /* NotebookContentRequester.swift in Sources */,
 				5C08EA462B1899C60095DE86 /* ContentSearchInteractor.swift in Sources */,
 				9F45BD792920CDE0003DE332 /* NotebookContentView.swift in Sources */,
@@ -1059,7 +1045,6 @@
 				9F45BD9E2920CE21003DE332 /* SpeechHelpr.swift in Sources */,
 				9FB6C69829275D0600C8EC76 /* FormatOptionsView.swift in Sources */,
 				5CCCF7F12AC15E0D00F5923E /* NotebookContentData.swift in Sources */,
-				9F45BD932920CDF9003DE332 /* SidebarSelection.swift in Sources */,
 				9FB6C6A929279BEC00C8EC76 /* TimelineBusiness.swift in Sources */,
 				5C16B9BB2B035A0200BF8592 /* NotebookContentB.swift in Sources */,
 				5C34A1882B1B918D00D036B7 /* DefaultThemes.swift in Sources */,
@@ -1067,7 +1052,6 @@
 				9F8EE98A293EB3090021409E /* CloudDataManager.swift in Sources */,
 				5C3DE6B72B13A8A2004E3621 /* RangeTimelineState.swift in Sources */,
 				5CC4C01F2A908D7000A4BE41 /* EditorView.swift in Sources */,
-				5CFCF5E42ABEDF4D00351EEA /* NotebooksListView.swift in Sources */,
 				5CCABA802B1C9B7F009A9F2E /* ThemeInteractor.swift in Sources */,
 				5C10D7A52B04C281006FB80D /* BusinessFactory.swift in Sources */,
 				9F3DB0C4292DF82300704860 /* FeedbackView+iPadOS.swift in Sources */,

@@ -37,11 +37,14 @@ class ThemeState {
     
     // trigged on 'save changes' action
     func themeUpdated(newValue: MarkdownTheme) {
-        // if updated is current theme, then update immediately
-        if theme.id == newValue.id {
-            theme = newValue
-            themeChangedNotification()
-        }
+        theme = newValue
+        themeChangedNotification()
+        
+//        // if updated is current theme, then update immediately
+//        if theme.id == newValue.id {
+//            theme = newValue
+//            themeChangedNotification()
+//        }
     }
     
     // trigged on 'set light/dark' action

@@ -11,9 +11,10 @@ class ThemeBusiness {
     var storage: ThemeStorageProvider
     init(storage: ThemeStorageProvider) {
         self.storage = storage
-        cofigThemes()
+//        cofigThemes()
     }
     
+    /*
     private func cofigThemes() {
         logger.debug("\(#function)")
         do {
@@ -123,5 +124,32 @@ class ThemeBusiness {
     func setDarkTheme(id: String) {
         storage.setDarkTheme(id: id)
     }
+     */
     
+    
+    func getLightTheme() -> Theme {
+        logger.debug("\(#function)")
+        if let theme = storage.fetchLightTheme() {
+            return theme
+        } else {
+            return DefaultThemes.generateCustomizedLightTheme()
+        }
+    }
+    
+    func getDarkTheme() -> Theme {
+        logger.debug("\(#function)")
+        if let theme = storage.fetchDarkTheme() {
+            return theme
+        } else {
+            return DefaultThemes.generateCustomizedDarkTheme()
+        }
+    }
+    
+    func saveLightTheme(_ theme: Theme) {
+        storage.saveLightTheme(theme)
+    }
+    
+    func saveDarkTheme(_ theme: Theme) {
+        storage.saveDarkTheme(theme)
+    }
 }

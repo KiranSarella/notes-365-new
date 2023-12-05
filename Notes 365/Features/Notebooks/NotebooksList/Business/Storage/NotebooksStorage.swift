@@ -58,17 +58,19 @@ class NotebooksStorage {
         return try modelContext.fetch(descriptor)
     }
     
+    func fetchActiveTopLevelNotebooks() throws -> [NotebookData] {
+        let predicate = #Predicate<NotebookData> { $0.parent == nil && $0.deletedDate == nil }
+        let descriptor = FetchDescriptor(predicate: predicate)
+        return try modelContext.fetch(descriptor)
+    }
+    
+    
     func fetchChildren(forParent id: UUID) throws -> [NotebookData] {
         let predicate = #Predicate<NotebookData> { $0.parent == id }
         let descriptor = FetchDescriptor(predicate: predicate)
         return try modelContext.fetch(descriptor)
     }
     
-    func fetchTopLevelNotebooks() throws -> [NotebookData] {
-        let predicate = #Predicate<NotebookData> { $0.parent == nil }
-        let descriptor = FetchDescriptor(predicate: predicate)
-        return try modelContext.fetch(descriptor)
-    }
     
     func insert(notebookData: NotebookData) throws {
         modelContext.insert(notebookData)

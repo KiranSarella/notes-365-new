@@ -15,8 +15,8 @@ protocol NotebooksStorageProvider {
     func insert(notebook: NotebookB) throws
     func update(notebook: NotebookB) throws
     func getNotebook(for id: UUID) throws -> NotebookB
-    func getTopLevelNotebooks() throws -> [NotebookB]
-    func getChildren(forParent id: UUID) throws -> [NotebookB]
+    func getActiveTopLevelNotebooks() throws -> [NotebookB]
+//    func getChildren(forParent id: UUID) throws -> [NotebookB]
     func getActiveChildren(forParent id: UUID) throws -> [NotebookB]
     // info
     func getAllFilesInfo() throws -> [NotebookB]

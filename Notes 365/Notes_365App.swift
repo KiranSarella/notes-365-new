@@ -10,11 +10,9 @@ import SwiftData
 
 @main
 struct Notes_365App: App {
-    
     @Environment(\.scenePhase) private var scenePhase
-    
     var context: ModelContext = {
-        SharedContext.shared.resetContext(mock: true)
+        SharedContext.shared.resetContext(mock: false)
         return SharedContext.shared.getModelContext()
     }()
     

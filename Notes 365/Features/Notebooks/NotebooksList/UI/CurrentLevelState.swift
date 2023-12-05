@@ -13,7 +13,7 @@ import os
 class CurrentLevelState {
     
     let notebooksBusiness: NotebooksRequester = BusinessFactory.createNotebooksFactory()
-    var parent: Notebook = Notebook(id: UUID(), name: "")
+    var parent: Notebook?
     var folders = [Notebook]()
     var files = [Notebook]()
     
@@ -31,17 +31,15 @@ class CurrentLevelState {
         
     }
     
-    func loadItems(for parent: Notebook) {
+    func loadItems(for parent: Notebook?) {
         self.parent = parent
         do {
-            let items = try notebooksBusiness.fetchItems(at: parent.id)
+            let items = try notebooksBusiness.fetchItems(at: parent?.id)
             let notebooks = items.map { $0.notebook() }
             folders = notebooks.filter { $0.isFolder }
             files = notebooks.filter { !$0.isFolder }
-            
             print(folders.map { "\($0.name) - \($0.id.uuidString)"})
             print(files.map { "\($0.name) - \($0.id.uuidString)"})
-            
         } catch let error {
             print(error)
         }
@@ -50,7 +48,7 @@ class CurrentLevelState {
     func createFolder() {
         let siblings = self.siblings.map { $0.notebookB() }
         do {
-            let newNotebookB = try notebooksBusiness.createFolder(inside: parent.notebookB(), siblings: siblings)
+            let newNotebookB = try notebooksBusiness.createFolder(inside: parent?.notebookB(), siblings: siblings)
             let newNotebook = newNotebookB.notebook()
             newNotebook.updateParent(parent)
             self.folders.append(newNotebook)
@@ -62,7 +60,7 @@ class CurrentLevelState {
     func createFile() {
         let siblings = self.siblings.map { $0.notebookB() }
         do {
-            let newNotebookB = try notebooksBusiness.createFile(inside: parent.notebookB(), siblings: siblings)
+            let newNotebookB = try notebooksBusiness.createFile(inside: parent?.notebookB(), siblings: siblings)
             let newNotebook = newNotebookB.notebook()
             newNotebook.updateParent(parent)
             self.files.append(newNotebook)

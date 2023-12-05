@@ -6,58 +6,27 @@
 //
 
 import Foundation
-import SwiftData
-
-
-/*
- getParent() -> Notebook
- // have to maintain [childID: parentID] dictionary
- // - when new child added, insert here
- // - no persistance is required, in-mem instant only
- // - when grouping changed
- 
- getChildren() -> [Notebook]
- 
- */
 
 @Observable
 class Notebook: Identifiable {
-    
     var id: UUID = UUID()
     var name: String = ""
-
     var parentId: UUID?
-//    private(set) var parent: Notebook?
-    
     var isFolder: Bool = true
     var childrenIds: [UUID]?
-    // private(set)
     var children: [Notebook] = [Notebook]()
-    
     var createdDate: Date = DateTime.now()
     var modifiedDate: Date = DateTime.now()
     var deletedDate: Date? = nil
-    
     var notebookData: NotebookData
-    
     var isExpanded: Bool = false
     var isDeleted: Bool = false
     var canShow: Bool = true
     
     func sortChildren() {
-//        children
-//            .sort { n1, n2 in  n1.isFolder }
-////            .sort { n1, n2 in   n1.createdDate < n2.createdDate }
-//        children.sort { n1, n2 in
-//            n1.createdDate < n2.createdDate
-//        }
-        
         children.sort { n1, n2 in
             n1.priority < n2.priority// && n1.createdDate < n2.createdDate
         }
-//        children.sort { n1, n2 in
-//            n1.isFolder && n1.createdDate < n2.createdDate
-//        }
     }
     
     var priority: Int {
@@ -72,7 +41,6 @@ class Notebook: Identifiable {
     
     // MARK: - parent
     func updateParent(_ newValue: Notebook?) {
-//        self.parent = newValue
         self.parentId = newValue?.id
     }
 }
@@ -93,7 +61,6 @@ extension Notebook: CustomStringConvertible {
 
 // MARK: - children
 extension Notebook {
-    
     func insertChild(notebook newValue: Notebook) {
         self.children.append(newValue)
         sortChildren()
@@ -125,105 +92,31 @@ extension Notebook {
     }
     
     var childrenCount: Int {
-        return children.count
+        children.count
     }
  
 }
 
-extension Notebook {
-    
-//    func syncNotebookData() {
-//        
-//        notebookData.id = id
-//        notebookData.name = name
-////        notebookData.orderID = orderID
-//        notebookData.parent = parent?.id
-//        
-//        notebookData.createdDate = createdDate
-//        notebookData.modifiedDate = modifiedDate
-//        notebookData.deletedDate = deletedDate
-//    }
-//    
-//    func saveNotebookData(_ modelContext: ModelContext) {
-//        syncNotebookData()
-//        do {
-//            modelContext.insert(notebookData)
-//            try modelContext.save()
-//        } catch let error {
-//            print(error)
-//        }
-//    }
-//    
-//    func updateNotebookData(_ modelContext: ModelContext) {
-//        syncNotebookData()
-//        do {
-//            try modelContext.save()
-//        } catch let error {
-//            print(error)
-//        }
-//    }
+extension NotebookB {
+    func notebook() -> Notebook {
+        let notebook = Notebook(id: id, name: name)
+        notebook.parentId = parentId
+        notebook.isFolder = isFolder
+        notebook.createdDate = createdDate
+        notebook.modifiedDate = modifiedDate
+        notebook.deletedDate = deletedDate
+        return notebook
+    }
 }
 
 extension Notebook {
-    
-//    var uuidPath: [UUID] {
-//        
-//        var uuids = [UUID]()
-//        // add self
-//        uuids.append(self.id)
-//        // add parents
-//        var parentRef = self.parent
-//        while parentRef != nil {
-//            uuids.append(parentRef!.id)
-//            parentRef = parentRef?.parent
-//        }
-//        
-//        return uuids.reversed()
-//    }
-    
-//    var filePath: String {
-//        return self.id.uuidString + ".md"
-//    }
-    
-    
-//    var oldFilePath: String {
-//        
-//        // add self
-//        var path: String = self.name + ".md"
-//        // add parents
-//        var parentRef = self.parent
-//        while parentRef != nil {
-//            path = parentRef!.name + "/" + path
-//            parentRef = parentRef?.parent
-//        }
-//        // return
-//        return path
-//    }
-    
-//    var folderPath: String {
-//        // add self
-//        var path: String = self.name
-//        // add parents
-//        var parentRef = self.parent
-//        while parentRef != nil {
-//            path = parentRef!.name + "/" + path
-//            parentRef = parentRef?.parent
-//        }
-//        // return
-//        return path
-//    }
-//    
-//    var folderPaths: [String] {
-//        // add self
-//        var paths = [self.name]
-//        // add parents
-//        var parentRef = self.parent
-//        while parentRef != nil {
-//            paths.append(parentRef!.name)
-//            // next
-//            parentRef = parentRef?.parent
-//        }
-//        // return
-//        return paths.reversed()
-//    }
+    func notebookB() -> NotebookB {
+        let notebookB = NotebookB(id: id, name: name)
+        notebookB.parentId = parentId
+        notebookB.isFolder = isFolder
+        notebookB.createdDate = createdDate
+        notebookB.modifiedDate = modifiedDate
+        notebookB.deletedDate = deletedDate
+        return notebookB
+    }
 }

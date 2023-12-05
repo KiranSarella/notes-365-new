@@ -17,41 +17,59 @@ class ThemeStorageAdapter: ThemeStorageProvider {
         storage = ThemeStorage(modelContext: modelContext)
     }
     
-    func fetchThemes(for appearanceType: AppearanceType) throws -> [Theme] {
-        try storage.fetchThemes(for: appearanceType.rawValue).map { $0.theme }
-    }
+//    func fetchThemes(for appearanceType: AppearanceType) throws -> [Theme] {
+//        try storage.fetchThemes(for: appearanceType.rawValue).map { $0.theme }
+//    }
+//    
+//    func fetchTheme(id: UUID) throws -> Theme? {
+//        try storage.fetchTheme(id: id)?.theme
+//    }
+//    
+//    func containThemes() throws -> Bool {
+//        try storage.containThemes()
+//    }
+//    
+//    func insert(theme: Theme) throws {
+//        try storage.insert(themeData: theme.themeData)
+//    }
+//    
+//    func update(theme: Theme) throws {
+//        try storage.update(themeData: theme.themeData)
+//    }
+//    
+//    // MARK: - User Defaults
+//    func setLightTheme(id: String) {
+//        storage.setLightTheme(id: id)
+//    }
+//    
+//    func setDarkTheme(id: String) {
+//        storage.setDarkTheme(id: id)
+//    }
+//    
+//    func fetchLightTheme() -> String? {
+//        storage.fetchLightTheme()
+//    }
+//    
+//    func fetchDarkTheme() -> String? {
+//        storage.fetchDarkTheme()
+//    }
     
-    func fetchTheme(id: UUID) throws -> Theme? {
-        try storage.fetchTheme(id: id)?.theme
-    }
-    
-    func containThemes() throws -> Bool {
-        try storage.containThemes()
-    }
-    
-    func insert(theme: Theme) throws {
-        try storage.insert(themeData: theme.themeData)
-    }
-    
-    func update(theme: Theme) throws {
-        try storage.update(themeData: theme.themeData)
-    }
-    
+   
     // MARK: - User Defaults
-    func setLightTheme(id: String) {
-        storage.setLightTheme(id: id)
+    func saveLightTheme(_ theme: Theme) {
+        storage.saveLightTheme(theme.themeData)
     }
     
-    func setDarkTheme(id: String) {
-        storage.setDarkTheme(id: id)
+    func saveDarkTheme(_ theme: Theme) {
+        storage.saveDarkTheme(theme.themeData)
     }
     
-    func fetchLightTheme() -> String? {
-        storage.fetchLightTheme()
+    func fetchLightTheme() -> Theme? {
+        storage.fetchLightTheme()?.theme
     }
     
-    func fetchDarkTheme() -> String? {
-        storage.fetchDarkTheme()
+    func fetchDarkTheme() -> Theme? {
+        storage.fetchDarkTheme()?.theme
     }
     
 }

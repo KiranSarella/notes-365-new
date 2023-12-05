@@ -55,6 +55,8 @@ struct CalendarView: View {
                    displayedComponents: [.date]
                )
                .datePickerStyle(.graphical)
+               .padding()
+            Spacer()
         }
         .frame(minWidth: 420)
     }

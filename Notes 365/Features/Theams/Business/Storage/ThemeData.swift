@@ -39,8 +39,8 @@ extension ColorData: CustomStringConvertible {
     }
 }
 
-@Model
-class ThemeData {
+//@Model
+class ThemeData: Codable {
     var id: UUID = UUID()
     var themeName: String = "default"
     var appearanceType: String = AppearanceType.light.rawValue
@@ -92,3 +92,4 @@ extension ThemeData {
         linkColor = newData.linkColor
     }
 }
+

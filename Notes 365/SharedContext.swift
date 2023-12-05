@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import CoreData
 
 class SharedContext {
     static let shared = SharedContext()
@@ -20,7 +21,8 @@ class SharedContext {
             if mock {
                 createMockContext()
             } else {
-                createContext()
+                createICloudContext()
+//                createLocalContext()
             }
             return modelContext!
         }
@@ -31,37 +33,92 @@ class SharedContext {
         if self.mock {
             createMockContext()
         } else {
-            createContext()
+//            createICloudContext()
+            createLocalContext()
         }
     }
     
     func createMockContext() {
-        let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try! ModelContainer(for:
-                                            NotebookData.self,
-                                            NotebookContentData.self,
-                                            DayVersionData.self,
-                                            TimelineData.self,
-                                            ThemeData.self,
-                                           configurations: modelConfiguration)
-        modelContext = ModelContext(container)
+        logger.debug("\(#function)")
+        let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: .none)
+        do {
+            let container = try ModelContainer(for:
+                                                NotebookData.self,
+                                                NotebookContentData.self,
+                                                DayVersionData.self,
+                                                TimelineData.self,
+                                               configurations: modelConfiguration)
+            modelContext = ModelContext(container)
+        } catch let error {
+            fatalError(error.localizedDescription)
+        }
     }
     
-    func createContext() {
-        let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: false)
-        let container = try! ModelContainer(for:
-                                            NotebookData.self,
-                                            NotebookContentData.self,
-                                            DayVersionData.self,
-                                            TimelineData.self,
-                                            ThemeData.self,
-                                           configurations: modelConfiguration)
-        modelContext = ModelContext(container)
+    func createLocalContext() {
+        logger.debug("\(#function)")
+//        let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: false, cloudKitDatabase: .none)
+        let modelConfiguration = ModelConfiguration()
+        do {
+            let container = try ModelContainer(for:
+                                                NotebookData.self,
+                                                NotebookContentData.self,
+                                                DayVersionData.self,
+                                                TimelineData.self,
+                                               configurations: modelConfiguration)
+            modelContext = ModelContext(container)
+        } catch let error {
+            fatalError(error.localizedDescription)
+        }
     }
     
     func createICloudContext() {
-        let conf = ModelConfiguration("iCloud.com.sarella.notes365-local")
-        let container = try! ModelContainer(for: NotebookData.self, NotebookContentData.self, configurations: conf)
-        modelContext = ModelContext(container)
+        logger.debug("\(#function)")
+        let icloudPath = "iCloud.com.sarella.notes365-local"
+        let modelConfiguration = ModelConfiguration(icloudPath)
+        
+        // ref: https://developer.apple.com/documentation/swiftdata/syncing-model-data-across-a-persons-devices
+        do {
+        #if DEBUG
+            // Use an autorelease pool to make sure Swift deallocates the persistent
+            // container before setting up the SwiftData stack.
+            try autoreleasepool {
+                let desc = NSPersistentStoreDescription(url: modelConfiguration.url)
+                let opts = NSPersistentCloudKitContainerOptions(containerIdentifier: icloudPath)
+                desc.cloudKitContainerOptions = opts
+                // Load the store synchronously so it completes before initializing the
+                // CloudKit schema.
+                desc.shouldAddStoreAsynchronously = false
+                if let mom = NSManagedObjectModel.makeManagedObjectModel(for: [NotebookData.self,
+                                                                               NotebookContentData.self,
+                                                                               DayVersionData.self,
+                                                                               TimelineData.self]) {
+                    let container = NSPersistentCloudKitContainer(name: "notes365-local", managedObjectModel: mom)
+                    container.persistentStoreDescriptions = [desc]
+                    container.loadPersistentStores {_, err in
+                        if let err {
+                            fatalError(err.localizedDescription)
+                        }
+                    }
+                    // Initialize the CloudKit schema after the store finishes loading.
+                    try container.initializeCloudKitSchema()
+                    // Remove and unload the store from the persistent container.
+                    if let store = container.persistentStoreCoordinator.persistentStores.first {
+                        try container.persistentStoreCoordinator.remove(store)
+                    }
+                }
+            }
+        #endif
+            let modelContainer = try ModelContainer(for:
+                                                NotebookData.self,
+                                                NotebookContentData.self,
+                                                DayVersionData.self,
+                                                TimelineData.self,
+                                               configurations: modelConfiguration)
+            modelContext = ModelContext(modelContainer)
+        } catch {
+//            fatalError(error.localizedDescription)
+            logger.error("\(error)")
+            createLocalContext()
+        }
     }
 }

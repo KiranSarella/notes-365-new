@@ -8,9 +8,10 @@
 import UIKit
 import SwiftData
 
-public enum NotebooksBusinessError: Error {
-    case invalidPosition
-    case rootAlreadyExists
+public enum NotebookBusinessError: Error {
+    case alreadyExists
+    case invalidCharacters
+    case invalidSelection
 }
 
 class NotebooksBusiness {
@@ -27,35 +28,23 @@ class NotebooksBusiness {
         logger.info("\(#function)")
         return try await storage.fetchAllNotebooks()
     }
-
-    func getRootNotebookOnly() throws -> NotebookB? {
-        try storage.getRootNotebook()
-    }
     
-    func createRootNotebook() throws -> NotebookB {
-        if let _ = try getRootNotebookOnly() { throw NotebooksBusinessError.rootAlreadyExists }
-        let notebook = NotebookB(id: UUID(), name: "root")
-        try notebook.insert(in: storage)
-        defer { sendNotebookInserted(notebook) }
-        return notebook
-    }
-    
-    func createFolder(inside parent: NotebookB, siblings: [NotebookB]) throws -> NotebookB {
+    func createFolder(inside parent: NotebookB?, siblings: [NotebookB]) throws -> NotebookB {
         // create
         let newNotebookName = generateUntitledName(atLevel: siblings, prefix: "Folder")
         let newNotebook = NotebookB(id: UUID(), name: newNotebookName)
-        newNotebook.parentId = parent.id
+        newNotebook.parentId = parent?.id
         newNotebook.isFolder = true
         try newNotebook.insert(in: storage)
         defer { sendNotebookInserted(newNotebook) }
         return newNotebook
     }
     
-    func createFile(inside parent: NotebookB, siblings: [NotebookB]) throws -> NotebookB {
+    func createFile(inside parent: NotebookB?, siblings: [NotebookB]) throws -> NotebookB {
         // create
         let newNotebookName = generateUntitledName(atLevel: siblings, prefix: "Notebook")
         let newNotebook = NotebookB(id: UUID(), name: newNotebookName)
-        newNotebook.parentId = parent.id
+        newNotebook.parentId = parent?.id
         newNotebook.isFolder = false
         try newNotebook.insert(in: storage)
         defer { sendNotebookInserted(newNotebook) }
@@ -66,14 +55,21 @@ class NotebooksBusiness {
         return try storage.getNotebook(for: id)
     }
     
-    func fetchItems(at parent: UUID) throws -> [NotebookB] {
-        return try storage.getActiveChildren(forParent: parent)
+    func fetchItems(at parent: UUID?) throws -> [NotebookB] {
+        if let parent = parent {
+            return try storage.getActiveChildren(forParent: parent)
+        } else {
+            return try storage.getActiveTopLevelNotebooks()
+        }
     }
     
-    func getTopLevelNotebooksWithoutChildren() throws -> [NotebookB] {
-        let notebooks = try storage.getTopLevelNotebooks()
-        return notebooks
+    func getRootNotebookOnly() throws -> NotebookB? {
+        try storage.getRootNotebook()
     }
+    
+//    func fetchRootItems() throws -> [NotebookB] {
+//        try storage.getTopLevelNotebooks()
+//    }
    
     private func generateUntitledName(atLevel siblings: [NotebookB], prefix: String) -> String {
         

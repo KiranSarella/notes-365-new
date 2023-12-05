@@ -13,24 +13,16 @@ struct Item: Identifiable {
     var createdDate: Date = DateTime.now()
 }
 
-struct NotebookDetailBaseView: View {
-    
-    @Binding var notebooksState: NotebooksListState
+struct NotebooksBaseDetailView: View {
     @Binding var path: NavigationPath
     
     var body: some View {
         NavigationStack(path: $path) {
-            NotebooksLevelView(navigationTitle: "Notebooks", path: $path, parent: notebooksState.root)
+            NotebooksLevelView(navigationTitle: "Notebooks", path: $path, parent: nil)
         }
-        
-//        NavigationStack(path: $path) {
-//            NotebooksLevelView(path: $path, notebook: <#Notebook#>)
-//        }
-//        .onDisappear {
-//            path = NavigationPath()
-//        }
     }
 }
+
 
 struct NotebooksLevelView: View {
     
@@ -46,7 +38,7 @@ struct NotebooksLevelView: View {
     @Binding var path: NavigationPath
     @State private var notebookContentState = NotebookContentState(business: BusinessFactory.createNotebookContentBusinessFactory())
     
-    var parent: Notebook
+    var parent: Notebook?
     
     var body: some View {
         VStack {
@@ -55,7 +47,7 @@ struct NotebooksLevelView: View {
                     Spacer()
                     HStack {
                         Spacer()
-                        Text("Empty Folder")
+                        Text("Empty")
                             .font(.headline)
                         Spacer()
                     }
@@ -103,54 +95,32 @@ struct NotebooksLevelView: View {
     
     @ToolbarContentBuilder
     private func toolbarItems() ->  some ToolbarContent {
-//            // menu options
-//            ToolbarItem(placement: .topBarTrailing) {
-//                Menu {
-//                    Button {
-////                        notebooksListState.showRecentlyModified()
-//                    } label: {
-//                        Text("Recently Modified")
-//                    }
-//                    .foregroundColor(.primary)
-//                    Button {
-////                        notebooksListState.showRecentlyDeleted()
-//                    } label: {
-//                        Text("Deleted Notebooks")
-//                    }
-//                    .foregroundColor(.primary)
-//                } label: {
-//                    Image(systemName: "ellipsis.circle")
-//                }
-//            }
-            ToolbarItem(placement: .topBarTrailing) {
-               
-                Button {
-                    Task {
-                        currentLevelState.isCreatingNotebook = true
-                        currentLevelState.createFolder()
-                        try await Task.sleep(nanoseconds: 1_000_000_000)
-                        currentLevelState.isCreatingNotebook = false
-                    }
-                } label: {
-                    Image(systemName: "folder.badge.plus")
-                }
-                .disabled(currentLevelState.isCreatingNotebook)
-            }
-            
         ToolbarItem(placement: .topBarTrailing) {
-               
-                Button {
-                    Task {
-                        currentLevelState.isCreatingNotebook = true
-                        currentLevelState.createFile()
-                        try await Task.sleep(nanoseconds: 1_000_000_000)
-                        currentLevelState.isCreatingNotebook = false
-                    }
-                } label: {
-                    Image(systemName: "square.and.pencil")
+            Button {
+                Task {
+                    currentLevelState.isCreatingNotebook = true
+                    currentLevelState.createFolder()
+                    try await Task.sleep(nanoseconds: 1_000_000_000)
+                    currentLevelState.isCreatingNotebook = false
                 }
-                .disabled(currentLevelState.isCreatingNotebook)
+            } label: {
+                Image(systemName: "folder.badge.plus")
             }
+            .disabled(currentLevelState.isCreatingNotebook)
+        }
+        ToolbarItem(placement: .topBarTrailing) {
+            Button {
+                Task {
+                    currentLevelState.isCreatingNotebook = true
+                    currentLevelState.createFile()
+                    try await Task.sleep(nanoseconds: 1_000_000_000)
+                    currentLevelState.isCreatingNotebook = false
+                }
+            } label: {
+                Image(systemName: "square.and.pencil")
+            }
+            .disabled(currentLevelState.isCreatingNotebook)
+        }
     }
 
     

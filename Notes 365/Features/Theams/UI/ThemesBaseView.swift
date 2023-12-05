@@ -18,8 +18,6 @@ struct ThemesBaseView: View {
     @Environment(\.colorScheme) private var colorScheme
     let themeBusiness = BusinessFactory.themeInteractor()
     @State private var appearanceType: AppearanceType = .light
-    @State private var lightThemes = [MarkdownTheme]()
-    @State private var darkThemes = [MarkdownTheme]()
     @State private var selectedLightTheme: MarkdownTheme = BusinessFactory.themeInteractor().getLightTheme().markdownTheme
     @State private var selectedDarkTheme: MarkdownTheme = BusinessFactory.themeInteractor().getDarkTheme().markdownTheme
     
@@ -59,9 +57,6 @@ struct ThemesBaseView: View {
             }
         }
         .onAppear {
-            lightThemes = themeBusiness.fetchLightThemes().map { $0.markdownTheme }
-            darkThemes = themeBusiness.fetchDarkThemes().map { $0.markdownTheme }
-            
             switch colorScheme {
             case .light:
                 appearanceType = .light
@@ -74,21 +69,17 @@ struct ThemesBaseView: View {
     }
     
     func persistThemeChanges() {
-        do {
-            switch appearanceType {
-            case .light:
-                try themeBusiness.update(theme: selectedLightTheme.theme)
-                if ThemeState.shared.theme.id == selectedLightTheme.id {
-                    ThemeState.shared.themeUpdated(newValue: selectedLightTheme)
-                }
-            case .dark:
-                try themeBusiness.update(theme: selectedDarkTheme.theme)
-                if ThemeState.shared.theme.id == selectedDarkTheme.id {
-                    ThemeState.shared.themeUpdated(newValue: selectedDarkTheme)
-                }
+        switch appearanceType {
+        case .light:
+            themeBusiness.saveLightTheme(selectedLightTheme.theme)
+            if ThemeState.shared.theme.appearanceType == .light {
+                ThemeState.shared.themeUpdated(newValue: selectedLightTheme)
             }
-        } catch let error {
-            logger.error("\(error)")
+        case .dark:
+            themeBusiness.saveDarkTheme(selectedDarkTheme.theme)
+            if ThemeState.shared.theme.appearanceType == .dark {
+                ThemeState.shared.themeUpdated(newValue: selectedDarkTheme)
+            }
         }
     }
 }

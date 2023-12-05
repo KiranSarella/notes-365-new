@@ -13,7 +13,7 @@ struct ContentWrapperView: View {
     @State private var didError = false
     @State private var errorDetail: Error?
     @State private var showRefresh = false
-    @State private var statusMessage = "Loading.. wrapper"
+    @State private var statusMessage = "Loading.."
     
     var body: some View {
         // do initial checks and configurations
@@ -34,6 +34,7 @@ struct ContentWrapperView: View {
                 }
                 .task {
                     do {
+                        try? await Task.sleep(nanoseconds: 6_000_000_000)
                         #if DEBUG
                         // choose environment
                         try chooseEnv.setEnviromment(with: .local)
@@ -57,6 +58,9 @@ struct ContentWrapperView: View {
                         // clean base version
                         TodayVersionBusiness.cleanOlderDayVersions()
                         #endif
+                        
+                        
+                        
                     } catch let error {
                         errorDetail = error
                         didError = true
@@ -82,31 +86,26 @@ struct ContentWrapperView: View {
     }
 }
 
+public enum SidebarItem: String, CaseIterable, Identifiable {
+    public var id: String { self.rawValue }
+    case timeline
+    case notebooks
+    case search
+}
+
 struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.colorScheme) private var colorScheme
     @Environment(ChooseEnvironment.self) var chooseEnv
-    
+    @State var settingsExpanded = true
     @State private var showThemes = false
     @State private var showFormattingSymbols = false
     @State private var showFeedback = false
-    @State private var selectedModeID: Mode.ID? = Mode.timeline.id
     @State private var sidebarItemSelected: SidebarItem.ID? = SidebarItem.timeline.id
-    // notebooks related
-    //    @State private var selectedNotebookM: Notebook.ID?
     @State private var selectedNotebookM: Notebook?
-    @State var notebooksListState = NotebooksListState(notebookBusiness: BusinessFactory.createNotebooksFactory())
     @State var navigationSplitViewVisibility = NavigationSplitViewVisibility.all
     var todayVersionBusiness = BusinessFactory.dayVersionInteractor()
-    
-    @State var timelineExpanded = true
-    @State var notebooksExpanded = true
-    @State var settingsExpanded = true
-    @State var allExpanded = true
-    @State var pinsExpanded = true
-    @State var selection: Int = 0
     @State private var timelineDetailState = TimelineBaseViewState(timelineBusiness: BusinessFactory.timelineInteractor())
-    @State private var presentedParks: [SidebarItem] = []
     @State private var path = NavigationPath()
     @State private var horizontalCalendarViewState = HorizontalCalendarViewState()
     
@@ -144,7 +143,6 @@ struct ContentView: View {
             }
             .sheet(isPresented: $showThemes) {
                 ThemesBaseView()
-//                SettingsView_iPadOS(showModel: $showThemes)
             }
             .sheet(isPresented: $showFormattingSymbols) {
                 EditorSymbolsView()
@@ -172,7 +170,7 @@ struct ContentView: View {
             case .timeline:
                 TimelineBaseView(state: $timelineDetailState, horizontalCalendarViewState: $horizontalCalendarViewState)
             case .notebooks:
-                NotebooksBaseDetailView(notebooksListState: $notebooksListState, path: $path)
+                NotebooksBaseDetailView(path: $path)
             case .search:
                 ContentSearchView()
             }

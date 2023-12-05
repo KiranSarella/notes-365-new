@@ -25,7 +25,7 @@ class NotebooksPathService {
     
     fileprivate var filesPathInfo = [UUID: LocationInfo]()
     fileprivate var foldersPathInfo = [UUID: LocationInfo]()
-    var fullPathsCache = [UUID: FullPathInfo]()
+//    var fullPathsCache = [UUID: FullPathInfo]()
     var pathsCache = [UUID: String]()
     var isLoaded = false
     
@@ -34,8 +34,36 @@ class NotebooksPathService {
         observeNotebookInserted()
     }
     
+    func refreshNotebooksInfo() async {
+        if isLoaded {
+            return
+        }
+        await updateNotebooksInfo()
+//        try? await Task.sleep(nanoseconds: 2_000_000_000)
+        isLoaded = true
+    }
+    
+    private func updateNotebooksInfo() async {
+        return await withCheckedContinuation { c in
+            let results = notebooksBusiness.getAllFilesInfo()
+            for result in results {
+                if result.isFolder {
+                    foldersPathInfo[result.id] = result.locationInfo()
+                } else {
+                    filesPathInfo[result.id] = result.locationInfo()
+                }
+            }
+            c.resume()
+        }
+    }
+    
     func fileName(for notebookId: UUID) -> String? {
-        filesPathInfo[notebookId]?.name
+        if let name = filesPathInfo[notebookId]?.name {
+            return name
+        } else {
+            isLoaded = false
+            return nil
+        }
     }
     
     func fullPath(for notebookId: UUID) -> String? {
@@ -66,43 +94,44 @@ class NotebooksPathService {
         }
     }
     
-    func path(for notebookId: UUID) async -> FullPathInfo? {
-        if let fullPathInfo = fullPathsCache[notebookId] {
-            return fullPathInfo
-        } else {
-            let newPath = await generatePath(notebookId: notebookId)
-            if let newPath = newPath {
-                pathsCache[notebookId] = "uhi > kuhku"//newPath
-            }
-            return newPath
-        }
-    }
-    
-    func generatePath(notebookId: UUID) async -> FullPathInfo? {
-        return await withCheckedContinuation { continution in
-            if let filePathInfo = self.filesPathInfo[notebookId] {
-                
-                var pathComponents = [String]()
-                pathComponents.append(filePathInfo.name)
-                if let folderId = filePathInfo.parentId {
-                    appendFoldersPath(startingFrom: folderId, in: &pathComponents)
-                }
-                let fullPath = pathComponents.reversed().joined(separator: "  \u{203A}   ")
-                let fullPathInfo = FullPathInfo(id: notebookId, name: filePathInfo.name, fullPath: fullPath)
-//                fullPathsCache[notebookId] = fullPathInfo
-    //                defer {
-    //                    fullPathsCache[notebookId] = fullPathInfo
-    //                }
-                continution.resume(returning: fullPathInfo)
-    //                return fullPathInfo
-            } else {
-                continution.resume(returning: nil)
-            }
-        }
-    }
+//    func path(for notebookId: UUID) async -> FullPathInfo? {
+//        if let fullPathInfo = fullPathsCache[notebookId] {
+//            return fullPathInfo
+//        } else {
+//            let newPath = await generatePath(notebookId: notebookId)
+//            if let newPath = newPath {
+//                pathsCache[notebookId] = "uhi > kuhku"//newPath
+//            }
+//            return newPath
+//        }
+//    }
+
+//    func generatePath(notebookId: UUID) async -> FullPathInfo? {
+//        return await withCheckedContinuation { continution in
+//            if let filePathInfo = self.filesPathInfo[notebookId] {
+//                
+//                var pathComponents = [String]()
+//                pathComponents.append(filePathInfo.name)
+//                if let folderId = filePathInfo.parentId {
+//                    appendFoldersPath(startingFrom: folderId, in: &pathComponents)
+//                }
+//                let fullPath = pathComponents.reversed().joined(separator: "  \u{203A}   ")
+//                let fullPathInfo = FullPathInfo(id: notebookId, name: filePathInfo.name, fullPath: fullPath)
+////                fullPathsCache[notebookId] = fullPathInfo
+//    //                defer {
+//    //                    fullPathsCache[notebookId] = fullPathInfo
+//    //                }
+//                continution.resume(returning: fullPathInfo)
+//    //                return fullPathInfo
+//            } else {
+//                continution.resume(returning: nil)
+//            }
+//        }
+//    }
     
     private func invalidateCacheFullPath() {
-        fullPathsCache.removeAll()
+//        fullPathsCache.removeAll()
+        pathsCache.removeAll()
     }
     
     private func appendFoldersPath(startingFrom folderId: UUID, in pathComponents: inout [String]) {
@@ -113,30 +142,7 @@ class NotebooksPathService {
         }
     }
     
-    func refreshNotebooksInfo() async {
-        if isLoaded {
-            return
-        }
-        await updateNotebooksInfo()
-//        try? await Task.sleep(nanoseconds: 2_000_000_000)
-        isLoaded = true
-    }
     
-    private func updateNotebooksInfo() async {
-        return await withCheckedContinuation { c in
-            let results = notebooksBusiness.getAllFilesInfo()
-            for result in results {
-                if result.parentId == nil { continue }
-                if result.isFolder {
-                    foldersPathInfo[result.id] = result.locationInfo()
-                } else {
-                    filesPathInfo[result.id] = result.locationInfo()
-                }
-            }
-            c.resume()
-        }
-    }
-
 }
 
 // MARK: - Handle Rename
@@ -183,10 +189,11 @@ extension NotebooksPathService {
         guard
             let notebookId = notification.userInfo?["notebook_id"] as? UUID,
             let name = notification.userInfo?["name"] as? String,
-            let isFolder = notification.userInfo?["isFolder"] as? Bool,
-            let parentId = notification.userInfo?["parent_id"] as? UUID
+            let isFolder = notification.userInfo?["isFolder"] as? Bool
         else { return }
                 
+        let parentId = notification.userInfo?["parent_id"] as? UUID
+        
         if isFolder {
             foldersPathInfo[notebookId] = LocationInfo(parentId: parentId, name: name)
         } else {
