@@ -7,15 +7,12 @@
 
 import SwiftUI
 
-
 struct FormattingOptionsView: View {
     @Binding var editorView: EditorView
     @Binding var contentEditedDate: Date?
     
     var body: some View {
-        
-        ScrollView(.horizontal) {
-            
+        ScrollView(.horizontal, showsIndicators: false) {
             HStack {
                 Spacer()
                 // bold, italic..

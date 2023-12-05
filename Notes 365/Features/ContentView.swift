@@ -14,6 +14,7 @@ struct ContentWrapperView: View {
     @State private var errorDetail: Error?
     @State private var showRefresh = false
     @State private var statusMessage = "Loading.."
+    @State var migrationProcess: MigrationProcess?
     
     var body: some View {
         // do initial checks and configurations
@@ -34,14 +35,19 @@ struct ContentWrapperView: View {
                 }
                 .task {
                     do {
-                        try? await Task.sleep(nanoseconds: 6_000_000_000)
+//                        try? await Task.sleep(nanoseconds: 6_000_000_000)
                         #if DEBUG
                         // choose environment
                         try chooseEnv.setEnviromment(with: .local)
+                        
+                        migrationProcess = MigrationProcess(basePathURL: EnvironmentState.shared.basePathURL)
+                        await migrationProcess?.startMigrationProcess()
+                        
                         // do any operations
                         chooseEnv.enableConfigured()
+                        
                         // clean base version
-                        DayVersion.shared.cleanOlderDayVersions()
+//                        DayVersion.shared.cleanOlderDayVersions()
                         #else
                         statusMessage = "checking iCloud settings"
                         // choose environment

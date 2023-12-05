@@ -9,7 +9,6 @@ import Foundation
 import SwiftData
 
 class NotebookB: Identifiable {
-    
     var id: UUID = UUID()
     var name: String = ""
     var parentId: UUID?

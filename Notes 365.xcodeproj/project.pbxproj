@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C04F41E2B1F478B00B82575 /* MigrationProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C04F41D2B1F478B00B82575 /* MigrationProcess.swift */; };
+		5C04F4212B1F4AEB00B82575 /* NotebookOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C04F4202B1F4AEB00B82575 /* NotebookOld.swift */; };
+		5C04F4232B1F4C5800B82575 /* NotebooksCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C04F4222B1F4C5800B82575 /* NotebooksCache.swift */; };
 		5C051B952B11C3B1005C99B7 /* TimelineInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C051B942B11C3B1005C99B7 /* TimelineInteractor.swift */; };
 		5C051B9B2B11FFF6005C99B7 /* NotebooksPathService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C051B9A2B11FFF6005C99B7 /* NotebooksPathService.swift */; };
 		5C051B9D2B1240D4005C99B7 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C051B9C2B1240D4005C99B7 /* Logger.swift */; };
@@ -119,7 +122,6 @@
 		9F8EE98A293EB3090021409E /* CloudDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8EE989293EB3090021409E /* CloudDataManager.swift */; };
 		9F8EE98B293EB32D0021409E /* CloudDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8EE989293EB3090021409E /* CloudDataManager.swift */; };
 		9F92CF0529B7525500B8D3C4 /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F92CF0429B7525500B8D3C4 /* MailView.swift */; };
-		9F93E14629E3FB4E00210E99 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F57BAE6299688BC0076FD9D /* Constants.swift */; };
 		9F93E15029E6A2AC00210E99 /* SmartEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93E14F29E6A2AC00210E99 /* SmartEditor.swift */; };
 		9FB0A47D29DD27470093FBD2 /* CloudServiceTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D2925299EC27E00B37F51 /* CloudServiceTwo.swift */; };
 		9FB0A47E29DD274F0093FBD2 /* InitialCloudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1687CB29AD0E7F0085A0CA /* InitialCloudSync.swift */; };
@@ -153,6 +155,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5C04F41D2B1F478B00B82575 /* MigrationProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationProcess.swift; sourceTree = "<group>"; };
+		5C04F4202B1F4AEB00B82575 /* NotebookOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookOld.swift; sourceTree = "<group>"; };
+		5C04F4222B1F4C5800B82575 /* NotebooksCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksCache.swift; sourceTree = "<group>"; };
 		5C051B942B11C3B1005C99B7 /* TimelineInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineInteractor.swift; sourceTree = "<group>"; };
 		5C051B9A2B11FFF6005C99B7 /* NotebooksPathService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksPathService.swift; sourceTree = "<group>"; };
 		5C051B9C2B1240D4005C99B7 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
@@ -322,6 +327,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5C04F41F2B1F4AD700B82575 /* Migration */ = {
+			isa = PBXGroup;
+			children = (
+				9F57BAE6299688BC0076FD9D /* Constants.swift */,
+				5C04F41D2B1F478B00B82575 /* MigrationProcess.swift */,
+				5C04F4202B1F4AEB00B82575 /* NotebookOld.swift */,
+				5C04F4222B1F4C5800B82575 /* NotebooksCache.swift */,
+			);
+			path = Migration;
+			sourceTree = "<group>";
+		};
 		5C051B932B11C346005C99B7 /* ContentCreator */ = {
 			isa = PBXGroup;
 			children = (
@@ -774,7 +790,7 @@
 			isa = PBXGroup;
 			children = (
 				9F45BCA32920CAAE003DE332 /* ContentView.swift */,
-				9F57BAE6299688BC0076FD9D /* Constants.swift */,
+				5C04F41F2B1F4AD700B82575 /* Migration */,
 				5C051B9C2B1240D4005C99B7 /* Logger.swift */,
 				9F45BCDE2920CCCE003DE332 /* Extensions.swift */,
 				9F7D2923299EB9D700B37F51 /* MainBusiness.swift */,
@@ -1080,9 +1096,12 @@
 				5C3DE6B22B13722C004E3621 /* RangeTimelineView.swift in Sources */,
 				9F7D2924299EB9D700B37F51 /* MainBusiness.swift in Sources */,
 				5CBEF3182B15008E003A3972 /* TodayVersionStorage.swift in Sources */,
+				5C04F4212B1F4AEB00B82575 /* NotebookOld.swift in Sources */,
+				5C04F4232B1F4C5800B82575 /* NotebooksCache.swift in Sources */,
 				5CBEF31E2B150CE7003A3972 /* DayVersionInteractor.swift in Sources */,
 				9FB6C69E2927615700C8EC76 /* SpeechState.swift in Sources */,
 				5CF612C12B0B0DD600D397C6 /* NotebookContentStorageAdapter.swift in Sources */,
+				5C04F41E2B1F478B00B82575 /* MigrationProcess.swift in Sources */,
 				5C7CFAB62B151E5D00777AB2 /* DateTime.swift in Sources */,
 				5C29FED52A98D91D001DC601 /* ReadonlyEditorCache.swift in Sources */,
 				5CBEF31A2B15025E003A3972 /* TodayVersionStorageAdapter.swift in Sources */,
@@ -1094,7 +1113,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9F93E14629E3FB4E00210E99 /* Constants.swift in Sources */,
 				9FB0A48729DE8E150093FBD2 /* ThemeBusiness.swift in Sources */,
 				9FB0A47D29DD27470093FBD2 /* CloudServiceTwo.swift in Sources */,
 				5C8FADFB2B0A072600B80BD9 /* NotebooksListStateTests.swift in Sources */,
