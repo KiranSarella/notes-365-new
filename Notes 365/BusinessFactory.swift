@@ -25,6 +25,11 @@ class BusinessFactory {
         return NotebookContentStorageAdapter(modelContext: modelContext)
     }
     
+    static func createTimelineStorageProvider() -> TimelineStorageProvider {
+        let modelContext = SharedContext.shared.getModelContext()
+        return TimelineStorageAdapter(modelContext: modelContext)
+    }
+    
     static func createNotebooksFactory() -> NotebooksRequester {
         let storage = BusinessFactory.createNotebooksStorage()
         return NotebooksBusiness(storage: storage)

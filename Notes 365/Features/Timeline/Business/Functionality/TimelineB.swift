@@ -33,3 +33,9 @@ struct TimelineB: Identifiable {
         self.day = date.getDay()
     }
 }
+
+extension TimelineB: CustomStringConvertible {
+    var description: String {
+        return id
+    }
+}

@@ -21,6 +21,9 @@
 		5C08EA462B1899C60095DE86 /* ContentSearchInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C08EA452B1899C60095DE86 /* ContentSearchInteractor.swift */; };
 		5C0A7B312B2024760099F0A3 /* DayContentGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B302B2024760099F0A3 /* DayContentGenerator.swift */; };
 		5C0A7B332B2024CF0099F0A3 /* OldNotesDataGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B322B2024CF0099F0A3 /* OldNotesDataGenerator.swift */; };
+		5C0A7B352B2041650099F0A3 /* TimelineBusinessOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B342B2041650099F0A3 /* TimelineBusinessOld.swift */; };
+		5C0A7B372B2049930099F0A3 /* MonthContentGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B362B2049930099F0A3 /* MonthContentGenerator.swift */; };
+		5C0A7B392B20648C0099F0A3 /* DayProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B382B20648C0099F0A3 /* DayProcessor.swift */; };
 		5C10D79B2B04C248006FB80D /* NotebooksStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D7982B04C248006FB80D /* NotebooksStorage.swift */; };
 		5C10D79D2B04C248006FB80D /* NotebooksStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D79A2B04C248006FB80D /* NotebooksStorageAdapter.swift */; };
 		5C10D7A12B04C26D006FB80D /* NotebooksBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D7A02B04C26D006FB80D /* NotebooksBusiness.swift */; };
@@ -171,6 +174,9 @@
 		5C08EA452B1899C60095DE86 /* ContentSearchInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentSearchInteractor.swift; sourceTree = "<group>"; };
 		5C0A7B302B2024760099F0A3 /* DayContentGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayContentGenerator.swift; sourceTree = "<group>"; };
 		5C0A7B322B2024CF0099F0A3 /* OldNotesDataGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldNotesDataGenerator.swift; sourceTree = "<group>"; };
+		5C0A7B342B2041650099F0A3 /* TimelineBusinessOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineBusinessOld.swift; sourceTree = "<group>"; };
+		5C0A7B362B2049930099F0A3 /* MonthContentGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthContentGenerator.swift; sourceTree = "<group>"; };
+		5C0A7B382B20648C0099F0A3 /* DayProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayProcessor.swift; sourceTree = "<group>"; };
 		5C10D7982B04C248006FB80D /* NotebooksStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksStorage.swift; sourceTree = "<group>"; };
 		5C10D79A2B04C248006FB80D /* NotebooksStorageAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksStorageAdapter.swift; sourceTree = "<group>"; };
 		5C10D7A02B04C26D006FB80D /* NotebooksBusiness.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksBusiness.swift; sourceTree = "<group>"; };
@@ -338,8 +344,11 @@
 				5C04F41D2B1F478B00B82575 /* MigrationProcess.swift */,
 				5C04F4202B1F4AEB00B82575 /* NotebookOld.swift */,
 				5C04F4222B1F4C5800B82575 /* NotebooksCache.swift */,
+				5C0A7B362B2049930099F0A3 /* MonthContentGenerator.swift */,
+				5C0A7B382B20648C0099F0A3 /* DayProcessor.swift */,
 				5C0A7B302B2024760099F0A3 /* DayContentGenerator.swift */,
 				5C0A7B322B2024CF0099F0A3 /* OldNotesDataGenerator.swift */,
+				5C0A7B342B2041650099F0A3 /* TimelineBusinessOld.swift */,
 			);
 			path = Migration;
 			sourceTree = "<group>";
@@ -1071,8 +1080,11 @@
 				9FB6C6A929279BEC00C8EC76 /* TimelineBusiness.swift in Sources */,
 				5C16B9BB2B035A0200BF8592 /* NotebookContentB.swift in Sources */,
 				5C34A1882B1B918D00D036B7 /* DefaultThemes.swift in Sources */,
+				5C0A7B352B2041650099F0A3 /* TimelineBusinessOld.swift in Sources */,
+				5C0A7B372B2049930099F0A3 /* MonthContentGenerator.swift in Sources */,
 				5C5668132B10B1E200CB873F /* TimelineB.swift in Sources */,
 				9F8EE98A293EB3090021409E /* CloudDataManager.swift in Sources */,
+				5C0A7B392B20648C0099F0A3 /* DayProcessor.swift in Sources */,
 				5C3DE6B72B13A8A2004E3621 /* RangeTimelineState.swift in Sources */,
 				5CC4C01F2A908D7000A4BE41 /* EditorView.swift in Sources */,
 				5CCABA802B1C9B7F009A9F2E /* ThemeInteractor.swift in Sources */,

@@ -21,6 +21,7 @@ class TimelineStorageAdapter: TimelineStorageProvider {
     }
     
     func save(dayNotebookChange: TimelineB) throws {
+        logger.debug("\(dayNotebookChange)")
         try storage.save(dayNotebookChange: dayNotebookChange.dayNotebookData())
     }
     
