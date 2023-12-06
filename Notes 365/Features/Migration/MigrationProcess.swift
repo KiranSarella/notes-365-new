@@ -28,6 +28,12 @@ class MigrationProcess {
     }
     
     func migrateTimelines() {
+        // for 2022, 2023
+        // loop each month
+        // loop each day
+        // extract each timeline in a day - metadata and content
+        // construct newTimelineB object
+        
         
         
     }
@@ -55,26 +61,48 @@ class MigrationProcess {
         // get notebook content
         // if contains children mark as folder
         // create other file with same name inside that folder.
-        await saveNotebooks(notebooks: notebooks)
+        await saveNotebooks(oldNotes: notebooks)
         try? await Task.sleep(nanoseconds: 15_000_000_000)
     }
     
-    func processNotebook(oldN: NotebookOld) async {
-        if oldN.containChildNotebooks {
-            await createFolderAndFile(for: oldN)
-        } else {
-            await createFile(for: oldN)
+//    func processNotebook(oldN: NotebookOld) async {
+//        if oldN.containChildNotebooks {
+//            await createFolderAndFile(for: oldN)
+//        } else {
+//            await createFile(for: oldN)
+//        }
+//        
+//        // children
+//        if oldN.containChildNotebooks {
+//            await saveNotebooks(oldNotes: oldN.children!)
+//        }
+//    }
+    
+    func processNotebook(noteArch: NotebookArchive) async {
+        // folder
+        if let folderAndFile = noteArch.folderAndFile {
+            try? notebooksStorage.insert(notebook: folderAndFile.folder)
+//            if let notebookFile = folderAndFile.notebookFile {
+//                try? notebooksStorage.insert(notebook: notebookFile.file)
+//                try? noteContentStorage.insert(notebookContent: notebookFile.fileContent)
+//            }
         }
-        
+        // file
+        if let notebookFile = noteArch.file {
+            try? notebooksStorage.insert(notebook: notebookFile.file)
+            try? noteContentStorage.insert(notebookContent: notebookFile.fileContent)
+        }
         // children
-        if oldN.containChildNotebooks {
-            await saveNotebooks(notebooks: oldN.children!)
+        if noteArch.notebookOld.containChildNotebooks {
+            await saveNotebooks(oldNotes: noteArch.notebookOld.children!)
         }
     }
     
-    func saveNotebooks(notebooks: [NotebookOld]) async {
-        for oldN in notebooks {
-            await processNotebook(oldN: oldN)
+    func saveNotebooks(oldNotes: [NotebookOld]) async {
+        let oldNotesDataGenerator = OldNotesDataGenerator(oldNotes: oldNotes)
+        for await noteArch in oldNotesDataGenerator {
+            // perform save
+            await processNotebook(noteArch: noteArch)
         }
     }
     

@@ -19,6 +19,8 @@
 		5C08EA422B1897EA0095DE86 /* ContentSearchAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C08EA412B1897EA0095DE86 /* ContentSearchAdapter.swift */; };
 		5C08EA442B1898B00095DE86 /* ContentSearchBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C08EA432B1898B00095DE86 /* ContentSearchBusiness.swift */; };
 		5C08EA462B1899C60095DE86 /* ContentSearchInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C08EA452B1899C60095DE86 /* ContentSearchInteractor.swift */; };
+		5C0A7B312B2024760099F0A3 /* DayContentGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B302B2024760099F0A3 /* DayContentGenerator.swift */; };
+		5C0A7B332B2024CF0099F0A3 /* OldNotesDataGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B322B2024CF0099F0A3 /* OldNotesDataGenerator.swift */; };
 		5C10D79B2B04C248006FB80D /* NotebooksStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D7982B04C248006FB80D /* NotebooksStorage.swift */; };
 		5C10D79D2B04C248006FB80D /* NotebooksStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D79A2B04C248006FB80D /* NotebooksStorageAdapter.swift */; };
 		5C10D7A12B04C26D006FB80D /* NotebooksBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D7A02B04C26D006FB80D /* NotebooksBusiness.swift */; };
@@ -167,6 +169,8 @@
 		5C08EA412B1897EA0095DE86 /* ContentSearchAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentSearchAdapter.swift; sourceTree = "<group>"; };
 		5C08EA432B1898B00095DE86 /* ContentSearchBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentSearchBusiness.swift; sourceTree = "<group>"; };
 		5C08EA452B1899C60095DE86 /* ContentSearchInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentSearchInteractor.swift; sourceTree = "<group>"; };
+		5C0A7B302B2024760099F0A3 /* DayContentGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayContentGenerator.swift; sourceTree = "<group>"; };
+		5C0A7B322B2024CF0099F0A3 /* OldNotesDataGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldNotesDataGenerator.swift; sourceTree = "<group>"; };
 		5C10D7982B04C248006FB80D /* NotebooksStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksStorage.swift; sourceTree = "<group>"; };
 		5C10D79A2B04C248006FB80D /* NotebooksStorageAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksStorageAdapter.swift; sourceTree = "<group>"; };
 		5C10D7A02B04C26D006FB80D /* NotebooksBusiness.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksBusiness.swift; sourceTree = "<group>"; };
@@ -334,6 +338,8 @@
 				5C04F41D2B1F478B00B82575 /* MigrationProcess.swift */,
 				5C04F4202B1F4AEB00B82575 /* NotebookOld.swift */,
 				5C04F4222B1F4C5800B82575 /* NotebooksCache.swift */,
+				5C0A7B302B2024760099F0A3 /* DayContentGenerator.swift */,
+				5C0A7B322B2024CF0099F0A3 /* OldNotesDataGenerator.swift */,
 			);
 			path = Migration;
 			sourceTree = "<group>";
@@ -1051,6 +1057,7 @@
 				5C4ADCE32A9757EF000A037E /* EditorSymbolsView.swift in Sources */,
 				5C10D7A12B04C26D006FB80D /* NotebooksBusiness.swift in Sources */,
 				5CF612CF2B0B79F000D397C6 /* NotebookContentRequester.swift in Sources */,
+				5C0A7B312B2024760099F0A3 /* DayContentGenerator.swift in Sources */,
 				5C08EA462B1899C60095DE86 /* ContentSearchInteractor.swift in Sources */,
 				9F45BD792920CDE0003DE332 /* NotebookContentView.swift in Sources */,
 				9F45BD922920CDED003DE332 /* StringDiff.swift in Sources */,
@@ -1096,6 +1103,7 @@
 				5C3DE6B22B13722C004E3621 /* RangeTimelineView.swift in Sources */,
 				9F7D2924299EB9D700B37F51 /* MainBusiness.swift in Sources */,
 				5CBEF3182B15008E003A3972 /* TodayVersionStorage.swift in Sources */,
+				5C0A7B332B2024CF0099F0A3 /* OldNotesDataGenerator.swift in Sources */,
 				5C04F4212B1F4AEB00B82575 /* NotebookOld.swift in Sources */,
 				5C04F4232B1F4C5800B82575 /* NotebooksCache.swift in Sources */,
 				5CBEF31E2B150CE7003A3972 /* DayVersionInteractor.swift in Sources */,
