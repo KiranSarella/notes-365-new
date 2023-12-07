@@ -29,6 +29,11 @@ struct TimelineBaseView: View {
 //            state.selectedDates = [newValue]
 //            horizontalCalendarViewState.selectedDateRange = nil
 //        })
+        .onChange(of: horizontalCalendarViewState.selectedDateRange, { oldValue, newValue in
+            if newValue != nil {
+                caldendarState = .none
+            }
+        })
         .onChange(of: caldendarState, { oldValue, newValue in
             switch newValue {
             case .day(let dayDate):

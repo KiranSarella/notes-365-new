@@ -9,10 +9,17 @@ import Foundation
 import SwiftData
 import CoreData
 
+enum StorageType {
+    case iCloud
+    case local
+    case mock
+}
+
 class SharedContext {
     static let shared = SharedContext()
     private var modelContext: ModelContext?
     var mock: Bool = true
+    var storageType = StorageType.iCloud
     
     func getModelContext() -> ModelContext {
         if let modelContext = modelContext {
@@ -56,8 +63,8 @@ class SharedContext {
     
     func createLocalContext() {
         logger.debug("\(#function)")
-//        let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: false, cloudKitDatabase: .none)
-        let modelConfiguration = ModelConfiguration()
+        let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: false, cloudKitDatabase: .none)
+//        let modelConfiguration = ModelConfiguration()
         do {
             let container = try ModelContainer(for:
                                                 NotebookData.self,
@@ -74,8 +81,8 @@ class SharedContext {
     func createICloudContext() {
         logger.debug("\(#function)")
         let icloudPath = "iCloud.com.sarella.notes365-local"
-        let modelConfiguration = ModelConfiguration(icloudPath)
-        
+//        let modelConfiguration = ModelConfiguration(icloudPath)
+        let modelConfiguration = ModelConfiguration() // it will take automatic
         // ref: https://developer.apple.com/documentation/swiftdata/syncing-model-data-across-a-persons-devices
         do {
         #if DEBUG
@@ -116,9 +123,9 @@ class SharedContext {
                                                configurations: modelConfiguration)
             modelContext = ModelContext(modelContainer)
         } catch {
-//            fatalError(error.localizedDescription)
-            logger.error("\(error)")
-            createLocalContext()
+            fatalError(error.localizedDescription)
+//            logger.error("\(error)")
+//            createLocalContext()
         }
     }
 }

@@ -15,6 +15,7 @@ class HorizontalCalendarViewState {
     var dateRanges = [TimelineDateRange]()
     var selectedDateRange: TimelineDateRange?
     var loadedDate: Date = DateTime.now()
+//    var disableSelection = false
     
     init() {
         

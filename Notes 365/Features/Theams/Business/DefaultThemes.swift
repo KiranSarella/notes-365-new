@@ -44,8 +44,8 @@ class DefaultThemes {
     
     static func generateCustomizedLightTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
-        theme.fontName = "Helvetica"
-        theme.fontSize = 16
+        theme.fontName = "Freebooter"
+        theme.fontSize = 20
         theme.bodyColor = Color.primary
         theme.styleColor = Color.yellow
         theme.codeColor = Color.blue
@@ -58,7 +58,7 @@ class DefaultThemes {
     static func generateCustomizedDarkTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
         theme.fontName = "ChalkboardSE-Light"
-        theme.fontSize = 16
+        theme.fontSize = 18
         theme.bodyColor = Color.white
         theme.styleColor = Color.purple
         theme.codeColor = Color.mint

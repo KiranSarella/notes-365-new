@@ -24,6 +24,7 @@ struct ContentSearchView: View {
                         }
                     }
                 }
+                .scrollDismissesKeyboard(.interactively)
                 Spacer()
             }
             .searchable(text: $searchText, prompt: "Search Content")

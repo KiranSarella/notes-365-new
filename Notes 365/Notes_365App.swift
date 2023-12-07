@@ -10,23 +10,22 @@ import SwiftData
 
 @main
 struct Notes_365App: App {
-    @Environment(\.scenePhase) private var scenePhase
     var context: ModelContext = {
+#if DEBUG
         SharedContext.shared.resetContext(mock: false)
+#else
+        SharedContext.shared.resetContext()
+#endif
         return SharedContext.shared.getModelContext()
     }()
     
     var body: some Scene {
         WindowGroup {
-//            BaseBackgroundView()
             ContentWrapperView()
         }
         .modelContext(context)
         .commands {
             SidebarCommands()
         }
-//        .onChange(of: scenePhase, { oldValue, newValue in
-//
-//        })
     }
 }

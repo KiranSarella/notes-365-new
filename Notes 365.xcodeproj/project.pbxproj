@@ -383,7 +383,7 @@
 		5C08EA372B1892C50095DE86 /* ContentSearch */ = {
 			isa = PBXGroup;
 			children = (
-				5C08EA382B1892DC0095DE86 /* ContentSearchView.swift */,
+				5C13731C2B218F0000F041E2 /* UI */,
 				5C08EA3A2B18952F0095DE86 /* Business */,
 			);
 			path = ContentSearch;
@@ -473,6 +473,14 @@
 				5CFCF5E52ABEDF7000351EEA /* NotebookData.swift */,
 			);
 			path = Storage;
+			sourceTree = "<group>";
+		};
+		5C13731C2B218F0000F041E2 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				5C08EA382B1892DC0095DE86 /* ContentSearchView.swift */,
+			);
+			path = UI;
 			sourceTree = "<group>";
 		};
 		5C34A17F2B1B3AA300D036B7 /* UI */ = {
