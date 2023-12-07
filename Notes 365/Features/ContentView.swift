@@ -168,7 +168,7 @@ struct ContentView: View {
                 EditorSymbolsView()
             }
             .sheet(isPresented: $showFeedback) {
-                FeedbackView_iPadOS()
+                FeedbackView()
             }
             .onAppear {
                 ThemeState.shared.updateColorScheme(colorScheme)

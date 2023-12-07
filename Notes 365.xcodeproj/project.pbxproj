@@ -109,8 +109,7 @@
 		9F14B4AE298F98900079D23B /* FontPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B4AD298F98900079D23B /* FontPicker.swift */; };
 		9F1687CC29AD0E7F0085A0CA /* InitialCloudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1687CB29AD0E7F0085A0CA /* InitialCloudSync.swift */; };
 		9F188D812930E49F0078D413 /* MarkdownHeading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F188D802930E49F0078D413 /* MarkdownHeading.swift */; };
-		9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1AAE32292C94F800B4D254 /* FeedbackState.swift */; };
-		9F3DB0C4292DF82300704860 /* FeedbackView+iPadOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3DB0C3292DF82300704860 /* FeedbackView+iPadOS.swift */; };
+		9F3DB0C4292DF82300704860 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3DB0C3292DF82300704860 /* FeedbackView.swift */; };
 		9F3DB0C6292E1D9200704860 /* ThemeBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3DB0C5292E1D9200704860 /* ThemeBusiness.swift */; };
 		9F3DB0CC292E340200704860 /* ThemeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3DB0CB292E340200704860 /* ThemeState.swift */; };
 		9F45BCA22920CAAE003DE332 /* Notes_365App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCA12920CAAE003DE332 /* Notes_365App.swift */; };
@@ -135,7 +134,6 @@
 		9F7D2926299EC27E00B37F51 /* CloudServiceTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D2925299EC27E00B37F51 /* CloudServiceTwo.swift */; };
 		9F8EE98A293EB3090021409E /* CloudDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8EE989293EB3090021409E /* CloudDataManager.swift */; };
 		9F8EE98B293EB32D0021409E /* CloudDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8EE989293EB3090021409E /* CloudDataManager.swift */; };
-		9F92CF0529B7525500B8D3C4 /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F92CF0429B7525500B8D3C4 /* MailView.swift */; };
 		9F93E15029E6A2AC00210E99 /* SmartEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F93E14F29E6A2AC00210E99 /* SmartEditor.swift */; };
 		9FB0A47D29DD27470093FBD2 /* CloudServiceTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D2925299EC27E00B37F51 /* CloudServiceTwo.swift */; };
 		9FB0A47E29DD274F0093FBD2 /* InitialCloudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1687CB29AD0E7F0085A0CA /* InitialCloudSync.swift */; };
@@ -269,10 +267,9 @@
 		9F14B4AD298F98900079D23B /* FontPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontPicker.swift; sourceTree = "<group>"; };
 		9F1687CB29AD0E7F0085A0CA /* InitialCloudSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialCloudSync.swift; sourceTree = "<group>"; };
 		9F188D802930E49F0078D413 /* MarkdownHeading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownHeading.swift; sourceTree = "<group>"; };
-		9F1AAE32292C94F800B4D254 /* FeedbackState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackState.swift; sourceTree = "<group>"; };
 		9F33BF812A0EA08700C39A76 /* Notes 365Release.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Notes 365Release.entitlements"; sourceTree = "<group>"; };
 		9F39F31E29F7BF6F00044DDB /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
-		9F3DB0C3292DF82300704860 /* FeedbackView+iPadOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeedbackView+iPadOS.swift"; sourceTree = "<group>"; };
+		9F3DB0C3292DF82300704860 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
 		9F3DB0C5292E1D9200704860 /* ThemeBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeBusiness.swift; sourceTree = "<group>"; };
 		9F3DB0CB292E340200704860 /* ThemeState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeState.swift; sourceTree = "<group>"; };
 		9F3DB0D1292E88C000704860 /* Themes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Themes.md; sourceTree = "<group>"; };
@@ -308,7 +305,6 @@
 		9F7D2925299EC27E00B37F51 /* CloudServiceTwo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudServiceTwo.swift; sourceTree = "<group>"; };
 		9F8EE989293EB3090021409E /* CloudDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudDataManager.swift; sourceTree = "<group>"; };
 		9F8EE98C293F4B7E0021409E /* Notes-365-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Notes-365-Info.plist"; sourceTree = SOURCE_ROOT; };
-		9F92CF0429B7525500B8D3C4 /* MailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailView.swift; sourceTree = "<group>"; };
 		9F93E14729E532D600210E99 /* TodayVersion.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TodayVersion.md; sourceTree = "<group>"; };
 		9F93E14929E59E3200210E99 /* MarkdownEditor.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MarkdownEditor.md; sourceTree = "<group>"; };
 		9F93E14F29E6A2AC00210E99 /* SmartEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartEditor.swift; sourceTree = "<group>"; };
@@ -720,9 +716,7 @@
 		9F1AAE2F292C93E000B4D254 /* Feedback */ = {
 			isa = PBXGroup;
 			children = (
-				9F3DB0C3292DF82300704860 /* FeedbackView+iPadOS.swift */,
-				9F1AAE32292C94F800B4D254 /* FeedbackState.swift */,
-				9F92CF0429B7525500B8D3C4 /* MailView.swift */,
+				9F3DB0C3292DF82300704860 /* FeedbackView.swift */,
 			);
 			path = Feedback;
 			sourceTree = "<group>";
@@ -1086,12 +1080,10 @@
 				5C5668112B10B1B100CB873F /* TimelineData.swift in Sources */,
 				5C10D79D2B04C248006FB80D /* NotebooksStorageAdapter.swift in Sources */,
 				5C34A1842B1B5CD400D036B7 /* ThemeData.swift in Sources */,
-				9F92CF0529B7525500B8D3C4 /* MailView.swift in Sources */,
 				5CE6FDF82B0BC19600ED9425 /* PDFFile.swift in Sources */,
 				5C0A7B512B20DA590099F0A3 /* MonthCalendarState.swift in Sources */,
 				5C56680D2B109DB800CB873F /* TimelineStorageProvider.swift in Sources */,
 				5C34A18C2B1B9F7700D036B7 /* ThemeStorageAdapter.swift in Sources */,
-				9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */,
 				5CFCF5E62ABEDFA400351EEA /* NotebookData.swift in Sources */,
 				9FB6C69C29275E0300C8EC76 /* NotebookContentState.swift in Sources */,
 				5C7D4AF22B07DCEA00BB1908 /* NotebooksRequester.swift in Sources */,
@@ -1163,7 +1155,7 @@
 				5CC4C01F2A908D7000A4BE41 /* EditorView.swift in Sources */,
 				5CCABA802B1C9B7F009A9F2E /* ThemeInteractor.swift in Sources */,
 				5C10D7A52B04C281006FB80D /* BusinessFactory.swift in Sources */,
-				9F3DB0C4292DF82300704860 /* FeedbackView+iPadOS.swift in Sources */,
+				9F3DB0C4292DF82300704860 /* FeedbackView.swift in Sources */,
 				5C0A7B502B20DA590099F0A3 /* MonthCalendarView.swift in Sources */,
 				5C9060522B0F46060068DD65 /* CurrentLevelState.swift in Sources */,
 				9F188D812930E49F0078D413 /* MarkdownHeading.swift in Sources */,
