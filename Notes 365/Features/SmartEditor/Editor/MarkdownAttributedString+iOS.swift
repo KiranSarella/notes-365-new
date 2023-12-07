@@ -190,7 +190,7 @@ class MarkdownAttriburedString {
             
             innerAttributedString.enumerateAttribute(.font, in: styleRange, options: []) { value, range, stop in
                 
-                let highlightColor = theme.highlightColor.uiColor.withAlphaComponent(0.45)
+                let highlightColor = theme.highlightColor.uiColor//.withAlphaComponent(0.45)
                 
                 // update text color
                 innerAttributedString.addAttribute(.backgroundColor,

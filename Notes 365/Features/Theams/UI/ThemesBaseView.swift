@@ -48,8 +48,15 @@ struct ThemesBaseView: View {
                 #endif
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button {
+                        resetTheme()
                         persistThemeChanges()
-                        dismiss()
+                    } label: {
+                        Text("Reset")
+                    }
+                    
+                    Button {
+                        persistThemeChanges()
+//                        dismiss()
                     } label: {
                         Text("Save")
                     }
@@ -65,6 +72,15 @@ struct ThemesBaseView: View {
             @unknown default:
                 appearanceType = .light
             }
+        }
+    }
+    
+    func resetTheme() {
+        switch appearanceType {
+        case .light:
+            selectedLightTheme = DefaultThemes.generateCustomizedLightTheme().markdownTheme
+        case .dark:
+            selectedDarkTheme = DefaultThemes.generateCustomizedDarkTheme().markdownTheme
         }
     }
     

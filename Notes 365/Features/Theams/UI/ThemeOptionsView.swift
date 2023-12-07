@@ -47,7 +47,7 @@ struct ThemeOptionsView: View {
                 ColorPicker("Heading", selection: $theme.headingColor, supportsOpacity: false)
                 ColorPicker("Bold, Italic, Strikthrough", selection: $theme.styleColor, supportsOpacity: false)
                 ColorPicker("List", selection: $theme.listColor, supportsOpacity: false)
-                ColorPicker("Highlight", selection: $theme.highlightColor, supportsOpacity: false)
+                ColorPicker("Highlight", selection: $theme.highlightColor, supportsOpacity: true)
                 ColorPicker("Source Code", selection: $theme.codeColor, supportsOpacity: false)
                 ColorPicker("Block Quote", selection: $theme.blockQuoteColor, supportsOpacity: false)
             }

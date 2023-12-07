@@ -18,34 +18,30 @@ enum StorageType {
 class SharedContext {
     static let shared = SharedContext()
     private var modelContext: ModelContext?
-    var mock: Bool = true
-    var storageType = StorageType.iCloud
+    private var storageType = StorageType.iCloud
     
     func getModelContext() -> ModelContext {
         if let modelContext = modelContext {
             return modelContext
         } else {
-            if mock {
-                createMockContext()
-            } else {
-                createICloudContext()
-//                createLocalContext()
-            }
+            resetContext(storageType: self.storageType)
             return modelContext!
         }
     }
     
-    func resetContext(mock: Bool = false) {
-        self.mock = mock
-        if self.mock {
-            createMockContext()
-        } else {
-//            createICloudContext()
+    func resetContext(storageType: StorageType) {
+        self.storageType = storageType
+        switch self.storageType {
+        case .iCloud:
+            createICloudContext()
+        case .local:
             createLocalContext()
+        case .mock:
+            createMockContext()
         }
     }
     
-    func createMockContext() {
+    private func createMockContext() {
         logger.debug("\(#function)")
         let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: .none)
         do {
@@ -61,7 +57,7 @@ class SharedContext {
         }
     }
     
-    func createLocalContext() {
+    private func createLocalContext() {
         logger.debug("\(#function)")
         let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: false, cloudKitDatabase: .none)
 //        let modelConfiguration = ModelConfiguration()
@@ -78,7 +74,7 @@ class SharedContext {
         }
     }
     
-    func createICloudContext() {
+    private func createICloudContext() {
         logger.debug("\(#function)")
         let icloudPath = "iCloud.com.sarella.notes365-local"
 //        let modelConfiguration = ModelConfiguration(icloudPath)
