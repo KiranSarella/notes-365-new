@@ -12,7 +12,7 @@ import SwiftData
 struct Notes_365App: App {
     @Environment(\.scenePhase) private var scenePhase
     var context: ModelContext = {
-        SharedContext.shared.resetContext(mock: true)
+        SharedContext.shared.resetContext(mock: false)
         return SharedContext.shared.getModelContext()
     }()
     
@@ -25,11 +25,8 @@ struct Notes_365App: App {
         .commands {
             SidebarCommands()
         }
-        .onChange(of: scenePhase, { oldValue, newValue in
-            // Doing this while setBaseVersion - in editor
-            //            if phase == .active {
-            //                TimelineState.cleanOldBaseVersions()
-            //            }
-        })
+//        .onChange(of: scenePhase, { oldValue, newValue in
+//
+//        })
     }
 }

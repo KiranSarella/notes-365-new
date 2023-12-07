@@ -35,38 +35,52 @@ struct ContentWrapperView: View {
                 }
                 .task {
                     do {
-//                        try? await Task.sleep(nanoseconds: 6_000_000_000)
+                        logger.info("wait for icloud sync")
+                        try? await Task.sleep(nanoseconds: 10_000_000_000)
                         #if DEBUG
                         // choose environment
                         try chooseEnv.setEnviromment(with: .local)
-                        
-                        migrationProcess = MigrationProcess(basePathURL: EnvironmentState.shared.basePathURL)
-                        await migrationProcess?.startMigrationProcess()
-                        
+                        let migrationCheck = UserDefaults.standard.bool(forKey: "migration_check_status")
+                        if migrationCheck == false {
+                            // in new device - check if migration required
+                            let notebooksCount = try BusinessFactory.createNotebooksStorage().fetchNotebooksCount()
+                            if notebooksCount > 0 {
+                                logger.info("notebooksCount: \(notebooksCount)")
+                                logger.info("migration not required")
+                            } else {
+                                statusMessage = "Migrating data to new structure, please wait.."
+                                migrationProcess = MigrationProcess(basePathURL: EnvironmentState.shared.basePathURL)
+                                await migrationProcess?.startMigrationProcess()
+                            }
+                        }
                         // do any operations
                         chooseEnv.enableConfigured()
                         
                         // clean base version
-//                        DayVersion.shared.cleanOlderDayVersions()
+                        DayVersion.shared.cleanOlderDayVersions()
                         #else
                         statusMessage = "checking iCloud settings"
                         // choose environment
                         try chooseEnv.setEnviromment(with: .cloud)
                         statusMessage = "iCloud sync.."
-                        
-//                        chooseEnv.downloaodCloudDocuments(completion: {
-//                            // do any operations
-//                            chooseEnv.enableConfigured()
-//                        })
-                        
+                        let migrationCheck = UserDefaults.standard.bool(forKey: "migration_check_status")
+                        if migrationCheck == false {
+                            // in new device - check if migration required
+                            let notebooksCount = try BusinessFactory.createNotebooksStorage().fetchNotebooksCount()
+                            if notebooksCount > 0 {
+                                logger.info("notebooksCount: \(notebooksCount)")
+                                logger.info("migration not required")
+                            } else {
+                                statusMessage = "Migrating data to new structure, please wait.."
+                                migrationProcess = MigrationProcess(basePathURL: EnvironmentState.shared.basePathURL)
+                                await migrationProcess?.startMigrationProcess()
+                            }
+                        }
                         // do any operations
                         chooseEnv.enableConfigured()
                         // clean base version
                         TodayVersionBusiness.cleanOlderDayVersions()
                         #endif
-                        
-                        
-                        
                     } catch let error {
                         errorDetail = error
                         didError = true

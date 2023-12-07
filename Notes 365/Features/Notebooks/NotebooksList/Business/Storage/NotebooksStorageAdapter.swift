@@ -16,6 +16,10 @@ class NotebooksStorageAdapter: NotebooksStorageProvider {
         storage = NotebooksStorage(modelContext: modelContext)
     }
     
+    func fetchNotebooksCount() throws -> Int {
+        try storage.fetchNotebooksCount()
+    }
+    
     func getRootNotebook() throws -> NotebookB? {
         try storage.fetchRootNotebook()?.notebook()
     }

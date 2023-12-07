@@ -9,7 +9,7 @@ import Foundation
 
 /*
  [x] notebooks
- [ ] timelines
+ [x] timelines
  [ ] today versions
  */
 
@@ -26,11 +26,29 @@ class MigrationProcess {
     }
 
     func startMigrationProcess() async {
+        logger.info("\(#function)")
+        // check if plist exits
+        let plistURL = basePathURL.appending(path: Constants.notebooksPListName).appendingPathExtension("plist")
+        if FileManager.default.fileExists(atPath: plistURL.path) == false {
+            UserDefaults.standard.set(true, forKey: "migration_check_status")
+            return
+        }
         await migrateTimelines()
         await migrateNotebooks()
+        // save status in userdefaults
+        UserDefaults.standard.set(true, forKey: "migration_check_status")
     }
     
+    
+//    func migrateDayVersions() async {
+//        // only current day
+//        
+//    }
+    
+    
+    // MARK: - Timelines
     func migrateTimelines() async {
+        logger.info("\(#function)")
         for await val in MonthContentGenerator(year: 2022) {
             logger.debug("\(val)")
         }
@@ -40,26 +58,9 @@ class MigrationProcess {
         try? await Task.sleep(nanoseconds: 10_000_000_000)
     }
     
-//    func constructMonthTimeline(month: Int, year: Int) async {
-//        // if folder contain,
-//        
-//    }
-    
-//    func saveDayData(dayDate: DayDate) async {
-//        guard let metadata = timelineBusiness.readDayMetaData(dayDate: dayDate) else {
-//            return
-//        }
-//        let lines = metadata.components(separatedBy: "\n")
-//        for await timelineB in DayContentGenerator(lines: lines, today: dayDate.date) {
-//            try? timelineStorage.save(dayNotebookChange: timelineB)
-//        }
-//    }
-    
-    
-    
-    
     // MARK: - Notebooks
     func migrateNotebooks() async {
+        logger.info("\(#function)")
         logger.debug("\(#function)")
         // get plist. and prepare
         guard let notebooks = retrieveNotebooks() else { return }

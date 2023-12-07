@@ -7,17 +7,17 @@
 
 import Foundation
 
-public struct MonthDate {
-    let start: Date
-    let end: Date
-    
-    init(date: Date) {
-        (start, end) = date.getMonthStartEndDates()
-    }
-}
-
-extension MonthDate: Equatable {}
-extension MonthDate: Hashable {}
+//public struct MonthDate {
+//    let start: Date
+//    let end: Date
+//    
+//    init(date: Date) {
+//        (start, end) = date.getMonthStartEndDates()
+//    }
+//}
+//
+//extension MonthDate: Equatable {}
+//extension MonthDate: Hashable {}
 
 
 struct MonthContentGenerator: AsyncSequence, AsyncIteratorProtocol {

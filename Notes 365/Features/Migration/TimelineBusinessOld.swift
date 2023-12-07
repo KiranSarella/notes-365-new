@@ -8,13 +8,13 @@
 import Foundation
 
 // MARK: - Day
-public struct DayDate: Identifiable {
-    public let id = UUID()
-    let date: Date
-}
-
-extension DayDate: Equatable {}
-extension DayDate: Hashable {}
+//public struct DayDate: Identifiable {
+//    public let id = UUID()
+//    let date: Date
+//}
+//
+//extension DayDate: Equatable {}
+//extension DayDate: Hashable {}
 
 class TimelineBusinessOld {
     

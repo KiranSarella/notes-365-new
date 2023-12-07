@@ -49,9 +49,6 @@ class ChooseEnvironment {
     }
     
     func setEnviromment(with environmentType: EnvironmentType) throws {
-        
-        
-        
         switch environmentType {
         case .cloud:
             // if cloud, then intereact with cloud service and get its url or respective error

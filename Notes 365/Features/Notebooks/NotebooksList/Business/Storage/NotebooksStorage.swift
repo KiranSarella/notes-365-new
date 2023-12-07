@@ -21,6 +21,12 @@ class NotebooksStorage {
         self.modelContext = modelContext
     }
     
+    func fetchNotebooksCount() throws -> Int {
+        let allListPredicate = #Predicate<NotebookData> { _ in true }
+        let descriptor = FetchDescriptor(predicate: allListPredicate)
+        return try modelContext.fetchCount(descriptor)
+    }
+    
     func fetchNotebooks() throws -> [NotebookData] {
         let allListPredicate = #Predicate<NotebookData> { _ in true }
         let descriptor = FetchDescriptor(predicate: allListPredicate)

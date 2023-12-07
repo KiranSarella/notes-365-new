@@ -44,3 +44,8 @@ class DateTime {
     // DateTime.now()
     // DateTime.now
 }
+
+/*
+ Date()
+ Date.now
+ */

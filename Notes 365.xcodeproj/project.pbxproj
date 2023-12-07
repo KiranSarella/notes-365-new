@@ -24,6 +24,16 @@
 		5C0A7B352B2041650099F0A3 /* TimelineBusinessOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B342B2041650099F0A3 /* TimelineBusinessOld.swift */; };
 		5C0A7B372B2049930099F0A3 /* MonthContentGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B362B2049930099F0A3 /* MonthContentGenerator.swift */; };
 		5C0A7B392B20648C0099F0A3 /* DayProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B382B20648C0099F0A3 /* DayProcessor.swift */; };
+		5C0A7B482B20DA330099F0A3 /* TimelineCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B412B20CBA90099F0A3 /* TimelineCalendarView.swift */; };
+		5C0A7B492B20DA390099F0A3 /* CalendarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B422B20CBA90099F0A3 /* CalendarState.swift */; };
+		5C0A7B4A2B20DA4B0099F0A3 /* CalendarNavigatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B472B20CBA90099F0A3 /* CalendarNavigatorView.swift */; };
+		5C0A7B4B2B20DA4B0099F0A3 /* CalendarType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B462B20CBA90099F0A3 /* CalendarType.swift */; };
+		5C0A7B4C2B20DA4F0099F0A3 /* DayCalendarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B3C2B20CBA90099F0A3 /* DayCalendarState.swift */; };
+		5C0A7B4D2B20DA4F0099F0A3 /* DayCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B3D2B20CBA90099F0A3 /* DayCalendarView.swift */; };
+		5C0A7B4E2B20DA530099F0A3 /* WeekCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B3F2B20CBA90099F0A3 /* WeekCalendarView.swift */; };
+		5C0A7B4F2B20DA530099F0A3 /* WeekCalendarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B402B20CBA90099F0A3 /* WeekCalendarState.swift */; };
+		5C0A7B502B20DA590099F0A3 /* MonthCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B442B20CBA90099F0A3 /* MonthCalendarView.swift */; };
+		5C0A7B512B20DA590099F0A3 /* MonthCalendarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B452B20CBA90099F0A3 /* MonthCalendarState.swift */; };
 		5C10D79B2B04C248006FB80D /* NotebooksStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D7982B04C248006FB80D /* NotebooksStorage.swift */; };
 		5C10D79D2B04C248006FB80D /* NotebooksStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D79A2B04C248006FB80D /* NotebooksStorageAdapter.swift */; };
 		5C10D7A12B04C26D006FB80D /* NotebooksBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D7A02B04C26D006FB80D /* NotebooksBusiness.swift */; };
@@ -98,7 +108,6 @@
 		9F14B491298A684F0079D23B /* ThemeOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B490298A684F0079D23B /* ThemeOptionsView.swift */; };
 		9F14B4AE298F98900079D23B /* FontPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B4AD298F98900079D23B /* FontPicker.swift */; };
 		9F1687CC29AD0E7F0085A0CA /* InitialCloudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1687CB29AD0E7F0085A0CA /* InitialCloudSync.swift */; };
-		9F1687D029AE21B20085A0CA /* NotebooksChangeMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1687CF29AE21B20085A0CA /* NotebooksChangeMonitor.swift */; };
 		9F188D812930E49F0078D413 /* MarkdownHeading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F188D802930E49F0078D413 /* MarkdownHeading.swift */; };
 		9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1AAE32292C94F800B4D254 /* FeedbackState.swift */; };
 		9F3DB0C4292DF82300704860 /* FeedbackView+iPadOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F3DB0C3292DF82300704860 /* FeedbackView+iPadOS.swift */; };
@@ -177,6 +186,16 @@
 		5C0A7B342B2041650099F0A3 /* TimelineBusinessOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineBusinessOld.swift; sourceTree = "<group>"; };
 		5C0A7B362B2049930099F0A3 /* MonthContentGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthContentGenerator.swift; sourceTree = "<group>"; };
 		5C0A7B382B20648C0099F0A3 /* DayProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayProcessor.swift; sourceTree = "<group>"; };
+		5C0A7B3C2B20CBA90099F0A3 /* DayCalendarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCalendarState.swift; sourceTree = "<group>"; };
+		5C0A7B3D2B20CBA90099F0A3 /* DayCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCalendarView.swift; sourceTree = "<group>"; };
+		5C0A7B3F2B20CBA90099F0A3 /* WeekCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekCalendarView.swift; sourceTree = "<group>"; };
+		5C0A7B402B20CBA90099F0A3 /* WeekCalendarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekCalendarState.swift; sourceTree = "<group>"; };
+		5C0A7B412B20CBA90099F0A3 /* TimelineCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineCalendarView.swift; sourceTree = "<group>"; };
+		5C0A7B422B20CBA90099F0A3 /* CalendarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarState.swift; sourceTree = "<group>"; };
+		5C0A7B442B20CBA90099F0A3 /* MonthCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthCalendarView.swift; sourceTree = "<group>"; };
+		5C0A7B452B20CBA90099F0A3 /* MonthCalendarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthCalendarState.swift; sourceTree = "<group>"; };
+		5C0A7B462B20CBA90099F0A3 /* CalendarType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarType.swift; sourceTree = "<group>"; };
+		5C0A7B472B20CBA90099F0A3 /* CalendarNavigatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarNavigatorView.swift; sourceTree = "<group>"; };
 		5C10D7982B04C248006FB80D /* NotebooksStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksStorage.swift; sourceTree = "<group>"; };
 		5C10D79A2B04C248006FB80D /* NotebooksStorageAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksStorageAdapter.swift; sourceTree = "<group>"; };
 		5C10D7A02B04C26D006FB80D /* NotebooksBusiness.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksBusiness.swift; sourceTree = "<group>"; };
@@ -249,7 +268,6 @@
 		9F14B490298A684F0079D23B /* ThemeOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeOptionsView.swift; sourceTree = "<group>"; };
 		9F14B4AD298F98900079D23B /* FontPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontPicker.swift; sourceTree = "<group>"; };
 		9F1687CB29AD0E7F0085A0CA /* InitialCloudSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialCloudSync.swift; sourceTree = "<group>"; };
-		9F1687CF29AE21B20085A0CA /* NotebooksChangeMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksChangeMonitor.swift; sourceTree = "<group>"; };
 		9F188D802930E49F0078D413 /* MarkdownHeading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownHeading.swift; sourceTree = "<group>"; };
 		9F1AAE32292C94F800B4D254 /* FeedbackState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackState.swift; sourceTree = "<group>"; };
 		9F33BF812A0EA08700C39A76 /* Notes 365Release.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Notes 365Release.entitlements"; sourceTree = "<group>"; };
@@ -399,6 +417,47 @@
 			path = Storage;
 			sourceTree = "<group>";
 		};
+		5C0A7B3A2B20CBA90099F0A3 /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				5C0A7B412B20CBA90099F0A3 /* TimelineCalendarView.swift */,
+				5C0A7B422B20CBA90099F0A3 /* CalendarState.swift */,
+				5C0A7B462B20CBA90099F0A3 /* CalendarType.swift */,
+				5C0A7B472B20CBA90099F0A3 /* CalendarNavigatorView.swift */,
+				5C0A7B3B2B20CBA90099F0A3 /* DaysCalendar */,
+				5C0A7B3E2B20CBA90099F0A3 /* WeeksCalendar */,
+				5C0A7B432B20CBA90099F0A3 /* MonthsCalendar */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
+		5C0A7B3B2B20CBA90099F0A3 /* DaysCalendar */ = {
+			isa = PBXGroup;
+			children = (
+				5C0A7B3C2B20CBA90099F0A3 /* DayCalendarState.swift */,
+				5C0A7B3D2B20CBA90099F0A3 /* DayCalendarView.swift */,
+			);
+			path = DaysCalendar;
+			sourceTree = "<group>";
+		};
+		5C0A7B3E2B20CBA90099F0A3 /* WeeksCalendar */ = {
+			isa = PBXGroup;
+			children = (
+				5C0A7B3F2B20CBA90099F0A3 /* WeekCalendarView.swift */,
+				5C0A7B402B20CBA90099F0A3 /* WeekCalendarState.swift */,
+			);
+			path = WeeksCalendar;
+			sourceTree = "<group>";
+		};
+		5C0A7B432B20CBA90099F0A3 /* MonthsCalendar */ = {
+			isa = PBXGroup;
+			children = (
+				5C0A7B442B20CBA90099F0A3 /* MonthCalendarView.swift */,
+				5C0A7B452B20CBA90099F0A3 /* MonthCalendarState.swift */,
+			);
+			path = MonthsCalendar;
+			sourceTree = "<group>";
+		};
 		5C10D7942B04C13D006FB80D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -472,6 +531,7 @@
 		5C5668042B10691F00CB873F /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				5C0A7B3A2B20CBA90099F0A3 /* Calendar */,
 				9F45BCF62920CCCE003DE332 /* Timeline.swift */,
 				5CC8C2612AD67D6D00ABAC1F /* TimelineDetail */,
 			);
@@ -796,7 +856,6 @@
 				9FB21DF2295D89E000CFEDA8 /* ChooseEnvironment.swift */,
 				9F7D2925299EC27E00B37F51 /* CloudServiceTwo.swift */,
 				9F1687CB29AD0E7F0085A0CA /* InitialCloudSync.swift */,
-				9F1687CF29AE21B20085A0CA /* NotebooksChangeMonitor.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -1021,6 +1080,7 @@
 				5C34A1842B1B5CD400D036B7 /* ThemeData.swift in Sources */,
 				9F92CF0529B7525500B8D3C4 /* MailView.swift in Sources */,
 				5CE6FDF82B0BC19600ED9425 /* PDFFile.swift in Sources */,
+				5C0A7B512B20DA590099F0A3 /* MonthCalendarState.swift in Sources */,
 				5C56680D2B109DB800CB873F /* TimelineStorageProvider.swift in Sources */,
 				5C34A18C2B1B9F7700D036B7 /* ThemeStorageAdapter.swift in Sources */,
 				9F1AAE33292C94F800B4D254 /* FeedbackState.swift in Sources */,
@@ -1038,6 +1098,7 @@
 				5CE6FE212B0CD65700ED9425 /* NotebooksListBusiness.swift in Sources */,
 				5CD2F4F02ACC7FD500E8B465 /* TimelineDetailState.swift in Sources */,
 				5CCCF7F32AC2B0B300F5923E /* DayVersionData.swift in Sources */,
+				5C0A7B4B2B20DA4B0099F0A3 /* CalendarType.swift in Sources */,
 				5CBEF3202B151018003A3972 /* DayVersion.swift in Sources */,
 				5CF612B72B0B06B700D397C6 /* SharedContext.swift in Sources */,
 				5C34A18E2B1BA0EA00D036B7 /* ThemeB.swift in Sources */,
@@ -1055,6 +1116,7 @@
 				9F3DB0C6292E1D9200704860 /* ThemeBusiness.swift in Sources */,
 				9F14B491298A684F0079D23B /* ThemeOptionsView.swift in Sources */,
 				5C5668172B10C84A00CB873F /* TimelineStorageAdapter.swift in Sources */,
+				5C0A7B4E2B20DA530099F0A3 /* WeekCalendarView.swift in Sources */,
 				5C7D4AF82B08E00C00BB1908 /* NotebookB.swift in Sources */,
 				5CBEF31C2B150359003A3972 /* TodayVersionStorageProvider.swift in Sources */,
 				9F45BD662920CDA9003DE332 /* NoteChangeHeadingView.swift in Sources */,
@@ -1062,17 +1124,21 @@
 				5CF612D62B0B98CF00D397C6 /* EditorView+Layout.swift in Sources */,
 				9FB6C6A02927695000C8EC76 /* NotebookContentBusiness.swift in Sources */,
 				5C34A18A2B1B936700D036B7 /* ThemeStorageProvider.swift in Sources */,
+				5C0A7B4C2B20DA4F0099F0A3 /* DayCalendarState.swift in Sources */,
 				9F45BDA82920CE41003DE332 /* MarkdownTheme.swift in Sources */,
 				5C4ADCE32A9757EF000A037E /* EditorSymbolsView.swift in Sources */,
 				5C10D7A12B04C26D006FB80D /* NotebooksBusiness.swift in Sources */,
 				5CF612CF2B0B79F000D397C6 /* NotebookContentRequester.swift in Sources */,
 				5C0A7B312B2024760099F0A3 /* DayContentGenerator.swift in Sources */,
 				5C08EA462B1899C60095DE86 /* ContentSearchInteractor.swift in Sources */,
+				5C0A7B492B20DA390099F0A3 /* CalendarState.swift in Sources */,
 				9F45BD792920CDE0003DE332 /* NotebookContentView.swift in Sources */,
 				9F45BD922920CDED003DE332 /* StringDiff.swift in Sources */,
+				5C0A7B4A2B20DA4B0099F0A3 /* CalendarNavigatorView.swift in Sources */,
 				5C10D7A32B04C272006FB80D /* NotebooksStorageProvider.swift in Sources */,
 				5C051B952B11C3B1005C99B7 /* TimelineInteractor.swift in Sources */,
 				9F45BCA22920CAAE003DE332 /* Notes_365App.swift in Sources */,
+				5C0A7B4F2B20DA530099F0A3 /* WeekCalendarState.swift in Sources */,
 				5C10D79B2B04C248006FB80D /* NotebooksStorage.swift in Sources */,
 				9F45BD9E2920CE21003DE332 /* SpeechHelpr.swift in Sources */,
 				9FB6C69829275D0600C8EC76 /* FormatOptionsView.swift in Sources */,
@@ -1090,6 +1156,7 @@
 				5CCABA802B1C9B7F009A9F2E /* ThemeInteractor.swift in Sources */,
 				5C10D7A52B04C281006FB80D /* BusinessFactory.swift in Sources */,
 				9F3DB0C4292DF82300704860 /* FeedbackView+iPadOS.swift in Sources */,
+				5C0A7B502B20DA590099F0A3 /* MonthCalendarView.swift in Sources */,
 				5C9060522B0F46060068DD65 /* CurrentLevelState.swift in Sources */,
 				9F188D812930E49F0078D413 /* MarkdownHeading.swift in Sources */,
 				9F93E15029E6A2AC00210E99 /* SmartEditor.swift in Sources */,
@@ -1106,7 +1173,7 @@
 				5CF612D12B0B980700D397C6 /* EditorView+TextStorage.swift in Sources */,
 				9F57BAE7299688BC0076FD9D /* Constants.swift in Sources */,
 				5C34A17E2B1B32F300D036B7 /* ThemesBaseView.swift in Sources */,
-				9F1687D029AE21B20085A0CA /* NotebooksChangeMonitor.swift in Sources */,
+				5C0A7B4D2B20DA4F0099F0A3 /* DayCalendarView.swift in Sources */,
 				5C051B9D2B1240D4005C99B7 /* Logger.swift in Sources */,
 				5C08EA422B1897EA0095DE86 /* ContentSearchAdapter.swift in Sources */,
 				9F7D291F299BABAC00B37F51 /* EditorViewUI.swift in Sources */,
@@ -1117,6 +1184,7 @@
 				5CBEF3182B15008E003A3972 /* TodayVersionStorage.swift in Sources */,
 				5C0A7B332B2024CF0099F0A3 /* OldNotesDataGenerator.swift in Sources */,
 				5C04F4212B1F4AEB00B82575 /* NotebookOld.swift in Sources */,
+				5C0A7B482B20DA330099F0A3 /* TimelineCalendarView.swift in Sources */,
 				5C04F4232B1F4C5800B82575 /* NotebooksCache.swift in Sources */,
 				5CBEF31E2B150CE7003A3972 /* DayVersionInteractor.swift in Sources */,
 				9FB6C69E2927615700C8EC76 /* SpeechState.swift in Sources */,

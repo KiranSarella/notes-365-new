@@ -17,28 +17,16 @@ struct ContentSearchView: View {
     var body: some View {
         NavigationStack {
             VStack {
-//                HStack {
-//                    Spacer()
-//                    TextField("Search", text: $searchText)
-//                        .frame(width: 200, height: 60)
-//                        .padding()
-//                        .textFieldStyle(.roundedBorder)
-//                    Spacer()
-//                        
-//                }
                 List {
                     ForEach(results) { result in
                         Section {
                             SearchDetailView(notebookContentState: $notebookContentState, searchText: searchText, result: result)
                         }
                     }
-    //                SearchDetailView()
-    //                SearchDetailView()
-    //                SearchDetailView()
                 }
                 Spacer()
             }
-            .searchable(text: $searchText)
+            .searchable(text: $searchText, prompt: "Search Content")
             .navigationBarTitleDisplayMode(.inline)
             .onChange(of: searchText) { oldValue, newValue in
                 if newValue.count >= 3 {
@@ -58,26 +46,24 @@ struct SearchDetailView: View {
     var notebookName: String {
         return NotebooksPathService.shared.fileName(for: result.notebookID) ?? "-"
     }
+    var notebookPath: String {
+        return NotebooksPathService.shared.fullPath(for: result.notebookID) ?? ""
+    }
     
     var body: some View {
         VStack {
-            HStack {
-                Text(notebookName)
-                    .font(.headline)
-                Spacer()
-            }
-            HStack {
-                NavigationLink(value: result) {
-                    Text(result.content)
-                        .lineLimit(2)
-                    Spacer()
+            NavigationLink(value: result) {
+                VStack(alignment: .leading) {
+                    Text(notebookName)
+                        .font(.headline)
+                    Text(notebookPath)
+                        .font(.caption)
                 }
             }
         }
         .navigationDestination(for: NotebookContentB.self) { item in
             NotebookContentView(isReadOnly: false, notebookId: item.notebookID, fileName: notebookName, searchText: searchText, notebookContentState: notebookContentState)
         }
-//        .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
     }
 }
 

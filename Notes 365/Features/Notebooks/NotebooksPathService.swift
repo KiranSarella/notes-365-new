@@ -27,11 +27,15 @@ class NotebooksPathService {
     fileprivate var foldersPathInfo = [UUID: LocationInfo]()
 //    var fullPathsCache = [UUID: FullPathInfo]()
     var pathsCache = [UUID: String]()
-    var isLoaded = false
+    private(set) var isLoaded = false
     
     private init() { 
         observeNotebookRenamed()
         observeNotebookInserted()
+    }
+    
+    func refreshOnNextService() {
+        isLoaded = false
     }
     
     func refreshNotebooksInfo() async {
@@ -80,7 +84,7 @@ class NotebooksPathService {
         }
     }
     
-    func generateFullPath(notebookId: UUID) -> String? {
+    private func generateFullPath(notebookId: UUID) -> String? {
         if let filePathInfo = self.filesPathInfo[notebookId] {
             var pathComponents = [String]()
             pathComponents.append(filePathInfo.name)

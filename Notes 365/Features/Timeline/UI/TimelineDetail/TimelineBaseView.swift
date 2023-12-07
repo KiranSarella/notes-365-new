@@ -13,6 +13,7 @@ struct TimelineBaseView: View {
     @State private var loadedFirstTime = false
     @State private var showCalendar = false
     @State private var calendarDate = DateTime.now()
+    @State var caldendarState = TimelineCalendarState.none
     
     var body: some View {
         VStack {
@@ -24,9 +25,24 @@ struct TimelineBaseView: View {
             Spacer()
         }
         .navigationBarTitleDisplayMode(.inline)
-        .onChange(of: calendarDate, { oldValue, newValue in
-            state.selectedDates = [newValue]
-            horizontalCalendarViewState.selectedDateRange = nil
+//        .onChange(of: calendarDate, { oldValue, newValue in
+//            state.selectedDates = [newValue]
+//            horizontalCalendarViewState.selectedDateRange = nil
+//        })
+        .onChange(of: caldendarState, { oldValue, newValue in
+            switch newValue {
+            case .day(let dayDate):
+                state.selectedDates = [dayDate.date]
+                horizontalCalendarViewState.selectedDateRange = nil
+            case .week(let weekDate):
+                state.selectedDates = weekDate.days
+                horizontalCalendarViewState.selectedDateRange = nil
+            case .month(let monthDate):
+                state.selectedDates = monthDate.start.getDaysOfMonth()
+                horizontalCalendarViewState.selectedDateRange = nil
+            case .none:
+                break
+            }
         })
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -36,7 +52,8 @@ struct TimelineBaseView: View {
                     Image(systemName: "calendar")
                 }
                 .popover(isPresented: $showCalendar, content: {
-                    CalendarView(calendarDate: $calendarDate)
+//                    CalendarView(calendarDate: $calendarDate)
+                    TimelineCalendarView(timelineCalendarState: $caldendarState)
                 })
             }
         }
