@@ -54,7 +54,7 @@ class TimelineContentCreator {
         let dayBaseVersion = DayVersion.shared.getTodayVersion(for: notebookId) ?? ""
         let diff = StringDiff.getChanges(old: dayBaseVersion, new: content)
             .trimmingCharacters(in: .newlines)
-        logger.debug("diff: \n\(diff)")
+//        logger.debug("diff: \n\(diff)")
         if diff.count == 0 {
             return nil
         }

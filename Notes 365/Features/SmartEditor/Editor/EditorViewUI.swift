@@ -107,7 +107,7 @@ extension EditorUICoordinator: UITextViewDelegate {
 struct ReadOnlyMarkDownView: View {
     @State var editorView = EditorView()
     var content: String?
-//    var width: CGFloat
+    @Binding var width: CGFloat// = 400
     @State var height: CGFloat = 100
     var body: some View {
         EditorViewUI(output: Binding.constant(""), text: Binding.constant(content ?? "no content"),
@@ -117,27 +117,59 @@ struct ReadOnlyMarkDownView: View {
                      isEditor: false
         )
         .onAppear {
-            DispatchQueue.main.async {
-                editorView.textView.sizeToFit()
-                height = editorView.textView.contentSize.height
-            }
+            updateHeight()
+//            DispatchQueue.main.async {
+//                editorView.textView.sizeToFit()
+//                let w = width > 250 ? width - 80 : 340
+//                let contentSizeHeight = editorView.textView.contentSize.height
+//                let otherHeight = editorView.textView.attributedText.height(for: w)
+////                let otherHeight = heightForAttributedString(editorView.textView.attributedText, width: w)
+//                logger.debug("width: \(width)")
+//                logger.debug("w: \(w)")
+//                logger.debug("contentSizeHeight: \(contentSizeHeight)")
+//                logger.debug("otherHeight: \(otherHeight)")
+//                height = contentSizeHeight
+//            }
         }
         .frame(height: height)
+        .onChange(of: width) { oldValue, newValue in
+            updateHeight()
+        }
     }
+    
+    func updateHeight() {
+        Task {
+            try? await Task.sleep(nanoseconds: 1_000_000_00)
+            DispatchQueue.main.async {
+                editorView.textView.sizeToFit()
+                let contentSizeHeight = editorView.textView.contentSize.height
+//                logger.debug("width: \(width)")
+//                logger.debug("contentSizeHeight: \(contentSizeHeight)")
+                height = contentSizeHeight
+            }
+        }
+    }
+    
+    func heightForAttributedString(_ attributedString: NSAttributedString, width: CGFloat) -> CGFloat {
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: .greatestFiniteMagnitude))
+        label.numberOfLines = 0
+        label.attributedText = attributedString
+        label.sizeToFit()
+        return label.frame.height
+    }
+
 }
 
 extension NSAttributedString {
 
     func height(for containerWidth: CGFloat) -> CGFloat {
-
         let rect = self.boundingRect(with: CGSize.init(width: containerWidth, height: CGFloat.greatestFiniteMagnitude),
-                                     options: [.usesLineFragmentOrigin, .usesFontLeading],
+                                     options: [.usesLineFragmentOrigin, .truncatesLastVisibleLine],
                                      context: nil)
         return ceil(rect.size.height)
     }
 
     func width(for containerHeight: CGFloat) -> CGFloat {
-
         let rect = self.boundingRect(with: CGSize.init(width: CGFloat.greatestFiniteMagnitude, height: containerHeight),
                                      options: [.usesLineFragmentOrigin, .usesFontLeading],
                                      context: nil)

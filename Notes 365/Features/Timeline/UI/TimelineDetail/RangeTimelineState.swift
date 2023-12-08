@@ -44,7 +44,7 @@ class RangeTimelineState {
 //        daysContentExists = []
         canLoadMore = false
         atleastOneDayExists = false
-        statusMessage = "Loading.. range timeline state. reset"
+        statusMessage = "Loading.."
     }
     
 //    func loadNextDay() {
@@ -64,7 +64,7 @@ class RangeTimelineState {
 //    }
     
     func tryLoadMore() {
-        logger.info("tryLoadMore - currentDayLoaded: \(self.currentDayLoaded)")
+        logger.debug("tryLoadMore - currentDayLoaded: \(self.currentDayLoaded)")
         // have to maintain queue? - what if day content is single line?
         if currentDayLoaded == false {
             return
@@ -73,13 +73,13 @@ class RangeTimelineState {
     }
     
     func loadNextDay() {
-        logger.info("loadNextDay")
+        logger.debug("loadNextDay")
         if givenDays.count == 0 {
             canLoadMore = false
-            logger.info("all loaded.")
+            logger.debug("all loaded.")
             if dayTimelineModels.isEmpty {
                 statusMessage = "Empty"
-                logger.info("no content")
+                logger.debug("no content")
             } else {
                 statusMessage = nil
             }
@@ -88,7 +88,7 @@ class RangeTimelineState {
             currentDayLoaded = false
             Task {
                 let timelines = await prepareTimelines(for: currentLoadingDate)
-                logger.info("timelines for date: \(self.currentDayLoaded) \(timelines.count)")
+                logger.debug("timelines for date: \(self.currentDayLoaded) \(timelines.count)")
                 if timelines.count > 0 {
                     let newDayRow = DayTimelineModel(date: currentLoadingDate, timelines: timelines)
                     dayTimelineModels.append(newDayRow)
@@ -99,7 +99,7 @@ class RangeTimelineState {
     }
     
     func prepareTimelines(for date: Date) async -> [Timeline] {
-        logger.info("load day: \(date)")
+        logger.debug("load day: \(date)")
         var timelines = [Timeline]()
         do {
             await NotebooksPathService.shared.refreshNotebooksInfo()

@@ -120,7 +120,7 @@ extension NotebooksBusiness {
             info["parent_id"] = parentId
         }
         NotificationCenter.default.post(name: Notification.Name.notebookRenamed, object: nil, userInfo: info)
-        logger.info("sendNotebookRenamed - \(notebook.description)")
+        logger.debug("sendNotebookRenamed - \(notebook.description)")
     }
     
     private func sendNotebookInserted(_ notebook: NotebookB) {
@@ -133,7 +133,7 @@ extension NotebooksBusiness {
             info["parent_id"] = parentId
         }
         NotificationCenter.default.post(name: Notification.Name.notebookInserted, object: nil, userInfo: info)
-        logger.info("sendNotebookInserted - \(notebook.description)")
+        logger.debug("sendNotebookInserted - \(notebook.description)")
     }
     
     private func sendNotebooksMoved(_ notebooks: [NotebookB], parentId: UUID) {

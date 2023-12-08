@@ -26,7 +26,7 @@ enum MarkdownHeading: Int, CaseIterable {
     var fontSizePercent: CGFloat {
         switch self {
         case .h1:
-            return 3.2
+            return 3.0
         case .h2:
             return 2.5
         case .h3:

@@ -29,7 +29,7 @@ class NotebookContentBusinessNew {
     
     /// send notification, so that some one can create day base version
     private func sendLoadedNotification(_ notebookContent: NotebookContentB) {
-        logger.info("sendLoadedNotification")
+        logger.debug("sendLoadedNotification")
         let info = [
             "notebook_id": notebookContent.notebookID,
             "notebook_content": notebookContent.content

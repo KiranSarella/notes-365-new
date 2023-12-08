@@ -7,17 +7,17 @@
 
 import SwiftUI
 
-
-
 struct SingleDayView: View {
     @Binding var dayTimelines: DayTimelineModel
     @Binding var discardTimelineInfo: DiscardTimelineInfo?
     @State var discardTimeline: Timeline?
+    var geometryProxy: GeometryProxy
+    @Binding var width: CGFloat
     
     var body: some View {
         VStack(spacing: 0) {
             DayHeaderView(date: dayTimelines.date)
-            SingleDayChangesListView(timelines: dayTimelines.timelines, discardTimeline: $discardTimeline)
+            SingleDayChangesListView(timelines: dayTimelines.timelines, discardTimeline: $discardTimeline, geometryProxy: geometryProxy, width: $width)
         }
         .onChange(of: discardTimeline) { oldValue, newValue in
             if let newValue = newValue {
@@ -47,7 +47,7 @@ struct DayHeaderView: View {
                 Text(date.string(withFormat: "EEEE, d MMMM"))
                 .listRowSeparator(.hidden)
                 .padding(.horizontal)
-                .font(.largeTitle)
+                .font(.title)
                 .fontDesign(.rounded)
                 .fontWeight(.bold)
             }
@@ -60,25 +60,28 @@ struct DayHeaderView: View {
 struct SingleDayChangesListView: View {
     var timelines: [Timeline]
     @Binding var discardTimeline: Timeline?
+    var geometryProxy: GeometryProxy
+    @Binding var width: CGFloat
+    
     var body: some View {
-        // each note change content list
-        ForEach(timelines) { noteChange in
-            VStack {
-                NoteChangeHeadingView(noteChange: noteChange, discardTimeline: $discardTimeline)
-                .listRowSeparator(.hidden)
-                .padding()
-                HStack {
-                    ReadOnlyMarkDownView(content: noteChange.content)
-                        .padding(.bottom)
+            // each note change content list
+            ForEach(timelines) { noteChange in
+                VStack {
+                    NoteChangeHeadingView(noteChange: noteChange, discardTimeline: $discardTimeline)
                     .listRowSeparator(.hidden)
-                    .textSelection(.enabled)
-                    .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
-                    Spacer()
+                    .padding()
+                    HStack {
+                        ReadOnlyMarkDownView(content: noteChange.content, width: $width)
+                            .padding(.bottom)
+                        .listRowSeparator(.hidden)
+                        .textSelection(.enabled)
+                        .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
+                        Spacer()
+                    }
+                    .listRowSeparator(.hidden)
                 }
                 .listRowSeparator(.hidden)
             }
-            .listRowSeparator(.hidden)
-        }
     }
 }
 

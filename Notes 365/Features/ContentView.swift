@@ -36,7 +36,7 @@ struct ContentWrapperView: View {
                 .task {
                     do {
                         logger.info("wait for icloud sync")
-                        try? await Task.sleep(nanoseconds: 10_000_000_000)
+                        try? await Task.sleep(nanoseconds: 12_000_000_000)
                         #if DEBUG
                         // choose environment
                         try chooseEnv.setEnviromment(with: .local)

@@ -71,7 +71,7 @@ enum CurrentState {
     var message: String {
         switch self {
         case .loading:
-            return "Loading.. current state"
+            return "Loading.."
         case .data:
             return ""
         case .empty:

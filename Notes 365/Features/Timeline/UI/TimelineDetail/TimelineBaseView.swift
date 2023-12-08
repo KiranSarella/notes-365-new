@@ -14,15 +14,23 @@ struct TimelineBaseView: View {
     @State private var showCalendar = false
     @State private var calendarDate = DateTime.now()
     @State var caldendarState = TimelineCalendarState.none
+    @State var width: CGFloat = 0
     
     var body: some View {
-        VStack {
-            HorizontalCalendarView(state: $horizontalCalendarViewState, selectedDates: $state.selectedDates)
-            ScrollView(.vertical, showsIndicators: false) {
-                RangeTimelineView(selectedDates: $state.selectedDates)
+        GeometryReader { geometryProxy in
+            VStack {
+                HorizontalCalendarView(state: $horizontalCalendarViewState, selectedDates: $state.selectedDates)
+                RangeTimelineView(selectedDates: $state.selectedDates, geometryProxy: geometryProxy, width: $width)
+                Spacer()
             }
-            .listStyle(PlainListStyle())
-            Spacer()
+            .ignoresSafeArea(edges: [.bottom])
+            .onAppear(perform: {
+                width = geometryProxy.size.width
+            })
+            .onChange(of: geometryProxy.size, { oldValue, newValue in
+                width = geometryProxy.size.width
+                logger.debug("geometryProxy.width \(width)")
+            })
         }
         .navigationBarTitleDisplayMode(.inline)
 //        .onChange(of: calendarDate, { oldValue, newValue in

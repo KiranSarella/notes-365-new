@@ -32,7 +32,7 @@ class SingleDayViewState {
     init() { }
     
     func loadDay(_ date: Date) {
-        logger.info("load day: \(date)")
+        logger.debug("load day: \(date)")
         Task {
             do {
                 await NotebooksPathService.shared.refreshNotebooksInfo()

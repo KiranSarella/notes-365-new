@@ -81,36 +81,36 @@ class SharedContext {
         let modelConfiguration = ModelConfiguration() // it will take automatic
         // ref: https://developer.apple.com/documentation/swiftdata/syncing-model-data-across-a-persons-devices
         do {
-        #if DEBUG
-            // Use an autorelease pool to make sure Swift deallocates the persistent
-            // container before setting up the SwiftData stack.
-            try autoreleasepool {
-                let desc = NSPersistentStoreDescription(url: modelConfiguration.url)
-                let opts = NSPersistentCloudKitContainerOptions(containerIdentifier: icloudPath)
-                desc.cloudKitContainerOptions = opts
-                // Load the store synchronously so it completes before initializing the
-                // CloudKit schema.
-                desc.shouldAddStoreAsynchronously = false
-                if let mom = NSManagedObjectModel.makeManagedObjectModel(for: [NotebookData.self,
-                                                                               NotebookContentData.self,
-                                                                               DayVersionData.self,
-                                                                               TimelineData.self]) {
-                    let container = NSPersistentCloudKitContainer(name: "notes365-local", managedObjectModel: mom)
-                    container.persistentStoreDescriptions = [desc]
-                    container.loadPersistentStores {_, err in
-                        if let err {
-                            fatalError(err.localizedDescription)
-                        }
-                    }
-                    // Initialize the CloudKit schema after the store finishes loading.
-                    try container.initializeCloudKitSchema()
-                    // Remove and unload the store from the persistent container.
-                    if let store = container.persistentStoreCoordinator.persistentStores.first {
-                        try container.persistentStoreCoordinator.remove(store)
-                    }
-                }
-            }
-        #endif
+//        #if DEBUG
+//            // Use an autorelease pool to make sure Swift deallocates the persistent
+//            // container before setting up the SwiftData stack.
+//            try autoreleasepool {
+//                let desc = NSPersistentStoreDescription(url: modelConfiguration.url)
+//                let opts = NSPersistentCloudKitContainerOptions(containerIdentifier: icloudPath)
+//                desc.cloudKitContainerOptions = opts
+//                // Load the store synchronously so it completes before initializing the
+//                // CloudKit schema.
+//                desc.shouldAddStoreAsynchronously = false
+//                if let mom = NSManagedObjectModel.makeManagedObjectModel(for: [NotebookData.self,
+//                                                                               NotebookContentData.self,
+//                                                                               DayVersionData.self,
+//                                                                               TimelineData.self]) {
+//                    let container = NSPersistentCloudKitContainer(name: "notes365-local", managedObjectModel: mom)
+//                    container.persistentStoreDescriptions = [desc]
+//                    container.loadPersistentStores {_, err in
+//                        if let err {
+//                            fatalError(err.localizedDescription)
+//                        }
+//                    }
+//                    // Initialize the CloudKit schema after the store finishes loading.
+//                    try container.initializeCloudKitSchema()
+//                    // Remove and unload the store from the persistent container.
+//                    if let store = container.persistentStoreCoordinator.persistentStores.first {
+//                        try container.persistentStoreCoordinator.remove(store)
+//                    }
+//                }
+//            }
+//        #endif
             let modelContainer = try ModelContainer(for:
                                                 NotebookData.self,
                                                 NotebookContentData.self,

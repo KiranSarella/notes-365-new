@@ -45,12 +45,12 @@ struct HorizontalCalendarView: View {
                 if state.dateRanges.isEmpty || !state.loadedDate.isSameDayAs(DateTime.now()) {
                     state.dateRanges = state.constructDateRanges()
                     state.loadedDate = DateTime.now()
-                    logger.info("dateRanges.count - \(state.dateRanges.count)")
+                    logger.debug("dateRanges.count - \(state.dateRanges.count)")
                     state.selectedDateRange = state.dateRanges.first
                 }
             })
             .onChange(of: state.selectedDateRange, { oldValue, newValue in
-                logger.info("onChange - selectedDateRange: ")
+                logger.debug("onChange - selectedDateRange: ")
                 guard let newRangeObj = newValue else { return }
                 selectedDates = state.getDates(for: newRangeObj)
             })

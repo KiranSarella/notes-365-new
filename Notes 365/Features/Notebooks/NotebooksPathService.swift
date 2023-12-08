@@ -72,14 +72,14 @@ class NotebooksPathService {
     
     func fullPath(for notebookId: UUID) -> String? {
         if let fullPathInfo = pathsCache[notebookId] {
-            logger.info("cached - \(fullPathInfo)")
+            logger.debug("cached - \(fullPathInfo)")
             return fullPathInfo
         } else {
             let newPath = generateFullPath(notebookId: notebookId)
             if let newPath = newPath {
                 pathsCache[notebookId] = newPath
             }
-            logger.info("generated - \(newPath ?? "")")
+            logger.debug("generated - \(newPath ?? "")")
             return newPath
         }
     }

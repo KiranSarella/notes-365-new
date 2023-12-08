@@ -26,7 +26,7 @@ class DayVersionCreator {
     }
     
     func observeNotebooksLoadedNotification() {
-        logger.info("observeNotebooksLoadedNotification")
+        logger.debug("observeNotebooksLoadedNotification")
         NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookLoaded(_:)), name: Notification.Name.notebookContentLoaded, object: nil)
     }
     
@@ -35,7 +35,7 @@ class DayVersionCreator {
     }
     
     @objc func handleNotebookLoaded(_ notification: Notification) {
-        logger.info("handleNotebookLoaded")
+        logger.debug("handleNotebookLoaded")
         guard
             let notebookId = notification.userInfo?["notebook_id"] as? UUID,
             let notebookConent = notification.userInfo?["notebook_content"] as? String

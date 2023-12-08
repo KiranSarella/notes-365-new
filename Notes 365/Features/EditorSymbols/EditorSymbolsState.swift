@@ -57,7 +57,7 @@ class EditorSymbolsState {
         let heading = "Headings"
         let content = """
         # Large Title
-        ## Title 1
+        ## Title
         ### Title 2
         #### Title 3
         ##### Heading

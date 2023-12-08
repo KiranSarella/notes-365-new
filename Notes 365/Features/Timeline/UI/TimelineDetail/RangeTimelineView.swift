@@ -11,12 +11,14 @@ struct RangeTimelineView: View {
     @Binding var selectedDates: [Date]
     @State private var state = RangeTimelineState()
     @State var discardTimelineInfo: DiscardTimelineInfo?
+    var geometryProxy: GeometryProxy
+    @Binding var width: CGFloat
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack {
                 ForEach($state.dayTimelineModels) { $dayTimelines in
-                    SingleDayView(dayTimelines: $dayTimelines, discardTimelineInfo: $discardTimelineInfo)
+                    SingleDayView(dayTimelines: $dayTimelines, discardTimelineInfo: $discardTimelineInfo, geometryProxy: geometryProxy, width: $width)
                 }
                 VStack {
                     if state.statusMessage != nil {
@@ -69,7 +71,7 @@ struct LoadMoreViewNew: View {
                 .foregroundStyle(.gray)
                 .frame(height: 80)
                 .onAppear {
-                    logger.info("load more view appear")
+                    logger.debug("load more view appear")
                     state.tryLoadMore()
                 }
             }

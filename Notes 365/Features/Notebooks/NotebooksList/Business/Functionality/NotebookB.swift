@@ -30,7 +30,6 @@ class NotebookB: Identifiable {
         self.createdDate = notebookData.createdDate
         self.modifiedDate = notebookData.modifiedDate
         self.deletedDate = notebookData.deletedDate
-        logger.info("notebookData to notebookB: \(self.description)")
     }
     
     init(id: UUID, name: String) {
