@@ -162,6 +162,7 @@ struct FolderCellView: View {
     }
     @State private var errorMessage: String = ""
     @State private var showAlert = false
+    @State private var onHover = false
     
     var body: some View {
         VStack {
@@ -172,32 +173,59 @@ struct FolderCellView: View {
                 .background(Color.gray)
                 .focused($isFocused)
             } else {
-                Label(notebook.name, systemImage: "folder")
-                    .contextMenu {
-                        RenameButton()
-                        Button(role: .destructive) {
-                            currentLevelState.deleteFolder(notebook: notebook)
+                HStack {
+                    Label(notebook.name, systemImage: "folder")
+                                .contextMenu {
+                                    RenameButton()
+                                    Button(role: .destructive) {
+                                        currentLevelState.deleteFolder(notebook: notebook)
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
+                                }
+                                .renameAction {
+                                    isEditing = true
+                                }
+                                .swipeActions(edge: .trailing) {
+                                    Button {
+                                        isEditing = true
+                                    } label: {
+                                        Label("Rename", systemImage: "pencil")
+                                    }
+                                    Button(role: .destructive) {
+                                        currentLevelState.deleteFolder(notebook: notebook)
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
+                                }
+                    
+                    Spacer()
+                    
+                    if onHover {
+                        Menu {
+                            Button {
+                                isEditing = true
+                            } label: {
+                                Label("Rename", systemImage: "pencil")
+                            }
+                            Button(role: .destructive) {
+                                currentLevelState.deleteFolder(notebook: notebook)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
                         } label: {
-                            Label("Delete", systemImage: "trash")
+                            Image(systemName: "ellipsis.circle.fill")
                         }
                     }
-                    .renameAction {
-                        isEditing = true
-                    }
-                    .swipeActions(edge: .trailing) {
-                        Button {
-                            isEditing = true
-                        } label: {
-                            Label("Rename", systemImage: "pencil")
-                        }
-                        Button(role: .destructive) {
-                            currentLevelState.deleteFolder(notebook: notebook)
-                        } label: {
-                            Label("Delete", systemImage: "trash")
-                        }
-                    }
+                }
+                
             }
         }
+#if targetEnvironment(macCatalyst)
+        .onHover { newValue in
+            onHover = newValue
+        }
+#endif
         .onChange(of: isEditing, { oldValue, newValue in
             if newValue == false {
                 // on escape, reset content
@@ -245,6 +273,7 @@ struct FileCellView: View {
     }
     @State private var errorMessage: String = ""
     @State private var showAlert = false
+    @State private var onHover = false
     
     var body: some View {
         VStack {
@@ -255,33 +284,59 @@ struct FileCellView: View {
                 .background(Color.gray)
                 .focused($isFocused)
             } else {
-                Text(notebook.name)
-                    .foregroundStyle(Color.primary)
-                    .contextMenu {
-                        RenameButton()
-                        Button(role: .destructive) {
-                            currentLevelState.deleteFile(notebook: notebook)
-                        } label: {
-                            Label("Delete", systemImage: "trash")
+                HStack {
+                    Text(notebook.name)
+                        .foregroundStyle(Color.primary)
+                        .contextMenu {
+                            RenameButton()
+                            Button(role: .destructive) {
+                                currentLevelState.deleteFile(notebook: notebook)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
                         }
-                    }
-                    .renameAction {
-                        isEditing = true
-                    }
-                    .swipeActions(edge: .trailing) {
-                        Button {
+                        .renameAction {
                             isEditing = true
-                        } label: {
-                            Label("Rename", systemImage: "pencil")
                         }
-                        Button(role: .destructive) {
-                            currentLevelState.deleteFile(notebook: notebook)
+                        .swipeActions(edge: .trailing) {
+                            Button {
+                                isEditing = true
+                            } label: {
+                                Label("Rename", systemImage: "pencil")
+                            }
+                            Button(role: .destructive) {
+                                currentLevelState.deleteFile(notebook: notebook)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                        }
+                    
+                    Spacer()
+                    
+                    if onHover {
+                        Menu {
+                            Button {
+                                isEditing = true
+                            } label: {
+                                Label("Rename", systemImage: "pencil")
+                            }
+                            Button(role: .destructive) {
+                                currentLevelState.deleteFile(notebook: notebook)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
                         } label: {
-                            Label("Delete", systemImage: "trash")
+                            Image(systemName: "ellipsis.circle.fill")
                         }
                     }
+                }
             }
         }
+#if targetEnvironment(macCatalyst)
+        .onHover { newValue in
+            onHover = newValue
+        }
+#endif
         .onChange(of: isEditing, { oldValue, newValue in
             if newValue == false {
                 // on escape, reset content
