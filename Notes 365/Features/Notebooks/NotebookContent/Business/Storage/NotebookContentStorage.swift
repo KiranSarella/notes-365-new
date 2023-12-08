@@ -19,6 +19,16 @@ class NotebookContentStorage {
         self.modelContext = modelContext
     }
     
+    func isNotebookContentExits(for id: UUID) throws -> Bool {
+        let contentPredicate = #Predicate<NotebookContentData> {
+            $0.notebookID == id
+        }
+        var descriptor = FetchDescriptor(predicate: contentPredicate)
+        descriptor.fetchLimit = 1
+        let result = try modelContext.fetchCount(descriptor)
+        return result > 0
+    }
+    
     func fetchNotebookContent(for id: UUID) throws -> NotebookContentData? {
         let contentPredicate = #Predicate<NotebookContentData> {
             $0.notebookID == id
@@ -44,10 +54,6 @@ class NotebookContentStorage {
     }
     
     func update(notebookContent: NotebookContentData) throws {
-        guard let oldNotebookData = try fetchNotebookContent(for: notebookContent.notebookID) else {
-            throw NotebookContentStorageError.noContent
-        }
-        oldNotebookData.sync(from: notebookContent)
-        try oldNotebookData.modelContext?.save()
+        try notebookContent.modelContext?.save()
     }
 }

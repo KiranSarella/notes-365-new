@@ -26,11 +26,19 @@ class NotebookContentStorageAdapter: NotebookContentStorageProvider {
     }
     
     func insert(notebookContent: NotebookContentB) throws {
-        try storage.insert(notebookContent: notebookContent.notebookContentData())
+        let isAlreadyExits = try storage.isNotebookContentExits(for: notebookContent.notebookID)
+        if isAlreadyExits == false {
+            try storage.insert(notebookContent: notebookContent.notebookContentData())
+        } else {
+            try update(notebookContent: notebookContent)
+        }
     }
     
     func update(notebookContent: NotebookContentB) throws {
-        try storage.update(notebookContent: notebookContent.notebookContentData())
+        if let oldNotebookData = try storage.fetchNotebookContent(for: notebookContent.notebookID) {
+            oldNotebookData.sync(from: notebookContent)
+            try storage.update(notebookContent: oldNotebookData)
+        }
     }
 }
 

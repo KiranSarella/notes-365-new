@@ -77,6 +77,11 @@ class NotebooksStorage {
         return try modelContext.fetch(descriptor)
     }
     
+    func isNotebookExits(for id: UUID) throws -> Bool {
+        let predicate = #Predicate<NotebookData> { $0.id == id }
+        let descriptor = FetchDescriptor(predicate: predicate)
+        return try modelContext.fetchCount(descriptor) > 0
+    }
     
     func insert(notebookData: NotebookData) throws {
         modelContext.insert(notebookData)
@@ -84,9 +89,7 @@ class NotebooksStorage {
     }
    
     func update(notebookData: NotebookData) throws {
-        let oldNotebookData = try fetchNotebook(for: notebookData.id)
-        oldNotebookData.sync(from: notebookData)
-        try oldNotebookData.modelContext?.save()
+        try notebookData.modelContext?.save()
     }
     
     

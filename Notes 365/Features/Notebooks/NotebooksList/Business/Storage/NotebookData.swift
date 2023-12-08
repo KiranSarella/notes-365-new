@@ -42,6 +42,14 @@ extension NotebookData {
         self.deletedDate = newData.deletedDate
         self.modifiedDate = newData.modifiedDate
     }
+    
+    func sync(from newData: NotebookB) {
+        self.parent = newData.parentId
+        self.isFolder = newData.isFolder
+        self.name = newData.name
+        self.deletedDate = newData.deletedDate
+        self.modifiedDate = newData.modifiedDate
+    }
 }
 
 extension NotebookData: CustomStringConvertible {

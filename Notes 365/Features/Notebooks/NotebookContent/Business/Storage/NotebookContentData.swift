@@ -65,4 +65,7 @@ extension NotebookContentData {
         self.content = newData.content
     }
     
+    func sync(from newData: NotebookContentB) {
+        self.content = newData.content
+    }
 }

@@ -67,9 +67,22 @@ struct SingleDayChangesListView: View {
             // each note change content list
             ForEach(timelines) { noteChange in
                 VStack {
-                    NoteChangeHeadingView(noteChange: noteChange, discardTimeline: $discardTimeline)
-                    .listRowSeparator(.hidden)
-                    .padding()
+                    List {
+                        NoteChangeHeadingView(noteChange: noteChange, discardTimeline: $discardTimeline)
+#if !targetEnvironment(macCatalyst)
+                            .swipeActions(edge: .trailing) {
+                                Button(role: .destructive) {
+                                    discardTimeline = noteChange
+                                } label: {
+                                    Text("Discard")
+                                }
+                            }
+#endif
+                        .listRowSeparator(.hidden)
+                        .listStyle(PlainListStyle())
+                    }
+                    .frame(height: 110)
+                    .scrollDisabled(true)
                     HStack {
                         ReadOnlyMarkDownView(content: noteChange.content, width: $width)
                             .padding(.bottom)

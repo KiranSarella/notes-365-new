@@ -15,6 +15,7 @@ struct RangeTimelineView: View {
     @Binding var width: CGFloat
     
     var body: some View {
+//        List {
         ScrollView(.vertical, showsIndicators: false) {
             VStack {
                 ForEach($state.dayTimelineModels) { $dayTimelines in

@@ -38,11 +38,18 @@ class NotebooksStorageAdapter: NotebooksStorageProvider {
     }
     
     func insert(notebook: NotebookB) throws {
-        try storage.insert(notebookData: notebook.generateNotebookData())
+        let alreadyExits = try storage.isNotebookExits(for: notebook.id)
+        if alreadyExits == false {
+            try storage.insert(notebookData: notebook.generateNotebookData())
+        } else {
+            try update(notebook: notebook)
+        }
     }
     
     func update(notebook: NotebookB) throws {
-        try storage.update(notebookData: notebook.generateNotebookData())
+        let oldNotebookData = try storage.fetchNotebook(for: notebook.id)
+        oldNotebookData.sync(from: notebook)
+        try storage.update(notebookData: oldNotebookData)
     }
     
     func getNotebook(for id: UUID) throws -> NotebookB {
