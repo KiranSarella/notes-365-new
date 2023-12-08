@@ -49,6 +49,7 @@ struct SmartEditor: View {
 //        .onChange(of: markdownEditorState.fileName, { oldValue, newValue in
 //            editorView.fileName = newValue
 //        })
+        .ignoresSafeArea(edges: [.bottom])
         .onChange(of: input, { oldValue, newValue in
             isTextFieldFocused = false
             showSymbols = false

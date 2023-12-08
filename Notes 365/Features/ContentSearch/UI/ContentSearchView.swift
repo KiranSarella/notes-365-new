@@ -27,6 +27,7 @@ struct ContentSearchView: View {
                 .scrollDismissesKeyboard(.interactively)
                 Spacer()
             }
+            .ignoresSafeArea(edges: [.bottom])
             .searchable(text: $searchText, prompt: "Search Content")
             .navigationBarTitleDisplayMode(.inline)
             .onChange(of: searchText) { oldValue, newValue in
