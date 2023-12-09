@@ -79,7 +79,7 @@ struct ContentWrapperView: View {
                         // do any operations
                         chooseEnv.enableConfigured()
                         // clean base version
-                        TodayVersionBusiness.cleanOlderDayVersions()
+                        DayVersion.shared.cleanOlderDayVersions()
                         #endif
                     } catch let error {
                         errorDetail = error

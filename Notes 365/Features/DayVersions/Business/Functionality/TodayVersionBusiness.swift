@@ -33,7 +33,7 @@ class TodayVersionBusiness {
         }
         let todayVersion = DayVersionData(notebookID: notebookId, content: content)
         do {
-            logger.debug("\(todayVersion)")
+//            logger.debug("\(todayVersion)")
             try storage.create(todayVersion: todayVersion)
             logger.debug("new base version created")
         } catch let error {
