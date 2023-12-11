@@ -40,36 +40,11 @@ struct ContentWrapperView: View {
                         #if DEBUG
                         // choose environment
                         try chooseEnv.setEnviromment(with: .local)
-//                        let migrationCheck = UserDefaults.standard.bool(forKey: "migration_check_status_2")
                         
-                        let migrationCheck = CloudKeyValueStore.shared.get(key: cloudMigrationKey) as? Bool ?? false
-                        
-                        if migrationCheck == false {
-                            let oldMigrationCheck = UserDefaults.standard.bool(forKey: "migration_check_status")
-                            if oldMigrationCheck == false {
-                                // means, no 2.8 version installed.
-                                // do as normal migration
-                                // in new device - check if migration required
-                                let notebooksCount = try BusinessFactory.createNotebooksStorage().fetchNotebooksCount()
-                                if notebooksCount > 0 {
-                                    logger.info("notebooksCount: \(notebooksCount)")
-                                    logger.info("migration not required")
-                                } else {
-                                    statusMessage = "Migrating data to new structure, please wait.."
-                                    migrationProcess = MigrationProcess(basePathURL: EnvironmentState.shared.basePathURL)
-                                    await migrationProcess?.startMigrationProcess()
-                                }
-                                
-                            } else {
-                                // it contains 2.8 version data
-                                // remove all db, and do migtation
-                                // remove all notebooks
-                                // remove all timelines
-                                
-                                statusMessage = "Migrating data to new structure, please wait.."
-                                migrationProcess = MigrationProcess(basePathURL: EnvironmentState.shared.basePathURL)
-                                await migrationProcess?.startMigrationProcess()
-                            }
+                        migrationProcess = MigrationProcess(basePathURL: EnvironmentState.shared.basePathURL)
+                        if migrationProcess?.isMigrationDone() == false {
+                            statusMessage = "Migrating data to new structure, please wait.."
+                            await migrationProcess?.startMigrationProcess(byResetDB: true)
                         }
                         // do any operations
                         chooseEnv.enableConfigured()

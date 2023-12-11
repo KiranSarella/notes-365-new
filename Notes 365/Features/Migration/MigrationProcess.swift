@@ -20,6 +20,7 @@ class MigrationProcess {
     let noteContentStorage = BusinessFactory.createNotebookContentStorageProvider()
     let timelineBusiness = TimelineBusinessOld(path: EnvironmentState.shared.basePathURL)
     let timelineStorage = BusinessFactory.createTimelineStorageProvider()
+    let userPreferenceStorage = BusinessFactory.createUserPreferenceStorage()
     
     init(basePathURL: URL) {
         self.basePathURL = basePathURL
@@ -37,25 +38,55 @@ class MigrationProcess {
         try? await Task.sleep(nanoseconds: 2_000_000_000)
     }
     
-    func startMigrationProcess(withClearDB: Bool = false) async {
+    func isMigrationDone() -> Bool {
+        logger.info("\(#function)")
+        do {
+            let userPref = try userPreferenceStorage.fetchUserPreference()
+            if let userPref = userPref {
+                return userPref.isMigrationDone
+            }
+        } catch let error {
+            logger.error("\(error)")
+        }
+        return false
+    }
+    
+    func saveMigrationDoneStatus() {
+        logger.info("\(#function)")
+        do {
+            let userPref = try userPreferenceStorage.fetchUserPreference()
+            if let userPref = userPref {
+                // update
+                userPref.isMigrationDone = true
+                try userPreferenceStorage.update(data: userPref)
+            } else {
+                // insert
+                let userPref = UserPreferenceData()
+                try userPreferenceStorage.insert(data: userPref)
+            }
+        } catch let error {
+            logger.error("\(error)")
+        }
+        
+    }
+    
+    func startMigrationProcess(byResetDB: Bool) async {
         logger.info("\(#function)")
         // check if plist exits
         let plistURL = basePathURL.appending(path: Constants.notebooksPListName).appendingPathExtension("plist")
         if FileManager.default.fileExists(atPath: plistURL.path) == false {
-            CloudKeyValueStore.shared.set(value: true, for: cloudMigrationKey)
-//            UserDefaults.standard.set(true, forKey: "migration_check_status_2")
+            saveMigrationDoneStatus()
             return
         }
         
-        if withClearDB {
+        if byResetDB {
             await resetNewDB()
         }
         
         await migrateNotebooks()
         await migrateTimelines()
         // save status in userdefaults
-        CloudKeyValueStore.shared.set(value: true, for: cloudMigrationKey)
-//        UserDefaults.standard.set(true, forKey: "migration_check_status_2")
+        saveMigrationDoneStatus()
     }
     
     

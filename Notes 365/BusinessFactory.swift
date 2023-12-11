@@ -15,6 +15,11 @@ import SwiftData
 // Factory Creator
 class BusinessFactory {
     
+    static func createUserPreferenceStorage() -> UserPreferenceStorage {
+        let modelContext = SharedContext.shared.getModelContext()
+        return UserPreferenceStorage(modelContext: modelContext)
+    }
+    
     static func createNotebooksStorage() -> NotebooksStorageProvider {
         let modelContext = SharedContext.shared.getModelContext()
         return NotebooksStorageAdapter(modelContext: modelContext)
@@ -34,6 +39,7 @@ class BusinessFactory {
         let storage = BusinessFactory.createNotebooksStorage()
         return NotebooksBusiness(storage: storage)
     }
+    
     
     static func createNotebookContentStorage() -> NotebookContentStorageProvider {
         let modelContext = SharedContext.shared.getModelContext()
