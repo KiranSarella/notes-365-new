@@ -47,21 +47,23 @@ struct OldNotesDataGenerator: AsyncSequence, AsyncIteratorProtocol {
     }
     
     func fetchDayMetadata(for oldNote: NotebookOld) async -> NotebookArchive? {
-        let folderFile = await createFolderAndFile(for: oldNote)
+        let folderFile = await createFolder(for: oldNote)
         let file = await createFile(for: oldNote)
        
         return NotebookArchive(notebookOld: oldNote, folderAndFile: folderFile, file: file)
     }
     
-    func createFolderAndFile(for oldN: NotebookOld) async -> NotebookFolderFile? {
+    func createFolder(for oldN: NotebookOld) async -> NotebookFolderFile? {
         if oldN.containChildNotebooks == false {
             return nil
         }
         logger.debug("\(#function), \(oldN.name)")
         // create folder and create file
-        let newFolder = NotebookB(id: oldN.id, name: oldN.name)
+        let folderId = UUID()
+        oldN.folderId = folderId
+        let newFolder = NotebookB(id: folderId, name: oldN.name)
         newFolder.isFolder = true
-        newFolder.parentId = oldN.parent?.id
+        newFolder.parentId = oldN.parent?.folderId
         
         return NotebookFolderFile(folder: newFolder, notebookFile: nil)
         
@@ -87,7 +89,7 @@ struct OldNotesDataGenerator: AsyncSequence, AsyncIteratorProtocol {
             // new file inside folder
             let newFile = NotebookB(id: oldN.id, name: oldN.name)
             newFile.isFolder = false
-            newFile.parentId = oldN.parent?.id
+            newFile.parentId = oldN.parent?.folderId
             // insert content
             let noteContent = NotebookContentB(notebookID: newFile.id, content: content)
             return NotebookFile(file: newFile, fileContent: noteContent)

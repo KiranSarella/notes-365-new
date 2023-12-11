@@ -13,4 +13,5 @@ protocol NotebookContentStorageProvider {
     func deleteNotebookContent(for id: UUID) throws
     func insert(notebookContent: NotebookContentB) throws
     func update(notebookContent: NotebookContentB) throws
+    func deleteAllRecords() throws
 }

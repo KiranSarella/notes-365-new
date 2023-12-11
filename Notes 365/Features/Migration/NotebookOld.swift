@@ -20,6 +20,7 @@ class NotebookOld: Identifiable, Codable {
     var isExpanded: Bool = false
     var isDeleted = false
     var canShow = true
+    var folderId: UUID?
     
     init(id: UUID, name: String) {
         self.id = id

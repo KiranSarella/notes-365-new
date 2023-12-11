@@ -40,16 +40,32 @@ struct ContentWrapperView: View {
                         #if DEBUG
                         // choose environment
                         try chooseEnv.setEnviromment(with: .local)
-                        let migrationCheck = UserDefaults.standard.bool(forKey: "migration_check_status")
+                        let migrationCheck = UserDefaults.standard.bool(forKey: "migration_check_status_new")
                         if migrationCheck == false {
-                            // in new device - check if migration required
-                            let notebooksCount = try BusinessFactory.createNotebooksStorage().fetchNotebooksCount()
-                            if notebooksCount > 0 {
-                                logger.info("notebooksCount: \(notebooksCount)")
-                                logger.info("migration not required")
+                            let oldMigrationCheck = UserDefaults.standard.bool(forKey: "migration_check_status")
+                            if oldMigrationCheck == false {
+                                // means, no 2.8 version installed.
+                                // do as normal migration
+                                // in new device - check if migration required
+                                let notebooksCount = try BusinessFactory.createNotebooksStorage().fetchNotebooksCount()
+                                if notebooksCount > 0 {
+                                    logger.info("notebooksCount: \(notebooksCount)")
+                                    logger.info("migration not required")
+                                } else {
+                                    statusMessage = "Migrating data to new structure, please wait.."
+                                    migrationProcess = MigrationProcess(basePathURL: EnvironmentState.shared.basePathURL)
+                                    await migrationProcess?.startMigrationProcess()
+                                }
+                                
                             } else {
+                                // it contains 2.8 version data
+                                // remove all db, and do migtation
+                                // remove all notebooks
+                                // remove all timelines
+                                
                                 statusMessage = "Migrating data to new structure, please wait.."
                                 migrationProcess = MigrationProcess(basePathURL: EnvironmentState.shared.basePathURL)
+                                await migrationProcess?.resetNewDB()
                                 await migrationProcess?.startMigrationProcess()
                             }
                         }

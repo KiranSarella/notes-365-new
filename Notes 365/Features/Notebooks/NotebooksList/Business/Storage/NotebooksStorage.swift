@@ -92,6 +92,10 @@ class NotebooksStorage {
         try notebookData.modelContext?.save()
     }
     
+    func deleteAllRecords() throws {
+        try modelContext.delete(model: NotebookData.self)
+    }
+    
     
     // MARK: - Info
     func getAllFilesInfo() throws -> [NotebookData] {

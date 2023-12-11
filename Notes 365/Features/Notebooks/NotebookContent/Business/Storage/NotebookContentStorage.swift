@@ -56,4 +56,8 @@ class NotebookContentStorage {
     func update(notebookContent: NotebookContentData) throws {
         try notebookContent.modelContext?.save()
     }
+    
+    func deleteAllRecords() throws {
+        try modelContext.delete(model: NotebookContentData.self)
+    }
 }

@@ -33,6 +33,9 @@ class TimelineStorageAdapter: TimelineStorageProvider {
         try storage.delete(for: dayNotebookChangeId)
     }
     
+    func deleteAllRecords() throws {
+        try storage.deleteAllRecords()
+    }
 }
 
 extension TimelineData {

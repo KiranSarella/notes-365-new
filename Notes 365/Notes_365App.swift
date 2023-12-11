@@ -12,9 +12,9 @@ import SwiftData
 struct Notes_365App: App {
     var context: ModelContext = {
 #if DEBUG
-//        SharedContext.shared.resetContext(storageType: .mock)
+        SharedContext.shared.resetContext(storageType: .local)
 //        SharedContext.shared.resetContext(storageType: .local)
-        SharedContext.shared.resetContext(storageType: .iCloud)
+//        SharedContext.shared.resetContext(storageType: .iCloud)
 #else
         SharedContext.shared.resetContext(storageType: .iCloud)
 #endif

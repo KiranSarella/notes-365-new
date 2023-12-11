@@ -98,7 +98,9 @@ class TimelineStorage {
 //        return try modelContext.fetch(descriptor)
 //    }
     
-
+    func deleteAllRecords() throws {
+        try modelContext.delete(model: TimelineData.self)
+    }
     
     
 }

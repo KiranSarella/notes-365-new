@@ -20,4 +20,5 @@ protocol NotebooksStorageProvider {
     func getActiveChildren(forParent id: UUID) throws -> [NotebookB]
     // info
     func getAllFilesInfo() throws -> [NotebookB]
+    func deleteAllRecords() throws
 }

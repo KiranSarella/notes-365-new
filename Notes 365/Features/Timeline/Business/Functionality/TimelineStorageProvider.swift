@@ -12,4 +12,5 @@ protocol TimelineStorageProvider {
     func save(dayNotebookChange: TimelineB) throws
     func getFirstAvailableTimelineDate() throws -> Date?
     func delete(dayNotebookChangeId: String) throws
+    func deleteAllRecords() throws
 }

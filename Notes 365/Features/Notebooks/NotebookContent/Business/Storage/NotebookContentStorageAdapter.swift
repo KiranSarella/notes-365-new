@@ -40,6 +40,10 @@ class NotebookContentStorageAdapter: NotebookContentStorageProvider {
             try storage.update(notebookContent: oldNotebookData)
         }
     }
+    
+    func deleteAllRecords() throws {
+        try storage.deleteAllRecords()
+    }
 }
 
 extension NotebookContentData {

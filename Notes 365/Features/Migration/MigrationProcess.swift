@@ -25,18 +25,30 @@ class MigrationProcess {
         self.basePathURL = basePathURL
     }
 
+    func resetNewDB() async {
+        do {
+            try notebooksStorage.deleteAllRecords()
+            try noteContentStorage.deleteAllRecords()
+            try timelineStorage.deleteAllRecords()
+        } catch {
+            logger.error("\(error)")
+        }
+        
+        try? await Task.sleep(nanoseconds: 2_000_000_000)
+    }
+    
     func startMigrationProcess() async {
         logger.info("\(#function)")
         // check if plist exits
         let plistURL = basePathURL.appending(path: Constants.notebooksPListName).appendingPathExtension("plist")
         if FileManager.default.fileExists(atPath: plistURL.path) == false {
-            UserDefaults.standard.set(true, forKey: "migration_check_status")
+            UserDefaults.standard.set(true, forKey: "migration_check_status_2")
             return
         }
         await migrateTimelines()
         await migrateNotebooks()
         // save status in userdefaults
-        UserDefaults.standard.set(true, forKey: "migration_check_status")
+        UserDefaults.standard.set(true, forKey: "migration_check_status_2")
     }
     
     
@@ -74,6 +86,14 @@ class MigrationProcess {
         try? await Task.sleep(nanoseconds: 10_000_000_000)
     }
     
+    func saveNotebooks(oldNotes: [NotebookOld]) async {
+        let oldNotesDataGenerator = OldNotesDataGenerator(oldNotes: oldNotes)
+        for await noteArch in oldNotesDataGenerator {
+            // perform save
+            await processNotebook(noteArch: noteArch)
+        }
+    }
+    
     func processNotebook(noteArch: NotebookArchive) async {
         // folder
         if let folderAndFile = noteArch.folderAndFile {
@@ -87,14 +107,6 @@ class MigrationProcess {
         // children
         if noteArch.notebookOld.containChildNotebooks {
             await saveNotebooks(oldNotes: noteArch.notebookOld.children!)
-        }
-    }
-    
-    func saveNotebooks(oldNotes: [NotebookOld]) async {
-        let oldNotesDataGenerator = OldNotesDataGenerator(oldNotes: oldNotes)
-        for await noteArch in oldNotesDataGenerator {
-            // perform save
-            await processNotebook(noteArch: noteArch)
         }
     }
     
