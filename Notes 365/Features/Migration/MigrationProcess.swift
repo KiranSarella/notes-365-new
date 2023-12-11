@@ -37,18 +37,25 @@ class MigrationProcess {
         try? await Task.sleep(nanoseconds: 2_000_000_000)
     }
     
-    func startMigrationProcess() async {
+    func startMigrationProcess(withClearDB: Bool = false) async {
         logger.info("\(#function)")
         // check if plist exits
         let plistURL = basePathURL.appending(path: Constants.notebooksPListName).appendingPathExtension("plist")
         if FileManager.default.fileExists(atPath: plistURL.path) == false {
-            UserDefaults.standard.set(true, forKey: "migration_check_status_2")
+            CloudKeyValueStore.shared.set(value: true, for: cloudMigrationKey)
+//            UserDefaults.standard.set(true, forKey: "migration_check_status_2")
             return
         }
-        await migrateTimelines()
+        
+        if withClearDB {
+            await resetNewDB()
+        }
+        
         await migrateNotebooks()
+        await migrateTimelines()
         // save status in userdefaults
-        UserDefaults.standard.set(true, forKey: "migration_check_status_2")
+        CloudKeyValueStore.shared.set(value: true, for: cloudMigrationKey)
+//        UserDefaults.standard.set(true, forKey: "migration_check_status_2")
     }
     
     

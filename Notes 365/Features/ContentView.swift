@@ -40,7 +40,10 @@ struct ContentWrapperView: View {
                         #if DEBUG
                         // choose environment
                         try chooseEnv.setEnviromment(with: .local)
-                        let migrationCheck = UserDefaults.standard.bool(forKey: "migration_check_status_new")
+//                        let migrationCheck = UserDefaults.standard.bool(forKey: "migration_check_status_2")
+                        
+                        let migrationCheck = CloudKeyValueStore.shared.get(key: cloudMigrationKey) as? Bool ?? false
+                        
                         if migrationCheck == false {
                             let oldMigrationCheck = UserDefaults.standard.bool(forKey: "migration_check_status")
                             if oldMigrationCheck == false {
@@ -65,7 +68,6 @@ struct ContentWrapperView: View {
                                 
                                 statusMessage = "Migrating data to new structure, please wait.."
                                 migrationProcess = MigrationProcess(basePathURL: EnvironmentState.shared.basePathURL)
-                                await migrationProcess?.resetNewDB()
                                 await migrationProcess?.startMigrationProcess()
                             }
                         }
