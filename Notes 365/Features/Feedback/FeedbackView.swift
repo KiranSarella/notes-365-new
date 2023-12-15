@@ -9,8 +9,8 @@ import SwiftUI
 import MessageUI
 
 struct FeedbackView: View {
+    @Environment(\.dismiss) var dismiss
     @State var today = DateTime.now()
-    
     let text = """
 Thank you for using Notes 365. Please share your feedback.
 """
@@ -33,7 +33,16 @@ Thank you for using Notes 365. Please share your feedback.
             }
             .padding()
             .navigationTitle("Feedback")
-            #if DEBUG
+            .toolbar {
+#if targetEnvironment(macCatalyst)
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Close") {
+                        dismiss()
+                    }
+                }
+#endif
+            }
+#if DEBUG
             HStack {
                 Button {
                     DateTime.changeToBeforeDay()
@@ -52,7 +61,7 @@ Thank you for using Notes 365. Please share your feedback.
                 }
             }
             .padding()
-            #endif
+#endif
         }
     }
 }

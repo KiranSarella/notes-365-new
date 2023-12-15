@@ -20,6 +20,14 @@ class SharedContext {
     private var modelContext: ModelContext?
     private var storageType = StorageType.iCloud
     
+    private let fullSchema = Schema([
+        NotebookData.self,
+        NotebookContentData.self,
+        DayVersionData.self,
+        TimelineData.self,
+        UserPreferenceData.self
+    ])
+    
     func getModelContext() -> ModelContext {
         if let modelContext = modelContext {
             return modelContext
@@ -45,13 +53,7 @@ class SharedContext {
         logger.debug("\(#function)")
         let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: .none)
         do {
-            let container = try ModelContainer(for:
-                                                NotebookData.self,
-                                                NotebookContentData.self,
-                                                DayVersionData.self,
-                                                TimelineData.self,
-                                               UserPreferenceData.self,
-                                               configurations: modelConfiguration)
+            let container = try ModelContainer(for: fullSchema, configurations: modelConfiguration)
             modelContext = ModelContext(container)
         } catch let error {
             fatalError(error.localizedDescription)
@@ -63,13 +65,7 @@ class SharedContext {
         let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: false, cloudKitDatabase: .none)
 //        let modelConfiguration = ModelConfiguration()
         do {
-            let container = try ModelContainer(for:
-                                                NotebookData.self,
-                                                NotebookContentData.self,
-                                                DayVersionData.self,
-                                                TimelineData.self,
-                                               UserPreferenceData.self,
-                                               configurations: modelConfiguration)
+            let container = try ModelContainer(for: fullSchema, configurations: modelConfiguration)
             modelContext = ModelContext(container)
         } catch let error {
             fatalError(error.localizedDescription)
@@ -114,13 +110,7 @@ class SharedContext {
                 }
             }
         #endif
-            let modelContainer = try ModelContainer(for:
-                                                NotebookData.self,
-                                                NotebookContentData.self,
-                                                DayVersionData.self,
-                                                TimelineData.self,
-                                                    UserPreferenceData.self,
-                                               configurations: modelConfiguration)
+            let modelContainer = try ModelContainer(for: fullSchema, configurations: modelConfiguration)
             modelContext = ModelContext(modelContainer)
         } catch {
             fatalError(error.localizedDescription)

@@ -16,7 +16,20 @@ enum MarkdownHeading: Int, CaseIterable {
     case h6 = 6
     
     var title: String {
-        return "Heading \(self.rawValue)"
+        switch self {
+        case .h1:
+            return "Large Title"
+        case .h2:
+            return "Title"
+        case .h3:
+            return "Title 2"
+        case .h4:
+            return "Title 3"
+        case .h5:
+            return "Heading"
+        case .h6:
+            return "Subheading"
+        }
     }
     
     var fontSize: CGFloat {
