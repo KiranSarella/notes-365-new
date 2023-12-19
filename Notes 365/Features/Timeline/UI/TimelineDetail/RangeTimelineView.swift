@@ -37,6 +37,7 @@ struct RangeTimelineView: View {
                 }
 //                LoadMoreViewNew(state: $state)
             }
+//            .background(Color("editor_background", bundle: nil))
             .onAppear {
                 state.startloading(days: selectedDates)
             }
@@ -50,6 +51,7 @@ struct RangeTimelineView: View {
             }
         }
         .listStyle(PlainListStyle())
+//        .background(Color("editor_background", bundle: nil))
         .scrollContentBackground(.hidden)
     }
 }

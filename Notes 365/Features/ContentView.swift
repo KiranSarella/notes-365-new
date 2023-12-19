@@ -36,7 +36,7 @@ struct ContentWrapperView: View {
                 .task {
                     do {
                         logger.info("wait for icloud sync")
-                        try? await Task.sleep(nanoseconds: 12_000_000_000)
+//                        try? await Task.sleep(nanoseconds: 12_000_000_000)
 //                        #if DEBUG
 //                        // choose environment
 //                        try chooseEnv.setEnviromment(with: .local)
@@ -52,15 +52,15 @@ struct ContentWrapperView: View {
 //                        // clean base version
 //                        DayVersion.shared.cleanOlderDayVersions()
 //                        #else
-                        statusMessage = "checking iCloud settings"
-                        // choose environment
-                        try chooseEnv.setEnviromment(with: .cloud)
-                        // migration
-                        migrationProcess = MigrationProcess(basePathURL: EnvironmentState.shared.basePathURL)
-                        if migrationProcess?.isMigrationDone() == false {
-                            statusMessage = "Migrating data to new structure, please wait.."
-                            await migrationProcess?.startMigrationProcess(byResetDB: true)
-                        }
+//                        statusMessage = "checking iCloud settings"
+//                        // choose environment
+//                        try chooseEnv.setEnviromment(with: .cloud)
+//                        // migration
+//                        migrationProcess = MigrationProcess(basePathURL: EnvironmentState.shared.basePathURL)
+//                        if migrationProcess?.isMigrationDone() == false {
+//                            statusMessage = "Migrating data to new structure, please wait.."
+//                            await migrationProcess?.startMigrationProcess(byResetDB: true)
+//                        }
                         // do any operations
                         chooseEnv.enableConfigured()
                         // clean base version

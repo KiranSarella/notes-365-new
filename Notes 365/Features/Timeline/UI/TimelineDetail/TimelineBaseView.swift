@@ -21,7 +21,8 @@ struct TimelineBaseView: View {
             VStack {
                 HorizontalCalendarView(state: $horizontalCalendarViewState, selectedDates: $state.selectedDates)
                 RangeTimelineView(selectedDates: $state.selectedDates, geometryProxy: geometryProxy, width: $width)
-                Spacer()
+                    .background(ThemeState.shared.theme.canvasColor)
+//                Spacer()
             }
             .ignoresSafeArea(edges: [.bottom])
             .onAppear(perform: {

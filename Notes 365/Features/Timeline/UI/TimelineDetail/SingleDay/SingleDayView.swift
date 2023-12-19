@@ -18,7 +18,9 @@ struct SingleDayView: View {
         VStack(spacing: 0) {
             DayHeaderView(date: dayTimelines.date)
             SingleDayChangesListView(timelines: dayTimelines.timelines, discardTimeline: $discardTimeline, geometryProxy: geometryProxy, width: $width)
+//                .background(Color("editor_background", bundle: nil))
         }
+//        .background(Color("editor_background", bundle: nil))
         .onChange(of: discardTimeline) { oldValue, newValue in
             if let newValue = newValue {
                 discardTimelineInfo =
@@ -47,12 +49,14 @@ struct DayHeaderView: View {
                 Text(date.string(withFormat: "EEEE, d MMMM"))
                 .listRowSeparator(.hidden)
                 .padding(.horizontal)
-                .font(.title)
+                .font(.largeTitle)
                 .fontDesign(.rounded)
                 .fontWeight(.bold)
+//                .background(Color("editor_background", bundle: nil))
             }
             .padding(.vertical)
         }
+//        .background(Color("editor_background", bundle: nil))
         .listRowSeparator(.hidden)
     }
 }
@@ -78,22 +82,31 @@ struct SingleDayChangesListView: View {
                                 }
                             }
 #endif
-                        .listRowSeparator(.hidden)
                         .listStyle(PlainListStyle())
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                        .listRowSpacing(0)
+                        .listSectionSpacing(0)
+                        .background(Color.clear)
                     }
                     .frame(height: 110)
                     .scrollDisabled(true)
-                    HStack {
+//                    .background(Color("editor_background", bundle: nil))
+//                    HStack {
+//                        Text(noteChange.content ?? "--")
+//                            .background(Color(UIColor(named: "editor_background")!))
                         ReadOnlyMarkDownView(content: noteChange.content, width: $width)
                             .padding(.bottom)
                         .listRowSeparator(.hidden)
                         .textSelection(.enabled)
                         .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
-                        Spacer()
-                    }
+//                        Spacer()
+//                        .background(Color("editor_background", bundle: nil))
+//                    }
                     .listRowSeparator(.hidden)
                 }
                 .listRowSeparator(.hidden)
+//                .background(Color("editor_background", bundle: nil))
             }
     }
 }

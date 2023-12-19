@@ -14,6 +14,8 @@ struct ThemeOptionsView: View {
     @State var showFontPicker = false
     @State var font: Font = Font.system(Font.TextStyle.body)
     @State var fontSize: Int = 16
+    @Binding var onReset: Bool
+    
     let step: Int = 2
     let range = 8...64
     
@@ -42,7 +44,7 @@ struct ThemeOptionsView: View {
                 .onChange(of: fontSize) { oldValue, newValue in
                     theme.fontSize = Float(newValue)
                 }
-                // color pickers
+                ColorPicker("Background", selection: $theme.canvasColor, supportsOpacity: true)
                 ColorPicker("Body", selection: $theme.bodyColor, supportsOpacity: false)
                 ColorPicker("Heading", selection: $theme.headingColor, supportsOpacity: false)
                 ColorPicker("Bold, Italic, Strikthrough", selection: $theme.styleColor, supportsOpacity: false)
@@ -87,6 +89,15 @@ struct ThemeOptionsView: View {
             if isFirstAppear {
                 fontSize = Int(theme.fontSize)
                 isFirstAppear = false
+                if let uifont = UIFont(name: theme.fontName, size: 16) {
+                    font = Font(uifont)
+                }
+            }
+        }
+        .onChange(of: onReset) { oldValue, newValue in
+            fontSize = Int(theme.fontSize)
+            if let uifont = UIFont(name: theme.fontName, size: 16) {
+                font = Font(uifont)
             }
         }
     }

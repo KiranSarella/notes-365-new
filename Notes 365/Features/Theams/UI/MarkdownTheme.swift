@@ -15,7 +15,7 @@ struct MarkdownTheme: Identifiable {
     var appearanceType: AppearanceType = .light
     var fontName: String = "system"
     var fontSize: Float = 16
-    // body
+    var canvasColor: Color = Color.white
     var bodyColor: Color = Color.primary
     var headingColor: Color = Color.primary
     var styleColor: Color = Color.primary
@@ -53,6 +53,7 @@ extension Theme {
         m.fontName = fontName
         m.fontSize = fontSize
         m.appearanceType = appearanceType
+        m.canvasColor = canvasColor
         m.bodyColor = bodyColor
         m.styleColor = styleColor
         m.codeColor = codeColor
@@ -76,6 +77,7 @@ extension MarkdownTheme {
         var m = Theme(id: id, themeName: themeName, appearanceType: appearanceType)
         m.fontName = fontName
         m.fontSize = fontSize
+        m.canvasColor = canvasColor
         m.bodyColor = bodyColor
         m.styleColor = styleColor
         m.codeColor = codeColor

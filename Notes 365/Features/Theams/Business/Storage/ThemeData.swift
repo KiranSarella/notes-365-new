@@ -47,6 +47,7 @@ class ThemeData: Codable {
     var fontName: String = "system"
     var fontSize: Float = 16
     // body
+    var canvasColor: ColorData = ColorData(color: Color.white)
     var bodyColor: ColorData = ColorData(color: Color.primary)
     // Heading
     var headingColor: ColorData = ColorData(color: Color.primary)
@@ -82,6 +83,7 @@ extension ThemeData {
         appearanceType = newData.appearanceType
         fontName = newData.fontName
         fontSize = newData.fontSize
+        canvasColor = newData.canvasColor
         bodyColor = newData.bodyColor
         headingColor = newData.headingColor
         styleColor = newData.styleColor

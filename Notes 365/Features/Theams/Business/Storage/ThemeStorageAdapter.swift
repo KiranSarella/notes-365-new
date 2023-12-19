@@ -80,6 +80,7 @@ extension ThemeData {
         var t = Theme(id: id, themeName: themeName, appearanceType: AppearanceType(rawValue: appearanceType)!)
         t.fontName = fontName
         t.fontSize = fontSize
+        t.canvasColor = canvasColor.color
         t.bodyColor = bodyColor.color
         t.headingColor = headingColor.color
         t.styleColor = styleColor.color
@@ -100,6 +101,7 @@ extension Theme {
         t.appearanceType = appearanceType.rawValue
         t.fontName = fontName
         t.fontSize = fontSize
+        t.canvasColor = canvasColor.colorData
         t.bodyColor = bodyColor.colorData
         t.headingColor = headingColor.colorData
         t.styleColor = styleColor.colorData

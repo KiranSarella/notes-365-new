@@ -8,6 +8,7 @@ import UIKit
 import Combine
 
 public class EditorView: UIView {
+    var isReadOnly = false
     var fileName: String = ""
     var text: String {
         get {
@@ -97,7 +98,8 @@ extension EditorView {
         addSubview(textView)
         
 //        self.backgroundColor = UIColor.green
-//        self.textView.backgroundColor = UIColor.yellow
+        
+        
         
 //        textView.contentSize
         
@@ -133,6 +135,7 @@ extension EditorView {
     }
     
     func setAsEditor(isEditable: Bool) {
+        isReadOnly = false
         layoutManager.isReadOnly = false
         
         textContainer.lineFragmentPadding = 20  // margin padding
@@ -142,9 +145,14 @@ extension EditorView {
         textView.showsVerticalScrollIndicator = true
         textView.isScrollEnabled = true
         textView.sizeToFit()
+        // bottom scroll padding for convenience
+        textView.contentInset.bottom = 440
+        
+        self.textView.backgroundColor = theme.canvasColor.uiColor
     }
     
     func setAsReadOnly() {
+        isReadOnly = true
         layoutManager.isReadOnly = true
         
         textContainer.lineFragmentPadding = 10  // margin padding
@@ -154,6 +162,8 @@ extension EditorView {
         textView.showsVerticalScrollIndicator = false
         textView.isScrollEnabled = false
         textView.sizeToFit()
+        
+        self.textView.backgroundColor = nil
     }
     
     func refreshLayout() {

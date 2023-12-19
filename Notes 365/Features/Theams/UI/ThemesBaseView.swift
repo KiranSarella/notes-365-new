@@ -20,6 +20,7 @@ struct ThemesBaseView: View {
     @State private var appearanceType: AppearanceType = .light
     @State private var selectedLightTheme: MarkdownTheme = BusinessFactory.themeInteractor().getLightTheme().markdownTheme
     @State private var selectedDarkTheme: MarkdownTheme = BusinessFactory.themeInteractor().getDarkTheme().markdownTheme
+    @State var onReset = false
     
     var body: some View {
         NavigationStack {
@@ -32,9 +33,9 @@ struct ThemesBaseView: View {
                 .padding()
                 switch appearanceType {
                 case .light:
-                    ThemeOptionsView(theme: $selectedLightTheme)
+                    ThemeOptionsView(theme: $selectedLightTheme, onReset: $onReset)
                 case .dark:
-                    ThemeOptionsView(theme: $selectedDarkTheme)
+                    ThemeOptionsView(theme: $selectedDarkTheme, onReset: $onReset)
                 }
             }
             .pickerStyle(.segmented)
@@ -82,6 +83,7 @@ struct ThemesBaseView: View {
         case .dark:
             selectedDarkTheme = DefaultThemes.generateCustomizedDarkTheme().markdownTheme
         }
+        onReset.toggle()
     }
     
     func persistThemeChanges() {

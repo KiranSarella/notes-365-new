@@ -15,6 +15,7 @@ struct Theme: Identifiable {
     var fontName: String = ""
     var fontSize: Float = 16
     // body
+    var canvasColor: Color = Color.white
     var bodyColor: Color = Color.primary
     // Heading
     var headingColor: Color = Color.primary

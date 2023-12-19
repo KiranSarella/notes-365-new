@@ -46,6 +46,7 @@ class DefaultThemes {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
         theme.fontName = "Helvetica"
         theme.fontSize = 20
+        theme.canvasColor = Color.white
         theme.bodyColor = Color.primary
         theme.headingColor = Color.orange
         theme.styleColor = Color.purple
@@ -60,6 +61,7 @@ class DefaultThemes {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
         theme.fontName = "ChalkboardSE-Light"
         theme.fontSize = 18
+        theme.canvasColor = Color.black
         theme.bodyColor = Color.white
         theme.headingColor = Color.yellow
         theme.styleColor = Color.pink

@@ -31,7 +31,7 @@ struct NoteChangeHeadingView: View {
                     .font(.footnote)
                     .foregroundColor(.secondary)
             }
-            .listStyle(PlainListStyle())
+//            .listStyle(PlainListStyle())
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
             Spacer()
