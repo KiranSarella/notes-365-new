@@ -42,11 +42,20 @@ struct SingleDayView: View {
 
 struct DayHeaderView: View {
     let date: Date
+    
+    var dateString: String {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            date.string(withFormat: "EEE, d MMM")
+        } else {
+            date.string(withFormat: "EEEE, d MMMM")
+        }
+    }
+    
     var body: some View {
         VStack {
             HStack {
                 Spacer()
-                Text(date.string(withFormat: "EEEE, d MMMM"))
+                Text(dateString)
                 .listRowSeparator(.hidden)
                 .padding(.horizontal)
                 .font(.largeTitle)
