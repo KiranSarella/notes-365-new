@@ -13,6 +13,8 @@ struct EditorViewUI: UIViewRepresentable {
     @Binding var text: String
     @Binding var editorView: EditorView
     @Binding var contentEditedDate: Date?
+    @Binding var selectedRange: NSRange
+    
     let isEditable: Bool
     var isEditor = true
     var width: CGFloat = 0
@@ -82,7 +84,7 @@ struct EditorViewUI: UIViewRepresentable {
 
 extension EditorViewUI {
     func makeCoordinator() -> EditorUICoordinator {
-        return EditorUICoordinator(self, output: $output)
+        return EditorUICoordinator(self, output: $output, selectedRange: $selectedRange)
     }
 }
 
@@ -90,10 +92,12 @@ extension EditorViewUI {
 class EditorUICoordinator: NSObject {
     var parent: EditorViewUI
     @Binding var output: String
+    @Binding var selectedRange: NSRange
     
-    init(_ parent: EditorViewUI, output: Binding<String>) {
+    init(_ parent: EditorViewUI, output: Binding<String>, selectedRange: Binding<NSRange>) {
         self.parent = parent
         _output = output
+        _selectedRange = selectedRange
     }
 }
 
@@ -101,6 +105,10 @@ extension EditorUICoordinator: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         output = textView.text
         parent.contentEditedDate = DateTime.now()
+    }
+    
+    func textViewDidChangeSelection(_ textView: UITextView) {
+        selectedRange = textView.selectedRange
     }
 }
 
@@ -112,7 +120,7 @@ struct ReadOnlyMarkDownView: View {
     var body: some View {
         EditorViewUI(output: Binding.constant(""), text: Binding.constant(content ?? "no content"),
                      editorView: $editorView,
-                     contentEditedDate: Binding.constant(DateTime.now()),
+                     contentEditedDate: Binding.constant(DateTime.now()), selectedRange: Binding.constant(NSRange()),
                      isEditable: false,
                      isEditor: false
         )

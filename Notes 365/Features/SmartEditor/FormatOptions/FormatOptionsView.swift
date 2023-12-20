@@ -10,6 +10,10 @@ import SwiftUI
 struct FormattingOptionsView: View {
     @Binding var editorView: EditorView
     @Binding var contentEditedDate: Date?
+    @Binding var selectedRange: NSRange
+    @State private var enableEraser = false
+    private let buttonHeight: CGFloat = 20
+    private let groupPadding: CGFloat = 30
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -24,6 +28,7 @@ struct FormattingOptionsView: View {
                             contentEditedDate = DateTime.now()
                         } label: {
                             Image(systemName: "bold")
+                                .frame(width: 28, height: buttonHeight)
                                 .help("Bold")
                         }
                         Button {
@@ -32,6 +37,7 @@ struct FormattingOptionsView: View {
                             contentEditedDate = DateTime.now()
                         } label: {
                             Image(systemName: "italic")
+                                .frame(width: 28, height: buttonHeight)
                                 .help("Italic")
                         }
                         Button {
@@ -39,113 +45,71 @@ struct FormattingOptionsView: View {
                             contentEditedDate = DateTime.now()
                         } label: {
                             Image(systemName: "strikethrough")
+                                .frame(width: 28, height: buttonHeight)
                                 .help("Strikethrough")
                         }
                     }
-                    .frame(width: 40, height: 44)
-//                    .padding([.leading, .trailing], 2)
                 }
-                // H1,.. H6
+                // Headings
                 HStack {
-                    Group {
-                        Button {
-                            editorView.heading(textStyle: .h1)
-                            contentEditedDate = DateTime.now()
-                        } label: {
-                            Text("H1")
-                                .help("Heading 1")
+                    Menu {
+                        Group {
+                            Button {
+                                editorView.heading(textStyle: .h1)
+                                contentEditedDate = DateTime.now()
+                            } label: {
+                                Text("Large Title")
+                            }
+                            Button {
+                                editorView.heading(textStyle: .h2)
+                                contentEditedDate = DateTime.now()
+                            } label: {
+                                Text("Title")
+                            }
+                            Button {
+                                editorView.heading(textStyle: .h3)
+                                contentEditedDate = DateTime.now()
+                            } label: {
+                                Text("Title 2")
+                            }
+                            Button {
+                                editorView.heading(textStyle: .h4)
+                                contentEditedDate = DateTime.now()
+                            } label: {
+                                Text("Title 3")
+                            }
+                            Button {
+                                editorView.heading(textStyle: .h5)
+                                contentEditedDate = DateTime.now()
+                            } label: {
+                                Text("Heading")
+                            }
+                            Button {
+                                editorView.heading(textStyle: .h6)
+                                contentEditedDate = DateTime.now()
+                            } label: {
+                                Text("Subheading")
+                            }
                         }
-                        Button {
-                            editorView.heading(textStyle: .h2)
-                            contentEditedDate = DateTime.now()
-                        } label: {
-                            Text("H2")
-                                .help("Heading 2")
-                        }
-                        Button {
-                            editorView.heading(textStyle: .h3)
-                            contentEditedDate = DateTime.now()
-                        } label: {
-                            Text("H3")
-                                .help("Heading 3")
-                        }
-                        Button {
-                            editorView.heading(textStyle: .h4)
-                            contentEditedDate = DateTime.now()
-                        } label: {
-                            Text("H4")
-                                .help("Heading 4")
-                        }
-                        Button {
-                            editorView.heading(textStyle: .h5)
-                            contentEditedDate = DateTime.now()
-                        } label: {
-                            Text("H5")
-                                .help("Heading 5")
-                        }
-                        Button {
-                            editorView.heading(textStyle: .h6)
-                            contentEditedDate = DateTime.now()
-                        } label: {
-                            Text("H6")
-                                .help("Heading 6")
-                        }
+                    } label: {
+                        Text("Headings")
+                            .fontWeight(.bold)
+                            .padding(.trailing, 40)
+                            .frame(height: buttonHeight)
                     }
-                    .frame(width: 40, height: 44)
-//                    .padding([.leading, .trailing], 10)
-                }.padding([.leading], 40)
-                //            HStack {
-                //
-                //                Group {
-                //                    // bullet list
-                //                    Button {
-                //
-                //                    } label: {
-                //                        Image(systemName: "list.bullet")
-                //                    }
-                //
-                //                    // numbers list
-                //                    Button {
-                //
-                //                    } label: {
-                //                        Image(systemName: "list.number")
-                //                    }
-                //
-                //                    // check list
-                //                    Button {
-                //
-                //                    } label: {
-                //                        Image(systemName: "checklist")
-                //                    }
-                //                }
-                //                .padding([.leading, .trailing], 5)
-                //            }.padding([.leading], 40)
+                }
+                .padding([.leading], groupPadding)
+                
+                // quote and highlight
                 HStack {
                     Group {
-                        // code
-                        Button {
-                            editorView.markInline()
-                            contentEditedDate = DateTime.now()
-                        } label: {
-                            Image("inline_code")
-                                .resizable()
-                                .frame(width: 26, height: 26)
-                                .help("Inline Code")
-                        }
-                        // code
-                        Button {
-                            editorView.markCodeblock()
-                            contentEditedDate = DateTime.now()
-                        } label: {
-                            Image(systemName: "chevron.left.forwardslash.chevron.right")
-                                .help("Source Code")
-                        }
                         // quote
                         Button {
                             editorView.markBlockQuote()
                             contentEditedDate = DateTime.now()
                         } label: {
                             Image(systemName: "text.quote")
+                                .frame(width: 28, height: buttonHeight)
                                 .help("Quote Block")
                         }
                         // highlight
@@ -155,38 +119,40 @@ struct FormattingOptionsView: View {
                             contentEditedDate = DateTime.now()
                         } label: {
                             Image(systemName: "highlighter")
+                                .frame(width: 28, height: buttonHeight)
                                 .help("Highlight")
                         }
                     }
-                    .frame(width: 40, height: 44)
-//                    .padding([.leading, .trailing], 10)
-                }.padding([.leading], 40)
-                //            HStack {
-                //
-                //                Group {
-                //                    // link
-                //                    Button {
-                //                        // make selected range as bold
-                //                        var change = currentTextStyleAction.2
-                //                        change.toggle()
-                //                        currentTextStyleAction = (.link, true, change)
-                //                    } label: {
-                //                        Image(systemName: "link")
-                //                    }
-                //
-                //                    // image
-                //                    Button {
-                //                        // make selected range as bold
-                //                        var change = currentTextStyleAction.2
-                //                        change.toggle()
-                //                        currentTextStyleAction = (.image, true, change)
-                //                    } label: {
-                //                        Image(systemName: "photo")
-                //                    }
-                //                }
-                //                .padding([.leading, .trailing], 5)
-                //            }.padding([.leading], 40)
+                }.padding([.leading], groupPadding)
+                
+                // code and code block
+                HStack {
+                    Group {
+                        // code
+                        Button {
+                            editorView.markInline()
+                            contentEditedDate = DateTime.now()
+                        } label: {
+                            Image("inline_code")
+                                .resizable()
+                                .frame(width: 28, height: buttonHeight)
+                                .help("Inline Code")
+                        }
+                        // code block
+                        Button {
+                            editorView.markCodeblock()
+                            contentEditedDate = DateTime.now()
+                        } label: {
+                            Image(systemName: "chevron.left.forwardslash.chevron.right")
+                                .frame(width: 28, height: buttonHeight)
+                                .help("Source Code")
+                        }
+                        
+                    }
+                }
+                .padding([.leading], groupPadding)
                 Spacer()
+                
                 HStack {
                     Group {
                         // Clear
@@ -194,18 +160,20 @@ struct FormattingOptionsView: View {
                             editorView.clearFormat()
                             contentEditedDate = DateTime.now()
                         } label: {
-                            Text("Clear")
+                            Image(systemName: "eraser.line.dashed")
+                                .frame(width: 28, height: buttonHeight)
                                 .help("Clear format")
                         }
+                        .disabled(!enableEraser)
                     }
-                    .padding([.leading, .trailing], 5)
-                }.padding([.leading], 40)
+                }.padding([.leading], groupPadding)
             }
-            .frame(height: 40)
-            
         }
-        
-        .buttonStyle(.plain)
+        .fontDesign(.rounded)
+        .buttonStyle(.bordered)
+        .onChange(of: selectedRange) { old, new in
+            enableEraser = new.length > 3
+        }
     }
     
 }

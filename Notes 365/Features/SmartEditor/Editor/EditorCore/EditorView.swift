@@ -10,6 +10,7 @@ import Combine
 public class EditorView: UIView {
     var isReadOnly = false
     var fileName: String = ""
+    
     var text: String {
         get {
             return textView.text
@@ -199,7 +200,7 @@ extension EditorView {
 extension EditorView: UITextViewDelegate {
     
     public func textViewDidChangeSelection(_ textView: UITextView) {
-    
+        textView.selectedRange
     }
 }
 

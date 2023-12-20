@@ -21,16 +21,18 @@ struct SmartEditor: View {
     @Binding var output: String
     @State private var showingPDFExporter = false
     @State private var pdfFileData: PDFFile = PDFFile(data: Data())
+    @State private var selectedRange: NSRange = NSRange()
     
     var body: some View {
         VStack(alignment: .leading) {
             // formatting bar view
-            FormattingOptionsView(editorView: $editorView, contentEditedDate: $contentEditedDate)
+            FormattingOptionsView(editorView: $editorView, contentEditedDate: $contentEditedDate, selectedRange: $selectedRange)
                 .padding(.horizontal)
                 .backgroundStyle(.regularMaterial)
                 .background(.background)
                 .disabled(isReadonly)
-            EditorViewUI(output: $output, text: $input, editorView: $editorView, contentEditedDate: $contentEditedDate, isEditable: !isReadonly)
+            
+            EditorViewUI(output: $output, text: $input, editorView: $editorView, contentEditedDate: $contentEditedDate, selectedRange: $selectedRange, isEditable: !isReadonly)
                 .font(Font.body)
                 .focused($isTextFieldFocused)
                 .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
