@@ -37,8 +37,10 @@ struct NotebooksLevelView: View {
     @State var currentLevelState = CurrentLevelState()
     @Binding var path: NavigationPath
     @State private var notebookContentState = NotebookContentState(business: BusinessFactory.createNotebookContentBusinessFactory())
-    
     var parent: Notebook?
+    
+    @State var moveSource: Notebook?
+    @State var showMoveView = false
     
     var body: some View {
         VStack {
@@ -58,7 +60,7 @@ struct NotebooksLevelView: View {
                     Section {
                         ForEach(currentLevelState.folders) { folder in
                             NavigationLink(value: folder) {
-                                FolderCellView(currentLevelState: $currentLevelState, name: folder.name, notebook: folder)
+                                FolderCellView(currentLevelState: $currentLevelState, moveSource: $moveSource, name: folder.name, notebook: folder)
                             }
                         }
                     }
@@ -67,12 +69,11 @@ struct NotebooksLevelView: View {
                             Button {
                                 path.append(file)
                             } label: {
-                                FileCellView(currentLevelState: $currentLevelState, name: file.name, notebook: file)
+                                FileCellView(currentLevelState: $currentLevelState, name: file.name, moveSource: $moveSource, notebook: file)
                             }
                         }
                     }
                 }
-                
             }
         }
         .navigationTitle(navigationTitle)
@@ -89,6 +90,19 @@ struct NotebooksLevelView: View {
         .onAppear {
             if currentLevelState.isEmpty {
                 currentLevelState.loadItems(for: parent)
+            }
+        }
+        .onChange(of: moveSource, { oldValue, newValue in
+            guard let newValue = newValue else { return }
+            logger.info("moveSource: \(newValue.name) \(newValue.id)")
+            showMoveView = true
+        })
+        .sheet(isPresented: $showMoveView) {
+            MoveToView(notebook: moveSource!)
+        }
+        .onChange(of: showMoveView) { old, new in
+            if new == false {
+                moveSource = nil
             }
         }
     }
@@ -152,6 +166,7 @@ extension Fruit: Hashable {
 
 struct FolderCellView: View {
     @Binding var currentLevelState: CurrentLevelState
+    @Binding var moveSource: Notebook?
     @State var name: String
     var notebook: Notebook
     @FocusState private var isFocused: Bool
@@ -163,6 +178,7 @@ struct FolderCellView: View {
     @State private var errorMessage: String = ""
     @State private var showAlert = false
     @State private var onHover = false
+    
     
     var body: some View {
         VStack {
@@ -192,6 +208,13 @@ struct FolderCellView: View {
                                     } label: {
                                         Label("Rename", systemImage: "pencil")
                                     }
+                                    .tint(.yellow)
+                                    Button {
+                                        moveSource = notebook
+                                    } label: {
+                                        Label("Move", systemImage: "folder")
+                                    }
+                                    .tint(.purple)
                                     Button(role: .destructive) {
                                         currentLevelState.deleteFolder(notebook: notebook)
                                     } label: {
@@ -264,6 +287,7 @@ struct FolderCellView: View {
 struct FileCellView: View {
     @Binding var currentLevelState: CurrentLevelState
     @State var name: String
+    @Binding var moveSource: Notebook?
     var notebook: Notebook
     @FocusState private var isFocused: Bool
     @State private var isEditing = false {
@@ -304,6 +328,12 @@ struct FileCellView: View {
                             } label: {
                                 Label("Rename", systemImage: "pencil")
                             }
+                            Button {
+                                moveSource = notebook
+                            } label: {
+                                Label("Move", systemImage: "folder")
+                            }
+                            .tint(.purple)
                             Button(role: .destructive) {
                                 currentLevelState.deleteFile(notebook: notebook)
                             } label: {

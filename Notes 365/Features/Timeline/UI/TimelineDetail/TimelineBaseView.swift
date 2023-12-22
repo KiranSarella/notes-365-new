@@ -20,10 +20,15 @@ struct TimelineBaseView: View {
         GeometryReader { geometryProxy in
             VStack {
                 HorizontalCalendarView(state: $horizontalCalendarViewState, selectedDates: $state.selectedDates)
-                RangeTimelineView(selectedDates: $state.selectedDates, geometryProxy: geometryProxy, width: $width)
-                    .background(ThemeState.shared.theme.canvasColor)
-//                Spacer()
+                VStack {
+                    RangeTimelineView(selectedDates: $state.selectedDates, geometryProxy: geometryProxy, width: $width)
+                        .background(ThemeState.shared.theme.canvasColor)
+                }
+                .background(.white)
+                .opacity(1)
             }
+//            .background(ThemeState.shared.theme.canvasColor.opacity(ThemeState.shared.theme.canvasColor.components.opacity))
+//            .background(.blendMode(.difference))
             .ignoresSafeArea(edges: [.bottom])
             .onAppear(perform: {
                 width = geometryProxy.size.width

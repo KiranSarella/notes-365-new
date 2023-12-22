@@ -89,7 +89,7 @@ extension EditorView {
 //        print("rect: ", rect)
         // textView <-> textContainer
         textView = UITextView(frame: rect, textContainer: textContainer)
-        textView.delegate = self
+//        textView.delegate = self
 //        textView.isEditable = false
 //        textView.showsVerticalScrollIndicator = false
 //        textView.isScrollEnabled = false
@@ -197,12 +197,12 @@ extension EditorView {
 
 // text view delegate
 
-extension EditorView: UITextViewDelegate {
-    
-    public func textViewDidChangeSelection(_ textView: UITextView) {
-        textView.selectedRange
-    }
-}
+//extension EditorView: UITextViewDelegate {
+//    
+////    public func textViewDidChangeSelection(_ textView: UITextView) {
+////        
+////    }
+//}
 
 
 

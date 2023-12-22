@@ -20,6 +20,7 @@ protocol NotebooksRequester {
     func rename(notebook: NotebookB, newValue: String, siblings: [NotebookB]) throws
     
     func getAllFilesInfo() -> [NotebookB]
+    func fetchAllFolders() throws -> [NotebookB]
 }
 
 extension NotebooksBusiness: NotebooksRequester { }

@@ -81,6 +81,10 @@ class NotebooksStorageAdapter: NotebooksStorageProvider {
     func deleteAllRecords() throws {
         try storage.deleteAllRecords()
     }
+    
+    func getAllFolders() throws -> [NotebookB] {
+        try storage.getAllFolders().map { NotebookB($0) }
+    }
 }
 
 

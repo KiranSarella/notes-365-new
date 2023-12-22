@@ -29,6 +29,11 @@ class NotebooksBusiness {
         return try await storage.fetchAllNotebooks()
     }
     
+    func fetchAllFolders() throws -> [NotebookB] {
+        logger.info("\(#function)")
+        return try storage.getAllFolders()
+    }
+    
     func createFolder(inside parent: NotebookB?, siblings: [NotebookB]) throws -> NotebookB {
         // create
         let newNotebookName = generateUntitledName(atLevel: siblings, prefix: "Folder")

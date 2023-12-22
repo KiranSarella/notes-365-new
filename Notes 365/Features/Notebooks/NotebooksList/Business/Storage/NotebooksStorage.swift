@@ -104,4 +104,14 @@ class NotebooksStorage {
         descriptor.propertiesToFetch = [\.id, \.parent, \.name, \.isFolder]
         return try modelContext.fetch(descriptor)
     }
+    
+    func getAllFolders() throws -> [NotebookData] {
+        let predicate = #Predicate<NotebookData> { item in
+            item.isFolder
+        }
+        let sortByName = SortDescriptor(\NotebookData.name, order: .forward)
+        var descriptor = FetchDescriptor(predicate: predicate, sortBy: [sortByName])
+        descriptor.propertiesToFetch = [\.id, \.parent, \.name]
+        return try modelContext.fetch(descriptor)
+    }
 }

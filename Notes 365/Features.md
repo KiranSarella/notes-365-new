@@ -1,13 +1,13 @@
 # backlogs
-[ ] move folders and files
+[-] move folders and files
+[ ] use cloudkit notification to known download status instead of sleep loader
 [ ] recent files
 [ ] deleted files list
 [ ] search files and folders
-[ ] convert h1...6 to titles - buttons to dropdown
-[ ] use cloudkit notification to known download status instead of sleep loader
 
 # Know Issues
-[ ] on font change, height not updating
+[ ] on font change, height not updating in timeline
+[ ] on font change, not refresing in editor
 [ ] sort files, not working
 
 

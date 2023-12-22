@@ -10,9 +10,7 @@ import Combine
 extension EditorView: NSTextStorageDelegate {
     
     public func textStorage(_ textStorage: NSTextStorage, willProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
-        
         let extendedRange = (textStorage.string as NSString).paragraphRange(for: editedRange)
-        
         textStorage.addAttribute(.font, value: theme.font, range: extendedRange)
     }
     
