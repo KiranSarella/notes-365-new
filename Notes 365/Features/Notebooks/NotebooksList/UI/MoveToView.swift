@@ -12,7 +12,7 @@ struct FileItem: Hashable, Identifiable {
     var id: Self { self }
     var name: String
     var isExpanded = false
-    var folderId: UUID = UUID()
+    var folderId: UUID?
     var children: [FileItem] = []
     var containsChildren: Bool {
         children.count > 0
@@ -23,8 +23,9 @@ struct FileItem: Hashable, Identifiable {
 struct MoveToView: View {
     @Environment(\.dismiss) var dismiss
     let notebook: Notebook
+    @Binding var moveDestination: FileItem?
+    @State var selectedItem: FileItem?
     @State var state = MoveToState()
-    @State var selectionValue:FileItem?
     @State var isFocused = true
     
     var body: some View {
@@ -42,7 +43,7 @@ struct MoveToView: View {
 //                }
 //                .padding()
                 
-                List(selection: $selectionValue) {
+                List(selection: $moveDestination) {
                     ForEach($state.items) { $item in
                         
                         if notebook.parentId == nil {
@@ -75,7 +76,6 @@ struct MoveToView: View {
                 }
                 .background(.tint)
             }
-            
             .navigationTitle("Select a Folder")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -85,6 +85,10 @@ struct MoveToView: View {
                     }
                 }
             }
+//            .onChange(of: selectedItem) { old, new in
+//                moveDestination = new
+//                dismiss()
+//            }
         }
     }
 }
@@ -198,42 +202,42 @@ class MoveToState {
     }
     
 }
-
-struct ContentViewMoveToTest: View {
-    struct FileItem: Hashable, Identifiable, CustomStringConvertible {
-        var id: Self { self }
-        var name: String
-        var children: [FileItem]? = nil
-        var description: String {
-            
-            
-            switch children {
-            case nil:
-                return "📄 \(name)"
-            case .some(let children):
-                return children.isEmpty ? "📂 \(name)" : "📁 \(name)"
-            }
-        }
-    }
-    let fileHierarchyData: [FileItem] = [
-      FileItem(name: "users", children:
-        [FileItem(name: "user1234", children:
-          [FileItem(name: "Photos", children:
-            [FileItem(name: "photo001.jpg"),
-             FileItem(name: "photo002.jpg")]),
-           FileItem(name: "Movies", children:
-             [FileItem(name: "movie001.mp4")]),
-              FileItem(name: "Documents", children: [])
-          ]),
-         FileItem(name: "newuser", children:
-           [FileItem(name: "Documents", children: [])
-           ])
-        ]),
-        FileItem(name: "private", children: nil)
-    ]
-    var body: some View {
-        List(fileHierarchyData, children: \.children) { item in
-            Label(item.description, systemImage: "folder")
-        }
-    }
-}
+//
+//struct ContentViewMoveToTest: View {
+//    struct FileItem: Hashable, Identifiable, CustomStringConvertible {
+//        var id: Self { self }
+//        var name: String
+//        var children: [FileItem]? = nil
+//        var description: String {
+//            
+//            
+//            switch children {
+//            case nil:
+//                return "📄 \(name)"
+//            case .some(let children):
+//                return children.isEmpty ? "📂 \(name)" : "📁 \(name)"
+//            }
+//        }
+//    }
+//    let fileHierarchyData: [FileItem] = [
+//      FileItem(name: "users", children:
+//        [FileItem(name: "user1234", children:
+//          [FileItem(name: "Photos", children:
+//            [FileItem(name: "photo001.jpg"),
+//             FileItem(name: "photo002.jpg")]),
+//           FileItem(name: "Movies", children:
+//             [FileItem(name: "movie001.mp4")]),
+//              FileItem(name: "Documents", children: [])
+//          ]),
+//         FileItem(name: "newuser", children:
+//           [FileItem(name: "Documents", children: [])
+//           ])
+//        ]),
+//        FileItem(name: "private", children: nil)
+//    ]
+//    var body: some View {
+//        List(fileHierarchyData, children: \.children) { item in
+//            Label(item.description, systemImage: "folder")
+//        }
+//    }
+//}

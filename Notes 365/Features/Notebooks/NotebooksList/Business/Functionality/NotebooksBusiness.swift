@@ -111,6 +111,13 @@ class NotebooksBusiness {
         try notebook.update(in: storage)
         do { sendNotebookRenamed(notebook) }
     }
+    
+    func move(notebook: NotebookB, to destinationId: UUID?) throws {
+        notebook.parentId = destinationId
+        try notebook.update(in: storage)
+        do { sendNotebookMoved(notebook) }
+//        do { sendNotebooksMoved([notebook], parentId: destinationId) }
+    }
 }
 
 extension NotebooksBusiness {
@@ -141,16 +148,29 @@ extension NotebooksBusiness {
         logger.debug("sendNotebookInserted - \(notebook.description)")
     }
     
-    private func sendNotebooksMoved(_ notebooks: [NotebookB], parentId: UUID) {
-        let fileIds = notebooks.filter { n in !n.isFolder }
-        let folderIds = notebooks.filter { n in n.isFolder }
-        let info = [
-            "folder_ids": folderIds,
-            "file_ids": fileIds,
-            "parent_id": parentId,
+    private func sendNotebookMoved(_ notebook: NotebookB) {
+        var info = [
+            "notebook_id": notebook.id,
+            "name": notebook.name,
+            "isFolder": notebook.isFolder
         ] as [String : Any]
+        if let parentId = notebook.parentId {
+            info["parent_id"] = parentId
+        }
         NotificationCenter.default.post(name: Notification.Name.notebooksMoved, object: nil, userInfo: info)
+        logger.debug("\(#function) - \(notebook.description)")
     }
+    
+//    private func sendNotebooksMoved(_ notebooks: [NotebookB], parentId: UUID) {
+//        let fileIds = notebooks.filter { n in !n.isFolder }
+//        let folderIds = notebooks.filter { n in n.isFolder }
+//        let info = [
+//            "folder_ids": folderIds,
+//            "file_ids": fileIds,
+//            "parent_id": parentId,
+//        ] as [String : Any]
+//        NotificationCenter.default.post(name: Notification.Name.notebooksMoved, object: nil, userInfo: info)
+//    }
     
 }
 

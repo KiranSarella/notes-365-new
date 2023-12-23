@@ -28,7 +28,12 @@ class CurrentLevelState {
     }
     
     init() {
-        
+        // listen for move updates, if destination is yours, add them to your list
+        observeNotebookMoved()
+    }
+    
+    deinit {
+        removeNotebookMovedObserver()
     }
     
     func loadItems(for parent: Notebook?) {
@@ -97,5 +102,69 @@ class CurrentLevelState {
         }
         // delete from UI
         folders.removeAll(where: { $0.id == notebook.id })
+    }
+    
+    func move(_ source: Notebook, to destinationId: UUID?) {
+        logger.info("\(#function) from: \(source.name) to: \(destinationId?.uuidString ?? "")")
+        var source = source
+        source.parentId = destinationId
+        do {
+            try notebooksBusiness.move(notebook: source.notebookB(), to: destinationId)
+        } catch {
+            logger.info("\(error)")
+        }
+        
+        if source.isFolder {
+            folders.removeAll { nt in
+                nt.id == source.id
+            }
+        } else {
+            files.removeAll { nt in
+                nt.id == source.id
+            }
+        }
+    }
+}
+
+extension CurrentLevelState {
+    func observeNotebookMoved() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookMoved(_:)), name: Notification.Name.notebooksMoved, object: nil)
+    }
+    
+    func removeNotebookMovedObserver() {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.notebooksMoved, object: nil)
+    }
+    
+    
+    @objc func handleNotebookMoved(_ notification: Notification) {
+        guard
+            let notebookId = notification.userInfo?["notebook_id"] as? UUID,
+            let name = notification.userInfo?["name"] as? String,
+            let isFolder = notification.userInfo?["isFolder"] as? Bool
+        else { return }
+                
+        let parentId = notification.userInfo?["parent_id"] as? UUID
+        
+        
+        var isMovedToThisLevel: Bool {
+            parentId == parent?.id
+        }
+        
+        if isMovedToThisLevel == false {
+            return
+        }
+        
+        let item = Notebook(id: notebookId, name: name)
+        item.isFolder = isFolder
+        item.parentId = parentId
+        
+        if isFolder {
+            folders.append(item)
+            // do sorting
+        } else {
+            files.append(item)
+            // do sorting
+        }
+        
     }
 }

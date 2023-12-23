@@ -13,7 +13,7 @@ class Notebook: Identifiable {
     var name: String = ""
     var parentId: UUID?
     var isFolder: Bool = true
-    var childrenIds: [UUID]?
+//    var childrenIds: [UUID]?
     var children: [Notebook] = [Notebook]()
     var createdDate: Date = DateTime.now()
     var modifiedDate: Date = DateTime.now()
@@ -70,22 +70,22 @@ extension Notebook {
         children.removeAll(where: { $0.id == id })
     }
     
-    func populateChildren(from dict: [UUID: NotebookB], expandedIds: Set<String>) {
-        guard let cArr = childrenIds, !cArr.isEmpty else { return }
-        children = [Notebook]()
-        for cid in cArr {
-            if let noteD = dict[cid] {
-                let note = noteD.notebook()
-                note.parentId = self.id
-                note.isExpanded = expandedIds.contains(note.id.uuidString)
-                children.append(note)
-            }
-        }
-        for cNote in children {
-            cNote.populateChildren(from: dict, expandedIds: expandedIds)
-            cNote.sortChildren()
-        }
-    }
+//    func populateChildren(from dict: [UUID: NotebookB], expandedIds: Set<String>) {
+//        guard let cArr = childrenIds, !cArr.isEmpty else { return }
+//        children = [Notebook]()
+//        for cid in cArr {
+//            if let noteD = dict[cid] {
+//                let note = noteD.notebook()
+//                note.parentId = self.id
+//                note.isExpanded = expandedIds.contains(note.id.uuidString)
+//                children.append(note)
+//            }
+//        }
+//        for cNote in children {
+//            cNote.populateChildren(from: dict, expandedIds: expandedIds)
+//            cNote.sortChildren()
+//        }
+//    }
     
     var containChildNotebooks: Bool {
         childrenCount > 0

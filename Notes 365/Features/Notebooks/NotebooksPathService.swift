@@ -32,6 +32,7 @@ class NotebooksPathService {
     private init() { 
         observeNotebookRenamed()
         observeNotebookInserted()
+        observeNotebookMoved()
     }
     
     func refreshOnNextService() {
@@ -204,6 +205,17 @@ extension NotebooksPathService {
             filesPathInfo[notebookId] = LocationInfo(parentId: parentId, name: name)
         }
         invalidateCacheFullPath()
+    }
+}
+
+// MARK: - Handle move - using insert logic
+extension NotebooksPathService {
+    func observeNotebookMoved() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookInserted(_:)), name: Notification.Name.notebookInserted, object: nil)
+    }
+    
+    func removeNotebookMovedObserver() {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.notebooksMoved, object: nil)
     }
 }
 

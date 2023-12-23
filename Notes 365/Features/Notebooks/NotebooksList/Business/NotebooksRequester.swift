@@ -21,6 +21,7 @@ protocol NotebooksRequester {
     
     func getAllFilesInfo() -> [NotebookB]
     func fetchAllFolders() throws -> [NotebookB]
+    func move(notebook: NotebookB, to destinationId: UUID?) throws
 }
 
 extension NotebooksBusiness: NotebooksRequester { }

@@ -41,6 +41,7 @@ struct NotebooksLevelView: View {
     
     @State var moveSource: Notebook?
     @State var showMoveView = false
+    @State var moveDestination: FileItem?
     
     var body: some View {
         VStack {
@@ -98,11 +99,19 @@ struct NotebooksLevelView: View {
             showMoveView = true
         })
         .sheet(isPresented: $showMoveView) {
-            MoveToView(notebook: moveSource!)
+            MoveToView(notebook: moveSource!, moveDestination: $moveDestination)
         }
         .onChange(of: showMoveView) { old, new in
             if new == false {
                 moveSource = nil
+                moveDestination = nil
+            }
+        }
+        .onChange(of: moveDestination) { old, new in
+            guard let moveSource = moveSource else { return }
+            if let destination = new {
+                currentLevelState.move(moveSource, to: destination.folderId)
+                showMoveView = false
             }
         }
     }
@@ -193,6 +202,11 @@ struct FolderCellView: View {
                     Label(notebook.name, systemImage: "folder")
                                 .contextMenu {
                                     RenameButton()
+                                    Button {
+                                        moveSource = notebook
+                                    } label: {
+                                        Label("Move", systemImage: "folder")
+                                    }
                                     Button(role: .destructive) {
                                         currentLevelState.deleteFolder(notebook: notebook)
                                     } label: {
@@ -230,6 +244,11 @@ struct FolderCellView: View {
                                 isEditing = true
                             } label: {
                                 Label("Rename", systemImage: "pencil")
+                            }
+                            Button {
+                                moveSource = notebook
+                            } label: {
+                                Label("Move", systemImage: "folder")
                             }
                             Button(role: .destructive) {
                                 currentLevelState.deleteFolder(notebook: notebook)
@@ -313,6 +332,11 @@ struct FileCellView: View {
                         .foregroundStyle(Color.primary)
                         .contextMenu {
                             RenameButton()
+                            Button {
+                                moveSource = notebook
+                            } label: {
+                                Label("Move", systemImage: "folder")
+                            }
                             Button(role: .destructive) {
                                 currentLevelState.deleteFile(notebook: notebook)
                             } label: {
@@ -349,6 +373,11 @@ struct FileCellView: View {
                                 isEditing = true
                             } label: {
                                 Label("Rename", systemImage: "pencil")
+                            }
+                            Button {
+                                moveSource = notebook
+                            } label: {
+                                Label("Move", systemImage: "folder")
                             }
                             Button(role: .destructive) {
                                 currentLevelState.deleteFile(notebook: notebook)

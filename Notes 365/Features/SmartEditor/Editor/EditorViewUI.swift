@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EditorViewUI: UIViewRepresentable {
     let theme: MarkdownTheme = ThemeState.shared.theme
-    @Binding var output: String
+    @Binding var output: String // use some shared output buffer state
     @Binding var text: String
     @Binding var editorView: EditorView
     @Binding var contentEditedDate: Date?
