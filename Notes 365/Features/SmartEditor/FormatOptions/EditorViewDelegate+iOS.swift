@@ -257,6 +257,10 @@ extension EditorView: EditorViewDelegate {
         // refresh font again
         self.textView.font = theme.font
         self.textView.textColor = theme.bodyColor.uiColor
+        
+        if isReadOnly == false {
+            self.textView.backgroundColor = theme.canvasColor.uiColor
+        }
     }
     
     func insertImage() {

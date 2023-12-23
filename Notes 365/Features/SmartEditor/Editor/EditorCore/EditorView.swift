@@ -120,19 +120,10 @@ extension EditorView {
 //        textContainer.lineFragmentPadding = 20  // margin padding
 //        self.textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         self.textContainer.widthTracksTextView = true
-
-        
 //        textView.autoresizingMask = [.width]
-        
         self.textView.isFindInteractionEnabled = true
-        
-        
         // set delegate
         self.layoutManager.textStorage?.delegate = self
-        
-//        textView.sizeToFit()
-        
-//        textView.backgroundColor = UIColor.clear
     }
     
     func setAsEditor(isEditable: Bool) {
@@ -164,7 +155,7 @@ extension EditorView {
         textView.isScrollEnabled = false
         textView.sizeToFit()
         
-        self.textView.backgroundColor = nil
+        self.textView.backgroundColor = nil // applied in timeline
     }
     
     func refreshLayout() {

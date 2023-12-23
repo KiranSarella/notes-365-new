@@ -32,7 +32,7 @@ struct SmartEditor: View {
                 .background(.background)
                 .disabled(isReadonly)
             
-            EditorViewUI(output: $output, text: $input, editorView: $editorView, contentEditedDate: $contentEditedDate, selectedRange: $selectedRange, isEditable: !isReadonly)
+            EditorViewRepresentable(output: $output, text: $input, editorView: $editorView, contentEditedDate: $contentEditedDate, selectedRange: $selectedRange, isEditable: !isReadonly)
                 .font(Font.body)
                 .focused($isTextFieldFocused)
                 .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working

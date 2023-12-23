@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EditorViewUI: UIViewRepresentable {
+struct EditorViewRepresentable: UIViewRepresentable {
     let theme: MarkdownTheme = ThemeState.shared.theme
     @Binding var output: String // use some shared output buffer state
     @Binding var text: String
@@ -82,7 +82,7 @@ struct EditorViewUI: UIViewRepresentable {
     typealias NSViewType = EditorView
 }
 
-extension EditorViewUI {
+extension EditorViewRepresentable {
     func makeCoordinator() -> EditorUICoordinator {
         return EditorUICoordinator(self, output: $output, selectedRange: $selectedRange)
     }
@@ -90,11 +90,11 @@ extension EditorViewUI {
 
 // Define View Modifiers
 class EditorUICoordinator: NSObject {
-    var parent: EditorViewUI
+    var parent: EditorViewRepresentable
     @Binding var output: String
     @Binding var selectedRange: NSRange
     
-    init(_ parent: EditorViewUI, output: Binding<String>, selectedRange: Binding<NSRange>) {
+    init(_ parent: EditorViewRepresentable, output: Binding<String>, selectedRange: Binding<NSRange>) {
         self.parent = parent
         _output = output
         _selectedRange = selectedRange
@@ -115,10 +115,10 @@ extension EditorUICoordinator: UITextViewDelegate {
 struct ReadOnlyMarkDownView: View {
     @State var editorView = EditorView()
     var content: String?
-    @Binding var width: CGFloat// = 400
+    @Binding var width: CGFloat
     @State var height: CGFloat = 100
     var body: some View {
-        EditorViewUI(output: Binding.constant(""), text: Binding.constant(content ?? "no content"),
+        EditorViewRepresentable(output: Binding.constant(""), text: Binding.constant(content ?? "no content"),
                      editorView: $editorView,
                      contentEditedDate: Binding.constant(DateTime.now()), selectedRange: Binding.constant(NSRange()),
                      isEditable: false,
@@ -126,33 +126,22 @@ struct ReadOnlyMarkDownView: View {
         )
         .onAppear {
             updateHeight()
-//            DispatchQueue.main.async {
-//                editorView.textView.sizeToFit()
-//                let w = width > 250 ? width - 80 : 340
-//                let contentSizeHeight = editorView.textView.contentSize.height
-//                let otherHeight = editorView.textView.attributedText.height(for: w)
-////                let otherHeight = heightForAttributedString(editorView.textView.attributedText, width: w)
-//                logger.debug("width: \(width)")
-//                logger.debug("w: \(w)")
-//                logger.debug("contentSizeHeight: \(contentSizeHeight)")
-//                logger.debug("otherHeight: \(otherHeight)")
-//                height = contentSizeHeight
-//            }
         }
         .frame(height: height)
         .onChange(of: width) { oldValue, newValue in
+            updateHeight()
+        }
+        .onChange(of: ThemeState.shared.theme) { oldValue, newValue in
             updateHeight()
         }
     }
     
     func updateHeight() {
         Task {
-            try? await Task.sleep(nanoseconds: 500_000_000)
+            try? await Task.sleep(nanoseconds: 800_000_000) // wait until attributed string prepared
             DispatchQueue.main.async {
                 editorView.textView.sizeToFit()
                 let contentSizeHeight = editorView.textView.contentSize.height
-//                logger.debug("width: \(width)")
-//                logger.debug("contentSizeHeight: \(contentSizeHeight)")
                 height = contentSizeHeight
             }
         }

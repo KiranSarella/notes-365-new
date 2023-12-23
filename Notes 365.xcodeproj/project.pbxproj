@@ -130,7 +130,7 @@
 		9F45BD9E2920CE21003DE332 /* SpeechHelpr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BCDC2920CCCE003DE332 /* SpeechHelpr.swift */; };
 		9F45BDA82920CE41003DE332 /* MarkdownTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD402920CCCF003DE332 /* MarkdownTheme.swift */; };
 		9F57BAE7299688BC0076FD9D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F57BAE6299688BC0076FD9D /* Constants.swift */; };
-		9F7D291F299BABAC00B37F51 /* EditorViewUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D291E299BABAC00B37F51 /* EditorViewUI.swift */; };
+		9F7D291F299BABAC00B37F51 /* EditorViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D291E299BABAC00B37F51 /* EditorViewRepresentable.swift */; };
 		9F7D2924299EB9D700B37F51 /* MainBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D2923299EB9D700B37F51 /* MainBusiness.swift */; };
 		9F7D2926299EC27E00B37F51 /* CloudServiceTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7D2925299EC27E00B37F51 /* CloudServiceTwo.swift */; };
 		9F8EE98A293EB3090021409E /* CloudDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8EE989293EB3090021409E /* CloudDataManager.swift */; };
@@ -301,7 +301,7 @@
 		9F498E042939E03B00FF4D17 /* NotebookEditor.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = NotebookEditor.md; sourceTree = "<group>"; };
 		9F57BAE6299688BC0076FD9D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9F6CA8DD2A041D27009061A0 /* ReorderLIst.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReorderLIst.md; sourceTree = "<group>"; };
-		9F7D291E299BABAC00B37F51 /* EditorViewUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorViewUI.swift; sourceTree = "<group>"; };
+		9F7D291E299BABAC00B37F51 /* EditorViewRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditorViewRepresentable.swift; sourceTree = "<group>"; };
 		9F7D2920299CB7C000B37F51 /* Notes 365Debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Notes 365Debug.entitlements"; sourceTree = "<group>"; };
 		9F7D2923299EB9D700B37F51 /* MainBusiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainBusiness.swift; sourceTree = "<group>"; };
 		9F7D2925299EC27E00B37F51 /* CloudServiceTwo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudServiceTwo.swift; sourceTree = "<group>"; };
@@ -824,7 +824,7 @@
 			isa = PBXGroup;
 			children = (
 				9F93E14F29E6A2AC00210E99 /* SmartEditor.swift */,
-				9F7D291E299BABAC00B37F51 /* EditorViewUI.swift */,
+				9F7D291E299BABAC00B37F51 /* EditorViewRepresentable.swift */,
 				5C29FECC2A98B377001DC601 /* PreviewViewUI.swift */,
 				5C29FED42A98D91D001DC601 /* ReadonlyEditorCache.swift */,
 				5CE6FDF72B0BC19600ED9425 /* PDFFile.swift */,
@@ -1180,7 +1180,7 @@
 				5C0A7B4D2B20DA4F0099F0A3 /* DayCalendarView.swift in Sources */,
 				5C051B9D2B1240D4005C99B7 /* Logger.swift in Sources */,
 				5C08EA422B1897EA0095DE86 /* ContentSearchAdapter.swift in Sources */,
-				9F7D291F299BABAC00B37F51 /* EditorViewUI.swift in Sources */,
+				9F7D291F299BABAC00B37F51 /* EditorViewRepresentable.swift in Sources */,
 				9FB6C69A29275D5100C8EC76 /* FormatOptions.swift in Sources */,
 				5CC4C0212A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift in Sources */,
 				5C3DE6B22B13722C004E3621 /* RangeTimelineView.swift in Sources */,
