@@ -28,11 +28,14 @@ class NotebooksPathService {
 //    var fullPathsCache = [UUID: FullPathInfo]()
     var pathsCache = [UUID: String]()
     private(set) var isLoaded = false
+    var cloudSyncFinishedObserver: NSObjectProtocol?
     
-    private init() { 
+    
+    private init() {
         observeNotebookRenamed()
         observeNotebookInserted()
         observeNotebookMoved()
+        observeCloudFinished()
     }
     
     func refreshOnNextService() {
@@ -44,7 +47,6 @@ class NotebooksPathService {
             return
         }
         await updateNotebooksInfo()
-//        try? await Task.sleep(nanoseconds: 2_000_000_000)
         isLoaded = true
     }
     
@@ -98,6 +100,7 @@ class NotebooksPathService {
             return nil
         }
     }
+    
     
 //    func path(for notebookId: UUID) async -> FullPathInfo? {
 //        if let fullPathInfo = fullPathsCache[notebookId] {
@@ -234,4 +237,14 @@ extension NotebookB {
 //    fileprivate var locationInfo: LocationInfo {
 //        LocationInfo(parentId: parentId, name: name)
 //    }
+}
+
+
+extension NotebooksPathService {
+    
+    func observeCloudFinished() {
+        cloudSyncFinishedObserver = NotificationCenter.default.addObserver(forName: .icloudSyncFinished, object: nil, queue: .main) { [weak self] notification in
+            self?.isLoaded = false
+        }
+    }
 }

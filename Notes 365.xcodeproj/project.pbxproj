@@ -34,6 +34,7 @@
 		5C0A7B4F2B20DA530099F0A3 /* WeekCalendarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B402B20CBA90099F0A3 /* WeekCalendarState.swift */; };
 		5C0A7B502B20DA590099F0A3 /* MonthCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B442B20CBA90099F0A3 /* MonthCalendarView.swift */; };
 		5C0A7B512B20DA590099F0A3 /* MonthCalendarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0A7B452B20CBA90099F0A3 /* MonthCalendarState.swift */; };
+		5C0EC5702B36C2D3004F8D96 /* CloudKitSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0EC56F2B36C2D3004F8D96 /* CloudKitSync.swift */; };
 		5C10D79B2B04C248006FB80D /* NotebooksStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D7982B04C248006FB80D /* NotebooksStorage.swift */; };
 		5C10D79D2B04C248006FB80D /* NotebooksStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D79A2B04C248006FB80D /* NotebooksStorageAdapter.swift */; };
 		5C10D7A12B04C26D006FB80D /* NotebooksBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C10D7A02B04C26D006FB80D /* NotebooksBusiness.swift */; };
@@ -195,6 +196,7 @@
 		5C0A7B452B20CBA90099F0A3 /* MonthCalendarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthCalendarState.swift; sourceTree = "<group>"; };
 		5C0A7B462B20CBA90099F0A3 /* CalendarType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarType.swift; sourceTree = "<group>"; };
 		5C0A7B472B20CBA90099F0A3 /* CalendarNavigatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarNavigatorView.swift; sourceTree = "<group>"; };
+		5C0EC56F2B36C2D3004F8D96 /* CloudKitSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSync.swift; sourceTree = "<group>"; };
 		5C10D7982B04C248006FB80D /* NotebooksStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksStorage.swift; sourceTree = "<group>"; };
 		5C10D79A2B04C248006FB80D /* NotebooksStorageAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksStorageAdapter.swift; sourceTree = "<group>"; };
 		5C10D7A02B04C26D006FB80D /* NotebooksBusiness.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebooksBusiness.swift; sourceTree = "<group>"; };
@@ -753,6 +755,7 @@
 				9F8EE98C293F4B7E0021409E /* Notes-365-Info.plist */,
 				9F45BCA12920CAAE003DE332 /* Notes_365App.swift */,
 				5CF612B62B0B06B700D397C6 /* SharedContext.swift */,
+				5C0EC56F2B36C2D3004F8D96 /* CloudKitSync.swift */,
 				5C10D7A42B04C281006FB80D /* BusinessFactory.swift */,
 				5C7CFAB52B151E5D00777AB2 /* DateTime.swift */,
 				9FB0A47129D9246D0093FBD2 /* architecture-decissions.md */,
@@ -1090,6 +1093,7 @@
 				5CFCF5E62ABEDFA400351EEA /* NotebookData.swift in Sources */,
 				9FB6C69C29275E0300C8EC76 /* NotebookContentState.swift in Sources */,
 				5C7D4AF22B07DCEA00BB1908 /* NotebooksRequester.swift in Sources */,
+				5C0EC5702B36C2D3004F8D96 /* CloudKitSync.swift in Sources */,
 				5C08EA392B1892DC0095DE86 /* ContentSearchView.swift in Sources */,
 				9F7D2926299EC27E00B37F51 /* CloudServiceTwo.swift in Sources */,
 				5CF612BD2B0B08A400D397C6 /* NotebookContentStorage.swift in Sources */,

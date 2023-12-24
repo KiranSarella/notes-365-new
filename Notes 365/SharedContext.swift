@@ -20,6 +20,7 @@ class SharedContext {
     private var modelContext: ModelContext?
     private var storageType = StorageType.iCloud
     
+    
     private let fullSchema = Schema([
         NotebookData.self,
         NotebookContentData.self,
@@ -118,4 +119,7 @@ class SharedContext {
 //            createLocalContext()
         }
     }
+    
 }
+
+

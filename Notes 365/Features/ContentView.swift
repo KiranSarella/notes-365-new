@@ -113,61 +113,72 @@ struct ContentView: View {
     @State private var timelineDetailState = TimelineBaseViewState(timelineBusiness: BusinessFactory.timelineInteractor())
     @State private var path = NavigationPath()
     @State private var horizontalCalendarViewState = HorizontalCalendarViewState()
+    let cloudKitSync = CloudKitSync()
     
     var body: some View {
         NavigationSplitView(columnVisibility: $navigationSplitViewVisibility) {
-            List(selection: $sidebarItemSelected) {
-                Label("Timeline", systemImage: "rectangle.stack")
-                    .tag(SidebarItem.timeline.id)
-                Label("Notebooks", systemImage: "books.vertical")
-                    .tag(SidebarItem.notebooks.id)
-                Label("Search", systemImage: "magnifyingglass")
-                    .tag(SidebarItem.search.id)
-                Section("Settings", isExpanded: $settingsExpanded) {
-                    Button {
-                        showThemes = true
-                    } label: {
-                        Label("Themes", systemImage: "paintbrush")
+            VStack {
+                List(selection: $sidebarItemSelected) {
+                    Label("Timeline", systemImage: "rectangle.stack")
+                        .tag(SidebarItem.timeline.id)
+                    Label("Notebooks", systemImage: "books.vertical")
+                        .tag(SidebarItem.notebooks.id)
+                    Label("Search", systemImage: "magnifyingglass")
+                        .tag(SidebarItem.search.id)
+                    Section("Settings", isExpanded: $settingsExpanded) {
+                        Button {
+                            showThemes = true
+                        } label: {
+                            Label("Themes", systemImage: "paintbrush")
+                        }
+                        Button {
+                            showFormattingSymbols = true
+                        } label: {
+                            Label("Symbols Guide", systemImage: "textformat")
+                        }
+                        Button {
+                            showFeedback = true
+                        } label: {
+                            Label("Feedback", systemImage: "hand.thumbsup")
+                        }
                     }
-                    Button {
-                        showFormattingSymbols = true
-                    } label: {
-                        Label("Symbols Guide", systemImage: "textformat")
+                    if cloudKitSync.isImportDone == false {
+                        HStack {
+                            Text("Syncing...")
+                                .padding()
+                            ProgressView()
+                        }
                     }
-                    Button {
-                        showFeedback = true
-                    } label: {
-                        Label("Feedback", systemImage: "hand.thumbsup")
+                }
+                .navigationTitle("Notes 365")
+                .onAppear {
+                    BusinessFactory.dayVersionInteractor().setupDayVersionCreationProcess()
+                    BusinessFactory.timelineInteractor().setupTimeineCreationProcess()
+                }
+                .sheet(isPresented: $showThemes) {
+                    ThemesBaseView()
+                }
+                .sheet(isPresented: $showFormattingSymbols) {
+                    EditorSymbolsView()
+                }
+                .sheet(isPresented: $showFeedback) {
+                    FeedbackView()
+                }
+                .onAppear {
+                    ThemeState.shared.updateColorScheme(colorScheme)
+                }
+                .onChange(of: colorScheme, { oldValue, newValue in
+                    if ThemeState.shared.colorScheme != newValue {
+                        ThemeState.shared.updateColorScheme(newValue)
+                    }
+                })
+                .onChange(of: sidebarItemSelected) { oldValue, newValue in
+                    if newValue == SidebarItem.timeline.rawValue {
+                        path = NavigationPath()
                     }
                 }
             }
-            .navigationTitle("Notes 365")
-            .onAppear {
-                BusinessFactory.dayVersionInteractor().setupDayVersionCreationProcess()
-                BusinessFactory.timelineInteractor().setupTimeineCreationProcess()
-            }
-            .sheet(isPresented: $showThemes) {
-                ThemesBaseView()
-            }
-            .sheet(isPresented: $showFormattingSymbols) {
-                EditorSymbolsView()
-            }
-            .sheet(isPresented: $showFeedback) {
-                FeedbackView()
-            }
-            .onAppear {
-                ThemeState.shared.updateColorScheme(colorScheme)
-            }
-            .onChange(of: colorScheme, { oldValue, newValue in
-                if ThemeState.shared.colorScheme != newValue {
-                    ThemeState.shared.updateColorScheme(newValue)
-                }
-            })
-            .onChange(of: sidebarItemSelected) { oldValue, newValue in
-                if newValue == SidebarItem.timeline.rawValue {
-                    path = NavigationPath()
-                }
-            }
+            
         }
         detail: {
             let selectedItem = SidebarItem(rawValue: sidebarItemSelected ?? SidebarItem.timeline.id)!

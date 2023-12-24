@@ -18,6 +18,7 @@ class CurrentLevelState {
     var files = [Notebook]()
     
     var isCreatingNotebook = false
+    var cloudSyncFinishedObserver: NSObjectProtocol?
     
     var isEmpty: Bool {
         folders.isEmpty && files.isEmpty
@@ -30,10 +31,15 @@ class CurrentLevelState {
     init() {
         // listen for move updates, if destination is yours, add them to your list
         observeNotebookMoved()
+        observeCloudFinished()
     }
     
     deinit {
         removeNotebookMovedObserver()
+    }
+    
+    func refreshList() {
+        loadItems(for: self.parent)
     }
     
     func loadItems(for parent: Notebook?) {
@@ -167,4 +173,21 @@ extension CurrentLevelState {
         }
         
     }
+}
+
+
+extension CurrentLevelState {
+    
+    func observeCloudFinished() {
+        cloudSyncFinishedObserver = NotificationCenter.default.addObserver(forName: .icloudSyncFinished, object: nil, queue: .main) { [weak self] notification in
+            
+            guard let self = self else { return }
+            
+            if self.parent == nil {
+                
+                self.refreshList()
+            }
+        }
+    }
+    
 }

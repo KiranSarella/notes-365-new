@@ -1,10 +1,11 @@
 # Backlogs
-[ ] use cloudkit notification to known download status instead of sleep loader
+[-] use cloudkit notification to known download status instead of sleep loader
 [ ] recent files
 [ ] deleted files list
 [ ] search files and folders
 
 # Know Issues
+[ ] timeline - with huge data hanging - need load more
 [ ] sort files, not working
 
 # Completed
