@@ -588,6 +588,13 @@
 			path = Functionality;
 			sourceTree = "<group>";
 		};
+		5CA40B962B3972610077645F /* Recents */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Recents;
+			sourceTree = "<group>";
+		};
 		5CBEF30F2B14FD2E003A3972 /* HorizontalCalendarView */ = {
 			isa = PBXGroup;
 			children = (
@@ -879,6 +886,7 @@
 				9FB0A47329DB22940093FBD2 /* Storage */,
 				9FB0A48829DF12980093FBD2 /* Timeline */,
 				9FB0A47529DBD6930093FBD2 /* Notebooks */,
+				5CA40B962B3972610077645F /* Recents */,
 				9FB0A48D29DF13930093FBD2 /* DayVersions */,
 				5C08EA372B1892C50095DE86 /* ContentSearch */,
 				9F93E14829E59CDA00210E99 /* SmartEditor */,

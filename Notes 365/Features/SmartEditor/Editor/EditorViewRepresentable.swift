@@ -138,7 +138,7 @@ struct ReadOnlyMarkDownView: View {
     
     func updateHeight() {
         Task {
-            try? await Task.sleep(nanoseconds: 800_000_000) // wait until attributed string prepared
+            try? await Task.sleep(nanoseconds: 700_000_000) // wait until attributed string prepared
             DispatchQueue.main.async {
                 editorView.textView.sizeToFit()
                 let contentSizeHeight = editorView.textView.contentSize.height
@@ -147,13 +147,13 @@ struct ReadOnlyMarkDownView: View {
         }
     }
     
-    func heightForAttributedString(_ attributedString: NSAttributedString, width: CGFloat) -> CGFloat {
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: .greatestFiniteMagnitude))
-        label.numberOfLines = 0
-        label.attributedText = attributedString
-        label.sizeToFit()
-        return label.frame.height
-    }
+//    func heightForAttributedString(_ attributedString: NSAttributedString, width: CGFloat) -> CGFloat {
+//        let label = UILabel(frame: CGRect(x: 0, y: 0, width: width, height: .greatestFiniteMagnitude))
+//        label.numberOfLines = 0
+//        label.attributedText = attributedString
+//        label.sizeToFit()
+//        return label.frame.height
+//    }
 
 }
 

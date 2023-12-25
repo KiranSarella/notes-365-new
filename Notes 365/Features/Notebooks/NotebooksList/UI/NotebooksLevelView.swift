@@ -42,7 +42,7 @@ struct NotebooksLevelView: View {
     @State var moveSource: Notebook?
     @State var showMoveView = false
     @State var moveDestination: FileItem?
-    @State var searchText: String = ""
+    
     @Environment(\.isSearching) private var isSearching
     
     var body: some View {
@@ -56,8 +56,8 @@ struct NotebooksLevelView: View {
                     fileSection
                 }
                 .scrollDismissesKeyboard(.interactively)
-                .searchable(text: $searchText, placement: .navigationBarDrawer)
-                .onChange(of: searchText) { old, new in
+                .searchable(text: $currentLevelState.searchText, placement: .navigationBarDrawer)
+                .onChange(of: currentLevelState.searchText) { old, new in
                     if new.count > 1 {
                         currentLevelState.searchItems(for: new)
                     } else {
@@ -112,6 +112,9 @@ struct NotebooksLevelView: View {
                 showMoveView = false
             }
         }
+//        .onChange(of: isSearching) { old, new in
+//            currentLevelState.isSearching = new
+//        }
     }
     
     private var emptyView: some View {

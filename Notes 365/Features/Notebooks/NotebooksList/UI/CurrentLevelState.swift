@@ -20,6 +20,12 @@ class CurrentLevelState {
     var isCreatingNotebook = false
     var cloudSyncFinishedObserver: NSObjectProtocol?
     
+    var isSearching: Bool {
+        !searchText.isEmpty
+    }
+    
+    var searchText: String = ""
+    
     var isEmpty: Bool {
         folders.isEmpty && files.isEmpty
     }
@@ -220,8 +226,7 @@ extension CurrentLevelState {
             
             guard let self = self else { return }
             
-            if self.parent == nil {
-                
+            if self.parent == nil && isSearching == false {
                 self.refreshList()
             }
         }
