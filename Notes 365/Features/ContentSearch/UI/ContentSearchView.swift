@@ -28,7 +28,7 @@ struct ContentSearchView: View {
                 Spacer()
             }
             .ignoresSafeArea(edges: [.bottom])
-            .searchable(text: $searchText, prompt: "Search Content")
+            .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Search Content")
             .navigationBarTitleDisplayMode(.inline)
             .onChange(of: searchText) { oldValue, newValue in
                 if newValue.count >= 3 {

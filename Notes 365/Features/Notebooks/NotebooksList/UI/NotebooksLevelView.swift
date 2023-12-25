@@ -42,42 +42,40 @@ struct NotebooksLevelView: View {
     @State var moveSource: Notebook?
     @State var showMoveView = false
     @State var moveDestination: FileItem?
+    @State var searchText: String = ""
+    @Environment(\.isSearching) private var isSearching
     
     var body: some View {
         VStack {
-            if currentLevelState.isEmpty {
-                VStack(alignment: .center) {
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        Text("Empty")
-                            .font(.headline)
-                        Spacer()
+            if parent == nil {
+                List {
+                    if currentLevelState.isEmpty {
+                        emptyView
                     }
-                    Spacer()
+                    folderSection
+                    fileSection
+                }
+                .scrollDismissesKeyboard(.interactively)
+                .searchable(text: $searchText, placement: .navigationBarDrawer)
+                .onChange(of: searchText) { old, new in
+                    if new.count > 1 {
+                        currentLevelState.searchItems(for: new)
+                    } else {
+                        currentLevelState.refreshList()
+                    }
                 }
             } else {
                 List {
-                    Section {
-                        ForEach(currentLevelState.folders) { folder in
-                            NavigationLink(value: folder) {
-                                FolderCellView(currentLevelState: $currentLevelState, moveSource: $moveSource, name: folder.name, notebook: folder)
-                            }
-                        }
+                    if currentLevelState.isEmpty {
+                        emptyView
                     }
-                    Section {
-                        ForEach(currentLevelState.files) { file in
-                            Button {
-                                path.append(file)
-                            } label: {
-                                FileCellView(currentLevelState: $currentLevelState, name: file.name, moveSource: $moveSource, notebook: file)
-                            }
-                        }
-                    }
+                    folderSection
+                    fileSection
                 }
             }
         }
         .navigationTitle(navigationTitle)
+        .navigationBarTitleDisplayMode(.large)
         .navigationDestination(for: Notebook.self) { notebook in
             if notebook.isFolder {
                 NotebooksLevelView(navigationTitle: notebook.name, path: $path, parent: notebook)
@@ -112,6 +110,45 @@ struct NotebooksLevelView: View {
             if let destination = new {
                 currentLevelState.move(moveSource, to: destination.folderId)
                 showMoveView = false
+            }
+        }
+    }
+    
+    private var emptyView: some View {
+        VStack(alignment: .center) {
+            Spacer()
+            HStack {
+                Spacer()
+                Text("Empty")
+                    .font(.headline)
+                Spacer()
+            }
+            .frame(height: 200)
+            Spacer()
+        }
+        .backgroundStyle(Color.clear)
+        .listRowBackground(Color.clear)
+        .listRowSeparator(.hidden)
+    }
+    
+    private var folderSection: some View {
+        Section {
+            ForEach(currentLevelState.folders) { folder in
+                NavigationLink(value: folder) {
+                    FolderCellView(currentLevelState: $currentLevelState, moveSource: $moveSource, name: folder.name, notebook: folder)
+                }
+            }
+        }
+    }
+    
+    private var fileSection: some View {
+        Section {
+            ForEach(currentLevelState.files) { file in
+                Button {
+                    path.append(file)
+                } label: {
+                    FileCellView(currentLevelState: $currentLevelState, name: file.name, moveSource: $moveSource, notebook: file)
+                }
             }
         }
     }
@@ -174,6 +211,7 @@ extension Fruit: Hashable {
 
 
 struct FolderCellView: View {
+    @Environment(\.isSearching) private var isSearching
     @Binding var currentLevelState: CurrentLevelState
     @Binding var moveSource: Notebook?
     @State var name: String
@@ -213,6 +251,7 @@ struct FolderCellView: View {
                                         Label("Delete", systemImage: "trash")
                                     }
                                 }
+                                .disabled(isSearching)
                                 .renameAction {
                                     isEditing = true
                                 }
@@ -235,6 +274,7 @@ struct FolderCellView: View {
                                         Label("Delete", systemImage: "trash")
                                     }
                                 }
+                                .disabled(isSearching)
                     
                     Spacer()
                     
@@ -258,6 +298,7 @@ struct FolderCellView: View {
                         } label: {
                             Image(systemName: "ellipsis.circle.fill")
                         }
+                        .disabled(isSearching)
                     }
                 }
                 
@@ -304,6 +345,7 @@ struct FolderCellView: View {
 
 
 struct FileCellView: View {
+    @Environment(\.isSearching) private var isSearching
     @Binding var currentLevelState: CurrentLevelState
     @State var name: String
     @Binding var moveSource: Notebook?
@@ -343,6 +385,7 @@ struct FileCellView: View {
                                 Label("Delete", systemImage: "trash")
                             }
                         }
+                        .disabled(isSearching)
                         .renameAction {
                             isEditing = true
                         }
@@ -364,6 +407,7 @@ struct FileCellView: View {
                                 Label("Delete", systemImage: "trash")
                             }
                         }
+                        .disabled(isSearching)
                     
                     Spacer()
                     
@@ -387,6 +431,7 @@ struct FileCellView: View {
                         } label: {
                             Image(systemName: "ellipsis.circle.fill")
                         }
+                        .disabled(isSearching)
                     }
                 }
             }

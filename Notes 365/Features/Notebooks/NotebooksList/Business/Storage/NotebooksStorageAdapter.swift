@@ -24,6 +24,10 @@ class NotebooksStorageAdapter: NotebooksStorageProvider {
         try storage.fetchRootNotebook()?.notebook()
     }
     
+    func searchActiveNotebooks(for searchText: String) throws -> [NotebookB] {
+        try storage.searchActiveNotebooks(for: searchText).map { $0.notebook() }
+    }
+    
     func fetchAllNotebooks() async throws -> [NotebookB] {
         try await withCheckedThrowingContinuation { continuation in
             do {

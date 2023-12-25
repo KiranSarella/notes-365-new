@@ -41,14 +41,35 @@ class CurrentLevelState {
     func refreshList() {
         loadItems(for: self.parent)
     }
+
+    func searchItems(for searchText: String) {
+        do {
+            let items = try notebooksBusiness.searchItems(for: searchText)
+            let notebooks = items.map { $0.notebook() }
+            folders = notebooks.filter { $0.isFolder }.sorted(by: { n1, n2 in
+                n1.name < n2.name
+            })
+            files = notebooks.filter { !$0.isFolder }.sorted(by: { n1, n2 in
+                n1.name < n2.name
+            })
+            print(folders.map { "\($0.name) - \($0.id.uuidString)"})
+            print(files.map { "\($0.name) - \($0.id.uuidString)"})
+        } catch let error {
+            print(error)
+        }
+    }
     
     func loadItems(for parent: Notebook?) {
         self.parent = parent
         do {
             let items = try notebooksBusiness.fetchItems(at: parent?.id)
             let notebooks = items.map { $0.notebook() }
-            folders = notebooks.filter { $0.isFolder }
-            files = notebooks.filter { !$0.isFolder }
+            folders = notebooks.filter { $0.isFolder }.sorted(by: { n1, n2 in
+                n1.name < n2.name
+            })
+            files = notebooks.filter { !$0.isFolder }.sorted(by: { n1, n2 in
+                n1.name < n2.name
+            })
             print(folders.map { "\($0.name) - \($0.id.uuidString)"})
             print(files.map { "\($0.name) - \($0.id.uuidString)"})
         } catch let error {
@@ -63,6 +84,9 @@ class CurrentLevelState {
             let newNotebook = newNotebookB.notebook()
             newNotebook.updateParent(parent)
             self.folders.append(newNotebook)
+            self.folders.sort(by: { n1, n2 in
+                n1.name < n2.name
+            })
         } catch let error {
             print(error)
         }
@@ -75,6 +99,9 @@ class CurrentLevelState {
             let newNotebook = newNotebookB.notebook()
             newNotebook.updateParent(parent)
             self.files.append(newNotebook)
+            self.files.sort(by: { n1, n2 in
+                n1.name < n2.name
+            })
         } catch let error {
             print(error)
         }
@@ -86,6 +113,15 @@ class CurrentLevelState {
                                      newValue: newValue,
                                      siblings: siblings)
         notebook.name = newValue
+        if notebook.isFolder {
+            self.folders.sort(by: { n1, n2 in
+                n1.name < n2.name
+            })
+        } else {
+            self.files.sort(by: { n1, n2 in
+                n1.name < n2.name
+            })
+        }
     }
     
     func deleteFile(notebook: Notebook) {
@@ -112,8 +148,6 @@ class CurrentLevelState {
     
     func move(_ source: Notebook, to destinationId: UUID?) {
         logger.info("\(#function) from: \(source.name) to: \(destinationId?.uuidString ?? "")")
-        var source = source
-        source.parentId = destinationId
         do {
             try notebooksBusiness.move(notebook: source.notebookB(), to: destinationId)
         } catch {
@@ -151,7 +185,6 @@ extension CurrentLevelState {
                 
         let parentId = notification.userInfo?["parent_id"] as? UUID
         
-        
         var isMovedToThisLevel: Bool {
             parentId == parent?.id
         }
@@ -166,10 +199,14 @@ extension CurrentLevelState {
         
         if isFolder {
             folders.append(item)
-            // do sorting
+            folders.sort(by: { n1, n2 in
+                n1.name < n2.name
+            })
         } else {
             files.append(item)
-            // do sorting
+            files.sort(by: { n1, n2 in
+                n1.name < n2.name
+            })
         }
         
     }

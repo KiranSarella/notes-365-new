@@ -58,6 +58,12 @@ class NotebooksStorage {
         }
     }
     
+    func searchActiveNotebooks(for searchText: String) throws -> [NotebookData] {
+        let predicate = #Predicate<NotebookData> { $0.deletedDate == nil && $0.name.localizedStandardContains(searchText)}
+        let descriptor = FetchDescriptor(predicate: predicate)
+        return try modelContext.fetch(descriptor)
+    }
+    
     func fetchActiveChildren(forParent id: UUID) throws -> [NotebookData] {
         let predicate = #Predicate<NotebookData> { $0.parent == id && $0.deletedDate == nil }
         let descriptor = FetchDescriptor(predicate: predicate)

@@ -657,8 +657,8 @@
 				9F6CA8DD2A041D27009061A0 /* ReorderLIst.md */,
 				5CE8C4872B03048E00F19217 /* Notebook.swift */,
 				5CF4F5172B0DE4EB008F13F3 /* NotebooksLevelView.swift */,
-				5C6C713C2B32D4AC00783517 /* MoveToView.swift */,
 				5C9060512B0F46060068DD65 /* CurrentLevelState.swift */,
+				5C6C713C2B32D4AC00783517 /* MoveToView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";

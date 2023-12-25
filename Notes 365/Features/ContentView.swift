@@ -95,6 +95,7 @@ public enum SidebarItem: String, CaseIterable, Identifiable {
     public var id: String { self.rawValue }
     case timeline
     case notebooks
+    case recents
     case search
 }
 
@@ -123,6 +124,8 @@ struct ContentView: View {
                         .tag(SidebarItem.timeline.id)
                     Label("Notebooks", systemImage: "books.vertical")
                         .tag(SidebarItem.notebooks.id)
+                    Label("Recents", systemImage: "clock")
+                        .tag(SidebarItem.recents.id)
                     Label("Search", systemImage: "magnifyingglass")
                         .tag(SidebarItem.search.id)
                     Section("Settings", isExpanded: $settingsExpanded) {
@@ -142,13 +145,10 @@ struct ContentView: View {
                             Label("Feedback", systemImage: "hand.thumbsup")
                         }
                     }
-                    if cloudKitSync.isImportDone == false {
-                        HStack {
-                            Text("Syncing...")
-                                .padding()
-                            ProgressView()
-                        }
-                    }
+                    
+//                    if cloudKitSync.isImportDone == false {
+//                        ProgressView("Syncing..")
+//                    }
                 }
                 .navigationTitle("Notes 365")
                 .onAppear {
@@ -189,6 +189,8 @@ struct ContentView: View {
                 NotebooksBaseDetailView(path: $path)
             case .search:
                 ContentSearchView()
+            case .recents:
+                NotebooksBaseDetailView(path: $path)
             }
         }
     }

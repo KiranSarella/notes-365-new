@@ -1,12 +1,10 @@
 # Backlogs
-[-] use cloudkit notification to known download status instead of sleep loader
 [ ] recent files
-[ ] deleted files list
 [ ] search files and folders
+[ ] deleted files list
 
-# Know Issues
 [ ] timeline - with huge data hanging - need load more
-[ ] sort files, not working
+[ ] in-app purchases
 
 # Completed
 [x] move folders and files
@@ -15,4 +13,6 @@
 
 [x] on font change, height not updating in timeline
 [x] on bg change, not refresing in editor
+[x] use cloudkit notification to known download status instead of sleep loader
+[x] sort files, not working - asc. 
 

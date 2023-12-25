@@ -9,6 +9,7 @@ import Foundation
 
 protocol NotebooksRequester {
     func fetchAllNotebooks() async throws -> [NotebookB]
+    func searchItems(for searchText: String) throws -> [NotebookB]
     func fetchItems(at parent: UUID?) throws -> [NotebookB]
 //    func fetchRootItems() throws -> [NotebookB]
     func getRootNotebookOnly() throws -> NotebookB?

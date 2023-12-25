@@ -68,6 +68,10 @@ class NotebooksBusiness {
         }
     }
     
+    func searchItems(for searchText: String) throws -> [NotebookB] {
+        try storage.searchActiveNotebooks(for: searchText)
+    }
+    
     func getRootNotebookOnly() throws -> NotebookB? {
         try storage.getRootNotebook()
     }

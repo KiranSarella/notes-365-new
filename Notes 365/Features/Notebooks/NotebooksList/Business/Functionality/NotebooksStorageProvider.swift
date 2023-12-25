@@ -10,6 +10,7 @@ import Foundation
 protocol NotebooksStorageProvider {
     func fetchNotebooksCount() throws -> Int
     func getRootNotebook() throws -> NotebookB?
+    func searchActiveNotebooks(for searchText: String) throws -> [NotebookB]
     func fetchAllNotebooks() async throws -> [NotebookB]
 //    func fetchDeletedNotebooks() async throws -> [NotebookB]
     func insert(notebook: NotebookB) throws
