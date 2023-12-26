@@ -17,8 +17,12 @@ struct ContentWrapperView: View {
     @State var migrationProcess: MigrationProcess?
     
     var body: some View {
-        // do initial checks and configurations
-        // show loading until all setup
+//        ContentView()
+//            .environment(chooseEnv)
+        
+        
+//         do initial checks and configurations
+//         show loading until all setup
         if chooseEnv.isConfigured == false {
             if showRefresh {
                 VStack {
@@ -115,6 +119,7 @@ struct ContentView: View {
     @State private var path = NavigationPath()
     @State private var horizontalCalendarViewState = HorizontalCalendarViewState()
     let cloudKitSync = CloudKitSync()
+    let recentsDataService = RecentsDataService.shared
     
     var body: some View {
         NavigationSplitView(columnVisibility: $navigationSplitViewVisibility) {
@@ -190,7 +195,7 @@ struct ContentView: View {
             case .search:
                 ContentSearchView()
             case .recents:
-                NotebooksBaseDetailView(path: $path)
+                RecentsBaseDetailView(path: $path)
             }
         }
     }

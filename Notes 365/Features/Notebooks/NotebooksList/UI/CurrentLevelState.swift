@@ -9,6 +9,10 @@ import Foundation
 import SwiftUI
 import os
 
+extension Notification.Name {
+    public static let addToRecent = Notification.Name("com.notes365.addToRecent")
+}
+
 @Observable
 class CurrentLevelState {
     
@@ -96,6 +100,8 @@ class CurrentLevelState {
         } catch let error {
             print(error)
         }
+        
+        notifyAddCurrentFolderToRecents()
     }
     
     func createFile() {
@@ -111,6 +117,8 @@ class CurrentLevelState {
         } catch let error {
             print(error)
         }
+        
+        notifyAddCurrentFolderToRecents()
     }
     
     func rename(for notebook: Notebook, newValue: String) throws {
@@ -128,6 +136,8 @@ class CurrentLevelState {
                 n1.name < n2.name
             })
         }
+        
+        notifyAddCurrentFolderToRecents()
     }
     
     func deleteFile(notebook: Notebook) {
@@ -139,6 +149,8 @@ class CurrentLevelState {
         }
         // delete from UI
         files.removeAll(where: { $0.id == notebook.id })
+        
+        notifyAddCurrentFolderToRecents()
     }
     
     func deleteFolder(notebook: Notebook) {
@@ -150,6 +162,8 @@ class CurrentLevelState {
         }
         // delete from UI
         folders.removeAll(where: { $0.id == notebook.id })
+        
+        notifyAddCurrentFolderToRecents()
     }
     
     func move(_ source: Notebook, to destinationId: UUID?) {
@@ -169,6 +183,8 @@ class CurrentLevelState {
                 nt.id == source.id
             }
         }
+        
+        notifyAddCurrentFolderToRecents()
     }
 }
 
@@ -196,6 +212,10 @@ extension CurrentLevelState {
         }
         
         if isMovedToThisLevel == false {
+            return
+        }
+        
+        if isSearching {
             return
         }
         
@@ -230,6 +250,26 @@ extension CurrentLevelState {
                 self.refreshList()
             }
         }
+    }
+    
+}
+
+extension CurrentLevelState {
+    
+    func notifyAddCurrentFolderToRecents() {
+        if let parent = parent {
+            notifyNotebookOpen(notebook: parent)
+        }
+    }
+    
+    func notifyNotebookOpen(notebook: Notebook) {
+        let info = [
+            "notebook_id": notebook.id,
+            "name": notebook.name,
+            "isFolder": notebook.isFolder
+        ] as [String : Any]
+        NotificationCenter.default.post(name: Notification.Name.addToRecent, object: nil, userInfo: info)
+        logger.debug("\(#function) - \(info)")
     }
     
 }

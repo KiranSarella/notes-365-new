@@ -8,6 +8,8 @@
 import SwiftUI
 import Combine
 
+
+
 struct NotebookContentView: View {
     var isReadOnly: Bool
     var notebookId: UUID

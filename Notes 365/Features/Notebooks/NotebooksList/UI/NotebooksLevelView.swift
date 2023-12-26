@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct Item: Identifiable {
-    let id: UUID
-    var name: String
-    var createdDate: Date = DateTime.now()
-}
+//struct Item: Identifiable {
+//    let id: UUID
+//    var name: String
+//    var createdDate: Date = DateTime.now()
+//}
 
 struct NotebooksBaseDetailView: View {
     @Binding var path: NavigationPath
@@ -25,15 +25,7 @@ struct NotebooksBaseDetailView: View {
 
 
 struct NotebooksLevelView: View {
-    
-    var items: [GridItem] {
-      Array(repeating: .init(.adaptive(minimum: 120)), count: 10)
-    }
-    
-    var columns = [GridItem(.adaptive(minimum: 200))]
-    
     var navigationTitle: String
-    
     @State var currentLevelState = CurrentLevelState()
     @Binding var path: NavigationPath
     @State private var notebookContentState = NotebookContentState(business: BusinessFactory.createNotebookContentBusinessFactory())
@@ -112,9 +104,6 @@ struct NotebooksLevelView: View {
                 showMoveView = false
             }
         }
-//        .onChange(of: isSearching) { old, new in
-//            currentLevelState.isSearching = new
-//        }
     }
     
     private var emptyView: some View {
@@ -149,6 +138,8 @@ struct NotebooksLevelView: View {
             ForEach(currentLevelState.files) { file in
                 Button {
                     path.append(file)
+                    currentLevelState.notifyNotebookOpen(notebook: file)
+                    currentLevelState.notifyAddCurrentFolderToRecents()
                 } label: {
                     FileCellView(currentLevelState: $currentLevelState, name: file.name, moveSource: $moveSource, notebook: file)
                 }
@@ -187,19 +178,6 @@ struct NotebooksLevelView: View {
     }
 
     
-}
-//
-//#Preview {
-//    NotebooksLevelView()
-//}
-
-struct FolderSection: View {
-    
-    let items:[Item]
-    
-    var body: some View {
-        Text("asdf")
-    }
 }
 
 struct Fruit: Identifiable {

@@ -101,44 +101,7 @@ class NotebooksPathService {
         }
     }
     
-    
-//    func path(for notebookId: UUID) async -> FullPathInfo? {
-//        if let fullPathInfo = fullPathsCache[notebookId] {
-//            return fullPathInfo
-//        } else {
-//            let newPath = await generatePath(notebookId: notebookId)
-//            if let newPath = newPath {
-//                pathsCache[notebookId] = "uhi > kuhku"//newPath
-//            }
-//            return newPath
-//        }
-//    }
-
-//    func generatePath(notebookId: UUID) async -> FullPathInfo? {
-//        return await withCheckedContinuation { continution in
-//            if let filePathInfo = self.filesPathInfo[notebookId] {
-//                
-//                var pathComponents = [String]()
-//                pathComponents.append(filePathInfo.name)
-//                if let folderId = filePathInfo.parentId {
-//                    appendFoldersPath(startingFrom: folderId, in: &pathComponents)
-//                }
-//                let fullPath = pathComponents.reversed().joined(separator: "  \u{203A}   ")
-//                let fullPathInfo = FullPathInfo(id: notebookId, name: filePathInfo.name, fullPath: fullPath)
-////                fullPathsCache[notebookId] = fullPathInfo
-//    //                defer {
-//    //                    fullPathsCache[notebookId] = fullPathInfo
-//    //                }
-//                continution.resume(returning: fullPathInfo)
-//    //                return fullPathInfo
-//            } else {
-//                continution.resume(returning: nil)
-//            }
-//        }
-//    }
-    
     private func invalidateCacheFullPath() {
-//        fullPathsCache.removeAll()
         pathsCache.removeAll()
     }
     
@@ -149,7 +112,6 @@ class NotebooksPathService {
             appendFoldersPath(startingFrom: parentId, in: &pathComponents)
         }
     }
-    
     
 }
 

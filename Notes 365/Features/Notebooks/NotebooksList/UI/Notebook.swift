@@ -13,22 +13,11 @@ class Notebook: Identifiable {
     var name: String = ""
     var parentId: UUID?
     var isFolder: Bool = true
-//    var childrenIds: [UUID]?
-    var children: [Notebook] = [Notebook]()
+    
     var createdDate: Date = DateTime.now()
     var modifiedDate: Date = DateTime.now()
     var deletedDate: Date? = nil
-    var notebookData: NotebookData
-    var isExpanded: Bool = false
-    var isDeleted: Bool = false
-    var canShow: Bool = true
-    
-    func sortChildren() {
-        children.sort { n1, n2 in
-            n1.priority < n2.priority// && n1.createdDate < n2.createdDate
-        }
-    }
-    
+
     var priority: Int {
         isFolder ? 0 : 1
     }
@@ -36,7 +25,6 @@ class Notebook: Identifiable {
     init(id: UUID, name: String) {
         self.id = id
         self.name = name
-        notebookData = NotebookData(id: id, name: name)
     }
     
     // MARK: - parent
@@ -57,44 +45,6 @@ extension Notebook: Equatable, Hashable {
 
 extension Notebook: CustomStringConvertible {
     var description: String { name }
-}
-
-// MARK: - children
-extension Notebook {
-    func insertChild(notebook newValue: Notebook) {
-        self.children.append(newValue)
-        sortChildren()
-    }
-    
-    func deleteChildren(where id: UUID) {
-        children.removeAll(where: { $0.id == id })
-    }
-    
-//    func populateChildren(from dict: [UUID: NotebookB], expandedIds: Set<String>) {
-//        guard let cArr = childrenIds, !cArr.isEmpty else { return }
-//        children = [Notebook]()
-//        for cid in cArr {
-//            if let noteD = dict[cid] {
-//                let note = noteD.notebook()
-//                note.parentId = self.id
-//                note.isExpanded = expandedIds.contains(note.id.uuidString)
-//                children.append(note)
-//            }
-//        }
-//        for cNote in children {
-//            cNote.populateChildren(from: dict, expandedIds: expandedIds)
-//            cNote.sortChildren()
-//        }
-//    }
-    
-    var containChildNotebooks: Bool {
-        childrenCount > 0
-    }
-    
-    var childrenCount: Int {
-        children.count
-    }
- 
 }
 
 extension NotebookB {

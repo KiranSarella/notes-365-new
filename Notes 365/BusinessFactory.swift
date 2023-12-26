@@ -76,19 +76,12 @@ class BusinessFactory {
         return ThemeBusiness(storage: storage)
     }
     
+    static func recentsInteractor() -> RecentsInteractor {
+        let modelContext = SharedContext.shared.getModelContext()
+        let storage = RecentsStorageAdapter(modelContext: modelContext)
+        return RecentsBusiness(storage: storage)
+    }
+    
 }
 
-//class NotebooksBusinessGenerator: NotebooksBusinessFactory {
-//    
-//    func makeBusinessObject() -> NotebooksStorageProvider {
-//        
-//    }
-//}
-//
-//class MockNotebooksBusinessGenerator: NotebooksBusinessFactory {
-//    
-//    func makeBusinessObject() -> NotebooksStorageProvider {
-//        
-//    }
-//}
 

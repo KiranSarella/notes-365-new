@@ -26,7 +26,8 @@ class SharedContext {
         NotebookContentData.self,
         DayVersionData.self,
         TimelineData.self,
-        UserPreferenceData.self
+        UserPreferenceData.self,
+        RecentItemData.self
     ])
     
     func getModelContext() -> ModelContext {
@@ -94,7 +95,9 @@ class SharedContext {
                                                                                NotebookContentData.self,
                                                                                DayVersionData.self,
                                                                                TimelineData.self,
-                                                                               UserPreferenceData.self]) {
+                                                                               UserPreferenceData.self,
+                                                                               RecentItemData.self
+                                                                              ]) {
                     let container = NSPersistentCloudKitContainer(name: "notes365-local", managedObjectModel: mom)
                     container.persistentStoreDescriptions = [desc]
                     container.loadPersistentStores {_, err in
