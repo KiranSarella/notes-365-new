@@ -26,6 +26,10 @@ class RecentsStorageAdapter: RecentsStorageProvider {
     func remove(id: UUID) throws {
         try storage.remove(for: id)
     }
+    
+    func removeItems(below date: Date, isFolder: Bool) throws {
+        try storage.removeItems(below: date, isFolder: isFolder)
+    }
 }
 
 extension RecentItem {

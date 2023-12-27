@@ -168,6 +168,7 @@ struct FormattingOptionsView: View {
                     }
                 }.padding([.leading], groupPadding)
             }
+            .padding(5)
         }
         .fontDesign(.rounded)
         .buttonStyle(.bordered)

@@ -35,4 +35,13 @@ class RecentsStorage {
         descriptor.fetchLimit = 1
         try modelContext.delete(model: RecentItemData.self, where: predicate)
     }
+    
+    func removeItems(below date: Date, isFolder: Bool) throws {
+        let predicate = #Predicate<RecentItemData> {
+            $0.isFolder == isFolder && $0.updatedDate < date
+        }
+        let descriptor = FetchDescriptor(predicate: predicate)
+        try modelContext.delete(model: RecentItemData.self, where: predicate)
+    }
+    
 }

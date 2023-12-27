@@ -13,10 +13,18 @@ class RecentsDataService {
     let notebooksBusiness = BusinessFactory.recentsInteractor()
     
     private init() {
+        
+    }
+    
+    func startProviding() {
         observeFilesOpen()
     }
     
-    func observeFilesOpen() {
+    func stopProviding() {
+        filesOpenObserver = nil
+    }
+    
+    private func observeFilesOpen() {
         filesOpenObserver = NotificationCenter.default.addObserver(forName: .addToRecent, object: nil, queue: .main) { [weak self] notification in
             guard let self = self else { return }
             

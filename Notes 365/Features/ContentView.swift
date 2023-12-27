@@ -119,35 +119,66 @@ struct ContentView: View {
     @State private var path = NavigationPath()
     @State private var horizontalCalendarViewState = HorizontalCalendarViewState()
     let cloudKitSync = CloudKitSync()
-    let recentsDataService = RecentsDataService.shared
     
     var body: some View {
         NavigationSplitView(columnVisibility: $navigationSplitViewVisibility) {
             VStack {
                 List(selection: $sidebarItemSelected) {
-                    Label("Timeline", systemImage: "rectangle.stack")
-                        .tag(SidebarItem.timeline.id)
-                    Label("Notebooks", systemImage: "books.vertical")
-                        .tag(SidebarItem.notebooks.id)
-                    Label("Recents", systemImage: "clock")
-                        .tag(SidebarItem.recents.id)
-                    Label("Search", systemImage: "magnifyingglass")
-                        .tag(SidebarItem.search.id)
+                    Label {
+                        Text("Timeline")
+                    } icon: {
+                        Image(systemName: "rectangle.stack")
+                    }
+                    .tag(SidebarItem.timeline.id)
+                        
+                    Label {
+                        Text("Notebooks")
+                    } icon: {
+                        Image(systemName: "books.vertical")
+                    }
+                    .tag(SidebarItem.notebooks.id)
+                    
+                    Label {
+                        Text("Recents")
+                    } icon: {
+                        Image(systemName: "clock")
+                    }
+                    .tag(SidebarItem.recents.id)
+                    
+                    Label {
+                        Text("Search")
+                    } icon: {
+                        Image(systemName: "magnifyingglass")
+                    }
+                    .tag(SidebarItem.search.id)
+                    
                     Section("Settings", isExpanded: $settingsExpanded) {
                         Button {
                             showThemes = true
                         } label: {
-                            Label("Themes", systemImage: "paintbrush")
+                            Label {
+                                Text("Themes")
+                            } icon: {
+                                Image(systemName: "paintbrush")
+                            }
                         }
                         Button {
                             showFormattingSymbols = true
                         } label: {
-                            Label("Symbols Guide", systemImage: "textformat")
+                            Label {
+                                Text("Symbols Guide")
+                            } icon: {
+                                Image(systemName: "textformat")
+                            }
                         }
                         Button {
                             showFeedback = true
                         } label: {
-                            Label("Feedback", systemImage: "hand.thumbsup")
+                            Label {
+                                Text("Feedback")
+                            } icon: {
+                                Image(systemName: "hand.thumbsup")
+                            }
                         }
                     }
                     
@@ -159,6 +190,7 @@ struct ContentView: View {
                 .onAppear {
                     BusinessFactory.dayVersionInteractor().setupDayVersionCreationProcess()
                     BusinessFactory.timelineInteractor().setupTimeineCreationProcess()
+                    BusinessFactory.recentsInteractor().setupRecentsAddingProcess()
                 }
                 .sheet(isPresented: $showThemes) {
                     ThemesBaseView()

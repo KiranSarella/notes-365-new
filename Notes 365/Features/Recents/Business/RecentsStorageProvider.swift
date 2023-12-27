@@ -11,4 +11,5 @@ protocol RecentsStorageProvider {
     func fetchRecentItems() throws -> [RecentItem]
     func insert(item: RecentItem) throws
     func remove(id: UUID) throws
+    func removeItems(below date: Date, isFolder: Bool) throws
 }
