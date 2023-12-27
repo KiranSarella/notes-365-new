@@ -34,7 +34,7 @@ class RecentsDataService {
                 let isFolder = notification.userInfo?["isFolder"] as? Bool
             else { return }
                     
-            let recentItem = RecentItem(id: notebookId, name: name, isFolder: isFolder, updatedDate: Date())
+            let recentItem = RecentItem(id: notebookId, name: name, isFolder: isFolder, updatedDate: DateTime.now())
             
             do {
                 try notebooksBusiness.addRecent(item: recentItem)

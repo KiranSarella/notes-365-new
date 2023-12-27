@@ -80,6 +80,7 @@ extension TodayVersionBusiness {
     func setupDayVersionCreationProcess() {
         logger.info("\(#function)")
         DayVersionCreator.shared.startProviding(for: self)
+        cleanOlderDayVersions()
     }
     
     func stopDayVersionCreationProcess() {

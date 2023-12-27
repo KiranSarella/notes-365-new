@@ -9,13 +9,9 @@ import SwiftUI
 
 struct EditorViewRepresentable: UIViewRepresentable {
     let theme: MarkdownTheme = ThemeState.shared.theme
-    @Binding var output: String // use some shared output buffer state
-    @Binding var text: String
-    @Binding var editorView: EditorView
+    let text: String
+    var editorView: EditorView
     @Binding var contentEditedDate: Date?
-    @Binding var selectedRange: NSRange
-    @Binding var canUndo: Bool
-    @Binding var canRedo: Bool
     
     let isEditable: Bool
     var isEditor = true
@@ -86,39 +82,32 @@ struct EditorViewRepresentable: UIViewRepresentable {
 
 extension EditorViewRepresentable {
     func makeCoordinator() -> EditorUICoordinator {
-        return EditorUICoordinator(self, output: $output, selectedRange: $selectedRange, canUndo: $canUndo, canRedo: $canRedo)
+        return EditorUICoordinator(self)
     }
 }
 
 // Define View Modifiers
 class EditorUICoordinator: NSObject {
     var parent: EditorViewRepresentable
-    @Binding var output: String
-    @Binding var selectedRange: NSRange
-    @Binding var canUndo: Bool
-    @Binding var canRedo: Bool
     
-    init(_ parent: EditorViewRepresentable, output: Binding<String>, selectedRange: Binding<NSRange>, canUndo: Binding<Bool>, canRedo: Binding<Bool>) {
+    init(_ parent: EditorViewRepresentable) {
         self.parent = parent
-        _output = output
-        _selectedRange = selectedRange
-        _canUndo = canUndo
-        _canRedo = canRedo
     }
 }
 
 extension EditorUICoordinator: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        DispatchQueue.main.async {
-            self.output = textView.text
-        }
+//        DispatchQueue.main.async {
+//            self.output = textView.text
+//        }
+        EditorOutputBuffer.shared.output = textView.text
         parent.contentEditedDate = DateTime.now()
-        canUndo = textView.undoManager?.canUndo ?? false
-        canRedo = textView.undoManager?.canRedo ?? false
+        EditorOutputBuffer.shared.canUndo = textView.undoManager?.canUndo ?? false
+        EditorOutputBuffer.shared.canRedo = textView.undoManager?.canRedo ?? false
     }
     
     func textViewDidChangeSelection(_ textView: UITextView) {
-        selectedRange = textView.selectedRange
+        EditorOutputBuffer.shared.selectedRange = textView.selectedRange
     }
 }
 
@@ -128,12 +117,9 @@ struct ReadOnlyMarkDownView: View {
     @Binding var width: CGFloat
     @State var height: CGFloat = 100
     var body: some View {
-        EditorViewRepresentable(output: Binding.constant(""), text: Binding.constant(content ?? "no content"),
-                     editorView: $editorView,
-                     contentEditedDate: Binding.constant(DateTime.now()), 
-                                selectedRange: Binding.constant(NSRange()),
-                                canUndo: Binding.constant(false),
-                                canRedo: Binding.constant(false),
+        EditorViewRepresentable(text: content ?? "no content",
+                     editorView: editorView,
+                     contentEditedDate: Binding.constant(DateTime.now()),
                      isEditable: false,
                      isEditor: false
         )

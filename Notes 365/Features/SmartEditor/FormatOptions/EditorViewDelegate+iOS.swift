@@ -87,21 +87,24 @@ extension EditorView: EditorViewDelegate {
     }
     
     func markBold() {
-
+        guard let selectedTextRange = textView.selectedTextRange else { return }
         let selectedRange = textView.selectedRange
+        
         // get string from the selected Range
         let str = textView.text as NSString?   // So we cast String? to NSString?
         if let substr = str?.substring(with: selectedRange), substr.count > 0 {
             // append
             let newStr = "**\(substr)**"
             // add spaces if not exists
-            self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
+            self.textView.replace(selectedTextRange, withText: newStr)
+//            self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
             textView.selectedRange = NSRange(location: selectedRange.location, length: selectedRange.length + 4)
         } else {
             // append
             let newStr = "****"
             // add spaces if not exists
-            self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
+            self.textView.replace(selectedTextRange, withText: newStr)
+//            self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
             textView.selectedRange = NSRange(location: selectedRange.location + 2, length: selectedRange.length)
         }
         
@@ -109,23 +112,29 @@ extension EditorView: EditorViewDelegate {
     }
     
     func markHighlight() {
-
+        guard let selectedTextRange = textView.selectedTextRange else { return }
+//        textView.undoManager?.beginUndoGrouping()
+        
         let selectedRange = textView.selectedRange
         // get string from the selected Range
         let str = textView.text as NSString?   // So we cast String? to NSString?
         if let substr = str?.substring(with: selectedRange), substr.count > 0 {
             // append
             let newStr = "==\(substr)=="
+            self.textView.replace(selectedTextRange, withText: newStr)
             // add spaces if not exists
-            self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
+//            self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
             textView.selectedRange = NSRange(location: selectedRange.location, length: selectedRange.length + 4)
         } else {
             // append
             let newStr = "===="
+            self.textView.replace(selectedTextRange, withText: newStr)
             // add spaces if not exists
-            self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
+//            self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
             textView.selectedRange = NSRange(location: selectedRange.location + 2, length: selectedRange.length)
         }
+        
+//        textView.undoManager?.endUndoGrouping()
         
         textView.delegate?.textViewDidChange?(textView)
     }

@@ -10,10 +10,7 @@ import SwiftUI
 struct FormattingOptionsView: View {
     @Binding var editorView: EditorView
     @Binding var contentEditedDate: Date?
-    @Binding var selectedRange: NSRange
     @State private var enableEraser = false
-    @Binding var canUndo: Bool
-    @Binding var canRedo: Bool
     
     private let buttonHeight: CGFloat = 20
     private let groupPadding: CGFloat = 30
@@ -179,27 +176,27 @@ struct FormattingOptionsView: View {
                         }
                         .disabled(!enableEraser)
                         
-                        Button {
-                            // make selected range as bold
-                            editorView.performUndo()
-                            contentEditedDate = DateTime.now()
-                        } label: {
-                            Image(systemName: "arrow.uturn.backward")
-                                .frame(width: 28, height: buttonHeight)
-                                .help("Undo")
-                        }
-                        .disabled(!canUndo)
-                        
-                        Button {
-                            // make selected range as bold
-                            editorView.performRedo()
-                            contentEditedDate = DateTime.now()
-                        } label: {
-                            Image(systemName: "arrow.uturn.forward")
-                                .frame(width: 28, height: buttonHeight)
-                                .help("Redo")
-                        }
-                        .disabled(!canRedo)
+//                        Button {
+//                            // make selected range as bold
+//                            editorView.performUndo()
+//                            contentEditedDate = DateTime.now()
+//                        } label: {
+//                            Image(systemName: "arrow.uturn.backward")
+//                                .frame(width: 28, height: buttonHeight)
+//                                .help("Undo")
+//                        }
+//                        .disabled(!EditorOutputBuffer.shared.canUndo)
+//                        
+//                        Button {
+//                            // make selected range as bold
+//                            editorView.performRedo()
+//                            contentEditedDate = DateTime.now()
+//                        } label: {
+//                            Image(systemName: "arrow.uturn.forward")
+//                                .frame(width: 28, height: buttonHeight)
+//                                .help("Redo")
+//                        }
+//                        .disabled(!EditorOutputBuffer.shared.canRedo)
                     }
                 }.padding([.leading], groupPadding)
                 
@@ -208,11 +205,8 @@ struct FormattingOptionsView: View {
         }
         .fontDesign(.rounded)
         .buttonStyle(.bordered)
-        .onChange(of: selectedRange) { old, new in
+        .onChange(of: EditorOutputBuffer.shared.selectedRange) { old, new in
             enableEraser = new.length > 3
-//            logger.debug("canUndo: \(editorView.undoManager?.canUndo ?? false)")
-//            canUndo = editorView.undoManager?.canUndo ?? false
-//            canRedo = editorView.undoManager?.canRedo ?? false
         }
     }
     

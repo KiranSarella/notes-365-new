@@ -94,6 +94,8 @@ extension EditorView {
 //        textView.showsVerticalScrollIndicator = false
 //        textView.isScrollEnabled = false
         
+//        textView.allowsEditingTextAttributes = true
+        
         // add textView to scrollView
         textView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(textView)

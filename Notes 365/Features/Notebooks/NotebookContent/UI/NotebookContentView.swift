@@ -30,11 +30,11 @@ struct NotebookContentView: View {
                 }
                 Spacer()
             } else {
-                SmartEditor(fileName: fileName, isReadonly: isReadOnly, searchText: searchText, contentEditedDate: $notebookContentState.contentEditedDate, input: $notebookContentState.input, output: $notebookContentState.output)
+                SmartEditor(fileName: fileName, isReadonly: isReadOnly, searchText: searchText, contentEditedDate: $notebookContentState.contentEditedDate, input: $notebookContentState.input)
                 .onAppear(perform: {
                     self.notebookContentState.startAutoSaveTimer()
                 })
-                .onChange(of: notebookContentState.output) { oldValue, newValue in
+                .onChange(of: EditorOutputBuffer.shared.output) { oldValue, newValue in
                     print(newValue)
                     notebookContentState.contentEditedDate = DateTime.now()
                 }

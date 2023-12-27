@@ -14,6 +14,17 @@ class EditorOutputBuffer {
     static let shared = EditorOutputBuffer()
     
     var output: String = ""
+    var selectedRange: NSRange = NSRange()
+    var canUndo: Bool = false
+    var canRedo: Bool = false
+    
+    func reset(_ input: String) {
+        self.output = input
+        selectedRange = NSRange()
+        canUndo = false
+        canRedo = false
+    }
+    
 }
 
 @Observable
@@ -22,7 +33,7 @@ class NotebookContentState {
     private(set) var notebookId: UUID = UUID()
     var isFetchingData = true
     var input: String = ""
-    var output: String = ""
+//    var output: String = ""
     var contentEditedDate: Date? = DateTime.now()
     var lastSavedDate: Date = DateTime.now()
     @ObservationIgnored
@@ -41,7 +52,7 @@ class NotebookContentState {
         print(#function, notebookId.uuidString)
         do {
             input = try business.retrieveOrInstantiateNotebookContent(for: notebookId).notebookContent().content
-            output = input
+            EditorOutputBuffer.shared.reset(input)
             lastSavedDate = DateTime.now()
         } catch let error {
             print(error)
@@ -61,7 +72,7 @@ class NotebookContentState {
     func saveChanges() {
         print(#function, notebookId.uuidString)
         do {
-            try business.update(notebookContent: NotebookContentB(notebookID: notebookId, content: output))
+            try business.update(notebookContent: NotebookContentB(notebookID: notebookId, content: EditorOutputBuffer.shared.output))
             lastSavedDate = DateTime.now()
         } catch let error {
             print(error)
