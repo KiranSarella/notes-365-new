@@ -14,6 +14,8 @@ struct EditorViewRepresentable: UIViewRepresentable {
     @Binding var editorView: EditorView
     @Binding var contentEditedDate: Date?
     @Binding var selectedRange: NSRange
+    @Binding var canUndo: Bool
+    @Binding var canRedo: Bool
     
     let isEditable: Bool
     var isEditor = true
@@ -84,7 +86,7 @@ struct EditorViewRepresentable: UIViewRepresentable {
 
 extension EditorViewRepresentable {
     func makeCoordinator() -> EditorUICoordinator {
-        return EditorUICoordinator(self, output: $output, selectedRange: $selectedRange)
+        return EditorUICoordinator(self, output: $output, selectedRange: $selectedRange, canUndo: $canUndo, canRedo: $canRedo)
     }
 }
 
@@ -93,18 +95,26 @@ class EditorUICoordinator: NSObject {
     var parent: EditorViewRepresentable
     @Binding var output: String
     @Binding var selectedRange: NSRange
+    @Binding var canUndo: Bool
+    @Binding var canRedo: Bool
     
-    init(_ parent: EditorViewRepresentable, output: Binding<String>, selectedRange: Binding<NSRange>) {
+    init(_ parent: EditorViewRepresentable, output: Binding<String>, selectedRange: Binding<NSRange>, canUndo: Binding<Bool>, canRedo: Binding<Bool>) {
         self.parent = parent
         _output = output
         _selectedRange = selectedRange
+        _canUndo = canUndo
+        _canRedo = canRedo
     }
 }
 
 extension EditorUICoordinator: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        output = textView.text
+        DispatchQueue.main.async {
+            self.output = textView.text
+        }
         parent.contentEditedDate = DateTime.now()
+        canUndo = textView.undoManager?.canUndo ?? false
+        canRedo = textView.undoManager?.canRedo ?? false
     }
     
     func textViewDidChangeSelection(_ textView: UITextView) {
@@ -120,7 +130,10 @@ struct ReadOnlyMarkDownView: View {
     var body: some View {
         EditorViewRepresentable(output: Binding.constant(""), text: Binding.constant(content ?? "no content"),
                      editorView: $editorView,
-                     contentEditedDate: Binding.constant(DateTime.now()), selectedRange: Binding.constant(NSRange()),
+                     contentEditedDate: Binding.constant(DateTime.now()), 
+                                selectedRange: Binding.constant(NSRange()),
+                                canUndo: Binding.constant(false),
+                                canRedo: Binding.constant(false),
                      isEditable: false,
                      isEditor: false
         )

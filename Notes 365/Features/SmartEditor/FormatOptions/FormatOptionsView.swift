@@ -12,8 +12,21 @@ struct FormattingOptionsView: View {
     @Binding var contentEditedDate: Date?
     @Binding var selectedRange: NSRange
     @State private var enableEraser = false
+    @Binding var canUndo: Bool
+    @Binding var canRedo: Bool
+    
     private let buttonHeight: CGFloat = 20
     private let groupPadding: CGFloat = 30
+    
+//    var canUndo: Bool {
+//        true
+////        editorView.undoManager?.canUndo ?? false
+//    }
+//    
+//    var canRedo: Bool {
+//        true
+////        editorView.undoManager?.canRedo ?? false
+//    }
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -165,8 +178,31 @@ struct FormattingOptionsView: View {
                                 .help("Clear format")
                         }
                         .disabled(!enableEraser)
+                        
+                        Button {
+                            // make selected range as bold
+                            editorView.performUndo()
+                            contentEditedDate = DateTime.now()
+                        } label: {
+                            Image(systemName: "arrow.uturn.backward")
+                                .frame(width: 28, height: buttonHeight)
+                                .help("Undo")
+                        }
+                        .disabled(!canUndo)
+                        
+                        Button {
+                            // make selected range as bold
+                            editorView.performRedo()
+                            contentEditedDate = DateTime.now()
+                        } label: {
+                            Image(systemName: "arrow.uturn.forward")
+                                .frame(width: 28, height: buttonHeight)
+                                .help("Redo")
+                        }
+                        .disabled(!canRedo)
                     }
                 }.padding([.leading], groupPadding)
+                
             }
             .padding(5)
         }
@@ -174,6 +210,9 @@ struct FormattingOptionsView: View {
         .buttonStyle(.bordered)
         .onChange(of: selectedRange) { old, new in
             enableEraser = new.length > 3
+//            logger.debug("canUndo: \(editorView.undoManager?.canUndo ?? false)")
+//            canUndo = editorView.undoManager?.canUndo ?? false
+//            canRedo = editorView.undoManager?.canRedo ?? false
         }
     }
     

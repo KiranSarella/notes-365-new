@@ -371,6 +371,14 @@ extension EditorView: EditorViewDelegate {
         textView.delegate?.textViewDidChange?(textView)
     }
     
+    
+    func performUndo() {
+        textView.undoManager?.undo()
+    }
+    
+    func performRedo() {
+        textView.undoManager?.redo()
+    }
 }
 
 

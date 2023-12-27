@@ -10,6 +10,13 @@ import SwiftUI
 import Combine
 
 @Observable
+class EditorOutputBuffer {
+    static let shared = EditorOutputBuffer()
+    
+    var output: String = ""
+}
+
+@Observable
 class NotebookContentState {
     let business: NotebookContentRequester
     private(set) var notebookId: UUID = UUID()
