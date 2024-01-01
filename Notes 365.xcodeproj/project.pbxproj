@@ -1442,7 +1442,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Notes 365/Notes 365Debug.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 27;
+				CURRENT_PROJECT_VERSION = 28;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Notes 365/Preview Content\"";
 				DEVELOPMENT_TEAM = Z5MSV52AV7;
@@ -1465,7 +1465,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 2.8.1;
+				MARKETING_VERSION = 2.8.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sarella.MyNotes-local";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -1486,7 +1486,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Notes 365/Notes 365Release.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 27;
+				CURRENT_PROJECT_VERSION = 28;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Notes 365/Preview Content\"";
 				DEVELOPMENT_TEAM = Z5MSV52AV7;
@@ -1509,7 +1509,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 2.8.1;
+				MARKETING_VERSION = 2.8.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sarella.MyNotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1678,7 +1678,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Notes 365/Notes_365.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 27;
+				CURRENT_PROJECT_VERSION = 28;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Notes 365/Preview Content\"";
 				DEVELOPMENT_TEAM = Z5MSV52AV7;
@@ -1701,7 +1701,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 2.8.1;
+				MARKETING_VERSION = 2.8.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sarella.MyNotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -633,11 +633,12 @@ extension EditorView {
         let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
         regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
-            let font =  theme.font
+//            let font =  theme.font
             let fullRange = NSRange(location: match!.range.location, length: match!.range.length)
-            innerAttributedString.addAttribute(.font,
-                                               value: font,
-                                                range: NSRange(location: match!.range.location, length: match!.range.length))
+//            innerAttributedString.addAttribute(.font,
+//                                               value: font,
+//                                                range: NSRange(location: match!.range.location, length: match!.range.length))
+            
             innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
                                                value:  theme.blockQuoteColor.uiColor,
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))

@@ -32,6 +32,7 @@ extension EditorView: NSTextStorageDelegate {
         
         textStorage.removeAttribute(.codeBlockBackground, range: extendedRange)
         textStorage.removeAttribute(.blockQuoteBackground, range: extendedRange)
+        textStorage.removeAttribute(.backgroundColor, range: extendedRange)
         textStorage.removeAttribute(.paragraphStyle, range: extendedRange)
         
         textStorage.addAttribute(.markdownRange, value: SymbolPattern.body, range: extendedRange)
