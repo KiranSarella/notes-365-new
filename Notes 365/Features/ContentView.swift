@@ -6,94 +6,6 @@
 //
 
 import SwiftUI
-//
-//struct ContentWrapperView: View {
-//    let themes = ThemeState.shared
-//    @State var chooseEnv = ChooseEnvironment()
-//    @State private var didError = false
-//    @State private var errorDetail: Error?
-//    @State private var showRefresh = false
-//    @State private var statusMessage = "Loading.."
-//    @State var migrationProcess: MigrationProcess?
-//    
-//    var body: some View {
-//        ContentView()
-//            .environment(chooseEnv)
-//        
-//        
-////         do initial checks and configurations
-////         show loading until all setup
-//        if chooseEnv.isConfigured == false {
-//            if showRefresh {
-//                VStack {
-//                    Text(errorDetail?.localizedDescription ?? "")
-//                        .padding()
-//                    Button("Refresh") {
-//                        showRefresh = false
-//                    }
-//                }
-//                .padding()
-//            } else {
-//                HStack {
-//                    Text(statusMessage)
-//                }
-//                .task {
-//                    do {
-//                        logger.info("wait for icloud sync")
-////                        try? await Task.sleep(nanoseconds: 12_000_000_000)
-////                        #if DEBUG
-////                        // choose environment
-////                        try chooseEnv.setEnviromment(with: .local)
-////                        
-////                        migrationProcess = MigrationProcess(basePathURL: EnvironmentState.shared.basePathURL)
-////                        if migrationProcess?.isMigrationDone() == false {
-////                            statusMessage = "Migrating data to new structure, please wait.."
-////                            await migrationProcess?.startMigrationProcess(byResetDB: true)
-////                        }
-////                        // do any operations
-////                        chooseEnv.enableConfigured()
-////                        
-////                        // clean base version
-////                        DayVersion.shared.cleanOlderDayVersions()
-////                        #else
-////                        statusMessage = "checking iCloud settings"
-////                        // choose environment
-////                        try chooseEnv.setEnviromment(with: .cloud)
-////                        // migration
-////                        migrationProcess = MigrationProcess(basePathURL: EnvironmentState.shared.basePathURL)
-////                        if migrationProcess?.isMigrationDone() == false {
-////                            statusMessage = "Migrating data to new structure, please wait.."
-////                            await migrationProcess?.startMigrationProcess(byResetDB: true)
-////                        }
-//                        // do any operations
-//                        chooseEnv.enableConfigured()
-//                        // clean base version
-//                        DayVersion.shared.cleanOlderDayVersions()
-////                        #endif
-//                    } catch let error {
-//                        errorDetail = error
-//                        didError = true
-//                    }
-//                }
-//                .alert(
-//                    "iCloud",
-//                    isPresented: $didError,
-//                    presenting: errorDetail
-//                ) { details in
-//                    Button("OK") {
-//                        // Handle the retry action.
-//                        showRefresh = true
-//                    }
-//                } message: { error in
-//                    Text(error.localizedDescription)
-//                }
-//            }
-//        } else {
-//            ContentView()
-//                .environment(chooseEnv)
-//        }
-//    }
-//}
 
 public enum SidebarItem: String, CaseIterable, Identifiable {
     public var id: String { self.rawValue }
@@ -119,6 +31,8 @@ struct ContentView: View {
     @State private var horizontalCalendarViewState = HorizontalCalendarViewState()
     let cloudKitSync = CloudKitSync()
     
+    let iconWidth: CGFloat = 18
+    
     var body: some View {
         NavigationSplitView(columnVisibility: $navigationSplitViewVisibility) {
             VStack {
@@ -126,21 +40,25 @@ struct ContentView: View {
                     Label {
                         Text("Timeline")
                     } icon: {
-                        Image(systemName: "rectangle.stack")
+                        Image(systemName: "calendar")
+//                        Image(systemName: "rectangle.stack.fill")
+                            .circularIconStyle(background: .purple)
                     }
                     .tag(SidebarItem.timeline.id)
                         
                     Label {
                         Text("Notebooks")
                     } icon: {
-                        Image(systemName: "books.vertical")
+                        Image(systemName: "books.vertical.fill")
+                            .circularIconStyle(background: .pink)
                     }
                     .tag(SidebarItem.notebooks.id)
                     
                     Label {
                         Text("Recents")
                     } icon: {
-                        Image(systemName: "clock")
+                        Image(systemName: "clock.fill")
+                            .circularIconStyle(background: .orange)
                     }
                     .tag(SidebarItem.recents.id)
                     
@@ -148,6 +66,7 @@ struct ContentView: View {
                         Text("Search")
                     } icon: {
                         Image(systemName: "magnifyingglass")
+                            .circularIconStyle(background: .indigo)
                     }
                     .tag(SidebarItem.search.id)
                     
@@ -158,7 +77,8 @@ struct ContentView: View {
                             Label {
                                 Text("Themes")
                             } icon: {
-                                Image(systemName: "paintbrush")
+                                Image(systemName: "paintbrush.fill")
+                                    .circularIconStyle(background: .red)
                             }
                         }
                         Button {
@@ -168,6 +88,7 @@ struct ContentView: View {
                                 Text("Symbols Guide")
                             } icon: {
                                 Image(systemName: "textformat")
+                                    .circularIconStyle(background: .teal)
                             }
                         }
                         Button {
@@ -176,7 +97,8 @@ struct ContentView: View {
                             Label {
                                 Text("Feedback")
                             } icon: {
-                                Image(systemName: "hand.thumbsup")
+                                Image(systemName: "hand.thumbsup.fill")
+                                    .circularIconStyle(background: .blue)
                             }
                         }
                     }
@@ -229,6 +151,35 @@ struct ContentView: View {
                 RecentsBaseDetailView(path: $path)
             }
         }
+    }
+}
+
+struct CircleIcon: View {
+    let systemName: String
+    let background: Color
+    var body: some View {
+        Image(systemName: systemName)
+          .resizable()
+          .fontWeight(.bold)
+          .frame(width: 18, height: 18)
+          .foregroundColor(.white)
+          .padding(6)
+          .background(background)
+          .clipShape(Circle())
+    }
+}
+
+
+extension Image {
+    func circularIconStyle(background: Color) -> some View {
+        self
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 18, height: 18, alignment: .center)
+            .foregroundColor(.white)
+            .padding(6)
+            .background(background)
+            .clipShape(Circle())
     }
 }
 
