@@ -21,6 +21,7 @@ struct ContentView: View {
     @State var settingsExpanded = true
     @State private var showThemes = false
     @State private var showFormattingSymbols = false
+    @State private var showPurchases = false
     @State private var showFeedback = false
     @State private var sidebarItemSelected: SidebarItem.ID? = SidebarItem.timeline.id
     @State private var selectedNotebookM: Notebook?
@@ -91,6 +92,18 @@ struct ContentView: View {
                                     .circularIconStyle(background: .teal)
                             }
                         }
+                        
+                        Button {
+                            showPurchases = true
+                        } label: {
+                            Label {
+                                Text("Full Access")
+                            } icon: {
+                                Image(systemName: "lock.open.fill")
+                                    .circularIconStyle(background: .yellow)
+                            }
+                        }
+                        
                         Button {
                             showFeedback = true
                         } label: {
@@ -118,6 +131,9 @@ struct ContentView: View {
                 }
                 .sheet(isPresented: $showFormattingSymbols) {
                     EditorSymbolsView()
+                }
+                .sheet(isPresented: $showPurchases) {
+                    PurchaseBaseView()
                 }
                 .sheet(isPresented: $showFeedback) {
                     FeedbackView()

@@ -65,6 +65,9 @@
 		5C5668112B10B1B100CB873F /* TimelineData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5668102B10B1B100CB873F /* TimelineData.swift */; };
 		5C5668132B10B1E200CB873F /* TimelineB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5668122B10B1E200CB873F /* TimelineB.swift */; };
 		5C5668172B10C84A00CB873F /* TimelineStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5668162B10C84A00CB873F /* TimelineStorageAdapter.swift */; };
+		5C5910B92B43F76B00E5D4A7 /* PurchaseOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5910B82B43F76B00E5D4A7 /* PurchaseOptionsView.swift */; };
+		5C5910BB2B4411E000E5D4A7 /* PurchaseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5910BA2B4411E000E5D4A7 /* PurchaseDetailView.swift */; };
+		5C5910BD2B4413AB00E5D4A7 /* PurchaseBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5910BC2B4413AB00E5D4A7 /* PurchaseBaseView.swift */; };
 		5C6C713D2B32D4AC00783517 /* MoveToView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6C713C2B32D4AC00783517 /* MoveToView.swift */; };
 		5C74AD002B3A92C9006B33B0 /* RecentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C74ACFF2B3A92C9006B33B0 /* RecentsView.swift */; };
 		5C74AD022B3A92E1006B33B0 /* RecentsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C74AD012B3A92E1006B33B0 /* RecentsState.swift */; };
@@ -237,6 +240,9 @@
 		5C5668102B10B1B100CB873F /* TimelineData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineData.swift; sourceTree = "<group>"; };
 		5C5668122B10B1E200CB873F /* TimelineB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineB.swift; sourceTree = "<group>"; };
 		5C5668162B10C84A00CB873F /* TimelineStorageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineStorageAdapter.swift; sourceTree = "<group>"; };
+		5C5910B82B43F76B00E5D4A7 /* PurchaseOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseOptionsView.swift; sourceTree = "<group>"; };
+		5C5910BA2B4411E000E5D4A7 /* PurchaseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseDetailView.swift; sourceTree = "<group>"; };
+		5C5910BC2B4413AB00E5D4A7 /* PurchaseBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseBaseView.swift; sourceTree = "<group>"; };
 		5C6C713C2B32D4AC00783517 /* MoveToView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveToView.swift; sourceTree = "<group>"; };
 		5C74ACFF2B3A92C9006B33B0 /* RecentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentsView.swift; sourceTree = "<group>"; };
 		5C74AD012B3A92E1006B33B0 /* RecentsState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentsState.swift; sourceTree = "<group>"; };
@@ -597,6 +603,16 @@
 			path = Storage;
 			sourceTree = "<group>";
 		};
+		5C5910B72B43F6DF00E5D4A7 /* Purchases */ = {
+			isa = PBXGroup;
+			children = (
+				5C5910BC2B4413AB00E5D4A7 /* PurchaseBaseView.swift */,
+				5C5910B82B43F76B00E5D4A7 /* PurchaseOptionsView.swift */,
+				5C5910BA2B4411E000E5D4A7 /* PurchaseDetailView.swift */,
+			);
+			path = Purchases;
+			sourceTree = "<group>";
+		};
 		5C74ACFD2B3A92A6006B33B0 /* UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -933,6 +949,7 @@
 			isa = PBXGroup;
 			children = (
 				9F45BCA32920CAAE003DE332 /* ContentView.swift */,
+				5C5910B72B43F6DF00E5D4A7 /* Purchases */,
 				5C04F41F2B1F4AD700B82575 /* Migration */,
 				5C051B9C2B1240D4005C99B7 /* Logger.swift */,
 				9F45BCDE2920CCCE003DE332 /* Extensions.swift */,
@@ -1155,6 +1172,7 @@
 				5CFCF5E62ABEDFA400351EEA /* NotebookData.swift in Sources */,
 				9FB6C69C29275E0300C8EC76 /* NotebookContentState.swift in Sources */,
 				5C7D4AF22B07DCEA00BB1908 /* NotebooksRequester.swift in Sources */,
+				5C5910B92B43F76B00E5D4A7 /* PurchaseOptionsView.swift in Sources */,
 				5C0EC5702B36C2D3004F8D96 /* CloudKitSync.swift in Sources */,
 				5C08EA392B1892DC0095DE86 /* ContentSearchView.swift in Sources */,
 				9F7D2926299EC27E00B37F51 /* CloudServiceTwo.swift in Sources */,
@@ -1174,6 +1192,7 @@
 				5C0A7B4B2B20DA4B0099F0A3 /* CalendarType.swift in Sources */,
 				5CBEF3202B151018003A3972 /* DayVersion.swift in Sources */,
 				5CF612B72B0B06B700D397C6 /* SharedContext.swift in Sources */,
+				5C5910BD2B4413AB00E5D4A7 /* PurchaseBaseView.swift in Sources */,
 				5C34A18E2B1BA0EA00D036B7 /* ThemeB.swift in Sources */,
 				5CBEF3112B14FDEF003A3972 /* HorizontalCalendarView.swift in Sources */,
 				9F45BD892920CDE0003DE332 /* EditorViewDelegate+iOS.swift in Sources */,
@@ -1235,6 +1254,7 @@
 				5C10D7A52B04C281006FB80D /* BusinessFactory.swift in Sources */,
 				9F3DB0C4292DF82300704860 /* FeedbackView.swift in Sources */,
 				5C0A7B502B20DA590099F0A3 /* MonthCalendarView.swift in Sources */,
+				5C5910BB2B4411E000E5D4A7 /* PurchaseDetailView.swift in Sources */,
 				5C9060522B0F46060068DD65 /* CurrentLevelState.swift in Sources */,
 				9F188D812930E49F0078D413 /* MarkdownHeading.swift in Sources */,
 				9F93E15029E6A2AC00210E99 /* SmartEditor.swift in Sources */,

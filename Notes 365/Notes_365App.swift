@@ -24,7 +24,6 @@ struct Notes_365App: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-//            ContentWrapperView()
         }
         .modelContext(context)
         .commands {

@@ -1,6 +1,6 @@
 # Backlogs
+[-] in-app purchases
 [ ] deleted files list
-[ ] in-app purchases
 [ ] themes creates muliple with cloud sync
 [ ] timeline filter tabs with all first level folders
 [ ] pinned folders and files
@@ -10,18 +10,11 @@
 # Issues
 [ ] timeline - with huge data hanging - need load more
 
-
-
 # Completed
 [x] in block quote - telugu not working
-
-
-
+[x] color icons 
 
 # Ideas 
 [ ] like block quote, can we have other quote style (centered and large)?
 
-
-
-In-app
 
