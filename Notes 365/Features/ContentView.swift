@@ -42,8 +42,7 @@ struct ContentView: View {
                         Text("Timeline")
                     } icon: {
                         Image(systemName: "calendar")
-//                        Image(systemName: "rectangle.stack.fill")
-                            .circularIconStyle(background: .purple)
+                            .circularIconStyle(background: Color("icon_purple", bundle: nil))
                     }
                     .tag(SidebarItem.timeline.id)
                         
@@ -51,7 +50,7 @@ struct ContentView: View {
                         Text("Notebooks")
                     } icon: {
                         Image(systemName: "books.vertical.fill")
-                            .circularIconStyle(background: .pink)
+                            .circularIconStyle(background: Color("icon_red", bundle: nil))
                     }
                     .tag(SidebarItem.notebooks.id)
                     
@@ -59,7 +58,7 @@ struct ContentView: View {
                         Text("Recents")
                     } icon: {
                         Image(systemName: "clock.fill")
-                            .circularIconStyle(background: .orange)
+                            .circularIconStyle(background: Color("icon_orange", bundle: nil))
                     }
                     .tag(SidebarItem.recents.id)
                     
@@ -79,7 +78,7 @@ struct ContentView: View {
                                 Text("Themes")
                             } icon: {
                                 Image(systemName: "paintbrush.fill")
-                                    .circularIconStyle(background: .red)
+                                    .circularIconStyle(background: Color("icon_green", bundle: nil))
                             }
                         }
                         Button {
@@ -89,7 +88,7 @@ struct ContentView: View {
                                 Text("Symbols Guide")
                             } icon: {
                                 Image(systemName: "textformat")
-                                    .circularIconStyle(background: .teal)
+                                    .circularIconStyle(background: Color("icon_teal", bundle: nil))
                             }
                         }
                         
@@ -100,7 +99,7 @@ struct ContentView: View {
                                 Text("Full Access")
                             } icon: {
                                 Image(systemName: "lock.open.fill")
-                                    .circularIconStyle(background: .yellow)
+                                    .circularIconStyle(background: Color("icon_amber", bundle: nil))
                             }
                         }
                         
@@ -111,7 +110,8 @@ struct ContentView: View {
                                 Text("Feedback")
                             } icon: {
                                 Image(systemName: "hand.thumbsup.fill")
-                                    .circularIconStyle(background: .blue)
+//                                    .circularIconStyle(background: .blue)
+                                    .circularIconStyle(background: Color("icon_blue", bundle: nil))
                             }
                         }
                     }
@@ -191,11 +191,12 @@ extension Image {
         self
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .frame(width: 18, height: 18, alignment: .center)
+            .frame(width: 20, height: 20, alignment: .center)
             .foregroundColor(.white)
             .padding(6)
             .background(background)
             .clipShape(Circle())
+            .fontWeight(.bold)
     }
 }
 

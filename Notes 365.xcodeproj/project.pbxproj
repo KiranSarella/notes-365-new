@@ -243,6 +243,7 @@
 		5C5910B82B43F76B00E5D4A7 /* PurchaseOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseOptionsView.swift; sourceTree = "<group>"; };
 		5C5910BA2B4411E000E5D4A7 /* PurchaseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseDetailView.swift; sourceTree = "<group>"; };
 		5C5910BC2B4413AB00E5D4A7 /* PurchaseBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseBaseView.swift; sourceTree = "<group>"; };
+		5C5910BE2B44233A00E5D4A7 /* purchases.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = purchases.storekit; sourceTree = "<group>"; };
 		5C6C713C2B32D4AC00783517 /* MoveToView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveToView.swift; sourceTree = "<group>"; };
 		5C74ACFF2B3A92C9006B33B0 /* RecentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentsView.swift; sourceTree = "<group>"; };
 		5C74AD012B3A92E1006B33B0 /* RecentsState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentsState.swift; sourceTree = "<group>"; };
@@ -607,6 +608,7 @@
 			isa = PBXGroup;
 			children = (
 				5C5910BC2B4413AB00E5D4A7 /* PurchaseBaseView.swift */,
+				5C5910BE2B44233A00E5D4A7 /* purchases.storekit */,
 				5C5910B82B43F76B00E5D4A7 /* PurchaseOptionsView.swift */,
 				5C5910BA2B4411E000E5D4A7 /* PurchaseDetailView.swift */,
 			);

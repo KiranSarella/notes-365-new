@@ -45,7 +45,7 @@ struct DayHeaderView: View {
     
     var dateString: String {
         if UIDevice.current.userInterfaceIdiom == .phone {
-            date.string(withFormat: "EEE, d MMM")
+            date.string(withFormat: "EEEE, d MMM")
         } else {
             date.string(withFormat: "EEEE, d MMMM")
         }

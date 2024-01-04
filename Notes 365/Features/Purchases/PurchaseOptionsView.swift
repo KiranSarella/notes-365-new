@@ -21,12 +21,6 @@ struct PurchaseOptionsView: View {
     var body: some View {
             ScrollView {
                  VStack {
-//                     HStack {
-//                         Text("Get Full Access")
-//                             .font(.title)
-//                         Spacer()
-//                     }
-                    
                      HStack {
                          Button {
                              

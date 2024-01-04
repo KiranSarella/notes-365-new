@@ -8,7 +8,10 @@
 [ ] read in background audio
 
 # Issues
+[ ] rename - not updating in recents
 [ ] timeline - with huge data hanging - need load more
+[ ] change color of text on Hover or focus
+[ ] focus created notebook - to rename
 
 # Completed
 [x] in block quote - telugu not working
