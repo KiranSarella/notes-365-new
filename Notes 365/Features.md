@@ -10,14 +10,25 @@
 # Issues
 [ ] rename - not updating in recents
 [ ] timeline - with huge data hanging - need load more
-[ ] change color of text on Hover or focus
-[ ] focus created notebook - to rename
+[ ] hang on theme save, when timeline is at month (with full data)
 
 # Completed
 [x] in block quote - telugu not working
 [x] color icons 
+[x] change color of text on Hover or focus
+[x] focus created notebook - to rename, scroll to is done
 
-# Ideas 
-[ ] like block quote, can we have other quote style (centered and large)?
+# Ideas
+
+
+
+## In-app purchases
+[ ] remove family share option for now
+[ ] cancel subs??
+[ ] restore
+[ ] link - privacy
+[ ] get active plan on app launch
+[ ] 3 notebooks limit for free version
+[ ] test in test flight only app, before releasing to app store
 
 

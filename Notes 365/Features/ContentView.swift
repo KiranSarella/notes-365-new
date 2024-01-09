@@ -96,7 +96,7 @@ struct ContentView: View {
                             showPurchases = true
                         } label: {
                             Label {
-                                Text("Full Access")
+                                Text("Premium")
                             } icon: {
                                 Image(systemName: "lock.open.fill")
                                     .circularIconStyle(background: Color("icon_amber", bundle: nil))

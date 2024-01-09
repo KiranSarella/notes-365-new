@@ -12,9 +12,13 @@ struct RecentsBaseDetailView: View {
     
     var body: some View {
         NavigationStack(path: $path) {
-            RecentsView(navigationTitle: "Recents", path: $path, parent: nil)
+            RecentsView(navigationTitle: "Recents", path: $path)
         }
     }
+}
+
+struct RecentNotebook: Hashable {
+    let notebook: Notebook
 }
 
 struct RecentsView: View {
@@ -22,7 +26,7 @@ struct RecentsView: View {
     @State var state = RecentsState()
     @Binding var path: NavigationPath
     @State private var notebookContentState = NotebookContentState(business: BusinessFactory.createNotebookContentBusinessFactory())
-    var parent: Notebook?
+//    var parent: Notebook?
     
     var body: some View {
         VStack {
@@ -36,11 +40,11 @@ struct RecentsView: View {
         }
         .navigationTitle(navigationTitle)
         .navigationBarTitleDisplayMode(.large)
-        .navigationDestination(for: Notebook.self) { notebook in
-            if notebook.isFolder {
-                NotebooksLevelView(navigationTitle: notebook.name, path: $path, parent: notebook)
+        .navigationDestination(for: RecentNotebook.self) { rn in
+            if rn.notebook.isFolder {
+                NotebooksLevelView(navigationTitle: rn.notebook.name, path: $path, parent: rn.notebook)
             } else {
-                NotebookContentView(isReadOnly: false, notebookId: notebook.id, fileName: notebook.name, notebookContentState: notebookContentState)
+                NotebookContentView(isReadOnly: false, notebookId: rn.notebook.id, fileName: rn.notebook.name, notebookContentState: notebookContentState)
             }
         }
         .onAppear {
@@ -70,7 +74,7 @@ struct RecentsView: View {
     private var folderSection: some View {
         Section {
             ForEach(state.folders) { folder in
-                NavigationLink(value: folder) {
+                NavigationLink(value: RecentNotebook(notebook: folder)) {
                     RecentFolderCellView(name: folder.name, notebook: folder)
                 }
             }
@@ -80,11 +84,14 @@ struct RecentsView: View {
     private var fileSection: some View {
         Section {
             ForEach(state.files) { file in
-                Button {
-                    path.append(file)
-                } label: {
+                NavigationLink(value: RecentNotebook(notebook: file)) {
                     RecentFileCellView(name: file.name, notebook: file)
                 }
+//                Button {
+//                    path.append(file)
+//                } label: {
+//                    RecentFileCellView(name: file.name, notebook: file)
+//                }
             }
         }
     }

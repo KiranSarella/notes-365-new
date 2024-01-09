@@ -38,34 +38,37 @@ struct NotebooksLevelView: View {
     @Environment(\.isSearching) private var isSearching
     
     var body: some View {
-        VStack {
-            if parent == nil {
-                List {
-                    if currentLevelState.isEmpty {
-                        emptyView
+        ScrollViewReader { proxy in
+            VStack {
+                if parent == nil {
+                    // base view with search option
+                    List {
+                        if currentLevelState.isEmpty {
+                            emptyView
+                        }
+                        folderSection
+                        fileSection
                     }
-                    folderSection
-                    fileSection
-                }
-                .scrollDismissesKeyboard(.interactively)
-                .searchable(text: $currentLevelState.searchText, placement: .navigationBarDrawer)
-                .onChange(of: currentLevelState.searchText) { old, new in
-                    if new.count > 1 {
-                        currentLevelState.searchItems(for: new)
-                    } else {
-                        currentLevelState.refreshList()
+                    .scrollDismissesKeyboard(.interactively)
+                    .searchable(text: $currentLevelState.searchText, placement: .navigationBarDrawer)
+                    .onChange(of: currentLevelState.searchText) { old, new in
+                        if new.count > 1 {
+                            currentLevelState.searchItems(for: new)
+                        } else {
+                            currentLevelState.refreshList()
+                        }
                     }
-                }
-            } else {
-                List {
-                    if currentLevelState.isEmpty {
-                        emptyView
+                } else {
+                    // nested list without search
+                    List {
+                        if currentLevelState.isEmpty {
+                            emptyView
+                        }
+                        folderSection
+                        fileSection
                     }
-                    folderSection
-                    fileSection
                 }
             }
-        }
         .navigationTitle(navigationTitle)
         .navigationBarTitleDisplayMode(.large)
         .navigationDestination(for: Notebook.self) { notebook in
@@ -73,10 +76,45 @@ struct NotebooksLevelView: View {
                 NotebooksLevelView(navigationTitle: notebook.name, path: $path, parent: notebook)
             } else {
                 NotebookContentView(isReadOnly: false, notebookId: notebook.id, fileName: notebook.name, notebookContentState: notebookContentState)
+                    .onAppear {
+                        currentLevelState.notifyNotebookOpen(notebook: notebook)
+                        currentLevelState.notifyAddCurrentFolderToRecents()
+                    }
             }
         }
         .toolbar(content: {
-            toolbarItems()
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    Task {
+                        currentLevelState.isCreatingNotebook = true
+                        let newItem = currentLevelState.createFolder()
+                        try await Task.sleep(nanoseconds: 1_000_000_000)
+                        currentLevelState.isCreatingNotebook = false
+                        if let newItem = newItem {
+                            proxy.scrollTo(newItem.id, anchor: .center)
+                        }
+                    }
+                } label: {
+                    Image(systemName: "folder.badge.plus")
+                }
+                .disabled(currentLevelState.isCreatingNotebook)
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    Task {
+                        currentLevelState.isCreatingNotebook = true
+                        let newItem = currentLevelState.createFile()
+                        try await Task.sleep(nanoseconds: 1_000_000_000)
+                        currentLevelState.isCreatingNotebook = false
+                        if let newItem = newItem {
+                            proxy.scrollTo(newItem.id, anchor: .center)
+                        }
+                    }
+                } label: {
+                    Image(systemName: "square.and.pencil")
+                }
+                .disabled(currentLevelState.isCreatingNotebook)
+            }
         })
         .onAppear {
             if currentLevelState.isEmpty {
@@ -103,6 +141,8 @@ struct NotebooksLevelView: View {
                 currentLevelState.move(moveSource, to: destination.folderId)
                 showMoveView = false
             }
+        }
+            
         }
     }
     
@@ -136,57 +176,12 @@ struct NotebooksLevelView: View {
     private var fileSection: some View {
         Section {
             ForEach(currentLevelState.files) { file in
-                Button {
-                    path.append(file)
-                    currentLevelState.notifyNotebookOpen(notebook: file)
-                    currentLevelState.notifyAddCurrentFolderToRecents()
-                } label: {
+                NavigationLink(value: file) {
                     FileCellView(currentLevelState: $currentLevelState, name: file.name, moveSource: $moveSource, notebook: file)
                 }
             }
         }
     }
-    
-    @ToolbarContentBuilder
-    private func toolbarItems() ->  some ToolbarContent {
-        ToolbarItem(placement: .topBarTrailing) {
-            Button {
-                Task {
-                    currentLevelState.isCreatingNotebook = true
-                    currentLevelState.createFolder()
-                    try await Task.sleep(nanoseconds: 1_000_000_000)
-                    currentLevelState.isCreatingNotebook = false
-                }
-            } label: {
-                Image(systemName: "folder.badge.plus")
-            }
-            .disabled(currentLevelState.isCreatingNotebook)
-        }
-        ToolbarItem(placement: .topBarTrailing) {
-            Button {
-                Task {
-                    currentLevelState.isCreatingNotebook = true
-                    currentLevelState.createFile()
-                    try await Task.sleep(nanoseconds: 1_000_000_000)
-                    currentLevelState.isCreatingNotebook = false
-                }
-            } label: {
-                Image(systemName: "square.and.pencil")
-            }
-            .disabled(currentLevelState.isCreatingNotebook)
-        }
-    }
-
-    
-}
-
-struct Fruit: Identifiable {
-    let id: UUID = UUID()
-    let name: String
-    let color: Color
-}
-
-extension Fruit: Hashable {
     
 }
 
@@ -207,6 +202,9 @@ struct FolderCellView: View {
     @State private var showAlert = false
     @State private var onHover = false
     
+    var highlightText: Bool {
+        onHover || notebook.isNewlyCreated
+    }
     
     var body: some View {
         VStack {
@@ -219,6 +217,8 @@ struct FolderCellView: View {
             } else {
                 HStack {
                     Label(notebook.name, systemImage: "folder")
+                        .id(notebook.id)
+                                .fontWeight(highlightText ? .heavy : .regular)
                                 .contextMenu {
                                     RenameButton()
                                     Button {
@@ -295,6 +295,8 @@ struct FolderCellView: View {
                 // on escape, reset content
                 name = notebook.name
             }
+            
+            notebook.isNewlyCreated = false
         })
         .onSubmit {
             if name == notebook.name {
@@ -341,6 +343,10 @@ struct FileCellView: View {
     @State private var showAlert = false
     @State private var onHover = false
     
+    var highlightText: Bool {
+        onHover || notebook.isNewlyCreated
+    }
+    
     var body: some View {
         VStack {
             if isEditing {
@@ -352,6 +358,8 @@ struct FileCellView: View {
             } else {
                 HStack {
                     Text(notebook.name)
+                        .id(notebook.id)
+                        .fontWeight(highlightText ? .heavy : .regular)
                         .foregroundStyle(Color.primary)
                         .contextMenu {
                             RenameButton()
@@ -376,6 +384,8 @@ struct FileCellView: View {
                             } label: {
                                 Label("Rename", systemImage: "pencil")
                             }
+                            .tint(.yellow)
+                            
                             Button {
                                 moveSource = notebook
                             } label: {
@@ -415,6 +425,7 @@ struct FileCellView: View {
                         .disabled(isSearching)
                     }
                 }
+                
             }
         }
 #if targetEnvironment(macCatalyst)
@@ -427,6 +438,8 @@ struct FileCellView: View {
                 // on escape, reset content
                 name = notebook.name
             }
+            
+            notebook.isNewlyCreated = false
         })
         .onSubmit {
             if name == notebook.name {

@@ -87,38 +87,49 @@ class CurrentLevelState {
         }
     }
     
-    func createFolder() {
+    func createFolder() -> Notebook? {
         let siblings = self.siblings.map { $0.notebookB() }
         do {
             let newNotebookB = try notebooksBusiness.createFolder(inside: parent?.notebookB(), siblings: siblings)
             let newNotebook = newNotebookB.notebook()
+            newNotebook.isNewlyCreated = true
             newNotebook.updateParent(parent)
             self.folders.append(newNotebook)
             self.folders.sort(by: { n1, n2 in
                 n1.name < n2.name
             })
+            
+            notifyAddCurrentFolderToRecents()
+            
+            return newNotebook
         } catch let error {
             print(error)
         }
         
-        notifyAddCurrentFolderToRecents()
+        
+        return nil
     }
     
-    func createFile() {
+    func createFile() -> Notebook? {
         let siblings = self.siblings.map { $0.notebookB() }
         do {
             let newNotebookB = try notebooksBusiness.createFile(inside: parent?.notebookB(), siblings: siblings)
             let newNotebook = newNotebookB.notebook()
+            newNotebook.isNewlyCreated = true
             newNotebook.updateParent(parent)
             self.files.append(newNotebook)
             self.files.sort(by: { n1, n2 in
                 n1.name < n2.name
             })
+            
+            notifyAddCurrentFolderToRecents()
+            
+            return newNotebook
         } catch let error {
             print(error)
         }
         
-        notifyAddCurrentFolderToRecents()
+        return nil
     }
     
     func rename(for notebook: Notebook, newValue: String) throws {

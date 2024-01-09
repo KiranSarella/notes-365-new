@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct PurchaseOptionsView: View {
     var state = PurchaseOptionsState()
@@ -19,53 +20,62 @@ struct PurchaseOptionsView: View {
     }
     
     var body: some View {
-            ScrollView {
-                 VStack {
-                     HStack {
-                         Button {
-                             
-                         } label: {
-                             HStack {
-                                 Text(yearlyTitle)
-                                     .font(.system(.title2))
-                             }
-                             .frame(minWidth: 300)
-                         }
-                         .buttonStyle(.borderedProminent)
-                         .buttonBorderShape(.roundedRectangle(radius: 4))
-                         .controlSize(.large)
-                         .padding()
-                     }
-                   
-                     HStack {
-                         Button {
-                             
-                         } label: {
-                             HStack {
-                                 Text(lifetimeTitle)
-                                     .font(.system(.title2))
-                             }
-                             .frame(minWidth: 300)
-                         }
-                         .buttonStyle(.borderedProminent)
-                         .buttonBorderShape(.roundedRectangle(radius: 4))
-                         .controlSize(.large)
-                         .padding()
-                     }
-                    
-                     HStack {
-                         Button {
-                             
-                         } label: {
-                             Text("Restore Purchases")
-                                 .foregroundStyle(Color.blue)
-                         }
-                         .padding()
-                     }
-                }
-                 
-            }
+        ScrollView {
+            ProductView(id: "LIFETIME001")
+                .padding()
+            ProductView(id: "YEARLY001")
+                .padding()
+//            StoreView(ids: ["LIFETIME001", "YEARLY001"])
+        }
         
+        
+//            ScrollView {
+//                 VStack {
+//                     HStack {
+//                         Button {
+//                             
+//                         } label: {
+//                             HStack {
+//                                 Text(yearlyTitle)
+//                                     .font(.system(.title2))
+//                             }
+//                             .frame(minWidth: 300)
+//                         }
+//                         .buttonStyle(.borderedProminent)
+//                         .buttonBorderShape(.roundedRectangle(radius: 4))
+//                         .controlSize(.large)
+//                         .padding()
+//                     }
+//                   
+//                     HStack {
+//                         Button {
+//                             
+//                         } label: {
+//                             HStack {
+//                                 Text(lifetimeTitle)
+//                                     .font(.system(.title2))
+//                             }
+//                             .frame(minWidth: 300)
+//                         }
+//                         .buttonStyle(.borderedProminent)
+//                         .buttonBorderShape(.roundedRectangle(radius: 4))
+//                         .controlSize(.large)
+//                         .padding()
+//                     }
+//                    
+//                     HStack {
+//                         Button {
+//                             
+//                         } label: {
+//                             Text("Restore Purchases")
+//                                 .foregroundStyle(Color.blue)
+//                         }
+//                         .padding()
+//                     }
+//                }
+//                 
+//            }
+//        
        
     }
 }

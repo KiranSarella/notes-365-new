@@ -18,6 +18,8 @@ class Notebook: Identifiable {
     var modifiedDate: Date = DateTime.now()
     var deletedDate: Date? = nil
 
+    var isNewlyCreated = false
+    
     var priority: Int {
         isFolder ? 0 : 1
     }

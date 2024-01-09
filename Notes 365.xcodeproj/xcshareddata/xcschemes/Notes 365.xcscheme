@@ -73,6 +73,9 @@
             ReferencedContainer = "container:Notes 365.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <StoreKitConfigurationFileReference
+         identifier = "../../Notes 365/Features/Purchases/purchases.storekit">
+      </StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
