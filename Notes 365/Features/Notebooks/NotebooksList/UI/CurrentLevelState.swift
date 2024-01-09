@@ -15,7 +15,7 @@ extension Notification.Name {
 
 @Observable
 class CurrentLevelState {
-    
+    let freeNotesLimit = 3
     let notebooksBusiness: NotebooksRequester = BusinessFactory.createNotebooksFactory()
     var parent: Notebook?
     var folders = [Notebook]()
@@ -196,6 +196,17 @@ class CurrentLevelState {
         }
         
         notifyAddCurrentFolderToRecents()
+    }
+    
+    func canAddNewNotebook() -> Bool {
+        var notesCount: Int = 0
+        do {
+            notesCount = try notebooksBusiness.fetchOnlyNotesCount()
+        } catch {
+            logger.error("\(error)")
+        }
+        
+        return notesCount <= freeNotesLimit
     }
 }
 

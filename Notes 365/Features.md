@@ -28,7 +28,7 @@
 [ ] restore
 [ ] link - privacy
 [ ] get active plan on app launch
-[ ] 3 notebooks limit for free version
+[x] 3 notebooks limit for free version
 [ ] test in test flight only app, before releasing to app store
 
 

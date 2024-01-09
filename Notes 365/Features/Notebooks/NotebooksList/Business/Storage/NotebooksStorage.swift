@@ -120,4 +120,10 @@ class NotebooksStorage {
         descriptor.propertiesToFetch = [\.id, \.parent, \.name]
         return try modelContext.fetch(descriptor)
     }
+    
+    func fetchOnlyNotesCount() throws -> Int {
+        let predicate = #Predicate<NotebookData> { $0.isFolder == false && $0.deletedDate == nil }
+        let descriptor = FetchDescriptor(predicate: predicate)
+        return try modelContext.fetchCount(descriptor)
+    }
 }

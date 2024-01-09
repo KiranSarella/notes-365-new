@@ -34,6 +34,7 @@ struct NotebooksLevelView: View {
     @State var moveSource: Notebook?
     @State var showMoveView = false
     @State var moveDestination: FileItem?
+    @State var showPurchaseView = false
     
     @Environment(\.isSearching) private var isSearching
     
@@ -85,6 +86,14 @@ struct NotebooksLevelView: View {
         .toolbar(content: {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
+                    
+                    if PurchaseStatusState.shared.isPurchased == false {
+                        if currentLevelState.canAddNewNotebook() == false {
+                            showPurchaseView = true
+                            return
+                        }
+                    }
+                    
                     Task {
                         currentLevelState.isCreatingNotebook = true
                         let newItem = currentLevelState.createFolder()
@@ -101,6 +110,14 @@ struct NotebooksLevelView: View {
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
+                    
+                    if PurchaseStatusState.shared.isPurchased == false {
+                        if currentLevelState.canAddNewNotebook() == false {
+                            showPurchaseView = true
+                            return
+                        }
+                    }
+                    
                     Task {
                         currentLevelState.isCreatingNotebook = true
                         let newItem = currentLevelState.createFile()
@@ -128,6 +145,9 @@ struct NotebooksLevelView: View {
         })
         .sheet(isPresented: $showMoveView) {
             MoveToView(notebook: moveSource!, moveDestination: $moveDestination)
+        }
+        .sheet(isPresented: $showPurchaseView) {
+            PurchaseBaseView()
         }
         .onChange(of: showMoveView) { old, new in
             if new == false {

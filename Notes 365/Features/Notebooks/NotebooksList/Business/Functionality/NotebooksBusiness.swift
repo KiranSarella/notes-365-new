@@ -122,6 +122,10 @@ class NotebooksBusiness {
         do { sendNotebookMoved(notebook) }
 //        do { sendNotebooksMoved([notebook], parentId: destinationId) }
     }
+    
+    func fetchOnlyNotesCount() throws -> Int {
+        try storage.fetchOnlyNotesCount()
+    }
 }
 
 extension NotebooksBusiness {

@@ -23,6 +23,8 @@ protocol NotebooksRequester {
     func getAllFilesInfo() -> [NotebookB]
     func fetchAllFolders() throws -> [NotebookB]
     func move(notebook: NotebookB, to destinationId: UUID?) throws
+    
+    func fetchOnlyNotesCount() throws -> Int
 }
 
 extension NotebooksBusiness: NotebooksRequester { }

@@ -23,4 +23,6 @@ protocol NotebooksStorageProvider {
     func getAllFilesInfo() throws -> [NotebookB]
     func deleteAllRecords() throws
     func getAllFolders() throws -> [NotebookB]
+    
+    func fetchOnlyNotesCount() throws -> Int
 }
