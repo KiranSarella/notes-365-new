@@ -23,6 +23,13 @@ class RecentsStorageAdapter: RecentsStorageProvider {
         try storage.insert(data: item.storageData)
     }
     
+    func rename(id: UUID, name: String) throws {
+        if let oldData = try storage.fetchRecentItem(id: id) {
+            oldData.name = name
+            try storage.update(data: oldData)
+        }
+    }
+    
     func remove(id: UUID) throws {
         try storage.remove(for: id)
     }

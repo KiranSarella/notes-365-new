@@ -126,6 +126,17 @@ struct ContentView: View {
                     BusinessFactory.timelineInteractor().setupTimeineCreationProcess()
                     BusinessFactory.recentsInteractor().setupRecentsAddingProcess()
                 }
+                .task {
+                    logger.info("Starting tasks to observe transaction updates")
+                    // Begin observing StoreKit transaction updates in case a
+                    // transaction happens on another device.
+                    await PremiumUserState.shared.observeTransactionUpdates()
+                    // Check if we have any unfinished transactions where we
+                    await PremiumUserState.shared.checkForUnfinishedTransactions()
+                    logger.info("Finished checking for unfinished transactions")
+                    // refresh premium status
+                    await PremiumUserState.shared.refreshPurchasedProducts()
+                }
                 .sheet(isPresented: $showThemes) {
                     ThemesBaseView()
                 }

@@ -26,6 +26,10 @@ class RecentsBusiness: RecentsInteractor {
         try storage.insert(item: item)
     }
     
+    func rename(id: UUID, name: String) throws {
+        try storage.rename(id: id, name: name)
+    }
+    
     func clearOldRecentItems() {
         logger.info("\(#function)")
         do {

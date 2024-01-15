@@ -86,15 +86,14 @@ struct NotebooksLevelView: View {
         .toolbar(content: {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    
-                    if PurchaseStatusState.shared.isPurchased == false {
-                        if currentLevelState.canAddNewNotebook() == false {
-                            showPurchaseView = true
-                            return
-                        }
-                    }
-                    
                     Task {
+                        if await PremiumUserState.shared.isPurchased == false {
+                            if currentLevelState.canAddNewNotebook() == false {
+                                showPurchaseView = true
+                                return
+                            }
+                        }
+                        
                         currentLevelState.isCreatingNotebook = true
                         let newItem = currentLevelState.createFolder()
                         try await Task.sleep(nanoseconds: 1_000_000_000)
@@ -110,15 +109,14 @@ struct NotebooksLevelView: View {
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    
-                    if PurchaseStatusState.shared.isPurchased == false {
-                        if currentLevelState.canAddNewNotebook() == false {
-                            showPurchaseView = true
-                            return
-                        }
-                    }
-                    
                     Task {
+                        if await PremiumUserState.shared.isPurchased == false {
+                            if currentLevelState.canAddNewNotebook() == false {
+                                showPurchaseView = true
+                                return
+                            }
+                        }
+                        
                         currentLevelState.isCreatingNotebook = true
                         let newItem = currentLevelState.createFile()
                         try await Task.sleep(nanoseconds: 1_000_000_000)

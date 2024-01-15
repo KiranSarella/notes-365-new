@@ -9,90 +9,56 @@ import SwiftUI
 import StoreKit
 
 struct PurchaseDetailView: View {
+    @Environment(\.openURL) private var openURL
+    @State var state = PurchaseDetailState()
     
-    @State var activePlan = false
-    @State var planName: String = ""
-    @State var productType: Product.ProductType?
-    @State var expirationDate: Date?
     var renewMessage: String {
-        if let expirationDate = expirationDate {
-            return "Renews \(expirationDate.string(format: "MMM, dd yyyy"))"
+        if let expirationDate = state.expirationDate {
+            return "Renews \(String(describing: expirationDate.string(format: "MMM, dd yyyy")))"
         }
         return ""
     }
     var cancelNote: String {
-        if let expirationDate = expirationDate {
+        if let expirationDate = state.expirationDate {
             return "If you cancel now, you can still access your subscription until \(expirationDate.string(format: "MMM, dd"))."
         }
         return ""
     }
     
-    func updateActivePlan(transaction: StoreKit.Transaction) {
-        productType = transaction.productType
-        
-        if transaction.productID == "LIFETIME001" {
-            planName = "Lifetime Plan"
-        } else if transaction.productID == "YEARLY001" {
-            planName = "Yearly Plan"
-            expirationDate = transaction.expirationDate
-        }
-        
-        activePlan = true
-    }
-
-    
-    func refreshPurchasedProducts() async {
-        logger.info("\(#function)")
-        // Iterate through the user's purchased products.
-        for await verificationResult in Transaction.currentEntitlements {
-            switch verificationResult {
-            case .verified(let transaction):
-                // Check the type of product for the transaction
-                // and provide access to the content as appropriate.
-                logger.info("\(transaction.debugDescription)")
-                updateActivePlan(transaction: transaction)
-            case .unverified(let unverifiedTransaction, let verificationError):
-                // Handle unverified transactions based on your
-                // business model.
-                logger.info("\(unverifiedTransaction.debugDescription)")
-                logger.error("\(verificationError)")
-            }
-        }
-    }
-    
     var body: some View {
         List {
-            
-            if activePlan {
+            if state.activePlan {
                 Section("Active Plan") {
-                    Label(planName, systemImage: "creditcard")
+                    Label(state.planName, systemImage: "creditcard")
                         .listRowSeparator(.hidden, edges: .all)
                     
-                    if productType == .autoRenewable {
+                    if state.productType == .autoRenewable {
                         Label(renewMessage, systemImage: "calendar")
                             .listRowSeparator(.hidden, edges: .all)
                     }
                 }
-                
-                Section {
-                    Button("Cancel Subscription", role: .destructive) {
-                        
+                if state.productType == .autoRenewable {
+                    Section {
+                        Button("Cancel Subscription", role: .destructive) {
+                            if let url = URL(string: "https://apps.apple.com/account/subscriptions") {
+                                UIApplication.shared.open(url)
+                            }
+                        }
+                    } footer: {
+                        Text(cancelNote)
                     }
-                } footer: {
-                    Text(cancelNote)
                 }
+                
             } else {
                 Section {
-                    Text("No active plans")
+                    Text("No active plan")
                 }
             }
-            
            
             Section("All Plans") {
                 ProductView(id: "LIFETIME001")
-                ProductView(id: "YEARLY001")
+                ProductView(id: "YEARLY002")
             }
-            
             
             Section {
                 HStack {
@@ -107,8 +73,21 @@ struct PurchaseDetailView: View {
             } footer: {
                 HStack {
                     Spacer()
-                    Button("About Subscriptions & Privacy") {
-                        
+                    Button {
+                        if let url = URL(string: "https://www.notes365.app/privacy") {
+                            openURL(url)
+                        }
+                    } label: {
+                        Text("Privacy Policy")
+                            .padding()
+                    }
+                    
+                    Button {
+                        if let url = URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/") {
+                            openURL(url)
+                        }
+                    } label: {
+                        Text("Terms of Use")
                     }
                 }
             }
@@ -116,36 +95,16 @@ struct PurchaseDetailView: View {
         }
         .contentMargins(.horizontal, 20, for: .scrollContent)
         .onInAppPurchaseCompletion { (product: Product, result: Result<Product.PurchaseResult, Error>) in
-            if case .success(.success(let verificationResult)) = result {
-                logger.info("onInAppPurchaseCompletion: \(verificationResult.debugDescription)")
-                logger.info("onInAppPurchaseCompletion: \(product.debugDescription)")
-//                updateActivePlan(transaction: transaction)
-//                await BirdBrain.shared.process(transaction: transaction)
-//                dismiss()
-                
-                let transaction: StoreKit.Transaction
-                switch verificationResult {
-                case .verified(let t):
-                    logger.debug("""
-                    Transaction ID \(t.id) for \(t.productID) is verified
-                    """)
-                    transaction = t
-                case .unverified(let t, let error):
-                    // Log failure and ignore unverified transactions
-                    logger.error("""
-                    Transaction ID \(t.id) for \(t.productID) is unverified: \(error)
-                    """)
-                    return
-                }
-                
-                await transaction.finish()
-                
-                updateActivePlan(transaction: transaction)
-            }
+            await PremiumUserState.shared.handleInAppPurchase(product: product, result: result)
+//            guard case .success(let verificationResult) = purchaseResult,
+//                  case .success(_) = verificationResult else {
+//                return
+//            }
+//            showingSubscriptionStore = false
         }
         .onAppear {
             Task {
-                await refreshPurchasedProducts()
+                await PremiumUserState.shared.refreshPurchasedProducts()
             }
         }
     }
@@ -163,6 +122,50 @@ struct RestorePurchasesButton: View {
             }
         }
         .disabled(isRestoring)
+    }
+    
+}
+
+@Observable
+class PurchaseDetailState {
+    var activePlan = false
+    var planName: String = ""
+    var productType: Product.ProductType?
+    var expirationDate: Date?
+    
+    var premiumStateObserver: NSObjectProtocol?
+    
+    init() {
+        observeChanges()
+    }
+    
+    deinit {
+        premiumStateObserver = nil
+    }
+    
+    func observeChanges() {
+        premiumStateObserver = NotificationCenter.default.addObserver(forName: .premiumStateChange, object: nil, queue: .main) { notification in
+            Task {
+                await self.updateDetail()
+            }
+        }
+    }
+    
+    func updateDetail() async {
+        planName = await PremiumUserState.shared.planName
+        productType = await PremiumUserState.shared.productType
+        expirationDate = await PremiumUserState.shared.expirationDate
+        activePlan = await PremiumUserState.shared.isPurchased
+        logger.debug("\(#function)")
+        logger.debug("\(self.planName) \(self.activePlan)")
+    }
+    
+    func cleanActivePlan() {
+        activePlan = false
+        planName = ""
+        productType = nil
+        expirationDate = nil
+        logger.debug("\(#function)")
     }
     
 }

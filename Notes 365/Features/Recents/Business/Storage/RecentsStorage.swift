@@ -22,9 +22,20 @@ class RecentsStorage {
         return try modelContext.fetch(descriptor)
     }
     
+    func fetchRecentItem(id: UUID) throws -> RecentItemData? {
+        let predicate = #Predicate<RecentItemData> { item in item.id == id }
+        var descriptor = FetchDescriptor(predicate: predicate)
+        descriptor.fetchLimit = 1
+        return try modelContext.fetch(descriptor).first
+    }
+    
     func insert(data: RecentItemData) throws {
         modelContext.insert(data)
         try modelContext.save()
+    }
+    
+    func update(data: RecentItemData) throws {
+        try data.modelContext?.save()
     }
     
     func remove(for id: UUID) throws {

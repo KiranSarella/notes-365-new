@@ -18,10 +18,12 @@ class RecentsDataService {
     
     func startProviding() {
         observeFilesOpen()
+        observeNotebookRenamed()
     }
     
     func stopProviding() {
         filesOpenObserver = nil
+        removeNotebookRenamedObserver()
     }
     
     private func observeFilesOpen() {
@@ -41,6 +43,32 @@ class RecentsDataService {
             } catch {
                 logger.error("\(error)")
             }
+        }
+    }
+    
+}
+
+// MARK: - Handle Rename
+extension RecentsDataService {
+    func observeNotebookRenamed() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookRenamed(_:)), name: Notification.Name.notebookRenamed, object: nil)
+    }
+    
+    func removeNotebookRenamedObserver() {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.notebookRenamed, object: nil)
+    }
+    
+    @objc func handleNotebookRenamed(_ notification: Notification) {
+        guard
+            let notebookId = notification.userInfo?["notebook_id"] as? UUID,
+            let name = notification.userInfo?["name"] as? String,
+            let isFolder = notification.userInfo?["isFolder"] as? Bool
+        else { return }
+                
+        do {
+            try notebooksBusiness.rename(id: notebookId, name: name)
+        } catch {
+            logger.error("\(error)")
         }
     }
 }

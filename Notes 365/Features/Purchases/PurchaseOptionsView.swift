@@ -23,59 +23,9 @@ struct PurchaseOptionsView: View {
         ScrollView {
             ProductView(id: "LIFETIME001")
                 .padding()
-            ProductView(id: "YEARLY001")
+            ProductView(id: "YEARLY002")
                 .padding()
-//            StoreView(ids: ["LIFETIME001", "YEARLY001"])
         }
-        
-        
-//            ScrollView {
-//                 VStack {
-//                     HStack {
-//                         Button {
-//                             
-//                         } label: {
-//                             HStack {
-//                                 Text(yearlyTitle)
-//                                     .font(.system(.title2))
-//                             }
-//                             .frame(minWidth: 300)
-//                         }
-//                         .buttonStyle(.borderedProminent)
-//                         .buttonBorderShape(.roundedRectangle(radius: 4))
-//                         .controlSize(.large)
-//                         .padding()
-//                     }
-//                   
-//                     HStack {
-//                         Button {
-//                             
-//                         } label: {
-//                             HStack {
-//                                 Text(lifetimeTitle)
-//                                     .font(.system(.title2))
-//                             }
-//                             .frame(minWidth: 300)
-//                         }
-//                         .buttonStyle(.borderedProminent)
-//                         .buttonBorderShape(.roundedRectangle(radius: 4))
-//                         .controlSize(.large)
-//                         .padding()
-//                     }
-//                    
-//                     HStack {
-//                         Button {
-//                             
-//                         } label: {
-//                             Text("Restore Purchases")
-//                                 .foregroundStyle(Color.blue)
-//                         }
-//                         .padding()
-//                     }
-//                }
-//                 
-//            }
-//        
        
     }
 }
@@ -87,7 +37,6 @@ struct PurchaseOptionsView: View {
 @Observable
 class PurchaseOptionsState {
     var hasFullAccess = true
-    var yearlyPrice: CGFloat = 799
-    var lifeTimePrice: CGFloat = 2999
-    
+    var yearlyPrice: CGFloat = 0
+    var lifeTimePrice: CGFloat = 0
 }

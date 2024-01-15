@@ -10,7 +10,7 @@
       "internalID" : "6475258899",
       "localizations" : [
         {
-          "description" : "Get full access with lifetime plan",
+          "description" : "Get full access with the lifetime plan",
           "displayName" : "Lifetime Plan",
           "locale" : "en_US"
         }
@@ -24,7 +24,7 @@
     "_applicationInternalID" : "1595001599",
     "_developerTeamID" : "Z5MSV52AV7",
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 725885764.49539697,
+    "_lastSynchronizedDate" : 726849488.15980196,
     "_locale" : "en_US",
     "_storefront" : "USA",
     "_storeKitErrors" : [
@@ -91,6 +91,31 @@
 
           ],
           "displayPrice" : "7.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "6476041504",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Get full access for one year",
+              "displayName" : "Individual Yearly Plan",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "YEARLY002",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Individual Yearly Plan",
+          "subscriptionGroupID" : "21428822",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "14.99",
           "familyShareable" : true,
           "groupNumber" : 1,
           "internalID" : "6475258281",
@@ -104,7 +129,7 @@
           ],
           "productID" : "YEARLY001",
           "recurringSubscriptionPeriod" : "P1Y",
-          "referenceName" : "Yearly Plan",
+          "referenceName" : "Yearly Plan + Family Sharing",
           "subscriptionGroupID" : "21428822",
           "type" : "RecurringSubscription"
         }

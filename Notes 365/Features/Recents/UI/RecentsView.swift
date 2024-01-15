@@ -48,9 +48,9 @@ struct RecentsView: View {
             }
         }
         .onAppear {
-            if state.isEmpty {
+//            if state.isEmpty {
                 state.loadRecents()
-            }
+//            }
         }
     }
     
@@ -105,6 +105,7 @@ struct RecentFolderCellView: View {
     
     var body: some View {
         VStack {
+//            Label("\(notebook.name) \(notebook.modifiedDate.string(format: "mm-dd-yy hh:mm:ss"))", systemImage: "folder")
             Label(notebook.name, systemImage: "folder")
         }
     }
@@ -117,6 +118,7 @@ struct RecentFileCellView: View {
     
     var body: some View {
         VStack {
+//            Text("\(notebook.name) \(notebook.modifiedDate.string(format: "mm-dd-yy hh:mm:ss"))")
             Text(notebook.name)
                 .foregroundStyle(Color.primary)
         }
