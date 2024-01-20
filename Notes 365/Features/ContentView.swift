@@ -13,6 +13,7 @@ public enum SidebarItem: String, CaseIterable, Identifiable {
     case notebooks
     case recents
     case search
+    case recentlyDeleted
 }
 
 struct ContentView: View {
@@ -69,6 +70,14 @@ struct ContentView: View {
                             .circularIconStyle(background: .indigo)
                     }
                     .tag(SidebarItem.search.id)
+                    
+                    Label {
+                        Text("Recently Deleted")
+                    } icon: {
+                        Image(systemName: "trash.fill")
+                            .circularIconStyle(background: .gray)
+                    }
+                    .tag(SidebarItem.recentlyDeleted.id)
                     
                     Section("Settings", isExpanded: $settingsExpanded) {
                         Button {
@@ -176,6 +185,8 @@ struct ContentView: View {
                 ContentSearchView()
             case .recents:
                 RecentsBaseDetailView(path: $path)
+            case .recentlyDeleted:
+                RecentlyDeletedBaseDetailView(path: $path)
             }
         }
     }

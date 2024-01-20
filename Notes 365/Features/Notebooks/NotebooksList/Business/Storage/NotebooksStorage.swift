@@ -34,8 +34,8 @@ class NotebooksStorage {
     }
     
     func fetchDeletedNotebooks() throws -> [NotebookData] {
-        let allListPredicate = #Predicate<NotebookData> { _ in true }
-        let descriptor = FetchDescriptor(predicate: allListPredicate)
+        let predicate = #Predicate<NotebookData> { $0.deletedDate != nil }
+        let descriptor = FetchDescriptor(predicate: predicate)
         return try modelContext.fetch(descriptor)
     }
     

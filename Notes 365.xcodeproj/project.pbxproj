@@ -79,6 +79,7 @@
 		5C74AD0F2B3AA738006B33B0 /* RecentsStorageAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C74AD0E2B3AA738006B33B0 /* RecentsStorageAdapter.swift */; };
 		5C74AD112B3AA766006B33B0 /* RecentsStorageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C74AD102B3AA766006B33B0 /* RecentsStorageProvider.swift */; };
 		5C74AD132B3AB2B1006B33B0 /* RecentsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C74AD122B3AB2B1006B33B0 /* RecentsInteractor.swift */; };
+		5C7A53192B5A807000500A90 /* RecentlyDeletedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7A53182B5A807000500A90 /* RecentlyDeletedView.swift */; };
 		5C7CFAB62B151E5D00777AB2 /* DateTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7CFAB52B151E5D00777AB2 /* DateTime.swift */; };
 		5C7D4AF22B07DCEA00BB1908 /* NotebooksRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7D4AF12B07DCEA00BB1908 /* NotebooksRequester.swift */; };
 		5C7D4AF82B08E00C00BB1908 /* NotebookB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7D4AF72B08E00C00BB1908 /* NotebookB.swift */; };
@@ -104,6 +105,7 @@
 		5CCCF7F52AC2CB6B00F5923E /* TimelineStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCCF7F42AC2CB6B00F5923E /* TimelineStorage.swift */; };
 		5CCE93BF2B4D8EFD00066AB3 /* PremiumUserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCE93BE2B4D8EFD00066AB3 /* PremiumUserState.swift */; };
 		5CD2F4F02ACC7FD500E8B465 /* TimelineDetailState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD2F4EF2ACC7FD500E8B465 /* TimelineDetailState.swift */; };
+		5CD72D8B2B5BE50200B772DF /* RecentlyDeletedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD72D8A2B5BE50200B772DF /* RecentlyDeletedState.swift */; };
 		5CE6FDF82B0BC19600ED9425 /* PDFFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE6FDF72B0BC19600ED9425 /* PDFFile.swift */; };
 		5CE6FE212B0CD65700ED9425 /* DeletedListLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD042920CCCE003DE332 /* DeletedListLogic.swift */; };
 		5CE8C4882B03048E00F19217 /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE8C4872B03048E00F19217 /* Notebook.swift */; };
@@ -256,6 +258,7 @@
 		5C74AD0E2B3AA738006B33B0 /* RecentsStorageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentsStorageAdapter.swift; sourceTree = "<group>"; };
 		5C74AD102B3AA766006B33B0 /* RecentsStorageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentsStorageProvider.swift; sourceTree = "<group>"; };
 		5C74AD122B3AB2B1006B33B0 /* RecentsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentsInteractor.swift; sourceTree = "<group>"; };
+		5C7A53182B5A807000500A90 /* RecentlyDeletedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyDeletedView.swift; sourceTree = "<group>"; };
 		5C7CFAB52B151E5D00777AB2 /* DateTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTime.swift; sourceTree = "<group>"; };
 		5C7D4AF12B07DCEA00BB1908 /* NotebooksRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksRequester.swift; sourceTree = "<group>"; };
 		5C7D4AF72B08E00C00BB1908 /* NotebookB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookB.swift; sourceTree = "<group>"; };
@@ -279,6 +282,7 @@
 		5CCCF7F42AC2CB6B00F5923E /* TimelineStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineStorage.swift; sourceTree = "<group>"; };
 		5CCE93BE2B4D8EFD00066AB3 /* PremiumUserState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumUserState.swift; sourceTree = "<group>"; };
 		5CD2F4EF2ACC7FD500E8B465 /* TimelineDetailState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineDetailState.swift; sourceTree = "<group>"; };
+		5CD72D8A2B5BE50200B772DF /* RecentlyDeletedState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyDeletedState.swift; sourceTree = "<group>"; };
 		5CE6FDF72B0BC19600ED9425 /* PDFFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFFile.swift; sourceTree = "<group>"; };
 		5CE8C4872B03048E00F19217 /* Notebook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notebook.swift; sourceTree = "<group>"; };
 		5CE8C48A2B0305CD00F19217 /* NotebookContentB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentB.swift; sourceTree = "<group>"; };
@@ -650,6 +654,23 @@
 			path = Storage;
 			sourceTree = "<group>";
 		};
+		5C7A53152B5A801900500A90 /* RecentlyDeleted */ = {
+			isa = PBXGroup;
+			children = (
+				5C7A53162B5A804500500A90 /* UI */,
+			);
+			path = RecentlyDeleted;
+			sourceTree = "<group>";
+		};
+		5C7A53162B5A804500500A90 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				5C7A53182B5A807000500A90 /* RecentlyDeletedView.swift */,
+				5CD72D8A2B5BE50200B772DF /* RecentlyDeletedState.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
 		5C7D4AF32B07DDB900BB1908 /* Functionality */ = {
 			isa = PBXGroup;
 			children = (
@@ -963,6 +984,7 @@
 				9FB0A48829DF12980093FBD2 /* Timeline */,
 				9FB0A47529DBD6930093FBD2 /* Notebooks */,
 				5CA40B962B3972610077645F /* Recents */,
+				5C7A53152B5A801900500A90 /* RecentlyDeleted */,
 				9FB0A48D29DF13930093FBD2 /* DayVersions */,
 				5C08EA372B1892C50095DE86 /* ContentSearch */,
 				9F93E14829E59CDA00210E99 /* SmartEditor */,
@@ -1182,12 +1204,14 @@
 				5C08EA392B1892DC0095DE86 /* ContentSearchView.swift in Sources */,
 				9F7D2926299EC27E00B37F51 /* CloudServiceTwo.swift in Sources */,
 				5C74AD002B3A92C9006B33B0 /* RecentsView.swift in Sources */,
+				5C7A53192B5A807000500A90 /* RecentlyDeletedView.swift in Sources */,
 				5CF612BD2B0B08A400D397C6 /* NotebookContentStorage.swift in Sources */,
 				5C3DE6AF2B132155004E3621 /* SingleDayView.swift in Sources */,
 				5C34A1862B1B5D3E00D036B7 /* ThemeStorage.swift in Sources */,
 				5CF612D42B0B987F00D397C6 /* EditorView+ProcessSymbols.swift in Sources */,
 				5C1CD5AB2ABC350B00D47814 /* TimelineBaseView.swift in Sources */,
 				5C051B9B2B11FFF6005C99B7 /* NotebooksPathService.swift in Sources */,
+				5CD72D8B2B5BE50200B772DF /* RecentlyDeletedState.swift in Sources */,
 				5C6C713D2B32D4AC00783517 /* MoveToView.swift in Sources */,
 				5C74AD0B2B3AA576006B33B0 /* RecentsStorage.swift in Sources */,
 				5CE6FE212B0CD65700ED9425 /* DeletedListLogic.swift in Sources */,

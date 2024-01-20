@@ -221,3 +221,11 @@ extension NotebooksBusiness {
     }
 }
 
+// MARK: Deleted Notebooks
+extension NotebooksBusiness {
+    
+    func fetchDeletedNotebooks() throws -> [NotebookB] {
+        logger.info("\(#function)")
+        return try storage.getDeletedNotebooks()
+    }
+}

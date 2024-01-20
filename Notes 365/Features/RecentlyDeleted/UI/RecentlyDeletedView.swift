@@ -1,29 +1,29 @@
 //
-//  RecentsView.swift
+//  RecentlyDeletedView.swift
 //  Notes 365
 //
-//  Created by kiran ipc on 26/12/23.
+//  Created by kiran ipc on 19/01/24.
 //
 
 import SwiftUI
 
-struct RecentsBaseDetailView: View {
+struct RecentlyDeletedBaseDetailView: View {
     @Binding var path: NavigationPath
     
     var body: some View {
         NavigationStack(path: $path) {
-            RecentsView(navigationTitle: "Recents", path: $path)
+            RecentlyDeletedView(navigationTitle: "Recently Deleted", path: $path)
         }
     }
 }
 
-struct RecentNotebook: Hashable {
+struct DeletedNotebook: Hashable {
     let notebook: Notebook
 }
 
-fileprivate struct RecentsView: View {
+fileprivate struct RecentlyDeletedView: View {
     var navigationTitle: String
-    @State var state = RecentsState()
+    @State var state = RecentlyDeletedState()
     @Binding var path: NavigationPath
     @State private var notebookContentState = NotebookContentState(business: BusinessFactory.createNotebookContentBusinessFactory())
 //    var parent: Notebook?
@@ -49,7 +49,7 @@ fileprivate struct RecentsView: View {
         }
         .onAppear {
 //            if state.isEmpty {
-                state.loadRecents()
+                state.loadRecentlyDeleted()
 //            }
         }
     }
@@ -75,7 +75,7 @@ fileprivate struct RecentsView: View {
         Section {
             ForEach(state.folders) { folder in
                 NavigationLink(value: RecentNotebook(notebook: folder)) {
-                    RecentFolderCellView(name: folder.name, notebook: folder)
+                    RecentlyDeletedFolderCellView(name: folder.name, notebook: folder)
                 }
             }
         }
@@ -85,7 +85,7 @@ fileprivate struct RecentsView: View {
         Section {
             ForEach(state.files) { file in
                 NavigationLink(value: RecentNotebook(notebook: file)) {
-                    RecentFileCellView(name: file.name, notebook: file)
+                    RecentlyDeletedFileCellView(name: file.name, notebook: file)
                 }
 //                Button {
 //                    path.append(file)
@@ -99,7 +99,7 @@ fileprivate struct RecentsView: View {
 }
 
 
-fileprivate struct RecentFolderCellView: View {
+fileprivate struct RecentlyDeletedFolderCellView: View {
     let name: String
     let notebook: Notebook
     
@@ -112,7 +112,7 @@ fileprivate struct RecentFolderCellView: View {
 }
 
 
-fileprivate struct RecentFileCellView: View {
+fileprivate struct RecentlyDeletedFileCellView: View {
     let name: String
     let notebook: Notebook
     

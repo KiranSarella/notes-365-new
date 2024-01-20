@@ -93,6 +93,11 @@ class NotebooksStorageAdapter: NotebooksStorageProvider {
     func fetchOnlyNotesCount() throws -> Int {
         try storage.fetchOnlyNotesCount()
     }
+    
+    func getDeletedNotebooks() throws -> [NotebookB] {
+        let topLevelNotebooksData = try storage.fetchDeletedNotebooks()
+        return topLevelNotebooksData.map { NotebookB($0) }
+    }
 }
 
 
