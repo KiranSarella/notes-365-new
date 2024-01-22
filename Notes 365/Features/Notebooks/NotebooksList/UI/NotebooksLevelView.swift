@@ -36,14 +36,11 @@ struct NotebooksLevelView: View {
         ScrollViewReader { proxy in
             VStack {
                 if parent == nil {
-                    
                     // base view with search option
                     List {
                         if currentLevelState.isEmpty {
                             emptyView
                         }
-//                        searchFolderSection
-//                        searchFileSection
                         if currentLevelState.searchText.count > 1 {
                             searchFolderSection
                             searchFileSection
@@ -510,8 +507,6 @@ struct FileCellView: View {
         }
     }
 }
-
-
 
 struct SearchFolderCellView: View {
     var notebook: Notebook
