@@ -25,7 +25,8 @@ class NotebooksPathService {
     
     fileprivate var filesPathInfo = [UUID: LocationInfo]()
     fileprivate var foldersPathInfo = [UUID: LocationInfo]()
-//    var fullPathsCache = [UUID: FullPathInfo]()
+
+    var folderPathsCache = [UUID: String]()
     var pathsCache = [UUID: String]()
     private(set) var isLoaded = false
     var cloudSyncFinishedObserver: NSObjectProtocol?
@@ -73,6 +74,20 @@ class NotebooksPathService {
         }
     }
     
+    func folderFullPath(for notebookId: UUID) -> String? {
+        if let fullPathInfo = folderPathsCache[notebookId] {
+            logger.debug("cached - \(fullPathInfo)")
+            return fullPathInfo
+        } else {
+            let newPath = generateFolderFullPath(notebookId: notebookId)
+            if let newPath = newPath {
+                folderPathsCache[notebookId] = newPath
+            }
+            logger.debug("generated - \(newPath ?? "")")
+            return newPath
+        }
+    }
+    
     func fullPath(for notebookId: UUID) -> String? {
         if let fullPathInfo = pathsCache[notebookId] {
             logger.debug("cached - \(fullPathInfo)")
@@ -86,6 +101,21 @@ class NotebooksPathService {
             return newPath
         }
     }
+    
+    private func generateFolderFullPath(notebookId: UUID) -> String? {
+        if let filePathInfo = self.foldersPathInfo[notebookId] {
+            var pathComponents = [String]()
+            pathComponents.append(filePathInfo.name)
+            if let folderId = filePathInfo.parentId {
+                appendFoldersPath(startingFrom: folderId, in: &pathComponents)
+            }
+            let fullPath = pathComponents.reversed().joined(separator: "  \u{203A}  ")
+            return fullPath
+        } else {
+            return nil
+        }
+    }
+    
     
     private func generateFullPath(notebookId: UUID) -> String? {
         if let filePathInfo = self.filesPathInfo[notebookId] {
@@ -103,6 +133,7 @@ class NotebooksPathService {
     
     private func invalidateCacheFullPath() {
         pathsCache.removeAll()
+        folderPathsCache.removeAll()
     }
     
     private func appendFoldersPath(startingFrom folderId: UUID, in pathComponents: inout [String]) {

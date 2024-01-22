@@ -10,7 +10,7 @@
 [ ] block quote font
 [ ] option to choose custom system font 
 [ ] rating view
-[ ] path for files search items
+[-] path for files search items and in recents
 
 # Issues
 [-] getting payment alert on app launch and adding new note (if online or only on offline), if so, have to persist state until you get new data

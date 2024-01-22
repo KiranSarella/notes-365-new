@@ -7,12 +7,6 @@
 
 import SwiftUI
 
-//struct Item: Identifiable {
-//    let id: UUID
-//    var name: String
-//    var createdDate: Date = DateTime.now()
-//}
-
 struct NotebooksBaseDetailView: View {
     @Binding var path: NavigationPath
     
@@ -42,13 +36,21 @@ struct NotebooksLevelView: View {
         ScrollViewReader { proxy in
             VStack {
                 if parent == nil {
+                    
                     // base view with search option
                     List {
                         if currentLevelState.isEmpty {
                             emptyView
                         }
-                        folderSection
-                        fileSection
+//                        searchFolderSection
+//                        searchFileSection
+                        if currentLevelState.searchText.count > 1 {
+                            searchFolderSection
+                            searchFileSection
+                        } else {
+                            folderSection
+                            fileSection
+                        }
                     }
                     .scrollDismissesKeyboard(.interactively)
                     .searchable(text: $currentLevelState.searchText, placement: .navigationBarDrawer)
@@ -201,11 +203,30 @@ struct NotebooksLevelView: View {
         }
     }
     
+    private var searchFolderSection: some View {
+        Section {
+            ForEach(currentLevelState.folders) { folder in
+                NavigationLink(value: folder) {
+                    SearchFolderCellView(notebook: folder)
+                }
+            }
+        }
+    }
+    
+    private var searchFileSection: some View {
+        Section {
+            ForEach(currentLevelState.files) { file in
+                NavigationLink(value: file) {
+                    SearchFileCellView(notebook: file)
+                }
+            }
+        }
+    }
+    
 }
 
 
 struct FolderCellView: View {
-    @Environment(\.isSearching) private var isSearching
     @Binding var currentLevelState: CurrentLevelState
     @Binding var moveSource: Notebook?
     @State var name: String
@@ -222,6 +243,10 @@ struct FolderCellView: View {
     
     var highlightText: Bool {
         onHover || notebook.isNewlyCreated
+    }
+    
+    var notebookPath: String {
+        return NotebooksPathService.shared.fullPath(for: notebook.id) ?? ""
     }
     
     var body: some View {
@@ -250,7 +275,6 @@ struct FolderCellView: View {
                                         Label("Delete", systemImage: "trash")
                                     }
                                 }
-                                .disabled(isSearching)
                                 .renameAction {
                                     isEditing = true
                                 }
@@ -273,7 +297,6 @@ struct FolderCellView: View {
                                         Label("Delete", systemImage: "trash")
                                     }
                                 }
-                                .disabled(isSearching)
                     
                     Spacer()
                     
@@ -297,11 +320,10 @@ struct FolderCellView: View {
                         } label: {
                             Image(systemName: "ellipsis.circle.fill")
                         }
-                        .disabled(isSearching)
                     }
                 }
-                
             }
+            
         }
 #if targetEnvironment(macCatalyst)
         .onHover { newValue in
@@ -346,7 +368,6 @@ struct FolderCellView: View {
 
 
 struct FileCellView: View {
-    @Environment(\.isSearching) private var isSearching
     @Binding var currentLevelState: CurrentLevelState
     @State var name: String
     @Binding var moveSource: Notebook?
@@ -363,6 +384,10 @@ struct FileCellView: View {
     
     var highlightText: Bool {
         onHover || notebook.isNewlyCreated
+    }
+    
+    var notebookPath: String {
+        return NotebooksPathService.shared.fullPath(for: notebook.id) ?? ""
     }
     
     var body: some View {
@@ -392,7 +417,6 @@ struct FileCellView: View {
                                 Label("Delete", systemImage: "trash")
                             }
                         }
-                        .disabled(isSearching)
                         .renameAction {
                             isEditing = true
                         }
@@ -416,7 +440,6 @@ struct FileCellView: View {
                                 Label("Delete", systemImage: "trash")
                             }
                         }
-                        .disabled(isSearching)
                     
                     Spacer()
                     
@@ -440,11 +463,12 @@ struct FileCellView: View {
                         } label: {
                             Image(systemName: "ellipsis.circle.fill")
                         }
-                        .disabled(isSearching)
+
                     }
                 }
-                
             }
+            
+            
         }
 #if targetEnvironment(macCatalyst)
         .onHover { newValue in
@@ -484,5 +508,83 @@ struct FileCellView: View {
         } message: {
             Text(errorMessage)
         }
+    }
+}
+
+
+
+struct SearchFolderCellView: View {
+    var notebook: Notebook
+    @FocusState private var isFocused: Bool
+    @State private var onHover = false
+    
+    var highlightText: Bool {
+        onHover || notebook.isNewlyCreated
+    }
+    
+    var notebookPath: String {
+        return NotebooksPathService.shared.folderFullPath(for: notebook.id) ?? ""
+    }
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Label(notebook.name, systemImage: "folder")
+                    .id(notebook.id)
+                    .fontWeight(highlightText ? .heavy : .semibold)
+                Spacer()
+            }
+            .padding(.vertical, 2)
+            
+            HStack {
+                Text(notebookPath)
+                    .font(.caption)
+                Spacer()
+            }
+        }
+#if targetEnvironment(macCatalyst)
+        .onHover { newValue in
+            onHover = newValue
+        }
+#endif
+    }
+}
+
+
+struct SearchFileCellView: View {
+    var notebook: Notebook
+    @FocusState private var isFocused: Bool
+    @State private var onHover = false
+    
+    var highlightText: Bool {
+        onHover || notebook.isNewlyCreated
+    }
+    
+    var notebookPath: String {
+        return NotebooksPathService.shared.fullPath(for: notebook.id) ?? ""
+    }
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Text(notebook.name)
+                    .id(notebook.id)
+                    .fontWeight(highlightText ? .heavy : .semibold)
+                    .foregroundStyle(Color.primary)
+                Spacer()
+            }
+            .padding(.vertical, 2)
+            
+            HStack {
+                Text(notebookPath)
+                    .font(.caption)
+                Spacer()
+            }
+        }
+#if targetEnvironment(macCatalyst)
+        .onHover { newValue in
+            onHover = newValue
+        }
+#endif
     }
 }

@@ -75,7 +75,7 @@ fileprivate struct RecentsView: View {
         Section {
             ForEach(state.folders) { folder in
                 NavigationLink(value: RecentNotebook(notebook: folder)) {
-                    RecentFolderCellView(name: folder.name, notebook: folder)
+                    SearchFolderCellView(notebook: folder)
                 }
             }
         }
@@ -85,13 +85,8 @@ fileprivate struct RecentsView: View {
         Section {
             ForEach(state.files) { file in
                 NavigationLink(value: RecentNotebook(notebook: file)) {
-                    RecentFileCellView(name: file.name, notebook: file)
+                    SearchFileCellView(notebook: file)
                 }
-//                Button {
-//                    path.append(file)
-//                } label: {
-//                    RecentFileCellView(name: file.name, notebook: file)
-//                }
             }
         }
     }
@@ -99,28 +94,31 @@ fileprivate struct RecentsView: View {
 }
 
 
-fileprivate struct RecentFolderCellView: View {
-    let name: String
-    let notebook: Notebook
-    
-    var body: some View {
-        VStack {
-//            Label("\(notebook.name) \(notebook.modifiedDate.string(format: "mm-dd-yy hh:mm:ss"))", systemImage: "folder")
-            Label(notebook.name, systemImage: "folder")
-        }
-    }
-}
-
-
-fileprivate struct RecentFileCellView: View {
-    let name: String
-    let notebook: Notebook
-    
-    var body: some View {
-        VStack {
-//            Text("\(notebook.name) \(notebook.modifiedDate.string(format: "mm-dd-yy hh:mm:ss"))")
-            Text(notebook.name)
-                .foregroundStyle(Color.primary)
-        }
-    }
-}
+//fileprivate struct RecentFolderCellView: View {
+//    let name: String
+//    let notebook: Notebook
+//    
+//    var notebookPath: String {
+//        return NotebooksPathService.shared.folderFullPath(for: notebook.id) ?? ""
+//    }
+//    
+//    var body: some View {
+//        VStack {
+//            Label(notebook.name, systemImage: "folder")
+//        }
+//    }
+//}
+//
+//
+//fileprivate struct RecentFileCellView: View {
+//    let name: String
+//    let notebook: Notebook
+//    
+//    var body: some View {
+//        VStack {
+////            Text("\(notebook.name) \(notebook.modifiedDate.string(format: "mm-dd-yy hh:mm:ss"))")
+//            Text(notebook.name)
+//                .foregroundStyle(Color.primary)
+//        }
+//    }
+//}
