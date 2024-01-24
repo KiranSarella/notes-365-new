@@ -640,12 +640,17 @@ extension EditorView {
                 guard let font = value as? UIFont else { return }
 
                 if font.familyName == theme.fontName {
-                    let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                    let fallbackDescriptor = fontDesc?.addingAttributes([
-                        UIFontDescriptor.AttributeName.name: theme.blockQuoteFontName
-                    ])
-                    let newFont = UIFont(descriptor: fallbackDescriptor ?? font.fontDescriptor, size: CGFloat(theme.fontSize))
-                    innerAttributedString.addAttribute(.font, value: newFont, range: range)
+//                    let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
+//                    let fallbackDescriptor = fontDesc?.addingAttributes([
+//                        UIFontDescriptor.AttributeName.name: theme.blockQuoteFontName
+//                    ])
+//                    let newFont = UIFont(descriptor: fallbackDescriptor ?? font.fontDescriptor, size: CGFloat(theme.fontSize))
+//                    innerAttributedString.addAttribute(.font, value: newFont, range: range)
+                    
+                    if let uiFont = UIFont(name: theme.blockQuoteFontName, size: CGFloat(theme.fontSize)) {
+                        innerAttributedString.addAttribute(.font, value: uiFont, range: range)
+                    }
+                    
                 } else {
                     // leave to default font
                 }
@@ -1045,12 +1050,17 @@ extension EditorView {
                 if font.familyName == theme.fontName {
                     // apply new font
                     // bold
-                    let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                    let fallbackDescriptor = fontDesc?.addingAttributes([
-                        UIFontDescriptor.AttributeName.name: theme.headingFontName
-                    ])
-                    let newFont = UIFont(descriptor: fallbackDescriptor ?? font.fontDescriptor, size: fontSize)
-                    innerAttributedString.addAttribute(.font, value: newFont, range: range)
+//                    let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
+//                    let fallbackDescriptor = fontDesc?.addingAttributes([
+//                        UIFontDescriptor.AttributeName.name: theme.headingFontName
+//                    ])
+//                    let newFont = UIFont(descriptor: fallbackDescriptor ?? font.fontDescriptor, size: fontSize)
+//                    innerAttributedString.addAttribute(.font, value: newFont, range: range)
+                    
+                    if let uiFont = UIFont(name: theme.headingFontName, size: fontSize) {
+                        innerAttributedString.addAttribute(.font, value: uiFont, range: range)
+                    }
+                    
                 } else {
                     // bold
                     let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold) ?? font.fontDescriptor

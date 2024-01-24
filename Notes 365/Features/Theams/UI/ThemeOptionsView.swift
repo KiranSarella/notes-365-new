@@ -29,65 +29,83 @@ struct ThemeOptionsView: View {
     var body: some View {
         VStack {
             List {
-                HStack {
-                    Text("Font")
-                    Spacer()
-                    Button {
-                        showFontPicker = true
-                    } label: {
-                        Text(theme.fontName)
-                            .font(font)
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                }
-                // font size
-                Stepper(value: $fontSize, in: range, step: step) {
-                    HStack {
-                        Text("Font Size")
-                        Spacer()
-                        Text("\(fontSize)")
-                    }
-                }
-                .onChange(of: fontSize) { oldValue, newValue in
-                    theme.fontSize = Float(newValue)
-                }
-                ColorPicker("Background", selection: $theme.canvasColor, supportsOpacity: true)
-                ColorPicker("Body", selection: $theme.bodyColor, supportsOpacity: false)
-                ColorPicker("Heading", selection: $theme.headingColor, supportsOpacity: false)
-                ColorPicker("Bold, Italic, Strikthrough", selection: $theme.styleColor, supportsOpacity: false)
-                ColorPicker("List", selection: $theme.listColor, supportsOpacity: false)
-                ColorPicker("Highlight", selection: $theme.highlightColor, supportsOpacity: true)
-                ColorPicker("Source Code", selection: $theme.codeColor, supportsOpacity: false)
-                ColorPicker("Block Quote", selection: $theme.blockQuoteColor, supportsOpacity: false)
                 
                 Section {
                     HStack {
-                        Text("Heading Font")
+                        Text("Font")
                         Spacer()
                         Button {
-                            showHeadingFontPicker = true
+                            showFontPicker = true
                         } label: {
-                            Text(theme.headingFontName)
-                                .font(headingFont)
+                            Text(theme.fontName)
+                                .font(font)
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
+                    // font size
+                    Stepper(value: $fontSize, in: range, step: step) {
+                        HStack {
+                            Text("Font Size")
+                            Spacer()
+                            Text("\(fontSize)")
+                        }
+                    }
+                    .onChange(of: fontSize) { oldValue, newValue in
+                        theme.fontSize = Float(newValue)
+                    }
+                    HStack {
+                        ColorPicker("Background", selection: $theme.canvasColor, supportsOpacity: true)
+                        Toggle("Background", isOn: $enableOtherFonts)
+                            .labelsHidden()
+                    }
+                }
+                
+                Section {
+                    ColorPicker("Body", selection: $theme.bodyColor, supportsOpacity: false)
+                    ColorPicker("Bold, Italic, Strikthrough", selection: $theme.styleColor, supportsOpacity: false)
+                    ColorPicker("Highlight", selection: $theme.highlightColor, supportsOpacity: true)
+                    ColorPicker("List", selection: $theme.listColor, supportsOpacity: false)
+                    ColorPicker("Source Code", selection: $theme.codeColor, supportsOpacity: false)
+                }
+             
+                Section {
+                    ColorPicker("Heading", selection: $theme.headingColor, supportsOpacity: false)
+                    HStack {
+                        Text("Heading Font")
+                        Spacer()
+                        HStack {
+                            Button {
+                                showHeadingFontPicker = true
+                            } label: {
+                                Text(theme.headingFontName)
+                                    .font(headingFont)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            Toggle("Heading Font", isOn: $enableOtherFonts)
+                                .labelsHidden()
+                        }
+                    }
+                }
+                
+                Section {
+                    ColorPicker("Block Quote", selection: $theme.blockQuoteColor, supportsOpacity: false)
                     HStack {
                         Text("Block Quote Font")
                         Spacer()
-                        Button {
-                            showBlockQuoteFontPicker = true
-                        } label: {
-                            Text(theme.blockQuoteFontName)
-                                .font(blockQuoteFont)
+                        HStack {
+                            Button {
+                                showBlockQuoteFontPicker = true
+                            } label: {
+                                Text(theme.blockQuoteFontName)
+                                    .font(blockQuoteFont)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            Toggle("", isOn: $enableOtherFonts)
+                                .labelsHidden()
                         }
-                        .buttonStyle(PlainButtonStyle())
                     }
-                } header: {
-                    Toggle("More", isOn: $enableOtherFonts)
-                }
+                } 
 
-                
             }
             .sheet(isPresented: $showFontPicker) {
                 NavigationStack {

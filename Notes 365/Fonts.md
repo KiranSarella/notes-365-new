@@ -9,7 +9,18 @@ Coaster
 Krungthep
 
 
-## Body fonts
+## Body fonts - bold, regular, italic
+Helvetica
+Ariel
+Corier ..
+
+
+https://developer.apple.com/documentation/uikit/uifontdescriptor/1616699-matchingfontdescriptors
+
+matchingFontDescriptors(withMandatoryKeys:)
+
+
+
 
 
 
