@@ -27,4 +27,7 @@ struct Theme: Identifiable {
     var blockQuoteColor: Color = Color.primary
     var listColor: Color = Color.primary
     var linkColor: Color = Color.primary
+    // font names
+    var headingFontName: String = ""
+    var blockQuoteFontName: String = ""
 }

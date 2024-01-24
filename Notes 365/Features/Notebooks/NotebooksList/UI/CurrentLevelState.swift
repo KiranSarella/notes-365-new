@@ -198,6 +198,27 @@ class CurrentLevelState {
         notifyAddCurrentFolderToRecents()
     }
     
+//    func restore(_ source: Notebook, to destinationId: UUID?) {
+//        logger.info("\(#function) from: \(source.name) to: \(destinationId?.uuidString ?? "")")
+//        do {
+//            try notebooksBusiness.move(notebook: source.notebookB(), to: destinationId)
+//        } catch {
+//            logger.info("\(error)")
+//        }
+//        
+//        if source.isFolder {
+//            folders.removeAll { nt in
+//                nt.id == source.id
+//            }
+//        } else {
+//            files.removeAll { nt in
+//                nt.id == source.id
+//            }
+//        }
+//        
+//        notifyAddCurrentFolderToRecents()
+//    }
+    
     func canAddNewNotebook() -> Bool {
         var notesCount: Int = 0
         do {

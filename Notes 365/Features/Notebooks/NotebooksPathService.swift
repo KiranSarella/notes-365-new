@@ -26,8 +26,9 @@ class NotebooksPathService {
     fileprivate var filesPathInfo = [UUID: LocationInfo]()
     fileprivate var foldersPathInfo = [UUID: LocationInfo]()
 
-    var folderPathsCache = [UUID: String]()
-    var pathsCache = [UUID: String]()
+    var foldersPathsCache = [UUID: String]()
+    var filesPathsCache = [UUID: String]()
+    
     private(set) var isLoaded = false
     var cloudSyncFinishedObserver: NSObjectProtocol?
     
@@ -75,13 +76,13 @@ class NotebooksPathService {
     }
     
     func folderFullPath(for notebookId: UUID) -> String? {
-        if let fullPathInfo = folderPathsCache[notebookId] {
+        if let fullPathInfo = foldersPathsCache[notebookId] {
             logger.debug("cached - \(fullPathInfo)")
             return fullPathInfo
         } else {
             let newPath = generateFolderFullPath(notebookId: notebookId)
             if let newPath = newPath {
-                folderPathsCache[notebookId] = newPath
+                foldersPathsCache[notebookId] = newPath
             }
             logger.debug("generated - \(newPath ?? "")")
             return newPath
@@ -89,13 +90,13 @@ class NotebooksPathService {
     }
     
     func fullPath(for notebookId: UUID) -> String? {
-        if let fullPathInfo = pathsCache[notebookId] {
+        if let fullPathInfo = filesPathsCache[notebookId] {
             logger.debug("cached - \(fullPathInfo)")
             return fullPathInfo
         } else {
             let newPath = generateFullPath(notebookId: notebookId)
             if let newPath = newPath {
-                pathsCache[notebookId] = newPath
+                filesPathsCache[notebookId] = newPath
             }
             logger.debug("generated - \(newPath ?? "")")
             return newPath
@@ -132,8 +133,8 @@ class NotebooksPathService {
     }
     
     private func invalidateCacheFullPath() {
-        pathsCache.removeAll()
-        folderPathsCache.removeAll()
+        filesPathsCache.removeAll()
+        foldersPathsCache.removeAll()
     }
     
     private func appendFoldersPath(startingFrom folderId: UUID, in pathComponents: inout [String]) {
@@ -240,4 +241,19 @@ extension NotebooksPathService {
             self?.isLoaded = false
         }
     }
+}
+
+
+// MARK: - Get all child items
+extension NotebooksPathService {
+    
+    func getAllChildFoldersAndFiles() -> [UUID] {
+        
+        // add all child files
+        // add all child folders
+        // for each folder again resursively add its childs
+        
+        return []
+    }
+    
 }

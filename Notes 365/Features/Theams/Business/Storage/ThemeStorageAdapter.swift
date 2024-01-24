@@ -89,6 +89,8 @@ extension ThemeData {
         t.blockQuoteColor = blockQuoteColor.color
         t.listColor = listColor.color
         t.linkColor = linkColor.color
+        t.headingFontName = headingFontName
+        t.blockQuoteFontName = blockQuoteFontName
         return t
     }
 }
@@ -110,6 +112,8 @@ extension Theme {
         t.blockQuoteColor = blockQuoteColor.colorData
         t.listColor = listColor.colorData
         t.linkColor = linkColor.colorData
+        t.headingFontName = headingFontName
+        t.blockQuoteFontName = blockQuoteFontName
         return t
     }
 }

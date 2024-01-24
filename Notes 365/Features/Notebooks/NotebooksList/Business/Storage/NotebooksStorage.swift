@@ -111,9 +111,9 @@ class NotebooksStorage {
         return try modelContext.fetch(descriptor)
     }
     
-    func getAllFolders() throws -> [NotebookData] {
+    func getAllActiveFolders() throws -> [NotebookData] {
         let predicate = #Predicate<NotebookData> { item in
-            item.isFolder
+            item.isFolder && item.deletedDate == nil
         }
         let sortByName = SortDescriptor(\NotebookData.name, order: .forward)
         var descriptor = FetchDescriptor(predicate: predicate, sortBy: [sortByName])

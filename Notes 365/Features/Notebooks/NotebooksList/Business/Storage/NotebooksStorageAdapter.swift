@@ -87,7 +87,7 @@ class NotebooksStorageAdapter: NotebooksStorageProvider {
     }
     
     func getAllFolders() throws -> [NotebookB] {
-        try storage.getAllFolders().map { NotebookB($0) }
+        try storage.getAllActiveFolders().map { NotebookB($0) }
     }
     
     func fetchOnlyNotesCount() throws -> Int {

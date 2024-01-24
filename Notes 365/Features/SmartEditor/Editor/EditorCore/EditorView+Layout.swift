@@ -67,10 +67,18 @@ extension EditorView: NSLayoutManagerDelegate {
             
 //            let uniChar = (textStorage.string as NSString).character(at: charPtr)
 //            if let unicodeScalar = UnicodeScalar(uniChar) {
-//                print(Character(unicodeScalar))
+//                print("unicodeScalar:", uniChar, Character(unicodeScalar))
 ////                if Character(unicodeScalar) == "*" {
 ////                    controlCharProps?[index] = .null
 ////                }
+//            } else {
+//                print("Not Unicode:", uniChar)
+//                let font = textStorage.attribute(.font, at: charIndexes[index], effectiveRange: nil)
+//                print(font)
+////                if let fonttt = UIFont(name: "AppleColorEmoji", size: 24) {
+////                    textStorage.addAttribute(.font, value: fonttt, range: glyphRange)
+////                }
+//                
 //            }
 //            print(textStorage.attribute(.markdown, at: charIndexes[index], effectiveRange: nil))
             

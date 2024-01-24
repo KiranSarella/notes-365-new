@@ -105,6 +105,7 @@
 		5CCCF7F52AC2CB6B00F5923E /* TimelineStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCCF7F42AC2CB6B00F5923E /* TimelineStorage.swift */; };
 		5CCE93BF2B4D8EFD00066AB3 /* PremiumUserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCE93BE2B4D8EFD00066AB3 /* PremiumUserState.swift */; };
 		5CD2F4F02ACC7FD500E8B465 /* TimelineDetailState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD2F4EF2ACC7FD500E8B465 /* TimelineDetailState.swift */; };
+		5CD6813E2B5FA5BA00F15D3B /* RestoreToView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD6813D2B5FA5BA00F15D3B /* RestoreToView.swift */; };
 		5CD72D8B2B5BE50200B772DF /* RecentlyDeletedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD72D8A2B5BE50200B772DF /* RecentlyDeletedState.swift */; };
 		5CE6FDF82B0BC19600ED9425 /* PDFFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE6FDF72B0BC19600ED9425 /* PDFFile.swift */; };
 		5CE6FE212B0CD65700ED9425 /* DeletedListLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD042920CCCE003DE332 /* DeletedListLogic.swift */; };
@@ -282,6 +283,8 @@
 		5CCCF7F42AC2CB6B00F5923E /* TimelineStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineStorage.swift; sourceTree = "<group>"; };
 		5CCE93BE2B4D8EFD00066AB3 /* PremiumUserState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumUserState.swift; sourceTree = "<group>"; };
 		5CD2F4EF2ACC7FD500E8B465 /* TimelineDetailState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineDetailState.swift; sourceTree = "<group>"; };
+		5CD6813D2B5FA5BA00F15D3B /* RestoreToView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreToView.swift; sourceTree = "<group>"; };
+		5CD6813F2B60264300F15D3B /* Fonts.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Fonts.md; sourceTree = "<group>"; };
 		5CD72D8A2B5BE50200B772DF /* RecentlyDeletedState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyDeletedState.swift; sourceTree = "<group>"; };
 		5CE6FDF72B0BC19600ED9425 /* PDFFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFFile.swift; sourceTree = "<group>"; };
 		5CE8C4872B03048E00F19217 /* Notebook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notebook.swift; sourceTree = "<group>"; };
@@ -667,6 +670,7 @@
 			children = (
 				5C7A53182B5A807000500A90 /* RecentlyDeletedView.swift */,
 				5CD72D8A2B5BE50200B772DF /* RecentlyDeletedState.swift */,
+				5CD6813D2B5FA5BA00F15D3B /* RestoreToView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -864,6 +868,7 @@
 				9FB0A47129D9246D0093FBD2 /* architecture-decissions.md */,
 				5C9732212A8B74C200C42E28 /* iCloud-sync.md */,
 				5C117C3D2A8E662800B0F3BE /* Features.md */,
+				5CD6813F2B60264300F15D3B /* Fonts.md */,
 				9FB0A47429DBD6830093FBD2 /* Features */,
 				9F45BCA52920CAB0003DE332 /* Assets.xcassets */,
 				9F45BCA72920CAB0003DE332 /* Notes_365.entitlements */,
@@ -1251,6 +1256,7 @@
 				9FB6C6A02927695000C8EC76 /* NotebookContentBusiness.swift in Sources */,
 				5C34A18A2B1B936700D036B7 /* ThemeStorageProvider.swift in Sources */,
 				5C0A7B4C2B20DA4F0099F0A3 /* DayCalendarState.swift in Sources */,
+				5CD6813E2B5FA5BA00F15D3B /* RestoreToView.swift in Sources */,
 				9F45BDA82920CE41003DE332 /* MarkdownTheme.swift in Sources */,
 				5C4ADCE32A9757EF000A037E /* EditorSymbolsView.swift in Sources */,
 				5C10D7A12B04C26D006FB80D /* NotebooksBusiness.swift in Sources */,

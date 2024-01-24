@@ -27,6 +27,11 @@ fileprivate struct RecentlyDeletedView: View {
     @Binding var path: NavigationPath
     @State private var notebookContentState = NotebookContentState(business: BusinessFactory.createNotebookContentBusinessFactory())
     
+    @State var restoreSource: Notebook?
+    @State var showRestoreView = false
+    @State var restoreDestination: FileItem?
+    
+    
     var body: some View {
         VStack {
             List {
@@ -51,6 +56,27 @@ fileprivate struct RecentlyDeletedView: View {
                 state.loadRecentlyDeleted()
 //            }
         }
+        .onChange(of: restoreSource, { oldValue, newValue in
+            guard let newValue = newValue else { return }
+            logger.info("restoreSource: \(newValue.name) \(newValue.id)")
+            showRestoreView = true
+        })
+        .onChange(of: restoreDestination) { old, new in
+            guard let restoreSource = restoreSource else { return }
+            if let destination = new {
+                state.restore(restoreSource, to: destination.folderId)
+                showRestoreView = false
+            }
+        }
+        .onChange(of: showRestoreView) { old, new in
+            if new == false {
+                restoreSource = nil
+                restoreDestination = nil
+            }
+        }
+        .sheet(isPresented: $showRestoreView) {
+            RestoreToView(notebook: restoreSource!, moveDestination: $restoreDestination)
+        }
     }
     
     private var emptyView: some View {
@@ -74,7 +100,7 @@ fileprivate struct RecentlyDeletedView: View {
         Section {
             ForEach(state.folders) { folder in
                 NavigationLink(value: RecentNotebook(notebook: folder)) {
-                    RecentlyDeletedFolderCellView(name: folder.name, notebook: folder)
+                    RecentlyDeletedFolderCellView(restoreSource: $restoreSource, name: folder.name, notebook: folder)
                 }
             }
         }
@@ -84,7 +110,7 @@ fileprivate struct RecentlyDeletedView: View {
         Section {
             ForEach(state.files) { file in
                 NavigationLink(value: RecentNotebook(notebook: file)) {
-                    RecentlyDeletedFileCellView(name: file.name, notebook: file)
+                    RecentlyDeletedFileCellView(restoreSource: $restoreSource, name: file.name, notebook: file)
                 }
             }
         }
@@ -94,26 +120,115 @@ fileprivate struct RecentlyDeletedView: View {
 
 
 fileprivate struct RecentlyDeletedFolderCellView: View {
+    @Binding var restoreSource: Notebook?
     let name: String
     let notebook: Notebook
     
+    @State private var onHover = false
+    
+    var highlightText: Bool {
+        onHover || notebook.isNewlyCreated
+    }
+    
     var body: some View {
         VStack {
-            Label(notebook.name, systemImage: "folder")
+            HStack {
+                Label(notebook.name, systemImage: "folder")
+                    .fontWeight(highlightText ? .heavy : .regular)
+                    .id(notebook.id)
+                            .contextMenu {
+                                Button {
+                                    restoreSource = notebook
+                                } label: {
+                                    Label("Restore to", systemImage: "folder")
+                                }
+                            }
+                            .swipeActions(edge: .trailing) {
+                                Button {
+                                    restoreSource = notebook
+                                } label: {
+                                    Label("Restore to", systemImage: "folder")
+                                }
+                                .tint(.purple)
+                            }
+                
+                Spacer()
+                
+                if onHover {
+                    Menu {
+                        Button {
+                            restoreSource = notebook
+                        } label: {
+                            Label("Restore to", systemImage: "folder")
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle.fill")
+                    }
+                }
+            }
         }
+#if targetEnvironment(macCatalyst)
+        .onHover { newValue in
+            onHover = newValue
+        }
+#endif
     }
 }
 
-
 fileprivate struct RecentlyDeletedFileCellView: View {
+    @Binding var restoreSource: Notebook?
     let name: String
     let notebook: Notebook
     
+    @State private var onHover = false
+    
+    var highlightText: Bool {
+        onHover || notebook.isNewlyCreated
+    }
+    
     var body: some View {
         VStack {
-            Text(notebook.name)
-                .foregroundStyle(Color.primary)
+            HStack {
+                Text(notebook.name)
+                    .foregroundStyle(Color.primary)
+                    .fontWeight(highlightText ? .heavy : .regular)
+                    .id(notebook.id)
+                            .contextMenu {
+                                Button {
+                                    restoreSource = notebook
+                                } label: {
+                                    Label("Restore to", systemImage: "folder")
+                                }
+                            }
+                            .swipeActions(edge: .trailing) {
+                                Button {
+                                    restoreSource = notebook
+                                } label: {
+                                    Label("Restore to", systemImage: "folder")
+                                }
+                                .tint(.purple)
+                            }
+                
+                Spacer()
+                
+                if onHover {
+                    Menu {
+                        Button {
+                            restoreSource = notebook
+                        } label: {
+                            Label("Restore to", systemImage: "folder")
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle.fill")
+                    }
+                }
+            }
         }
+#if targetEnvironment(macCatalyst)
+        .onHover { newValue in
+            onHover = newValue
+        }
+#endif
     }
 }
 

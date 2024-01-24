@@ -2,12 +2,16 @@
 [-] deleted files list
     [x] read only list
     [x] read only editor
-    [ ] restore view 
-    [ ] restore functionality
+    [x] restore view 
+    [x] restore functionality
+    [-] clean recents list 
+        [-] remove current file
+        [-] capture all nested folders and files for deleded tree
+        [ ] observe delete changes and remove from list
     [ ] 30 days view 
     [ ] 30 days delete functionality
 
-[-] timeline filter tabs with all first level folders
+[ ] timeline filter tabs with all first level folders
 // reading related
 [ ] read text
 [ ] read in background audio
@@ -27,6 +31,7 @@
 [ ] test restore in live
 [ ] dont refresh others except today's tab.
 [ ] diff - just for two new words added in different paras, whole paras are timelined insteated of two lines
+[ ] is content search is ignoring deleted files - confirm it.
 
 # Completed
 [x] path for files search items and in recents

@@ -16,9 +16,13 @@ extension EditorView: NSTextStorageDelegate {
     
     public func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
      
+    
+        
 //        print("editedRange", editedRange, "delta", delta, "editedMask", editedMask)
    
         let extendedRange = (textStorage.string as NSString).paragraphRange(for: editedRange)
+        
+        
         
 //        textStorage.setAttributes([:], range: extendedRange)
         // FIXIT: - ** if enabled, telugu font will not work. if disabled, code block and below lines font issue.
@@ -43,6 +47,11 @@ extension EditorView: NSTextStorageDelegate {
         
         // FIXIT: - ** if enabled, telugu font will not work. if disabled, code block and below lines font
 //        textStorage.addAttribute(.font, value: theme.font, range: extendedRange)
+//        if let font = textView.font {
+//            textStorage.addAttribute(.font, value: font, range: extendedRange)
+//        }
+        
+        
 
         
 //        let font = textStorage.attribute(.font, at: 0, effectiveRange: &extendedRange)

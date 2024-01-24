@@ -228,4 +228,13 @@ extension NotebooksBusiness {
         logger.info("\(#function)")
         return try storage.getDeletedNotebooks()
     }
+    
+    func restore(notebook: NotebookB, to destinationId: UUID?) throws {
+        notebook.parentId = destinationId
+        notebook.deletedDate = nil
+        try notebook.update(in: storage)
+        do { sendNotebookMoved(notebook) }
+//        do { sendNotebooksMoved([notebook], parentId: destinationId) }
+    }
+    
 }

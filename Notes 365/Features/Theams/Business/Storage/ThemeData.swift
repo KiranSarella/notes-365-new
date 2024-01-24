@@ -59,6 +59,9 @@ class ThemeData: Codable {
     var blockQuoteColor: ColorData = ColorData(color: Color.primary)
     var listColor: ColorData = ColorData(color: Color.primary)
     var linkColor: ColorData = ColorData(color: Color.primary)
+    // other fonts
+    var headingFontName: String = "system"
+    var blockQuoteFontName: String = "system"
     
     init() {
         
@@ -73,6 +76,8 @@ extension ThemeData: CustomStringConvertible {
         str.append("\(appearanceType)\n")
         str.append("\(fontName)\n")
         str.append("\(fontSize)\n")
+        str.append("\(headingFontName)\n")
+        str.append("\(blockQuoteFontName)\n")
         return str
     }
 }
@@ -92,6 +97,8 @@ extension ThemeData {
         blockQuoteColor = newData.blockQuoteColor
         listColor = newData.listColor
         linkColor = newData.linkColor
+        headingFontName = newData.headingFontName
+        blockQuoteFontName = newData.blockQuoteFontName
     }
 }
 

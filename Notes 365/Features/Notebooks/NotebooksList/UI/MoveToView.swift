@@ -25,23 +25,12 @@ struct MoveToView: View {
     let notebook: Notebook
     @Binding var moveDestination: FileItem?
     @State var selectedItem: FileItem?
-    @State var state = MoveToState()
+    @State var state = MoveToViewState()
     @State var isFocused = true
     
     var body: some View {
         NavigationStack {
             VStack {
-                
-//                HStack {
-//                    if notebook.isFolder {
-//                        Label(notebook.name, systemImage: "folder")
-//                    } else {
-//                        Text(notebook.name)
-//                    }
-//                    
-//                    Spacer()
-//                }
-//                .padding()
                 
                 List(selection: $moveDestination) {
                     ForEach($state.items) { $item in
@@ -93,7 +82,7 @@ struct MoveToView: View {
     }
 }
 
-struct NestedFoldersView: View {
+private struct NestedFoldersView: View {
     @Binding var items: [FileItem]
     let notebook: Notebook
     
@@ -160,12 +149,8 @@ struct NestedFoldersView: View {
 }
 
 
-//#Preview {
-//    MoveToView(, notebook: <#Notebook#>)
-//}
-
 @Observable
-class MoveToState {
+class MoveToViewState {
     let notebooksBusiness = BusinessFactory.createNotebooksFactory()
     var items: [FileItem] = []
     
@@ -202,42 +187,3 @@ class MoveToState {
     }
     
 }
-//
-//struct ContentViewMoveToTest: View {
-//    struct FileItem: Hashable, Identifiable, CustomStringConvertible {
-//        var id: Self { self }
-//        var name: String
-//        var children: [FileItem]? = nil
-//        var description: String {
-//            
-//            
-//            switch children {
-//            case nil:
-//                return "📄 \(name)"
-//            case .some(let children):
-//                return children.isEmpty ? "📂 \(name)" : "📁 \(name)"
-//            }
-//        }
-//    }
-//    let fileHierarchyData: [FileItem] = [
-//      FileItem(name: "users", children:
-//        [FileItem(name: "user1234", children:
-//          [FileItem(name: "Photos", children:
-//            [FileItem(name: "photo001.jpg"),
-//             FileItem(name: "photo002.jpg")]),
-//           FileItem(name: "Movies", children:
-//             [FileItem(name: "movie001.mp4")]),
-//              FileItem(name: "Documents", children: [])
-//          ]),
-//         FileItem(name: "newuser", children:
-//           [FileItem(name: "Documents", children: [])
-//           ])
-//        ]),
-//        FileItem(name: "private", children: nil)
-//    ]
-//    var body: some View {
-//        List(fileHierarchyData, children: \.children) { item in
-//            Label(item.description, systemImage: "folder")
-//        }
-//    }
-//}

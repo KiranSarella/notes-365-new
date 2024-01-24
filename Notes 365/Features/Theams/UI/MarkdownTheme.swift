@@ -24,6 +24,8 @@ struct MarkdownTheme: Identifiable {
     var blockQuoteColor: Color = Color.primary
     var listColor: Color = Color.primary
     var linkColor: Color = Color.primary
+    var headingFontName: String = "system"
+    var blockQuoteFontName: String = "system"
     
     init(id: UUID) {
         self.id = id
@@ -62,6 +64,8 @@ extension Theme {
         m.headingColor = headingColor
         m.highlightColor = highlightColor
         m.linkColor = linkColor
+        m.headingFontName = headingFontName
+        m.blockQuoteFontName = blockQuoteFontName
         return m
     }
 }
@@ -86,6 +90,8 @@ extension MarkdownTheme {
         m.headingColor = headingColor
         m.highlightColor = highlightColor
         m.linkColor = linkColor
+        m.headingFontName = headingFontName
+        m.blockQuoteFontName = blockQuoteFontName
         return m
     }
 }

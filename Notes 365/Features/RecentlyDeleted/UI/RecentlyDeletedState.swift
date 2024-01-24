@@ -32,4 +32,24 @@ class RecentlyDeletedState {
             print(error)
         }
     }
+    
+    func restore(_ source: Notebook, to destinationId: UUID?) {
+        logger.info("\(#function) from: \(source.name) to: \(destinationId?.uuidString ?? "")")
+        do {
+            try business.restore(notebook: source.notebookB(), to: destinationId)
+        } catch {
+            logger.info("\(error)")
+        }
+        
+        if source.isFolder {
+            folders.removeAll { nt in
+                nt.id == source.id
+            }
+        } else {
+            files.removeAll { nt in
+                nt.id == source.id
+            }
+        }
+        
+    }
 }

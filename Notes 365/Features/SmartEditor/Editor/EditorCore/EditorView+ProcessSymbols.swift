@@ -633,11 +633,32 @@ extension EditorView {
         let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
         regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
-//            let font =  theme.font
+            
             let fullRange = NSRange(location: match!.range.location, length: match!.range.length)
-//            innerAttributedString.addAttribute(.font,
-//                                               value: font,
-//                                                range: NSRange(location: match!.range.location, length: match!.range.length))
+            
+            innerAttributedString.enumerateAttribute(.font, in: fullRange, options: []) { value, range, stop in
+                guard let font = value as? UIFont else { return }
+
+                if font.familyName == theme.fontName {
+                    let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
+                    let fallbackDescriptor = fontDesc?.addingAttributes([
+                        UIFontDescriptor.AttributeName.name: theme.blockQuoteFontName
+                    ])
+                    let newFont = UIFont(descriptor: fallbackDescriptor ?? font.fontDescriptor, size: CGFloat(theme.fontSize))
+                    innerAttributedString.addAttribute(.font, value: newFont, range: range)
+                } else {
+                    // leave to default font
+                }
+            }
+            
+            
+//            let font =  theme.blockQuoteFontName
+////            let fullRange = NSRange(location: match!.range.location, length: match!.range.length)
+//            if let uifont = UIFont(name: font, size: CGFloat(theme.fontSize)) {
+//                innerAttributedString.addAttribute(.font,
+//                                                   value: uifont,
+//                                                    range: NSRange(location: match!.range.location, length: match!.range.length))
+//            }
             
             innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
                                                value:  theme.blockQuoteColor.uiColor,
@@ -676,13 +697,23 @@ extension EditorView {
     
     func processHeadings(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
         
+        styleHeading(symbolPattern: .h1, innerAttributedString: textStorage, extendedRange: extendedRange, symbolLenght: 2, fontLevel: 1)
+        styleHeading(symbolPattern: .h2, innerAttributedString: textStorage, extendedRange: extendedRange, symbolLenght: 3, fontLevel: 2)
+        styleHeading(symbolPattern: .h3, innerAttributedString: textStorage, extendedRange: extendedRange, symbolLenght: 4, fontLevel: 3)
+        styleHeading(symbolPattern: .h4, innerAttributedString: textStorage, extendedRange: extendedRange, symbolLenght: 5, fontLevel: 4)
+        styleHeading(symbolPattern: .h5, innerAttributedString: textStorage, extendedRange: extendedRange, symbolLenght: 6, fontLevel: 5)
+        styleHeading(symbolPattern: .h6, innerAttributedString: textStorage, extendedRange: extendedRange, symbolLenght: 7, fontLevel: 6)
+        
+    }
+    
+    func processHeadingsOld(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
+        
         
         let paragraphStyle = NSMutableParagraphStyle()
         //        paragraphStyle.lineHeightMultiple = 1.4
         paragraphStyle.paragraphSpacingBefore = 15
         paragraphStyle.paragraphSpacing = 5
         //            paragraphStyle.lineSpacing = 5
-        
         
         let patternH1 = SymbolPattern.h1.rawValue
         
@@ -693,16 +724,66 @@ extension EditorView {
             
             let range = NSRange(location: match!.range.location + 2, length: match!.range.length - 2)
             
+//            innerAttributedString.enumerateAttribute(.font, in: range, options: []) { value, range, stop in
+//                guard let font = value as? UIFont else { return }
+//                // bold
+//                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
+//                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 1))
+//                innerAttributedString.addAttribute(.font, value: newFont, range: range)
+//                // foreground color
+//                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
+//            }
+            
             innerAttributedString.enumerateAttribute(.font, in: range, options: []) { value, range, stop in
                 guard let font = value as? UIFont else { return }
-                // bold
+                print("enumerateAttribute: .font", range)
+                let aStr = innerAttributedString.attributedSubstring(from: range)
+                print(aStr.string)
+                print(font)
+                print(font.familyName, theme.fontName)
                 
-                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 1))
-                innerAttributedString.addAttribute(.font, value: newFont, range: range)
+                if font.familyName == theme.fontName {
+                    // apply new font
+                    // bold
+                    let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
+                    let fallbackDescriptor = fontDesc?.addingAttributes([
+                        UIFontDescriptor.AttributeName.name: theme.headingFontName
+                    ])
+                    let newFont = UIFont(descriptor: fallbackDescriptor ?? font.fontDescriptor, size: getHeadingFontSize(level: 1))
+                    innerAttributedString.addAttribute(.font, value: newFont, range: range)
+                } else {
+                    // bold
+                    let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold) ?? font.fontDescriptor
+                    let newFont = UIFont(descriptor: fontDesc, size: getHeadingFontSize(level: 1))
+                    innerAttributedString.addAttribute(.font, value: newFont, range: range)
+                }
+                
+                
                 // foreground color
                 innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
             }
+
+            
+            
+//            innerAttributedString.enumerateAttribute(.font, in: range, options: []) { value, range, stop in
+//                guard let font = value as? UIFont else { return }
+//
+//                if let uifont = UIFont(name: theme.headingFontName, size: getHeadingFontSize(level: 1)) {
+//                    innerAttributedString.addAttribute(.font, value: uifont, range: range)
+//                }
+//                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
+//            }
+            
+            
+//            if let uifont = UIFont(name: theme.headingFontName, size: getHeadingFontSize(level: 1)) {
+//                
+//                let uifont = addFallbackToFont(font: uifont)
+//                innerAttributedString.addAttribute(.font,
+//                                                   value: uifont,
+//                                                    range: range)
+//            }
+//            
+//            innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
             
             // add id key
             innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
@@ -723,14 +804,22 @@ extension EditorView {
             
             let charRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 3)
             
-            innerAttributedString.enumerateAttribute(.font, in: charRange, options: []) { value, range, stop in
-                guard let font = value as? UIFont else { return }
-                
-                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 2))
-                innerAttributedString.addAttribute(.font, value: newFont, range: range)
-                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
+//            innerAttributedString.enumerateAttribute(.font, in: charRange, options: []) { value, range, stop in
+//                guard let font = value as? UIFont else { return }
+//                
+//                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
+//                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 2))
+//                innerAttributedString.addAttribute(.font, value: newFont, range: range)
+//                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
+//            }
+            
+            if let h2Font = UIFont(name: theme.headingFontName, size: getHeadingFontSize(level: 2)) {
+                innerAttributedString.addAttribute(.font,
+                                                   value: h2Font,
+                                                    range: charRange)
             }
+            innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: charRange)
+            
             
 //            innerAttributedString.addAttribute(NSAttributedString.Key.font,
 //                                                    value: UIFont.boldSystemFont(ofSize: getHeadingFontSize(level: 2)),
@@ -759,14 +848,23 @@ extension EditorView {
             
             let charRange = NSRange(location: match!.range.location + 4, length: match!.range.length - 4)
             
-            innerAttributedString.enumerateAttribute(.font, in: charRange, options: []) { value, range, stop in
-                guard let font = value as? UIFont else { return }
-                
-                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 3))
-                innerAttributedString.addAttribute(.font, value: newFont, range: range)
-                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
+            if let h1Font = UIFont(name: theme.headingFontName, size: getHeadingFontSize(level: 3)) {
+                innerAttributedString.addAttribute(.font,
+                                                   value: h1Font,
+                                                    range: charRange)
             }
+            
+            innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: charRange)
+            
+            
+//            innerAttributedString.enumerateAttribute(.font, in: charRange, options: []) { value, range, stop in
+//                guard let font = value as? UIFont else { return }
+//                
+//                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
+//                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 3))
+//                innerAttributedString.addAttribute(.font, value: newFont, range: range)
+//                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
+//            }
             
 //            innerAttributedString.addAttribute(NSAttributedString.Key.font,
 //                                                    value: UIFont.boldSystemFont(ofSize: getHeadingFontSize(level: 3)),
@@ -795,15 +893,23 @@ extension EditorView {
             
             let charRange = NSRange(location: match!.range.location + 5, length: match!.range.length - 5)
             
-            innerAttributedString.enumerateAttribute(.font, in: charRange, options: []) { value, range, stop in
-                guard let font = value as? UIFont else { return }
-                
-                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 4))
-                
-                innerAttributedString.addAttribute(.font, value: newFont, range: range)
-                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
+//            innerAttributedString.enumerateAttribute(.font, in: charRange, options: []) { value, range, stop in
+//                guard let font = value as? UIFont else { return }
+//                
+//                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
+//                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 4))
+//                
+//                innerAttributedString.addAttribute(.font, value: newFont, range: range)
+//                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
+//            }
+            
+            
+            if let h1Font = UIFont(name: theme.headingFontName, size: getHeadingFontSize(level: 4)) {
+                innerAttributedString.addAttribute(.font,
+                                                   value: h1Font,
+                                                    range: charRange)
             }
+            innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: charRange)
             
 //            innerAttributedString.addAttribute(NSAttributedString.Key.font,
 //                                                    value: UIFont.boldSystemFont(ofSize: getHeadingFontSize(level: 4)),
@@ -831,15 +937,22 @@ extension EditorView {
             match, flags, stop in
             
             let charRange = NSRange(location: match!.range.location + 6, length: match!.range.length - 6)
+            innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: charRange)
             
-            innerAttributedString.enumerateAttribute(.font, in: charRange, options: []) { value, range, stop in
-                guard let font = value as? UIFont else { return }
-                
-                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 5))
-                
-                innerAttributedString.addAttribute(.font, value: newFont, range: range)
-                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
+//            innerAttributedString.enumerateAttribute(.font, in: charRange, options: []) { value, range, stop in
+//                guard let font = value as? UIFont else { return }
+//                
+//                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
+//                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 5))
+//                
+//                innerAttributedString.addAttribute(.font, value: newFont, range: range)
+//                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
+//            }
+            
+            if let h1Font = UIFont(name: theme.headingFontName, size: getHeadingFontSize(level: 5)) {
+                innerAttributedString.addAttribute(.font,
+                                                   value: h1Font,
+                                                    range: charRange)
             }
             
             
@@ -870,15 +983,25 @@ extension EditorView {
             
             let charRange = NSRange(location: match!.range.location + 7, length: match!.range.length - 7)
             
-            innerAttributedString.enumerateAttribute(.font, in: charRange, options: []) { value, range, stop in
-                guard let font = value as? UIFont else { return }
-                
-                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 6))
-                
-                innerAttributedString.addAttribute(.font, value: newFont, range: range)
-                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
+            innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: charRange)
+            
+//            innerAttributedString.enumerateAttribute(.font, in: charRange, options: []) { value, range, stop in
+//                guard let font = value as? UIFont else { return }
+//                
+//                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
+//                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 6))
+//                
+//                innerAttributedString.addAttribute(.font, value: newFont, range: range)
+//                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
+//            }
+            
+            
+            if let h1Font = UIFont(name: theme.headingFontName, size: getHeadingFontSize(level: 6)) {
+                innerAttributedString.addAttribute(.font,
+                                                   value: h1Font,
+                                                    range: charRange)
             }
+            
             
 //            innerAttributedString.addAttribute(NSAttributedString.Key.font,
 //                                                    value: UIFont.boldSystemFont(ofSize: getHeadingFontSize(level: 6)),
@@ -900,10 +1023,95 @@ extension EditorView {
         }
     }
     
+    func styleHeading(symbolPattern: SymbolPattern, innerAttributedString: NSTextStorage, extendedRange: NSRange, symbolLenght: Int, fontLevel: CGFloat) {
+        
+        let pattern = symbolPattern.rawValue
+        let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
+        let fontSize = getHeadingFontSize(level: fontLevel)
+        
+        regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
+            match, flags, stop in
+            
+            let range = NSRange(location: match!.range.location + symbolLenght, length: match!.range.length - symbolLenght)
+            
+            innerAttributedString.enumerateAttribute(.font, in: range, options: []) { value, range, stop in
+                guard let font = value as? UIFont else { return }
+//                print("enumerateAttribute: .font", range)
+                let aStr = innerAttributedString.attributedSubstring(from: range)
+//                print(aStr.string)
+//                print(font)
+//                print(font.familyName, theme.fontName)
+                
+                if font.familyName == theme.fontName {
+                    // apply new font
+                    // bold
+                    let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
+                    let fallbackDescriptor = fontDesc?.addingAttributes([
+                        UIFontDescriptor.AttributeName.name: theme.headingFontName
+                    ])
+                    let newFont = UIFont(descriptor: fallbackDescriptor ?? font.fontDescriptor, size: fontSize)
+                    innerAttributedString.addAttribute(.font, value: newFont, range: range)
+                } else {
+                    // bold
+                    let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold) ?? font.fontDescriptor
+                    let newFont = UIFont(descriptor: fontDesc, size: fontSize)
+                    innerAttributedString.addAttribute(.font, value: newFont, range: range)
+                }
+                
+                
+                // foreground color
+                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
+            }
+
+            // add id key
+            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
+                                                    value: 0,
+                                                    range: NSRange(location: match!.range.location, length: symbolLenght))
+            
+            innerAttributedString.addAttribute(.markdownRange, value: symbolPattern, range: match!.range)
+        }
+        
+        
+    }
+    
     
     func getHeadingFontSize(level: CGFloat) -> CGFloat {
         
         let heading = MarkdownHeading(rawValue: Int(level))!
         return heading.getHeadingFontSize(baseFontSize: theme.font.pointSize)
     }
+    
+    /*
+     
+     + (UIFont *)addFallbacktoFont:(UIFont*)font{
+        UIFontDescriptor* originalDescriptor = [font fontDescriptor];
+
+        UIFontDescriptor* fallbackDescriptor = [originalDescriptor fontDescriptorByAddingAttributes:@{UIFontDescriptorNameAttribute:@"Helvetica Neue"}];
+
+        UIFontDescriptor* repaired = [originalDescriptor fontDescriptorByAddingAttributes:@{UIFontDescriptorCascadeListAttribute:@[
+                                                                                                 fallbackDescriptor
+                                                                                                 ]}];
+
+        font = [UIFont fontWithDescriptor:repaired size:0.0];
+
+        return font;
+     }
+     
+     */
+
+    
+    func addFallbackToFont(font: UIFont) -> UIFont {
+        let originalDescriptor = font.fontDescriptor
+        let fallbackDescriptor = originalDescriptor.addingAttributes([
+            UIFontDescriptor.AttributeName.name: UIFont.systemFont(ofSize: 30)
+        ])
+        let repairedDescriptor = originalDescriptor.addingAttributes([
+            UIFontDescriptor.AttributeName.cascadeList: [fallbackDescriptor]
+        ])
+        return UIFont(descriptor: repairedDescriptor, size: 0.0)
+    }
+
 }
+
+
+

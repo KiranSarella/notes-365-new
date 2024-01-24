@@ -27,6 +27,7 @@ protocol NotebooksRequester {
     func fetchOnlyNotesCount() throws -> Int
     
     func fetchDeletedNotebooks() throws -> [NotebookB]
+    func restore(notebook: NotebookB, to destinationId: UUID?) throws
 }
 
 extension NotebooksBusiness: NotebooksRequester { }
