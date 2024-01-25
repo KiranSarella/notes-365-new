@@ -30,4 +30,9 @@ struct Theme: Identifiable {
     // font names
     var headingFontName: String = ""
     var blockQuoteFontName: String = ""
+    
+    var enableHeadingFont: Bool = true
+    var enableBlockQuoteFont: Bool = true
+    var enableBackground: Bool = true
+    
 }

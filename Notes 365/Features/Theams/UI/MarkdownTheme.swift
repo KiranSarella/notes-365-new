@@ -24,11 +24,37 @@ struct MarkdownTheme: Identifiable {
     var blockQuoteColor: Color = Color.primary
     var listColor: Color = Color.primary
     var linkColor: Color = Color.primary
+    
     var headingFontName: String = "system"
     var blockQuoteFontName: String = "system"
     
+    var enableHeadingFont: Bool = true
+    var enableBlockQuoteFont: Bool = true
+    var enableBackground: Bool = true
+    
     init(id: UUID) {
         self.id = id
+    }
+    
+    var defaultCalvasColor: Color {
+        switch appearanceType {
+        case .light:
+            return Color.white
+        case .dark:
+            return Color.black
+        }
+    }
+    
+    var dynamicCanvasColor: Color {
+        enableBackground ? canvasColor : defaultCalvasColor
+    }
+    
+    var dynamicHeadingFont: String {
+        enableHeadingFont ? headingFontName : fontName
+    }
+    
+    var dynamicBlockQuoteFont: String {
+        enableBlockQuoteFont ? blockQuoteFontName : fontName
     }
 }
 
@@ -64,8 +90,14 @@ extension Theme {
         m.headingColor = headingColor
         m.highlightColor = highlightColor
         m.linkColor = linkColor
+        
         m.headingFontName = headingFontName
         m.blockQuoteFontName = blockQuoteFontName
+        
+        m.enableHeadingFont = enableHeadingFont
+        m.enableBlockQuoteFont = enableBlockQuoteFont
+        m.enableBackground  = enableBackground
+        
         return m
     }
 }
@@ -90,8 +122,14 @@ extension MarkdownTheme {
         m.headingColor = headingColor
         m.highlightColor = highlightColor
         m.linkColor = linkColor
+        
         m.headingFontName = headingFontName
         m.blockQuoteFontName = blockQuoteFontName
+        
+        m.enableHeadingFont = enableHeadingFont
+        m.enableBlockQuoteFont = enableBlockQuoteFont
+        m.enableBackground  = enableBackground
+        
         return m
     }
 }

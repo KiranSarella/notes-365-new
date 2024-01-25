@@ -629,6 +629,9 @@ extension EditorView {
     }
     
     func processBlockQuote(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
+        
+        var elseCount = 0
+        
         let pattern = SymbolPattern.blockQuote.rawValue
         let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
         regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
@@ -639,7 +642,9 @@ extension EditorView {
             innerAttributedString.enumerateAttribute(.font, in: fullRange, options: []) { value, range, stop in
                 guard let font = value as? UIFont else { return }
 
-                if font.familyName == theme.fontName {
+                logger.debug("font.familyName: \(font.familyName)")
+                
+                if font.familyName == theme.fontName || font.familyName == "Helvetica" {
 //                    let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
 //                    let fallbackDescriptor = fontDesc?.addingAttributes([
 //                        UIFontDescriptor.AttributeName.name: theme.blockQuoteFontName
@@ -647,15 +652,19 @@ extension EditorView {
 //                    let newFont = UIFont(descriptor: fallbackDescriptor ?? font.fontDescriptor, size: CGFloat(theme.fontSize))
 //                    innerAttributedString.addAttribute(.font, value: newFont, range: range)
                     
-                    if let uiFont = UIFont(name: theme.blockQuoteFontName, size: CGFloat(theme.fontSize)) {
+                    if let uiFont = UIFont(name: theme.dynamicBlockQuoteFont, size: CGFloat(theme.fontSize)) {
                         innerAttributedString.addAttribute(.font, value: uiFont, range: range)
                     }
                     
                 } else {
                     // leave to default font
+                    elseCount += 1
                 }
+                
+                
             }
             
+            logger.debug("elseCount: \(elseCount)")
             
 //            let font =  theme.blockQuoteFontName
 ////            let fullRange = NSRange(location: match!.range.location, length: match!.range.length)
@@ -711,322 +720,6 @@ extension EditorView {
         
     }
     
-    func processHeadingsOld(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        
-        
-        let paragraphStyle = NSMutableParagraphStyle()
-        //        paragraphStyle.lineHeightMultiple = 1.4
-        paragraphStyle.paragraphSpacingBefore = 15
-        paragraphStyle.paragraphSpacing = 5
-        //            paragraphStyle.lineSpacing = 5
-        
-        let patternH1 = SymbolPattern.h1.rawValue
-        
-        let regex1a = try! NSRegularExpression(pattern: patternH1, options: [.anchorsMatchLines])
-        
-        regex1a.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
-            match, flags, stop in
-            
-            let range = NSRange(location: match!.range.location + 2, length: match!.range.length - 2)
-            
-//            innerAttributedString.enumerateAttribute(.font, in: range, options: []) { value, range, stop in
-//                guard let font = value as? UIFont else { return }
-//                // bold
-//                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-//                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 1))
-//                innerAttributedString.addAttribute(.font, value: newFont, range: range)
-//                // foreground color
-//                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
-//            }
-            
-            innerAttributedString.enumerateAttribute(.font, in: range, options: []) { value, range, stop in
-                guard let font = value as? UIFont else { return }
-                print("enumerateAttribute: .font", range)
-                let aStr = innerAttributedString.attributedSubstring(from: range)
-                print(aStr.string)
-                print(font)
-                print(font.familyName, theme.fontName)
-                
-                if font.familyName == theme.fontName {
-                    // apply new font
-                    // bold
-                    let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                    let fallbackDescriptor = fontDesc?.addingAttributes([
-                        UIFontDescriptor.AttributeName.name: theme.headingFontName
-                    ])
-                    let newFont = UIFont(descriptor: fallbackDescriptor ?? font.fontDescriptor, size: getHeadingFontSize(level: 1))
-                    innerAttributedString.addAttribute(.font, value: newFont, range: range)
-                } else {
-                    // bold
-                    let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold) ?? font.fontDescriptor
-                    let newFont = UIFont(descriptor: fontDesc, size: getHeadingFontSize(level: 1))
-                    innerAttributedString.addAttribute(.font, value: newFont, range: range)
-                }
-                
-                
-                // foreground color
-                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
-            }
-
-            
-            
-//            innerAttributedString.enumerateAttribute(.font, in: range, options: []) { value, range, stop in
-//                guard let font = value as? UIFont else { return }
-//
-//                if let uifont = UIFont(name: theme.headingFontName, size: getHeadingFontSize(level: 1)) {
-//                    innerAttributedString.addAttribute(.font, value: uifont, range: range)
-//                }
-//                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
-//            }
-            
-            
-//            if let uifont = UIFont(name: theme.headingFontName, size: getHeadingFontSize(level: 1)) {
-//                
-//                let uifont = addFallbackToFont(font: uifont)
-//                innerAttributedString.addAttribute(.font,
-//                                                   value: uifont,
-//                                                    range: range)
-//            }
-//            
-//            innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
-            
-            // add id key
-            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
-                                                    value: 0,
-                                                    range: NSRange(location: match!.range.location, length: 2))
-            
-            innerAttributedString.addAttribute(.markdownRange, value: SymbolPattern.h1, range: match!.range)
-        }
-        
-        
-        
-        let patternH2 = SymbolPattern.h2.rawValue
-        
-        let regex2 = try! NSRegularExpression(pattern: patternH2, options: [.anchorsMatchLines])
-        
-        regex2.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
-            match, flags, stop in
-            
-            let charRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 3)
-            
-//            innerAttributedString.enumerateAttribute(.font, in: charRange, options: []) { value, range, stop in
-//                guard let font = value as? UIFont else { return }
-//                
-//                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-//                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 2))
-//                innerAttributedString.addAttribute(.font, value: newFont, range: range)
-//                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
-//            }
-            
-            if let h2Font = UIFont(name: theme.headingFontName, size: getHeadingFontSize(level: 2)) {
-                innerAttributedString.addAttribute(.font,
-                                                   value: h2Font,
-                                                    range: charRange)
-            }
-            innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: charRange)
-            
-            
-//            innerAttributedString.addAttribute(NSAttributedString.Key.font,
-//                                                    value: UIFont.boldSystemFont(ofSize: getHeadingFontSize(level: 2)),
-//                                                    range: NSRange(location: match!.range.location + 3, length: match!.range.length - 3))
-//
-//            innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
-//                                                    value: UIColor.systemCyan,
-//                                                    range: NSRange(location: match!.range.location + 3, length: match!.range.length - 3))
-            //            innerAttributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: match!.range)
-            
-            // add id key
-            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
-                                                    value: 0,
-                                                    range: NSRange(location: match!.range.location, length: 3))
-            
-            innerAttributedString.addAttribute(.markdownRange, value: SymbolPattern.h2, range: match!.range)
-        }
-        
-        
-        let patternH3 = SymbolPattern.h3.rawValue
-        
-        let regex3 = try! NSRegularExpression(pattern: patternH3, options: [.anchorsMatchLines])
-        
-        regex3.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
-            match, flags, stop in
-            
-            let charRange = NSRange(location: match!.range.location + 4, length: match!.range.length - 4)
-            
-            if let h1Font = UIFont(name: theme.headingFontName, size: getHeadingFontSize(level: 3)) {
-                innerAttributedString.addAttribute(.font,
-                                                   value: h1Font,
-                                                    range: charRange)
-            }
-            
-            innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: charRange)
-            
-            
-//            innerAttributedString.enumerateAttribute(.font, in: charRange, options: []) { value, range, stop in
-//                guard let font = value as? UIFont else { return }
-//                
-//                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-//                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 3))
-//                innerAttributedString.addAttribute(.font, value: newFont, range: range)
-//                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
-//            }
-            
-//            innerAttributedString.addAttribute(NSAttributedString.Key.font,
-//                                                    value: UIFont.boldSystemFont(ofSize: getHeadingFontSize(level: 3)),
-//                                                    range: NSRange(location: match!.range.location + 4, length: match!.range.length - 4))
-//
-//            innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
-//                                                    value: UIColor.systemTeal,
-//                                                    range: NSRange(location: match!.range.location + 4, length: match!.range.length - 4))
-            //            innerAttributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: match!.range)
-            
-            // add id key
-            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
-                                                    value: 0,
-                                                    range: NSRange(location: match!.range.location, length: 4))
-            
-            innerAttributedString.addAttribute(.markdownRange, value: SymbolPattern.h3, range: match!.range)
-        }
-        
-        
-        let patternH4 = SymbolPattern.h4.rawValue
-        
-        let regex4 = try! NSRegularExpression(pattern: patternH4, options: [.anchorsMatchLines])
-        
-        regex4.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
-            match, flags, stop in
-            
-            let charRange = NSRange(location: match!.range.location + 5, length: match!.range.length - 5)
-            
-//            innerAttributedString.enumerateAttribute(.font, in: charRange, options: []) { value, range, stop in
-//                guard let font = value as? UIFont else { return }
-//                
-//                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-//                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 4))
-//                
-//                innerAttributedString.addAttribute(.font, value: newFont, range: range)
-//                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
-//            }
-            
-            
-            if let h1Font = UIFont(name: theme.headingFontName, size: getHeadingFontSize(level: 4)) {
-                innerAttributedString.addAttribute(.font,
-                                                   value: h1Font,
-                                                    range: charRange)
-            }
-            innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: charRange)
-            
-//            innerAttributedString.addAttribute(NSAttributedString.Key.font,
-//                                                    value: UIFont.boldSystemFont(ofSize: getHeadingFontSize(level: 4)),
-//                                                    range: NSRange(location: match!.range.location + 5, length: match!.range.length - 5))
-//
-//            innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
-//                                                    value: UIColor.systemBrown,
-//                                                    range: NSRange(location: match!.range.location + 5, length: match!.range.length - 5))
-            
-            //            innerAttributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: match!.range)
-            // add id key
-            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
-                                                    value: 0,
-                                                    range: NSRange(location: match!.range.location, length: 5))
-            
-            innerAttributedString.addAttribute(.markdownRange, value: SymbolPattern.h4, range: match!.range)
-        }
-        
-        
-        let patternH5 = SymbolPattern.h5.rawValue
-        
-        let regex5 = try! NSRegularExpression(pattern: patternH5, options: [.anchorsMatchLines])
-        
-        regex5.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
-            match, flags, stop in
-            
-            let charRange = NSRange(location: match!.range.location + 6, length: match!.range.length - 6)
-            innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: charRange)
-            
-//            innerAttributedString.enumerateAttribute(.font, in: charRange, options: []) { value, range, stop in
-//                guard let font = value as? UIFont else { return }
-//                
-//                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-//                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 5))
-//                
-//                innerAttributedString.addAttribute(.font, value: newFont, range: range)
-//                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
-//            }
-            
-            if let h1Font = UIFont(name: theme.headingFontName, size: getHeadingFontSize(level: 5)) {
-                innerAttributedString.addAttribute(.font,
-                                                   value: h1Font,
-                                                    range: charRange)
-            }
-            
-            
-//            innerAttributedString.addAttribute(NSAttributedString.Key.font,
-//                                                    value: UIFont.boldSystemFont(ofSize: getHeadingFontSize(level: 5)),
-//                                                    range: NSRange(location: match!.range.location + 6, length: match!.range.length - 6))
-//
-//            innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
-//                                                    value: UIColor.systemIndigo,
-//                                                    range: NSRange(location: match!.range.location + 6, length: match!.range.length - 6))
-//
-            //            innerAttributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: match!.range)
-            
-            // add id key
-            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
-                                                    value: 0,
-                                                    range: NSRange(location: match!.range.location, length: 6))
-            
-            innerAttributedString.addAttribute(.markdownRange, value: SymbolPattern.h5, range: match!.range)
-        }
-        
-        let patternH6 = SymbolPattern.h6.rawValue
-        
-        let regex6 = try! NSRegularExpression(pattern: patternH6, options: [.anchorsMatchLines])
-        
-        regex6.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
-            match, flags, stop in
-            
-            let charRange = NSRange(location: match!.range.location + 7, length: match!.range.length - 7)
-            
-            innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: charRange)
-            
-//            innerAttributedString.enumerateAttribute(.font, in: charRange, options: []) { value, range, stop in
-//                guard let font = value as? UIFont else { return }
-//                
-//                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-//                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 6))
-//                
-//                innerAttributedString.addAttribute(.font, value: newFont, range: range)
-//                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
-//            }
-            
-            
-            if let h1Font = UIFont(name: theme.headingFontName, size: getHeadingFontSize(level: 6)) {
-                innerAttributedString.addAttribute(.font,
-                                                   value: h1Font,
-                                                    range: charRange)
-            }
-            
-            
-//            innerAttributedString.addAttribute(NSAttributedString.Key.font,
-//                                                    value: UIFont.boldSystemFont(ofSize: getHeadingFontSize(level: 6)),
-//                                                    range: NSRange(location: match!.range.location + 7, length: match!.range.length - 7))
-//
-//            innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
-//                                                    value: UIColor.systemMint,
-//                                                    range: NSRange(location: match!.range.location + 7, length: match!.range.length - 7))
-//
-            
-            //            innerAttributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: match!.range)
-            
-            // add id key
-            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
-                                                    value: 0,
-                                                    range: NSRange(location: match!.range.location, length: 7))
-            
-            innerAttributedString.addAttribute(.markdownRange, value: SymbolPattern.h6, range: match!.range)
-        }
-    }
     
     func styleHeading(symbolPattern: SymbolPattern, innerAttributedString: NSTextStorage, extendedRange: NSRange, symbolLenght: Int, fontLevel: CGFloat) {
         
@@ -1047,7 +740,7 @@ extension EditorView {
 //                print(font)
 //                print(font.familyName, theme.fontName)
                 
-                if font.familyName == theme.fontName {
+                if font.familyName == theme.fontName || font.familyName == "Helvetica" {
                     // apply new font
                     // bold
 //                    let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
@@ -1057,7 +750,7 @@ extension EditorView {
 //                    let newFont = UIFont(descriptor: fallbackDescriptor ?? font.fontDescriptor, size: fontSize)
 //                    innerAttributedString.addAttribute(.font, value: newFont, range: range)
                     
-                    if let uiFont = UIFont(name: theme.headingFontName, size: fontSize) {
+                    if let uiFont = UIFont(name: theme.dynamicHeadingFont, size: fontSize) {
                         innerAttributedString.addAttribute(.font, value: uiFont, range: range)
                     }
                     

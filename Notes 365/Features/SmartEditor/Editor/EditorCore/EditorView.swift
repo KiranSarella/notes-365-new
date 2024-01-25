@@ -142,7 +142,7 @@ extension EditorView {
         // bottom scroll padding for convenience
         textView.contentInset.bottom = 440
         
-        self.textView.backgroundColor = theme.canvasColor.uiColor
+        self.textView.backgroundColor = theme.dynamicCanvasColor.uiColor
     }
     
     func setAsReadOnly() {

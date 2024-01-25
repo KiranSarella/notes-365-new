@@ -15,9 +15,7 @@ struct ThemeOptionsView: View {
     @State var font: Font = Font.system(Font.TextStyle.body)
     @State var fontSize: Int = 16
     @Binding var onReset: Bool
-    
-    
-    @State var enableOtherFonts = true
+       
     @State var showHeadingFontPicker = false
     @State var showBlockQuoteFontPicker = false
     @State var headingFont: Font = Font.system(Font.TextStyle.body)
@@ -55,7 +53,9 @@ struct ThemeOptionsView: View {
                     }
                     HStack {
                         ColorPicker("Background", selection: $theme.canvasColor, supportsOpacity: true)
-                        Toggle("Background", isOn: $enableOtherFonts)
+                            .disabled(!theme.enableBackground)
+                        
+                        Toggle("Background", isOn: $theme.enableBackground)
                             .labelsHidden()
                     }
                 }
@@ -81,7 +81,9 @@ struct ThemeOptionsView: View {
                                     .font(headingFont)
                             }
                             .buttonStyle(PlainButtonStyle())
-                            Toggle("Heading Font", isOn: $enableOtherFonts)
+                            .disabled(!theme.enableHeadingFont)
+                            
+                            Toggle("Heading Font", isOn: $theme.enableHeadingFont)
                                 .labelsHidden()
                         }
                     }
@@ -100,7 +102,9 @@ struct ThemeOptionsView: View {
                                     .font(blockQuoteFont)
                             }
                             .buttonStyle(PlainButtonStyle())
-                            Toggle("", isOn: $enableOtherFonts)
+                            .disabled(!theme.enableBlockQuoteFont)
+                            
+                            Toggle("", isOn: $theme.enableBlockQuoteFont)
                                 .labelsHidden()
                         }
                     }
@@ -203,32 +207,28 @@ struct ThemeOptionsView: View {
         }
         .onAppear {
             if isFirstAppear {
-                fontSize = Int(theme.fontSize)
+                updateFields()
                 isFirstAppear = false
-                if let uifont = UIFont(name: theme.fontName, size: 16) {
-                    font = Font(uifont)
-                }
-                if let uifont = UIFont(name: theme.headingFontName, size: 16) {
-                    headingFont = Font(uifont)
-                }
-                if let uifont = UIFont(name: theme.blockQuoteFontName, size: 16) {
-                    blockQuoteFont = Font(uifont)
-                }
             }
         }
         .onChange(of: onReset) { oldValue, newValue in
-            fontSize = Int(theme.fontSize)
-            if let uifont = UIFont(name: theme.fontName, size: 16) {
-                font = Font(uifont)
-            }
-            if let uifont = UIFont(name: theme.headingFontName, size: 16) {
-                headingFont = Font(uifont)
-            }
-            if let uifont = UIFont(name: theme.blockQuoteFontName, size: 16) {
-                blockQuoteFont = Font(uifont)
-            }
+            updateFields()
         }
     }
+    
+    func updateFields() {
+        fontSize = Int(theme.fontSize)
+        if let uifont = UIFont(name: theme.fontName, size: 16) {
+            font = Font(uifont)
+        }
+        if let uifont = UIFont(name: theme.headingFontName, size: 16) {
+            headingFont = Font(uifont)
+        }
+        if let uifont = UIFont(name: theme.blockQuoteFontName, size: 16) {
+            blockQuoteFont = Font(uifont)
+        }
+    }
+    
 }
 
 //struct ThemeDetailView_iOS_Previews: PreviewProvider {

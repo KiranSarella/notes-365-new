@@ -54,8 +54,14 @@ class DefaultThemes {
         theme.blockQuoteColor = Color.green
         theme.listColor = Color.mint
         theme.highlightColor = Color.yellow.opacity(0.45)
+        
         theme.headingFontName = "Helvetica"
         theme.blockQuoteFontName = "Helvetica"
+        
+        theme.enableBackground = true
+        theme.enableHeadingFont = true
+        theme.enableBlockQuoteFont = true
+        
         return theme
     }
     
@@ -71,8 +77,14 @@ class DefaultThemes {
         theme.blockQuoteColor = Color.mint
         theme.listColor = Color.red
         theme.highlightColor = Color.purple.opacity(0.25)
+        
         theme.headingFontName = "Helvetica"
         theme.blockQuoteFontName = "Helvetica"
+        
+        theme.enableBackground = true
+        theme.enableHeadingFont = true
+        theme.enableBlockQuoteFont = true
+        
         return theme
     }
     

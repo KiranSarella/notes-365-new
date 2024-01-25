@@ -63,6 +63,10 @@ class ThemeData: Codable {
     var headingFontName: String = "system"
     var blockQuoteFontName: String = "system"
     
+    var enableHeadingFont: Bool = true
+    var enableBlockQuoteFont: Bool = true
+    var enableBackground: Bool = true
+    
     init() {
         
     }
@@ -97,8 +101,13 @@ extension ThemeData {
         blockQuoteColor = newData.blockQuoteColor
         listColor = newData.listColor
         linkColor = newData.linkColor
+        
         headingFontName = newData.headingFontName
         blockQuoteFontName = newData.blockQuoteFontName
+        
+        enableBackground = newData.enableBackground
+        enableHeadingFont = newData.enableHeadingFont
+        enableBlockQuoteFont = newData.enableBlockQuoteFont
     }
 }
 

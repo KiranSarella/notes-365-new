@@ -22,7 +22,7 @@ struct TimelineBaseView: View {
                 HorizontalCalendarView(state: $horizontalCalendarViewState, selectedDates: $state.selectedDates)
                 VStack {
                     RangeTimelineView(selectedDates: $state.selectedDates, geometryProxy: geometryProxy, width: $width)
-                        .background(ThemeState.shared.theme.canvasColor)
+                        .background(ThemeState.shared.theme.dynamicCanvasColor)
                 }
                 .background(.white)
                 .opacity(1)

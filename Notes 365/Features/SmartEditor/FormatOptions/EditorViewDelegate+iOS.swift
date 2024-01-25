@@ -268,7 +268,7 @@ extension EditorView: EditorViewDelegate {
         self.textView.textColor = theme.bodyColor.uiColor
         
         if isReadOnly == false {
-            self.textView.backgroundColor = theme.canvasColor.uiColor
+            self.textView.backgroundColor = theme.dynamicCanvasColor.uiColor
         }
     }
     
