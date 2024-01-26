@@ -50,6 +50,7 @@ struct MarkdownTheme: Identifiable {
     }
     
     var dynamicHeadingFont: String {
+//        "CoasterBlack"
         enableHeadingFont ? headingFontName : fontName
     }
     

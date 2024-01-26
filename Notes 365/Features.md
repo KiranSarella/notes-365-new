@@ -11,7 +11,7 @@
     [ ] 30 days view 
     [ ] 30 days delete functionality
 [ ] custom fonts
-    [ ] handle toggle flag logic
+    [x] handle toggle flag logic
     [ ] default custom fonts - display, body, blockquote
     [ ] new UI for fonts selection - default list and system fonts list in other section
 [ ] timeline filter tabs with all first level folders
