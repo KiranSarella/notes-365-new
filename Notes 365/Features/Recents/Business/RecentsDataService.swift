@@ -19,11 +19,13 @@ class RecentsDataService {
     func startProviding() {
         observeFilesOpen()
         observeNotebookRenamed()
+        observeNotebookDeleted()
     }
     
     func stopProviding() {
         filesOpenObserver = nil
         removeNotebookRenamedObserver()
+        removeNotebookDeletedObserver()
     }
     
     private func observeFilesOpen() {
@@ -69,6 +71,44 @@ extension RecentsDataService {
             try notebooksBusiness.rename(id: notebookId, name: name)
         } catch {
             logger.error("\(error)")
+        }
+    }
+}
+
+// MARK: - Handle Deleted items
+extension RecentsDataService {
+    func observeNotebookDeleted() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookDeleted(_:)), name: Notification.Name.notebookDeleted, object: nil)
+    }
+    
+    func removeNotebookDeletedObserver() {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.notebookDeleted, object: nil)
+    }
+    
+    @objc func handleNotebookDeleted(_ notification: Notification) {
+        guard
+            let notebookId = notification.userInfo?["notebook_id"] as? UUID,
+            let isFolder = notification.userInfo?["isFolder"] as? Bool
+        else { return }
+                
+        if isFolder {
+            // get all hierarchy list
+            let (filesIds, folderIds) = NotebooksPathService.shared.getAllChildFoldersAndFiles(folderId: notebookId)
+            let allIds = filesIds + folderIds
+            do {
+                for id in allIds {
+                    try notebooksBusiness.remove(id: id)
+                }
+            } catch {
+                logger.error("\(error)")
+            }
+            
+        } else {
+            do {
+                try notebooksBusiness.remove(id: notebookId)
+            } catch {
+                logger.error("\(error)")
+            }
         }
     }
 }

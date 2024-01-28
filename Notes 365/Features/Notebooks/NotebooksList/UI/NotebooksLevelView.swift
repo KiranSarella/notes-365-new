@@ -13,7 +13,9 @@ struct NotebooksBaseDetailView: View {
     var body: some View {
         NavigationStack(path: $path) {
             NotebooksLevelView(navigationTitle: "Notebooks", path: $path, parent: nil)
+                .navigationBarTitleDisplayMode(.large)
         }
+        .navigationBarTitleDisplayMode(.large)
     }
 }
 
@@ -524,17 +526,34 @@ struct SearchFolderCellView: View {
     var body: some View {
         VStack {
             HStack {
-                Label(notebook.name, systemImage: "folder")
-                    .id(notebook.id)
-                    .fontWeight(highlightText ? .heavy : .semibold)
-                Spacer()
-            }
-            .padding(.vertical, 2)
-            
-            HStack {
-                Text(notebookPath)
-                    .font(.caption)
-                Spacer()
+                VStack {
+                    Image(systemName: "folder")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 32)
+                        .fontWeight(highlightText ? .bold : .regular)
+                        .foregroundStyle(.tint)
+                }
+                
+                VStack {
+                    VStack {
+                        HStack {
+                            Text(notebook.name)
+                                .id(notebook.id)
+                                .fontWeight(highlightText ? .heavy : .semibold)
+                            Spacer()
+                        }
+                        .padding(.vertical, 2)
+                        
+                        HStack {
+                            Text(notebookPath)
+                                .font(.caption)
+                            Spacer()
+                        }
+                        
+                    }
+                }
+                .padding(.horizontal, 8)
             }
         }
 #if targetEnvironment(macCatalyst)

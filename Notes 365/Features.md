@@ -4,16 +4,10 @@
     [x] read only editor
     [x] restore view 
     [x] restore functionality
-    [-] clean recents list 
-        [-] remove current file
-        [-] capture all nested folders and files for deleded tree
-        [ ] observe delete changes and remove from list
-    [ ] 30 days view 
-    [ ] 30 days delete functionality
-[ ] custom fonts
-    [x] handle toggle flag logic
-    [ ] default custom fonts - display, body, blockquote
-    [ ] new UI for fonts selection - default list and system fonts list in other section
+    [x] clean recents list
+        [x] capture all nested folders and files uuids 
+        [x] observe delete changes in recents business and remove them
+    [-] 30 days view and functionality 
 [ ] timeline filter tabs with all first level folders
 // reading related
 [ ] read text
@@ -27,7 +21,8 @@
 
 
 # Issues
-[-] getting payment alert on app launch and adding new note (if online or only on offline), if so, have to persist state until you get new data
+[*] on first time, heading font not updating until body font changed
+[*] getting payment alert on app launch and adding new note (if online or only on offline), if so, have to persist state until you get new data
 [ ] recents - sort not working
 [ ] timeline - with huge data hanging - need load more
 [ ] hang on theme save, when timeline is at month (with full data)
@@ -38,6 +33,8 @@
 
 # Completed
 [x] path for files search items and in recents
+[x] custom fonts integrated
+[x] font option for display, blockquote with toggle option
 
 # first level filters
 [ ] have to get all note ids for top level

@@ -821,6 +821,7 @@
 			isa = PBXGroup;
 			children = (
 				5C10D7A02B04C26D006FB80D /* NotebooksBusiness.swift */,
+				5C051B9A2B11FFF6005C99B7 /* NotebooksPathService.swift */,
 				9F45BD042920CCCE003DE332 /* DeletedListLogic.swift */,
 				5C7D4AF72B08E00C00BB1908 /* NotebookB.swift */,
 				5C10D7A22B04C272006FB80D /* NotebooksStorageProvider.swift */,
@@ -1225,7 +1226,6 @@
 			isa = PBXGroup;
 			children = (
 				9F45BDCA29214D48003DE332 /* notebooks.md */,
-				5C051B9A2B11FFF6005C99B7 /* NotebooksPathService.swift */,
 				9FB6C69429275BF900C8EC76 /* NotebooksList */,
 				9FB6C69629275C1500C8EC76 /* NotebookContent */,
 			);

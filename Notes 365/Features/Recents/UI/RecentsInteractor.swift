@@ -14,4 +14,5 @@ protocol RecentsInteractor {
     func setupRecentsAddingProcess()
     func stopRecentsAddingProcess()
     func rename(id: UUID, name: String) throws
+    func remove(id: UUID) throws
 }

@@ -101,6 +101,7 @@ class NotebooksBusiness {
     func deleteNotebook(notebook: NotebookB) throws {
         notebook.deletedDate = DateTime.now()
         try notebook.update(in: storage)
+        do { sendNotebookDeleted(notebook) }
     }
     
     private func isAlreadyFilenameExists(fileName: String, in siblings: [NotebookB]) -> Bool {
@@ -120,7 +121,6 @@ class NotebooksBusiness {
         notebook.parentId = destinationId
         try notebook.update(in: storage)
         do { sendNotebookMoved(notebook) }
-//        do { sendNotebooksMoved([notebook], parentId: destinationId) }
     }
     
     func fetchOnlyNotesCount() throws -> Int {
@@ -129,6 +129,19 @@ class NotebooksBusiness {
 }
 
 extension NotebooksBusiness {
+    
+    private func sendNotebookDeleted(_ notebook: NotebookB) {
+        var info = [
+            "notebook_id": notebook.id,
+            "name": notebook.name,
+            "isFolder": notebook.isFolder
+        ] as [String : Any]
+        if let parentId = notebook.parentId {
+            info["parent_id"] = parentId
+        }
+        NotificationCenter.default.post(name: Notification.Name.notebookDeleted, object: nil, userInfo: info)
+        logger.debug("sendNotebookDeleted - \(notebook.description)")
+    }
     
     private func sendNotebookRenamed(_ notebook: NotebookB) {
         var info = [
@@ -168,17 +181,6 @@ extension NotebooksBusiness {
         NotificationCenter.default.post(name: Notification.Name.notebooksMoved, object: nil, userInfo: info)
         logger.debug("\(#function) - \(notebook.description)")
     }
-    
-//    private func sendNotebooksMoved(_ notebooks: [NotebookB], parentId: UUID) {
-//        let fileIds = notebooks.filter { n in !n.isFolder }
-//        let folderIds = notebooks.filter { n in n.isFolder }
-//        let info = [
-//            "folder_ids": folderIds,
-//            "file_ids": fileIds,
-//            "parent_id": parentId,
-//        ] as [String : Any]
-//        NotificationCenter.default.post(name: Notification.Name.notebooksMoved, object: nil, userInfo: info)
-//    }
     
 }
 
@@ -234,7 +236,6 @@ extension NotebooksBusiness {
         notebook.deletedDate = nil
         try notebook.update(in: storage)
         do { sendNotebookMoved(notebook) }
-//        do { sendNotebooksMoved([notebook], parentId: destinationId) }
     }
     
 }

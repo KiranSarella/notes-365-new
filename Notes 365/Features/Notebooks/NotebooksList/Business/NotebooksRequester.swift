@@ -36,4 +36,5 @@ extension Notification.Name {
     public static let notebookRenamed = Notification.Name("com.notes365.notebookRenamed")
     public static let notebookInserted = Notification.Name("com.notes365.notebookInserted")
     public static let notebooksMoved = Notification.Name("com.notes365.notebooksMoved")
+    public static let notebookDeleted = Notification.Name("com.notes365.notebookDeleted")
 }

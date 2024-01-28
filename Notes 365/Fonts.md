@@ -2,15 +2,15 @@
 
 
 ## Display Fonts - Heading
-Amorria
+
+## need to add
+Challenge Font Family
 Fredoka One
-Library 3 am
-Nexa Rust Slab
 Marko one
 Super dream
 cute auraro
 Devinne swash
-the fruit star
+
 
 
 
