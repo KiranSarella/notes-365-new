@@ -21,10 +21,11 @@ protocol NotebooksStorageProvider {
     func getActiveChildren(forParent id: UUID) throws -> [NotebookB]
     // info
     func getAllFilesInfo() throws -> [NotebookB]
-    func deleteAllRecords() throws
     func getAllFolders() throws -> [NotebookB]
-    
     func fetchOnlyNotesCount() throws -> Int
-    
+
+    func deleteAllRecords() throws
     func getDeletedNotebooks() throws -> [NotebookB]
+    func fetchExpiredDeletedNotebooks(expiryDate: Date) throws -> [NotebookB]
+    func permanentDelete(notebookId: UUID) throws
 }

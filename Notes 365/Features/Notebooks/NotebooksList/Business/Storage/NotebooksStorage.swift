@@ -33,12 +33,6 @@ class NotebooksStorage {
         return try modelContext.fetch(descriptor)
     }
     
-    func fetchDeletedNotebooks() throws -> [NotebookData] {
-        let predicate = #Predicate<NotebookData> { $0.deletedDate != nil }
-        let descriptor = FetchDescriptor(predicate: predicate)
-        return try modelContext.fetch(descriptor)
-    }
-    
     func fetchRootNotebook() throws -> NotebookData? {
         let predicate = #Predicate<NotebookData> { $0.parent == nil }
         var descriptor = FetchDescriptor(predicate: predicate)
@@ -98,9 +92,30 @@ class NotebooksStorage {
         try notebookData.modelContext?.save()
     }
     
-    func deleteAllRecords() throws {
-        try modelContext.delete(model: NotebookData.self)
+    // MARK: - Delete
+    func fetchDeletedNotebooks() throws -> [NotebookData] {
+        let predicate = #Predicate<NotebookData> { $0.deletedDate != nil }
+        let descriptor = FetchDescriptor(predicate: predicate)
+        return try modelContext.fetch(descriptor)
     }
+    
+    func fetchExpiredDeletedNotebooks(expiryDate: Date) throws -> [NotebookData] {
+        let predicate = #Predicate<NotebookData> { $0.deletedDate.flatMap { $0 < expiryDate } == true }
+//        let predicate = #Predicate<NotebookData> { $0.deletedDate != nil && $0.deletedDate! < expiryDate}
+        let descriptor = FetchDescriptor(predicate: predicate)
+        return try modelContext.fetch(descriptor)
+    }
+    
+    func permanentDelete(notebookId: UUID) throws {
+        let contentPredicate = #Predicate<NotebookData> {
+            $0.id == notebookId
+        }
+        try modelContext.delete(model: NotebookData.self, where: contentPredicate)
+    }
+    
+//    func deleteAllRecords() throws {
+//        try modelContext.delete(model: NotebookData.self)
+//    }
     
     
     // MARK: - Info

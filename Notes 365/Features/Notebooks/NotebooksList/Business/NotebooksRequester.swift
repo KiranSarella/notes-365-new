@@ -28,6 +28,7 @@ protocol NotebooksRequester {
     
     func fetchDeletedNotebooks() throws -> [NotebookB]
     func restore(notebook: NotebookB, to destinationId: UUID?) throws
+    func permanentDeleteExpiredItems()
 }
 
 extension NotebooksBusiness: NotebooksRequester { }

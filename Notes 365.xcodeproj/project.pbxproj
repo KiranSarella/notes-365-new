@@ -365,7 +365,6 @@
 		5CF612BC2B0B08A400D397C6 /* NotebookContentStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentStorage.swift; sourceTree = "<group>"; };
 		5CF612BE2B0B0DC000D397C6 /* NotebookContentStorageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentStorageProvider.swift; sourceTree = "<group>"; };
 		5CF612C02B0B0DD600D397C6 /* NotebookContentStorageAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentStorageAdapter.swift; sourceTree = "<group>"; };
-		5CF612C22B0B1F3200D397C6 /* NotebookContentBusiness copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotebookContentBusiness copy.swift"; sourceTree = "<group>"; };
 		5CF612C42B0B207A00D397C6 /* NotebookContentBusinessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentBusinessTests.swift; sourceTree = "<group>"; };
 		5CF612CA2B0B33F700D397C6 /* NotebookContentRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentRequester.swift; sourceTree = "<group>"; };
 		5CF612CB2B0B343200D397C6 /* NotebookContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContent.swift; sourceTree = "<group>"; };
@@ -947,7 +946,6 @@
 			isa = PBXGroup;
 			children = (
 				9FB6C69F2927695000C8EC76 /* NotebookContentBusiness.swift */,
-				5CF612C22B0B1F3200D397C6 /* NotebookContentBusiness copy.swift */,
 				5CE8C48A2B0305CD00F19217 /* NotebookContentB.swift */,
 				5CF612BE2B0B0DC000D397C6 /* NotebookContentStorageProvider.swift */,
 			);

@@ -43,8 +43,6 @@ class NotebookContentStorage {
         let contentPredicate = #Predicate<NotebookContentData> {
             $0.notebookID == id
         }
-        var descriptor = FetchDescriptor(predicate: contentPredicate)
-        descriptor.fetchLimit = 1
         try modelContext.delete(model: NotebookContentData.self, where: contentPredicate)
     }
     

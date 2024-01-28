@@ -93,7 +93,7 @@ extension RecentsDataService {
                 
         if isFolder {
             // get all hierarchy list
-            let (filesIds, folderIds) = NotebooksPathService.shared.getAllChildFoldersAndFiles(folderId: notebookId)
+            let (filesIds, folderIds) = NotebooksPathService.shared.getAllChildFilesAndFolders(folderId: notebookId)
             let allIds = filesIds + folderIds
             do {
                 for id in allIds {

@@ -296,7 +296,7 @@ extension NotebooksPathService {
 // MARK: - Get all child items
 extension NotebooksPathService {
     
-    func getAllChildFoldersAndFiles(folderId: UUID) -> ([UUID], [UUID]) {
+    func getAllChildFilesAndFolders(folderId: UUID) -> ([UUID], [UUID]) {
         var recentsFilesToRemove = [UUID]()
         var recentsFoldersToRemove = [UUID]()
         // add selected folder

@@ -31,13 +31,26 @@ fileprivate struct RecentlyDeletedView: View {
     @State var showRestoreView = false
     @State var restoreDestination: FileItem?
     
+    let deleteInfoMessage = "Items are available here for 30 days. After that time, items will be permanently deleted."
     
     var body: some View {
         VStack {
             List {
+                Section {
+                    
+                } footer: {
+                    HStack {
+                        Spacer()
+                        Text(deleteInfoMessage)
+                            .font(.caption)
+                        Spacer()
+                    }
+                }
+
                 if state.isEmpty {
                     emptyView
                 }
+                
                 folderSection
                 fileSection
             }

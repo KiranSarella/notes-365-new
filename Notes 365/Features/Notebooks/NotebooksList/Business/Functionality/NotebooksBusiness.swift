@@ -16,7 +16,11 @@ public enum NotebookBusinessError: Error {
 
 class NotebooksBusiness {
     
-    private let deleteDays = 30
+#if DEBUG
+    private let deleteExpiryLimit = 2
+#else
+    private let deleteExpiryLimit = 30
+#endif
 
     var storage: NotebooksStorageProvider
     
@@ -236,6 +240,41 @@ extension NotebooksBusiness {
         notebook.deletedDate = nil
         try notebook.update(in: storage)
         do { sendNotebookMoved(notebook) }
+    }
+    
+    func permanentDeleteExpiredItems() {
+        do {
+            guard let expiryDate = Calendar.current.date(byAdding: .day, value: -deleteExpiryLimit, to: DateTime().date) else { return }
+            
+            let contentBusiness = BusinessFactory.createNotebookContentBusinessFactory()
+            
+            let expiredItems = try storage.fetchExpiredDeletedNotebooks(expiryDate: expiryDate)
+            
+            var fileIds = [UUID]()
+            var folderIds = [UUID]()
+            // files
+            for expiryItem in expiredItems {
+                if expiryItem.isFolder {
+                    let (files, folders) = NotebooksPathService.shared.getAllChildFilesAndFolders(folderId: expiryItem.id)
+                    fileIds.append(contentsOf: files)
+                    folderIds.append(contentsOf: folders)
+                } else {
+                    fileIds.append(expiryItem.id)
+                }
+            }
+            // delete files and contents
+            for fileId in fileIds {
+                try contentBusiness.deleteNotebookContent(for: fileId)
+                try storage.permanentDelete(notebookId: fileId)
+            }
+            // delete folders
+            for folderId in folderIds {
+                try storage.permanentDelete(notebookId: folderId)
+            }
+        } catch {
+            logger.error("\(error)")
+        }
+        
     }
     
 }

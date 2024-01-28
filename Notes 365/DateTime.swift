@@ -10,7 +10,12 @@ import Foundation
 class DateTime {
     static let shared = DateTime()
     
-    private(set) var date = Date()  //Date.fromString(dateStr: "05/11/2023")!
+    #if DEBUG
+    private(set) var date = Date()
+//    private(set) var date = Date.fromString(dateStr: "29/01/2024")!
+    #else
+    private(set) var date = Date()
+    #endif
     
     #if DEBUG
     static func now() -> Date {

@@ -83,7 +83,7 @@ class NotebooksStorageAdapter: NotebooksStorageProvider {
     }
     
     func deleteAllRecords() throws {
-        try storage.deleteAllRecords()
+//        try storage.deleteAllRecords()
     }
     
     func getAllFolders() throws -> [NotebookB] {
@@ -97,6 +97,14 @@ class NotebooksStorageAdapter: NotebooksStorageProvider {
     func getDeletedNotebooks() throws -> [NotebookB] {
         let topLevelNotebooksData = try storage.fetchDeletedNotebooks()
         return topLevelNotebooksData.map { NotebookB($0) }
+    }
+    
+    func fetchExpiredDeletedNotebooks(expiryDate: Date) throws -> [NotebookB] {
+       try storage.fetchExpiredDeletedNotebooks(expiryDate: expiryDate).map { NotebookB($0) }
+    }
+    
+    func permanentDelete(notebookId: UUID) throws {
+        try storage.permanentDelete(notebookId: notebookId)
     }
 }
 

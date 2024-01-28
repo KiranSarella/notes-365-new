@@ -145,6 +145,10 @@ struct ContentView: View {
                     logger.info("Finished checking for unfinished transactions")
                     // refresh premium status
                     await PremiumUserState.shared.refreshPurchasedProducts()
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        BusinessFactory.createNotebooksFactory().permanentDeleteExpiredItems()
+                    }
                 }
                 .sheet(isPresented: $showThemes) {
                     ThemesBaseView()
