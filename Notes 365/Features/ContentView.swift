@@ -146,7 +146,7 @@ struct ContentView: View {
                     // refresh premium status
                     await PremiumUserState.shared.refreshPurchasedProducts()
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
                         BusinessFactory.createNotebooksFactory().permanentDeleteExpiredItems()
                     }
                 }
