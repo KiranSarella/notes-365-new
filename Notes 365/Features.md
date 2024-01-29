@@ -12,10 +12,8 @@
 
 
 # Issues
-[*] on first time, heading font not updating until body font changed
-[*] getting payment alert on app launch and adding new note (if online or only on offline), if so, have to persist state until you get new data
-[*] is content search is ignoring deleted files - confirm it.
-
+[-] on first time, heading font not updating until body font changed - try updating default fontnames
+[-] getting payment alert on app launch and adding new note (if online or only on offline), if so, have to persist state until you get new data
 [ ] recents - sort not working
 [ ] timeline - with huge data hanging - need load more
 [ ] hang on theme save, when timeline is at month (with full data)
@@ -37,7 +35,11 @@
         [x] capture all nested folders and files uuids 
         [x] observe delete changes in recents business and remove them
     [x] 30 days view and functionality 
-
+[x] is content search is ignoring deleted files? - confirm it. 
+    [x] no need as per apple notes, only make it readonly
+    [x] done isDeletedFile recursive function
+    
+    
 # first level filters
 [ ] have to get all note ids for top level
     - get folders and files for parent

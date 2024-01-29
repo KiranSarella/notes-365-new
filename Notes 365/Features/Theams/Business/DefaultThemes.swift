@@ -55,8 +55,8 @@ class DefaultThemes {
         theme.listColor = Color.mint
         theme.highlightColor = Color.yellow.opacity(0.45)
         
-        theme.headingFontName = "Helvetica"
-        theme.blockQuoteFontName = "Helvetica"
+        theme.headingFontName = "Arial Rounded MT Bold"
+        theme.blockQuoteFontName = "Kefa"
         
         theme.enableBackground = true
         theme.enableHeadingFont = true
@@ -67,8 +67,8 @@ class DefaultThemes {
     
     static func generateCustomizedDarkTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
-        theme.fontName = "ChalkboardSE-Light"
-        theme.fontSize = 18
+        theme.fontName = "Chalkboard SE"
+        theme.fontSize = 22
         theme.canvasColor = Color.black
         theme.bodyColor = Color.white
         theme.headingColor = Color.yellow
@@ -78,8 +78,8 @@ class DefaultThemes {
         theme.listColor = Color.red
         theme.highlightColor = Color.purple.opacity(0.25)
         
-        theme.headingFontName = "Helvetica"
-        theme.blockQuoteFontName = "Helvetica"
+        theme.headingFontName = "Chalkduster"
+        theme.blockQuoteFontName = "Futura"
         
         theme.enableBackground = true
         theme.enableHeadingFont = true

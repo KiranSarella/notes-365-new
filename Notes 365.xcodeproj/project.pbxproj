@@ -90,6 +90,13 @@
 		5CA77C162A24AE220030EFB2 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C152A24AE220030EFB2 /* Collections */; };
 		5CA77C182A24AE220030EFB2 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C172A24AE220030EFB2 /* DequeModule */; };
 		5CA77C1A2A24AE220030EFB2 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C192A24AE220030EFB2 /* OrderedCollections */; };
+		5CAF9E7F2B679A730020E9CB /* ChallengeContour.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF9E7D2B679A730020E9CB /* ChallengeContour.ttf */; };
+		5CAF9E802B679A730020E9CB /* ChallengeShadow.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF9E7E2B679A730020E9CB /* ChallengeShadow.ttf */; };
+		5CAF9E822B679A950020E9CB /* FredokaOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF9E812B679A950020E9CB /* FredokaOne-Regular.ttf */; };
+		5CAF9E842B679B860020E9CB /* MarkoOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF9E832B679B860020E9CB /* MarkoOne-Regular.ttf */; };
+		5CAF9E862B679BA30020E9CB /* SuperDream-ax3vE.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF9E852B679BA30020E9CB /* SuperDream-ax3vE.ttf */; };
+		5CAF9E882B679C070020E9CB /* Cute_Aurora_demo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF9E872B679C070020E9CB /* Cute_Aurora_demo.ttf */; };
+		5CAF9E8A2B679C260020E9CB /* DevinneSwash-qZd5.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF9E892B679C260020E9CB /* DevinneSwash-qZd5.ttf */; };
 		5CBEF3112B14FDEF003A3972 /* HorizontalCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBEF3102B14FDEF003A3972 /* HorizontalCalendarView.swift */; };
 		5CBEF3132B14FE22003A3972 /* HorizontalCalendarViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBEF3122B14FE22003A3972 /* HorizontalCalendarViewState.swift */; };
 		5CBEF3182B15008E003A3972 /* TodayVersionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBEF3172B15008E003A3972 /* TodayVersionStorage.swift */; };
@@ -108,7 +115,6 @@
 		5CD6813E2B5FA5BA00F15D3B /* RestoreToView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD6813D2B5FA5BA00F15D3B /* RestoreToView.swift */; };
 		5CD72D8B2B5BE50200B772DF /* RecentlyDeletedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD72D8A2B5BE50200B772DF /* RecentlyDeletedState.swift */; };
 		5CE6FDF82B0BC19600ED9425 /* PDFFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE6FDF72B0BC19600ED9425 /* PDFFile.swift */; };
-		5CE6FE212B0CD65700ED9425 /* DeletedListLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD042920CCCE003DE332 /* DeletedListLogic.swift */; };
 		5CE8C4882B03048E00F19217 /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE8C4872B03048E00F19217 /* Notebook.swift */; };
 		5CF4F5182B0DE4EB008F13F3 /* NotebooksLevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF4F5172B0DE4EB008F13F3 /* NotebooksLevelView.swift */; };
 		5CF612B72B0B06B700D397C6 /* SharedContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF612B62B0B06B700D397C6 /* SharedContext.swift */; };
@@ -339,6 +345,13 @@
 		5C9060512B0F46060068DD65 /* CurrentLevelState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLevelState.swift; sourceTree = "<group>"; };
 		5C9732212A8B74C200C42E28 /* iCloud-sync.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "iCloud-sync.md"; sourceTree = "<group>"; };
 		5C9B5CFF2A8FED2A00396102 /* TextKit.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TextKit.md; sourceTree = "<group>"; };
+		5CAF9E7D2B679A730020E9CB /* ChallengeContour.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ChallengeContour.ttf; sourceTree = "<group>"; };
+		5CAF9E7E2B679A730020E9CB /* ChallengeShadow.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ChallengeShadow.ttf; sourceTree = "<group>"; };
+		5CAF9E812B679A950020E9CB /* FredokaOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FredokaOne-Regular.ttf"; sourceTree = "<group>"; };
+		5CAF9E832B679B860020E9CB /* MarkoOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MarkoOne-Regular.ttf"; sourceTree = "<group>"; };
+		5CAF9E852B679BA30020E9CB /* SuperDream-ax3vE.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SuperDream-ax3vE.ttf"; sourceTree = "<group>"; };
+		5CAF9E872B679C070020E9CB /* Cute_Aurora_demo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Cute_Aurora_demo.ttf; sourceTree = "<group>"; };
+		5CAF9E892B679C260020E9CB /* DevinneSwash-qZd5.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DevinneSwash-qZd5.ttf"; sourceTree = "<group>"; };
 		5CBEF3102B14FDEF003A3972 /* HorizontalCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalCalendarView.swift; sourceTree = "<group>"; };
 		5CBEF3122B14FE22003A3972 /* HorizontalCalendarViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalCalendarViewState.swift; sourceTree = "<group>"; };
 		5CBEF3172B15008E003A3972 /* TodayVersionStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayVersionStorage.swift; sourceTree = "<group>"; };
@@ -469,7 +482,6 @@
 		9F45BCDE2920CCCE003DE332 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		9F45BCF62920CCCE003DE332 /* Timeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timeline.swift; sourceTree = "<group>"; };
 		9F45BCFA2920CCCE003DE332 /* NoteChangeHeadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteChangeHeadingView.swift; sourceTree = "<group>"; };
-		9F45BD042920CCCE003DE332 /* DeletedListLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletedListLogic.swift; sourceTree = "<group>"; };
 		9F45BD152920CCCE003DE332 /* SymbolPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolPattern.swift; sourceTree = "<group>"; };
 		9F45BD172920CCCE003DE332 /* EditorViewDelegate+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorViewDelegate+iOS.swift"; sourceTree = "<group>"; };
 		9F45BD242920CCCE003DE332 /* NotebookContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentView.swift; sourceTree = "<group>"; };
@@ -821,7 +833,6 @@
 			children = (
 				5C10D7A02B04C26D006FB80D /* NotebooksBusiness.swift */,
 				5C051B9A2B11FFF6005C99B7 /* NotebooksPathService.swift */,
-				9F45BD042920CCCE003DE332 /* DeletedListLogic.swift */,
 				5C7D4AF72B08E00C00BB1908 /* NotebookB.swift */,
 				5C10D7A22B04C272006FB80D /* NotebooksStorageProvider.swift */,
 			);
@@ -975,11 +986,18 @@
 				5CF876FC2B63B6A1001F509C /* chela-one-regular.ttf */,
 				5CF8769E2B63AA98001F509C /* mouldy-cheese-regular-wymwg.ttf */,
 				5CF876E42B63B3C1001F509C /* taurus-mono-outline-bold.otf */,
+				5CAF9E812B679A950020E9CB /* FredokaOne-Regular.ttf */,
 				5CF876BC2B63B074001F509C /* top-secret.ttf */,
+				5CAF9E892B679C260020E9CB /* DevinneSwash-qZd5.ttf */,
 				5CF876FA2B63B628001F509C /* exo2.0-regular.otf */,
+				5CAF9E852B679BA30020E9CB /* SuperDream-ax3vE.ttf */,
+				5CAF9E832B679B860020E9CB /* MarkoOne-Regular.ttf */,
+				5CAF9E872B679C070020E9CB /* Cute_Aurora_demo.ttf */,
 				5CF876F62B63B4AB001F509C /* elgethy-bold.ttf */,
 				5CF876EF2B63B452001F509C /* moon00.ttf */,
 				5CF877112B63BF96001F509C /* courier-prime-bold.ttf */,
+				5CAF9E7D2B679A730020E9CB /* ChallengeContour.ttf */,
+				5CAF9E7E2B679A730020E9CB /* ChallengeShadow.ttf */,
 				5CF877102B63BF96001F509C /* courier-prime-bold-italic.ttf */,
 				5CF8770E2B63BF95001F509C /* courier-prime-italic.ttf */,
 				5CF8770F2B63BF95001F509C /* courier-prime-regular.ttf */,
@@ -1401,6 +1419,8 @@
 				5CF876B12B63AEC1001F509C /* packard-antique-bold.ttf in Resources */,
 				5CF876F42B63B452001F509C /* moon00_i.ttf in Resources */,
 				5CF8770B2B63BDEB001F509C /* technical-rounded-vp-thin-oblique.otf in Resources */,
+				5CAF9E8A2B679C260020E9CB /* DevinneSwash-qZd5.ttf in Resources */,
+				5CAF9E7F2B679A730020E9CB /* ChallengeContour.ttf in Resources */,
 				5CF876BF2B63B087001F509C /* hey-august.ttf in Resources */,
 				5CF876FF2B63B6DC001F509C /* krungthep.ttf in Resources */,
 				5CF876C92B63B1F0001F509C /* rothenburg-decorative-regular.ttf in Resources */,
@@ -1414,6 +1434,8 @@
 				9F45BCAA2920CAB0003DE332 /* Preview Assets.xcassets in Resources */,
 				5CF876B52B63AF03001F509C /* hillock-brk-regular.ttf in Resources */,
 				5CF876C72B63B1DB001F509C /* islabell.ttf in Resources */,
+				5CAF9E882B679C070020E9CB /* Cute_Aurora_demo.ttf in Resources */,
+				5CAF9E822B679A950020E9CB /* FredokaOne-Regular.ttf in Resources */,
 				5CF876D72B63B277001F509C /* lucian-schoenschrift-cat.ttf in Resources */,
 				5CF876C52B63B1C1001F509C /* hilds.ttf in Resources */,
 				5CF876CD2B63B216001F509C /* 3d-noise.ttf in Resources */,
@@ -1422,6 +1444,7 @@
 				5CF877142B63BF96001F509C /* courier-prime-bold-italic.ttf in Resources */,
 				5CF876F32B63B452001F509C /* moon15.ttf in Resources */,
 				5CF877182B63BFFE001F509C /* courier-prime-code-regular.ttf in Resources */,
+				5CAF9E802B679A730020E9CB /* ChallengeShadow.ttf in Resources */,
 				5CF876D32B63B24D001F509C /* an-akronism.ttf in Resources */,
 				5CF877272B63C057001F509C /* IMFeENsc29P.ttf in Resources */,
 				5CF877212B63C021001F509C /* courier-prime-sans-italic.ttf in Resources */,
@@ -1439,6 +1462,7 @@
 				5CF8771E2B63C021001F509C /* courier-prime-sans-regular.ttf in Resources */,
 				5CF876F72B63B4AB001F509C /* elgethy-bold.ttf in Resources */,
 				5CF8770D2B63BE9B001F509C /* kanit-light.ttf in Resources */,
+				5CAF9E862B679BA30020E9CB /* SuperDream-ax3vE.ttf in Resources */,
 				5CF876A32B63ABE8001F509C /* balonez-fantasia-br.ttf in Resources */,
 				5CF876BB2B63B02A001F509C /* subway-black.ttf in Resources */,
 				5CF876CF2B63B229001F509C /* neuropol-x-rg.otf in Resources */,
@@ -1447,6 +1471,7 @@
 				5CF876C32B63B19D001F509C /* berkshire-swash-regular.ttf in Resources */,
 				5CF876E72B63B3D9001F509C /* vast-shadow-regular.ttf in Resources */,
 				5CF876D12B63B23B001F509C /* times-old-attic.TTF in Resources */,
+				5CAF9E842B679B860020E9CB /* MarkoOne-Regular.ttf in Resources */,
 				5CF877192B63BFFE001F509C /* courier-prime-code-italic.ttf in Resources */,
 				5CF877072B63B742001F509C /* gyneric-brk.ttf in Resources */,
 				5CF876D92B63B316001F509C /* failed.ttf in Resources */,
@@ -1509,7 +1534,6 @@
 				5CD72D8B2B5BE50200B772DF /* RecentlyDeletedState.swift in Sources */,
 				5C6C713D2B32D4AC00783517 /* MoveToView.swift in Sources */,
 				5C74AD0B2B3AA576006B33B0 /* RecentsStorage.swift in Sources */,
-				5CE6FE212B0CD65700ED9425 /* DeletedListLogic.swift in Sources */,
 				5C74AD0F2B3AA738006B33B0 /* RecentsStorageAdapter.swift in Sources */,
 				5CD2F4F02ACC7FD500E8B465 /* TimelineDetailState.swift in Sources */,
 				5CCCF7F32AC2B0B300F5923E /* DayVersionData.swift in Sources */,

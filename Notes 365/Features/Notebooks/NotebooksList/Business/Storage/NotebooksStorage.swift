@@ -122,7 +122,7 @@ class NotebooksStorage {
     func getAllFilesInfo() throws -> [NotebookData] {
         let predicate = #Predicate<NotebookData> { _ in true }
         var descriptor = FetchDescriptor(predicate: predicate)
-        descriptor.propertiesToFetch = [\.id, \.parent, \.name, \.isFolder]
+        descriptor.propertiesToFetch = [\.id, \.parent, \.name, \.isFolder, \.deletedDate]
         return try modelContext.fetch(descriptor)
     }
     

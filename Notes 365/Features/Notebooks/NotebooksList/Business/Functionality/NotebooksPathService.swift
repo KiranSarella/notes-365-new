@@ -325,4 +325,26 @@ extension NotebooksPathService {
             getChildFoldersAndFiles(folderId: subfolderId, &recentsFilesToRemove, &recentsFoldersToRemove)
         }
     }
+    
+    func isDeletedFile(uuid: UUID) -> Bool {
+        guard let fileInfo = filesInfoCache.first(where: { $0.id == uuid }) else { return false }
+        if fileInfo.isDeleted {
+            return true
+        } else {
+            // check its app parent folders till root
+            return isUnderDeletedTreeRecursive(folderId: fileInfo.parentId)
+        }
+    }
+    
+    func isUnderDeletedTreeRecursive(folderId: UUID?) -> Bool {
+        guard let folderId = folderId else { return false }
+        guard let folderInfo = foldersInfoCache.first(where: { $0.id == folderId }) else { return false }
+        
+        if folderInfo.isDeleted {
+            return true
+        } else {
+            // check its parent
+            return isUnderDeletedTreeRecursive(folderId: folderInfo.parentId)
+        }
+    }
 }

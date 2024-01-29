@@ -30,7 +30,8 @@ struct EditorViewRepresentable: UIViewRepresentable {
     }
     
     func makeUIView(context: Context) -> EditorView {
-        print(#function)
+//        logger.debug("\(#function)")
+//        logger.debug("\(text)")
         if isConfigured {
             return editorView
         }

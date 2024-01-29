@@ -46,10 +46,14 @@ struct SearchDetailView: View {
     var searchText: String
     let result: NotebookContentB
     var notebookName: String {
-        return NotebooksPathService.shared.fileName(for: result.notebookID) ?? "-"
+        NotebooksPathService.shared.fileName(for: result.notebookID) ?? "-"
     }
     var notebookPath: String {
-        return NotebooksPathService.shared.fullPath(for: result.notebookID) ?? ""
+        NotebooksPathService.shared.fullPath(for: result.notebookID) ?? ""
+    }
+    
+    var isReadOnly: Bool {
+        NotebooksPathService.shared.isDeletedFile(uuid: result.notebookID)
     }
     
     var body: some View {
@@ -64,7 +68,7 @@ struct SearchDetailView: View {
             }
         }
         .navigationDestination(for: NotebookContentB.self) { item in
-            NotebookContentView(isReadOnly: false, notebookId: item.notebookID, fileName: notebookName, searchText: searchText, notebookContentState: notebookContentState)
+            NotebookContentView(isReadOnly: isReadOnly, notebookId: item.notebookID, fileName: notebookName, searchText: searchText, notebookContentState: notebookContentState)
         }
     }
 }

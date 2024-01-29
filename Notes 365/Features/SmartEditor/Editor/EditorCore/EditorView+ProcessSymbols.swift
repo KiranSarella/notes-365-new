@@ -629,7 +629,7 @@ extension EditorView {
     }
     
     func processBlockQuote(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        
+//        logger.debug("\(#function)")
         var elseCount = 0
         
         let pattern = SymbolPattern.blockQuote.rawValue
@@ -642,7 +642,7 @@ extension EditorView {
             innerAttributedString.enumerateAttribute(.font, in: fullRange, options: []) { value, range, stop in
                 guard let font = value as? UIFont else { return }
 
-                logger.debug("font.familyName: \(font.familyName)")
+//                logger.debug("font.familyName: \(font.familyName)")
                 
                 if font.familyName == theme.fontName || font.familyName == "Helvetica" {
 //                    let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
@@ -694,7 +694,7 @@ extension EditorView {
 //            let val = editorType == .smart ? 2 : 1
             
             let lineRange = NSRange(location: match!.range.location + 2, length: match!.range.length - 2)
-            logger.debug("lineRange: \(lineRange)")
+//            logger.debug("lineRange: \(lineRange)")
             let bgInfo = [
                 "code": "blockQuote",
                 "color": theme.blockQuoteColor.uiColor
@@ -710,6 +710,7 @@ extension EditorView {
     }
     
     func processHeadings(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
+//        logger.debug("\(#function)")
         
         styleHeading(symbolPattern: .h1, innerAttributedString: textStorage, extendedRange: extendedRange, symbolLenght: 2, fontLevel: 1)
         styleHeading(symbolPattern: .h2, innerAttributedString: textStorage, extendedRange: extendedRange, symbolLenght: 3, fontLevel: 2)

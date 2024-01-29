@@ -243,6 +243,7 @@ extension NotebooksBusiness {
     }
     
     func permanentDeleteExpiredItems() {
+        logger.info("\(#function)")
         do {
             guard let expiryDate = Calendar.current.date(byAdding: .day, value: -deleteExpiryLimit, to: DateTime().date) else { return }
             
