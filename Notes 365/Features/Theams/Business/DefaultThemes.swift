@@ -78,7 +78,7 @@ class DefaultThemes {
         theme.listColor = Color.red
         theme.highlightColor = Color.purple.opacity(0.25)
         
-        theme.headingFontName = "Chalkduster"
+        theme.headingFontName = "Impact"
         theme.blockQuoteFontName = "Futura"
         
         theme.enableBackground = true

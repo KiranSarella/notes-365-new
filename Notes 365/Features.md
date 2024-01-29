@@ -12,8 +12,6 @@
 
 
 # Issues
-[-] on first time, heading font not updating until body font changed - try updating default fontnames
-[-] getting payment alert on app launch and adding new note (if online or only on offline), if so, have to persist state until you get new data
 [ ] recents - sort not working
 [ ] timeline - with huge data hanging - need load more
 [ ] hang on theme save, when timeline is at month (with full data)

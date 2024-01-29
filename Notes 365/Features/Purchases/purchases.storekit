@@ -5,7 +5,7 @@
   ],
   "products" : [
     {
-      "displayPrice" : "29.99",
+      "displayPrice" : "12.99",
       "familyShareable" : false,
       "internalID" : "6475258899",
       "localizations" : [
@@ -24,12 +24,15 @@
     "_applicationInternalID" : "1595001599",
     "_developerTeamID" : "Z5MSV52AV7",
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 726849488.15980196,
+    "_lastSynchronizedDate" : 728219660.73720706,
     "_locale" : "en_US",
     "_storefront" : "USA",
     "_storeKitErrors" : [
       {
-        "current" : null,
+        "current" : {
+          "index" : 2,
+          "type" : "generic"
+        },
         "enabled" : false,
         "name" : "Load Products"
       },
@@ -44,17 +47,26 @@
         "name" : "Verification"
       },
       {
-        "current" : null,
+        "current" : {
+          "index" : 2,
+          "type" : "generic"
+        },
         "enabled" : false,
         "name" : "App Store Sync"
       },
       {
-        "current" : null,
+        "current" : {
+          "index" : 2,
+          "type" : "generic"
+        },
         "enabled" : false,
         "name" : "Subscription Status"
       },
       {
-        "current" : null,
+        "current" : {
+          "index" : 3,
+          "type" : "generic"
+        },
         "enabled" : false,
         "name" : "App Transaction"
       },
@@ -90,7 +102,7 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "7.99",
+          "displayPrice" : "3.99",
           "familyShareable" : false,
           "groupNumber" : 2,
           "internalID" : "6476041504",
