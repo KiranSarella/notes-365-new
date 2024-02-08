@@ -11,13 +11,15 @@ struct SingleDayView: View {
     @Binding var dayTimelines: DayTimelineModel
     @Binding var discardTimelineInfo: DiscardTimelineInfo?
     @State var discardTimeline: Timeline?
+    @State var openTimeline: Timeline?
     var geometryProxy: GeometryProxy
     @Binding var width: CGFloat
+    @State private var notebookContentState = NotebookContentState(business: BusinessFactory.createNotebookContentBusinessFactory())
     
     var body: some View {
         VStack(spacing: 0) {
             DayHeaderView(date: dayTimelines.date)
-            SingleDayChangesListView(timelines: dayTimelines.timelines, discardTimeline: $discardTimeline, geometryProxy: geometryProxy, width: $width)
+            SingleDayChangesListView(timelines: dayTimelines.timelines, discardTimeline: $discardTimeline, openTimeline: $openTimeline, geometryProxy: geometryProxy, width: $width)
 //                .background(Color("editor_background", bundle: nil))
         }
 //        .background(Color("editor_background", bundle: nil))
@@ -25,6 +27,16 @@ struct SingleDayView: View {
             if let newValue = newValue {
                 discardTimelineInfo =
                 DiscardTimelineInfo(dayId: dayTimelines.id, date: dayTimelines.date, fileId: newValue.fileUUID, changeId: newValue.id)
+            }
+        }
+        .onChange(of: openTimeline) { oldValue, newValue in
+            if let newValue = newValue {
+//                newValue.fileUUID
+                
+                // if notebook id valid
+                // present it
+                
+//                NotebookContentView(isReadOnly: false, notebookId: newValue.fileUUID, fileName: newValue.fileName, notebookContentState: notebookContentState)
             }
         }
 //        .onAppear {
@@ -73,6 +85,7 @@ struct DayHeaderView: View {
 struct SingleDayChangesListView: View {
     var timelines: [Timeline]
     @Binding var discardTimeline: Timeline?
+    @Binding var openTimeline: Timeline?
     var geometryProxy: GeometryProxy
     @Binding var width: CGFloat
     
@@ -84,6 +97,11 @@ struct SingleDayChangesListView: View {
                         NoteChangeHeadingView(noteChange: noteChange, discardTimeline: $discardTimeline)
 #if !targetEnvironment(macCatalyst)
                             .swipeActions(edge: .trailing) {
+                                Button {
+                                    openTimeline = noteChange
+                                } label: {
+                                    Text("Open")
+                                }
                                 Button(role: .destructive) {
                                     discardTimeline = noteChange
                                 } label: {
@@ -104,11 +122,22 @@ struct SingleDayChangesListView: View {
 //                    HStack {
 //                        Text(noteChange.content ?? "--")
 //                            .background(Color(UIColor(named: "editor_background")!))
+                    
+                    LazyVStack {
                         ReadOnlyMarkDownView(content: noteChange.content, width: $width)
                             .padding(.bottom)
                         .listRowSeparator(.hidden)
                         .textSelection(.enabled)
-                        .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
+                        .lineSpacing(EditorSettings.lineSpacing)
+                    }
+                    
+//                        ReadOnlyMarkDownView(content: noteChange.content, width: $width)
+//                            .padding(.bottom)
+//                        .listRowSeparator(.hidden)
+//                        .textSelection(.enabled)
+//                        .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
+                    
+                    
 //                        Spacer()
 //                        .background(Color("editor_background", bundle: nil))
 //                    }

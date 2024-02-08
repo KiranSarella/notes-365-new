@@ -15,14 +15,17 @@ struct TimelineBaseView: View {
     @State private var calendarDate = DateTime.now()
     @State var caldendarState = TimelineCalendarState.none
     @State var width: CGFloat = 0
+    @State var scrollViewHeight: CGFloat = 0
     
     var body: some View {
         GeometryReader { geometryProxy in
             VStack {
                 HorizontalCalendarView(state: $horizontalCalendarViewState, selectedDates: $state.selectedDates)
                 VStack {
+//                    RangeTimelineNewView(selectedDates: $state.selectedDates, width: $width)
+                    
                     RangeTimelineView(selectedDates: $state.selectedDates, geometryProxy: geometryProxy, width: $width)
-                        .background(ThemeState.shared.theme.dynamicCanvasColor)
+//                        .background(ThemeState.shared.theme.dynamicCanvasColor)
                 }
                 .background(.white)
                 .opacity(1)
@@ -36,8 +39,12 @@ struct TimelineBaseView: View {
             .onChange(of: geometryProxy.size, { oldValue, newValue in
                 width = geometryProxy.size.width
                 logger.debug("geometryProxy.width \(width)")
+                
+                scrollViewHeight = geometryProxy.size.height
+                logger.debug("geometryProxy.height \(scrollViewHeight)")
             })
         }
+        .coordinateSpace(name: "scrollView")
         .navigationBarTitleDisplayMode(.inline)
 //        .onChange(of: calendarDate, { oldValue, newValue in
 //            state.selectedDates = [newValue]

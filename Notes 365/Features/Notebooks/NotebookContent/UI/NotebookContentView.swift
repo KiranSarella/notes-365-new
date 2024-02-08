@@ -15,7 +15,7 @@ struct NotebookContentView: View {
     var notebookId: UUID
     var fileName: String
     var searchText: String?
-    @Bindable var notebookContentState: NotebookContentState
+    @Bindable var notebookContentState: NotebookContentState // state is outside, bcz to save any changes after immediatly closed
     
     var body: some View {
         VStack(alignment: .leading) {

@@ -752,7 +752,10 @@ extension EditorView {
 //                    innerAttributedString.addAttribute(.font, value: newFont, range: range)
                     
                     if let uiFont = UIFont(name: theme.dynamicHeadingFont, size: fontSize) {
-                        innerAttributedString.addAttribute(.font, value: uiFont, range: range)
+                        // bold
+                        let fontDesc = uiFont.fontDescriptor.withSymbolicTraits(.traitBold) ?? uiFont.fontDescriptor
+                        let newFont = UIFont(descriptor: fontDesc, size: fontSize)
+                        innerAttributedString.addAttribute(.font, value: newFont, range: range)
                     }
                     
                 } else {

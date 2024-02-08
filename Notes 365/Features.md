@@ -1,41 +1,25 @@
 # Backlogs
+[ ] open notebook inplace from timeline
 [ ] timeline filter tabs with all first level folders
-// reading related
 [ ] read text
 [ ] read in background audio
-// fonts related
-[ ] display fonts - for headings
-[ ] body fonts 
-[ ] block quote font
-[ ] option to choose custom system font 
 [ ] rating view
 
-
 # Issues
-[ ] recents - sort not working
-[ ] timeline - with huge data hanging - need load more
+[-] timeline - with huge data hanging - need load more
 [ ] hang on theme save, when timeline is at month (with full data)
-[ ] test restore in live
 [ ] dont refresh others except today's tab.
+
+[ ] recents - sort not working, deleted recents - date issue seems.
 [ ] diff - just for two new words added in different paras, whole paras are timelined insteated of two lines
+[ ] emoji and telugu not working in code block
+[ ] code block not working in timeline
+[ ] in different bg, code block is not visible
+[ ] empty text for filename is accepting
 
 
 # Completed
-[x] path for files search items and in recents
-[x] custom fonts integrated
-[x] font option for display, blockquote with toggle option
-[x] deleted files list
-    [x] read only list
-    [x] read only editor
-    [x] restore view 
-    [x] restore functionality
-    [x] clean recents list
-        [x] capture all nested folders and files uuids 
-        [x] observe delete changes in recents business and remove them
-    [x] 30 days view and functionality 
-[x] is content search is ignoring deleted files? - confirm it. 
-    [x] no need as per apple notes, only make it readonly
-    [x] done isDeletedFile recursive function
+[x] headings font - bold not working on switch disabled.
     
     
 # first level filters
@@ -49,10 +33,6 @@
     - if exists, then load content
     - else repeat for previous day
     - till, last record or first record date
-
-
-
-
 
 
 

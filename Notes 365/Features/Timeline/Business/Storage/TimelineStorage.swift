@@ -16,6 +16,23 @@ class TimelineStorage {
         self.modelContext = modelContext
     }
     
+//    func fetchPaginatedMonthTimelines(for date: Date, offset: Int?, fetchLimit: Int) throws -> [TimelineData] {
+//        let year = date.getYear()
+//        let month = date.getMonth()
+//        let day = date.getDay()
+//        
+//        var descriptor = FetchDescriptor<TimelineData>(
+//            predicate: #Predicate { $0.year == year && $0.month == month },
+//            sortBy: [
+//                .init(\.day),
+//                .init(\.updatedTime)
+//            ]
+//        )
+//        descriptor.fetchLimit = 5
+//
+//        return try modelContext.fetch(descriptor)
+//    }
+//    
     func fetchDayTimelineRecords(for date: Date) throws -> [TimelineData] {
         let year = date.getYear()
         let month = date.getMonth()

@@ -35,7 +35,7 @@ class SingleDayViewState {
         logger.debug("load day: \(date)")
         Task {
             do {
-                await NotebooksPathService.shared.refreshNotebooksInfo()
+//                await NotebooksPathService.shared.refreshNotebooksInfo()
                 let results = try timelineBusiness.fetchDayTimelineNoteChanges(date: date)
                 for result in results {
                     let r = await result.getTimeline()
