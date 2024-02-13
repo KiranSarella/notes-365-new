@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FormattingOptionsView: View {
-    @Binding var editorView: EditorView
+    @Binding var editorView: UIEditorView
     @Binding var contentEditedDate: Date?
     @State private var enableEraser = false
     

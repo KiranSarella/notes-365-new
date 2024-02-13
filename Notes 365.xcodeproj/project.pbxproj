@@ -104,7 +104,7 @@
 		5CBEF31C2B150359003A3972 /* TodayVersionStorageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBEF31B2B150359003A3972 /* TodayVersionStorageProvider.swift */; };
 		5CBEF31E2B150CE7003A3972 /* DayVersionInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBEF31D2B150CE7003A3972 /* DayVersionInteractor.swift */; };
 		5CBEF3202B151018003A3972 /* DayVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBEF31F2B151018003A3972 /* DayVersion.swift */; };
-		5CC4C01F2A908D7000A4BE41 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC4C01E2A908D7000A4BE41 /* EditorView.swift */; };
+		5CC4C01F2A908D7000A4BE41 /* UIEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC4C01E2A908D7000A4BE41 /* UIEditorView.swift */; };
 		5CC4C0212A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC4C0202A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift */; };
 		5CCABA802B1C9B7F009A9F2E /* ThemeInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCABA7F2B1C9B7F009A9F2E /* ThemeInteractor.swift */; };
 		5CCCF7F12AC15E0D00F5923E /* NotebookContentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCCF7F02AC15E0D00F5923E /* NotebookContentData.swift */; };
@@ -359,7 +359,7 @@
 		5CBEF31B2B150359003A3972 /* TodayVersionStorageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayVersionStorageProvider.swift; sourceTree = "<group>"; };
 		5CBEF31D2B150CE7003A3972 /* DayVersionInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayVersionInteractor.swift; sourceTree = "<group>"; };
 		5CBEF31F2B151018003A3972 /* DayVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayVersion.swift; sourceTree = "<group>"; };
-		5CC4C01E2A908D7000A4BE41 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
+		5CC4C01E2A908D7000A4BE41 /* UIEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIEditorView.swift; sourceTree = "<group>"; };
 		5CC4C0202A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MarkdownAttributedString+iOS.swift"; sourceTree = "<group>"; };
 		5CCABA7F2B1C9B7F009A9F2E /* ThemeInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeInteractor.swift; sourceTree = "<group>"; };
 		5CCCF7F02AC15E0D00F5923E /* NotebookContentData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentData.swift; sourceTree = "<group>"; };
@@ -963,10 +963,10 @@
 			path = Functionality;
 			sourceTree = "<group>";
 		};
-		5CF612D22B0B983900D397C6 /* EditorCore */ = {
+		5CF612D22B0B983900D397C6 /* UIEditor */ = {
 			isa = PBXGroup;
 			children = (
-				5CC4C01E2A908D7000A4BE41 /* EditorView.swift */,
+				5CC4C01E2A908D7000A4BE41 /* UIEditorView.swift */,
 				5CF612D02B0B980700D397C6 /* EditorView+TextStorage.swift */,
 				5CF612D32B0B987F00D397C6 /* EditorView+ProcessSymbols.swift */,
 				5CF612D52B0B98CF00D397C6 /* EditorView+Layout.swift */,
@@ -974,7 +974,7 @@
 				9F45BD152920CCCE003DE332 /* SymbolPattern.swift */,
 				5C9B5CFF2A8FED2A00396102 /* TextKit.md */,
 			);
-			path = EditorCore;
+			path = UIEditor;
 			sourceTree = "<group>";
 		};
 		5CF8769D2B625E0D001F509C /* Fonts */ = {
@@ -1177,7 +1177,7 @@
 				5C29FECC2A98B377001DC601 /* PreviewViewUI.swift */,
 				5C29FED42A98D91D001DC601 /* ReadonlyEditorCache.swift */,
 				5CE6FDF72B0BC19600ED9425 /* PDFFile.swift */,
-				5CF612D22B0B983900D397C6 /* EditorCore */,
+				5CF612D22B0B983900D397C6 /* UIEditor */,
 				5CC4C0202A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift */,
 				9FB40282297B9F60000DF922 /* markdown-regex.md */,
 			);
@@ -1598,7 +1598,7 @@
 				9F8EE98A293EB3090021409E /* CloudDataManager.swift in Sources */,
 				5C0A7B392B20648C0099F0A3 /* DayProcessor.swift in Sources */,
 				5C3DE6B72B13A8A2004E3621 /* RangeTimelineState.swift in Sources */,
-				5CC4C01F2A908D7000A4BE41 /* EditorView.swift in Sources */,
+				5CC4C01F2A908D7000A4BE41 /* UIEditorView.swift in Sources */,
 				5CCABA802B1C9B7F009A9F2E /* ThemeInteractor.swift in Sources */,
 				5C10D7A52B04C281006FB80D /* BusinessFactory.swift in Sources */,
 				9F3DB0C4292DF82300704860 /* FeedbackView.swift in Sources */,

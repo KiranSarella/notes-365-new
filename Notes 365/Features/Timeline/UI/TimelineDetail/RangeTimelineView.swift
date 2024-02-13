@@ -7,39 +7,6 @@
 
 import SwiftUI
 
-
-struct RangeTimelineNewView: View {
-    @Binding var selectedDates: [Date]
-    @State private var state = RangeTimelineNewState()
-    @Binding var width: CGFloat
-    
-    var body: some View {
-        ScrollView(.vertical) {
-//        List {
-            ForEach(state.items) { item in
-                switch item.type {
-                case .date:
-                    DayHeaderView(date: item.date)
-                case .path:
-                    //                Text(item.filePath)
-                    NoteChangeHeadingNewView(fileUUID: item.fileUUID)
-                case .content:
-                
-                    ReadOnlyMarkDownView(content: item.content, width: $width)
-                        .padding(.bottom)
-                        .listRowSeparator(.hidden)
-                        .textSelection(.enabled)
-                        .lineSpacing(EditorSettings.lineSpacing)
-                }
-            }
-        }
-        .onAppear(perform: {
-            state.loadItems()
-        })
-        .listStyle(PlainListStyle())
-    }
-}
-
 struct RangeTimelineView: View {
     @Binding var selectedDates: [Date]
     @State private var state = RangeTimelineState()
@@ -47,13 +14,18 @@ struct RangeTimelineView: View {
     var geometryProxy: GeometryProxy
     @Binding var width: CGFloat
     
+    @State var discardTimeline: Timeline?
+    @State var openTimeline: Timeline?
+    
+    
     var body: some View {
 //        List {
         ScrollView(.vertical, showsIndicators: true) {
             VStack {
-                ForEach($state.dayTimelineModels) { $dayTimelines in
-                    SingleDayView(dayTimelines: $dayTimelines, discardTimelineInfo: $discardTimelineInfo, geometryProxy: geometryProxy, width: $width)
-                }
+//                ForEach($state.dayTimelineModels) { $dayTimelines in
+//                    SingleDayView(dayTimelines: $dayTimelines, discardTimelineInfo: $discardTimelineInfo, geometryProxy: geometryProxy, width: $width)
+                    SingleDayChangesListView(timelines: state.dayTimelineModels, discardTimeline: $discardTimeline, openTimeline: $openTimeline, geometryProxy: geometryProxy, width: $width)
+//                }
                 VStack {
                     if state.statusMessage != nil {
                         HStack {
@@ -68,9 +40,6 @@ struct RangeTimelineView: View {
                         .listRowSeparator(.hidden)
                     }
                 }
-                
-//                LoadMoreViewNew(state: $state)
-//                    .id("loadmore")
             }
             .scrollTargetLayout()
 //            .background(Color("editor_background", bundle: nil))
@@ -92,13 +61,19 @@ struct RangeTimelineView: View {
             }
             .onChange(of: state.scrolledID) { oldValue, newValue in
                 logger.debug("scrolledID")
-                print(state.scrolledID ?? "nil")
-                guard let lastUUID = state.dayTimelineModels.last?.id  else { return }
-                if newValue == lastUUID {
-                    logger.debug("SCROLLED TO BOTTOM")
-                    state.tryLoadNextDay()
+                if state.canLoadMore {
+                    guard let lastUUID = state.dayTimelineModels.last?.id  else { return }
+                    if newValue == lastUUID {
+                        logger.debug("SCROLLED TO BOTTOM")
+//                        state.tryLoadNextDay()
+                        state.loadNext()
+                    }
                 }
             }
+//            .onChange(of: state.scrolledTimelineID) { oldValue, newValue in
+//                logger.debug("scrolledTimelineID")
+//                print(newValue)
+//            }
         }
         .scrollPosition(id: $state.scrolledID, anchor: .bottom)
         .listStyle(PlainListStyle())
@@ -111,25 +86,25 @@ struct RangeTimelineView: View {
 //    RangeTimelineView()
 //}
 
-struct LoadMoreViewNew: View {
-    @Binding var state: RangeTimelineState
-    var body: some View {
-//        if state.canLoadMore {
-            VStack {
-                HStack {
-                    Spacer()
-                    Text("Loading.. range timeline")
-                    Spacer()
-                }
-                .progressViewStyle(CircularProgressViewStyle())
-                .foregroundStyle(.gray)
-                .frame(height: 80)
-                .onAppear {
-                    logger.debug("load more view appear")
-//                    state.tryLoadMore()
-                }
-            }
-            .listRowSeparator(.hidden)
-//        }
-    }
-}
+//struct LoadMoreViewNew: View {
+//    @Binding var state: RangeTimelineState
+//    var body: some View {
+////        if state.canLoadMore {
+//            VStack {
+//                HStack {
+//                    Spacer()
+//                    Text("Loading.. range timeline")
+//                    Spacer()
+//                }
+//                .progressViewStyle(CircularProgressViewStyle())
+//                .foregroundStyle(.gray)
+//                .frame(height: 80)
+//                .onAppear {
+//                    logger.debug("load more view appear")
+////                    state.tryLoadMore()
+//                }
+//            }
+//            .listRowSeparator(.hidden)
+////        }
+//    }
+//}

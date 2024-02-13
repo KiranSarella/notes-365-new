@@ -31,23 +31,23 @@ class SingleDayViewState {
     
     init() { }
     
-    func loadDay(_ date: Date) {
-        logger.debug("load day: \(date)")
-        Task {
-            do {
-//                await NotebooksPathService.shared.refreshNotebooksInfo()
-                let results = try timelineBusiness.fetchDayTimelineNoteChanges(date: date)
-                for result in results {
-                    let r = await result.getTimeline()
-                    timelines.append(r)
-                }
-                isLoaded = true
-            } catch let error {
-                logger.error("\(error)")
-                isLoaded = true
-            }
-        }
-    }
+//    func loadDay(_ date: Date) {
+//        logger.debug("load day: \(date)")
+//        Task {
+//            do {
+////                await NotebooksPathService.shared.refreshNotebooksInfo()
+//                let results = try timelineBusiness.fetchDayTimelineNoteChanges(date: date)
+//                for result in results {
+//                    let r = await result.getTimeline()
+//                    timelines.append(r)
+//                }
+//                isLoaded = true
+//            } catch let error {
+//                logger.error("\(error)")
+//                isLoaded = true
+//            }
+//        }
+//    }
     
     
 }

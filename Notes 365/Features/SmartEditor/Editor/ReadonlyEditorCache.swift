@@ -14,7 +14,7 @@ public struct ReadonlyEditorCache: Identifiable {
     let heading: String
     var content: String
     // UI optimazation related
-    var editorView: EditorView = EditorView()
+    var editorView: UIEditorView = UIEditorView()
     var height: CGFloat = 0
     var isConfigured = false
     var themeID: UUID = UUID()

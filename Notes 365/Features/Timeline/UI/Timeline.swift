@@ -14,7 +14,21 @@ struct Timeline: Identifiable {
     var fileUUID: UUID
     var fileName: String
     var filePath: String
+    var date: Date
+    
     var content: String?
+//    var canDisplayContent: Bool = false
+    
+    var isFirst: Bool = false
+    
+    mutating func setAsFirst() {
+        isFirst = true
+    }
+    
+//    mutating func updateContent(str: String) {
+//        self.content = str
+//        self.canDisplayContent = true
+//    }
 }
 
 extension Timeline: Equatable {

@@ -101,14 +101,14 @@ enum SpeechState {
 
 
 extension TimelineB {
-    func getTimeline() async -> Timeline {
+    func getTimeline(date: Date) async -> Timeline {
         let fileName = NotebooksPathService.shared.fileName(for: notebookId)
 //        let fullPathInfo = await NotebooksPathService.shared.path(for: notebookId)
         let fullPathInfo: FullPathInfo? = FullPathInfo(id: notebookId, name: "test 1", fullPath: "")
         var t = Timeline(id: id,
                          fileUUID: notebookId,
                          fileName: fileName ?? "",
-                         filePath: fullPathInfo?.fullPath ?? "")
+                         filePath: fullPathInfo?.fullPath ?? "", date: date)
         t.content = content
         return t
     }

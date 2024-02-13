@@ -10,11 +10,11 @@ import SwiftUI
 struct PreviewViewUI: UIViewRepresentable {
     let theme: MarkdownTheme = ThemeState.shared.theme
     let text: String
-    var editorView: EditorView
+    var editorView: UIEditorView
     var editorType = EditorType.smart
     var isConfigured = false
    
-    func makeUIView(context: Context) -> EditorView {
+    func makeUIView(context: Context) -> UIEditorView {
         if isConfigured {
             return editorView
         }
@@ -39,10 +39,10 @@ struct PreviewViewUI: UIViewRepresentable {
         return editorView
     }
     
-    func updateUIView(_ editorView: EditorView, context: Context) {
+    func updateUIView(_ editorView: UIEditorView, context: Context) {
 
     }
     
-    typealias NSViewType = EditorView
+    typealias NSViewType = UIEditorView
 }
 

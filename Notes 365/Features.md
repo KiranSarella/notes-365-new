@@ -4,11 +4,11 @@
 [ ] read text
 [ ] read in background audio
 [ ] rating view
+[ ] TipKit
 
 # Issues
-[-] timeline - with huge data hanging - need load more
-[ ] hang on theme save, when timeline is at month (with full data)
-[ ] dont refresh others except today's tab.
+[-] hang on theme save, when timeline is at month (with full data)
+[ ] path cache shoud have to update once cloud sync is done
 
 [ ] recents - sort not working, deleted recents - date issue seems.
 [ ] diff - just for two new words added in different paras, whole paras are timelined insteated of two lines
@@ -16,11 +16,16 @@
 [ ] code block not working in timeline
 [ ] in different bg, code block is not visible
 [ ] empty text for filename is accepting
-
+[ ] replace matched options are showing?
 
 # Completed
 [x] headings font - bold not working on switch disabled.
-    
+[x] load next day on scroll to bottom done
+
+
+[-] dont refresh others except today's tab. 
+    - can't because, while switcing tab, the navigtion is popping, no persistance. so, have to reload again.
+    - alternative is open notes in-place
     
 # first level filters
 [ ] have to get all note ids for top level
@@ -40,3 +45,18 @@ Yearly - 449
 Lifetime - 1349
 
 Family Sharing - 749
+
+
+
+timeline loading data
+- to apply folder filters later in mind
+    - fetch only info, not content
+- once all filers applied for that day, then process each day content with delay and cancel task on dates changed.
+- use scrollview only, but use single data source list
+    - why single view, because the scrollID should be wrt timeline block, not wrt day block.
+    - append each item once content is loaded
+    - append date header if record is first one on that day
+    - on discard?
+        - create id for each day and keep in each contentdata
+        - using that id, we can get all records in a day.
+        - id records are empty, remove date header with that id 

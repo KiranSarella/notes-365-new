@@ -7,7 +7,7 @@
 import UIKit
 import Combine
 
-extension EditorView: NSTextStorageDelegate {
+extension UIEditorView: NSTextStorageDelegate {
     
     public func textStorage(_ textStorage: NSTextStorage, willProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
         let extendedRange = (textStorage.string as NSString).paragraphRange(for: editedRange)
@@ -15,7 +15,9 @@ extension EditorView: NSTextStorageDelegate {
     }
     
     public func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
-//        logger.debug("\(#function)")
+        logger.debug("\(#function)")
+        
+//        return
         
 //        print("editedRange", editedRange, "delta", delta, "editedMask", editedMask)
    
@@ -76,19 +78,27 @@ extension EditorView: NSTextStorageDelegate {
         processOrderedList(extendedRange: extendedRange, textStorage: textStorage)
         processUnorderedList(extendedRange: extendedRange, textStorage: textStorage)
         processCheckList(extendedRange: extendedRange, textStorage: textStorage)
-        
+//        
         processItalic(extendedRange: extendedRange, textStorage: textStorage)   // *
         processBold(extendedRange: extendedRange, textStorage: textStorage)     // **
         processHighlight(extendedRange: extendedRange, textStorage: textStorage)     // **
         processBoldAndItalic(extendedRange: extendedRange, textStorage: textStorage)    // ***
         processStrikethrough(extendedRange: extendedRange, textStorage: textStorage)
+        
+        
+        // dont enable now
 //        processLink(extendedRange: extendedRange, textStorage: textStorage)
+        
+        
+        
         processInlineCode(extendedRange: extendedRange, textStorage: textStorage)
         processHttp(extendedRange: extendedRange, textStorage: textStorage)
         let fullRange = textStorage.fullRange()
         if fullRange.length > 0 {
             processCodeBlock(extendedRange: textStorage.fullRange(), textStorage: textStorage)
         }
+        
+        
     }
     
     

@@ -16,12 +16,16 @@ struct SingleDayView: View {
     @Binding var width: CGFloat
     @State private var notebookContentState = NotebookContentState(business: BusinessFactory.createNotebookContentBusinessFactory())
     
+    
     var body: some View {
         VStack(spacing: 0) {
             DayHeaderView(date: dayTimelines.date)
             SingleDayChangesListView(timelines: dayTimelines.timelines, discardTimeline: $discardTimeline, openTimeline: $openTimeline, geometryProxy: geometryProxy, width: $width)
 //                .background(Color("editor_background", bundle: nil))
         }
+//        .onAppear(perform: {
+//            displayOneByOne()
+//        })
 //        .background(Color("editor_background", bundle: nil))
         .onChange(of: discardTimeline) { oldValue, newValue in
             if let newValue = newValue {
@@ -82,17 +86,41 @@ struct DayHeaderView: View {
     }
 }
 
+@Observable
+class SingleDayTimelinesListState {
+    var timelines = [Timeline]()
+    var timelinesToDisplay = [Timeline]()
+    
+    func displayOneByOne() {
+        logger.debug("\(#function)")
+        if timelines.isEmpty { return }
+        
+        let tm = timelines.removeFirst()
+        timelinesToDisplay.append(tm)
+        
+        Task {
+            try? await Task.sleep(nanoseconds: 2_000_000_000)
+            displayOneByOne()
+        }
+    }
+}
+
 struct SingleDayChangesListView: View {
     var timelines: [Timeline]
     @Binding var discardTimeline: Timeline?
     @Binding var openTimeline: Timeline?
     var geometryProxy: GeometryProxy
     @Binding var width: CGFloat
+//    @State var state = SingleDayTimelinesListState()
     
     var body: some View {
             // each note change content list
+        VStack {
             ForEach(timelines) { noteChange in
                 VStack {
+                    if noteChange.isFirst {
+                        DayHeaderView(date: noteChange.date)
+                    }
                     List {
                         NoteChangeHeadingView(noteChange: noteChange, discardTimeline: $discardTimeline)
 #if !targetEnvironment(macCatalyst)
@@ -123,29 +151,39 @@ struct SingleDayChangesListView: View {
 //                        Text(noteChange.content ?? "--")
 //                            .background(Color(UIColor(named: "editor_background")!))
                     
-                    LazyVStack {
-                        ReadOnlyMarkDownView(content: noteChange.content, width: $width)
-                            .padding(.bottom)
-                        .listRowSeparator(.hidden)
-                        .textSelection(.enabled)
-                        .lineSpacing(EditorSettings.lineSpacing)
-                    }
-                    
+//                    LazyVStack {
 //                        ReadOnlyMarkDownView(content: noteChange.content, width: $width)
 //                            .padding(.bottom)
 //                        .listRowSeparator(.hidden)
 //                        .textSelection(.enabled)
-//                        .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
+//                        .lineSpacing(EditorSettings.lineSpacing)
+//                    }
                     
+                 
+                        ReadOnlyMarkDownView(content: noteChange.content, width: $width)
+                            .padding(.bottom)
+                        .listRowSeparator(.hidden)
+                        .textSelection(.enabled)
+                        .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
+                        .listRowSeparator(.hidden)
+                    
+                    
+                        
                     
 //                        Spacer()
 //                        .background(Color("editor_background", bundle: nil))
 //                    }
-                    .listRowSeparator(.hidden)
+                    
                 }
+//                .id(noteChange.id)
                 .listRowSeparator(.hidden)
 //                .background(Color("editor_background", bundle: nil))
             }
+        }
+//        .onAppear(perform: {
+//            state.timelines = timelines
+//            state.displayOneByOne()
+//        })
     }
 }
 

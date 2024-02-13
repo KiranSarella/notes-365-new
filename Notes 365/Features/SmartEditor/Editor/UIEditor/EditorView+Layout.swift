@@ -10,7 +10,7 @@ import UIKit
 import Combine
 
 
-extension EditorView: NSLayoutManagerDelegate {
+extension UIEditorView: NSLayoutManagerDelegate {
     
     public func layoutManager(_ layoutManager: NSLayoutManager, shouldGenerateGlyphs glyphs: UnsafePointer<CGGlyph>, properties props: UnsafePointer<NSLayoutManager.GlyphProperty>, characterIndexes charIndexes: UnsafePointer<Int>, font aFont: UIFont, forGlyphRange glyphRange: NSRange) -> Int {
         

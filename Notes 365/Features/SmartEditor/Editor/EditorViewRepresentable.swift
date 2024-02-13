@@ -10,7 +10,7 @@ import SwiftUI
 struct EditorViewRepresentable: UIViewRepresentable {
     let theme: MarkdownTheme = ThemeState.shared.theme
     let text: String
-    var editorView: EditorView
+    var editorView: UIEditorView
     @Binding var contentEditedDate: Date?
     
     let isEditable: Bool
@@ -29,7 +29,7 @@ struct EditorViewRepresentable: UIViewRepresentable {
 //        return rect.height + 50
     }
     
-    func makeUIView(context: Context) -> EditorView {
+    func makeUIView(context: Context) -> UIEditorView {
 //        logger.debug("\(#function)")
 //        logger.debug("\(text)")
         if isConfigured {
@@ -74,11 +74,11 @@ struct EditorViewRepresentable: UIViewRepresentable {
         return editorView
     }
     
-    func updateUIView(_ editorView: EditorView, context: Context) {
+    func updateUIView(_ editorView: UIEditorView, context: Context) {
 //        print(#function)
     }
     
-    typealias NSViewType = EditorView
+    typealias NSViewType = UIEditorView
 }
 
 extension EditorViewRepresentable {
@@ -113,7 +113,7 @@ extension EditorUICoordinator: UITextViewDelegate {
 }
 
 struct ReadOnlyMarkDownView: View {
-    @State var editorView = EditorView()
+    @State var editorView = UIEditorView()
     var content: String?
     @Binding var width: CGFloat
     @State var height: CGFloat = 100

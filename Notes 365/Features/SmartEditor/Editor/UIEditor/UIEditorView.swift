@@ -7,7 +7,7 @@
 import UIKit
 import Combine
 
-public class EditorView: UIView {
+public class UIEditorView: UIView {
     var isReadOnly = false
     var fileName: String = ""
     
@@ -55,15 +55,17 @@ public class EditorView: UIView {
     // theme notifcation
     var cancellables: Set<AnyCancellable> = []
     
+    private var notificationQueue = DispatchQueue(label: "notification.queue", qos: .userInitiated)
+
+
+    
+    
     func observeThemeChanges() {
         NotificationCenter.default
             .publisher(for: .themeUpdated)
             .sink { [weak self] notification in
                 // Unwrap the sent object
-                guard let newTheme = notification.object as? MarkdownTheme else {
-                    return
-                }
-
+                guard let newTheme = notification.object as? MarkdownTheme else { return }
                 self?.updateTheme(theme: newTheme)
             }
             .store(in: &cancellables)
@@ -72,7 +74,7 @@ public class EditorView: UIView {
 }
 
 
-extension EditorView {
+extension UIEditorView {
     /**
      Creates and configures the NSTextView, NSTextContainer, NSTextStorage and NSLayoutManager objects
      // TextView -> TextContainer -> LayoutManager -> TextStorage

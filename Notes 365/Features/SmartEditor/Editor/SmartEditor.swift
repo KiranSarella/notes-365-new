@@ -13,7 +13,7 @@ struct SmartEditor: View {
     var isReadonly: Bool
     var searchText: String?
     @FocusState private var isTextFieldFocused: Bool
-    @State private var editorView = EditorView()
+    @State private var editorView = UIEditorView()
     @State private var editorType = EditorType.smart
     @State private var showSymbols = false
     @Binding var contentEditedDate: Date?

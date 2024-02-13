@@ -22,7 +22,7 @@ protocol EditorViewDelegate {
 }
 
 
-extension EditorView: EditorViewDelegate {
+extension UIEditorView: EditorViewDelegate {
     
 //    func printAction() {
 //     
@@ -256,7 +256,7 @@ extension EditorView: EditorViewDelegate {
     
     
     func updateTheme(theme: MarkdownTheme) {
-        
+        logger.debug("\(#function)")
         self.theme = theme
         
         // TODO: fix textview.text to textView.text

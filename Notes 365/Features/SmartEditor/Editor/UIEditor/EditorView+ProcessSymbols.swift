@@ -10,15 +10,19 @@ import Combine
 
 
 // MARK: - process markdown chars
-extension EditorView {
+extension UIEditorView {
     
     func processBold(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
+//        logger.debug("\(#function)")
         let pattern = SymbolPattern.bold.rawValue
 //        var boldFont = theme.font
 //        boldFont = boldFont.apply(newTraits: .bold)
         let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
         regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
+            
+//            logger.debug("\(#function) - enumerateMatches")
+            
             let regExCharLenght = 2
             //            let frontPadding = 0
             let backPadding = 0
@@ -26,6 +30,8 @@ extension EditorView {
             
             innerAttributedString.enumerateAttribute(.font, in: styleRange, options: []) { value, range, stop in
                 guard let font = value as? UIFont else { return }
+                
+//                logger.debug("\(#function) - bold - enumerateAttribute")
                 // bold
                 let newFontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold) ?? font.fontDescriptor
                 let newFont = UIFont(descriptor: newFontDesc, size: font.pointSize)
