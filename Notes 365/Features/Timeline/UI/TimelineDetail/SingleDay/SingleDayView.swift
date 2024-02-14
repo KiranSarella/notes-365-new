@@ -30,7 +30,7 @@ struct SingleDayView: View {
         .onChange(of: discardTimeline) { oldValue, newValue in
             if let newValue = newValue {
                 discardTimelineInfo =
-                DiscardTimelineInfo(dayId: dayTimelines.id, date: dayTimelines.date, fileId: newValue.fileUUID, changeId: newValue.id)
+                DiscardTimelineInfo(date: dayTimelines.date, fileId: newValue.fileUUID, changeId: newValue.id)
             }
         }
         .onChange(of: openTimeline) { oldValue, newValue in

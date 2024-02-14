@@ -211,25 +211,47 @@ class RangeTimelineState {
         return timelines
     }
  
-    func discardTimelineChanges(info: DiscardTimelineInfo) {
-//        logger.info("\(#function)")
-//        do {
-////            try timelineBusiness.discard(changeId: info.changeId, date: info.date, fileId: info.fileId)
-//            // remove from UI
-//            if let index = dayTimelineModels.firstIndex(where: { $0.id == info.dayId }) {
-//                if dayTimelineModels[index].timelines.count > 1 {
-//                    // remove timeline inside a day
-//                    dayTimelineModels[index].timelines.removeAll { t in
-//                        t.fileUUID == info.fileId
-//                    }
-//                } else {
-//                    // remove day itself
-//                    dayTimelineModels.remove(at: index)
-//                }
+    func deleteHeaderIfRequired(date: Date) {
+        logger.debug("\(#function)")
+        let dayItemsCount = dayTimelineModels.filter { t in
+            t.date == date
+        }.count
+        logger.debug("dayItemsCount: \(dayItemsCount)")
+        if dayItemsCount == 1 {
+            // means, only header existed. remove that also
+            dayTimelineModels.removeAll { t in
+                t.date == date
+            }
+        }
+    }
+    
+    func discardTimelineChanges(info: Timeline) {
+        logger.info("\(#function)")
+        do {
+            try timelineBusiness.discard(changeId: info.id, date: info.date, fileId: info.fileUUID)
+            // remove from UI
+            guard let index = dayTimelineModels.firstIndex(where: { $0.id == info.id }) else { return }
+            
+            // set next as first if same day
+            if dayTimelineModels[index].isFirst {
+                let nextIndex = index + 1
+                if nextIndex < dayTimelineModels.count {
+                    if dayTimelineModels[nextIndex].date == info.date {
+                        dayTimelineModels[nextIndex].setAsFirst()
+                    }
+                }
+            }
+            
+            dayTimelineModels.remove(at: index)
+            
+//            dayTimelineModels.removeAll { t in
+//                t.id == info.id
 //            }
-//        } catch let error {
-//            logger.error("\(error)")
-//        }
+//            
+//            deleteHeaderIfRequired(date: info.date)
+        } catch let error {
+            logger.error("\(error)")
+        }
     }
     
 }

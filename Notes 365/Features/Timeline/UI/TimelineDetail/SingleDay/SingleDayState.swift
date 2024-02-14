@@ -17,7 +17,7 @@ struct DayTimelineModel: Identifiable {
 }
 
 struct DiscardTimelineInfo: Equatable {
-    let dayId: UUID
+//    let dayId: UUID
     let date: Date
     let fileId: UUID
     let changeId: String

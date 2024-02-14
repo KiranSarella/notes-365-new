@@ -10,7 +10,7 @@ import SwiftUI
 struct RangeTimelineView: View {
     @Binding var selectedDates: [Date]
     @State private var state = RangeTimelineState()
-    @State var discardTimelineInfo: DiscardTimelineInfo?
+//    @State var discardTimelineInfo: DiscardTimelineInfo?
     var geometryProxy: GeometryProxy
     @Binding var width: CGFloat
     
@@ -54,9 +54,10 @@ struct RangeTimelineView: View {
             .onChange(of: selectedDates, { oldValue, newValue in
                 state.startloading(days: newValue)
             })
-            .onChange(of: discardTimelineInfo) { oldValue, newValue in
+            .onChange(of: discardTimeline) { oldValue, newValue in
                 if let newValue = newValue {
                     state.discardTimelineChanges(info: newValue)
+                    discardTimeline = nil
                 }
             }
             .onChange(of: state.scrolledID) { oldValue, newValue in
