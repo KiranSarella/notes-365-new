@@ -13,7 +13,7 @@ struct NoteChangeHeadingView: View {
     var noteChange: Timeline
     @State var fullPath: String?
     @Binding var discardTimeline: Timeline?
-//    @Binding var openTimeline: Timeline?
+    @Binding var openTimeline: Timeline?
     
     func getFullPath() {
         fullPath = NotebooksPathService.shared.fullPath(for: noteChange.fileUUID)
@@ -39,7 +39,7 @@ struct NoteChangeHeadingView: View {
             // discard button
             if isFocused {
                 Button {
-//                    openTimeline = noteChange
+                    openTimeline = noteChange
                 } label: {
                     Text("Open")
                 }

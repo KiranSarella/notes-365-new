@@ -127,6 +127,30 @@ public extension Date {
         return Calendar.current.component(.weekOfYear, from: self)
     }
     
+    var isToday: Bool {
+        let today = DateTime.now()
+        if self.getYear() == today.getYear() && self.getMonth() == today.getMonth() && self.getDay() == today.getDay() {
+            return true
+        }
+        return false
+    }
+    
+    var isThisMonth: Bool {
+        let today = DateTime.now()
+        if self.getYear() == today.getYear() && self.getMonth() == today.getMonth() {
+            return true
+        }
+        return false
+    }
+    
+    var isThisYear: Bool {
+        let today = DateTime.now()
+        if self.getYear() == today.getYear() {
+            return true
+        }
+        return false
+    }
+    
     static func dates(from fromDate: Date, to toDate: Date) -> [Date] {
         var dates: [Date] = []
         var date = fromDate

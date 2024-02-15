@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct RangeTimelineView: View {
+    @Binding var path: NavigationPath
     @Binding var selectedDates: [Date]
     @State private var state = RangeTimelineState()
 //    @State var discardTimelineInfo: DiscardTimelineInfo?
@@ -17,69 +18,80 @@ struct RangeTimelineView: View {
     @State var discardTimeline: Timeline?
     @State var openTimeline: Timeline?
     
+    @State private var notebookContentState = NotebookContentState(business: BusinessFactory.createNotebookContentBusinessFactory())
     
     var body: some View {
 //        List {
-        ScrollView(.vertical, showsIndicators: true) {
-            VStack {
-//                ForEach($state.dayTimelineModels) { $dayTimelines in
-//                    SingleDayView(dayTimelines: $dayTimelines, discardTimelineInfo: $discardTimelineInfo, geometryProxy: geometryProxy, width: $width)
-                    SingleDayChangesListView(timelines: state.dayTimelineModels, discardTimeline: $discardTimeline, openTimeline: $openTimeline, geometryProxy: geometryProxy, width: $width)
-//                }
+        VStack {
+            ScrollView(.vertical, showsIndicators: true) {
                 VStack {
-                    if state.statusMessage != nil {
-                        HStack {
-                            Spacer()
-                            Text(state.statusMessage ?? "")
-                                .listRowSeparator(.hidden)
-                                .fontWeight(.medium)
-                                .foregroundColor(.gray)
-                            Spacer()
+    //                ForEach($state.dayTimelineModels) { $dayTimelines in
+    //                    SingleDayView(dayTimelines: $dayTimelines, discardTimelineInfo: $discardTimelineInfo, geometryProxy: geometryProxy, width: $width)
+                        SingleDayChangesListView(timelines: state.dayTimelineModels, discardTimeline: $discardTimeline, openTimeline: $openTimeline, geometryProxy: geometryProxy, width: $width)
+    //                }
+                    VStack {
+                        if state.loadingState.displayMessage != nil {
+                            HStack {
+                                Spacer()
+                                Text(state.loadingState.displayMessage ?? "")
+                                    .listRowSeparator(.hidden)
+                                    .fontWeight(.medium)
+                                    .foregroundColor(.gray)
+                                Spacer()
+                            }
+                            .frame(height: 100)
+                            .listRowSeparator(.hidden)
                         }
-                        .frame(height: 100)
-                        .listRowSeparator(.hidden)
+                    }
+                }
+                .scrollTargetLayout()
+    //            .background(Color("editor_background", bundle: nil))
+                .onAppear {
+                    if state.dayTimelineModels.isEmpty {
+                        Task {
+                            await NotebooksPathService.shared.refreshNotebooksInfo()
+                            state.startloading(days: selectedDates)
+                        }
+                    } else {
+                        // if recently opended is today, refetch content, if not exists - remove it.
+                    }
+                }
+                .onChange(of: selectedDates, { oldValue, newValue in
+                    state.startloading(days: newValue)
+                })
+                .onChange(of: discardTimeline) { oldValue, newValue in
+                    if let newValue = newValue {
+                        state.discardTimelineChanges(info: newValue)
+                        discardTimeline = nil
+                    }
+                }
+                .onChange(of: openTimeline) { oldValue, newValue in
+                    if let newValue = newValue {
+                        // open
+                        path.append(newValue)
+                        openTimeline = nil
+                    }
+                }
+                .onChange(of: state.scrolledID) { oldValue, newValue in
+                    logger.debug("scrolledID")
+                    if state.loadingState != .done {
+                        guard let lastUUID = state.dayTimelineModels.last?.id  else { return }
+                        if newValue == lastUUID {
+                            logger.debug("SCROLLED TO BOTTOM")
+    //                        state.tryLoadNextDay()
+                            state.loadNext()
+                        }
                     }
                 }
             }
-            .scrollTargetLayout()
-//            .background(Color("editor_background", bundle: nil))
-            .onAppear {
-                Task {
-                    await NotebooksPathService.shared.refreshNotebooksInfo()
-                    state.startloading(days: selectedDates)
-                    // reset
-                    state.scrolledID = nil
-                }
-            }
-            .onChange(of: selectedDates, { oldValue, newValue in
-                state.startloading(days: newValue)
-            })
-            .onChange(of: discardTimeline) { oldValue, newValue in
-                if let newValue = newValue {
-                    state.discardTimelineChanges(info: newValue)
-                    discardTimeline = nil
-                }
-            }
-            .onChange(of: state.scrolledID) { oldValue, newValue in
-                logger.debug("scrolledID")
-                if state.canLoadMore {
-                    guard let lastUUID = state.dayTimelineModels.last?.id  else { return }
-                    if newValue == lastUUID {
-                        logger.debug("SCROLLED TO BOTTOM")
-//                        state.tryLoadNextDay()
-                        state.loadNext()
-                    }
-                }
-            }
-//            .onChange(of: state.scrolledTimelineID) { oldValue, newValue in
-//                logger.debug("scrolledTimelineID")
-//                print(newValue)
-//            }
+            .scrollPosition(id: $state.scrolledID, anchor: .bottom)
+            .listStyle(PlainListStyle())
+    //        .background(Color("editor_background", bundle: nil))
+            .scrollContentBackground(.hidden)
         }
-        .scrollPosition(id: $state.scrolledID, anchor: .bottom)
-        .listStyle(PlainListStyle())
-//        .background(Color("editor_background", bundle: nil))
-        .scrollContentBackground(.hidden)
+        .navigationDestination(for: Timeline.self) { t in
+            NotebookContentView(isReadOnly: false, notebookId: t.fileUUID, fileName: t.fileName, notebookContentState: notebookContentState)
+        }
     }
 }
 

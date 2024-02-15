@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct TimelineBaseView: View {
+    @Binding var path: NavigationPath
     @Binding var state: TimelineBaseViewState
     @Binding var horizontalCalendarViewState: HorizontalCalendarViewState
     @State private var loadedFirstTime = false
@@ -15,70 +16,72 @@ struct TimelineBaseView: View {
     @State private var calendarDate = DateTime.now()
     @State var caldendarState = TimelineCalendarState.none
     @State var width: CGFloat = 0
-    @State var scrollViewHeight: CGFloat = 0
+//    @State var scrollViewHeight: CGFloat = 0
     
     var body: some View {
-        GeometryReader { geometryProxy in
-            VStack {
-                HorizontalCalendarView(state: $horizontalCalendarViewState, selectedDates: $state.selectedDates)
+        NavigationStack(path: $path) {
+            GeometryReader { geometryProxy in
                 VStack {
-                    RangeTimelineView(selectedDates: $state.selectedDates, geometryProxy: geometryProxy, width: $width)
-                        .background(ThemeState.shared.theme.dynamicCanvasColor)
+                    HorizontalCalendarView(state: $horizontalCalendarViewState, selectedDates: $state.selectedDates)
+                    VStack {
+                        RangeTimelineView(path: $path, selectedDates: $state.selectedDates, geometryProxy: geometryProxy, width: $width)
+                            .background(ThemeState.shared.theme.dynamicCanvasColor)
+                    }
+                    .background(.white)
+                    .opacity(1)
                 }
-                .background(.white)
-                .opacity(1)
-            }
-//            .background(ThemeState.shared.theme.canvasColor.opacity(ThemeState.shared.theme.canvasColor.components.opacity))
-//            .background(.blendMode(.difference))
-            .ignoresSafeArea(edges: [.bottom])
-            .onAppear(perform: {
-                width = geometryProxy.size.width
-            })
-            .onChange(of: geometryProxy.size, { oldValue, newValue in
-                width = geometryProxy.size.width
-                logger.debug("geometryProxy.width \(width)")
-                
-                scrollViewHeight = geometryProxy.size.height
-                logger.debug("geometryProxy.height \(scrollViewHeight)")
-            })
-        }
-        .coordinateSpace(name: "scrollView")
-        .navigationBarTitleDisplayMode(.inline)
-//        .onChange(of: calendarDate, { oldValue, newValue in
-//            state.selectedDates = [newValue]
-//            horizontalCalendarViewState.selectedDateRange = nil
-//        })
-        .onChange(of: horizontalCalendarViewState.selectedDateRange, { oldValue, newValue in
-            if newValue != nil {
-                caldendarState = .none
-            }
-        })
-        .onChange(of: caldendarState, { oldValue, newValue in
-            switch newValue {
-            case .day(let dayDate):
-                state.selectedDates = [dayDate.date]
-                horizontalCalendarViewState.selectedDateRange = nil
-            case .week(let weekDate):
-                state.selectedDates = weekDate.days
-                horizontalCalendarViewState.selectedDateRange = nil
-            case .month(let monthDate):
-                state.selectedDates = monthDate.start.getDaysOfMonth()
-                horizontalCalendarViewState.selectedDateRange = nil
-            case .none:
-                break
-            }
-        })
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    showCalendar = true
-                } label: {
-                    Image(systemName: "calendar")
-                }
-                .popover(isPresented: $showCalendar, content: {
-//                    CalendarView(calendarDate: $calendarDate)
-                    TimelineCalendarView(timelineCalendarState: $caldendarState)
+    //            .background(ThemeState.shared.theme.canvasColor.opacity(ThemeState.shared.theme.canvasColor.components.opacity))
+    //            .background(.blendMode(.difference))
+                .ignoresSafeArea(edges: [.bottom])
+                .onAppear(perform: {
+                    width = geometryProxy.size.width
                 })
+                .onChange(of: geometryProxy.size, { oldValue, newValue in
+                    width = geometryProxy.size.width
+                    logger.debug("geometryProxy.width \(width)")
+                    
+//                    scrollViewHeight = geometryProxy.size.height
+//                    logger.debug("geometryProxy.height \(scrollViewHeight)")
+                })
+            }
+            .coordinateSpace(name: "scrollView")
+            .navigationBarTitleDisplayMode(.inline)
+    //        .onChange(of: calendarDate, { oldValue, newValue in
+    //            state.selectedDates = [newValue]
+    //            horizontalCalendarViewState.selectedDateRange = nil
+    //        })
+            .onChange(of: horizontalCalendarViewState.selectedDateRange, { oldValue, newValue in
+                if newValue != nil {
+                    caldendarState = .none
+                }
+            })
+            .onChange(of: caldendarState, { oldValue, newValue in
+                switch newValue {
+                case .day(let dayDate):
+                    state.selectedDates = [dayDate.date]
+                    horizontalCalendarViewState.selectedDateRange = nil
+                case .week(let weekDate):
+                    state.selectedDates = weekDate.days
+                    horizontalCalendarViewState.selectedDateRange = nil
+                case .month(let monthDate):
+                    state.selectedDates = monthDate.start.getDaysOfMonth()
+                    horizontalCalendarViewState.selectedDateRange = nil
+                case .none:
+                    break
+                }
+            })
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showCalendar = true
+                    } label: {
+                        Image(systemName: "calendar")
+                    }
+                    .popover(isPresented: $showCalendar, content: {
+    //                    CalendarView(calendarDate: $calendarDate)
+                        TimelineCalendarView(timelineCalendarState: $caldendarState)
+                    })
+                }
             }
         }
         

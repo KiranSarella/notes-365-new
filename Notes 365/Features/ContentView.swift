@@ -182,7 +182,7 @@ struct ContentView: View {
             let selectedItem = SidebarItem(rawValue: sidebarItemSelected ?? SidebarItem.timeline.id)!
             switch selectedItem {
             case .timeline:
-                TimelineBaseView(state: $timelineDetailState, horizontalCalendarViewState: $horizontalCalendarViewState)
+                TimelineBaseView(path: $path, state: $timelineDetailState, horizontalCalendarViewState: $horizontalCalendarViewState)
             case .notebooks:
                 NotebooksBaseDetailView(path: $path)
             case .search:

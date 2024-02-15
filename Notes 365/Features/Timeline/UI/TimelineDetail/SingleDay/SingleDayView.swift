@@ -122,7 +122,7 @@ struct SingleDayChangesListView: View {
                         DayHeaderView(date: noteChange.date)
                     }
                     List {
-                        NoteChangeHeadingView(noteChange: noteChange, discardTimeline: $discardTimeline)
+                        NoteChangeHeadingView(noteChange: noteChange, discardTimeline: $discardTimeline, openTimeline: $openTimeline)
 #if !targetEnvironment(macCatalyst)
                             .swipeActions(edge: .trailing) {
                                 Button {

@@ -5,6 +5,7 @@
 [ ] read in background audio
 [ ] rating view
 [ ] TipKit
+[ ] MetricKit
 
 # Issues
 [-] hang on theme save, when timeline is at month (with full data)

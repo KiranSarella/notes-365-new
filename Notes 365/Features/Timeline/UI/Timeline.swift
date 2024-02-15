@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import UIKit
 
-struct Timeline: Identifiable {
+struct Timeline: Identifiable, Hashable {
     var id: String
     var fileUUID: UUID
     var fileName: String
