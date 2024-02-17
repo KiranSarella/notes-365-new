@@ -39,6 +39,7 @@ struct NoteChangeHeadingView: View {
             // discard button
             if isFocused {
                 Button {
+                    logger.debug("openTimeline - button action")
                     openTimeline = noteChange
                 } label: {
                     Text("Open")

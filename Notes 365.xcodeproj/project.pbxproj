@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C0063762B806891007A5F73 /* SmartViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C0063752B806891007A5F73 /* SmartViewer.swift */; };
 		5C04F41E2B1F478B00B82575 /* MigrationProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C04F41D2B1F478B00B82575 /* MigrationProcess.swift */; };
 		5C04F4212B1F4AEB00B82575 /* NotebookOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C04F4202B1F4AEB00B82575 /* NotebookOld.swift */; };
 		5C04F4232B1F4C5800B82575 /* NotebooksCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C04F4222B1F4C5800B82575 /* NotebooksCache.swift */; };
@@ -124,9 +125,9 @@
 		5CF612C52B0B207A00D397C6 /* NotebookContentBusinessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF612C42B0B207A00D397C6 /* NotebookContentBusinessTests.swift */; };
 		5CF612CC2B0B343200D397C6 /* NotebookContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF612CB2B0B343200D397C6 /* NotebookContent.swift */; };
 		5CF612CF2B0B79F000D397C6 /* NotebookContentRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF612CA2B0B33F700D397C6 /* NotebookContentRequester.swift */; };
-		5CF612D12B0B980700D397C6 /* EditorView+TextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF612D02B0B980700D397C6 /* EditorView+TextStorage.swift */; };
-		5CF612D42B0B987F00D397C6 /* EditorView+ProcessSymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF612D32B0B987F00D397C6 /* EditorView+ProcessSymbols.swift */; };
-		5CF612D62B0B98CF00D397C6 /* EditorView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF612D52B0B98CF00D397C6 /* EditorView+Layout.swift */; };
+		5CF612D12B0B980700D397C6 /* UIEditorView+TextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF612D02B0B980700D397C6 /* UIEditorView+TextStorage.swift */; };
+		5CF612D42B0B987F00D397C6 /* UIEditorView+ProcessSymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF612D32B0B987F00D397C6 /* UIEditorView+ProcessSymbols.swift */; };
+		5CF612D62B0B98CF00D397C6 /* UIEditorView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CF612D52B0B98CF00D397C6 /* UIEditorView+Layout.swift */; };
 		5CF8769A2B625C8B001F509C /* coaster-shadow.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5CF876972B625C8B001F509C /* coaster-shadow.ttf */; };
 		5CF8769C2B625C8B001F509C /* coaster-black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5CF876992B625C8B001F509C /* coaster-black.ttf */; };
 		5CF8769F2B63AA98001F509C /* mouldy-cheese-regular-wymwg.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5CF8769E2B63AA98001F509C /* mouldy-cheese-regular-wymwg.ttf */; };
@@ -263,6 +264,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5C0063752B806891007A5F73 /* SmartViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartViewer.swift; sourceTree = "<group>"; };
 		5C04F41D2B1F478B00B82575 /* MigrationProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationProcess.swift; sourceTree = "<group>"; };
 		5C04F4202B1F4AEB00B82575 /* NotebookOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookOld.swift; sourceTree = "<group>"; };
 		5C04F4222B1F4C5800B82575 /* NotebooksCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksCache.swift; sourceTree = "<group>"; };
@@ -381,9 +383,9 @@
 		5CF612C42B0B207A00D397C6 /* NotebookContentBusinessTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentBusinessTests.swift; sourceTree = "<group>"; };
 		5CF612CA2B0B33F700D397C6 /* NotebookContentRequester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContentRequester.swift; sourceTree = "<group>"; };
 		5CF612CB2B0B343200D397C6 /* NotebookContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookContent.swift; sourceTree = "<group>"; };
-		5CF612D02B0B980700D397C6 /* EditorView+TextStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorView+TextStorage.swift"; sourceTree = "<group>"; };
-		5CF612D32B0B987F00D397C6 /* EditorView+ProcessSymbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorView+ProcessSymbols.swift"; sourceTree = "<group>"; };
-		5CF612D52B0B98CF00D397C6 /* EditorView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorView+Layout.swift"; sourceTree = "<group>"; };
+		5CF612D02B0B980700D397C6 /* UIEditorView+TextStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEditorView+TextStorage.swift"; sourceTree = "<group>"; };
+		5CF612D32B0B987F00D397C6 /* UIEditorView+ProcessSymbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEditorView+ProcessSymbols.swift"; sourceTree = "<group>"; };
+		5CF612D52B0B98CF00D397C6 /* UIEditorView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEditorView+Layout.swift"; sourceTree = "<group>"; };
 		5CF876972B625C8B001F509C /* coaster-shadow.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "coaster-shadow.ttf"; sourceTree = "<group>"; };
 		5CF876992B625C8B001F509C /* coaster-black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "coaster-black.ttf"; sourceTree = "<group>"; };
 		5CF8769E2B63AA98001F509C /* mouldy-cheese-regular-wymwg.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "mouldy-cheese-regular-wymwg.ttf"; sourceTree = "<group>"; };
@@ -544,6 +546,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5C0063732B806835007A5F73 /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				5C0063742B80687F007A5F73 /* SmartViewer */,
+				9F93E14829E59CDA00210E99 /* SmartEditor */,
+				5CF612D22B0B983900D397C6 /* UIEditorCore */,
+			);
+			path = Editor;
+			sourceTree = "<group>";
+		};
+		5C0063742B80687F007A5F73 /* SmartViewer */ = {
+			isa = PBXGroup;
+			children = (
+				5C0063752B806891007A5F73 /* SmartViewer.swift */,
+			);
+			path = SmartViewer;
+			sourceTree = "<group>";
+		};
 		5C04F41F2B1F4AD700B82575 /* Migration */ = {
 			isa = PBXGroup;
 			children = (
@@ -963,18 +983,18 @@
 			path = Functionality;
 			sourceTree = "<group>";
 		};
-		5CF612D22B0B983900D397C6 /* UIEditor */ = {
+		5CF612D22B0B983900D397C6 /* UIEditorCore */ = {
 			isa = PBXGroup;
 			children = (
 				5CC4C01E2A908D7000A4BE41 /* UIEditorView.swift */,
-				5CF612D02B0B980700D397C6 /* EditorView+TextStorage.swift */,
-				5CF612D32B0B987F00D397C6 /* EditorView+ProcessSymbols.swift */,
-				5CF612D52B0B98CF00D397C6 /* EditorView+Layout.swift */,
+				5CF612D02B0B980700D397C6 /* UIEditorView+TextStorage.swift */,
+				5CF612D32B0B987F00D397C6 /* UIEditorView+ProcessSymbols.swift */,
+				5CF612D52B0B98CF00D397C6 /* UIEditorView+Layout.swift */,
 				5C117C3E2A8E77FF00B0F3BE /* LayoutManager.swift */,
 				9F45BD152920CCCE003DE332 /* SymbolPattern.swift */,
 				5C9B5CFF2A8FED2A00396102 /* TextKit.md */,
 			);
-			path = UIEditor;
+			path = UIEditorCore;
 			sourceTree = "<group>";
 		};
 		5CF8769D2B625E0D001F509C /* Fonts */ = {
@@ -1162,7 +1182,7 @@
 			isa = PBXGroup;
 			children = (
 				9F93E14929E59E3200210E99 /* MarkdownEditor.md */,
-				9F93E14D29E5B1AF00210E99 /* Speech */,
+				9F93E14F29E6A2AC00210E99 /* SmartEditor.swift */,
 				9F93E14C29E5B16700210E99 /* FormatOptions */,
 				9F93E14B29E5B02E00210E99 /* Editor */,
 			);
@@ -1172,12 +1192,11 @@
 		9F93E14B29E5B02E00210E99 /* Editor */ = {
 			isa = PBXGroup;
 			children = (
-				9F93E14F29E6A2AC00210E99 /* SmartEditor.swift */,
 				9F7D291E299BABAC00B37F51 /* EditorViewRepresentable.swift */,
 				5C29FECC2A98B377001DC601 /* PreviewViewUI.swift */,
 				5C29FED42A98D91D001DC601 /* ReadonlyEditorCache.swift */,
 				5CE6FDF72B0BC19600ED9425 /* PDFFile.swift */,
-				5CF612D22B0B983900D397C6 /* UIEditor */,
+				9F93E14D29E5B1AF00210E99 /* Speech */,
 				5CC4C0202A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift */,
 				9FB40282297B9F60000DF922 /* markdown-regex.md */,
 			);
@@ -1230,7 +1249,7 @@
 				5C7A53152B5A801900500A90 /* RecentlyDeleted */,
 				9FB0A48D29DF13930093FBD2 /* DayVersions */,
 				5C08EA372B1892C50095DE86 /* ContentSearch */,
-				9F93E14829E59CDA00210E99 /* SmartEditor */,
+				5C0063732B806835007A5F73 /* Editor */,
 				9F45BD382920CCCF003DE332 /* Theams */,
 				9F1AAE2F292C93E000B4D254 /* Feedback */,
 				5C4ADCE12A97576F000A037E /* EditorSymbols */,
@@ -1509,6 +1528,7 @@
 				9F1687CC29AD0E7F0085A0CA /* InitialCloudSync.swift in Sources */,
 				5C29FECD2A98B377001DC601 /* PreviewViewUI.swift in Sources */,
 				5C29FED32A98D8FD001DC601 /* EditorSymbolsState.swift in Sources */,
+				5C0063762B806891007A5F73 /* SmartViewer.swift in Sources */,
 				5C5668112B10B1B100CB873F /* TimelineData.swift in Sources */,
 				5C10D79D2B04C248006FB80D /* NotebooksStorageAdapter.swift in Sources */,
 				5C34A1842B1B5CD400D036B7 /* ThemeData.swift in Sources */,
@@ -1528,7 +1548,7 @@
 				5CF612BD2B0B08A400D397C6 /* NotebookContentStorage.swift in Sources */,
 				5C3DE6AF2B132155004E3621 /* SingleDayView.swift in Sources */,
 				5C34A1862B1B5D3E00D036B7 /* ThemeStorage.swift in Sources */,
-				5CF612D42B0B987F00D397C6 /* EditorView+ProcessSymbols.swift in Sources */,
+				5CF612D42B0B987F00D397C6 /* UIEditorView+ProcessSymbols.swift in Sources */,
 				5C1CD5AB2ABC350B00D47814 /* TimelineBaseView.swift in Sources */,
 				5C051B9B2B11FFF6005C99B7 /* NotebooksPathService.swift in Sources */,
 				5CD72D8B2B5BE50200B772DF /* RecentlyDeletedState.swift in Sources */,
@@ -1566,7 +1586,7 @@
 				5C74AD112B3AA766006B33B0 /* RecentsStorageProvider.swift in Sources */,
 				9F14B4AE298F98900079D23B /* FontPicker.swift in Sources */,
 				5C74AD022B3A92E1006B33B0 /* RecentsState.swift in Sources */,
-				5CF612D62B0B98CF00D397C6 /* EditorView+Layout.swift in Sources */,
+				5CF612D62B0B98CF00D397C6 /* UIEditorView+Layout.swift in Sources */,
 				9FB6C6A02927695000C8EC76 /* NotebookContentBusiness.swift in Sources */,
 				5C34A18A2B1B936700D036B7 /* ThemeStorageProvider.swift in Sources */,
 				5C0A7B4C2B20DA4F0099F0A3 /* DayCalendarState.swift in Sources */,
@@ -1618,7 +1638,7 @@
 				5CF4F5182B0DE4EB008F13F3 /* NotebooksLevelView.swift in Sources */,
 				9F09CEB129267FBC00609D99 /* TodayVersionBusiness.swift in Sources */,
 				9F3DB0CC292E340200704860 /* ThemeState.swift in Sources */,
-				5CF612D12B0B980700D397C6 /* EditorView+TextStorage.swift in Sources */,
+				5CF612D12B0B980700D397C6 /* UIEditorView+TextStorage.swift in Sources */,
 				9F57BAE7299688BC0076FD9D /* Constants.swift in Sources */,
 				5C34A17E2B1B32F300D036B7 /* ThemesBaseView.swift in Sources */,
 				5C0A7B4D2B20DA4F0099F0A3 /* DayCalendarView.swift in Sources */,

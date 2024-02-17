@@ -18,7 +18,6 @@ struct SmartEditor: View {
     @State private var showSymbols = false
     @Binding var contentEditedDate: Date?
     @Binding var input: String
-//    @Binding var output: String
     @State private var showingPDFExporter = false
     @State private var pdfFileData: PDFFile = PDFFile(data: Data())
     
@@ -45,12 +44,6 @@ struct SmartEditor: View {
                     }
                 }
         }
-//        .onAppear {
-//            markdownEditorState.fileName = self.fileName
-//        }
-//        .onChange(of: markdownEditorState.fileName, { oldValue, newValue in
-//            editorView.fileName = newValue
-//        })
         .ignoresSafeArea(edges: [.bottom])
         .onChange(of: input, { oldValue, newValue in
             isTextFieldFocused = false
@@ -118,10 +111,3 @@ struct SmartEditor: View {
         
     }
 }
-
-
-//struct MarkdownEditorView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MarkdownEditorView()
-//    }
-//}

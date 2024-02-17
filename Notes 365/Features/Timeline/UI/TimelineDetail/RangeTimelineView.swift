@@ -16,7 +16,6 @@ struct RangeTimelineView: View {
     @Binding var width: CGFloat
     
     @State var discardTimeline: Timeline?
-    @State var openTimeline: Timeline?
     
     @State private var notebookContentState = NotebookContentState(business: BusinessFactory.createNotebookContentBusinessFactory())
     
@@ -27,7 +26,7 @@ struct RangeTimelineView: View {
                 VStack {
     //                ForEach($state.dayTimelineModels) { $dayTimelines in
     //                    SingleDayView(dayTimelines: $dayTimelines, discardTimelineInfo: $discardTimelineInfo, geometryProxy: geometryProxy, width: $width)
-                        SingleDayChangesListView(timelines: state.dayTimelineModels, discardTimeline: $discardTimeline, openTimeline: $openTimeline, geometryProxy: geometryProxy, width: $width)
+                    SingleDayChangesListView(timelines: $state.dayTimelineModels, discardTimeline: $discardTimeline, openTimeline: $state.openTimeline, geometryProxy: geometryProxy, width: $width)
     //                }
                     VStack {
                         if state.loadingState.displayMessage != nil {
@@ -54,6 +53,10 @@ struct RangeTimelineView: View {
                         }
                     } else {
                         // if recently opended is today, refetch content, if not exists - remove it.
+                        Task {
+                            try? await Task.sleep(nanoseconds: 1_000_000_000)
+                            state.refreshOpenedTimelineContent()
+                        }
                     }
                 }
                 .onChange(of: selectedDates, { oldValue, newValue in
@@ -65,11 +68,12 @@ struct RangeTimelineView: View {
                         discardTimeline = nil
                     }
                 }
-                .onChange(of: openTimeline) { oldValue, newValue in
+                .onChange(of: state.openTimeline) { oldValue, newValue in
                     if let newValue = newValue {
                         // open
-                        path.append(newValue)
-                        openTimeline = nil
+                        DispatchQueue.main.async {
+                            path.append(newValue)
+                        }
                     }
                 }
                 .onChange(of: state.scrolledID) { oldValue, newValue in
@@ -78,7 +82,6 @@ struct RangeTimelineView: View {
                         guard let lastUUID = state.dayTimelineModels.last?.id  else { return }
                         if newValue == lastUUID {
                             logger.debug("SCROLLED TO BOTTOM")
-    //                        state.tryLoadNextDay()
                             state.loadNext()
                         }
                     }

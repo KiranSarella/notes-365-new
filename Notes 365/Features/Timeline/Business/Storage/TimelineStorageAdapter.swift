@@ -20,6 +20,10 @@ class TimelineStorageAdapter: TimelineStorageProvider {
         try storage.fetchDayTimelineRecords(for: date).map { $0.dayNotebookChange() }
     }
     
+    func fetchDayTimelineContent(for id: String) throws -> TimelineB? {
+        try storage.fetchDayNotebookChange(for: id)?.dayNotebookChange()
+    }
+    
     func save(dayNotebookChange: TimelineB) throws {
         logger.debug("\(dayNotebookChange)")
         try storage.save(dayNotebookChange: dayNotebookChange.dayNotebookData())

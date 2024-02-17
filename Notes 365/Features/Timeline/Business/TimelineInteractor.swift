@@ -9,6 +9,7 @@ import Foundation
 
 protocol TimelineInteractor {
     func fetchDayTimelineNoteChanges(date: Date) throws -> [TimelineB]
+    func fetchDayTimelineNoteChanges(id: String) throws -> TimelineB?
     func setupTimeineCreationProcess()
     func stopTimelineCreationProcess()
     func getFirstAvailableTimelineDate() -> Date?

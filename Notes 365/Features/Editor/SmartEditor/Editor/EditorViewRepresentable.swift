@@ -18,26 +18,13 @@ struct EditorViewRepresentable: UIViewRepresentable {
     var width: CGFloat = 0
     var editorType = EditorType.smart
     var isConfigured = false
-//    @Binding var height: CGFloat
-    
-    fileprivate func calculateHeight(_ attrStr: NSAttributedString?, width: CGFloat) -> CGFloat {
-        guard let attrStr = attrStr else {
-            return 100
-        }
-        let rect = attrStr.boundingRect(with: CGSize(width: width - 90, height: 10000), options: [.usesLineFragmentOrigin], context: nil)
-        return ceil(rect.size.height) + 50
-//        return rect.height + 50
-    }
-    
+
     func makeUIView(context: Context) -> UIEditorView {
 //        logger.debug("\(#function)")
 //        logger.debug("\(text)")
         if isConfigured {
             return editorView
         }
-//        print(#function)
-//        editorView.width = width
-//        editorView.theme = theme
         editorView.editorType = editorType
         editorView.textView.delegate = context.coordinator
         editorView.textView.font = theme.font
@@ -57,25 +44,17 @@ struct EditorViewRepresentable: UIViewRepresentable {
         // set content
         editorView.textView.text = text
 
-//        editorView.textView.isEditable = isEditable
-        
         if isEditor {
             editorView.setAsEditor(isEditable: isEditable)
         } else {
             editorView.setAsReadOnly()
-            // calc height
-//            DispatchQueue.main.async {
-//                height = calculateHeight(editorView.textView.attributedText, width: width)
-//                print("calc: ", width, height)
-//                print("content size: ", editorView.textView.contentSize)
-//            }
         }
         
         return editorView
     }
     
     func updateUIView(_ editorView: UIEditorView, context: Context) {
-//        print(#function)
+        logger.debug("\(#function)")
     }
     
     typealias NSViewType = UIEditorView
@@ -114,13 +93,16 @@ extension EditorUICoordinator: UITextViewDelegate {
 
 struct ReadOnlyMarkDownView: View {
     @State var editorView = UIEditorView()
-    var content: String?
+    @Binding var content: String?
     @Binding var width: CGFloat
     @State var height: CGFloat = 100
+    
+    @State var editedDate: Date? = DateTime.now()
+    
     var body: some View {
         EditorViewRepresentable(text: content ?? "no content",
                      editorView: editorView,
-                     contentEditedDate: Binding.constant(DateTime.now()),
+                     contentEditedDate: $editedDate,
                      isEditable: false,
                      isEditor: false
         )
@@ -133,6 +115,11 @@ struct ReadOnlyMarkDownView: View {
         }
         .onChange(of: ThemeState.shared.theme) { oldValue, newValue in
             updateHeight()
+        }
+        .onChange(of: content) { oldValue, newValue in
+//            editedDate = DateTime.now()
+            logger.debug("\(newValue ?? "")")
+            editorView.textView.text = newValue ?? ""
         }
     }
     
@@ -173,3 +160,5 @@ extension NSAttributedString {
         return ceil(rect.size.width)
     }
 }
+
+

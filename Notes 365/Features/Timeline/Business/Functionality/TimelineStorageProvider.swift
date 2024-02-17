@@ -9,6 +9,7 @@ import Foundation
 
 protocol TimelineStorageProvider {
     func fetchDayTimelineRecords(for date: Date) throws -> [TimelineB]
+    func fetchDayTimelineContent(for id: String) throws -> TimelineB?
     func save(dayNotebookChange: TimelineB) throws
     func getFirstAvailableTimelineDate() throws -> Date?
     func delete(dayNotebookChangeId: String) throws

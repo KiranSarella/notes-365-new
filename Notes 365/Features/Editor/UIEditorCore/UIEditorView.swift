@@ -56,9 +56,6 @@ public class UIEditorView: UIView {
     var cancellables: Set<AnyCancellable> = []
     
     private var notificationQueue = DispatchQueue(label: "notification.queue", qos: .userInitiated)
-
-
-    
     
     func observeThemeChanges() {
         NotificationCenter.default
@@ -188,16 +185,5 @@ extension UIEditorView {
 //        }
     }
 }
-
-
-// text view delegate
-
-//extension EditorView: UITextViewDelegate {
-//    
-////    public func textViewDidChangeSelection(_ textView: UITextView) {
-////        
-////    }
-//}
-
 
 

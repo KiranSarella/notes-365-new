@@ -20,7 +20,7 @@ struct SingleDayView: View {
     var body: some View {
         VStack(spacing: 0) {
             DayHeaderView(date: dayTimelines.date)
-            SingleDayChangesListView(timelines: dayTimelines.timelines, discardTimeline: $discardTimeline, openTimeline: $openTimeline, geometryProxy: geometryProxy, width: $width)
+            SingleDayChangesListView(timelines: $dayTimelines.timelines, discardTimeline: $discardTimeline, openTimeline: $openTimeline, geometryProxy: geometryProxy, width: $width)
 //                .background(Color("editor_background", bundle: nil))
         }
 //        .onAppear(perform: {
@@ -106,7 +106,7 @@ class SingleDayTimelinesListState {
 }
 
 struct SingleDayChangesListView: View {
-    var timelines: [Timeline]
+    @Binding var timelines: [Timeline]
     @Binding var discardTimeline: Timeline?
     @Binding var openTimeline: Timeline?
     var geometryProxy: GeometryProxy
@@ -116,7 +116,7 @@ struct SingleDayChangesListView: View {
     var body: some View {
             // each note change content list
         VStack {
-            ForEach(timelines) { noteChange in
+            ForEach($timelines) { $noteChange in
                 VStack {
                     if noteChange.isFirst {
                         DayHeaderView(date: noteChange.date)
@@ -159,9 +159,12 @@ struct SingleDayChangesListView: View {
 //                        .lineSpacing(EditorSettings.lineSpacing)
 //                    }
                     
+                    
+//                    SmartViewerRepresentable(content: $noteChange.content, width: $width)
+//                        .frame(width: 500, height: 500)
                  
-                        ReadOnlyMarkDownView(content: noteChange.content, width: $width)
-                            .padding(.bottom)
+                        ReadOnlyMarkDownView(content: $noteChange.content, width: $width)
+                        .padding(.bottom)
                         .listRowSeparator(.hidden)
                         .textSelection(.enabled)
                         .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working

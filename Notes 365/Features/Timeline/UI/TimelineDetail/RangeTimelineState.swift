@@ -57,6 +57,7 @@ class RangeTimelineState {
     // better to get accurate value based on theme font size
     
     var blockOtherRequests = false
+    var openTimeline: Timeline?
     
     func startloading(days: [Date]) {
         logger.info("startLoadingDays - \(days)")
@@ -280,6 +281,18 @@ class RangeTimelineState {
         }
     }
     
+    fileprivate func setNextAsFirstDayIfSameDay(_ index: Array<Timeline>.Index, _ date: Date) {
+        // set next as first if same day
+        if dayTimelineModels[index].isFirst {
+            let nextIndex = index + 1
+            if nextIndex < dayTimelineModels.count {
+                if dayTimelineModels[nextIndex].date == date {
+                    dayTimelineModels[nextIndex].setAsFirst()
+                }
+            }
+        }
+    }
+    
     func discardTimelineChanges(info: Timeline) {
         logger.info("\(#function)")
         do {
@@ -287,15 +300,7 @@ class RangeTimelineState {
             // remove from UI
             guard let index = dayTimelineModels.firstIndex(where: { $0.id == info.id }) else { return }
             
-            // set next as first if same day
-            if dayTimelineModels[index].isFirst {
-                let nextIndex = index + 1
-                if nextIndex < dayTimelineModels.count {
-                    if dayTimelineModels[nextIndex].date == info.date {
-                        dayTimelineModels[nextIndex].setAsFirst()
-                    }
-                }
-            }
+            setNextAsFirstDayIfSameDay(index, info.date)
             
             dayTimelineModels.remove(at: index)
             
@@ -307,6 +312,35 @@ class RangeTimelineState {
         } catch let error {
             logger.error("\(error)")
         }
+    }
+    
+    func refreshOpenedTimelineContent() {
+        guard let openTimeline = openTimeline else { return }
+        // if today
+        if !openTimeline.date.isToday {
+            self.openTimeline = nil
+            return
+        }
+        
+        guard let index = dayTimelineModels.firstIndex(where: { $0.id == openTimeline.id }) else { return }
+        logger.debug("\(#function)")
+        
+        do {
+            if let newChanges = try timelineBusiness.fetchDayTimelineNoteChanges(id: openTimeline.id) {
+                dayTimelineModels[index].content = newChanges.content
+            } else {
+                // no record
+                setNextAsFirstDayIfSameDay(index, openTimeline.date)
+                dayTimelineModels.remove(at: index)
+            }
+        } catch {
+            logger.error("\(error)")
+            // no record found
+            setNextAsFirstDayIfSameDay(index, openTimeline.date)
+            dayTimelineModels.remove(at: index)
+        }
+        // deselect
+        self.openTimeline = nil
     }
     
 }

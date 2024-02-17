@@ -24,6 +24,11 @@ class TimelineBusiness {
         return try storage.fetchDayTimelineRecords(for: date)
     }
     
+    func fetchDayTimelineNoteChanges(id: String) throws -> TimelineB? {
+        logger.info("\(#function)")
+        return try storage.fetchDayTimelineContent(for: id)
+    }
+    
     func save(dayNotebookChange: TimelineB) {
         logger.info("\(#function)")
         do {
