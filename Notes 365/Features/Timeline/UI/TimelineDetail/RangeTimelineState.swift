@@ -255,7 +255,6 @@ class RangeTimelineState {
         logger.debug("load day: \(date)")
         var timelines = [Timeline]()
         do {
-            //            await NotebooksPathService.shared.refreshNotebooksInfo()
             let results = try timelineBusiness.fetchDayTimelineNoteChanges(date: date)
             for result in results {
                 let r = await result.getTimeline(date: date)

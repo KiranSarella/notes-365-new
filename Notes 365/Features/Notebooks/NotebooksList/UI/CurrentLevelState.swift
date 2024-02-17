@@ -70,6 +70,7 @@ class CurrentLevelState {
     }
     
     func loadItems(for parent: Notebook?) {
+        logger.debug("\(#function)")
         self.parent = parent
         do {
             let items = try notebooksBusiness.fetchItems(at: parent?.id)

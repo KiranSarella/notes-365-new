@@ -31,34 +31,75 @@ class NotebooksPathService {
     var foldersPathsCache = [UUID: String]()
     var filesPathsCache = [UUID: String]()
     
-    private(set) var isLoaded = false
+    private(set) var isRefreshing = false
     var cloudSyncFinishedObserver: NSObjectProtocol?
     
+    var isEmpty: Bool {
+        foldersPathInfo.isEmpty && filesPathInfo.isEmpty
+    }
+    
+    var observingServices = false
+    
+    var lastRefreshTime: Date?
     
     private init() {
+        
+    }
+    
+    
+    
+    func startObservingServices() {
+        
+        if observingServices {
+            return
+        }
+        
+        observingServices = true
+        
         observeNotebookRenamed()
         observeNotebookInserted()
         observeNotebookMoved()
         observeCloudFinished()
     }
     
-    deinit {
+    func stopObservingServices() {
+        
+        if observingServices == false {
+            return
+        }
+
+        observingServices = false
+        
         removeNotebookRenamedObserver()
         removeNotebookMovedObserver()
         removeNotebookInsertedObserver()
     }
     
-    func refreshOnNextService() {
-        isLoaded = false
+    deinit {
+        stopObservingServices()
+    }
+    
+    func doRefresh() {
+        if isRefreshing { return }
+        Task {
+            await refreshNotebooksInfo()
+        }
+    }
+    
+    func doRefreshIfNotLoaded() async {
+        if isEmpty && isRefreshing == false {
+            await refreshNotebooksInfo()
+        }
     }
     
     func refreshNotebooksInfo() async {
-        if isLoaded {
-            return
-        }
+        logger.debug("\(#function)")
+        isRefreshing = true
+        lastRefreshTime = DateTime.now()
         resetInfoObjects()
         await updateNotebooksInfo()
-        isLoaded = true
+        isRefreshing = false
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
     }
     
     func resetInfoObjects() {
@@ -88,12 +129,17 @@ class NotebooksPathService {
         if let name = filesPathInfo[notebookId]?.name {
             return name
         } else {
-            isLoaded = false
+//            isLoaded = false
             return nil
         }
     }
     
-    func folderFullPath(for notebookId: UUID) -> String? {
+    func folderFullPath(for notebookId: UUID) async -> String? {
+        
+        if isRefreshing {
+            try? await Task.sleep(nanoseconds: 1_000_000_000)
+        }
+        
         if let fullPathInfo = foldersPathsCache[notebookId] {
             logger.debug("cached - \(fullPathInfo)")
             return fullPathInfo
@@ -107,7 +153,33 @@ class NotebooksPathService {
         }
     }
     
-    func fullPath(for notebookId: UUID) -> String? {
+//    func fullPath(for notebookId: UUID) async -> String? {
+//        return await withCheckedContinuation { c in
+//            if isLoaded == false {
+//                
+//                try? await Task.sleep(nanoseconds: 1_000_000_000)
+//            }
+//            
+//            if let fullPathInfo = filesPathsCache[notebookId] {
+//                logger.debug("cached - \(fullPathInfo)")
+//                c.resume(returning: fullPathInfo)
+//            } else {
+//                let newPath = generateFullPath(notebookId: notebookId)
+//                if let newPath = newPath {
+//                    filesPathsCache[notebookId] = newPath
+//                }
+//                logger.debug("generated - \(newPath ?? "")")
+//                c.resume(returning: newPath)
+//            }
+//        }
+//    }
+    
+    func fileFullPath(for notebookId: UUID) async -> String? {
+        
+        if isRefreshing {
+            try? await Task.sleep(nanoseconds: 1_000_000_000)
+        }
+        
         if let fullPathInfo = filesPathsCache[notebookId] {
             logger.debug("cached - \(fullPathInfo)")
             return fullPathInfo
@@ -120,7 +192,22 @@ class NotebooksPathService {
             return newPath
         }
     }
+
     
+//    func fullPath(for notebookId: UUID) -> String? {
+//        if let fullPathInfo = filesPathsCache[notebookId] {
+//            logger.debug("cached - \(fullPathInfo)")
+//            return fullPathInfo
+//        } else {
+//            let newPath = generateFullPath(notebookId: notebookId)
+//            if let newPath = newPath {
+//                filesPathsCache[notebookId] = newPath
+//            }
+//            logger.debug("generated - \(newPath ?? "")")
+//            return newPath
+//        }
+//    }
+//    
     private func generateFolderFullPath(notebookId: UUID) -> String? {
         if let filePathInfo = self.foldersPathInfo[notebookId] {
             var pathComponents = [String]()
@@ -287,7 +374,17 @@ extension NotebooksPathService {
     
     func observeCloudFinished() {
         cloudSyncFinishedObserver = NotificationCenter.default.addObserver(forName: .icloudSyncFinished, object: nil, queue: .main) { [weak self] notification in
-            self?.isLoaded = false
+            
+            if let lastRefreshTime = self?.lastRefreshTime {
+                
+                guard let minutes = Calendar.current.dateComponents([.minute], from: lastRefreshTime, to: DateTime.now()).minute else { return }
+                if minutes > 1 {
+                    self?.doRefresh()
+                }
+                
+            } else {
+                self?.doRefresh()
+            }
         }
     }
 }

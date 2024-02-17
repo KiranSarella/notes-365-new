@@ -244,9 +244,9 @@ struct FolderCellView: View {
         onHover || notebook.isNewlyCreated
     }
     
-    var notebookPath: String {
-        return NotebooksPathService.shared.fullPath(for: notebook.id) ?? ""
-    }
+//    var notebookPath: String {
+//        return NotebooksPathService.shared.fullPath(for: notebook.id) ?? ""
+//    }
     
     var body: some View {
         VStack {
@@ -385,9 +385,9 @@ struct FileCellView: View {
         onHover || notebook.isNewlyCreated
     }
     
-    var notebookPath: String {
-        return NotebooksPathService.shared.fullPath(for: notebook.id) ?? ""
-    }
+//    var notebookPath: String {
+//        return NotebooksPathService.shared.fullPath(for: notebook.id) ?? ""
+//    }
     
     var body: some View {
         VStack {
@@ -519,9 +519,7 @@ struct SearchFolderCellView: View {
         onHover || notebook.isNewlyCreated
     }
     
-    var notebookPath: String {
-        return NotebooksPathService.shared.folderFullPath(for: notebook.id) ?? ""
-    }
+    @State var notebookPath: String = ""
     
     var body: some View {
         VStack {
@@ -556,6 +554,9 @@ struct SearchFolderCellView: View {
                 .padding(.horizontal, 8)
             }
         }
+        .task {
+            notebookPath = await NotebooksPathService.shared.folderFullPath(for: notebook.id) ?? ""
+        }
 #if targetEnvironment(macCatalyst)
         .onHover { newValue in
             onHover = newValue
@@ -574,9 +575,7 @@ struct SearchFileCellView: View {
         onHover || notebook.isNewlyCreated
     }
     
-    var notebookPath: String {
-        return NotebooksPathService.shared.fullPath(for: notebook.id) ?? ""
-    }
+    @State private var notebookPath: String = ""
     
     var body: some View {
         VStack {
@@ -594,6 +593,9 @@ struct SearchFileCellView: View {
                     .font(.caption)
                 Spacer()
             }
+        }
+        .task {
+            notebookPath = await NotebooksPathService.shared.fileFullPath(for: notebook.id) ?? ""
         }
 #if targetEnvironment(macCatalyst)
         .onHover { newValue in

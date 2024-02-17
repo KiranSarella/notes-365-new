@@ -65,6 +65,7 @@ struct ThemesBaseView: View {
             }
         }
         .onAppear {
+            logger.debug("onAppear - ThemeBaseView")
             switch colorScheme {
             case .light:
                 appearanceType = .light

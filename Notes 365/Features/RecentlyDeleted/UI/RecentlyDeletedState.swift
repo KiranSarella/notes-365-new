@@ -17,6 +17,7 @@ class RecentlyDeletedState {
     let business: NotebooksRequester = BusinessFactory.createNotebooksFactory()
     
     func loadRecentlyDeleted() {
+        logger.debug("\(#function)")
         do {
             let items = try business.fetchDeletedNotebooks()
             let notebooks = items.map { $0.notebook() }

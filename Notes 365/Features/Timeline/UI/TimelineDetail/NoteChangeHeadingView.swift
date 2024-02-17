@@ -14,11 +14,7 @@ struct NoteChangeHeadingView: View {
     @State var fullPath: String?
     @Binding var discardTimeline: Timeline?
     @Binding var openTimeline: Timeline?
-    
-    func getFullPath() {
-        fullPath = NotebooksPathService.shared.fullPath(for: noteChange.fileUUID)
-    }
-    
+   
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
@@ -62,10 +58,8 @@ struct NoteChangeHeadingView: View {
         .onHover { subscriptionStatus in
             isFocused = subscriptionStatus
         }
-        .onAppear {
-            if fullPath == nil {
-                getFullPath()
-            }
+        .task {
+            fullPath = await NotebooksPathService.shared.fileFullPath(for: noteChange.fileUUID)
         }
     }
 }

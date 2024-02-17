@@ -24,7 +24,7 @@ struct ContentView: View {
     @State private var showFormattingSymbols = false
     @State private var showPurchases = false
     @State private var showFeedback = false
-    @State private var sidebarItemSelected: SidebarItem.ID? = SidebarItem.timeline.id
+    @State private var sidebarItemSelected: SidebarItem.ID?// = SidebarItem.timeline.id
     @State private var selectedNotebookM: Notebook?
     @State var navigationSplitViewVisibility = NavigationSplitViewVisibility.all
     var todayVersionBusiness = BusinessFactory.dayVersionInteractor()
@@ -34,6 +34,9 @@ struct ContentView: View {
     let cloudKitSync = CloudKitSync()
     
     let iconWidth: CGFloat = 18
+    
+    @State var isFirstTimeAppeared = false
+    @State var isFirstTimeTask = false
     
     var body: some View {
         NavigationSplitView(columnVisibility: $navigationSplitViewVisibility) {
@@ -131,9 +134,32 @@ struct ContentView: View {
                 }
                 .navigationTitle("Notes 365")
                 .onAppear {
-                    BusinessFactory.dayVersionInteractor().setupDayVersionCreationProcess()
-                    BusinessFactory.timelineInteractor().setupTimeineCreationProcess()
-                    BusinessFactory.recentsInteractor().setupRecentsAddingProcess()
+                    if isFirstTimeAppeared == false {
+                        isFirstTimeAppeared = true
+                        BusinessFactory.dayVersionInteractor().setupDayVersionCreationProcess()
+                        BusinessFactory.timelineInteractor().setupTimeineCreationProcess()
+                        BusinessFactory.recentsInteractor().setupRecentsAddingProcess()
+                        
+                        ThemeState.shared.updateColorScheme(colorScheme)
+                        
+                        // start service
+                        NotebooksPathService.shared.startObservingServices()
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+                            BusinessFactory.createNotebooksFactory().permanentDeleteExpiredItems()
+                        }
+                        
+//                        Task {
+//                            await NotebooksPathService.shared.refreshNotebooksInfo()
+//                        }
+                        
+//                        Task {
+//                            
+//                            
+//                        }
+                        
+                        
+                    }
                 }
                 .task {
                     logger.info("Starting tasks to observe transaction updates")
@@ -146,9 +172,6 @@ struct ContentView: View {
                     // refresh premium status
                     await PremiumUserState.shared.refreshPurchasedProducts()
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-                        BusinessFactory.createNotebooksFactory().permanentDeleteExpiredItems()
-                    }
                 }
                 .sheet(isPresented: $showThemes) {
                     ThemesBaseView()
@@ -162,36 +185,51 @@ struct ContentView: View {
                 .sheet(isPresented: $showFeedback) {
                     FeedbackView()
                 }
-                .onAppear {
-                    ThemeState.shared.updateColorScheme(colorScheme)
-                }
                 .onChange(of: colorScheme, { oldValue, newValue in
                     if ThemeState.shared.colorScheme != newValue {
                         ThemeState.shared.updateColorScheme(newValue)
                     }
                 })
-                .onChange(of: sidebarItemSelected) { oldValue, newValue in
-                    if newValue == SidebarItem.timeline.rawValue {
-                        path = NavigationPath()
-                    }
-                }
+//                .onChange(of: sidebarItemSelected) { oldValue, newValue in
+//                    if newValue == SidebarItem.timeline.rawValue {
+//                        path = NavigationPath()
+//                    }
+//                }
             }
             
         }
         detail: {
-            let selectedItem = SidebarItem(rawValue: sidebarItemSelected ?? SidebarItem.timeline.id)!
-            switch selectedItem {
-            case .timeline:
-                TimelineBaseView(path: $path, state: $timelineDetailState, horizontalCalendarViewState: $horizontalCalendarViewState)
-            case .notebooks:
-                NotebooksBaseDetailView(path: $path)
-            case .search:
-                ContentSearchView()
-            case .recents:
-                RecentsBaseDetailView(path: $path)
-            case .recentlyDeleted:
-                RecentlyDeletedBaseDetailView(path: $path)
+            if let sidebarItemSelected = sidebarItemSelected {
+                let selectedItem = SidebarItem(rawValue: sidebarItemSelected)!
+                switch selectedItem {
+                case .timeline:
+                    TimelineBaseView(path: $path, state: $timelineDetailState, horizontalCalendarViewState: $horizontalCalendarViewState)
+                case .notebooks:
+                    NotebooksBaseDetailView(path: $path)
+                case .search:
+                    ContentSearchView()
+                case .recents:
+                    RecentsBaseDetailView(path: $path)
+                case .recentlyDeleted:
+                    RecentlyDeletedBaseDetailView(path: $path)
+                }
+            } else {
+                EmptyView()
             }
+            
+//            let selectedItem = SidebarItem(rawValue: sidebarItemSelected ?? SidebarItem.timeline.id)!
+//            switch selectedItem {
+//            case .timeline:
+//                TimelineBaseView(path: $path, state: $timelineDetailState, horizontalCalendarViewState: $horizontalCalendarViewState)
+//            case .notebooks:
+//                NotebooksBaseDetailView(path: $path)
+//            case .search:
+//                ContentSearchView()
+//            case .recents:
+//                RecentsBaseDetailView(path: $path)
+//            case .recentlyDeleted:
+//                RecentlyDeletedBaseDetailView(path: $path)
+//            }
         }
     }
 }
@@ -232,3 +270,34 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
+
+struct ContentDetailView: View {
+    
+    @Binding var sidebarItemSelected: SidebarItem.ID?
+    @Binding var path: NavigationPath
+    
+    var body: some View {
+        
+        if let sidebarItemSelected = sidebarItemSelected {
+            let selectedItem = SidebarItem(rawValue: sidebarItemSelected)!
+            switch selectedItem {
+            case .timeline:
+    //            TimelineBaseView(path: $path, state: $timelineDetailState, horizontalCalendarViewState: $horizontalCalendarViewState)
+                Text("Timeoine")
+            case .notebooks:
+                NotebooksBaseDetailView(path: $path)
+            case .search:
+                ContentSearchView()
+            case .recents:
+                RecentsBaseDetailView(path: $path)
+            case .recentlyDeleted:
+                RecentlyDeletedBaseDetailView(path: $path)
+            }
+        } else {
+            EmptyView()
+        }
+        
+//        let selectedItem = SidebarItem(rawValue: sidebarItemSelected ?? SidebarItem.timeline.id)!
+        
+    }
+}
