@@ -16,8 +16,6 @@
 [ ] in different bg, code block is not visible
 [ ] replace matched options are showing?
 
-[-] check Path() - timeline commented - any impact
-
 
 # Completed
 [x] headings font - bold not working on switch disabled.

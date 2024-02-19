@@ -34,12 +34,15 @@ struct NoteChangeHeadingView: View {
             Spacer()
             // discard button
             if isFocused {
-                Button {
-                    logger.debug("openTimeline - button action")
-                    openTimeline = noteChange
-                } label: {
-                    Text("Open")
+                if !noteChange.fileName.isEmpty {
+                    Button {
+    //                    logger.debug("openTimeline - button action")
+                        openTimeline = noteChange
+                    } label: {
+                        Text("Open")
+                    }
                 }
+                
                 Button {
                     discardTimeline = noteChange
                 } label: {

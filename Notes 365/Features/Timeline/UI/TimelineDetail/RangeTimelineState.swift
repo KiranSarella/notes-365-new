@@ -53,7 +53,7 @@ class RangeTimelineState {
     //    var scrolledTimelineID: Timeline.ID?
     var displayedContentLength: Int = 0
     
-    let initialLoadCount: Int = 10000 // safe side keeping more.
+    let initialLoadCount: Int = 8000 // safe side keeping more.
     // better to get accurate value based on theme font size
     
     var blockOtherRequests = false
@@ -83,7 +83,7 @@ class RangeTimelineState {
     
     var isContentFilledToScrollable: Bool {
         logger.debug("contentLength: \(self.displayedContentLength)")
-        return displayedContentLength > 10000
+        return displayedContentLength > initialLoadCount
     }
     
     
@@ -153,9 +153,11 @@ class RangeTimelineState {
                 
                 if isContentFilledToScrollable == false {
                     displayedContentLength += timeline.content?.count ?? 0
+                    if Task.isCancelled {
+                        return
+                    }
                     loadNext()
                 }
-                
             } else {
                 if Task.isCancelled {
                     blockOtherRequests = false
@@ -194,16 +196,24 @@ class RangeTimelineState {
                 blockOtherRequests = false
                 
                 if scrolledID == nil {
+                    // after first item
+                    displayedContentLength += timeline.content?.count ?? 0
+                    if Task.isCancelled {
+                        return
+                    }
                     scrolledID = timeline.id
+                } else {
+                    // from 2nd to scrollable limit
+                    if isContentFilledToScrollable == false {
+                        displayedContentLength += timeline.content?.count ?? 0
+                        if Task.isCancelled {
+                            return
+                        }
+                        loadNext()
+                    }
                 }
                 
-//                if isContentFilledToScrollable == false {
-//                    displayedContentLength += timeline.content?.count ?? 0
-//                    if Task.isCancelled {
-//                        return
-//                    }
-//                    loadNext()
-//                }
+
             } else {
                 // auto try next day
                 blockOtherRequests = false

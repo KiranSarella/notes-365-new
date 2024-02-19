@@ -112,6 +112,7 @@ struct SingleDayChangesListView: View {
     var geometryProxy: GeometryProxy
     @Binding var width: CGFloat
 //    @State var state = SingleDayTimelinesListState()
+  
     
     var body: some View {
             // each note change content list
@@ -125,10 +126,12 @@ struct SingleDayChangesListView: View {
                         NoteChangeHeadingView(noteChange: noteChange, discardTimeline: $discardTimeline, openTimeline: $openTimeline)
 #if !targetEnvironment(macCatalyst)
                             .swipeActions(edge: .trailing) {
-                                Button {
-                                    openTimeline = noteChange
-                                } label: {
-                                    Text("Open")
+                                if !noteChange.fileName.isEmpty {
+                                    Button {
+                                        openTimeline = noteChange
+                                    } label: {
+                                        Text("Open")
+                                    }
                                 }
                                 Button(role: .destructive) {
                                     discardTimeline = noteChange
