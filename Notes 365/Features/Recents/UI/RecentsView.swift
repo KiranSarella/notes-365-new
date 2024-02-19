@@ -17,8 +17,10 @@ struct RecentsBaseDetailView: View {
     }
 }
 
-struct RecentNotebook: Hashable {
+struct RecentNotebook: Identifiable, Hashable {
+    let id: UUID
     let notebook: Notebook
+    var notebookPath: String = ""
 }
 
 fileprivate struct RecentsView: View {
@@ -27,6 +29,7 @@ fileprivate struct RecentsView: View {
     @Binding var path: NavigationPath
     @State private var notebookContentState = NotebookContentState(business: BusinessFactory.createNotebookContentBusinessFactory())
 //    var parent: Notebook?
+//    @State var selection: RecentNotebook?
     
     var body: some View {
         VStack {
@@ -73,9 +76,9 @@ fileprivate struct RecentsView: View {
     
     private var folderSection: some View {
         Section {
-            ForEach(state.folders) { folder in
-                NavigationLink(value: RecentNotebook(notebook: folder)) {
-                    SearchFolderCellView(notebook: folder)
+            ForEach($state.folders) { $folder in
+                NavigationLink(value: folder) {
+                    RecentFolderCellView(item: $folder)
                 }
             }
         }
@@ -83,9 +86,9 @@ fileprivate struct RecentsView: View {
     
     private var fileSection: some View {
         Section {
-            ForEach(state.files) { file in
-                NavigationLink(value: RecentNotebook(notebook: file)) {
-                    SearchFileCellView(notebook: file)
+            ForEach($state.files) { $file in
+                NavigationLink(value: file) {
+                    RecentFileCellView(item: $file)
                 }
             }
         }
@@ -93,32 +96,97 @@ fileprivate struct RecentsView: View {
     
 }
 
+private struct RecentFolderCellView: View {
+    @Binding var item: RecentNotebook
+    @FocusState private var isFocused: Bool
+    @State private var onHover = false
+    
+    var highlightText: Bool {
+        onHover
+    }
+    
+    var body: some View {
+        VStack {
+            HStack {
+                VStack {
+                    Image(systemName: "folder")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 32)
+                        .fontWeight(highlightText ? .bold : .regular)
+                        .foregroundStyle(.tint)
+                }
+                
+                VStack {
+                    VStack {
+                        HStack {
+                            Text(item.notebook.name)
+                                .id(item.id)
+                                .fontWeight(highlightText ? .heavy : .semibold)
+                            Spacer()
+                        }
+                        .padding(.vertical, 2)
+                        
+                        HStack {
+                            Text(item.notebookPath)
+                                .font(.caption)
+                            Spacer()
+                        }
+                        
+                    }
+                }
+                .padding(.horizontal, 8)
+            }
+        }
+        .task {
+            if item.notebookPath.isEmpty {
+                item.notebookPath = await NotebooksPathService.shared.folderFullPath(for: item.id) ?? ""
+            }
+        }
+#if targetEnvironment(macCatalyst)
+        .onHover { newValue in
+            onHover = newValue
+        }
+#endif
+    }
+}
 
-//fileprivate struct RecentFolderCellView: View {
-//    let name: String
-//    let notebook: Notebook
-//    
-//    var notebookPath: String {
-//        return NotebooksPathService.shared.folderFullPath(for: notebook.id) ?? ""
-//    }
-//    
-//    var body: some View {
-//        VStack {
-//            Label(notebook.name, systemImage: "folder")
-//        }
-//    }
-//}
-//
-//
-//fileprivate struct RecentFileCellView: View {
-//    let name: String
-//    let notebook: Notebook
-//    
-//    var body: some View {
-//        VStack {
-////            Text("\(notebook.name) \(notebook.modifiedDate.string(format: "mm-dd-yy hh:mm:ss"))")
-//            Text(notebook.name)
-//                .foregroundStyle(Color.primary)
-//        }
-//    }
-//}
+
+private struct RecentFileCellView: View {
+    @Binding var item: RecentNotebook
+    @FocusState private var isFocused: Bool
+    @State private var onHover = false
+    
+    var highlightText: Bool {
+        onHover
+    }
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Text(item.notebook.name)
+                    .id(item.id)
+                    .fontWeight(highlightText ? .heavy : .semibold)
+                    .foregroundStyle(Color.primary)
+                Spacer()
+            }
+            .padding(.vertical, 2)
+            
+            HStack {
+                Text(item.notebookPath)
+                    .font(.caption)
+                Spacer()
+            }
+        }
+        .task {
+            if item.notebookPath.isEmpty {
+                item.notebookPath = await NotebooksPathService.shared.fileFullPath(for: item.id) ?? ""
+            }
+        }
+#if targetEnvironment(macCatalyst)
+        .onHover { newValue in
+            onHover = newValue
+        }
+#endif
+    }
+}

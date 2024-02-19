@@ -112,7 +112,7 @@ fileprivate struct RecentlyDeletedView: View {
     private var folderSection: some View {
         Section {
             ForEach(state.folders) { folder in
-                NavigationLink(value: RecentNotebook(notebook: folder)) {
+                NavigationLink(value: folder) {
                     RecentlyDeletedFolderCellView(restoreSource: $restoreSource, name: folder.name, notebook: folder)
                 }
             }
@@ -122,7 +122,7 @@ fileprivate struct RecentlyDeletedView: View {
     private var fileSection: some View {
         Section {
             ForEach(state.files) { file in
-                NavigationLink(value: RecentNotebook(notebook: file)) {
+                NavigationLink(value: file) {
                     RecentlyDeletedFileCellView(restoreSource: $restoreSource, name: file.name, notebook: file)
                 }
             }

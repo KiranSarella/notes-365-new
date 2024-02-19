@@ -563,7 +563,9 @@ struct SearchFolderCellView: View {
             }
         }
         .task {
-            notebookPath = await NotebooksPathService.shared.folderFullPath(for: notebook.id) ?? ""
+            if notebookPath.isEmpty {
+                notebookPath = await NotebooksPathService.shared.folderFullPath(for: notebook.id) ?? ""
+            }
         }
 #if targetEnvironment(macCatalyst)
         .onHover { newValue in
@@ -603,7 +605,9 @@ struct SearchFileCellView: View {
             }
         }
         .task {
-            notebookPath = await NotebooksPathService.shared.fileFullPath(for: notebook.id) ?? ""
+            if notebookPath.isEmpty {
+                notebookPath = await NotebooksPathService.shared.fileFullPath(for: notebook.id) ?? ""
+            }
         }
 #if targetEnvironment(macCatalyst)
         .onHover { newValue in
