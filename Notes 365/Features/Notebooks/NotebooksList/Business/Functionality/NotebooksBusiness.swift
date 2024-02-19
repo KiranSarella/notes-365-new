@@ -12,6 +12,7 @@ public enum NotebookBusinessError: Error {
     case alreadyExists
     case invalidCharacters
     case invalidSelection
+    case empty
 }
 
 class NotebooksBusiness {
@@ -113,9 +114,15 @@ class NotebooksBusiness {
     }
     
     func rename(notebook: NotebookB, newValue: String, siblings: [NotebookB]) throws {
+        
+        if newValue.count == 0 {
+            throw NotebookBusinessError.empty
+        }
+        
         if isAlreadyFilenameExists(fileName: newValue, in: siblings) {
             throw NotebookBusinessError.alreadyExists
         }
+        
         notebook.name = newValue
         try notebook.update(in: storage)
         do { sendNotebookRenamed(notebook) }
@@ -242,7 +249,7 @@ extension NotebooksBusiness {
         do { sendNotebookMoved(notebook) }
     }
     
-    func permanentDeleteExpiredItems() {
+    func permanentDeleteExpiredItems() async {
         logger.info("\(#function)")
         do {
             guard let expiryDate = Calendar.current.date(byAdding: .day, value: -deleteExpiryLimit, to: DateTime().date) else { return }
@@ -256,7 +263,7 @@ extension NotebooksBusiness {
             // files
             for expiryItem in expiredItems {
                 if expiryItem.isFolder {
-                    let (files, folders) = NotebooksPathService.shared.getAllChildFilesAndFolders(folderId: expiryItem.id)
+                    let (files, folders) = await NotebooksPathService.shared.getAllChildFilesAndFolders(folderId: expiryItem.id)
                     fileIds.append(contentsOf: files)
                     folderIds.append(contentsOf: folders)
                 } else {

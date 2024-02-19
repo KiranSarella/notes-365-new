@@ -142,12 +142,30 @@ struct ContentView: View {
                         
                         ThemeState.shared.updateColorScheme(colorScheme)
                         
-                        // start service
-                        NotebooksPathService.shared.startObservingServices()
-                        
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-                            BusinessFactory.createNotebooksFactory().permanentDeleteExpiredItems()
+                        Task {
+                            // start service
+                            await NotebooksPathService.shared.startObservingServices()
+                            await NotebooksPathService.shared.refreshNotebooksInfo()
                         }
+                        
+                        Task {
+                            try? await Task.sleep(nanoseconds: 10_000_000_000)
+                            await BusinessFactory.createNotebooksFactory().permanentDeleteExpiredItems()
+                        }
+                        
+                        if UIDevice.current.userInterfaceIdiom != .phone {
+                            sidebarItemSelected = SidebarItem.timeline.id
+                        }
+                        
+                        
+                        Task {
+                            try? await Task.sleep(nanoseconds: 10_000_000_000)
+                            await BusinessFactory.createNotebooksFactory().permanentDeleteExpiredItems()
+                        }
+                        
+//                        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+//                            BusinessFactory.createNotebooksFactory().permanentDeleteExpiredItems()
+//                        }
                         
 //                        Task {
 //                            await NotebooksPathService.shared.refreshNotebooksInfo()
@@ -216,20 +234,6 @@ struct ContentView: View {
             } else {
                 EmptyView()
             }
-            
-//            let selectedItem = SidebarItem(rawValue: sidebarItemSelected ?? SidebarItem.timeline.id)!
-//            switch selectedItem {
-//            case .timeline:
-//                TimelineBaseView(path: $path, state: $timelineDetailState, horizontalCalendarViewState: $horizontalCalendarViewState)
-//            case .notebooks:
-//                NotebooksBaseDetailView(path: $path)
-//            case .search:
-//                ContentSearchView()
-//            case .recents:
-//                RecentsBaseDetailView(path: $path)
-//            case .recentlyDeleted:
-//                RecentlyDeletedBaseDetailView(path: $path)
-//            }
         }
     }
 }

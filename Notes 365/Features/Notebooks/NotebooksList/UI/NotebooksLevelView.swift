@@ -44,11 +44,11 @@ struct NotebooksLevelView: View {
                             emptyView
                         }
                         if currentLevelState.searchText.count > 1 {
-                            searchFolderSection
                             searchFileSection
+                            searchFolderSection
                         } else {
-                            folderSection
                             fileSection
+                            folderSection
                         }
                     }
                     .scrollDismissesKeyboard(.interactively)
@@ -66,8 +66,8 @@ struct NotebooksLevelView: View {
                         if currentLevelState.isEmpty {
                             emptyView
                         }
-                        folderSection
                         fileSection
+                        folderSection
                     }
                 }
             }
@@ -346,11 +346,15 @@ struct FolderCellView: View {
                 try currentLevelState.rename(for: notebook, newValue: name)
                 isEditing = false
             } catch NotebookBusinessError.alreadyExists {
-                errorMessage = "filename already exists"
+                errorMessage = "Name already exists"
                 showAlert = true
                 isEditing = true
             } catch NotebookBusinessError.invalidCharacters {
-                errorMessage = "filename contains unsupported characters"
+                errorMessage = "Name contains unsupported characters"
+                showAlert = true
+                isEditing = true
+            }  catch NotebookBusinessError.empty {
+                errorMessage = "Name should not be empty"
                 showAlert = true
                 isEditing = true
             } catch {
@@ -491,11 +495,15 @@ struct FileCellView: View {
                 try currentLevelState.rename(for: notebook, newValue: name)
                 isEditing = false
             } catch NotebookBusinessError.alreadyExists {
-                errorMessage = "filename already exists"
+                errorMessage = "Name already exists"
                 showAlert = true
                 isEditing = true
             } catch NotebookBusinessError.invalidCharacters {
-                errorMessage = "filename contains unsupported characters"
+                errorMessage = "Name contains unsupported characters"
+                showAlert = true
+                isEditing = true
+            } catch NotebookBusinessError.empty {
+                errorMessage = "Name should not be empty"
                 showAlert = true
                 isEditing = true
             } catch {

@@ -28,10 +28,12 @@ protocol NotebooksRequester {
     
     func fetchDeletedNotebooks() throws -> [NotebookB]
     func restore(notebook: NotebookB, to destinationId: UUID?) throws
-    func permanentDeleteExpiredItems()
+    func permanentDeleteExpiredItems() async
 }
 
-extension NotebooksBusiness: NotebooksRequester { }
+extension NotebooksBusiness: NotebooksRequester {
+    
+}
 
 extension Notification.Name {
     public static let notebookRenamed = Notification.Name("com.notes365.notebookRenamed")

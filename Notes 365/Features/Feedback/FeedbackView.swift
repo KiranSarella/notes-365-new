@@ -10,6 +10,7 @@ import MessageUI
 
 struct FeedbackView: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(\.requestReview) var requestReview
     @State var today = DateTime.now()
     let text = """
 Thank you for using Notes 365. Please share your feedback.
@@ -29,6 +30,18 @@ Thank you for using Notes 365. Please share your feedback.
                     Spacer()
                 }
                 .padding(.vertical)
+                
+                HStack {
+                    HStack {
+                        Image(systemName: "star")
+                    }
+                    Button("Review on the App Store") {
+                        requestReview()
+                    }
+                    Spacer()
+                }
+//                .padding(.vertical)
+                
                 Spacer()
             }
             .padding()

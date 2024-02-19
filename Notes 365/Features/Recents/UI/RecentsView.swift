@@ -34,8 +34,8 @@ fileprivate struct RecentsView: View {
                 if state.isEmpty {
                     emptyView
                 }
-                folderSection
                 fileSection
+                folderSection
             }
         }
         .navigationTitle(navigationTitle)

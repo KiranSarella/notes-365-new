@@ -169,13 +169,13 @@ class RangeTimelineState {
     
     private func fetchNextDayTimelines() {
         logger.debug("\(#function)")
-        // delay some time, to load next day
-        if remainingDaysToLoad.isEmpty {
-            updateStatusMessage()
-            blockOtherRequests = false
-            return
-        }
+        
         fetchNextDayTask = Task {
+            if remainingDaysToLoad.isEmpty {
+                updateStatusMessage()
+                blockOtherRequests = false
+                return
+            }
             currentLoadingDate = remainingDaysToLoad.removeFirst()
             let dayTimelines = await prepareTimelines(for: currentLoadingDate)
             if Task.isCancelled {

@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Combine
 
 struct LocationInfo: Hashable {
     let parentId: UUID?
@@ -19,7 +20,7 @@ struct FullPathInfo: Hashable {
     let fullPath: String
 }
 
-class NotebooksPathService {
+actor NotebooksPathService {
     static let shared = NotebooksPathService()
     let notebooksBusiness = BusinessFactory.createNotebooksFactory()
     
@@ -42,6 +43,11 @@ class NotebooksPathService {
     
     var lastRefreshTime: Date?
     
+    var renamedObserver: Cancellable?
+    var insertedObserver: Cancellable?
+    var movedObserver: Cancellable?
+    var cloudSyncFinishObserver: Cancellable?
+    
     private init() {
         
     }
@@ -49,7 +55,6 @@ class NotebooksPathService {
     
     
     func startObservingServices() {
-        
         if observingServices {
             return
         }
@@ -63,30 +68,44 @@ class NotebooksPathService {
     }
     
     func stopObservingServices() {
-        
         if observingServices == false {
             return
         }
 
         observingServices = false
         
-        removeNotebookRenamedObserver()
-        removeNotebookMovedObserver()
-        removeNotebookInsertedObserver()
+        renamedObserver?.cancel()
+        renamedObserver = nil
+        
+        insertedObserver?.cancel()
+        insertedObserver = nil
+        
+        movedObserver?.cancel()
+        movedObserver = nil
+        
+        cloudSyncFinishObserver?.cancel()
+        cloudSyncFinishObserver = nil
+        
+//        removeNotebookRenamedObserver()
+//        removeNotebookMovedObserver()
+//        removeNotebookInsertedObserver()
     }
     
     deinit {
-        stopObservingServices()
+//        stopObservingServices()
     }
+    
+    var refreshTask: Task<(), Never>?
     
     func doRefresh() {
         if isRefreshing { return }
-        Task {
+        refreshTask = Task {
             await refreshNotebooksInfo()
         }
     }
     
     func doRefreshIfNotLoaded() async {
+        logger.debug("\(#function)")
         if isEmpty && isRefreshing == false {
             await refreshNotebooksInfo()
         }
@@ -96,8 +115,9 @@ class NotebooksPathService {
         logger.debug("\(#function)")
         isRefreshing = true
         lastRefreshTime = DateTime.now()
+        logger.debug("lastRefreshTime: \(self.lastRefreshTime?.debugDescription ?? "")")
         resetInfoObjects()
-        await updateNotebooksInfo()
+        updateNotebooksInfo()
         isRefreshing = false
         try? await Task.sleep(nanoseconds: 1_000_000_000)
     }
@@ -109,21 +129,36 @@ class NotebooksPathService {
         filesInfoCache.removeAll()
     }
     
-    private func updateNotebooksInfo() async {
-        return await withCheckedContinuation { c in
-            let results = notebooksBusiness.getAllFilesInfo()
-            for result in results {
-                if result.isFolder {
-                    foldersPathInfo[result.id] = result.locationInfo()
-                    foldersInfoCache.insert(result)
-                } else {
-                    filesPathInfo[result.id] = result.locationInfo()
-                    filesInfoCache.insert(result)
-                }
+    private func updateNotebooksInfo() {
+        logger.debug("\(#function)")
+        let results = notebooksBusiness.getAllFilesInfo()
+        for result in results {
+            if result.isFolder {
+                foldersPathInfo[result.id] = result.locationInfo()
+                foldersInfoCache.insert(result)
+            } else {
+                filesPathInfo[result.id] = result.locationInfo()
+                filesInfoCache.insert(result)
             }
-            c.resume()
         }
     }
+    
+//    private func updateNotebooksInfo() async {
+//        return await withCheckedContinuation { c in
+//            logger.debug("\(#function)")
+//            let results = notebooksBusiness.getAllFilesInfo()
+//            for result in results {
+//                if result.isFolder {
+//                    foldersPathInfo[result.id] = result.locationInfo()
+//                    foldersInfoCache.insert(result)
+//                } else {
+//                    filesPathInfo[result.id] = result.locationInfo()
+//                    filesInfoCache.insert(result)
+//                }
+//            }
+//            c.resume()
+//        }
+//    }
     
     func fileName(for notebookId: UUID) -> String? {
         if let name = filesPathInfo[notebookId]?.name {
@@ -255,101 +290,169 @@ class NotebooksPathService {
 // MARK: - Handle Rename
 extension NotebooksPathService {
     func observeNotebookRenamed() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookRenamed(_:)), name: Notification.Name.notebookRenamed, object: nil)
-    }
-    
-    func removeNotebookRenamedObserver() {
-        NotificationCenter.default.removeObserver(self, name: Notification.Name.notebookRenamed, object: nil)
-    }
-    
-    @objc func handleNotebookRenamed(_ notification: Notification) {
-        guard
-            let notebookId = notification.userInfo?["notebook_id"] as? UUID,
-            let name = notification.userInfo?["name"] as? String,
-            let isFolder = notification.userInfo?["isFolder"] as? Bool
-        else { return }
-                
-        if isFolder {
-            if let info = foldersPathInfo[notebookId] {
-                foldersPathInfo[notebookId] = LocationInfo(parentId: info.parentId, name: name)
+//        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookRenamed(_:)), name: Notification.Name.notebookRenamed, object: nil)
+        
+        renamedObserver = NotificationCenter.default.publisher(for: Notification.Name.notebookInserted).sink { notification in
+            guard
+                let notebookId = notification.userInfo?["notebook_id"] as? UUID,
+                let name = notification.userInfo?["name"] as? String,
+                let isFolder = notification.userInfo?["isFolder"] as? Bool
+            else { return }
+                    
+            if isFolder {
+                if let info = self.foldersPathInfo[notebookId] {
+                    self.foldersPathInfo[notebookId] = LocationInfo(parentId: info.parentId, name: name)
+                }
+            } else {
+                if let info = self.filesPathInfo[notebookId] {
+                    self.filesPathInfo[notebookId] = LocationInfo(parentId: info.parentId, name: name)
+                }
             }
-        } else {
-            if let info = filesPathInfo[notebookId] {
-                filesPathInfo[notebookId] = LocationInfo(parentId: info.parentId, name: name)
-            }
+            self.invalidateCacheFullPath()
         }
-        invalidateCacheFullPath()
+        
     }
+    
+//    func removeNotebookRenamedObserver() {
+//        NotificationCenter.default.removeObserver(self, name: Notification.Name.notebookRenamed, object: nil)
+//    }
+//    
+//    @objc func handleNotebookRenamed(_ notification: Notification) async {
+//        guard
+//            let notebookId = notification.userInfo?["notebook_id"] as? UUID,
+//            let name = notification.userInfo?["name"] as? String,
+//            let isFolder = notification.userInfo?["isFolder"] as? Bool
+//        else { return }
+//                
+//        if isFolder {
+//            if let info = foldersPathInfo[notebookId] {
+//                foldersPathInfo[notebookId] = LocationInfo(parentId: info.parentId, name: name)
+//            }
+//        } else {
+//            if let info = filesPathInfo[notebookId] {
+//                filesPathInfo[notebookId] = LocationInfo(parentId: info.parentId, name: name)
+//            }
+//        }
+//        invalidateCacheFullPath()
+//    }
 }
 
 // MARK: - Handle Insert
 extension NotebooksPathService {
     func observeNotebookInserted() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookInserted(_:)), name: Notification.Name.notebookInserted, object: nil)
-    }
-    
-    func removeNotebookInsertedObserver() {
-        NotificationCenter.default.removeObserver(self, name: Notification.Name.notebookInserted, object: nil)
-    }
-    
-    @objc func handleNotebookInserted(_ notification: Notification) {
-        guard
-            let notebookId = notification.userInfo?["notebook_id"] as? UUID,
-            let name = notification.userInfo?["name"] as? String,
-            let isFolder = notification.userInfo?["isFolder"] as? Bool
-        else { return }
-                
-        let parentId = notification.userInfo?["parent_id"] as? UUID
-        
-        let notebookB = NotebookB(id: notebookId, name: name)
-        notebookB.isFolder = isFolder
-        notebookB.parentId = parentId
-        
-        if isFolder {
-            foldersPathInfo[notebookId] = LocationInfo(parentId: parentId, name: name)
-            foldersInfoCache.insert(notebookB)
-        } else {
-            filesPathInfo[notebookId] = LocationInfo(parentId: parentId, name: name)
-            filesInfoCache.insert(notebookB)
+        insertedObserver = NotificationCenter.default.publisher(for: Notification.Name.notebookInserted).sink { notification in
+            guard
+                let notebookId = notification.userInfo?["notebook_id"] as? UUID,
+                let name = notification.userInfo?["name"] as? String,
+                let isFolder = notification.userInfo?["isFolder"] as? Bool
+            else { return }
+                    
+            let parentId = notification.userInfo?["parent_id"] as? UUID
+            
+            let notebookB = NotebookB(id: notebookId, name: name)
+            notebookB.isFolder = isFolder
+            notebookB.parentId = parentId
+            
+            if isFolder {
+                self.foldersPathInfo[notebookId] = LocationInfo(parentId: parentId, name: name)
+                self.foldersInfoCache.insert(notebookB)
+            } else {
+                self.filesPathInfo[notebookId] = LocationInfo(parentId: parentId, name: name)
+                self.filesInfoCache.insert(notebookB)
+            }
+            self.invalidateCacheFullPath()
         }
-        invalidateCacheFullPath()
+//        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookInserted(_:)), name: Notification.Name.notebookInserted, object: nil)
     }
+    
+//    func removeNotebookInsertedObserver() {
+//        NotificationCenter.default.removeObserver(self, name: Notification.Name.notebookInserted, object: nil)
+//    }
+//    
+//    @objc func handleNotebookInserted(_ notification: Notification) async {
+//        guard
+//            let notebookId = notification.userInfo?["notebook_id"] as? UUID,
+//            let name = notification.userInfo?["name"] as? String,
+//            let isFolder = notification.userInfo?["isFolder"] as? Bool
+//        else { return }
+//                
+//        let parentId = notification.userInfo?["parent_id"] as? UUID
+//        
+//        let notebookB = NotebookB(id: notebookId, name: name)
+//        notebookB.isFolder = isFolder
+//        notebookB.parentId = parentId
+//        
+//        if isFolder {
+//            foldersPathInfo[notebookId] = LocationInfo(parentId: parentId, name: name)
+//            foldersInfoCache.insert(notebookB)
+//        } else {
+//            filesPathInfo[notebookId] = LocationInfo(parentId: parentId, name: name)
+//            filesInfoCache.insert(notebookB)
+//        }
+//        invalidateCacheFullPath()
+//    }
 }
 
 // MARK: - Handle move - using insert logic
 extension NotebooksPathService {
     func observeNotebookMoved() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookMoved(_:)), name: Notification.Name.notebooksMoved, object: nil)
+        
+        movedObserver = NotificationCenter.default.publisher(for: Notification.Name.notebookInserted).sink { notification in
+            guard
+                let notebookId = notification.userInfo?["notebook_id"] as? UUID,
+                let name = notification.userInfo?["name"] as? String,
+                let isFolder = notification.userInfo?["isFolder"] as? Bool
+            else { return }
+            
+            let parentId = notification.userInfo?["parent_id"] as? UUID
+            
+            let notebookB = NotebookB(id: notebookId, name: name)
+            notebookB.isFolder = isFolder
+            notebookB.parentId = parentId
+            
+            if isFolder {
+                self.foldersPathInfo[notebookId] = LocationInfo(parentId: parentId, name: name)
+                self.foldersInfoCache.remove(notebookB)
+                self.foldersInfoCache.insert(notebookB)
+            } else {
+                self.filesPathInfo[notebookId] = LocationInfo(parentId: parentId, name: name)
+                self.filesInfoCache.remove(notebookB)
+                self.filesInfoCache.insert(notebookB)
+            }
+            self.invalidateCacheFullPath()
+        }
+        
+//        NotificationCenter.default.addObserver(self, selector: #selector(handleNotebookMoved(_:)), name: Notification.Name.notebooksMoved, object: nil)
     }
 
-    func removeNotebookMovedObserver() {
-        NotificationCenter.default.removeObserver(self, name: Notification.Name.notebooksMoved, object: nil)
-    }
+//    func removeNotebookMovedObserver() {
+//        NotificationCenter.default.removeObserver(self, name: Notification.Name.notebooksMoved, object: nil)
+//    }
     
-    @objc func handleNotebookMoved(_ notification: Notification) {
-        guard
-            let notebookId = notification.userInfo?["notebook_id"] as? UUID,
-            let name = notification.userInfo?["name"] as? String,
-            let isFolder = notification.userInfo?["isFolder"] as? Bool
-        else { return }
-                
-        let parentId = notification.userInfo?["parent_id"] as? UUID
-        
-        let notebookB = NotebookB(id: notebookId, name: name)
-        notebookB.isFolder = isFolder
-        notebookB.parentId = parentId
-        
-        if isFolder {
-            foldersPathInfo[notebookId] = LocationInfo(parentId: parentId, name: name)
-            foldersInfoCache.remove(notebookB)
-            foldersInfoCache.insert(notebookB)
-        } else {
-            filesPathInfo[notebookId] = LocationInfo(parentId: parentId, name: name)
-            filesInfoCache.remove(notebookB)
-            filesInfoCache.insert(notebookB)
-        }
-        invalidateCacheFullPath()
-    }
+//    @objc func handleNotebookMoved(_ notification: Notification) async {
+//        guard
+//            let notebookId = notification.userInfo?["notebook_id"] as? UUID,
+//            let name = notification.userInfo?["name"] as? String,
+//            let isFolder = notification.userInfo?["isFolder"] as? Bool
+//        else { return }
+//                
+//        let parentId = notification.userInfo?["parent_id"] as? UUID
+//        
+//        let notebookB = NotebookB(id: notebookId, name: name)
+//        notebookB.isFolder = isFolder
+//        notebookB.parentId = parentId
+//        
+//        if isFolder {
+//            foldersPathInfo[notebookId] = LocationInfo(parentId: parentId, name: name)
+//            foldersInfoCache.remove(notebookB)
+//            foldersInfoCache.insert(notebookB)
+//        } else {
+//            filesPathInfo[notebookId] = LocationInfo(parentId: parentId, name: name)
+//            filesInfoCache.remove(notebookB)
+//            filesInfoCache.insert(notebookB)
+//        }
+//        invalidateCacheFullPath()
+//    }
 }
 
 extension NotebooksPathService {
@@ -373,17 +476,18 @@ extension NotebookB {
 extension NotebooksPathService {
     
     func observeCloudFinished() {
-        cloudSyncFinishedObserver = NotificationCenter.default.addObserver(forName: .icloudSyncFinished, object: nil, queue: .main) { [weak self] notification in
+        
+        cloudSyncFinishObserver = NotificationCenter.default.publisher(for: Notification.Name.notebookInserted).sink { notification in
             
-            if let lastRefreshTime = self?.lastRefreshTime {
+            if let lastRefreshTime = self.lastRefreshTime {
                 
                 guard let minutes = Calendar.current.dateComponents([.minute], from: lastRefreshTime, to: DateTime.now()).minute else { return }
                 if minutes > 1 {
-                    self?.doRefresh()
+                    self.doRefresh()
                 }
                 
             } else {
-                self?.doRefresh()
+                self.doRefresh()
             }
         }
     }

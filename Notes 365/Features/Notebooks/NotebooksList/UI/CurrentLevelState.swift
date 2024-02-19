@@ -134,7 +134,14 @@ class CurrentLevelState {
     }
     
     func rename(for notebook: Notebook, newValue: String) throws {
-        let siblings = self.siblings.map { $0.notebookB() }
+        let siblings =
+        if notebook.isFolder {
+            self.folders.map { $0.notebookB() }
+        } else {
+            self.files.map { $0.notebookB() }
+        }
+        
+//        let siblings = self.siblings.map { $0.notebookB() }
         try notebooksBusiness.rename(notebook: notebook.notebookB(),
                                      newValue: newValue,
                                      siblings: siblings)

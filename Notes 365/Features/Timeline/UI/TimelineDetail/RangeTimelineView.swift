@@ -71,7 +71,10 @@ struct RangeTimelineView: View {
                 .onChange(of: state.openTimeline) { oldValue, newValue in
                     if let newValue = newValue {
                         // open
-                        DispatchQueue.main.async {
+//                        DispatchQueue.main.async {
+//                            path.append(newValue)
+//                        }
+                        Task { @MainActor in
                             path.append(newValue)
                         }
                     }

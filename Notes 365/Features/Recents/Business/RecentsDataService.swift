@@ -91,24 +91,28 @@ extension RecentsDataService {
             let isFolder = notification.userInfo?["isFolder"] as? Bool
         else { return }
                 
-        if isFolder {
-            // get all hierarchy list
-            let (filesIds, folderIds) = NotebooksPathService.shared.getAllChildFilesAndFolders(folderId: notebookId)
-            let allIds = filesIds + folderIds
-            do {
-                for id in allIds {
-                    try notebooksBusiness.remove(id: id)
+        Task {
+            if isFolder {
+                // get all hierarchy list
+                let (filesIds, folderIds) = await NotebooksPathService.shared.getAllChildFilesAndFolders(folderId: notebookId)
+                let allIds = filesIds + folderIds
+                do {
+                    for id in allIds {
+                        try notebooksBusiness.remove(id: id)
+                    }
+                } catch {
+                    logger.error("\(error)")
                 }
-            } catch {
-                logger.error("\(error)")
-            }
-            
-        } else {
-            do {
-                try notebooksBusiness.remove(id: notebookId)
-            } catch {
-                logger.error("\(error)")
+                
+            } else {
+                do {
+                    try notebooksBusiness.remove(id: notebookId)
+                } catch {
+                    logger.error("\(error)")
+                }
             }
         }
+        
+        
     }
 }

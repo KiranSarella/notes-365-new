@@ -45,17 +45,9 @@ struct SearchDetailView: View {
     @Binding var notebookContentState: NotebookContentState
     var searchText: String
     let result: NotebookContentB
-    var notebookName: String {
-        NotebooksPathService.shared.fileName(for: result.notebookID) ?? "-"
-    }
+    @State var notebookName: String = ""
     @State var notebookPath: String = ""
-//    var notebookPath: String {
-//        NotebooksPathService.shared.fullPath(for: result.notebookID) ?? ""
-//    }
-    
-    var isReadOnly: Bool {
-        NotebooksPathService.shared.isDeletedFile(uuid: result.notebookID)
-    }
+    @State var isReadOnly: Bool = false
     
     var body: some View {
         VStack {
@@ -70,6 +62,8 @@ struct SearchDetailView: View {
         }
         .task {
             notebookPath = await NotebooksPathService.shared.fileFullPath(for: result.notebookID) ?? ""
+            notebookName = await NotebooksPathService.shared.fileName(for: result.notebookID) ?? "-"
+            isReadOnly = await NotebooksPathService.shared.isDeletedFile(uuid: result.notebookID)
         }
         .navigationDestination(for: NotebookContentB.self) { item in
             NotebookContentView(isReadOnly: isReadOnly, notebookId: item.notebookID, fileName: notebookName, searchText: searchText, notebookContentState: notebookContentState)

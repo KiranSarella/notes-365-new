@@ -1,14 +1,12 @@
 # Backlogs
-[ ] open notebook inplace from timeline
 [ ] timeline filter tabs with all first level folders
 [ ] read text
 [ ] read in background audio
-[ ] rating view
 [ ] TipKit
 [ ] MetricKit
 
 # Issues
-[-] hang on theme save, when timeline is at month (with full data)
+[-] hang on theme save, when timeline is at month (with full data) - NotificationQueue
 [ ] path cache shoud have to update once cloud sync is done
 
 [ ] recents - sort not working, deleted recents - date issue seems.
@@ -16,18 +14,25 @@
 [ ] emoji and telugu not working in code block
 [ ] code block not working in timeline
 [ ] in different bg, code block is not visible
-[ ] empty text for filename is accepting
 [ ] replace matched options are showing?
+
+[-] check Path() - timeline commented - any impact
+
 
 # Completed
 [x] headings font - bold not working on switch disabled.
 [x] load next day on scroll to bottom done
-
-
-[-] dont refresh others except today's tab. 
+[x] dont refresh others except today's tab. 
     - can't because, while switcing tab, the navigtion is popping, no persistance. so, have to reload again.
     - alternative is open notes in-place
+// file naming
+[x] empty text for filename is accepting
+[x] accept same name for folder and file - getting filename exists error
+[x] rating view
+[x] open notebook inplace from timeline
     
+
+
 # first level filters
 [ ] have to get all note ids for top level
     - get folders and files for parent
@@ -42,9 +47,8 @@
 
 
 
-Yearly - 449
+[ ] - Yearly - 389 (449)
 Lifetime - 1349
-
 Family Sharing - 749
 
 
