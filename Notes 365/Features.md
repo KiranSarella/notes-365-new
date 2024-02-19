@@ -6,7 +6,6 @@
 [ ] MetricKit
 
 # Issues
-[-] on first time, changes are not refresing in timeline note open
 [-] hang on theme save, when timeline is at month (with full data) - NotificationQueue
 
 [ ] recents - sort not working, deleted recents - date issue seems.

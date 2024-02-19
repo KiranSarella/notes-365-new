@@ -336,17 +336,23 @@ class RangeTimelineState {
         
         do {
             if let newChanges = try timelineBusiness.fetchDayTimelineNoteChanges(id: openTimeline.id) {
-                dayTimelineModels[index].content = newChanges.content
+                Task { @MainActor in
+                    dayTimelineModels[index].content = newChanges.content
+                }
             } else {
-                // no record
-                setNextAsFirstDayIfSameDay(index, openTimeline.date)
-                dayTimelineModels.remove(at: index)
+                Task { @MainActor in
+                    // no record
+                    setNextAsFirstDayIfSameDay(index, openTimeline.date)
+                    dayTimelineModels.remove(at: index)
+                }
             }
         } catch {
             logger.error("\(error)")
-            // no record found
-            setNextAsFirstDayIfSameDay(index, openTimeline.date)
-            dayTimelineModels.remove(at: index)
+            Task { @MainActor in
+                // no record found
+                setNextAsFirstDayIfSameDay(index, openTimeline.date)
+                dayTimelineModels.remove(at: index)
+            }
         }
         // deselect
         self.openTimeline = nil
