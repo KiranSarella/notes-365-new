@@ -33,7 +33,7 @@ Thank you for using Notes 365. Please share your feedback.
                 
                 HStack {
                     HStack {
-                        Image(systemName: "star")
+                        Image(systemName: "hand.thumbsup")
                     }
                     Button("Review on the App Store") {
                         requestReview()

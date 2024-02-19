@@ -6,15 +6,16 @@
 [ ] MetricKit
 
 # Issues
+[-] on first time, changes are not refresing in timeline note open
 [-] hang on theme save, when timeline is at month (with full data) - NotificationQueue
-[ ] path cache shoud have to update once cloud sync is done
 
 [ ] recents - sort not working, deleted recents - date issue seems.
+[ ] replace matched options are showing in editor?
 [ ] diff - just for two new words added in different paras, whole paras are timelined insteated of two lines
 [ ] emoji and telugu not working in code block
 [ ] code block not working in timeline
 [ ] in different bg, code block is not visible
-[ ] replace matched options are showing?
+
 
 
 # Completed
@@ -28,7 +29,7 @@
 [x] accept same name for folder and file - getting filename exists error
 [x] rating view
 [x] open notebook inplace from timeline
-    
+[x] path cache shoud have to update once cloud sync is done
 
 
 # first level filters

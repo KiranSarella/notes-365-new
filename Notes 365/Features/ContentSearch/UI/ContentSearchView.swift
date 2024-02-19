@@ -7,20 +7,18 @@
 
 import SwiftUI
 
+
 struct ContentSearchView: View {
     
-    @State private var notebookContentState = NotebookContentState(business: BusinessFactory.createNotebookContentBusinessFactory())
-    @State private var searchText = ""
-    let business = BusinessFactory.contentSearchInteractor()
-    @State var results = [NotebookContentB]()
+    @State var state = ContentSearchState()
     
     var body: some View {
         NavigationStack {
             VStack {
                 List {
-                    ForEach(results) { result in
+                    ForEach($state.results) { $result in
                         Section {
-                            SearchDetailView(notebookContentState: $notebookContentState, searchText: searchText, result: result)
+                            SearchDetailView(notebookContentState: $state.notebookContentState, searchText: state.searchText, result: $result)
                         }
                     }
                 }
@@ -28,45 +26,44 @@ struct ContentSearchView: View {
                 Spacer()
             }
             .ignoresSafeArea(edges: [.bottom])
-            .searchable(text: $searchText, placement: .navigationBarDrawer, prompt: "Search Content")
+            .searchable(text: $state.searchText, placement: .navigationBarDrawer, prompt: "Search Content")
             .navigationBarTitleDisplayMode(.inline)
-            .onChange(of: searchText) { oldValue, newValue in
-                if newValue.count >= 3 {
-                   results =  business.fetchSearchResults(for: newValue) ?? []
-                } else {
-                    results.removeAll()
-                }
+            .navigationDestination(for: ContentSearchVM.self) { item in
+                NotebookContentView(isReadOnly: item.isReadOnly, notebookId: item.id, fileName: item.notebookName, searchText: state.searchText, notebookContentState: state.notebookContentState)
+            }
+            .onChange(of: state.searchText) { oldValue, newValue in
+                state.search(newValue)
             }
         }
+        
     }
 }
 
 struct SearchDetailView: View {
     @Binding var notebookContentState: NotebookContentState
     var searchText: String
-    let result: NotebookContentB
-    @State var notebookName: String = ""
-    @State var notebookPath: String = ""
-    @State var isReadOnly: Bool = false
+    @Binding var result: ContentSearchVM
+//    @State var notebookName: String = ""
+//    @State var notebookPath: String = ""
+//    @State var isReadOnly: Bool = false
     
     var body: some View {
         VStack {
             NavigationLink(value: result) {
                  LazyVStack(alignment: .leading) {
-                    Text(notebookName)
+                     Text(result.notebookName)
                         .font(.headline)
-                    Text(notebookPath)
+                     Text(result.notebookPath)
                         .font(.caption)
                 }
             }
         }
         .task {
-            notebookPath = await NotebooksPathService.shared.fileFullPath(for: result.notebookID) ?? ""
-            notebookName = await NotebooksPathService.shared.fileName(for: result.notebookID) ?? "-"
-            isReadOnly = await NotebooksPathService.shared.isDeletedFile(uuid: result.notebookID)
-        }
-        .navigationDestination(for: NotebookContentB.self) { item in
-            NotebookContentView(isReadOnly: isReadOnly, notebookId: item.notebookID, fileName: notebookName, searchText: searchText, notebookContentState: notebookContentState)
+            if result.notebookPath.isEmpty {
+                result.notebookPath = await NotebooksPathService.shared.fileFullPath(for: result.id) ?? ""
+                result.notebookName = await NotebooksPathService.shared.fileName(for: result.id) ?? ""
+                result.isReadOnly = await NotebooksPathService.shared.isDeletedFile(uuid: result.id)
+            }
         }
     }
 }

@@ -106,6 +106,8 @@
 		5CCE93BF2B4D8EFD00066AB3 /* PremiumUserState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCE93BE2B4D8EFD00066AB3 /* PremiumUserState.swift */; };
 		5CD2F4F02ACC7FD500E8B465 /* TimelineDetailState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD2F4EF2ACC7FD500E8B465 /* TimelineDetailState.swift */; };
 		5CD549172B820BF800539538 /* UserPreferenceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD549162B820BF800539538 /* UserPreferenceStorage.swift */; };
+		5CD5491A2B83243B00539538 /* ContentViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD549192B83243B00539538 /* ContentViewState.swift */; };
+		5CD5491C2B83287600539538 /* ContentSearchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD5491B2B83287600539538 /* ContentSearchState.swift */; };
 		5CD6813E2B5FA5BA00F15D3B /* RestoreToView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD6813D2B5FA5BA00F15D3B /* RestoreToView.swift */; };
 		5CD72D8B2B5BE50200B772DF /* RecentlyDeletedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD72D8A2B5BE50200B772DF /* RecentlyDeletedState.swift */; };
 		5CE6FDF82B0BC19600ED9425 /* PDFFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CE6FDF72B0BC19600ED9425 /* PDFFile.swift */; };
@@ -346,6 +348,8 @@
 		5CD2F4EF2ACC7FD500E8B465 /* TimelineDetailState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineDetailState.swift; sourceTree = "<group>"; };
 		5CD549162B820BF800539538 /* UserPreferenceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPreferenceStorage.swift; sourceTree = "<group>"; };
 		5CD549182B827FFB00539538 /* Preferences.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Preferences.md; sourceTree = "<group>"; };
+		5CD549192B83243B00539538 /* ContentViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewState.swift; sourceTree = "<group>"; };
+		5CD5491B2B83287600539538 /* ContentSearchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentSearchState.swift; sourceTree = "<group>"; };
 		5CD6813D2B5FA5BA00F15D3B /* RestoreToView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreToView.swift; sourceTree = "<group>"; };
 		5CD6813F2B60264300F15D3B /* Fonts.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Fonts.md; sourceTree = "<group>"; };
 		5CD72D8A2B5BE50200B772DF /* RecentlyDeletedState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyDeletedState.swift; sourceTree = "<group>"; };
@@ -643,6 +647,7 @@
 			isa = PBXGroup;
 			children = (
 				5C08EA382B1892DC0095DE86 /* ContentSearchView.swift */,
+				5CD5491B2B83287600539538 /* ContentSearchState.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -1183,6 +1188,7 @@
 			isa = PBXGroup;
 			children = (
 				9F45BCA32920CAAE003DE332 /* ContentView.swift */,
+				5CD549192B83243B00539538 /* ContentViewState.swift */,
 				5C5910B72B43F6DF00E5D4A7 /* Purchases */,
 				5C051B9C2B1240D4005C99B7 /* Logger.swift */,
 				9F45BCDE2920CCCE003DE332 /* Extensions.swift */,
@@ -1505,6 +1511,7 @@
 				5C34A18E2B1BA0EA00D036B7 /* ThemeB.swift in Sources */,
 				5CBEF3112B14FDEF003A3972 /* HorizontalCalendarView.swift in Sources */,
 				9F45BD892920CDE0003DE332 /* EditorViewDelegate+iOS.swift in Sources */,
+				5CD5491C2B83287600539538 /* ContentSearchState.swift in Sources */,
 				9F45BD712920CDE0003DE332 /* SymbolPattern.swift in Sources */,
 				5C74AD0D2B3AA6F5006B33B0 /* RecentItem.swift in Sources */,
 				9F45BCA42920CAAE003DE332 /* ContentView.swift in Sources */,
@@ -1585,6 +1592,7 @@
 				5CC4C0212A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift in Sources */,
 				5C3DE6B22B13722C004E3621 /* RangeTimelineView.swift in Sources */,
 				5CBEF3182B15008E003A3972 /* TodayVersionStorage.swift in Sources */,
+				5CD5491A2B83243B00539538 /* ContentViewState.swift in Sources */,
 				5C74AD042B3A9A85006B33B0 /* RecentsBusiness.swift in Sources */,
 				5C0A7B482B20DA330099F0A3 /* TimelineCalendarView.swift in Sources */,
 				5CBEF31E2B150CE7003A3972 /* DayVersionInteractor.swift in Sources */,

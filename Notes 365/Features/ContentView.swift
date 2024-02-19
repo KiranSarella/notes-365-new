@@ -33,10 +33,12 @@ struct ContentView: View {
     @State private var horizontalCalendarViewState = HorizontalCalendarViewState()
     let cloudKitSync = CloudKitSync()
     
+    @State var state = ContentViewState()
+    
     let iconWidth: CGFloat = 18
     
     @State var isFirstTimeAppeared = false
-    @State var isFirstTimeTask = false
+    @State var isFirstTimePurchasesUpdated = false
     
     var body: some View {
         NavigationSplitView(columnVisibility: $navigationSplitViewVisibility) {
@@ -180,16 +182,12 @@ struct ContentView: View {
                     }
                 }
                 .task {
-                    logger.info("Starting tasks to observe transaction updates")
-                    // Begin observing StoreKit transaction updates in case a
-                    // transaction happens on another device.
-                    await PremiumUserState.shared.observeTransactionUpdates()
-                    // Check if we have any unfinished transactions where we
-                    await PremiumUserState.shared.checkForUnfinishedTransactions()
-                    logger.info("Finished checking for unfinished transactions")
-                    // refresh premium status
-                    await PremiumUserState.shared.refreshPurchasedProducts()
-                    
+                    if isFirstTimePurchasesUpdated == false {
+                        isFirstTimePurchasesUpdated = true
+                        state.checkAndObservePurchasesChanges()
+                    } else if await PremiumUserState.shared.isPurchased == false {
+                        state.checkAndObservePurchasesChanges()
+                    }
                 }
                 .sheet(isPresented: $showThemes) {
                     ThemesBaseView()
