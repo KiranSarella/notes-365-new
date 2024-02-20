@@ -17,7 +17,8 @@ struct RecentlyDeletedBaseDetailView: View {
     }
 }
 
-struct DeletedNotebook: Hashable {
+struct DeletedNotebook: Identifiable, Hashable {
+    let id: UUID
     let notebook: Notebook
 }
 
@@ -27,7 +28,7 @@ fileprivate struct RecentlyDeletedView: View {
     @Binding var path: NavigationPath
     @State private var notebookContentState = NotebookContentState(business: BusinessFactory.createNotebookContentBusinessFactory())
     
-    @State var restoreSource: Notebook?
+    @State var restoreSource: DeletedNotebook?
     @State var showRestoreView = false
     @State var restoreDestination: FileItem?
     
@@ -57,27 +58,27 @@ fileprivate struct RecentlyDeletedView: View {
         }
         .navigationTitle(navigationTitle)
         .navigationBarTitleDisplayMode(.large)
-        .navigationDestination(for: RecentNotebook.self) { rn in
+        .navigationDestination(for: DeletedNotebook.self) { rn in
             if rn.notebook.isFolder {
                 DeletedNotebooksLevelView(navigationTitle: rn.notebook.name, path: $path, parent: rn.notebook)
             } else {
-                NotebookContentView(isReadOnly: true, notebookId: rn.notebook.id, fileName: rn.notebook.name, notebookContentState: notebookContentState)
+                NotebookContentView(isReadOnly: true, notebookId: rn.notebook.id, fileName: rn.notebook.name, state: notebookContentState)
             }
         }
         .onAppear {
-//            if state.isEmpty {
+            if state.isEmpty {
                 state.loadRecentlyDeleted()
-//            }
+            }
         }
         .onChange(of: restoreSource, { oldValue, newValue in
             guard let newValue = newValue else { return }
-            logger.info("restoreSource: \(newValue.name) \(newValue.id)")
+            logger.info("restoreSource: \(newValue.notebook.name) \(newValue.id)")
             showRestoreView = true
         })
         .onChange(of: restoreDestination) { old, new in
             guard let restoreSource = restoreSource else { return }
             if let destination = new {
-                state.restore(restoreSource, to: destination.folderId)
+                state.restore(restoreSource.notebook, to: destination.folderId)
                 showRestoreView = false
             }
         }
@@ -88,7 +89,7 @@ fileprivate struct RecentlyDeletedView: View {
             }
         }
         .sheet(isPresented: $showRestoreView) {
-            RestoreToView(notebook: restoreSource!, moveDestination: $restoreDestination)
+            RestoreToView(notebook: restoreSource!.notebook, moveDestination: $restoreDestination)
         }
     }
     
@@ -113,7 +114,7 @@ fileprivate struct RecentlyDeletedView: View {
         Section {
             ForEach(state.folders) { folder in
                 NavigationLink(value: folder) {
-                    RecentlyDeletedFolderCellView(restoreSource: $restoreSource, name: folder.name, notebook: folder)
+                    RecentlyDeletedFolderCellView(restoreSource: $restoreSource, name: folder.notebook.name, item: folder)
                 }
             }
         }
@@ -123,7 +124,7 @@ fileprivate struct RecentlyDeletedView: View {
         Section {
             ForEach(state.files) { file in
                 NavigationLink(value: file) {
-                    RecentlyDeletedFileCellView(restoreSource: $restoreSource, name: file.name, notebook: file)
+                    RecentlyDeletedFileCellView(restoreSource: $restoreSource, name: file.notebook.name, item: file)
                 }
             }
         }
@@ -133,32 +134,32 @@ fileprivate struct RecentlyDeletedView: View {
 
 
 fileprivate struct RecentlyDeletedFolderCellView: View {
-    @Binding var restoreSource: Notebook?
+    @Binding var restoreSource: DeletedNotebook?
     let name: String
-    let notebook: Notebook
+    let item: DeletedNotebook
     
     @State private var onHover = false
     
     var highlightText: Bool {
-        onHover || notebook.isNewlyCreated
+        onHover
     }
     
     var body: some View {
         VStack {
             HStack {
-                Label(notebook.name, systemImage: "folder")
+                Label(item.notebook.name, systemImage: "folder")
                     .fontWeight(highlightText ? .heavy : .regular)
-                    .id(notebook.id)
+                    .id(item.id)
                             .contextMenu {
                                 Button {
-                                    restoreSource = notebook
+                                    restoreSource = item
                                 } label: {
                                     Label("Restore to", systemImage: "folder")
                                 }
                             }
                             .swipeActions(edge: .trailing) {
                                 Button {
-                                    restoreSource = notebook
+                                    restoreSource = item
                                 } label: {
                                     Label("Restore to", systemImage: "folder")
                                 }
@@ -170,7 +171,7 @@ fileprivate struct RecentlyDeletedFolderCellView: View {
                 if onHover {
                     Menu {
                         Button {
-                            restoreSource = notebook
+                            restoreSource = item
                         } label: {
                             Label("Restore to", systemImage: "folder")
                         }
@@ -189,33 +190,33 @@ fileprivate struct RecentlyDeletedFolderCellView: View {
 }
 
 fileprivate struct RecentlyDeletedFileCellView: View {
-    @Binding var restoreSource: Notebook?
+    @Binding var restoreSource: DeletedNotebook?
     let name: String
-    let notebook: Notebook
+    let item: DeletedNotebook
     
     @State private var onHover = false
     
     var highlightText: Bool {
-        onHover || notebook.isNewlyCreated
+        onHover
     }
     
     var body: some View {
         VStack {
             HStack {
-                Text(notebook.name)
+                Text(item.notebook.name)
                     .foregroundStyle(Color.primary)
                     .fontWeight(highlightText ? .heavy : .regular)
-                    .id(notebook.id)
+                    .id(item.id)
                             .contextMenu {
                                 Button {
-                                    restoreSource = notebook
+                                    restoreSource = item
                                 } label: {
                                     Label("Restore to", systemImage: "folder")
                                 }
                             }
                             .swipeActions(edge: .trailing) {
                                 Button {
-                                    restoreSource = notebook
+                                    restoreSource = item
                                 } label: {
                                     Label("Restore to", systemImage: "folder")
                                 }
@@ -227,7 +228,7 @@ fileprivate struct RecentlyDeletedFileCellView: View {
                 if onHover {
                     Menu {
                         Button {
-                            restoreSource = notebook
+                            restoreSource = item
                         } label: {
                             Label("Restore to", systemImage: "folder")
                         }
@@ -275,11 +276,7 @@ struct DeletedNotebooksLevelView: View {
             if notebook.isFolder {
                 DeletedNotebooksLevelView(navigationTitle: notebook.name, path: $path, parent: notebook)
             } else {
-                NotebookContentView(isReadOnly: true, notebookId: notebook.id, fileName: notebook.name, notebookContentState: notebookContentState)
-                    .onAppear {
-                        currentLevelState.notifyNotebookOpen(notebook: notebook)
-                        currentLevelState.notifyAddCurrentFolderToRecents()
-                    }
+                NotebookContentView(isReadOnly: true, notebookId: notebook.id, fileName: notebook.name, state: notebookContentState)
             }
         }
         .onAppear {

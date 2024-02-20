@@ -29,7 +29,7 @@ struct ContentSearchView: View {
             .searchable(text: $state.searchText, placement: .navigationBarDrawer, prompt: "Search Content")
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: ContentSearchVM.self) { item in
-                NotebookContentView(isReadOnly: item.isReadOnly, notebookId: item.id, fileName: item.notebookName, searchText: state.searchText, notebookContentState: state.notebookContentState)
+                NotebookContentView(isReadOnly: item.isReadOnly, notebookId: item.id, fileName: item.notebookName, searchText: state.searchText, state: state.notebookContentState)
             }
             .onChange(of: state.searchText) { oldValue, newValue in
                 state.search(newValue)

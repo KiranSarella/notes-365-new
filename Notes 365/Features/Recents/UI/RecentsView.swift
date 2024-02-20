@@ -47,13 +47,13 @@ fileprivate struct RecentsView: View {
             if rn.notebook.isFolder {
                 NotebooksLevelView(navigationTitle: rn.notebook.name, path: $path, parent: rn.notebook)
             } else {
-                NotebookContentView(isReadOnly: false, notebookId: rn.notebook.id, fileName: rn.notebook.name, notebookContentState: notebookContentState)
+                NotebookContentView(isReadOnly: false, notebookId: rn.notebook.id, fileName: rn.notebook.name, state: notebookContentState)
             }
         }
         .onAppear {
-//            if state.isEmpty {
+            if state.isEmpty {
                 state.loadRecents()
-//            }
+            }
         }
     }
     
@@ -120,7 +120,7 @@ private struct RecentFolderCellView: View {
                 VStack {
                     VStack {
                         HStack {
-                            Text(item.notebook.name)
+                            Text(item.notebook.name + "   \(item.notebook.modifiedDate.formatted(date: .numeric, time: .standard))")
                                 .id(item.id)
                                 .fontWeight(highlightText ? .heavy : .semibold)
                             Spacer()
@@ -164,7 +164,7 @@ private struct RecentFileCellView: View {
     var body: some View {
         VStack {
             HStack {
-                Text(item.notebook.name)
+                Text(item.notebook.name + "   \(item.notebook.modifiedDate.formatted(date: .numeric, time: .standard))")
                     .id(item.id)
                     .fontWeight(highlightText ? .heavy : .semibold)
                     .foregroundStyle(Color.primary)

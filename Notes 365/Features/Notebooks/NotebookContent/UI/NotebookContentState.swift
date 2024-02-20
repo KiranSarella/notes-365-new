@@ -33,6 +33,7 @@ class NotebookContentState {
     private(set) var notebookId: UUID = UUID()
     var isFetchingData = true
     var input: String = ""
+    var fileName: String = ""
 //    var output: String = ""
     var contentEditedDate: Date? = DateTime.now()
     var lastSavedDate: Date = DateTime.now()
@@ -81,6 +82,15 @@ class NotebookContentState {
     }
     
     
+    func notifyNotebookOpen() {
+        let info = [
+            "notebook_id": notebookId,
+            "name": fileName,
+            "isFolder": false
+        ] as [String : Any]
+        NotificationCenter.default.post(name: Notification.Name.addToRecent, object: nil, userInfo: info)
+        logger.debug("\(#function) - \(info)")
+    }
 }
 
 

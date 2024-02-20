@@ -97,7 +97,7 @@ struct RangeTimelineView: View {
             .scrollContentBackground(.hidden)
         }
         .navigationDestination(for: Timeline.self) { t in
-            NotebookContentView(isReadOnly: false, notebookId: t.fileUUID, fileName: t.fileName, notebookContentState: notebookContentState)
+            NotebookContentView(isReadOnly: false, notebookId: t.fileUUID, fileName: t.fileName, state: notebookContentState)
         }
     }
 }

@@ -8,18 +8,16 @@
 import SwiftUI
 import Combine
 
-
-
 struct NotebookContentView: View {
     var isReadOnly: Bool
     var notebookId: UUID
     var fileName: String
     var searchText: String?
-    @Bindable var notebookContentState: NotebookContentState // state is outside, bcz to save any changes after immediatly closed
+    @Bindable var state: NotebookContentState // state is outside, bcz to save any changes after immediatly closed
     
     var body: some View {
         VStack(alignment: .leading) {
-            if notebookContentState.isFetchingData {
+            if state.isFetchingData {
                 Spacer()
                 HStack(alignment: .center) {
                     Spacer()
@@ -30,31 +28,30 @@ struct NotebookContentView: View {
                 }
                 Spacer()
             } else {
-                SmartEditor(fileName: fileName, isReadonly: isReadOnly, searchText: searchText, contentEditedDate: $notebookContentState.contentEditedDate, input: $notebookContentState.input)
+                SmartEditor(fileName: fileName, isReadonly: isReadOnly, searchText: searchText, contentEditedDate: $state.contentEditedDate, input: $state.input)
                 .onAppear(perform: {
-                    self.notebookContentState.startAutoSaveTimer()
+                    self.state.startAutoSaveTimer()
                 })
                 .onChange(of: EditorOutputBuffer.shared.output) { oldValue, newValue in
                     print(newValue)
-                    notebookContentState.contentEditedDate = DateTime.now()
+                    state.contentEditedDate = DateTime.now()
                 }
             }
         }
         .onAppear {
             Task {
                 // new notebook steps
-                notebookContentState.loadContent(for: notebookId)
-//                editorState.getNewContent = {
-//                    return await MainActor.run {
-//                        editorState.getTextHandler!()
-//                    }
-//                }
+                state.loadContent(for: notebookId)
+                state.fileName = fileName
+                if isReadOnly == false {
+                    state.notifyNotebookOpen()
+                }
             }
         }
         .onDisappear {
             Task {
-                notebookContentState.invalidateAutoSaveTimer()
-                notebookContentState.saveChangesIfModified()
+                state.invalidateAutoSaveTimer()
+                state.saveChangesIfModified()
 //                self.editorState.cancelAutoSaveTimer()
 //                await editorState.saveContentChanges()
             }

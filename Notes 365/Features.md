@@ -6,7 +6,6 @@
 [ ] MetricKit
 
 # Issues
-[-] hang on theme save, when timeline is at month (with full data) - NotificationQueue
 [-] recents - sort not working, deleted recents - date issue seems. 
 [ ] replace matched options are showing in editor?
 [ ] diff - just for two new words added in different paras, whole paras are timelined insteated of two lines
@@ -28,6 +27,7 @@
 [x] rating view
 [x] open notebook inplace from timeline
 [x] path cache shoud have to update once cloud sync is done
+[x] hang on theme save, when timeline is at month (with full data) - NotificationQueue
 
 
 # first level filters

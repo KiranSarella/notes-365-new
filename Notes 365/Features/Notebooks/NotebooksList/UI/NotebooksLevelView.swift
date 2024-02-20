@@ -77,9 +77,8 @@ struct NotebooksLevelView: View {
             if notebook.isFolder {
                 NotebooksLevelView(navigationTitle: notebook.name, path: $path, parent: notebook)
             } else {
-                NotebookContentView(isReadOnly: false, notebookId: notebook.id, fileName: notebook.name, notebookContentState: notebookContentState)
+                NotebookContentView(isReadOnly: false, notebookId: notebook.id, fileName: notebook.name, state: notebookContentState)
                     .onAppear {
-                        currentLevelState.notifyNotebookOpen(notebook: notebook)
                         currentLevelState.notifyAddCurrentFolderToRecents()
                     }
             }

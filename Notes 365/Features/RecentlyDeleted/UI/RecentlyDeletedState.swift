@@ -9,8 +9,8 @@ import Foundation
 
 @Observable
 class RecentlyDeletedState {
-    var folders = [Notebook]()
-    var files = [Notebook]()
+    var folders = [DeletedNotebook]()
+    var files = [DeletedNotebook]()
     var isEmpty: Bool {
         folders.isEmpty && files.isEmpty
     }
@@ -20,15 +20,15 @@ class RecentlyDeletedState {
         logger.debug("\(#function)")
         do {
             let items = try business.fetchDeletedNotebooks()
-            let notebooks = items.map { $0.notebook() }
-            folders = notebooks.filter { $0.isFolder }.sorted(by: { n1, n2 in
-                n1.modifiedDate > n2.modifiedDate
+            let notebooks = items.map { $0.deletedNotebook() }
+            folders = notebooks.filter { $0.notebook.isFolder }.sorted(by: { n1, n2 in
+                n1.notebook.modifiedDate > n2.notebook.modifiedDate
             })
-            files = notebooks.filter { !$0.isFolder }.sorted(by: { n1, n2 in
-                n1.modifiedDate > n2.modifiedDate
+            files = notebooks.filter { !$0.notebook.isFolder }.sorted(by: { n1, n2 in
+                n1.notebook.modifiedDate > n2.notebook.modifiedDate
             })
-            print(folders.map { "\($0.name) - \($0.id.uuidString)"})
-            print(files.map { "\($0.name) - \($0.id.uuidString)"})
+            print(folders.map { "\($0.notebook.name) - \($0.id.uuidString)"})
+            print(files.map { "\($0.notebook.name) - \($0.id.uuidString)"})
         } catch let error {
             print(error)
         }
@@ -52,5 +52,11 @@ class RecentlyDeletedState {
             }
         }
         
+    }
+}
+
+extension NotebookB {
+    func deletedNotebook() -> DeletedNotebook {
+        DeletedNotebook(id: id, notebook: notebook())
     }
 }
