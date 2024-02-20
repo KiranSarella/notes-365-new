@@ -162,3 +162,48 @@ extension NSAttributedString {
 }
 
 
+
+struct SmartDocViewerRepresentable: UIViewRepresentable {
+    let theme: MarkdownTheme = ThemeState.shared.theme
+    let text: String
+    
+    @Binding var contentEditedDate: Date?
+//    var editorView: UIEditorView
+    let isEditable: Bool
+    var isEditor = true
+    var width: CGFloat = 0
+    var editorType = EditorType.smart
+    var isConfigured = false
+
+    func makeUIView(context: Context) -> UIEditorView {
+//        logger.debug("\(#function)")
+//        logger.debug("\(text)")
+        let editorView = UIEditorView()
+        editorView.editorType = editorType
+        editorView.textView.font = theme.font
+        editorView.textView.textColor = theme.bodyColor.uiColor
+        editorView.textView.keyboardDismissMode = .interactive
+        // line height
+        // https://developer.apple.com/forums/thread/711814
+        // or using layout manager (need to try)
+        // https://stackoverflow.com/questions/3760924/set-line-height-in-uitextview
+        var attributes = [NSAttributedString.Key: Any]()
+        let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+//        paragraphStyle.lineHeightMultiple = 1.1
+        paragraphStyle.lineSpacing = 10
+        attributes[NSAttributedString.Key.paragraphStyle] = paragraphStyle
+        attributes[NSAttributedString.Key.font] = theme.font
+        editorView.textView.typingAttributes = attributes
+        // set content
+        editorView.textView.text = text
+
+        editorView.setAsReadOnly()
+        return editorView
+    }
+    
+    func updateUIView(_ editorView: UIEditorView, context: Context) {
+        logger.debug("\(#function)")
+    }
+    
+    typealias NSViewType = UIEditorView
+}

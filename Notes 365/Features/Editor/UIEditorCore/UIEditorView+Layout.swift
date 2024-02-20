@@ -50,19 +50,31 @@ extension UIEditorView: NSLayoutManagerDelegate {
         var mutableGlymphRange = glyphRange
         
         
+        
+        
         for index in 0..<glyphRange.length {
             
             let charPtr = charIndexes[index]
+//            var isMarkdown: Bool {
+//                let attrValue = textStorage.attribute(.markdown, at: charPtr, effectiveRange: &mutableGlymphRange)
+//                return attrValue != nil
+//            }
+            
             var isMarkdown: Bool {
-                let attrValue = textStorage.attribute(.markdown, at: charPtr, effectiveRange: &mutableGlymphRange)
-                return attrValue != nil
+                guard let a = textStorage.attribute(.markdown, at: charPtr, effectiveRange: &mutableGlymphRange) as? Int else { return false }
+                return true
             }
+            
             
 //            print("isMarkdown", isMarkdown)
             
             if isMarkdown {
                 // hide symbol
-                controlCharProps?[index] = .null
+                if let controlCharProps = controlCharProps {
+//                    print(controlCharProps[index])
+                    controlCharProps[index] = NSLayoutManager.GlyphProperty.controlCharacter
+                }
+//                controlCharProps?[index] = .null
             }
             
 //            let uniChar = (textStorage.string as NSString).character(at: charPtr)
@@ -89,12 +101,24 @@ extension UIEditorView: NSLayoutManagerDelegate {
         
         // Update only if mutableProperties was allocated
         if let newProps = controlCharProps {
-
             layoutManager.setGlyphs(glyphs, properties: newProps, characterIndexes: charIndexes, font: aFont, forGlyphRange: glyphRange)
-           
             return glyphRange.length
-
-        } else { return 0 }
+        }
+        
+        return glyphRange.length
     }
+    
+    
+//    public func layoutManager(_ layoutManager: NSLayoutManager, shouldUse action: NSLayoutManager.ControlCharacterAction, forControlCharacterAt charIndex: Int) -> NSLayoutManager.ControlCharacterAction {
+//
+////        print(#function, action, charIndex)
+//        
+////        let glyphIndex = layoutManager.glyphIndexForCharacter(at: charIndex)
+////        layoutManager.setNotShownAttribute(false, forGlyphAt: glyphIndex)
+//        
+////        return .zeroAdvancement
+//        
+//        return action
+//    }
     
 }

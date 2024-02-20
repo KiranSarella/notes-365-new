@@ -12,69 +12,6 @@ import Combine
 // MARK: - process markdown chars
 extension UIEditorView {
     
-    func processBold(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        logger.debug("\(#function)")
-        let pattern = SymbolPattern.bold.rawValue
-//        var boldFont = theme.font
-//        boldFont = boldFont.apply(newTraits: .bold)
-        let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
-        regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
-            match, flags, stop in
-            
-//            logger.debug("\(#function) - enumerateMatches")
-            
-            let regExCharLenght = 2
-            //            let frontPadding = 0
-            let backPadding = 0
-            let styleRange = NSRange(location: match!.range.location + regExCharLenght, length: match!.range.length - (2 * regExCharLenght) - backPadding)
-            
-            innerAttributedString.enumerateAttribute(.font, in: styleRange, options: []) { value, range, stop in
-                guard let font = value as? UIFont else { return }
-                
-//                logger.debug("\(#function) - bold - enumerateAttribute")
-                // bold
-                let newFontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold) ?? font.fontDescriptor
-                let newFont = UIFont(descriptor: newFontDesc, size: font.pointSize)
-                innerAttributedString.addAttribute(.font, value: newFont, range: range)
-//                // foreground color
-//                innerAttributedString.addAttribute(.foregroundColor, value: theme.h1Color.uiColor, range: range)
-            }
-            
-            
-//            innerAttributedString.addAttribute(.font,
-//                                               value: boldFont,
-//                                               range: styleRange)
-            
-            // update text color
-            innerAttributedString.addAttribute(.foregroundColor,
-                                               value: theme.styleColor.uiColor, range: styleRange)
-            
-            // get markdown symbol start,end ranges
-            let startRange = NSRange(location: match!.range.location, length: regExCharLenght)
-            let endRange = NSRange(location: match!.range.location + match!.range.length - regExCharLenght - backPadding , length: regExCharLenght)
-            // mark char as markdown start symbol, used to show/hide in layout delegate
-            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
-                                               value: 0,
-                                               range: startRange)
-            
-            // mark char as markdown end symbol, used to show/hide in layout delegate
-            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
-                                               value: 0,
-                                               range: endRange)
-            
-            let info: [String: Any] = [
-                "range": styleRange,
-                "type": "bold"
-            ]
-            // info
-            innerAttributedString.addAttribute(NSAttributedString.Key.markdownInfo,
-                                               value: info,
-                                               range: styleRange)
-            
-            innerAttributedString.addAttribute(.markdownRange, value: SymbolPattern.bold, range: match!.range)
-        }
-    }
-    
     func processHighlight(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
         logger.debug("\(#function)")
         
@@ -125,6 +62,74 @@ extension UIEditorView {
         }
     }
     
+    func processBold(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
+        logger.debug("\(#function)")
+        let pattern = SymbolPattern.bold.rawValue
+//        var boldFont = theme.font
+//        boldFont = boldFont.apply(newTraits: .bold)
+        do {
+            let regex = try NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
+            regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
+                match, flags, stop in
+//                logger.debug("\(#function) - enumerateMatches")
+                let regExCharLenght = 2
+//                //            let frontPadding = 0
+                let backPadding = 0
+                let styleRange = NSRange(location: match!.range.location + regExCharLenght, length: match!.range.length - (2 * regExCharLenght) - backPadding)
+//                print(styleRange)
+                
+                innerAttributedString.enumerateAttribute(.font, in: styleRange, options: []) { value, range, stop in
+                    guard let font = value as? UIFont else { return }
+    
+    //                logger.debug("\(#function) - bold - enumerateAttribute")
+                    // bold
+                    let newFontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold) ?? font.fontDescriptor
+                    let newFont = UIFont(descriptor: newFontDesc, size: font.pointSize)
+                    innerAttributedString.addAttribute(.font, value: newFont, range: range)
+    //                // foreground color
+    //                innerAttributedString.addAttribute(.foregroundColor, value: theme.h1Color.uiColor, range: range)
+                }
+                
+                
+    //            innerAttributedString.addAttribute(.font,
+    //                                               value: boldFont,
+    //                                               range: styleRange)
+                
+                // update text color
+                innerAttributedString.addAttribute(.foregroundColor,
+                                                   value: theme.styleColor.uiColor, range: styleRange)
+                
+                // get markdown symbol start,end ranges
+                let startRange = NSRange(location: match!.range.location, length: regExCharLenght)
+//                let startRange = NSRange(location: match!.range.location - 1, length: 2)
+                let endRange = NSRange(location: match!.range.location + match!.range.length - regExCharLenght - backPadding , length: regExCharLenght)
+//                print("bold-ranges: ", startRange, endRange)
+                // mark char as markdown start symbol, used to show/hide in layout delegate
+                innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
+                                                   value: 0,
+                                                   range: startRange)
+                
+                // mark char as markdown end symbol, used to show/hide in layout delegate
+                innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
+                                                   value: 0,
+                                                   range: endRange)
+                
+                let info: [String: Any] = [
+                    "range": styleRange,
+                    "type": "bold"
+                ]
+                // info
+                innerAttributedString.addAttribute(NSAttributedString.Key.markdownInfo,
+                                                   value: info,
+                                                   range: styleRange)
+                
+                innerAttributedString.addAttribute(.markdownRange, value: SymbolPattern.bold, range: match!.range)
+            }
+        } catch {
+            logger.error("\(error)")
+        }
+    }
+    
     
     func processItalic(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
         logger.debug("\(#function)")
@@ -148,7 +153,6 @@ extension UIEditorView {
             
             innerAttributedString.enumerateAttribute(.font, in: styleRange, options: []) { value, range, stop in
                 guard let font = value as? UIFont else { return }
-                // bold
                 let newFontDesc = font.fontDescriptor.withSymbolicTraits(.traitItalic) ?? font.fontDescriptor
                 let newFont = UIFont(descriptor: newFontDesc, size: font.pointSize)
 //                (  .apply(newTraits: .italicTrait)

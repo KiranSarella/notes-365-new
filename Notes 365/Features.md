@@ -7,8 +7,10 @@
 
 # Issues
 [-] hang on theme save, when timeline is at month (with full data) - NotificationQueue
-
+[-] dark mode change not working on timeline - not appear
 [ ] recents - sort not working, deleted recents - date issue seems.
+[ ] put loader till timeline sidebar selection 
+[ ] change dark mode theme - that contains bold and italic - default fonts
 [ ] replace matched options are showing in editor?
 [ ] diff - just for two new words added in different paras, whole paras are timelined insteated of two lines
 [ ] emoji and telugu not working in code block

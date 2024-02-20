@@ -98,6 +98,7 @@ actor NotebooksPathService {
     var refreshTask: Task<(), Never>?
     
     func doRefresh() {
+        logger.debug("\(#function)")
         if isRefreshing { return }
         refreshTask = Task {
             await refreshNotebooksInfo()
@@ -476,7 +477,7 @@ extension NotebookB {
 extension NotebooksPathService {
     
     func observeCloudFinished() {
-        
+        logger.debug("\(#function)")
         cloudSyncFinishObserver = NotificationCenter.default.publisher(for: Notification.Name.notebookInserted).sink { notification in
             
             if let lastRefreshTime = self.lastRefreshTime {

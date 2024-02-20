@@ -85,7 +85,9 @@ struct RangeTimelineView: View {
                         guard let lastUUID = state.dayTimelineModels.last?.id  else { return }
                         if newValue == lastUUID {
                             logger.debug("SCROLLED TO BOTTOM")
-                            state.loadNext()
+                            Task { @MainActor in
+                                state.loadNext()
+                            }
                         }
                     }
                 }

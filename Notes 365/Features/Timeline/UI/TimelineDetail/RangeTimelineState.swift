@@ -137,7 +137,7 @@ class RangeTimelineState {
         if blockOtherRequests { return }
         logger.debug("\(#function)")
         
-        loadNextTask =  Task {
+        loadNextTask =  Task { @MainActor in
             blockOtherRequests = true
             if delay {
                 try? await Task.sleep(nanoseconds: 1_000_000_000)
@@ -148,7 +148,9 @@ class RangeTimelineState {
             }
             if currentDayModel.timelines.isEmpty == false {
                 let timeline =  currentDayModel.timelines.removeFirst()
-                dayTimelineModels.append(timeline)
+//                Task { @MainActor in
+                    dayTimelineModels.append(timeline)
+//                }
                 blockOtherRequests = false
                 
                 if isContentFilledToScrollable == false {
@@ -156,7 +158,9 @@ class RangeTimelineState {
                     if Task.isCancelled {
                         return
                     }
-                    loadNext()
+//                    Task { @MainActor in
+                        loadNext()
+//                    }
                 }
             } else {
                 if Task.isCancelled {
@@ -172,7 +176,7 @@ class RangeTimelineState {
     private func fetchNextDayTimelines() {
         logger.debug("\(#function)")
         
-        fetchNextDayTask = Task {
+        fetchNextDayTask = Task { @MainActor in
             if remainingDaysToLoad.isEmpty {
                 updateStatusMessage()
                 blockOtherRequests = false
@@ -191,8 +195,10 @@ class RangeTimelineState {
                 
                 var timeline =  currentDayModel.timelines.removeFirst()
                 timeline.setAsFirst()
-                dayTimelineModels.append(timeline)
-                
+                let finalTimeline = timeline
+//                Task { @MainActor in
+                    dayTimelineModels.append(finalTimeline)
+//                }
                 blockOtherRequests = false
                 
                 if scrolledID == nil {
@@ -209,7 +215,9 @@ class RangeTimelineState {
                         if Task.isCancelled {
                             return
                         }
-                        loadNext()
+//                        Task { @MainActor in
+                            loadNext()
+//                        }
                     }
                 }
                 
@@ -220,7 +228,9 @@ class RangeTimelineState {
                 if Task.isCancelled {
                     return
                 }
-                loadNext(false)
+//                Task { @MainActor in
+                    loadNext(false)
+//                }
             }
         }
     }

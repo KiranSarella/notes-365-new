@@ -138,6 +138,11 @@ struct ContentView: View {
                 .onAppear {
                     if isFirstTimeAppeared == false {
                         isFirstTimeAppeared = true
+                        
+                        Task {
+                            await NotebooksPathService.shared.startObservingServices()
+                        }
+                        
                         BusinessFactory.dayVersionInteractor().setupDayVersionCreationProcess()
                         BusinessFactory.timelineInteractor().setupTimeineCreationProcess()
                         BusinessFactory.recentsInteractor().setupRecentsAddingProcess()
@@ -146,8 +151,13 @@ struct ContentView: View {
                         
                         Task {
                             // start service
-                            await NotebooksPathService.shared.startObservingServices()
-                            await NotebooksPathService.shared.refreshNotebooksInfo()
+                            try? await Task.sleep(nanoseconds: 4_000_000_000)
+                            await NotebooksPathService.shared.doRefreshIfNotLoaded()
+                            if UIDevice.current.userInterfaceIdiom != .phone {
+                                Task { @MainActor in
+                                    sidebarItemSelected = SidebarItem.timeline.id
+                                }
+                            }
                         }
                         
                         Task {
@@ -155,9 +165,7 @@ struct ContentView: View {
                             await BusinessFactory.createNotebooksFactory().permanentDeleteExpiredItems()
                         }
                         
-                        if UIDevice.current.userInterfaceIdiom != .phone {
-                            sidebarItemSelected = SidebarItem.timeline.id
-                        }
+                        
                         
                         
                         Task {
