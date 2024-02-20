@@ -15,7 +15,7 @@ extension UIEditorView: NSTextStorageDelegate {
     }
     
     public func textStorage(_ textStorage: NSTextStorage, didProcessEditing editedMask: NSTextStorage.EditActions, range editedRange: NSRange, changeInLength delta: Int) {
-        logger.debug("\(#function)")
+//        logger.debug("\(#function)")
         
 //        return
         

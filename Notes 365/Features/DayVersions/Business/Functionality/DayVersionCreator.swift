@@ -35,7 +35,7 @@ class DayVersionCreator {
     }
     
     @objc func handleNotebookLoaded(_ notification: Notification) {
-        logger.debug("handleNotebookLoaded")
+//        logger.debug("handleNotebookLoaded")
         guard
             let notebookId = notification.userInfo?["notebook_id"] as? UUID,
             let notebookConent = notification.userInfo?["notebook_content"] as? String

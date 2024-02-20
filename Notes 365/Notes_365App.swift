@@ -29,5 +29,6 @@ struct Notes_365App: App {
         .commands {
             SidebarCommands()
         }
+        
     }
 }

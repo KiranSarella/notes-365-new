@@ -20,7 +20,7 @@ struct SmartViewerRepresentable: UIViewRepresentable {
     var isConfigured = false
 
     func makeUIView(context: Context) -> UIEditorView {
-        logger.debug("SmartViewerRepresentable - \(#function)")
+//        logger.debug("SmartViewerRepresentable - \(#function)")
         editorView.editorType = EditorType.smart
         editorView.textView.font = theme.font
         editorView.textView.textColor = theme.bodyColor.uiColor
@@ -39,7 +39,7 @@ struct SmartViewerRepresentable: UIViewRepresentable {
     }
     
     func updateUIView(_ editorView: UIEditorView, context: Context) {
-        logger.debug("SmartViewerRepresentable - \(#function)")
+//        logger.debug("SmartViewerRepresentable - \(#function)")
 //        updateHeight()
     }
     
@@ -47,11 +47,11 @@ struct SmartViewerRepresentable: UIViewRepresentable {
     
     func updateHeight() {
         DispatchQueue.main.async {
-            logger.debug("\(editorView.text)")
+//            logger.debug("\(editorView.text)")
             editorView.textView.sizeToFit()
             let contentSizeHeight = editorView.textView.contentSize.height
             height = contentSizeHeight
-            logger.debug("\(height)")
+//            logger.debug("\(height)")
         }
         
         

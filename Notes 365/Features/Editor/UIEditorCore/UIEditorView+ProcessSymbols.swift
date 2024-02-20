@@ -13,8 +13,6 @@ import Combine
 extension UIEditorView {
     
     func processHighlight(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        logger.debug("\(#function)")
-        
         let pattern = SymbolPattern.highlight.rawValue
         
         let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
@@ -81,7 +79,6 @@ extension UIEditorView {
                 innerAttributedString.enumerateAttribute(.font, in: styleRange, options: []) { value, range, stop in
                     guard let font = value as? UIFont else { return }
     
-    //                logger.debug("\(#function) - bold - enumerateAttribute")
                     // bold
                     let newFontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold) ?? font.fontDescriptor
                     let newFont = UIFont(descriptor: newFontDesc, size: font.pointSize)
@@ -132,7 +129,6 @@ extension UIEditorView {
     
     
     func processItalic(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        logger.debug("\(#function)")
         
         let pattern = SymbolPattern.italic.rawValue
         
@@ -198,7 +194,6 @@ extension UIEditorView {
     
     
     func processBoldAndItalic(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        logger.debug("\(#function)")
         let pattern = SymbolPattern.boldAndItalic.rawValue
         
 //        var italicFont = theme.font
@@ -276,7 +271,6 @@ extension UIEditorView {
    
     
     func processStrikethrough(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        logger.debug("\(#function)")
         let pattern = SymbolPattern.strikethrough.rawValue
         
         let regex = try! NSRegularExpression(pattern: pattern, options: [])
@@ -320,7 +314,6 @@ extension UIEditorView {
     }
     
     func processHttp(extendedRange: NSRange, textStorage innerAttributedString: NSMutableAttributedString) {
-        logger.debug("\(#function)")
         let pattern = SymbolPattern.url
 
         
@@ -353,7 +346,6 @@ extension UIEditorView {
     
     
     func processLink(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        logger.debug("\(#function)")
         let pattern = SymbolPattern.link.rawValue
         
         let regex = try! NSRegularExpression(pattern: pattern, options: [])
@@ -401,7 +393,6 @@ extension UIEditorView {
     
     
     func processInlineCode(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        logger.debug("\(#function)")
         let pattern = SymbolPattern.inlineCode.rawValue
         
         let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
@@ -447,7 +438,6 @@ extension UIEditorView {
     }
     
     func canPocessCodeBlock(_ extendedRange: NSRange, _ innerAttributedString: NSTextStorage) -> (Int, Bool) {
-        logger.debug("\(#function)")
         let pattern = SymbolPattern.codeBlockBalanceChecker.rawValue
         let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
         
@@ -463,7 +453,6 @@ extension UIEditorView {
     }
     
     func processCodeBlock(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        logger.debug("\(#function)")
         // continue if balanced only, else skip
         let (count, canProceed) = canPocessCodeBlock(extendedRange, textStorage)
         
@@ -544,7 +533,6 @@ extension UIEditorView {
     
     
     func processOrderedList(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        logger.debug("\(#function)")
         let pattern = SymbolPattern.orderedList.rawValue
         
         let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
@@ -578,7 +566,6 @@ extension UIEditorView {
     
     
     func processUnorderedList(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        logger.debug("\(#function)")
         let pattern = SymbolPattern.unorderedList.rawValue
         
         let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
@@ -610,7 +597,7 @@ extension UIEditorView {
     }
     
     func processCheckList(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        logger.debug("\(#function)")
+//        logger.debug("\(#function)")
         let pattern = SymbolPattern.checkList.rawValue
         
         let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
@@ -642,7 +629,7 @@ extension UIEditorView {
     }
     
     func processBlockQuote(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        logger.debug("\(#function)")
+//        logger.debug("\(#function)")
         var elseCount = 0
         
         let pattern = SymbolPattern.blockQuote.rawValue
@@ -723,7 +710,7 @@ extension UIEditorView {
     }
     
     func processHeadings(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        logger.debug("\(#function)")
+//        logger.debug("\(#function)")
         
         styleHeading(symbolPattern: .h1, innerAttributedString: textStorage, extendedRange: extendedRange, symbolLenght: 2, fontLevel: 1)
         styleHeading(symbolPattern: .h2, innerAttributedString: textStorage, extendedRange: extendedRange, symbolLenght: 3, fontLevel: 2)
@@ -736,7 +723,7 @@ extension UIEditorView {
     
     
     func styleHeading(symbolPattern: SymbolPattern, innerAttributedString: NSTextStorage, extendedRange: NSRange, symbolLenght: Int, fontLevel: CGFloat) {
-        logger.debug("\(#function)")
+//        logger.debug("\(#function)")
         let pattern = symbolPattern.rawValue
         let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
         let fontSize = getHeadingFontSize(level: fontLevel)
@@ -796,7 +783,7 @@ extension UIEditorView {
     
     
     func getHeadingFontSize(level: CGFloat) -> CGFloat {
-        logger.debug("\(#function)")
+//        logger.debug("\(#function)")
         let heading = MarkdownHeading(rawValue: Int(level))!
         return heading.getHeadingFontSize(baseFontSize: theme.font.pointSize)
     }

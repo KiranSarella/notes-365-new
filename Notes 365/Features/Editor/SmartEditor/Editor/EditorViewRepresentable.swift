@@ -54,7 +54,7 @@ struct EditorViewRepresentable: UIViewRepresentable {
     }
     
     func updateUIView(_ editorView: UIEditorView, context: Context) {
-        logger.debug("\(#function)")
+//        logger.debug("\(#function)")
     }
     
     typealias NSViewType = UIEditorView
@@ -118,7 +118,7 @@ struct ReadOnlyMarkDownView: View {
         }
         .onChange(of: content) { oldValue, newValue in
 //            editedDate = DateTime.now()
-            logger.debug("\(newValue ?? "")")
+//            logger.debug("\(newValue ?? "")")
             editorView.textView.text = newValue ?? ""
         }
     }
@@ -126,7 +126,7 @@ struct ReadOnlyMarkDownView: View {
     func updateHeight() {
         Task { @MainActor in
             let sec = UInt64.random(in: 700_000_000..<1200_000_000)
-            logger.debug("random seconds: \(sec)")
+//            logger.debug("random seconds: \(sec)")
             try? await Task.sleep(nanoseconds: sec) // wait until attributed string prepared
 //            DispatchQueue.main.async {
                 editorView.textView.sizeToFit()

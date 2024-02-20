@@ -5,8 +5,7 @@
 [ ] TipKit
 [ ] MetricKit
 
-# Issues
-[-] recents - sort not working, deleted recents - date issue seems. 
+# Issues 
 [ ] replace matched options are showing in editor?
 [ ] diff - just for two new words added in different paras, whole paras are timelined insteated of two lines
 [ ] emoji and telugu not working in code block
@@ -28,6 +27,7 @@
 [x] open notebook inplace from timeline
 [x] path cache shoud have to update once cloud sync is done
 [x] hang on theme save, when timeline is at month (with full data) - NotificationQueue
+[x] recents - sort not working, deleted recents - date issue seems.
 
 
 # first level filters
@@ -44,7 +44,7 @@
 
 
 
-[ ] - Yearly - 389 (449)
+[-] - Yearly - 395 (449)
 Lifetime - 1349
 Family Sharing - 749
 

@@ -49,6 +49,8 @@ struct ContentView: View {
     @State var isFirstTimeAppeared = false
     @State var isFirstTimePurchasesUpdated = false
     
+    @State var colorSchemaTask: Task<(), Never>?
+    
     var body: some View {
         VStack {
             NavigationSplitView(columnVisibility: $navigationSplitViewVisibility) {
@@ -145,6 +147,7 @@ struct ContentView: View {
     //                    }
                     }
                     .navigationTitle("Notes 365")
+//
 //                    .task {
 //                        if isFirstTimePurchasesUpdated == false {
 //                            isFirstTimePurchasesUpdated = true
@@ -177,7 +180,9 @@ struct ContentView: View {
     //                    }
     //                }
                 }
-                
+//                .onAppear(perform: {
+//                    ThemeState.shared.updateColorScheme(colorScheme)
+//                })
             }
             detail: {
                 if let sidebarItemSelected = sidebarItemSelected {
@@ -198,6 +203,7 @@ struct ContentView: View {
                     ProgressView()
                 }
             }
+
         }
         .onAppear {
             // on background to foreground also not required again
@@ -233,9 +239,16 @@ struct ContentView: View {
             }
         }
         .onChange(of: colorScheme, { oldValue, newValue in
-            if ThemeState.shared.colorScheme != newValue {
-                ThemeState.shared.updateColorScheme(newValue)
+            colorSchemaTask?.cancel()
+            colorSchemaTask = Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 1_000_000_000)
+                if ThemeState.shared.colorScheme != colorScheme {
+                    if Task.isCancelled { return }
+                    ThemeState.shared.updateColorScheme(colorScheme)
+                }
             }
+            
+            
         })
         
     }

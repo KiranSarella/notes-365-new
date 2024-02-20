@@ -16,7 +16,7 @@ class ContentSearchBusiness {
     }
     
     func fetchSearchResults(for text: String) -> [NotebookContentB]? {
-        logger.debug("\(#function) - \(text)")
+//        logger.debug("\(#function) - \(text)")
         do {
             let results = try storage.fetchSearchResults(for: text)
             logger.log("\(results)")

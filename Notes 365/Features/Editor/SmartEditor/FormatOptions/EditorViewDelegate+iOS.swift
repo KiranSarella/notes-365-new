@@ -256,7 +256,7 @@ extension UIEditorView: EditorViewDelegate {
     
     
     func updateTheme(theme: MarkdownTheme) {
-        logger.debug("\(#function)")
+//        logger.debug("\(#function)")
         self.theme = theme
         
         // TODO: fix textview.text to textView.text
