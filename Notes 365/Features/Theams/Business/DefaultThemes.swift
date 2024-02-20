@@ -9,39 +9,7 @@ import Foundation
 import SwiftUI
 
 class DefaultThemes {
-//    static func loadTheams() -> [Theme] {
-//        return [generateBasicLightTheme(),
-//                generateBasicDarkTheme(),
-//                generateCustomizedLightTheme(),
-//                generateCustomizedDarkTheme()]
-//    }
-    
-//    static func generateBasicLightTheme() -> Theme {
-//        var theme = Theme(id: UUID(), themeName: "Basic", appearanceType: .light)
-//        theme.fontName = "Helvetica"
-//        theme.fontSize = 16
-//        theme.bodyColor = Color.primary
-//        theme.styleColor = Color.primary
-//        theme.codeColor = Color.primary
-//        theme.blockQuoteColor = Color.primary
-//        theme.listColor = Color.primary
-//        theme.headingColor = Color.primary
-//        return theme
-//    }
-//    
-//    static func generateBasicDarkTheme() -> Theme {
-//        var theme = Theme(id: UUID(), themeName: "Basic", appearanceType: .dark)
-//        theme.fontName = "Helvetica"
-//        theme.fontSize = 16
-//        theme.bodyColor = Color.primary
-//        theme.styleColor = Color.primary
-//        theme.codeColor = Color.primary
-//        theme.blockQuoteColor = Color.primary
-//        theme.listColor = Color.primary
-//        theme.headingColor = Color.primary
-//        return theme
-//    }
-//    
+
     static func generateCustomizedLightTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
         theme.fontName = "Helvetica"
@@ -67,7 +35,7 @@ class DefaultThemes {
     
     static func generateCustomizedDarkTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
-        theme.fontName = "Chalkboard SE"
+        theme.fontName = "Helvetica Neue"
         theme.fontSize = 22
         theme.canvasColor = Color.black
         theme.bodyColor = Color.white
@@ -76,7 +44,7 @@ class DefaultThemes {
         theme.codeColor = Color.green
         theme.blockQuoteColor = Color.mint
         theme.listColor = Color.red
-        theme.highlightColor = Color.purple.opacity(0.25)
+        theme.highlightColor = Color.purple.opacity(0.45)
         
         theme.headingFontName = "Impact"
         theme.blockQuoteFontName = "Futura"

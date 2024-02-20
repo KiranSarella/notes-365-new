@@ -32,7 +32,6 @@ actor NotebooksPathService {
     var foldersPathsCache = [UUID: String]()
     var filesPathsCache = [UUID: String]()
     
-    private(set) var isRefreshing = false
     var cloudSyncFinishedObserver: NSObjectProtocol?
     
     var isEmpty: Bool {
@@ -40,8 +39,6 @@ actor NotebooksPathService {
     }
     
     var observingServices = false
-    
-    var lastRefreshTime: Date?
     
     var renamedObserver: Cancellable?
     var insertedObserver: Cancellable?
@@ -99,27 +96,26 @@ actor NotebooksPathService {
     
     func doRefresh() {
         logger.debug("\(#function)")
-        if isRefreshing { return }
+        refreshTask?.cancel()   // cancel existing
         refreshTask = Task {
             await refreshNotebooksInfo()
         }
     }
     
-    func doRefreshIfNotLoaded() async {
+    func doRefreshIfNotLoaded() {
         logger.debug("\(#function)")
-        if isEmpty && isRefreshing == false {
-            await refreshNotebooksInfo()
+        if isEmpty {
+            doRefresh()
         }
     }
     
-    func refreshNotebooksInfo() async {
+    private func refreshNotebooksInfo() async {
         logger.debug("\(#function)")
-        isRefreshing = true
-        lastRefreshTime = DateTime.now()
-        logger.debug("lastRefreshTime: \(self.lastRefreshTime?.debugDescription ?? "")")
+        if Task.isCancelled { return }
         resetInfoObjects()
+        if Task.isCancelled { return }
         updateNotebooksInfo()
-        isRefreshing = false
+        if Task.isCancelled { return }
         try? await Task.sleep(nanoseconds: 1_000_000_000)
     }
     
@@ -132,7 +128,9 @@ actor NotebooksPathService {
     
     private func updateNotebooksInfo() {
         logger.debug("\(#function)")
+        if Task.isCancelled { return }
         let results = notebooksBusiness.getAllFilesInfo()
+        if Task.isCancelled { return }
         for result in results {
             if result.isFolder {
                 foldersPathInfo[result.id] = result.locationInfo()
@@ -171,11 +169,6 @@ actor NotebooksPathService {
     }
     
     func folderFullPath(for notebookId: UUID) async -> String? {
-        
-        if isRefreshing {
-            try? await Task.sleep(nanoseconds: 1_000_000_000)
-        }
-        
         if let fullPathInfo = foldersPathsCache[notebookId] {
             logger.debug("cached - \(fullPathInfo)")
             return fullPathInfo
@@ -211,11 +204,6 @@ actor NotebooksPathService {
 //    }
     
     func fileFullPath(for notebookId: UUID) async -> String? {
-        
-        if isRefreshing {
-            try? await Task.sleep(nanoseconds: 1_000_000_000)
-        }
-        
         if let fullPathInfo = filesPathsCache[notebookId] {
             logger.debug("cached - \(fullPathInfo)")
             return fullPathInfo
@@ -478,18 +466,11 @@ extension NotebooksPathService {
     
     func observeCloudFinished() {
         logger.debug("\(#function)")
-        cloudSyncFinishObserver = NotificationCenter.default.publisher(for: Notification.Name.notebookInserted).sink { notification in
-            
-            if let lastRefreshTime = self.lastRefreshTime {
-                
-                guard let minutes = Calendar.current.dateComponents([.minute], from: lastRefreshTime, to: DateTime.now()).minute else { return }
-                if minutes > 1 {
-                    self.doRefresh()
-                }
-                
-            } else {
+        cloudSyncFinishObserver = NotificationCenter.default
+            .publisher(for: Notification.Name.icloudSyncFinished)
+            .debounce(for: .seconds(3), scheduler: RunLoop.main)
+            .sink { notification in
                 self.doRefresh()
-            }
         }
     }
 }

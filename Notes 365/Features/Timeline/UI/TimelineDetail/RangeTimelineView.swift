@@ -48,7 +48,6 @@ struct RangeTimelineView: View {
                 .onAppear {
                     if state.dayTimelineModels.isEmpty {
                         Task {
-                            await NotebooksPathService.shared.doRefreshIfNotLoaded()
                             state.startloading(days: selectedDates)
                         }
                     } else {

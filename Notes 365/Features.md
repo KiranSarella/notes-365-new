@@ -7,7 +7,6 @@
 
 # Issues
 [-] hang on theme save, when timeline is at month (with full data) - NotificationQueue
-[-] dark mode change not working on timeline - not appear
 [ ] recents - sort not working, deleted recents - date issue seems.
 [ ] put loader till timeline sidebar selection 
 [ ] change dark mode theme - that contains bold and italic - default fonts

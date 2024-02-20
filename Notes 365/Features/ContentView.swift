@@ -16,6 +16,15 @@ public enum SidebarItem: String, CaseIterable, Identifiable {
     case recentlyDeleted
 }
 
+struct LaunchView: View {
+    var body: some View {
+        ContentView()
+            .onAppear {
+                
+            }
+    }
+}
+
 struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.colorScheme) private var colorScheme
@@ -41,206 +50,194 @@ struct ContentView: View {
     @State var isFirstTimePurchasesUpdated = false
     
     var body: some View {
-        NavigationSplitView(columnVisibility: $navigationSplitViewVisibility) {
-            VStack {
-                List(selection: $sidebarItemSelected) {
-                    Label {
-                        Text("Timeline")
-                    } icon: {
-                        Image(systemName: "calendar")
-                            .circularIconStyle(background: Color("icon_purple", bundle: nil))
-                    }
-                    .tag(SidebarItem.timeline.id)
+        VStack {
+            NavigationSplitView(columnVisibility: $navigationSplitViewVisibility) {
+                VStack {
+                    List(selection: $sidebarItemSelected) {
+                        Label {
+                            Text("Timeline")
+                        } icon: {
+                            Image(systemName: "calendar")
+                                .circularIconStyle(background: Color("icon_purple", bundle: nil))
+                        }
+                        .tag(SidebarItem.timeline.id)
+                            
+                        Label {
+                            Text("Notebooks")
+                        } icon: {
+                            Image(systemName: "books.vertical.fill")
+                                .circularIconStyle(background: Color("icon_red", bundle: nil))
+                        }
+                        .tag(SidebarItem.notebooks.id)
                         
-                    Label {
-                        Text("Notebooks")
-                    } icon: {
-                        Image(systemName: "books.vertical.fill")
-                            .circularIconStyle(background: Color("icon_red", bundle: nil))
-                    }
-                    .tag(SidebarItem.notebooks.id)
-                    
-                    Label {
-                        Text("Recents")
-                    } icon: {
-                        Image(systemName: "clock.fill")
-                            .circularIconStyle(background: Color("icon_orange", bundle: nil))
-                    }
-                    .tag(SidebarItem.recents.id)
-                    
-                    Label {
-                        Text("Search")
-                    } icon: {
-                        Image(systemName: "magnifyingglass")
-                            .circularIconStyle(background: .indigo)
-                    }
-                    .tag(SidebarItem.search.id)
-                    
-                    Label {
-                        Text("Recently Deleted")
-                    } icon: {
-                        Image(systemName: "trash.fill")
-                            .circularIconStyle(background: .gray)
-                    }
-                    .tag(SidebarItem.recentlyDeleted.id)
-                    
-                    Section("Settings", isExpanded: $settingsExpanded) {
-                        Button {
-                            showThemes = true
-                        } label: {
-                            Label {
-                                Text("Themes")
-                            } icon: {
-                                Image(systemName: "paintbrush.fill")
-                                    .circularIconStyle(background: Color("icon_green", bundle: nil))
+                        Label {
+                            Text("Recents")
+                        } icon: {
+                            Image(systemName: "clock.fill")
+                                .circularIconStyle(background: Color("icon_orange", bundle: nil))
+                        }
+                        .tag(SidebarItem.recents.id)
+                        
+                        Label {
+                            Text("Search")
+                        } icon: {
+                            Image(systemName: "magnifyingglass")
+                                .circularIconStyle(background: .indigo)
+                        }
+                        .tag(SidebarItem.search.id)
+                        
+                        Label {
+                            Text("Recently Deleted")
+                        } icon: {
+                            Image(systemName: "trash.fill")
+                                .circularIconStyle(background: .gray)
+                        }
+                        .tag(SidebarItem.recentlyDeleted.id)
+                        
+                        Section("Settings", isExpanded: $settingsExpanded) {
+                            Button {
+                                showThemes = true
+                            } label: {
+                                Label {
+                                    Text("Themes")
+                                } icon: {
+                                    Image(systemName: "paintbrush.fill")
+                                        .circularIconStyle(background: Color("icon_green", bundle: nil))
+                                }
                             }
-                        }
-                        Button {
-                            showFormattingSymbols = true
-                        } label: {
-                            Label {
-                                Text("Symbols Guide")
-                            } icon: {
-                                Image(systemName: "textformat")
-                                    .circularIconStyle(background: Color("icon_teal", bundle: nil))
+                            Button {
+                                showFormattingSymbols = true
+                            } label: {
+                                Label {
+                                    Text("Symbols Guide")
+                                } icon: {
+                                    Image(systemName: "textformat")
+                                        .circularIconStyle(background: Color("icon_teal", bundle: nil))
+                                }
                             }
-                        }
-                        
-                        Button {
-                            showPurchases = true
-                        } label: {
-                            Label {
-                                Text("Premium")
-                            } icon: {
-                                Image(systemName: "lock.open.fill")
-                                    .circularIconStyle(background: Color("icon_amber", bundle: nil))
+                            
+                            Button {
+                                showPurchases = true
+                            } label: {
+                                Label {
+                                    Text("Premium")
+                                } icon: {
+                                    Image(systemName: "lock.open.fill")
+                                        .circularIconStyle(background: Color("icon_amber", bundle: nil))
+                                }
                             }
-                        }
-                        
-                        Button {
-                            showFeedback = true
-                        } label: {
-                            Label {
-                                Text("Feedback")
-                            } icon: {
-                                Image(systemName: "hand.thumbsup.fill")
-//                                    .circularIconStyle(background: .blue)
-                                    .circularIconStyle(background: Color("icon_blue", bundle: nil))
-                            }
-                        }
-                    }
-                    
-//                    if cloudKitSync.isImportDone == false {
-//                        ProgressView("Syncing..")
-//                    }
-                }
-                .navigationTitle("Notes 365")
-                .onAppear {
-                    if isFirstTimeAppeared == false {
-                        isFirstTimeAppeared = true
-                        
-                        Task {
-                            await NotebooksPathService.shared.startObservingServices()
-                        }
-                        
-                        BusinessFactory.dayVersionInteractor().setupDayVersionCreationProcess()
-                        BusinessFactory.timelineInteractor().setupTimeineCreationProcess()
-                        BusinessFactory.recentsInteractor().setupRecentsAddingProcess()
-                        
-                        ThemeState.shared.updateColorScheme(colorScheme)
-                        
-                        Task {
-                            // start service
-                            try? await Task.sleep(nanoseconds: 4_000_000_000)
-                            await NotebooksPathService.shared.doRefreshIfNotLoaded()
-                            if UIDevice.current.userInterfaceIdiom != .phone {
-                                Task { @MainActor in
-                                    sidebarItemSelected = SidebarItem.timeline.id
+                            
+                            Button {
+                                showFeedback = true
+                            } label: {
+                                Label {
+                                    Text("Feedback")
+                                } icon: {
+                                    Image(systemName: "hand.thumbsup.fill")
+    //                                    .circularIconStyle(background: .blue)
+                                        .circularIconStyle(background: Color("icon_blue", bundle: nil))
                                 }
                             }
                         }
                         
-                        Task {
-                            try? await Task.sleep(nanoseconds: 10_000_000_000)
-                            await BusinessFactory.createNotebooksFactory().permanentDeleteExpiredItems()
-                        }
-                        
-                        
-                        
-                        
-                        Task {
-                            try? await Task.sleep(nanoseconds: 10_000_000_000)
-                            await BusinessFactory.createNotebooksFactory().permanentDeleteExpiredItems()
-                        }
-                        
-//                        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-//                            BusinessFactory.createNotebooksFactory().permanentDeleteExpiredItems()
-//                        }
-                        
-//                        Task {
-//                            await NotebooksPathService.shared.refreshNotebooksInfo()
-//                        }
-                        
-//                        Task {
-//                            
-//                            
-//                        }
-                        
-                        
+    //                    if cloudKitSync.isImportDone == false {
+    //                        ProgressView("Syncing..")
+    //                    }
                     }
-                }
-                .task {
-                    if isFirstTimePurchasesUpdated == false {
-                        isFirstTimePurchasesUpdated = true
-                        state.checkAndObservePurchasesChanges()
-                    } else if await PremiumUserState.shared.isPurchased == false {
-                        state.checkAndObservePurchasesChanges()
-                    }
-                }
-                .sheet(isPresented: $showThemes) {
-                    ThemesBaseView()
-                }
-                .sheet(isPresented: $showFormattingSymbols) {
-                    EditorSymbolsView()
-                }
-                .sheet(isPresented: $showPurchases) {
-                    PurchaseBaseView()
-                }
-                .sheet(isPresented: $showFeedback) {
-                    FeedbackView()
-                }
-                .onChange(of: colorScheme, { oldValue, newValue in
-                    if ThemeState.shared.colorScheme != newValue {
-                        ThemeState.shared.updateColorScheme(newValue)
-                    }
-                })
-//                .onChange(of: sidebarItemSelected) { oldValue, newValue in
-//                    if newValue == SidebarItem.timeline.rawValue {
-//                        path = NavigationPath()
+                    .navigationTitle("Notes 365")
+//                    .task {
+//                        if isFirstTimePurchasesUpdated == false {
+//                            isFirstTimePurchasesUpdated = true
+//                            state.checkAndObservePurchasesChanges()
+//                        } else if await PremiumUserState.shared.isPurchased == false {
+//                            state.checkAndObservePurchasesChanges()
+//                        }
 //                    }
-//                }
-            }
-            
-        }
-        detail: {
-            if let sidebarItemSelected = sidebarItemSelected {
-                let selectedItem = SidebarItem(rawValue: sidebarItemSelected)!
-                switch selectedItem {
-                case .timeline:
-                    TimelineBaseView(path: $path, state: $timelineDetailState, horizontalCalendarViewState: $horizontalCalendarViewState)
-                case .notebooks:
-                    NotebooksBaseDetailView(path: $path)
-                case .search:
-                    ContentSearchView()
-                case .recents:
-                    RecentsBaseDetailView(path: $path)
-                case .recentlyDeleted:
-                    RecentlyDeletedBaseDetailView(path: $path)
+                    .sheet(isPresented: $showThemes) {
+                        ThemesBaseView()
+                    }
+                    .sheet(isPresented: $showFormattingSymbols) {
+                        EditorSymbolsView()
+                    }
+                    .sheet(isPresented: $showPurchases) {
+                        PurchaseBaseView()
+                    }
+                    .sheet(isPresented: $showFeedback) {
+                        FeedbackView()
+                    }
+    //                .onChange(of: colorScheme, { oldValue, newValue in
+    //                    ThemeState.shared.updateColorScheme(newValue)
+    ////                    if ThemeState.shared.colorScheme != newValue {
+    ////
+    ////                    }
+    //                })
+    //                .onChange(of: sidebarItemSelected) { oldValue, newValue in
+    //                    if newValue == SidebarItem.timeline.rawValue {
+    //                        path = NavigationPath()
+    //                    }
+    //                }
                 }
-            } else {
-                EmptyView()
+                
+            }
+            detail: {
+                if let sidebarItemSelected = sidebarItemSelected {
+                    let selectedItem = SidebarItem(rawValue: sidebarItemSelected)!
+                    switch selectedItem {
+                    case .timeline:
+                        TimelineBaseView(path: $path, state: $timelineDetailState, horizontalCalendarViewState: $horizontalCalendarViewState)
+                    case .notebooks:
+                        NotebooksBaseDetailView(path: $path)
+                    case .search:
+                        ContentSearchView()
+                    case .recents:
+                        RecentsBaseDetailView(path: $path)
+                    case .recentlyDeleted:
+                        RecentlyDeletedBaseDetailView(path: $path)
+                    }
+                } else {
+                    ProgressView()
+                }
             }
         }
+        .onAppear {
+            // on background to foreground also not required again
+            if isFirstTimeAppeared == false {
+                isFirstTimeAppeared = true
+                Task {
+                    await NotebooksPathService.shared.startObservingServices()
+                }
+                
+                BusinessFactory.dayVersionInteractor().setupDayVersionCreationProcess()
+                BusinessFactory.timelineInteractor().setupTimeineCreationProcess()
+                BusinessFactory.recentsInteractor().setupRecentsAddingProcess()
+                
+                ThemeState.shared.updateColorScheme(colorScheme)
+                
+                Task {
+                    // start service
+                    try? await Task.sleep(nanoseconds: 5_000_000_000)
+                    await NotebooksPathService.shared.doRefreshIfNotLoaded()
+                    if UIDevice.current.userInterfaceIdiom != .phone {
+                        Task { @MainActor in
+                            sidebarItemSelected = SidebarItem.timeline.id
+                        }
+                    }
+                }
+                
+                Task {
+                    try? await Task.sleep(nanoseconds: 10_000_000_000)
+                    await BusinessFactory.createNotebooksFactory().permanentDeleteExpiredItems()
+                }
+                
+                state.checkAndObservePurchasesChanges()
+            }
+        }
+        .onChange(of: colorScheme, { oldValue, newValue in
+            if ThemeState.shared.colorScheme != newValue {
+                ThemeState.shared.updateColorScheme(newValue)
+            }
+        })
+        
     }
 }
 

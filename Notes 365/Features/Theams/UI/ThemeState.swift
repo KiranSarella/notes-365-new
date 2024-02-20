@@ -31,6 +31,8 @@ class ThemeState {
     }
     
     func updateColorScheme(_ newValue: ColorScheme) {
+        logger.debug("\(#function)")
+        print("ColorScheme: ", newValue)
         colorScheme = newValue
         self.loadTheme(colorScheme: colorScheme)
     }
