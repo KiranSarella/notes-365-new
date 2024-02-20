@@ -9,7 +9,13 @@ import Foundation
 
 class RecentsBusiness: RecentsInteractor {
     var storage: RecentsStorageProvider
-    let max: Int = 20
+    
+#if DEBUG
+    let maxLimit = 10
+#else
+    let maxLimit = 20
+#endif
+    
     
     init(storage: RecentsStorageProvider) {
         self.storage = storage
@@ -17,6 +23,14 @@ class RecentsBusiness: RecentsInteractor {
     
     func loadRecents() throws -> [RecentItem] {
         try storage.fetchRecentItems()
+    }
+    
+    func loadRecentFiles() throws -> [RecentItem] {
+        try storage.fetchRecentFiles()
+    }
+    
+    func loadRecentFolders() throws -> [RecentItem] {
+        try storage.fetchRecentFolders()
     }
     
     func addRecent(item: RecentItem) throws {
@@ -34,26 +48,22 @@ class RecentsBusiness: RecentsInteractor {
         try storage.rename(id: id, name: name)
     }
     
+    /// clear when exceed 20 items and older then 2 days
     func clearOldRecentItems() {
         logger.info("\(#function)")
         do {
-            let allItems = try storage.fetchRecentItems()
-            // folders
-            let folders = allItems.filter({ $0.isFolder }).sorted { r1, r2 in
-                r1.updatedDate < r2.updatedDate
-            }
-            if folders.count > max {
-                let limitDate = folders[max].updatedDate
-                try storage.removeItems(below: limitDate, isFolder: true)
-            }
-            // files
-            let files = allItems.filter({ $0.isFolder == false }).sorted { r1, r2 in
-                r1.updatedDate < r2.updatedDate
-            }
-            if files.count > max {
-                let limitDate = files[max].updatedDate
+            let filesCount = try storage.fetchRecentFilesCount()
+            if filesCount > maxLimit {
+                let limitDate = DateTime.now().dayBefore.dayBefore
                 try storage.removeItems(below: limitDate, isFolder: false)
             }
+            
+            let foldersCount = try storage.fetchRecentFoldersCount()
+            if foldersCount > maxLimit {
+                let limitDate = DateTime.now().dayBefore.dayBefore
+                try storage.removeItems(below: limitDate, isFolder: true)
+            }
+            
         } catch {
             logger.error("\(error)")
         }

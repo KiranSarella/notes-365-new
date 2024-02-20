@@ -9,6 +9,12 @@ import Foundation
 
 protocol RecentsStorageProvider {
     func fetchRecentItems() throws -> [RecentItem]
+    func fetchRecentFiles() throws -> [RecentItem]
+    
+    func fetchRecentFilesCount() throws -> Int
+    func fetchRecentFoldersCount() throws -> Int
+    
+    func fetchRecentFolders() throws -> [RecentItem]
     func insert(item: RecentItem) throws
     func remove(id: UUID) throws
     func removeItems(below date: Date, isFolder: Bool) throws

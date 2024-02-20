@@ -120,7 +120,7 @@ private struct RecentFolderCellView: View {
                 VStack {
                     VStack {
                         HStack {
-                            Text(item.notebook.name + "   \(item.notebook.modifiedDate.formatted(date: .numeric, time: .standard))")
+                            Text(item.notebook.name)
                                 .id(item.id)
                                 .fontWeight(highlightText ? .heavy : .semibold)
                             Spacer()
@@ -164,7 +164,7 @@ private struct RecentFileCellView: View {
     var body: some View {
         VStack {
             HStack {
-                Text(item.notebook.name + "   \(item.notebook.modifiedDate.formatted(date: .numeric, time: .standard))")
+                Text(item.notebook.name)
                     .id(item.id)
                     .fontWeight(highlightText ? .heavy : .semibold)
                     .foregroundStyle(Color.primary)

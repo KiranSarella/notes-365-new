@@ -20,16 +20,12 @@ class RecentsState {
         do {
             let items = try business.loadRecents()
             let notebooks = items.map { $0.notebook }
-            let folderItems = notebooks.filter { $0.isFolder }.sorted(by: { n1, n2 in
-                n1.modifiedDate > n2.modifiedDate
-            })
-            folders = folderItems.map { RecentNotebook(id: $0.id, notebook: $0) }
-            let fileItems = notebooks.filter { !$0.isFolder }.sorted(by: { n1, n2 in
-                n1.modifiedDate > n2.modifiedDate
-            })
-            files = fileItems.map { RecentNotebook(id: $0.id, notebook: $0) }
-//            print(folders.map { "\($0.name) - \($0.id.uuidString)"})
-//            print(files.map { "\($0.name) - \($0.id.uuidString)"})
+            
+            let folderItems = try business.loadRecentFolders()
+            folders = folderItems.map { RecentNotebook(id: $0.id, notebook: $0.notebook) }
+            
+            let fileItems = try business.loadRecentFiles()
+            files = fileItems.map { RecentNotebook(id: $0.id, notebook: $0.notebook) }
         } catch let error {
             print(error)
         }

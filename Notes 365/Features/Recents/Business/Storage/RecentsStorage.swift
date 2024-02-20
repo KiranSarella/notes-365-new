@@ -16,6 +16,35 @@ class RecentsStorage {
         self.modelContext = modelContext
     }
     
+    
+    func fetchRecentFiles() throws -> [RecentItemData] {
+        let predicate = #Predicate<RecentItemData> { $0.isFolder == false }
+        let sortDescriptor = SortDescriptor(\RecentItemData.updatedDate, order: .reverse)
+        var descriptor = FetchDescriptor(predicate: predicate, sortBy: [sortDescriptor])
+        descriptor.fetchLimit = 20
+        return try modelContext.fetch(descriptor)
+    }
+    
+    func fetchRecentFolders() throws -> [RecentItemData] {
+        let predicate = #Predicate<RecentItemData> { $0.isFolder == true }
+        let sortDescriptor = SortDescriptor(\RecentItemData.updatedDate, order: .reverse)
+        var descriptor = FetchDescriptor(predicate: predicate, sortBy: [sortDescriptor])
+        descriptor.fetchLimit = 20
+        return try modelContext.fetch(descriptor)
+    }
+    
+    func fetchRecentFilesCount() throws -> Int {
+        let predicate = #Predicate<RecentItemData> { $0.isFolder == false }
+        let descriptor = FetchDescriptor(predicate: predicate)
+        return try modelContext.fetchCount(descriptor)
+    }
+    
+    func fetchRecentFoldersCount() throws -> Int {
+        let predicate = #Predicate<RecentItemData> { $0.isFolder == true }
+        let descriptor = FetchDescriptor(predicate: predicate)
+        return try modelContext.fetchCount(descriptor)
+    }
+    
     func fetchRecentItems() throws -> [RecentItemData] {
         let allListPredicate = #Predicate<RecentItemData> { _ in true }
         let descriptor = FetchDescriptor(predicate: allListPredicate)
@@ -51,7 +80,6 @@ class RecentsStorage {
         let predicate = #Predicate<RecentItemData> {
             $0.isFolder == isFolder && $0.updatedDate < date
         }
-//        let descriptor = FetchDescriptor(predicate: predicate)
         try modelContext.delete(model: RecentItemData.self, where: predicate)
     }
     

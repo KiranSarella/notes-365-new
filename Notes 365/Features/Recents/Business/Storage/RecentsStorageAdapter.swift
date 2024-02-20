@@ -15,6 +15,22 @@ class RecentsStorageAdapter: RecentsStorageProvider {
         storage = RecentsStorage(modelContext: modelContext)
     }
     
+    func fetchRecentFiles() throws -> [RecentItem] {
+        try storage.fetchRecentFiles().map { $0.businessModel }
+    }
+    
+    func fetchRecentFolders() throws -> [RecentItem] {
+        try storage.fetchRecentFolders().map { $0.businessModel }
+    }
+    
+    func fetchRecentFilesCount() throws -> Int {
+        try storage.fetchRecentFilesCount()
+    }
+    
+    func fetchRecentFoldersCount() throws -> Int {
+        try storage.fetchRecentFoldersCount()
+    }
+    
     func fetchRecentItems() throws -> [RecentItem] {
         try storage.fetchRecentItems().map { $0.businessModel }
     }

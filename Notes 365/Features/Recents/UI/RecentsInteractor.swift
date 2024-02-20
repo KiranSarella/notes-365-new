@@ -9,6 +9,8 @@ import Foundation
 
 protocol RecentsInteractor {
     func loadRecents() throws -> [RecentItem]
+    func loadRecentFiles() throws -> [RecentItem]
+    func loadRecentFolders() throws -> [RecentItem]
     func addRecent(item: RecentItem) throws
     func clearOldRecentItems()
     func setupRecentsAddingProcess()
