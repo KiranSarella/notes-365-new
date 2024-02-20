@@ -124,13 +124,15 @@ struct ReadOnlyMarkDownView: View {
     }
     
     func updateHeight() {
-        Task {
-            try? await Task.sleep(nanoseconds: 700_000_000) // wait until attributed string prepared
-            DispatchQueue.main.async {
+        Task { @MainActor in
+            let sec = UInt64.random(in: 700_000_000..<1200_000_000)
+            logger.debug("random seconds: \(sec)")
+            try? await Task.sleep(nanoseconds: sec) // wait until attributed string prepared
+//            DispatchQueue.main.async {
                 editorView.textView.sizeToFit()
                 let contentSizeHeight = editorView.textView.contentSize.height
                 height = contentSizeHeight
-            }
+//            }
         }
     }
     

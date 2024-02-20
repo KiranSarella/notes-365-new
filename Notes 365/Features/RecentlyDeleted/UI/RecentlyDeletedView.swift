@@ -51,8 +51,8 @@ fileprivate struct RecentlyDeletedView: View {
                     emptyView
                 }
                 
-                folderSection
                 fileSection
+                folderSection
             }
         }
         .navigationTitle(navigationTitle)
@@ -265,8 +265,8 @@ struct DeletedNotebooksLevelView: View {
                 if currentLevelState.isEmpty {
                     emptyView
                 }
-                folderSection
                 fileSection
+                folderSection
             }
         }
         .navigationTitle(navigationTitle)

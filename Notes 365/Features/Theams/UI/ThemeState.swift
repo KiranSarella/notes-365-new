@@ -60,7 +60,10 @@ class ThemeState {
     
     // send notification
     func themeChangedNotification() {
-        NotificationCenter.default.post(name: .themeUpdated, object: theme)
+//        NotificationCenter.default.post(name: .themeUpdated, object: theme)
+        
+        let notification = Notification(name: .themeUpdated, object: theme)
+        NotificationQueue.default.enqueue(notification, postingStyle: .whenIdle, coalesceMask: .onName, forModes: nil)
     }
 }
 
