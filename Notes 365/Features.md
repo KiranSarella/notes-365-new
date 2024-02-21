@@ -30,6 +30,13 @@
 [x] recents - sort not working, deleted recents - date issue seems.
 
 
+- bug fixes and performace improvements
+- lazy loading for timeline content
+- button to open respective notebook from timeline
+- rating option in feedback screen
+- Yearly - price drop - 395 (449)
+
+
 # first level filters
 [ ] have to get all note ids for top level
     - get folders and files for parent
@@ -44,7 +51,7 @@
 
 
 
-[-] - Yearly - 395 (449)
+Yearly - 395
 Lifetime - 1349
 Family Sharing - 749
 
