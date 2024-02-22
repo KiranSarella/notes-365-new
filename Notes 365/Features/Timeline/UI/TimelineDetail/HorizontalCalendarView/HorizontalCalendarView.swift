@@ -17,26 +17,35 @@ struct HorizontalCalendarView: View {
         ScrollViewReader { scrollProxy in
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    ForEach(state.dateRanges) { dateRange in
+                    
+//                    ForEach(state.list, id: \.id) { item in
+//                        Label(item.title, systemImage: item.filterType.icon)
+//                    }
+                    
+                    ForEach(state.dateRanges, id: \.id) { item in
                         VStack {
-                            if state.isSelected(input: dateRange) {
+                            if state.isSelected(input: item) {
                                 Button {
-                                    state.selectedDateRange = dateRange
+                                    if let item = item as? TimelineDateRange {
+                                        state.selectedDateRange = item
+                                    }
                                 } label: {
-                                    Text(dateRange.title)
+                                    Label(item.title, systemImage: item.filterType.icon)
                                 }
                                 .buttonStyle(.borderedProminent)
                             } else {
                                 Button {
-                                    state.selectedDateRange = dateRange
+                                    if let item = item as? TimelineDateRange {
+                                        state.selectedDateRange = item
+                                    }
                                 } label: {
-                                    Text(dateRange.title)
+                                    Label(item.title, systemImage: item.filterType.icon)
                                 }
                                 .buttonStyle(.bordered)
                             }
                         }
                         .padding(5)
-                        .id(dateRange.id)
+                        .id(item.id)
                     }
                 }
                 .padding(.horizontal)
@@ -49,9 +58,10 @@ struct HorizontalCalendarView: View {
                     state.selectedDateRange = state.dateRanges.first
                 }
             })
-            .onChange(of: state.selectedDateRange, { oldValue, newValue in
+            .onChange(of: state.selectedDateRange?.id, { oldValue, newValue in
                 logger.debug("onChange - selectedDateRange: ")
-                guard let newRangeObj = newValue else { return }
+                guard let newValue = newValue else { return }
+                guard let newRangeObj = state.selectedDateRange as? TimelineDateRange else { return }
                 selectedDates = state.getDates(for: newRangeObj)
             })
         }

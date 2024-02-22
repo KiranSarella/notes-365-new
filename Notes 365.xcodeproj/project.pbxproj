@@ -50,7 +50,6 @@
 		5C34A18E2B1BA0EA00D036B7 /* ThemeB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C34A18D2B1BA0EA00D036B7 /* ThemeB.swift */; };
 		5C3DE6AF2B132155004E3621 /* SingleDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3DE6AE2B132155004E3621 /* SingleDayView.swift */; };
 		5C3DE6B22B13722C004E3621 /* RangeTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3DE6B12B13722C004E3621 /* RangeTimelineView.swift */; };
-		5C3DE6B52B13A19D004E3621 /* SingleDayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3DE6B42B13A19D004E3621 /* SingleDayState.swift */; };
 		5C3DE6B72B13A8A2004E3621 /* RangeTimelineState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C3DE6B62B13A8A2004E3621 /* RangeTimelineState.swift */; };
 		5C4ADCE32A9757EF000A037E /* EditorSymbolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4ADCE22A9757EF000A037E /* EditorSymbolsView.swift */; };
 		5C56680D2B109DB800CB873F /* TimelineStorageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C56680C2B109DB800CB873F /* TimelineStorageProvider.swift */; };
@@ -292,7 +291,6 @@
 		5C3DE6AE2B132155004E3621 /* SingleDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleDayView.swift; sourceTree = "<group>"; };
 		5C3DE6B02B13709C004E3621 /* TimelineDetail.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TimelineDetail.md; sourceTree = "<group>"; };
 		5C3DE6B12B13722C004E3621 /* RangeTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeTimelineView.swift; sourceTree = "<group>"; };
-		5C3DE6B42B13A19D004E3621 /* SingleDayState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleDayState.swift; sourceTree = "<group>"; };
 		5C3DE6B62B13A8A2004E3621 /* RangeTimelineState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeTimelineState.swift; sourceTree = "<group>"; };
 		5C4ADCE22A9757EF000A037E /* EditorSymbolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSymbolsView.swift; sourceTree = "<group>"; };
 		5C56680C2B109DB800CB873F /* TimelineStorageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineStorageProvider.swift; sourceTree = "<group>"; };
@@ -687,15 +685,6 @@
 			path = Storage;
 			sourceTree = "<group>";
 		};
-		5C3DE6B32B13A181004E3621 /* SingleDay */ = {
-			isa = PBXGroup;
-			children = (
-				5C3DE6AE2B132155004E3621 /* SingleDayView.swift */,
-				5C3DE6B42B13A19D004E3621 /* SingleDayState.swift */,
-			);
-			path = SingleDay;
-			sourceTree = "<group>";
-		};
 		5C4ADCE12A97576F000A037E /* EditorSymbols */ = {
 			isa = PBXGroup;
 			children = (
@@ -879,13 +868,13 @@
 		5CC8C2612AD67D6D00ABAC1F /* TimelineDetail */ = {
 			isa = PBXGroup;
 			children = (
-				5CD2F4EF2ACC7FD500E8B465 /* TimelineDetailState.swift */,
+				5C3DE6B02B13709C004E3621 /* TimelineDetail.md */,
 				5C1CD5AA2ABC350B00D47814 /* TimelineBaseView.swift */,
+				5CD2F4EF2ACC7FD500E8B465 /* TimelineDetailState.swift */,
 				5CBEF30F2B14FD2E003A3972 /* HorizontalCalendarView */,
 				5C3DE6B12B13722C004E3621 /* RangeTimelineView.swift */,
 				5C3DE6B62B13A8A2004E3621 /* RangeTimelineState.swift */,
-				5C3DE6B32B13A181004E3621 /* SingleDay */,
-				5C3DE6B02B13709C004E3621 /* TimelineDetail.md */,
+				5C3DE6AE2B132155004E3621 /* SingleDayView.swift */,
 				9F45BCFA2920CCCE003DE332 /* NoteChangeHeadingView.swift */,
 			);
 			path = TimelineDetail;
@@ -1518,7 +1507,6 @@
 				5C08EA442B1898B00095DE86 /* ContentSearchBusiness.swift in Sources */,
 				5CBEF3132B14FE22003A3972 /* HorizontalCalendarViewState.swift in Sources */,
 				5C08EA402B1897440095DE86 /* ContentSearchProvider.swift in Sources */,
-				5C3DE6B52B13A19D004E3621 /* SingleDayState.swift in Sources */,
 				5C08EA3E2B1895980095DE86 /* ContentSearchStorage.swift in Sources */,
 				5CE8C4882B03048E00F19217 /* Notebook.swift in Sources */,
 				5CCCF7F52AC2CB6B00F5923E /* TimelineStorage.swift in Sources */,

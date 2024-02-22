@@ -1,11 +1,17 @@
 # Backlogs
-[ ] timeline filter tabs with all first level folders
+[-] timeline filter tabs with all first level folders
 [ ] read text
 [ ] read in background audio
 [ ] TipKit
 [ ] MetricKit
 
 # Issues 
+[ ] single line full path for recents and search content rows
+[ ] limit search content results (100) and - use load more
+[ ] update UI for search content
+
+
+#### editor related
 [ ] replace matched options are showing in editor?
 [ ] diff - just for two new words added in different paras, whole paras are timelined insteated of two lines
 [ ] emoji and telugu not working in code block
@@ -13,32 +19,12 @@
 [ ] in different bg, code block is not visible
 
 
-
 # Completed
-[x] headings font - bold not working on switch disabled.
-[x] load next day on scroll to bottom done
-[x] dont refresh others except today's tab. 
-    - can't because, while switcing tab, the navigtion is popping, no persistance. so, have to reload again.
-    - alternative is open notes in-place
-// file naming
-[x] empty text for filename is accepting
-[x] accept same name for folder and file - getting filename exists error
-[x] rating view
-[x] open notebook inplace from timeline
-[x] path cache shoud have to update once cloud sync is done
-[x] hang on theme save, when timeline is at month (with full data) - NotificationQueue
-[x] recents - sort not working, deleted recents - date issue seems.
-
-
-- bug fixes and performace improvements
-- lazy loading for timeline content
-- button to open respective notebook from timeline
-- rating option in feedback screen
-- Yearly - price drop - 395 (449)
+[x] hang on inner file and folder deleting
 
 
 # first level filters
-[ ] have to get all note ids for top level
+[-] have to get all note ids for top level
     - get folders and files for parent
         - files - add to set
         - folders - repeat above steps - recursive

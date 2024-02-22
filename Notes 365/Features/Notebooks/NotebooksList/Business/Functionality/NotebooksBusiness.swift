@@ -104,6 +104,7 @@ class NotebooksBusiness {
     }
     
     func deleteNotebook(notebook: NotebookB) throws {
+        logger.debug("\(#function)")
         notebook.deletedDate = DateTime.now()
         try notebook.update(in: storage)
         do { sendNotebookDeleted(notebook) }

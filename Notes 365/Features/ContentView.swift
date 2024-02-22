@@ -289,35 +289,3 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
-
-
-struct ContentDetailView: View {
-    
-    @Binding var sidebarItemSelected: SidebarItem.ID?
-    @Binding var path: NavigationPath
-    
-    var body: some View {
-        
-        if let sidebarItemSelected = sidebarItemSelected {
-            let selectedItem = SidebarItem(rawValue: sidebarItemSelected)!
-            switch selectedItem {
-            case .timeline:
-    //            TimelineBaseView(path: $path, state: $timelineDetailState, horizontalCalendarViewState: $horizontalCalendarViewState)
-                Text("Timeoine")
-            case .notebooks:
-                NotebooksBaseDetailView(path: $path)
-            case .search:
-                ContentSearchView()
-            case .recents:
-                RecentsBaseDetailView(path: $path)
-            case .recentlyDeleted:
-                RecentlyDeletedBaseDetailView(path: $path)
-            }
-        } else {
-            EmptyView()
-        }
-        
-//        let selectedItem = SidebarItem(rawValue: sidebarItemSelected ?? SidebarItem.timeline.id)!
-        
-    }
-}

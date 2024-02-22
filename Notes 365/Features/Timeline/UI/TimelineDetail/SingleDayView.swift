@@ -7,6 +7,24 @@
 
 import SwiftUI
 
+struct DayTimelineModel: Identifiable {
+    let id = UUID()
+    let date: Date
+    var timelines = [Timeline]()
+    
+    mutating func showTimelines(newValues: [Timeline]) {
+        timelines = newValues
+    }
+}
+
+struct DiscardTimelineInfo: Equatable {
+//    let dayId: UUID
+    let date: Date
+    let fileId: UUID
+    let changeId: String
+}
+
+
 struct SingleDayView: View {
     @Binding var dayTimelines: DayTimelineModel
     @Binding var discardTimelineInfo: DiscardTimelineInfo?
@@ -128,7 +146,9 @@ struct SingleDayChangesListView: View {
                             .swipeActions(edge: .trailing) {
                                 if !noteChange.fileName.isEmpty {
                                     Button {
-                                        openTimeline = noteChange
+                                        Task { @MainActor in
+                                            openTimeline = noteChange
+                                        }
                                     } label: {
                                         Text("Open")
                                     }

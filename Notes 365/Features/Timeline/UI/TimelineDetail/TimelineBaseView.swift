@@ -50,7 +50,7 @@ struct TimelineBaseView: View {
     //            state.selectedDates = [newValue]
     //            horizontalCalendarViewState.selectedDateRange = nil
     //        })
-            .onChange(of: horizontalCalendarViewState.selectedDateRange, { oldValue, newValue in
+            .onChange(of: horizontalCalendarViewState.selectedDateRange?.id, { oldValue, newValue in
                 if newValue != nil {
                     caldendarState = .none
                 }
@@ -112,16 +112,16 @@ enum TimelineDateRangeType {
     case month
 }
 
-struct TimelineDateRange: Identifiable {
-    let id = UUID()
-    let title: String
-    let type: TimelineDateRangeType
-    let date: Date
-}
-
-extension TimelineDateRange: Equatable {
-    
-}
+//struct TimelineDateRange: Identifiable {
+//    let id = UUID()
+//    let title: String
+//    let type: TimelineDateRangeType
+//    let date: Date
+//}
+//
+//extension TimelineDateRange: Equatable {
+//    
+//}
 
 
 struct LoadingStatusMessageView: View {
@@ -143,28 +143,6 @@ struct LoadingStatusMessageView: View {
     }
 }
 
-//struct LoadMoreView: View {
-//    @Binding var timelineDetailState: TimelineDetailState
-//    var body: some View {
-//        if timelineDetailState.canLoadMore {
-//            VStack {
-//                HStack {
-//                    Spacer()
-//                    Text("Loading.. in (timeline detail)")
-//                    Spacer()
-//                }
-//                .progressViewStyle(CircularProgressViewStyle())
-//                .foregroundStyle(.gray)
-//                .frame(height: 80)
-//                .onAppear {
-//                    print("load more appear")
-//                    timelineDetailState.tryLoadMore()
-//                }
-//            }
-//            .listRowSeparator(.hidden)
-//        }
-//    }
-//}
 
 extension Date {
     func startOfMonth() -> Date {

@@ -112,48 +112,17 @@ extension TimelineB {
         t.content = content
         return t
     }
-    
-//    var timeline: Timeline {
-//        let fullPathInfo = NotebooksPathService.shared.path(for: notebookId)
-//        var t = Timeline(changesID: notebookId, 
-//                         fileUUID: notebookId,
-//                         fileName: fullPathInfo?.name ?? "",
-//                         filePath: fullPathInfo?.fullPath ?? "")
-//        t.content = content
-//        return t
-//    }
 }
 
 
 @Observable
 class TimelineBaseViewState {
     let timelineBusiness: TimelineInteractor
-    
-    var selectedDates: [Date] = []
-    
-    // load more
-    var canLoadMore = false
-    var loadingDayChanges = false
-    var loadingDate = DateTime.now()
     var currentState = CurrentState.stop
-    var cancellable: Cancellable? = nil
-//    var timelineIndexes = [TimelineIndex]()
-    var timelines = [Timeline]()
-    var isFirstAppear = true
-    var generatorTask: Task<(), Never>? = nil
-    
-    var cancellableSet = Set<AnyCancellable>()
-    var currentTaskID = UUID()
+    var selectedDates: [Date] = []
+   
     init(timelineBusiness: TimelineInteractor) {
         self.timelineBusiness = timelineBusiness
-    }
-    
-    func clearDisplay() {
-        print(#function)
-        generatorTask?.cancel()
-        currentTaskID = UUID()
-        self.currentState = .stop
-        self.canLoadMore = false
     }
     
 }

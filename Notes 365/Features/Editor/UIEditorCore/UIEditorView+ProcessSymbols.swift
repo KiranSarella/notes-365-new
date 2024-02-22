@@ -61,7 +61,6 @@ extension UIEditorView {
     }
     
     func processBold(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
-        logger.debug("\(#function)")
         let pattern = SymbolPattern.bold.rawValue
 //        var boldFont = theme.font
 //        boldFont = boldFont.apply(newTraits: .bold)

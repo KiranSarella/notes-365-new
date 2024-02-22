@@ -123,6 +123,7 @@ class CurrentLevelState {
                 n1.name < n2.name
             })
             
+            
             notifyAddCurrentFolderToRecents()
             
             return newNotebook
@@ -309,6 +310,7 @@ extension CurrentLevelState {
     
     func notifyAddCurrentFolderToRecents() {
         if let parent = parent {
+            
             notifyNotebookOpen(notebook: parent)
         }
     }
@@ -319,7 +321,9 @@ extension CurrentLevelState {
             "name": notebook.name,
             "isFolder": notebook.isFolder
         ] as [String : Any]
-        NotificationCenter.default.post(name: Notification.Name.addToRecent, object: nil, userInfo: info)
+        let notification = Notification(name: .addToRecent, userInfo: info)
+        NotificationQueue.default.enqueue(notification, postingStyle: .whenIdle)
+//        NotificationCenter.default.post(name: Notification.Name.addToRecent, object: nil, userInfo: info)
         logger.debug("\(#function) - \(info)")
     }
     
