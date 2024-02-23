@@ -9,9 +9,8 @@ import SwiftUI
 
 struct RangeTimelineView: View {
     @Binding var path: NavigationPath
-    @Binding var selectedDates: [Date]
+    @Binding var timelineBaseState: TimelineBaseViewState
     @State private var state = RangeTimelineState()
-//    @State var discardTimelineInfo: DiscardTimelineInfo?
     var geometryProxy: GeometryProxy
     @Binding var width: CGFloat
     
@@ -24,10 +23,7 @@ struct RangeTimelineView: View {
         VStack {
             ScrollView(.vertical, showsIndicators: true) {
                 VStack {
-    //                ForEach($state.dayTimelineModels) { $dayTimelines in
-    //                    SingleDayView(dayTimelines: $dayTimelines, discardTimelineInfo: $discardTimelineInfo, geometryProxy: geometryProxy, width: $width)
                     SingleDayChangesListView(timelines: $state.dayTimelineModels, discardTimeline: $discardTimeline, openTimeline: $state.openTimeline, geometryProxy: geometryProxy, width: $width)
-    //                }
                     VStack {
                         if state.loadingState.displayMessage != nil {
                             HStack {
@@ -48,7 +44,7 @@ struct RangeTimelineView: View {
                 .onAppear {
                     if state.dayTimelineModels.isEmpty {
                         Task {
-                            state.startloading(days: selectedDates)
+                            state.beginNewLoading(filter: timelineBaseState.selectedFilterOption)
                         }
                     } else {
                         // if recently opended is today, refetch content, if not exists - remove it.
@@ -58,8 +54,8 @@ struct RangeTimelineView: View {
                         }
                     }
                 }
-                .onChange(of: selectedDates, { oldValue, newValue in
-                    state.startloading(days: newValue)
+                .onChange(of: timelineBaseState.selectedFilterOption.id, { oldValue, newValue in
+                    state.beginNewLoading(filter: timelineBaseState.selectedFilterOption)
                 })
                 .onChange(of: discardTimeline) { oldValue, newValue in
                     if let newValue = newValue {

@@ -39,7 +39,6 @@ struct ContentView: View {
     var todayVersionBusiness = BusinessFactory.dayVersionInteractor()
     @State private var timelineDetailState = TimelineBaseViewState(timelineBusiness: BusinessFactory.timelineInteractor())
     @State private var path = NavigationPath()
-    @State private var horizontalCalendarViewState = HorizontalCalendarViewState()
     let cloudKitSync = CloudKitSync()
     
     @State var state = ContentViewState()
@@ -189,7 +188,7 @@ struct ContentView: View {
                     let selectedItem = SidebarItem(rawValue: sidebarItemSelected)!
                     switch selectedItem {
                     case .timeline:
-                        TimelineBaseView(path: $path, state: $timelineDetailState, horizontalCalendarViewState: $horizontalCalendarViewState)
+                        TimelineBaseView(path: $path, state: $timelineDetailState)
                     case .notebooks:
                         NotebooksBaseDetailView(path: $path)
                     case .search:
@@ -218,6 +217,8 @@ struct ContentView: View {
                 BusinessFactory.recentsInteractor().setupRecentsAddingProcess()
                 
                 ThemeState.shared.updateColorScheme(colorScheme)
+                
+                timelineDetailState.loadFirstKnowDate()
                 
                 Task {
                     // start service

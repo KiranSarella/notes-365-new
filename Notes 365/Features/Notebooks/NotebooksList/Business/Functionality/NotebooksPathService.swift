@@ -24,10 +24,10 @@ actor NotebooksPathService {
     static let shared = NotebooksPathService()
     let notebooksBusiness = BusinessFactory.createNotebooksFactory()
     
-    fileprivate var filesPathInfo = [UUID: LocationInfo]()
-    fileprivate var foldersPathInfo = [UUID: LocationInfo]()
-    fileprivate var foldersInfoCache: Set<NotebookB> = []
-    fileprivate var filesInfoCache: Set<NotebookB> = []
+    private(set) var filesPathInfo = [UUID: LocationInfo]()
+    private(set) var foldersPathInfo = [UUID: LocationInfo]()
+    private(set) var foldersInfoCache: Set<NotebookB> = []
+    private(set) var filesInfoCache: Set<NotebookB> = []
     
     var foldersPathsCache = [UUID: String]()
     var filesPathsCache = [UUID: String]()
@@ -478,6 +478,32 @@ extension NotebooksPathService {
 
 // MARK: - Get all child items
 extension NotebooksPathService {
+    
+    func getAllChildFiles(folderId: UUID) -> [UUID] {
+        var recentsFilesToRemove = [UUID]()
+        // add child folders and files
+        getChildFiles(folderId: folderId, &recentsFilesToRemove)
+        
+        return recentsFilesToRemove
+    }
+    
+    func getChildFiles(folderId: UUID, _ recentsFilesToRemove: inout [UUID]) {
+        // add all child files
+        let filesIds = filesInfoCache
+                        .filter { info in info.parentId == folderId }
+                        .map { $0.id }
+        recentsFilesToRemove.append(contentsOf: filesIds)
+        
+        // add all child folders
+        let subfolderIds = foldersInfoCache
+                        .filter { info in info.parentId == folderId }
+                        .map { $0.id }
+        
+        // for each folder again resursively add its childs
+        for subfolderId in subfolderIds {
+            getChildFiles(folderId: subfolderId, &recentsFilesToRemove)
+        }
+    }
     
     func getAllChildFilesAndFolders(folderId: UUID) -> ([UUID], [UUID]) {
         var recentsFilesToRemove = [UUID]()

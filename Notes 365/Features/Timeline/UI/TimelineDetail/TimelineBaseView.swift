@@ -10,7 +10,6 @@ import SwiftUI
 struct TimelineBaseView: View {
     @Binding var path: NavigationPath
     @Binding var state: TimelineBaseViewState
-    @Binding var horizontalCalendarViewState: HorizontalCalendarViewState
     @State private var loadedFirstTime = false
     @State private var showCalendar = false
     @State private var calendarDate = DateTime.now()
@@ -22,9 +21,9 @@ struct TimelineBaseView: View {
         NavigationStack(path: $path) {
             GeometryReader { geometryProxy in
                 VStack {
-                    HorizontalCalendarView(state: $horizontalCalendarViewState, selectedDates: $state.selectedDates)
+                    HorizontalCalendarView(state: $state)
                     VStack {
-                        RangeTimelineView(path: $path, selectedDates: $state.selectedDates, geometryProxy: geometryProxy, width: $width)
+                        RangeTimelineView(path: $path, timelineBaseState: $state, geometryProxy: geometryProxy, width: $width)
                             .background(ThemeState.shared.theme.dynamicCanvasColor)
                     }
                     .background(.white)
@@ -50,25 +49,25 @@ struct TimelineBaseView: View {
     //            state.selectedDates = [newValue]
     //            horizontalCalendarViewState.selectedDateRange = nil
     //        })
-            .onChange(of: horizontalCalendarViewState.selectedDateRange?.id, { oldValue, newValue in
-                if newValue != nil {
-                    caldendarState = .none
-                }
+            .onChange(of: state.selectedFilterOption.id, { oldValue, newValue in
+                caldendarState = .none
             })
             .onChange(of: caldendarState, { oldValue, newValue in
+                
+                var filter =  TimelineDateRange(title: "", filterType: .dateRange, type: TimelineDateRangeType.dynamic, date: DateTime.now())
+                
                 switch newValue {
                 case .day(let dayDate):
-                    state.selectedDates = [dayDate.date]
-                    horizontalCalendarViewState.selectedDateRange = nil
+                    filter.dateRange = [dayDate.date]
                 case .week(let weekDate):
-                    state.selectedDates = weekDate.days
-                    horizontalCalendarViewState.selectedDateRange = nil
+                    filter.dateRange = weekDate.days
                 case .month(let monthDate):
-                    state.selectedDates = monthDate.start.getDaysOfMonth()
-                    horizontalCalendarViewState.selectedDateRange = nil
+                    filter.dateRange = monthDate.start.getDaysOfMonth()
                 case .none:
                     break
                 }
+                
+                state.selectedFilterOption = filter
             })
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -110,6 +109,7 @@ enum TimelineDateRangeType {
     case today
     case previousSevenDays
     case month
+    case dynamic
 }
 
 //struct TimelineDateRange: Identifiable {

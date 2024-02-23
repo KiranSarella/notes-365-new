@@ -59,12 +59,45 @@ class RangeTimelineState {
     var blockOtherRequests = false
     var openTimeline: Timeline?
     
-    func startloading(days: [Date]) {
+    // folder related
+    private var folderId: UUID = UUID()
+    private var folderItems = Set<UUID>()
+    
+    private(set) var currentFilterType: TopFilterType = .dateRange
+    
+    func beginNewLoading(filter: any TopFilterOption) {
+        if let filter = filter as? TimelineDateRange {
+            startloading(days: filter.dateRange)
+        } else if let filter = filter as? TimelineFolderRange {
+            startloadingFolderItems(folderId: filter.folderId)
+        }
+    }
+    
+    private func startloading(days: [Date]) {
         logger.info("startLoadingDays - \(days)")
         resetFields()
+        currentFilterType = .dateRange
         remainingDaysToLoad = days
         loadNext()
     }
+    
+    private var startFolderTask: Task<(), Never>?
+    
+    private func startloadingFolderItems(folderId: UUID) {
+        logger.info("\(#function)")
+        resetFields()
+        currentFilterType = .folder
+        self.folderId = folderId
+        
+        startFolderTask?.cancel()
+        startFolderTask = Task {
+            let fileIds = await NotebooksPathService.shared.getAllChildFiles(folderId: folderId)
+            if Task.isCancelled { return }
+            folderItems = Set(fileIds)
+            loadNext()
+        }
+    }
+    
     
     func resetFields() {
         loadNextTask?.cancel()
@@ -79,6 +112,10 @@ class RangeTimelineState {
         loadingState = .loading
         displayedContentLength = 0
         initialLoadDone = false
+        
+        // folder
+        folderId = UUID()
+        folderItems.removeAll()
     }
     
     var isContentFilledToScrollable: Bool {
@@ -96,38 +133,6 @@ class RangeTimelineState {
             logger.debug("all loaded.")
         }
     }
-    
-    //    var anyDaysAvailable: Bool {
-    //        if remainingDaysToLoad.count == 0 {
-    //            canLoadMore = false
-    //            logger.debug("all loaded.")
-    //            if dayTimelineModels.isEmpty {
-    //                statusMessage = "Empty"
-    //                logger.debug("no content")
-    //            } else {
-    //                statusMessage = nil
-    //            }
-    //            return false
-    //        }
-    //        return true
-    //    }
-    
-    //    var isLastDayAllDisplayed: Bool {
-    //        guard let lastTimelines = dayTimelineModels.last?.timelines else { return true }
-    //        let pendingCound = lastTimelines.reduce(0, { partialResult, tl in
-    //            if tl.canDisplayContent == false {
-    //                return 1
-    //            } else {
-    //                return 0
-    //            }
-    //        })
-    //
-    //        if pendingCound == 0 {
-    //            return true
-    //        } else {
-    //            return false
-    //        }
-    //    }
     
     var loadNextTask: Task<(), Never>?
     var fetchNextDayTask: Task<(), Never>?
@@ -148,9 +153,7 @@ class RangeTimelineState {
             }
             if currentDayModel.timelines.isEmpty == false {
                 let timeline =  currentDayModel.timelines.removeFirst()
-//                Task { @MainActor in
-                    dayTimelineModels.append(timeline)
-//                }
+                dayTimelineModels.append(timeline)
                 blockOtherRequests = false
                 
                 if isContentFilledToScrollable == false {
@@ -158,21 +161,23 @@ class RangeTimelineState {
                     if Task.isCancelled {
                         return
                     }
-//                    Task { @MainActor in
-                        loadNext()
-//                    }
+                    loadNext()
                 }
             } else {
                 if Task.isCancelled {
                     blockOtherRequests = false
                     return
                 }
-                fetchNextDayTimelines()
+                switch currentFilterType {
+                case .dateRange:
+                    fetchNextDayTimelines()
+                case .folder:
+                    fetchNextFolderDayTimelines()
+                }
             }
         }
     }
-    
-    
+   
     private func fetchNextDayTimelines() {
         logger.debug("\(#function)")
         
@@ -196,9 +201,7 @@ class RangeTimelineState {
                 var timeline =  currentDayModel.timelines.removeFirst()
                 timeline.setAsFirst()
                 let finalTimeline = timeline
-//                Task { @MainActor in
-                    dayTimelineModels.append(finalTimeline)
-//                }
+                dayTimelineModels.append(finalTimeline)
                 blockOtherRequests = false
                 
                 if scrolledID == nil {
@@ -215,12 +218,9 @@ class RangeTimelineState {
                         if Task.isCancelled {
                             return
                         }
-//                        Task { @MainActor in
-                            loadNext()
-//                        }
+                        loadNext()
                     }
                 }
-                
 
             } else {
                 // auto try next day
@@ -228,49 +228,76 @@ class RangeTimelineState {
                 if Task.isCancelled {
                     return
                 }
-//                Task { @MainActor in
-                    loadNext(false)
-//                }
+                loadNext(false)
             }
         }
     }
     
     
+    var anyAvailableFolderDays: Bool {
+        currentLoadingDate > SharedData.shared.firstKnowDate
+    }
     
-    //    fileprivate func loadNextTillScreenFills() async {
-    //        if initialLoadDone == false {
-    //            logger.debug("\(#function)")
-    //            for t in dayTimelineModels {
-    //                displayedContentLength += t.content?.count ?? 0
-    //            }
-    //            if isContentFilledToScrollable == false {
-    //                logger.debug("isContentFilledToScrollable")
-    //                loadNext()
-    ////                tryLoadNextDay()
-    //            } else {
-    //                initialLoadDone = true
-    //            }
-    //        }
-    //    }
+    private func fetchNextFolderDayTimelines() {
+        logger.debug("\(#function)")
+        
+        fetchNextDayTask = Task { @MainActor in
+            if anyAvailableFolderDays == false {
+                updateStatusMessage()
+                blockOtherRequests = false
+                return
+            }
+            currentLoadingDate = currentLoadingDate.dayBefore
+            let allItems = await prepareTimelines(for: currentLoadingDate)
+            // include folder items only
+            let dayTimelines = allItems.filter { t in
+                folderItems.contains(t.fileUUID)
+            }
+            if Task.isCancelled {
+                blockOtherRequests = false
+                return
+            }
+            logger.debug("timelines for date: \(dayTimelines.count)")
+            if dayTimelines.count > 0 {
+                let newDayRow = DayTimelineModel(date: currentLoadingDate, timelines: dayTimelines)
+                currentDayModel = newDayRow
+                
+                var timeline =  currentDayModel.timelines.removeFirst()
+                timeline.setAsFirst()
+                let finalTimeline = timeline
+                dayTimelineModels.append(finalTimeline)
+                blockOtherRequests = false
+                
+                if scrolledID == nil {
+                    // after first item
+                    displayedContentLength += timeline.content?.count ?? 0
+                    if Task.isCancelled {
+                        return
+                    }
+                    scrolledID = timeline.id
+                } else {
+                    // from 2nd to scrollable limit
+                    if isContentFilledToScrollable == false {
+                        displayedContentLength += timeline.content?.count ?? 0
+                        if Task.isCancelled {
+                            return
+                        }
+                        loadNext()
+                    }
+                }
+
+            } else {
+                // auto try next day
+                blockOtherRequests = false
+                if Task.isCancelled {
+                    return
+                }
+                loadNext(false)
+            }
+        }
+    }
     
-    
-    var displayingCount = 0
-    
-    //    func displayOneByOne() {
-    //        logger.debug("\(#function)")
-    //        if displayingCount >= dayTimelines.timelines.count { return }
-    //
-    //        DispatchQueue.main.async {
-    //            dayTimelines.timelines[displayingCount].canDisplayContent = true
-    //        }
-    //        Task {
-    //            try? await Task.sleep(nanoseconds: 2_000_000_000)
-    //            displayingCount += 1
-    //            displayOneByOne()
-    //        }
-    //    }
-    
-    
+
     func prepareTimelines(for date: Date) async -> [Timeline] {
         logger.debug("load day: \(date)")
         var timelines = [Timeline]()
