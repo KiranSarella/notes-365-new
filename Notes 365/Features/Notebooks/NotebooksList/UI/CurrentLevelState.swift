@@ -157,7 +157,7 @@ class CurrentLevelState {
             })
         }
         
-        notifyAddCurrentFolderToRecents()
+//        notifyAddCurrentFolderToRecents()
     }
     
     func deleteFile(notebook: Notebook) {
@@ -170,7 +170,7 @@ class CurrentLevelState {
         // delete from UI
         files.removeAll(where: { $0.id == notebook.id })
         
-        notifyAddCurrentFolderToRecents()
+//        notifyAddCurrentFolderToRecents()
     }
     
     func deleteFolder(notebook: Notebook) {
@@ -183,7 +183,7 @@ class CurrentLevelState {
         // delete from UI
         folders.removeAll(where: { $0.id == notebook.id })
         
-        notifyAddCurrentFolderToRecents()
+//        notifyAddCurrentFolderToRecents()
     }
     
     func move(_ source: Notebook, to destinationId: UUID?) {
@@ -204,7 +204,7 @@ class CurrentLevelState {
             }
         }
         
-        notifyAddCurrentFolderToRecents()
+//        notifyAddCurrentFolderToRecents()
     }
     
 //    func restore(_ source: Notebook, to destinationId: UUID?) {
@@ -310,7 +310,6 @@ extension CurrentLevelState {
     
     func notifyAddCurrentFolderToRecents() {
         if let parent = parent {
-            
             notifyNotebookOpen(notebook: parent)
         }
     }

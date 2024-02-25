@@ -78,9 +78,9 @@ struct NotebooksLevelView: View {
                 NotebooksLevelView(navigationTitle: notebook.name, path: $path, parent: notebook)
             } else {
                 NotebookContentView(isReadOnly: false, notebookId: notebook.id, fileName: notebook.name, state: notebookContentState)
-                    .onAppear {
-                        currentLevelState.notifyAddCurrentFolderToRecents()
-                    }
+//                    .onAppear {
+//                        currentLevelState.notifyAddCurrentFolderToRecents()
+//                    }
             }
         }
         .toolbar(content: {

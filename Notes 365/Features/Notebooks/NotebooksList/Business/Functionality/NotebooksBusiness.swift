@@ -151,7 +151,11 @@ extension NotebooksBusiness {
         if let parentId = notebook.parentId {
             info["parent_id"] = parentId
         }
-        NotificationCenter.default.post(name: Notification.Name.notebookDeleted, object: nil, userInfo: info)
+        
+        let notification = Notification(name: .notebookDeleted, userInfo: info)
+        NotificationQueue.default.enqueue(notification, postingStyle: .whenIdle)
+        
+//        NotificationCenter.default.post(name: Notification.Name.notebookDeleted, object: nil, userInfo: info)
         logger.debug("sendNotebookDeleted - \(notebook.description)")
     }
     

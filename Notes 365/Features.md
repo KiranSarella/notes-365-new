@@ -1,12 +1,11 @@
 # Backlogs
-[-] timeline filter tabs with all first level folders
 [ ] read text
 [ ] read in background audio
 [ ] TipKit
 [ ] MetricKit
 
 # Issues 
-[ ] single line full path for recents and search content rows
+[ ] when discarded, then again making changes, - base version is not updating?
 [ ] limit search content results (100) and - use load more
 [ ] update UI for search content
 
@@ -21,19 +20,8 @@
 
 # Completed
 [x] hang on inner file and folder deleting
-
-
-# first level filters
-[-] have to get all note ids for top level
-    - get folders and files for parent
-        - files - add to set
-        - folders - repeat above steps - recursive
-    - you have all note ids set
-[ ] get only change note ids for each day
-    - filter with noteids set
-    - if exists, then load content
-    - else repeat for previous day
-    - till, last record or first record date
+[x] timeline filter tabs with all first level folders
+[x] single line full path for recents and search content rows
 
 
 
