@@ -42,7 +42,7 @@ extension UIEditorView: EditorViewDelegate {
     
     // https://www.hackingwithswift.com/example-code/uikit/how-to-render-an-nsattributedstring-to-a-pdf
     func generatePDFData() -> Data? {
-        print(#function)
+        logger.info("\(#function)")
         var pdfTheme = BusinessFactory.themeInteractor().getLightTheme()
         pdfTheme.fontSize = pdfTheme.fontSize * 0.6
         let attrStrGen = MarkdownAttriburedString(theme: pdfTheme.markdownTheme)

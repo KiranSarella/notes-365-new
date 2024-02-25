@@ -170,7 +170,7 @@ class CalendarState {
     var oldCalenderType: CalendarType = .day
     
     func getOldNavigationDate(_ oldValue: CalendarType) -> Date {
-        print(#function, oldValue)
+        logger.debug("\(#function)")
         switch oldValue {
         case .day:
             return dayDate.date
@@ -190,7 +190,6 @@ class CalendarState {
             dayDate = DayDate(date: getOldNavigationDate(oldValue))
         case .week:
             weekDate = WeekDate(date: getOldNavigationDate(oldValue))
-            print(#function , weekDate.start)
         case .month:
             monthDate = MonthDate(date: getOldNavigationDate(oldValue))
         }

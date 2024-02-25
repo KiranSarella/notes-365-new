@@ -62,10 +62,8 @@ class CurrentLevelState {
             files = notebooks.filter { !$0.isFolder }.sorted(by: { n1, n2 in
                 n1.name < n2.name
             })
-            print(folders.map { "\($0.name) - \($0.id.uuidString)"})
-            print(files.map { "\($0.name) - \($0.id.uuidString)"})
         } catch let error {
-            print(error)
+            logger.error("\(error)")
         }
     }
     
@@ -81,10 +79,8 @@ class CurrentLevelState {
             files = notebooks.filter { !$0.isFolder }.sorted(by: { n1, n2 in
                 n1.name < n2.name
             })
-            print(folders.map { "\($0.name) - \($0.id.uuidString)"})
-            print(files.map { "\($0.name) - \($0.id.uuidString)"})
         } catch let error {
-            print(error)
+            logger.error("\(error)")
         }
     }
     
@@ -104,7 +100,7 @@ class CurrentLevelState {
             
             return newNotebook
         } catch let error {
-            print(error)
+            logger.error("\(error)")
         }
         
         
@@ -128,7 +124,7 @@ class CurrentLevelState {
             
             return newNotebook
         } catch let error {
-            print(error)
+            logger.error("\(error)")
         }
         
         return nil
@@ -164,7 +160,7 @@ class CurrentLevelState {
         do {
             try notebooksBusiness.deleteNotebook(notebook: notebook.notebookB())
         } catch let error {
-            print(error)
+            logger.error("\(error)")
             return
         }
         // delete from UI
@@ -177,7 +173,7 @@ class CurrentLevelState {
         do {
             try notebooksBusiness.deleteNotebook(notebook: notebook.notebookB())
         } catch let error {
-            print(error)
+            logger.error("\(error)")
             return
         }
         // delete from UI

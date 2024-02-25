@@ -68,7 +68,7 @@ class TodayVersionBusiness {
             let todayVersionId = DayVersionData(notebookID: notebookId).id
             try storage.removeDayVersion(for: todayVersionId)
         } catch let error {
-            print(error)
+            logger.error("\(error)")
         }
     }
     

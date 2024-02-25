@@ -27,7 +27,7 @@ class RecentsState {
             let fileItems = try business.loadRecentFiles()
             files = fileItems.map { RecentNotebook(id: $0.id, notebook: $0.notebook) }
         } catch let error {
-            print(error)
+            logger.error("\(error)")
         }
     }
 }

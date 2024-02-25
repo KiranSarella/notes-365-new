@@ -65,13 +65,13 @@ class TimelineStorage {
     }
     
     private func insert(dayNotebookChange: TimelineData) throws {
-        print(#function, dayNotebookChange)
+        logger.debug("\(#function)")
         modelContext.insert(dayNotebookChange)
         try modelContext.save()
     }
     
     private func update(dayNotebookChange: TimelineData) throws {
-        print(#function, dayNotebookChange)
+        logger.debug("\(#function)")
         try dayNotebookChange.modelContext?.save()
     }
     

@@ -34,9 +34,9 @@ class NotebooksStorageAdapter: NotebooksStorageProvider {
                 let notebooksData = try self.storage.fetchNotebooks()
                 let notebooks = notebooksData.map { $0.notebook() }
                 continuation.resume(returning: notebooks)
-            } catch let err {
-                print(err)
-                continuation.resume(throwing: err)
+            } catch {
+                logger.error("\(error)")
+                continuation.resume(throwing: error)
             }
         }
     }

@@ -34,7 +34,7 @@ class TimelineBusiness {
         do {
             try storage.save(dayNotebookChange: dayNotebookChange)
         } catch let error {
-            print(error)
+            logger.error("\(error)")
         }
     }
     
@@ -43,7 +43,7 @@ class TimelineBusiness {
         do {
             return try storage.getFirstAvailableTimelineDate()
         } catch let error {
-            print(error)
+            logger.error("\(error)")
             return nil
         }
     }

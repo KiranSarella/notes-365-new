@@ -19,9 +19,6 @@ struct WeekCalendarView: View {
             .frame(height: 50)
             WeekGridView(weekDate: $weekDate, selectedWeekDate: $selectedWeekDate)
         }
-        .onAppear {
-            print(weekDate.start)
-        }
     }
 }
 

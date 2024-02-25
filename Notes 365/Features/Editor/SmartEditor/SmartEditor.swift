@@ -86,7 +86,7 @@ struct SmartEditor: View {
                             pdfFileData = PDFFile(data: pdfData)
                             showingPDFExporter = true
                         } else {
-                            print("pdf export failed")
+                            logger.info("pdf export failed")
                         }
                     } label: {
                         Text("Export to PDF")
@@ -103,9 +103,9 @@ struct SmartEditor: View {
         .fileExporter(isPresented: $showingPDFExporter, document: pdfFileData, contentType: .pdf, defaultFilename: fileName) { result in
             switch result {
             case .success(let url):
-                print("Saved to \(url)")
+                logger.debug("Saved to \(url)")
             case .failure(let error):
-                print(error.localizedDescription)
+                logger.error("\(error)")
             }
         }
         

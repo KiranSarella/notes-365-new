@@ -50,13 +50,13 @@ class NotebookContentState {
     
     func loadContent(for notebookId: UUID) {
         self.notebookId = notebookId
-        print(#function, notebookId.uuidString)
+        logger.debug("\(#function)")
         do {
             input = try business.retrieveOrInstantiateNotebookContent(for: notebookId).notebookContent().content
             EditorOutputBuffer.shared.reset(input)
             lastSavedDate = DateTime.now()
         } catch let error {
-            print(error)
+            logger.error("\(error)")
             fatalError(error.localizedDescription)
         }
         self.isFetchingData = false
@@ -71,12 +71,12 @@ class NotebookContentState {
     }
     
     func saveChanges() {
-        print(#function, notebookId.uuidString)
+        logger.debug("\(#function) - \(self.notebookId.uuidString)")
         do {
             try business.update(notebookContent: NotebookContentB(notebookID: notebookId, content: EditorOutputBuffer.shared.output))
             lastSavedDate = DateTime.now()
         } catch let error {
-            print(error)
+            logger.error("\(error)")
             fatalError(error.localizedDescription)
         }
     }

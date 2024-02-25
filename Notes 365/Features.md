@@ -3,12 +3,13 @@
 [ ] read in background audio
 [ ] TipKit
 [ ] MetricKit
-
+[ ] update search UI
+ 
 # Issues 
-[ ] when discarded, then again making changes, - base version is not updating?
 [ ] limit search content results (100) and - use load more
 [ ] update UI for search content
-
+[ ] search results sort based on alphabetic or (count if possible)
+[ ] calendar state not preserving on sidebar navigation change 
 
 #### editor related
 [ ] replace matched options are showing in editor?

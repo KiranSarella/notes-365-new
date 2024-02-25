@@ -27,10 +27,8 @@ class RecentlyDeletedState {
             files = notebooks.filter { !$0.notebook.isFolder }.sorted(by: { n1, n2 in
                 n1.notebook.modifiedDate > n2.notebook.modifiedDate
             })
-            print(folders.map { "\($0.notebook.name) - \($0.id.uuidString)"})
-            print(files.map { "\($0.notebook.name) - \($0.id.uuidString)"})
         } catch let error {
-            print(error)
+            logger.error("\(error)")
         }
     }
     

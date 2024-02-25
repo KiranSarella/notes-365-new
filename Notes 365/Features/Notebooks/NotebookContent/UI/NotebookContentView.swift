@@ -33,7 +33,6 @@ struct NotebookContentView: View {
                     self.state.startAutoSaveTimer()
                 })
                 .onChange(of: EditorOutputBuffer.shared.output) { oldValue, newValue in
-                    print(newValue)
                     state.contentEditedDate = DateTime.now()
                 }
             }

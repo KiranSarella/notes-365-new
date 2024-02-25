@@ -155,17 +155,17 @@ class TimelineBaseViewState {
         if filterOptions.isEmpty || !loadedDate.isSameDayAs(DateTime.now()) {
             Task { @MainActor in
                 filterOptions = constructDateRanges()
-                // add seperator
-                let seperator = SeperatorOption()
-                filterOptions.append(seperator)
-                try? await Task.sleep(nanoseconds: 1_000_000)
-                filterOptions.append(contentsOf: await conctructTopLevelFolders())
-                loadedDate = DateTime.now()
-                logger.debug("dateRanges.count - \(self.filterOptions.count)")
-                
                 if let first = filterOptions.first {
                     selectedFilterOption = first
                 }
+                // append top folders
+                // add seperator
+                let seperator = SeperatorOption()
+                filterOptions.append(seperator)
+                try? await Task.sleep(nanoseconds: 1_000_000_000)
+                filterOptions.append(contentsOf: await conctructTopLevelFolders())
+                loadedDate = DateTime.now()
+                logger.debug("dateRanges.count - \(self.filterOptions.count)")
             }
         } else {
             logger.debug("only refreshing folders")

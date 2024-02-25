@@ -32,7 +32,7 @@ struct HorizontalCalendarView: View {
                 HStack {
                     ForEach(state.filterOptions, id: \.id) { item in
                         VStack {
-                            if let item = item as? SeperatorOption {
+                            if item is SeperatorOption {
                                 Text("   ")
                             } else {
                                 if state.isSelected(input: item) {
@@ -64,9 +64,13 @@ struct HorizontalCalendarView: View {
             }
             .onAppear {
                 // scroll to selected
-                scrollProxy.scrollTo(state.selectedFilterOption.id, anchor: .center)
+                Task { @MainActor in
+                    try? await Task.sleep(nanoseconds: 2_000_000_000)
+                    withAnimation {
+                        scrollProxy.scrollTo(state.selectedFilterOption.id, anchor: .center)
+                    }
+                }
             }
-
         }
     }
 }
