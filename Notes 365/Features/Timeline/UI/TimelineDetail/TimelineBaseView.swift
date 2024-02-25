@@ -50,10 +50,18 @@ struct TimelineBaseView: View {
     //            horizontalCalendarViewState.selectedDateRange = nil
     //        })
             .onChange(of: state.selectedFilterOption.id, { oldValue, newValue in
-                caldendarState = .none
+                if let filterOption = state.selectedFilterOption as? TimelineDateRange {
+                    if filterOption.type != .dynamic {
+                        caldendarState = .none
+                    }
+                } else {
+                    caldendarState = .none
+                }
             })
             .onChange(of: caldendarState, { oldValue, newValue in
-                
+                if newValue == .none {
+                    return
+                }
                 var filter =  TimelineDateRange(title: "", filterType: .dateRange, type: TimelineDateRangeType.dynamic, date: DateTime.now())
                 
                 switch newValue {
@@ -83,7 +91,11 @@ struct TimelineBaseView: View {
                 }
             }
         }
-
+        .onAppear(perform: {
+            if state.openTimeline == nil {
+                state.constructFilterItemsIfRequired()
+            }
+        })
     }
 }
 

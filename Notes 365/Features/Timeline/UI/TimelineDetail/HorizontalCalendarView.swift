@@ -7,89 +7,154 @@
 
 import SwiftUI
 
-enum TopFilterType {
-    case dateRange
-    case folder
-    
-    var icon: String {
-        switch self {
-        case .dateRange:
-            "calendar"
-        case .folder:
-            "folder"
-        }
-    }
-}
 
-protocol TopFilterOption: Identifiable, Equatable {
-    var id: UUID { get set }
-    var title: String { get set }
-    var filterType: TopFilterType { get set }
-}
-
-struct TimelineDateRange: TopFilterOption {
-    var id = UUID()
-    var title: String
-    var filterType: TopFilterType
-    
-    let type: TimelineDateRangeType
-    let date: Date
-    var dateRange = [Date]()
-}
-
-struct TimelineFolderRange: TopFilterOption {
-    var id = UUID()
-    var title: String
-    var filterType: TopFilterType
-    
-    let folderId: UUID
-}
 
 struct HorizontalCalendarView: View {
     @Binding var state: TimelineBaseViewState
     
     func makeAsSelected(_ item: any TopFilterOption) {
-        if var newDateRangeFilter = item as? TimelineDateRange {
-            newDateRangeFilter.dateRange = state.getDates(for: newDateRangeFilter)
-            state.selectedFilterOption = newDateRangeFilter
-        } else {
-            state.selectedFilterOption = item
-        }
+        state.selectedFilterOption = item
+//        if var newDateRangeFilter = item as? TimelineDateRange {
+////            newDateRangeFilter.dateRange = state.getDates(for: newDateRangeFilter)
+//            state.selectedFilterOption = newDateRangeFilter
+//        } else {
+//            state.selectedFilterOption = item
+//        }
+    }
+    
+    func selectedStateColor(_ item: any TopFilterOption) -> Color {
+        state.isSelected(input: item) ? item.filterType.iconColor.opacity(0.08) : Color.clear
     }
     
     var body: some View {
         ScrollViewReader { scrollProxy in
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    
                     ForEach(state.filterOptions, id: \.id) { item in
                         VStack {
-                            if state.isSelected(input: item) {
-                                Button {
-                                    makeAsSelected(item)
-                                } label: {
-                                    Label(item.title, systemImage: item.filterType.icon)
-                                }
-                                .buttonStyle(.borderedProminent)
+                            if let item = item as? SeperatorOption {
+                                Text("   ")
                             } else {
-                                Button {
-                                    makeAsSelected(item)
-                                } label: {
-                                    Label(item.title, systemImage: item.filterType.icon)
+                                if state.isSelected(input: item) {
+                                    Button {
+                                        makeAsSelected(item)
+                                    } label: {
+                                        Text(item.title)
+    //                                    Label(item.title, systemImage: item.filterType.icon)
+                                    }
+                                    .buttonStyle(.borderedProminent)
+                                } else {
+                                    Button {
+                                        makeAsSelected(item)
+                                    } label: {
+                                        Text(item.title)
+    //                                    Label(item.title, systemImage: item.filterType.icon)
+                                    }
+                                    .buttonStyle(.bordered)
                                 }
-                                .buttonStyle(.bordered)
                             }
+                            
                         }
                         .padding(5)
                         .id(item.id)
                     }
                 }
                 .padding(.horizontal)
+//                .buttonStyle(PrimaryButtonStyle())
             }
-            .onAppear(perform: {
-                state.constructFilterItemsIfRequired()
-            })
-        }
+            .onAppear {
+                // scroll to selected
+                scrollProxy.scrollTo(state.selectedFilterOption.id, anchor: .center)
+            }
 
+        }
     }
 }
+
+
+
+/*
+ struct HorizontalCalendarView: View {
+     @Binding var state: TimelineBaseViewState
+     
+     func makeAsSelected(_ item: any TopFilterOption) {
+         if var newDateRangeFilter = item as? TimelineDateRange {
+             newDateRangeFilter.dateRange = state.getDates(for: newDateRangeFilter)
+             state.selectedFilterOption = newDateRangeFilter
+         } else {
+             state.selectedFilterOption = item
+         }
+     }
+     
+     func selectedStateColor(_ item: any TopFilterOption) -> Color {
+         state.isSelected(input: item) ? item.filterType.iconColor.opacity(0.08) : Color.clear
+     }
+     
+     var body: some View {
+         ScrollViewReader { scrollProxy in
+             ScrollView(.horizontal, showsIndicators: false) {
+                 HStack {
+                     
+                     ForEach(state.filterOptions, id: \.id) { item in
+                         VStack {
+                             if state.isSelected(input: item) {
+                                
+                                 Button {
+                                     makeAsSelected(item)
+                                 } label: {
+                                     Label {
+                                         Text(item.title)
+                                             .foregroundColor(.primary)
+                                             .colorInvert()
+                                     } icon: {
+                                         Image(systemName: item.filterType.icon)
+                                             .foregroundColor(.primary)
+                                             .colorInvert()
+                                     }
+                                     .padding(EdgeInsets(top: 8, leading: 10, bottom: 8, trailing: 10))
+                                     .overlay(
+                                         RoundedRectangle(cornerRadius: 60).stroke(item.filterType.iconColor, lineWidth: 1.5)
+                                     )
+                                 }
+                                 .background(item.filterType.iconColor)
+                                 .cornerRadius(60)
+                                 
+                                
+                                 
+                             } else {
+                                 
+                                 Button {
+                                     makeAsSelected(item)
+                                 } label: {
+                                     Label {
+                                         Text(item.title)
+                                     } icon: {
+                                         Image(systemName: item.filterType.icon)
+                                             .foregroundColor(item.filterType.iconColor)
+                                     }
+                                     .padding(EdgeInsets(top: 8, leading: 10, bottom: 8, trailing: 10))
+ //                                    .border(item.filterType.iconColor.opacity(0.2))
+                                     .overlay(
+                                         RoundedRectangle(cornerRadius: 60).stroke(item.filterType.iconColor.opacity(0.6), lineWidth: 1.5)
+                                     )
+                                 }
+                                 .foregroundColor(.primary)
+                                 .cornerRadius(60)
+                             }
+                         }
+                         .padding(5)
+                         .id(item.id)
+                     }
+                 }
+                 .padding(.horizontal)
+ //                .buttonStyle(PrimaryButtonStyle())
+             }
+             .onAppear(perform: {
+                 state.constructFilterItemsIfRequired()
+             })
+         }
+
+     }
+ }
+
+ */

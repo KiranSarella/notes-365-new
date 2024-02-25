@@ -41,7 +41,7 @@ enum LoadingState {
 class RangeTimelineState {
     var remainingDaysToLoad = [Date]()
     var dayTimelineModels = [Timeline]()
-    var currentLoadingDate = DateTime.now()
+    var currentLoadingDate = DateTime.now().dayAfter
     var currentDayModel = DayTimelineModel(date: DateTime.now())
     //    var currentDateLoadingState = CurrentDateLoadingState(date: DateTime.now(), timmelinesCount: 0)
     var loadingState: LoadingState = .notStarted
@@ -57,7 +57,6 @@ class RangeTimelineState {
     // better to get accurate value based on theme font size
     
     var blockOtherRequests = false
-    var openTimeline: Timeline?
     
     // folder related
     private var folderId: UUID = UUID()
@@ -66,6 +65,7 @@ class RangeTimelineState {
     private(set) var currentFilterType: TopFilterType = .dateRange
     
     func beginNewLoading(filter: any TopFilterOption) {
+        logger.debug("\(#function)")
         if let filter = filter as? TimelineDateRange {
             startloading(days: filter.dateRange)
         } else if let filter = filter as? TimelineFolderRange {
@@ -106,7 +106,7 @@ class RangeTimelineState {
         remainingDaysToLoad.removeAll()
         scrolledID = nil
         blockOtherRequests = false
-        currentLoadingDate = DateTime.now()
+        currentLoadingDate = DateTime.now().dayAfter
         currentDayModel = DayTimelineModel(date: DateTime.now())
         
         loadingState = .loading
@@ -173,6 +173,8 @@ class RangeTimelineState {
                     fetchNextDayTimelines()
                 case .folder:
                     fetchNextFolderDayTimelines()
+                case .separator:
+                    break
                 }
             }
         }
@@ -360,11 +362,11 @@ class RangeTimelineState {
         }
     }
     
-    func refreshOpenedTimelineContent() {
-        guard let openTimeline = openTimeline else { return }
+    func refreshOpenedTimelineContent(_ newValue: inout Timeline?) {
+        guard let openTimeline = newValue else { return }
         // if today
         if !openTimeline.date.isToday {
-            self.openTimeline = nil
+            newValue = nil
             return
         }
         
@@ -392,7 +394,7 @@ class RangeTimelineState {
             }
         }
         // deselect
-        self.openTimeline = nil
+        newValue = nil
     }
     
 }

@@ -55,17 +55,81 @@ enum SpeechState {
 extension TimelineB {
     func getTimeline(date: Date) async -> Timeline {
         let fileName = await NotebooksPathService.shared.fileName(for: notebookId)
+        let isDeleted = await NotebooksPathService.shared.isDeletedFile(uuid: notebookId)
 //        let fullPathInfo = await NotebooksPathService.shared.path(for: notebookId)
-        let fullPathInfo: FullPathInfo? = FullPathInfo(id: notebookId, name: "test 1", fullPath: "")
+//        let fullPathInfo: FullPathInfo? = FullPathInfo(id: notebookId, name: "", fullPath: "")
         var t = Timeline(id: id,
                          fileUUID: notebookId,
                          fileName: fileName ?? "",
-                         filePath: fullPathInfo?.fullPath ?? "", date: date)
+                         filePath: "", date: date, isDeleted: isDeleted)
         t.content = content
         return t
     }
 }
 
+enum TopFilterType {
+    case dateRange
+    case folder
+    case separator
+    
+    var icon: String {
+        switch self {
+        case .dateRange:
+            "calendar"
+        case .folder:
+            "folder"
+        case .separator:
+            ""
+        }
+    }
+    
+    var iconColor: Color {
+        switch self {
+        case .dateRange:
+//            Color("icon_purple", bundle: nil)
+//            Color.green
+            Color(hex: 0xDA9100)
+//            Color(hex: 0xF5BF03)
+        case .folder:
+            Color(hex: 0xB76E79)
+//            Color.purple
+//            Color("icon_red", bundle: nil)
+//            Color.cyan
+        case .separator:
+            Color.red
+        }
+    }
+}
+
+protocol TopFilterOption: Identifiable, Equatable {
+    var id: UUID { get set }
+    var title: String { get set }
+    var filterType: TopFilterType { get set }
+}
+
+struct TimelineDateRange: TopFilterOption {
+    var id = UUID()
+    var title: String
+    var filterType: TopFilterType = .dateRange
+    
+    let type: TimelineDateRangeType
+    let date: Date
+    var dateRange = [Date]()
+}
+
+struct TimelineFolderRange: TopFilterOption {
+    var id: UUID
+    var title: String
+    var filterType: TopFilterType = .folder
+    
+    let folderId: UUID
+}
+
+struct SeperatorOption: TopFilterOption {
+    var id = UUID()
+    var title: String = ""
+    var filterType: TopFilterType = .separator
+}
 
 @Observable
 class TimelineBaseViewState {
@@ -74,9 +138,11 @@ class TimelineBaseViewState {
 //    var selectedDates: [Date] = []
     
     var filterOptions = [any TopFilterOption]()
-    var selectedFilterOption: (any TopFilterOption) = TimelineDateRange(title: "Today", filterType: .dateRange, type: .today, date: DateTime.now())
+    var selectedFilterOption: (any TopFilterOption) = TimelineDateRange(title: "Today", type: .today, date: DateTime.now())
     var loadedDate: Date = DateTime.now()
    
+    var openTimeline: Timeline?
+    
     init(timelineBusiness: TimelineInteractor) {
         self.timelineBusiness = timelineBusiness
     }
@@ -89,6 +155,9 @@ class TimelineBaseViewState {
         if filterOptions.isEmpty || !loadedDate.isSameDayAs(DateTime.now()) {
             Task { @MainActor in
                 filterOptions = constructDateRanges()
+                // add seperator
+                let seperator = SeperatorOption()
+                filterOptions.append(seperator)
                 filterOptions.append(contentsOf: await conctructTopLevelFolders())
                 loadedDate = DateTime.now()
                 logger.debug("dateRanges.count - \(self.filterOptions.count)")
@@ -97,6 +166,42 @@ class TimelineBaseViewState {
                     selectedFilterOption = first
                 }
             }
+        } else {
+            logger.debug("only refreshing folders")
+            // only refresh folders
+            Task { @MainActor in
+                
+                filterOptions.removeAll { f in
+                    f.filterType == .folder
+                }
+                
+                filterOptions.append(contentsOf: await conctructTopLevelFolders())
+//                loadedDate = DateTime.now()
+                logger.debug("dateRanges.count - \(self.filterOptions.count)")
+                
+                if selectedFilterOption.filterType == .folder {
+                    let contains = filterOptions.contains(where: { f in
+                        f.id == selectedFilterOption.id
+                    })
+                    
+                    if contains {
+                        let buffer = selectedFilterOption
+                        selectedFilterOption = TimelineDateRange(title: "Today", type: .today, date: DateTime.now())
+                        try? await Task.sleep(nanoseconds: 100_000_000)
+                        selectedFilterOption = buffer
+                    } else {
+                        if let first = filterOptions.first {
+                            selectedFilterOption = first
+                        }
+                    }
+                }
+                
+                
+                
+//                if let first = filterOptions.first {
+//                    selectedFilterOption = first
+//                }
+            }
         }
     }
     
@@ -104,23 +209,26 @@ class TimelineBaseViewState {
         logger.info("constructDateRanges")
         var ranges = [TimelineDateRange]()
         
-        let today = TimelineDateRange(title: "Today", filterType: .dateRange, type: .today, date: DateTime.now())
+        var today = TimelineDateRange(title: "Today", type: .today, date: DateTime.now())
+        today.dateRange = getDates(for: today)
         ranges.append(today)
         
         // add previous 7 days by default
-        let sevenDays = TimelineDateRange(title: "Previous 7 Days", filterType: .dateRange, type: .previousSevenDays, date: DateTime.now().dayBefore)
+        var sevenDays = TimelineDateRange(title: "Previous 7 Days", type: .previousSevenDays, date: DateTime.now().dayBefore)
+        sevenDays.dateRange = getDates(for: sevenDays)
         ranges.append(sevenDays)
         
         // add current month by default
         var currenMonth = DateTime.now().startOfMonth()
-        let currentMonthRange = TimelineDateRange(title: "This Month", filterType: .dateRange, type: .month, date: currenMonth)
+        var currentMonthRange = TimelineDateRange(title: "This Month", type: .month, date: currenMonth)
+        currentMonthRange.dateRange = getDates(for: currentMonthRange)
         ranges.append(currentMonthRange)
         
         // populate previous 6 months
         currenMonth = currenMonth.monthBefore
         var count = 6
         while count > 0 {
-            let monthRange = TimelineDateRange(title: currenMonth.monthName, filterType: .dateRange, type: .month, date: currenMonth)
+            let monthRange = TimelineDateRange(title: currenMonth.monthName, type: .month, date: currenMonth)
             ranges.append(monthRange)
             currenMonth = currenMonth.monthBefore
             count -= 1
@@ -164,17 +272,25 @@ class TimelineBaseViewState {
     }
     
     func conctructTopLevelFolders() async -> [TimelineFolderRange] {
-        
-        let topLevel = await NotebooksPathService.shared.foldersInfoCache.filter { nb in
+        logger.debug("\(#function)")
+        let topLevel = await NotebooksPathService.shared.folders.filter { nb in
             nb.parentId == nil && nb.deletedDate == nil
         }
         
-        return topLevel.map { $0.timelineFolderRange }
+        for op in topLevel {
+            logger.debug("\(op.name)")
+        }
+        
+        return topLevel
+            .map { $0.timelineFolderRange }
+            .sorted { t1, t2 in
+                t1.title < t2.title
+            }
     }
 }
 
 extension NotebookB {
     var timelineFolderRange: TimelineFolderRange {
-        TimelineFolderRange(title: name, filterType: .folder, folderId: id)
+        TimelineFolderRange(id: id, title: name, folderId: id)
     }
 }

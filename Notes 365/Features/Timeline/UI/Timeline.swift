@@ -16,6 +16,7 @@ struct Timeline: Identifiable, Hashable {
     var filePath: String
     var date: Date
     
+    var isDeleted: Bool
     var content: String?
 //    var canDisplayContent: Bool = false
     
