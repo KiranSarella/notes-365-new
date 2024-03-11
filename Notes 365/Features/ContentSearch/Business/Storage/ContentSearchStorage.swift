@@ -24,7 +24,8 @@ class ContentSearchStorage {
         let predicate = #Predicate<NotebookContentData> {
             $0.content.localizedStandardContains(text) //contains(text)
         }
-        let descriptor = FetchDescriptor(predicate: predicate)
+        var descriptor = FetchDescriptor(predicate: predicate)
+        descriptor.fetchLimit = 50
         return try modelContext.fetch(descriptor)
     }
     

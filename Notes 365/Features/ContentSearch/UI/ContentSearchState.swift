@@ -33,12 +33,41 @@ class ContentSearchState {
         
     }
     
+    var searchResultsTask: Task<(), Never>?
+    
     func search(_ newValue: String) {
-        if newValue.count >= 3 {
-            results =  business.fetchSearchResults(for: newValue)?.map { $0.viewModel() } ?? []
-        } else {
-            results.removeAll()
+        searchResultsTask?.cancel()
+        searchResultsTask = Task {
+            try? await Task.sleep(nanoseconds: 1_000_000_000)
+            if Task.isCancelled { return }
+            
+            if newValue.count >= 3 {
+                let resultsData =  business.fetchSearchResults(for: newValue)?.map { $0.viewModel() } ?? []
+                
+                var newResults = [ContentSearchVM]()
+                
+                for r in resultsData {
+                    
+                    if Task.isCancelled { break }
+                    
+                    let notebookPath = await NotebooksPathService.shared.fileFullPath(for: r.id) ?? ""
+                    let notebookName = await NotebooksPathService.shared.fileName(for: r.id) ?? ""
+                    let isReadOnly = await NotebooksPathService.shared.isDeletedFile(uuid: r.id)
+                    
+                    let fullObj = ContentSearchVM(id: r.id, content: r.content, notebookName: notebookName, notebookPath: notebookPath, isReadOnly: isReadOnly)
+                    
+                    newResults.append(fullObj)
+                }
+                
+                if Task.isCancelled { return }
+                results = newResults
+                
+            } else {
+                results.removeAll()
+            }
         }
+        
+        
     }
     
 }

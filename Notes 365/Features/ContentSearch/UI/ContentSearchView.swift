@@ -16,9 +16,9 @@ struct ContentSearchView: View {
         NavigationStack {
             VStack {
                 List {
-                    ForEach($state.results) { $result in
+                    ForEach(state.results) { result in
                         Section {
-                            SearchDetailView(notebookContentState: $state.notebookContentState, searchText: state.searchText, result: $result)
+                            SearchDetailView(result: result)
                         }
                     }
                 }
@@ -40,29 +40,17 @@ struct ContentSearchView: View {
 }
 
 struct SearchDetailView: View {
-    @Binding var notebookContentState: NotebookContentState
-    var searchText: String
-    @Binding var result: ContentSearchVM
-//    @State var notebookName: String = ""
-//    @State var notebookPath: String = ""
-//    @State var isReadOnly: Bool = false
+    let result: ContentSearchVM
     
     var body: some View {
         VStack {
             NavigationLink(value: result) {
-                 LazyVStack(alignment: .leading) {
+                 VStack(alignment: .leading) {
                      Text(result.notebookName)
                         .font(.headline)
                      Text(result.notebookPath)
                         .font(.caption)
                 }
-            }
-        }
-        .task {
-            if result.notebookPath.isEmpty {
-                result.notebookPath = await NotebooksPathService.shared.fileFullPath(for: result.id) ?? ""
-                result.notebookName = await NotebooksPathService.shared.fileName(for: result.id) ?? ""
-                result.isReadOnly = await NotebooksPathService.shared.isDeletedFile(uuid: result.id)
             }
         }
     }

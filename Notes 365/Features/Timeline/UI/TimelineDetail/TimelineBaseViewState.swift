@@ -225,11 +225,12 @@ class TimelineBaseViewState {
         currentMonthRange.dateRange = getDates(for: currentMonthRange)
         ranges.append(currentMonthRange)
         
-        // populate previous 6 months
+        // populate previous 3 months
         currenMonth = currenMonth.monthBefore
-        var count = 6
+        var count = 3
         while count > 0 {
-            let monthRange = TimelineDateRange(title: currenMonth.monthName, type: .month, date: currenMonth)
+            var monthRange = TimelineDateRange(title: currenMonth.monthName, type: .month, date: currenMonth)
+            monthRange.dateRange = getDates(for: monthRange)
             ranges.append(monthRange)
             currenMonth = currenMonth.monthBefore
             count -= 1

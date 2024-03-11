@@ -1,15 +1,39 @@
 # Backlogs
+[ ] default themes cells view
+    - 1. gray - menlo
+    - 2. 
+    - 3. 
+    - 4.
+    - check text editors and prepare 
+    - atleast 4 themes
+    
 [ ] read text
 [ ] read in background audio
 [ ] TipKit
 [ ] MetricKit
 [ ] update search UI
+[ ] minimap with headings selection and with horizontal interactive scroll bar
+[ ] folding - expand collapse heading sections as scope
+// editor related
+[] on hover on a line or block, control chars should visible
+[ ] export all notebooks - ext?
+[ ] do not track flag - (until that book closed)
+[ ] table block - new syntax
  
 # Issues 
-[ ] limit search content results (100) and - use load more
+[x] months tabs - not working - showing empty 
+[ ] show year in timeline if year is not current year (for folders) 
 [ ] update UI for search content
-[ ] search results sort based on alphabetic or (count if possible)
-[ ] calendar state not preserving on sidebar navigation change 
+[ ] calendar state not preserving on sidebar navigation change
+[ ] cancel loading timelines if user moved to other sidebar.
+// search
+[ ] limit search content results (100) and - use load more
+[ ] search results sort based on alphabetic or (count if possible) 
+[ ] search is crasing for 'ipad' keyword
+[ ] search not working for two chars
+[ ] search paths are not working - priority
+[ ] searhc inputs - need fuzy search like so, (ex: ipad hang) - should show results for `ipad hang`, `ipad`, `hang` also.
+
 
 #### editor related
 [ ] replace matched options are showing in editor?
