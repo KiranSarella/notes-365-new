@@ -1,4 +1,15 @@
+# Next Releases
+[ ] default themes - 3 light and 3 dark
+[ ] index
+[ ] timeline index > 7 days, > 30 days, > 60 days
+[ ] switch to disable timeline saving
+
+
+
+
+
 # Backlogs
+[ ] on hover on headings when special chars are not showing display 1...6 small number infront of heading to identify.
 [ ] default themes cells view
     - 1. gray - menlo
     - 2. 
@@ -16,23 +27,27 @@
 [ ] folding - expand collapse heading sections as scope
 // editor related
 [] on hover on a line or block, control chars should visible
-[ ] export all notebooks - ext?
+[ ] export all notebooks - to text files
 [ ] do not track flag - (until that book closed)
 [ ] table block - new syntax
- 
+[ ] keyboard shortcuts
+
 # Issues 
-[x] months tabs - not working - showing empty 
+
 [ ] show year in timeline if year is not current year (for folders) 
 [ ] update UI for search content
 [ ] calendar state not preserving on sidebar navigation change
 [ ] cancel loading timelines if user moved to other sidebar.
+[ ] scroll to top while typing at bottom
 // search
-[ ] limit search content results (100) and - use load more
+[ ] searc results - use load more
 [ ] search results sort based on alphabetic or (count if possible) 
 [ ] search is crasing for 'ipad' keyword
 [ ] search not working for two chars
 [ ] search paths are not working - priority
 [ ] searhc inputs - need fuzy search like so, (ex: ipad hang) - should show results for `ipad hang`, `ipad`, `hang` also.
+
+
 
 
 #### editor related
@@ -44,9 +59,8 @@
 
 
 # Completed
-[x] hang on inner file and folder deleting
-[x] timeline filter tabs with all first level folders
-[x] single line full path for recents and search content rows
+[x] limit search content results (50)
+[x] months tabs - not working - showing empty 
 
 
 
