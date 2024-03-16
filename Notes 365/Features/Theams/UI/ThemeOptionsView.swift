@@ -24,6 +24,8 @@ struct ThemeOptionsView: View {
     let step: Int = 2
     let range = 8...64
     
+    let defaultThemes: [Theme]
+    
     var body: some View {
         VStack {
             List {
@@ -118,51 +120,46 @@ struct ThemeOptionsView: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             
-                            ForEach(0..<10) { i in
+                            ForEach(defaultThemes) { theme in
                                 Button(action: {
+                                    
+                                    
                                     
                                 }, label: {
                                     VStack {
                                         HStack {
-                                            
                                             Image(systemName: "text.word.spacing")
                                                 .resizable()
                                                 .aspectRatio(contentMode: .fit)
-//                                                .frame(height: 30)
                                                 .padding(.horizontal, 8)
-                                            
+                                                .foregroundStyle(theme.bodyColor)
                                             Spacer()
-                                                
                                             Image(systemName: "paintbrush.pointed.fill")
                                                 .resizable()
                                                 .aspectRatio(contentMode: .fit)
-                                                .foregroundStyle(Color.red)
+                                                .foregroundStyle(theme.headingColor)
                                         }
                                         .frame(height: 40)
                                         .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
                                         
                                         HStack(spacing: 8) {
                                             Circle()
-                                                .fill(.mint)
+                                                .fill(theme.styleColor)
                                                 .frame(height: 25)
-//                                                .padding(.horizontal)
                                             Circle()
-                                                .fill(.purple)
+                                                .fill(theme.blockQuoteColor)
                                                 .frame(height: 20)
-//                                                .padding(.horizontal)
                                             Circle()
-                                                .fill(.cyan)
+                                                .fill(theme.codeColor)
                                                 .frame(height: 15)
-//                                                .padding(.horizontal)
                                             Circle()
-                                                .fill(.cyan)
+                                                .fill(theme.listColor)
                                                 .frame(height: 10)
-//                                                .padding(.horizontal)
                                         }
                                     }
                                     .frame(width: 100, height: 60)
                                 })
-                                .buttonStyle(NeumorphicButtonStyle(bgColor: .white))
+                                .buttonStyle(NeumorphicButtonStyle(bgColor: theme.getBackgroundColor))
                                 .padding()
                             }
                         }
@@ -325,7 +322,7 @@ struct NeumorphicButtonStyle: ButtonStyle {
     
     func makeBody(configuration: Self.Configuration) -> some View {
         configuration.label
-            .padding()
+            .padding(20)
             .background(
                 ZStack {
                     RoundedRectangle(cornerRadius: 10, style: .continuous)

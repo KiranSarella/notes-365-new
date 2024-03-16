@@ -31,8 +31,26 @@ struct Theme: Identifiable {
     var headingFontName: String = ""
     var blockQuoteFontName: String = ""
     
+    var enableBackground: Bool = true
     var enableHeadingFont: Bool = true
     var enableBlockQuoteFont: Bool = true
-    var enableBackground: Bool = true
+    
+    
+}
+
+extension Theme {
+    
+    var defaultCanvasColor: Color {
+        switch appearanceType {
+        case .light:
+            return Color.white
+        case .dark:
+            return Color.black
+        }
+    }
+    
+    var getBackgroundColor: Color {
+        enableBackground ? canvasColor : defaultCanvasColor
+    }
     
 }

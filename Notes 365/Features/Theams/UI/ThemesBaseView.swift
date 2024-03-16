@@ -13,6 +13,7 @@ enum AppearanceType: String, CaseIterable, Identifiable, Codable {
     var id: Self { self }
 }
 
+
 struct ThemesBaseView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) private var colorScheme
@@ -33,9 +34,9 @@ struct ThemesBaseView: View {
                 .padding()
                 switch appearanceType {
                 case .light:
-                    ThemeOptionsView(theme: $selectedLightTheme, onReset: $onReset)
+                    ThemeOptionsView(theme: $selectedLightTheme, onReset: $onReset, defaultThemes: themeBusiness.getDefaultLightThemes())
                 case .dark:
-                    ThemeOptionsView(theme: $selectedDarkTheme, onReset: $onReset)
+                    ThemeOptionsView(theme: $selectedDarkTheme, onReset: $onReset, defaultThemes: themeBusiness.getDefaultDarkThemes())
                 }
             }
             .pickerStyle(.segmented)

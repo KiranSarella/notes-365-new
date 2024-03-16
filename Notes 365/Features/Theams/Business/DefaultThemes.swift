@@ -10,6 +10,8 @@ import SwiftUI
 
 class DefaultThemes {
     
+    // MARK: - Light Themes
+    
     static func generateCustomizedLightTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
         theme.fontName = "Helvetica"
@@ -33,31 +35,8 @@ class DefaultThemes {
         return theme
     }
     
-    static func generateCustomizedDarkTheme() -> Theme {
-        var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
-        theme.fontName = "Helvetica Neue"
-        theme.fontSize = 24
-        theme.canvasColor = Color(hex: 0x28292A, opacity: 1)
-        theme.bodyColor = Color.white
-        theme.headingColor = Color.yellow
-        theme.styleColor = Color.pink
-        theme.codeColor = Color.green
-        theme.blockQuoteColor = Color.mint
-        theme.listColor = Color.red
-        theme.highlightColor = Color.purple.opacity(0.45)
-        
-        theme.headingFontName = "Impact"
-        theme.blockQuoteFontName = "Futura"
-        
-        theme.enableBackground = false
-        theme.enableHeadingFont = true
-        theme.enableBlockQuoteFont = true
-        
-        return theme
-    }
     
     
-    // MARK: - Light Themes
     
     static func ashLightTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
@@ -105,7 +84,34 @@ class DefaultThemes {
         return theme
     }
     
+}
+
+extension DefaultThemes {
+    
     // MARK: - Dark Themes
+    
+    static func generateCustomizedDarkTheme() -> Theme {
+        var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
+        theme.fontName = "Helvetica Neue"
+        theme.fontSize = 24
+        theme.canvasColor = Color(hex: 0x28292A, opacity: 1)
+        theme.bodyColor = Color.white
+        theme.headingColor = Color.yellow
+        theme.styleColor = Color.pink
+        theme.codeColor = Color.green
+        theme.blockQuoteColor = Color.mint
+        theme.listColor = Color.red
+        theme.highlightColor = Color.purple.opacity(0.45)
+        
+        theme.headingFontName = "Impact"
+        theme.blockQuoteFontName = "Futura"
+        
+        theme.enableBackground = false
+        theme.enableHeadingFont = true
+        theme.enableBlockQuoteFont = true
+        
+        return theme
+    }
     
     static func purpleDarkTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)

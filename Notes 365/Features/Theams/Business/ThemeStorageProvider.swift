@@ -8,16 +8,6 @@
 import Foundation
 
 protocol ThemeStorageProvider {
-//    func fetchThemes(for appearanceType: AppearanceType) throws -> [Theme]
-//    func fetchTheme(id: UUID) throws -> Theme?
-//    func containThemes() throws -> Bool
-//    func insert(theme: Theme) throws
-//    func update(theme: Theme) throws
-//    func setLightTheme(id: String)
-//    func setDarkTheme(id: String)
-//    func fetchLightTheme() -> String?
-//    func fetchDarkTheme() -> String?
-    
     func saveLightTheme(_ theme: Theme)
     func saveDarkTheme(_ theme: Theme)
     func fetchLightTheme() -> Theme?

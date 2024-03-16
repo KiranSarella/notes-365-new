@@ -16,6 +16,9 @@ protocol ThemeInteractor {
     func saveLightTheme(_ theme: Theme)
     func saveDarkTheme(_ theme: Theme)
     
+    func getDefaultLightThemes() -> [Theme]
+    func getDefaultDarkThemes() -> [Theme]
+    
 //    func insert(theme: Theme) throws
 //    func update(theme: Theme) throws
 //    func setLightTheme(id: String)
