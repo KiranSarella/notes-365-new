@@ -109,6 +109,66 @@ struct ThemeOptionsView: View {
                         }
                     }
                 } 
+                
+                Section {
+                    
+                } header: {
+                    
+                } footer: {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            
+                            ForEach(0..<10) { i in
+                                Button(action: {
+                                    
+                                }, label: {
+                                    VStack {
+                                        HStack {
+                                            
+                                            Image(systemName: "text.word.spacing")
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+//                                                .frame(height: 30)
+                                                .padding(.horizontal, 8)
+                                            
+                                            Spacer()
+                                                
+                                            Image(systemName: "paintbrush.pointed.fill")
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .foregroundStyle(Color.red)
+                                        }
+                                        .frame(height: 40)
+                                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
+                                        
+                                        HStack(spacing: 8) {
+                                            Circle()
+                                                .fill(.mint)
+                                                .frame(height: 25)
+//                                                .padding(.horizontal)
+                                            Circle()
+                                                .fill(.purple)
+                                                .frame(height: 20)
+//                                                .padding(.horizontal)
+                                            Circle()
+                                                .fill(.cyan)
+                                                .frame(height: 15)
+//                                                .padding(.horizontal)
+                                            Circle()
+                                                .fill(.cyan)
+                                                .frame(height: 10)
+//                                                .padding(.horizontal)
+                                        }
+                                    }
+                                    .frame(width: 100, height: 60)
+                                })
+                                .buttonStyle(NeumorphicButtonStyle(bgColor: .white))
+                                .padding()
+                            }
+                        }
+                    }
+                }
+
 
             }
             .sheet(isPresented: $showFontPicker) {
@@ -236,3 +296,56 @@ struct ThemeOptionsView: View {
 //        ThemeDetailView_iOS()
 //    }
 //}
+
+
+struct ThemeBoxStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding()
+            .background(
+                RoundedRectangle(
+                    cornerRadius: 20,
+                    style: .continuous
+                )
+                .stroke(.gray, lineWidth: 1)
+            )
+    }
+}
+
+extension ButtonStyle where Self == ThemeBoxStyle {
+    static var themeBox: Self {
+        return .init()
+    }
+}
+
+
+struct NeumorphicButtonStyle: ButtonStyle {
+    var bgColor: Color
+    @State private var offset: CGFloat = 1
+    
+    func makeBody(configuration: Self.Configuration) -> some View {
+        configuration.label
+            .padding()
+            .background(
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        .shadow(color: .white, 
+                                radius: configuration.isPressed ? 4: 8,
+                                x: configuration.isPressed ? -3: -8,
+                                y: configuration.isPressed ? -3: -8)
+                        .shadow(color: .black,
+                                radius: configuration.isPressed ? 4: 8,
+                                x: configuration.isPressed ? 3: 8,
+                                y: configuration.isPressed ? 3: 8)
+                        .blendMode(.overlay)
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        .fill(bgColor)
+                }
+            )
+            .scaleEffect(configuration.isPressed ? 0.95: 1)
+            .foregroundColor(.primary)
+            .animation(.spring, value: configuration.isPressed)
+    }
+}
+
+
