@@ -43,7 +43,7 @@ class DefaultThemes {
         theme.fontName = "Cute Aurora"
         theme.fontSize = 30
         theme.canvasColor = Color(hex: 0xF6F1EC)
-        theme.bodyColor = Color(hex: 0xFFE600)
+        theme.bodyColor = Color(hex: 0x212121)
         theme.headingColor = Color(hex: 0x76D6FF)
         theme.styleColor = Color(hex: 0xF60036)
         theme.codeColor = Color.green

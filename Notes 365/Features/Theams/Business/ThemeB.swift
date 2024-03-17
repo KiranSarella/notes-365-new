@@ -53,4 +53,9 @@ extension Theme {
         enableBackground ? canvasColor : defaultCanvasColor
     }
     
+    
+}
+
+extension Theme: Equatable {
+    
 }

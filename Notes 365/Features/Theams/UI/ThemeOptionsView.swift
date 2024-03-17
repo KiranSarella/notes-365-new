@@ -25,6 +25,9 @@ struct ThemeOptionsView: View {
     let range = 8...64
     
     let defaultThemes: [Theme]
+    @Binding var selectedDefaultTheme: Theme?
+    
+
     
     var body: some View {
         VStack {
@@ -117,53 +120,61 @@ struct ThemeOptionsView: View {
                 } header: {
                     
                 } footer: {
-                    ScrollView(.horizontal, showsIndicators: false) {
+                    
+                    VStack {
+                        
                         HStack {
-                            
-                            ForEach(defaultThemes) { theme in
-                                Button(action: {
-                                    
-                                    
-                                    
-                                }, label: {
-                                    VStack {
-                                        HStack {
-                                            Image(systemName: "text.word.spacing")
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fit)
-                                                .padding(.horizontal, 8)
-                                                .foregroundStyle(theme.bodyColor)
-                                            Spacer()
-                                            Image(systemName: "paintbrush.pointed.fill")
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fit)
-                                                .foregroundStyle(theme.headingColor)
+                            Text("Default Themes")
+                            Spacer()
+                        }
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(defaultThemes) { theme in
+                                    Button(action: {
+                                        selectedDefaultTheme = theme
+                                    }, label: {
+                                        VStack {
+                                            HStack {
+                                                Image(systemName: "text.word.spacing")
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .padding(.horizontal, 8)
+                                                    .foregroundStyle(theme.bodyColor)
+                                                Spacer()
+                                                Image(systemName: "paintbrush.pointed.fill")
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .foregroundStyle(theme.headingColor)
+                                            }
+                                            .frame(height: 40)
+                                            .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
+                                            
+                                            HStack(spacing: 8) {
+                                                Circle()
+                                                    .fill(theme.styleColor)
+                                                    .frame(height: 25)
+                                                Circle()
+                                                    .fill(theme.blockQuoteColor)
+                                                    .frame(height: 20)
+                                                Circle()
+                                                    .fill(theme.codeColor)
+                                                    .frame(height: 15)
+                                                Circle()
+                                                    .fill(theme.listColor)
+                                                    .frame(height: 10)
+                                            }
                                         }
-                                        .frame(height: 40)
-                                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
-                                        
-                                        HStack(spacing: 8) {
-                                            Circle()
-                                                .fill(theme.styleColor)
-                                                .frame(height: 25)
-                                            Circle()
-                                                .fill(theme.blockQuoteColor)
-                                                .frame(height: 20)
-                                            Circle()
-                                                .fill(theme.codeColor)
-                                                .frame(height: 15)
-                                            Circle()
-                                                .fill(theme.listColor)
-                                                .frame(height: 10)
-                                        }
-                                    }
-                                    .frame(width: 100, height: 60)
-                                })
-                                .buttonStyle(NeumorphicButtonStyle(bgColor: theme.getBackgroundColor))
-                                .padding()
+                                        .frame(width: 100, height: 60)
+                                    })
+                                    .buttonStyle(NeumorphicButtonStyle(bgColor: theme.getBackgroundColor))
+                                    .padding()
+                                }
                             }
                         }
+                        .padding(.horizontal, -20)
                     }
+                    
                 }
 
 
@@ -315,10 +326,9 @@ extension ButtonStyle where Self == ThemeBoxStyle {
     }
 }
 
-
+// ref: https://sarunw.com/posts/swiftui-buttonstyle/
 struct NeumorphicButtonStyle: ButtonStyle {
     var bgColor: Color
-    @State private var offset: CGFloat = 1
     
     func makeBody(configuration: Self.Configuration) -> some View {
         configuration.label
@@ -327,13 +337,13 @@ struct NeumorphicButtonStyle: ButtonStyle {
                 ZStack {
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .shadow(color: .white, 
-                                radius: configuration.isPressed ? 4: 8,
-                                x: configuration.isPressed ? -3: -8,
-                                y: configuration.isPressed ? -3: -8)
+                                radius: configuration.radius,
+                                x: -configuration.x,
+                                y: -configuration.y)
                         .shadow(color: .black,
-                                radius: configuration.isPressed ? 4: 8,
-                                x: configuration.isPressed ? 3: 8,
-                                y: configuration.isPressed ? 3: 8)
+                                radius: configuration.radius,
+                                x: configuration.x,
+                                y: configuration.y)
                         .blendMode(.overlay)
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .fill(bgColor)
@@ -345,4 +355,41 @@ struct NeumorphicButtonStyle: ButtonStyle {
     }
 }
 
+// want to try State pattern, end up like this.
+protocol NeumorphicShadowState {
+    static var radius: CGFloat { get }
+    static var x: CGFloat { get }
+    static var y: CGFloat { get }
+}
 
+struct DefaultNeumorphicState: NeumorphicShadowState {
+    static var radius: CGFloat = 8
+    static var x: CGFloat = 8
+    static var y: CGFloat = 8
+}
+
+struct PressedNeumorphicState: NeumorphicShadowState {
+    static var radius: CGFloat = 4
+    static var x: CGFloat = 3
+    static var y: CGFloat = 3
+}
+
+extension  ButtonStyleConfiguration {
+    
+    private var shadowState: NeumorphicShadowState.Type {
+        isPressed ? PressedNeumorphicState.self : DefaultNeumorphicState.self
+    }
+    
+    var x: CGFloat {
+        shadowState.x
+    }
+    
+    var y: CGFloat {
+        shadowState.y
+    }
+    
+    var radius: CGFloat {
+        shadowState.radius
+    }
+    
+}

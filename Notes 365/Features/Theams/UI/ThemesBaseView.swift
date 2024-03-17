@@ -23,6 +23,27 @@ struct ThemesBaseView: View {
     @State private var selectedDarkTheme: MarkdownTheme = BusinessFactory.themeInteractor().getDarkTheme().markdownTheme
     @State var onReset = false
     
+    @State var selectedDefaultTheme: Theme?
+    
+    func updateWithDefault(_ theme: Theme) {
+//        self.theme.fontSize = theme.fontSize
+//        self.theme.canvasColor = theme.canvasColor
+//        self.theme.bodyColor = theme.bodyColor
+//        self.theme.headingColor = theme.headingColor
+//        self.theme.styleColor = theme.styleColor
+//        self.theme.highlightColor = theme.highlightColor
+//        self.theme.codeColor = theme.codeColor
+//        self.theme.blockQuoteColor = theme.blockQuoteColor
+//        self.theme.listColor = theme.listColor
+//        self.theme.linkColor = theme.linkColor
+//        self.theme.headingFontName = theme.headingFontName
+//        self.theme.blockQuoteFontName = theme.blockQuoteFontName
+//        
+//        self.theme.enableBackground = theme.enableBackground
+//        self.theme.enableHeadingFont = theme.enableHeadingFont
+//        self.theme.enableBlockQuoteFont = theme.enableBlockQuoteFont
+    }
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -34,9 +55,9 @@ struct ThemesBaseView: View {
                 .padding()
                 switch appearanceType {
                 case .light:
-                    ThemeOptionsView(theme: $selectedLightTheme, onReset: $onReset, defaultThemes: themeBusiness.getDefaultLightThemes())
+                    ThemeOptionsView(theme: $selectedLightTheme, onReset: $onReset, defaultThemes: themeBusiness.getDefaultLightThemes(), selectedDefaultTheme: $selectedDefaultTheme)
                 case .dark:
-                    ThemeOptionsView(theme: $selectedDarkTheme, onReset: $onReset, defaultThemes: themeBusiness.getDefaultDarkThemes())
+                    ThemeOptionsView(theme: $selectedDarkTheme, onReset: $onReset, defaultThemes: themeBusiness.getDefaultDarkThemes(), selectedDefaultTheme: $selectedDefaultTheme)
                 }
             }
             .pickerStyle(.segmented)
@@ -49,13 +70,7 @@ struct ThemesBaseView: View {
                 }
                 #endif
                 ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button {
-                        resetTheme()
-                        persistThemeChanges()
-                    } label: {
-                        Text("Reset")
-                    }
-                    
+                   
                     Button {
                         persistThemeChanges()
 //                        dismiss()
@@ -76,17 +91,33 @@ struct ThemesBaseView: View {
                 appearanceType = .light
             }
         }
+        .onChange(of: selectedDefaultTheme) { oldValue, newValue in
+            guard let newValue = newValue else { return }
+            
+            reset(with: newValue)
+        }
     }
     
-    func resetTheme() {
+    func reset(with newTheme: Theme) {
         switch appearanceType {
         case .light:
-            selectedLightTheme = DefaultThemes.generateCustomizedLightTheme().markdownTheme
+            selectedLightTheme = newTheme.markdownTheme
         case .dark:
-            selectedDarkTheme = DefaultThemes.generateCustomizedDarkTheme().markdownTheme
+            selectedDarkTheme = newTheme.markdownTheme
         }
         onReset.toggle()
+        persistThemeChanges()
     }
+    
+//    func resetTheme() {
+//        switch appearanceType {
+//        case .light:
+//            selectedLightTheme = DefaultThemes.generateCustomizedLightTheme().markdownTheme
+//        case .dark:
+//            selectedDarkTheme = DefaultThemes.generateCustomizedDarkTheme().markdownTheme
+//        }
+//        onReset.toggle()
+//    }
     
     func persistThemeChanges() {
         switch appearanceType {
