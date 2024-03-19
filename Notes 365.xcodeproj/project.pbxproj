@@ -323,7 +323,6 @@
 		5C7DDE5B2B19D8A200EE89A6 /* DayVersionCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayVersionCreator.swift; sourceTree = "<group>"; };
 		5C8FADFA2B0A072600B80BD9 /* NotebooksListStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksListStateTests.swift; sourceTree = "<group>"; };
 		5C9060512B0F46060068DD65 /* CurrentLevelState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLevelState.swift; sourceTree = "<group>"; };
-		5C9732212A8B74C200C42E28 /* iCloud-sync.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "iCloud-sync.md"; sourceTree = "<group>"; };
 		5C9B5CFF2A8FED2A00396102 /* TextKit.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TextKit.md; sourceTree = "<group>"; };
 		5CAF9E7D2B679A730020E9CB /* ChallengeContour.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ChallengeContour.ttf; sourceTree = "<group>"; };
 		5CAF9E7E2B679A730020E9CB /* ChallengeShadow.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ChallengeShadow.ttf; sourceTree = "<group>"; };
@@ -1068,7 +1067,6 @@
 				5C7CFAB52B151E5D00777AB2 /* DateTime.swift */,
 				5CD549162B820BF800539538 /* UserPreferenceStorage.swift */,
 				9FB0A47129D9246D0093FBD2 /* architecture-decissions.md */,
-				5C9732212A8B74C200C42E28 /* iCloud-sync.md */,
 				5C117C3D2A8E662800B0F3BE /* Features.md */,
 				5CD549182B827FFB00539538 /* Preferences.md */,
 				5CD6813F2B60264300F15D3B /* Fonts.md */,

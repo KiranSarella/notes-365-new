@@ -31,18 +31,29 @@ struct SmartEditor: View {
                 .background(.background)
                 .disabled(isReadonly)
             
-            EditorViewRepresentable(text: input, editorView: editorView, contentEditedDate: $contentEditedDate,  isEditable: !isReadonly)
-                .font(Font.body)
-                .focused($isTextFieldFocused)
-                .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
-                .onAppear {
-                    if let searchText = searchText, !searchText.isEmpty  {
-                        Task {
-                            try? await Task.sleep(nanoseconds: 1_000_000_00)
-                            editorView.findAction(with: searchText)
+            ZStack {
+                EditorViewRepresentable(text: input, editorView: editorView, contentEditedDate: $contentEditedDate,  isEditable: !isReadonly)
+                    .font(Font.body)
+                    .focused($isTextFieldFocused)
+                    .lineSpacing(EditorSettings.lineSpacing)    // bcz paragraph spacing is not working
+                    .onAppear {
+                        if let searchText = searchText, !searchText.isEmpty  {
+                            Task {
+                                try? await Task.sleep(nanoseconds: 1_000_000_00)
+                                editorView.findAction(with: searchText)
+                            }
                         }
                     }
+                
+                HStack {
+                    Spacer()
+                    IndexView()
+                        .frame(width: 400)
+                        .background(Color.black.opacity(0.6))
                 }
+            }
+            
+            
         }
         .ignoresSafeArea(edges: [.bottom])
         .onChange(of: input, { oldValue, newValue in
@@ -108,6 +119,21 @@ struct SmartEditor: View {
                 logger.error("\(error)")
             }
         }
+        
+    }
+}
+
+
+struct IndexView: View {
+    
+    let headings = ["Chapter 1", "Chapter 2", "Chapter 3", "Chapter 4", "Chapter 5", "Chapter 6"]
+    
+    var body: some View {
+        List(headings, id: \.self) { heading in
+            Text(heading)
+                .listRowBackground(Color.clear)
+        }
+        .listStyle(PlainListStyle())
         
     }
 }

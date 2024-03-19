@@ -1,5 +1,5 @@
 # Next Releases
-[ ] default themes - 3 light and 3 dark
+[-] default themes - 3 light and 3 dark
 [ ] index
 [ ] timeline index > 7 days, > 30 days, > 60 days
 [ ] switch to disable timeline saving
@@ -59,26 +59,4 @@
 
 
 # Completed
-[x] limit search content results (50)
-[x] months tabs - not working - showing empty 
 
-
-
-Yearly - 395
-Lifetime - 1349
-Family Sharing - 749
-
-
-
-timeline loading data
-- to apply folder filters later in mind
-    - fetch only info, not content
-- once all filers applied for that day, then process each day content with delay and cancel task on dates changed.
-- use scrollview only, but use single data source list
-    - why single view, because the scrollID should be wrt timeline block, not wrt day block.
-    - append each item once content is loaded
-    - append date header if record is first one on that day
-    - on discard?
-        - create id for each day and keep in each contentdata
-        - using that id, we can get all records in a day.
-        - id records are empty, remove date header with that id 
