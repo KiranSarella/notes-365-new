@@ -39,7 +39,7 @@ class DefaultThemes {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
         theme.fontName = "Helvetica"
         theme.fontSize = 24
-        theme.canvasColor = Color(hex: 0x76D6FF, opacity: 0.15)
+        theme.canvasColor = Color(hex: 0xE6F7FF)
         theme.bodyColor = Color.primary
         theme.headingColor = Color.orange
         theme.styleColor = Color.purple
@@ -112,6 +112,28 @@ class DefaultThemes {
 extension DefaultThemes {
     
     // MARK: - Dark Themes
+    static func generateBasicDarkTheme() -> Theme {
+        var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
+        theme.fontName = "Helvetica"
+        theme.fontSize = 24
+        theme.canvasColor = Color.black
+        theme.bodyColor = Color.white
+        theme.headingColor = Color.white
+        theme.styleColor = Color.white
+        theme.codeColor = Color.white
+        theme.blockQuoteColor = Color.white
+        theme.listColor = Color.white
+        theme.highlightColor = Color.yellow.opacity(0.45)
+        
+        theme.headingFontName = "Helvetica"
+        theme.blockQuoteFontName = "Helvetica"
+        
+        theme.enableBackground = false
+        theme.enableHeadingFont = false
+        theme.enableBlockQuoteFont = false
+        
+        return theme
+    }
     
     static func generateCustomizedDarkTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
@@ -136,21 +158,21 @@ extension DefaultThemes {
         return theme
     }
     
-    static func purpleDarkTheme() -> Theme {
+    static func GrayDarkTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
-        theme.fontName = "Cute Aurora"
+        theme.fontName = "Avenir"
         theme.fontSize = 30
-        theme.canvasColor = Color(hex: 0x372039)
-        theme.bodyColor = Color(hex: 0xFFE600)
-        theme.headingColor = Color(hex: 0xFF7E79)
-        theme.styleColor = Color(hex: 0xF60036)
-        theme.codeColor = Color.green
-        theme.blockQuoteColor = Color.cyan
-        theme.listColor = Color(hex: 0x4F8F00)
-        theme.highlightColor = Color(hex: 0xAF52DE, opacity: 0.45)
+        theme.canvasColor = Color(hex: 0x292A2F)
+        theme.bodyColor = Color(hex: 0xFFFFFF)
+        theme.headingColor = Color(hex: 0xFC6A5D)
+        theme.styleColor = Color(hex: 0xFC5FA3)
+        theme.codeColor = Color(hex: 0xB4B300)
+        theme.blockQuoteColor = Color(hex: 0x67B7A4)
+        theme.listColor = Color(hex: 0x5BC67D)
+        theme.highlightColor = Color(hex: 0x73FCD6, opacity: 0.38)
         
-        theme.headingFontName = "Impact"
-        theme.blockQuoteFontName = "Futura"
+        theme.headingFontName = "Georgia"
+        theme.blockQuoteFontName = "Verdana"
         
         theme.enableBackground = true
         theme.enableHeadingFont = true
@@ -158,5 +180,7 @@ extension DefaultThemes {
         
         return theme
     }
+    
+    
     
 }

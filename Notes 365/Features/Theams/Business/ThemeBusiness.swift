@@ -53,8 +53,9 @@ extension ThemeBusiness {
     
     func getDefaultDarkThemes() -> [Theme] {
         [
+            DefaultThemes.generateBasicDarkTheme(),
             DefaultThemes.generateCustomizedDarkTheme(),
-            DefaultThemes.purpleDarkTheme()
+            DefaultThemes.GrayDarkTheme()
         ]
     }
     
