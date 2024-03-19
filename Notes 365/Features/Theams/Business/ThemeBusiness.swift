@@ -44,6 +44,7 @@ extension ThemeBusiness {
     
     func getDefaultLightThemes() -> [Theme] {
         [
+            DefaultThemes.generateBasicLightTheme(),
             DefaultThemes.generateCustomizedLightTheme(),
             DefaultThemes.ashLightTheme(),
             DefaultThemes.lightPurpleLightTheme()

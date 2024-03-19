@@ -12,6 +12,29 @@ class DefaultThemes {
     
     // MARK: - Light Themes
     
+    static func generateBasicLightTheme() -> Theme {
+        var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
+        theme.fontName = "Helvetica"
+        theme.fontSize = 24
+        theme.canvasColor = Color.white
+        theme.bodyColor = Color.primary
+        theme.headingColor = Color.primary
+        theme.styleColor = Color.primary
+        theme.codeColor = Color.primary
+        theme.blockQuoteColor = Color.primary
+        theme.listColor = Color.primary
+        theme.highlightColor = Color.yellow.opacity(0.25)
+        
+        theme.headingFontName = "Helvetica"
+        theme.blockQuoteFontName = "Helvetica"
+        
+        theme.enableBackground = false
+        theme.enableHeadingFont = false
+        theme.enableBlockQuoteFont = false
+        
+        return theme
+    }
+    
     static func generateCustomizedLightTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
         theme.fontName = "Helvetica"
