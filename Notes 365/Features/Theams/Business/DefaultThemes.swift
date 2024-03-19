@@ -40,18 +40,18 @@ class DefaultThemes {
     
     static func ashLightTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
-        theme.fontName = "Cute Aurora"
+        theme.fontName = "Avenir"
         theme.fontSize = 30
         theme.canvasColor = Color(hex: 0xF6F1EC)
         theme.bodyColor = Color(hex: 0x212121)
-        theme.headingColor = Color(hex: 0x76D6FF)
-        theme.styleColor = Color(hex: 0xF60036)
-        theme.codeColor = Color.green
-        theme.blockQuoteColor = Color.cyan
-        theme.listColor = Color(hex: 0x4F8F00)
-        theme.highlightColor = Color(hex: 0xAF52DE, opacity: 0.45)
+        theme.headingColor = Color(hex: 0x0069B8)
+        theme.styleColor = Color(hex: 0xE87EC4)
+        theme.codeColor = Color(hex: 0x00A75E)
+        theme.blockQuoteColor = Color(hex: 0x0096FF)
+        theme.listColor = Color(hex: 0xFF2F92)
+        theme.highlightColor = Color(hex: 0xAF52DE, opacity: 0.30)
         
-        theme.headingFontName = "Impact"
+        theme.headingFontName = "Georgia"
         theme.blockQuoteFontName = "Futura"
         
         theme.enableBackground = true
@@ -64,13 +64,13 @@ class DefaultThemes {
     static func lightPurpleLightTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
         theme.fontName = "Times New Roman"
-        theme.fontSize = 28
-        theme.canvasColor = Color(hex: 0xAAA7CC, opacity: 0.40)
-        theme.bodyColor = Color(hex: 0x212121)
-        theme.headingColor = Color(hex: 0xFC4204)
-        theme.styleColor = Color(hex: 0x008F00)
-        theme.codeColor = Color(hex: 0x945200)
-        theme.blockQuoteColor = Color(hex: 0x009193)
+        theme.fontSize = 32
+        theme.canvasColor = Color(hex: 0xAAA7CC, opacity: 0.16)
+        theme.bodyColor = Color(hex: 0x000000)
+        theme.headingColor = Color(hex: 0xFF4E00)
+        theme.styleColor = Color(hex: 0x17AF4C)
+        theme.codeColor = Color(hex: 0x046AFF)
+        theme.blockQuoteColor = Color(hex: 0x009B93)
         theme.listColor = Color(hex: 0x941751)
         theme.highlightColor = Color(hex: 0xFFD479, opacity: 0.50)
         

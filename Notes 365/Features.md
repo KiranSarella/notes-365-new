@@ -5,11 +5,6 @@
 [ ] switch to disable timeline saving
 
 
-
-
-
-# Backlogs
-[ ] on hover on headings when special chars are not showing display 1...6 small number infront of heading to identify.
 [ ] default themes cells view
     - 1. gray - menlo
     - 2. 
@@ -17,6 +12,11 @@
     - 4.
     - check text editors and prepare 
     - atleast 4 themes
+
+
+# Backlogs
+[ ] on hover on headings when special chars are not showing display 1...6 small number infront of heading to identify.
+
     
 [ ] read text
 [ ] read in background audio
