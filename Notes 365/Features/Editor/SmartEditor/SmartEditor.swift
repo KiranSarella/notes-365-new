@@ -21,9 +21,10 @@ struct SmartEditor: View {
     @State private var showingPDFExporter = false
     @State private var pdfFileData: PDFFile = PDFFile(data: Data())
     
-    @State var presentIndexView = true
+    @State var showingIndexView = true
     @State var headings = [ContentItem]()
-    
+    @State var headingSelection: ContentItem.ID? = nil
+    @State var headingsRange = Set<HeadingRange>()
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -47,38 +48,30 @@ struct SmartEditor: View {
                         }
                     }
                 }
-                .inspector(isPresented: $presentIndexView) {
-                    IndexView(items: $headings)
-                        .inspectorColumnWidth(500)
+                .inspector(isPresented: $showingIndexView) {
+                    IndexView(items: $headings, headingSelection: $headingSelection)
+                        .inspectorColumnWidth(440)
+                        .toolbar(content: {
+                            ToolbarItem {
+                                Button {
+                                    showingIndexView.toggle()
+                                } label: {
+                                    if showingIndexView {
+                                        Image(systemName: "list.bullet.rectangle.fill")
+                                    } else {
+                                        Image(systemName: "list.bullet.rectangle")
+                                    }
+                                    
+                                }
+                            }
+                        })
                         .onAppear {
-                            
                             Task {
                                 try? await Task.sleep(nanoseconds: 1_000_000_000)
                                 populateContents()
                             }
-                            
                         }
-//                        .inspectorColumnWidth(min: 350, ideal: 360, max: 600)
                 }
-            
-//            ZStack {
-//                
-//                
-//                HStack {
-//                    Spacer()
-//                    VStack {
-//                        IndexView()
-//                            .frame(width: 400, height: 800)
-//                            .background(Color.black.opacity(0.7))
-//                            .clipShape(RoundedRectangle(cornerRadius: 30))
-//                            .padding(20)
-//                        
-//                        Spacer()
-//                    }
-//                        
-//                }
-//            }
-            
             
         }
         .ignoresSafeArea(edges: [.bottom])
@@ -88,6 +81,20 @@ struct SmartEditor: View {
             self.contentEditedDate = nil
             editorView.text = newValue
         })
+        .onChange(of: headingSelection) { oldValue, newValue in
+            guard let newValue = newValue else { return }
+            let obj = headingsRange.first { h in
+                h.id == newValue
+            }
+            
+            if let obj = obj {
+                Task { @MainActor in
+                    editorView.textView.scrollRangeToVisible(obj.range)
+                }
+            }
+            
+            headingSelection = nil
+        }
         .onDisappear {
             isTextFieldFocused = false
         }
@@ -110,11 +117,11 @@ struct SmartEditor: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
                     Button {
-                        presentIndexView.toggle()
+                        showingIndexView.toggle()
 //                        populateContents()
                     } label: {
                         HStack {
-                            if presentIndexView {
+                            if showingIndexView {
                                 Text("Hide Index")
                             } else {
                                 Text("Show Index")
@@ -158,6 +165,7 @@ struct SmartEditor: View {
                 logger.error("\(error)")
             }
         }
+        
 //        .inspectorColumnWidth(min: 600, ideal: 600, max: 600)
         
 //
@@ -165,6 +173,12 @@ struct SmartEditor: View {
     }
 }
 
+
+struct HeadingRange: Hashable {
+    let id: UUID = UUID()
+    let line: String
+    let range: NSRange
+}
 
 extension SmartEditor {
     
@@ -176,11 +190,8 @@ extension SmartEditor {
         
         logger.debug("\(#function)")
         
-        var h1Text = [String]()
-        var h2Text = [String]()
-        var h3Text = [String]()
         
-        var headings = [String]()
+        var headings = [HeadingRange]()
         
         let pattern = headingsPattern
         let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
@@ -191,45 +202,42 @@ extension SmartEditor {
             let range = NSRange(location: match!.range.location, length: match!.range.length)
             let line = (editorView.textView.text as NSString).substring(with: range)
             
-            headings.append(line)
+            headings.append(HeadingRange(line: line, range: range))
         }
-        
-        dump(headings)
-        
         
         var items = [ContentItem]()
         
-        let trimRegex = try! NSRegularExpression(pattern: headingsTrimPattern, options: [.anchorsMatchLines])
-        
-        
-        for line in headings {
+        for heading in headings {
+            let id = heading.id
+            let line = heading.line
+            let range = heading.range
             if line.hasPrefix("# ") {
                 let line = String(line.dropFirst(2))
-                let item = ContentItem(name: line)
+                let item = ContentItem(id: id, name: line, range: range)
                 items.append(item)
                 
             } else if line.hasPrefix("## ") {
                 let line = String(line.dropFirst(3))
-                let item = ContentItem(name: line)
+                let item = ContentItem(id: id, name: line, range: range)
                 items.last?.children
                     .append(item)
                 
             } else if line.hasPrefix("### ") {
                 let line = String(line.dropFirst(4))
-                let item = ContentItem(name: line)
+                let item = ContentItem(id: id, name: line, range: range)
                 items.last?.children
                     .last?.children
                     .append(item)
             } else if line.hasPrefix("#### ") {
                 let line = String(line.dropFirst(5))
-               let item = ContentItem(name: line)
+                let item = ContentItem(id: id, name: line, range: range)
                items.last?.children
                    .last?.children
                    .last?.children
                    .append(item)
            } else if line.hasPrefix("##### ") {
                let line = String(line.dropFirst(6))
-               let item = ContentItem(name: line)
+               let item = ContentItem(id: id, name: line, range: range)
                items.last?.children
                    .last?.children
                    .last?.children
@@ -237,7 +245,7 @@ extension SmartEditor {
                    .append(item)
            } else if line.hasPrefix("###### ") {
                let line = String(line.dropFirst(7))
-               let item = ContentItem(name: line)
+               let item = ContentItem(id: id, name: line, range: range)
                items.last?.children
                    .last?.children
                    .last?.children
@@ -249,7 +257,8 @@ extension SmartEditor {
         }
         
         self.headings = items
- 
+        self.headingsRange = Set(headings)
+        
     }
     
 }
@@ -306,14 +315,18 @@ extension SmartEditor {
 
 
 class ContentItem: Identifiable {
-    let id: UUID = UUID()
-    var name: String = ""
+    let id: UUID
+    let name: String
+    let range: NSRange
+    
     var children = [ContentItem]()
 
     var isExpanded = true
     
-    init(name: String) {
+    init(id: UUID, name: String, range: NSRange) {
+        self.id = id
         self.name = name
+        self.range = range
     }
     
     var containsChildren: Bool {
@@ -358,77 +371,65 @@ extension ContentItem: Hashable, Equatable {
 
 struct IndexView: View {
     @Binding var items: [ContentItem]
-    @State var selection: ContentItem.ID? = nil
+    @Binding var headingSelection: ContentItem.ID?
+    let level: MarkdownHeading = .h1
     
         var body: some View {
-            List(selection: $selection) {
+            List(selection: $headingSelection) {
                 ForEach($items, id: \.id) { $item in
-                    
-//                    Section(content: {
-//                        if item.containsChildren {
-//                            NestedView(items: $item.children)
-//                        }
-//                    }, header: {
-//                        Text(item.name)
-//                            .font(.title)
-//                    })
                     
                     Section {
                         if item.containsChildren {
-                            DisclosureGroup(item.name) {
-                                NestedView(items: $item.children)
-                            }
-                            .listRowBackground(Color.clear)
+                            IndexGroupView(level: level, item: $item)
                         } else {
                             Text(item.name)
                                 .listRowBackground(Color.clear)
+                                .foregroundColor(level.indexColor)
+                                .fontWeight(level.indexWeight)
                         }
                     }
-                    
-                   
                 }
             }
             .listStyle(PlainListStyle())
-            .onChange(of: selection) { oldValue, newValue in
-                guard let newValue = newValue else { return }
-                
-//                logger.debug("selection: \(newValue.name)")
-//                
-//                selection = nil
-            }
             .background(ThemeState.shared.theme.dynamicCanvasColor)
-            .foregroundColor(Color.secondary)
-            .lineLimit(2)
+//            .foregroundColor(Color.secondary)
+            .lineLimit(1)
             
         }
 }
 
 struct IndexGroupView: View {
-    
+    let level: MarkdownHeading
     @Binding var item: ContentItem
     @State var isExpanded = true
     
     var body: some View {
-        DisclosureGroup(item.name, isExpanded: $isExpanded) {
-            NestedView(items: $item.children)
+        
+        DisclosureGroup(isExpanded: $isExpanded) {
+            NestedView(level: level.next(), items: $item.children)
+        } label: {
+            Text(item.name)
+                .listRowBackground(Color.clear)
+                .foregroundColor(level.indexColor)
+                .fontWeight(level.indexWeight)
         }
         .listRowBackground(Color.clear)
     }
 }
 
 struct NestedView: View {
+    let level: MarkdownHeading
     @Binding var items: [ContentItem]
     
     var body: some View {
         ForEach($items, id: \.id) { $item in
             if item.containsChildren {
-                DisclosureGroup(item.name) {
-                    NestedView(items: $item.children)
-                }
-                .listRowBackground(Color.clear)
+                IndexGroupView(level: level, item: $item)
             } else {
                 Text(item.name)
                     .listRowBackground(Color.clear)
+                    .foregroundColor(level.indexColor)
+                    .fontWeight(level.indexWeight)
             }
         }
     }
@@ -436,28 +437,85 @@ struct NestedView: View {
 
 
 
-struct MyDisclosureStyle: DisclosureGroupStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        VStack {
-            Button {
-                withAnimation {
-                    configuration.isExpanded.toggle()
-                }
-            } label: {
-                HStack(alignment: .firstTextBaseline) {
-                    configuration.label
-                    Spacer()
-                    Text(configuration.isExpanded ? "hide" : "show")
-                        .foregroundColor(.accentColor)
-                        .font(.caption.lowercaseSmallCaps())
-                        .animation(nil, value: configuration.isExpanded)
-                }
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            if configuration.isExpanded {
-                configuration.content
-            }
+//struct MyDisclosureStyle: DisclosureGroupStyle {
+//    func makeBody(configuration: Configuration) -> some View {
+//        VStack {
+//            Button {
+//                withAnimation {
+//                    configuration.isExpanded.toggle()
+//                }
+//            } label: {
+//                HStack(alignment: .firstTextBaseline) {
+//                    configuration.label
+//                    Spacer()
+//                    Text(configuration.isExpanded ? "hide" : "show")
+//                        .foregroundColor(.accentColor)
+//                        .font(.caption.lowercaseSmallCaps())
+//                        .animation(nil, value: configuration.isExpanded)
+//                }
+//                .contentShape(Rectangle())
+//            }
+//            .buttonStyle(.plain)
+//            if configuration.isExpanded {
+//                configuration.content
+//            }
+//        }
+//    }
+//}
+
+extension MarkdownHeading {
+    
+    // index related
+    func next() -> MarkdownHeading {
+        switch self {
+        case .h1:
+            return MarkdownHeading.h2
+        case .h2:
+            return MarkdownHeading.h3
+        case .h3:
+            return MarkdownHeading.h4
+        case .h4:
+            return MarkdownHeading.h5
+        case .h5:
+            return MarkdownHeading.h6
+        case .h6:
+            return MarkdownHeading.h6
         }
     }
+    
+    var indexColor: Color {
+        switch self {
+        case .h1:
+            return Color.primary
+        case .h2:
+            return Color(hex: 0x941100)
+        case .h3:
+            return Color(hex: 0x929000)
+        case .h4:
+            return Color(hex: 0x009051)
+        case .h5:
+            return Color(hex: 0x005493)
+        case .h6:
+            return Color(hex: 0xe26c00)
+        }
+    }
+    
+    var indexWeight: Font.Weight {
+        
+        switch self {
+        case .h1:
+            return .black
+        case .h2:
+            return .bold
+        case .h3:
+            return .bold
+        case .h4:
+            return .bold
+        case .h5:
+            return .bold
+        case .h6:
+            return .bold
+        }
+    }
+
 }
