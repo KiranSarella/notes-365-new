@@ -27,7 +27,7 @@ extension UIEditorView {
             
             innerAttributedString.enumerateAttribute(.font, in: styleRange, options: []) { value, range, stop in
                 
-                let highlightColor = theme.highlightColor.uiColor//.withAlphaComponent(0.45)
+                let highlightColor = theme.styleColor.uiColor.withAlphaComponent(0.40)
                 
                 // update text color
                 innerAttributedString.addAttribute(.backgroundColor,
@@ -398,7 +398,9 @@ extension UIEditorView {
         
         regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
-            let font = UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: UIFont.Weight.regular)
+//            let font = UIFont.monospacedSystemFont(ofSize: theme.font.pointSize, weight: UIFont.Weight.regular)
+            let fontM = UIFont.monospacedSystemFont(ofSize: theme.font.pointSize - 2, weight: UIFont.Weight.regular)
+            let font = UIFont(name: theme.codeFontName, size: theme.font.pointSize - 2) ?? fontM
             let textRange = NSRange(location: match!.range.location + 1, length: match!.range.length - 2)
             
             // font
@@ -472,7 +474,7 @@ extension UIEditorView {
             match, flags, stop in
             
             let fontM = UIFont.monospacedSystemFont(ofSize: theme.font.pointSize - 2, weight: UIFont.Weight.regular)
-            let font = UIFont(name: "Menlo", size: theme.font.pointSize - 2) ?? fontM
+            let font = UIFont(name: theme.codeFontName, size: theme.font.pointSize - 2) ?? fontM
 //            print("code#font", font)
             let textRange = NSRange(location: match!.range.location + 3, length: match!.range.length - 6)
             
@@ -539,13 +541,17 @@ extension UIEditorView {
         regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
             
+            let font = theme.font
+            let newFontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold) ?? font.fontDescriptor
+            let newFont = UIFont(descriptor: newFontDesc, size: font.pointSize)
+
             
             innerAttributedString.addAttribute(.font,
-                                               value:  theme.font,
+                                               value:  newFont,
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
             
             innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
-                                               value:  theme.listColor.uiColor,
+                                               value:  theme.headingColor.uiColor,
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
             
             
@@ -572,13 +578,17 @@ extension UIEditorView {
         regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
             match, flags, stop in
             
+            let font = theme.font
+            let newFontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold) ?? font.fontDescriptor
+            let newFont = UIFont(descriptor: newFontDesc, size: font.pointSize)
+
             
             innerAttributedString.addAttribute(NSAttributedString.Key.font,
-                                               value:  theme.font,
+                                               value:  newFont,
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
             
             innerAttributedString.addAttribute(.foregroundColor,
-                                               value: theme.listColor.uiColor,
+                                               value: theme.headingColor.uiColor,
                                                     range: NSRange(location: match!.range.location, length: match!.range.length))
             
             

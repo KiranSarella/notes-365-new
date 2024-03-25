@@ -44,7 +44,7 @@ class ThemeData: Codable {
     var id: UUID = UUID()
     var themeName: String = "default"
     var appearanceType: String = AppearanceType.light.rawValue
-    var fontName: String = "system"
+    var fontName: String = "Helvetica"
     var fontSize: Float = 16
     // body
     var canvasColor: ColorData = ColorData(color: Color.white)
@@ -60,8 +60,9 @@ class ThemeData: Codable {
     var listColor: ColorData = ColorData(color: Color.primary)
     var linkColor: ColorData = ColorData(color: Color.primary)
     // other fonts
-    var headingFontName: String = "system"
-    var blockQuoteFontName: String = "system"
+    var headingFontName: String = "Helvetica"
+    var blockQuoteFontName: String = "Helvetica"
+    var codeFontName: String = "Helvetica"
     
     var enableHeadingFont: Bool = true
     var enableBlockQuoteFont: Bool = true
@@ -82,6 +83,7 @@ extension ThemeData: CustomStringConvertible {
         str.append("\(fontSize)\n")
         str.append("\(headingFontName)\n")
         str.append("\(blockQuoteFontName)\n")
+        str.append("\(codeFontName)")
         return str
     }
 }
@@ -104,6 +106,7 @@ extension ThemeData {
         
         headingFontName = newData.headingFontName
         blockQuoteFontName = newData.blockQuoteFontName
+        codeFontName = newData.codeFontName
         
         enableBackground = newData.enableBackground
         enableHeadingFont = newData.enableHeadingFont

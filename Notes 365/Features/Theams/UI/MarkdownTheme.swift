@@ -13,7 +13,7 @@ struct MarkdownTheme: Identifiable {
     var id: UUID
     var themeName: String = "default"
     var appearanceType: AppearanceType = .light
-    var fontName: String = "system"
+    
     var fontSize: Float = 16
     var canvasColor: Color = Color.white
     var bodyColor: Color = Color.primary
@@ -25,8 +25,10 @@ struct MarkdownTheme: Identifiable {
     var listColor: Color = Color.primary
     var linkColor: Color = Color.primary
     
-    var headingFontName: String = "system"
-    var blockQuoteFontName: String = "system"
+    var fontName: String = "Helvetica"
+    var headingFontName: String = "Helvetica"
+    var blockQuoteFontName: String = "Helvetica"
+    var codeFontName: String = "Helvetica"
     
     var enableHeadingFont: Bool = true
     var enableBlockQuoteFont: Bool = true
@@ -67,7 +69,7 @@ extension MarkdownTheme: Equatable {
 import UIKit
 extension MarkdownTheme {
     var font: UIFont {
-        if self.fontName == "system" {
+        if self.fontName == "Helvetica" {
             return UIFont.systemFont(ofSize: CGFloat(self.fontSize))
         } else {
             return UIFont(name: self.fontName, size: CGFloat(self.fontSize)) ?? UIFont.systemFont(ofSize: CGFloat(self.fontSize))
@@ -94,6 +96,7 @@ extension Theme {
         
         m.headingFontName = headingFontName
         m.blockQuoteFontName = blockQuoteFontName
+        m.codeFontName = codeFontName
         
         m.enableHeadingFont = enableHeadingFont
         m.enableBlockQuoteFont = enableBlockQuoteFont
@@ -126,6 +129,7 @@ extension MarkdownTheme {
         
         m.headingFontName = headingFontName
         m.blockQuoteFontName = blockQuoteFontName
+        m.codeFontName = codeFontName
         
         m.enableHeadingFont = enableHeadingFont
         m.enableBlockQuoteFont = enableBlockQuoteFont

@@ -7,19 +7,30 @@
 
 import SwiftUI
 
+enum FontPickerInput: String {
+    case body
+    case heading
+    case blockQuote
+    case code
+}
+
 struct ThemeOptionsView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var theme: MarkdownTheme
     @State var isFirstAppear = true
-    @State var showFontPicker = false
+    
     @State var font: Font = Font.system(Font.TextStyle.body)
     @State var fontSize: Int = 16
     @Binding var onReset: Bool
-       
-    @State var showHeadingFontPicker = false
-    @State var showBlockQuoteFontPicker = false
+    
+    @State var selectedFontPicker: FontPickerInput?
+    @State var showFontPicker = false
+    
     @State var headingFont: Font = Font.system(Font.TextStyle.body)
     @State var blockQuoteFont: Font = Font.system(Font.TextStyle.body)
+    @State var codeFontName: Font = Font.system(Font.TextStyle.body)
+    
+    @State var codeFont: Font = Font.system(Font.TextStyle.body)
     
     let step: Int = 2
     let range = 8...64
@@ -33,18 +44,9 @@ struct ThemeOptionsView: View {
         VStack {
             List {
                 
+
+                // fonts
                 Section {
-                    HStack {
-                        Text("Font")
-                        Spacer()
-                        Button {
-                            showFontPicker = true
-                        } label: {
-                            Text(theme.fontName)
-                                .font(font)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                    }
                     // font size
                     Stepper(value: $fontSize, in: range, step: step) {
                         HStack {
@@ -56,77 +58,77 @@ struct ThemeOptionsView: View {
                     .onChange(of: fontSize) { oldValue, newValue in
                         theme.fontSize = Float(newValue)
                     }
+                    
                     HStack {
-                        ColorPicker("Background", selection: $theme.canvasColor, supportsOpacity: true)
-                            .disabled(!theme.enableBackground)
-                        
-                        Toggle("Background", isOn: $theme.enableBackground)
-                            .labelsHidden()
+                        Text("Body Font")
+                        Spacer()
+                        Button {
+                            selectedFontPicker = .body
+                            showFontPicker = true
+                        } label: {
+                            Text(theme.fontName)
+                                .font(font)
+                        }
+                        .buttonStyle(PlainButtonStyle())
                     }
-                }
-                
-                Section {
-                    ColorPicker("Body", selection: $theme.bodyColor, supportsOpacity: false)
-                    ColorPicker("Bold, Italic, Strikthrough", selection: $theme.styleColor, supportsOpacity: false)
-                    ColorPicker("Highlight", selection: $theme.highlightColor, supportsOpacity: true)
-                    ColorPicker("List", selection: $theme.listColor, supportsOpacity: false)
-                    ColorPicker("Source Code", selection: $theme.codeColor, supportsOpacity: false)
-                }
-             
-                Section {
-                    ColorPicker("Heading", selection: $theme.headingColor, supportsOpacity: false)
+                    
                     HStack {
                         Text("Heading Font")
                         Spacer()
-                        HStack {
-                            Button {
-                                showHeadingFontPicker = true
-                            } label: {
-                                Text(theme.headingFontName)
-                                    .font(headingFont)
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                            .disabled(!theme.enableHeadingFont)
-                            
-                            Toggle("Heading Font", isOn: $theme.enableHeadingFont)
-                                .labelsHidden()
+                        Button {
+                            selectedFontPicker = .heading
+                            showFontPicker = true
+                        } label: {
+                            Text(theme.headingFontName)
+                                .font(headingFont)
                         }
+                        .buttonStyle(PlainButtonStyle())
                     }
-                }
-                
-                Section {
-                    ColorPicker("Block Quote", selection: $theme.blockQuoteColor, supportsOpacity: false)
+                    
                     HStack {
                         Text("Block Quote Font")
                         Spacer()
-                        HStack {
-                            Button {
-                                showBlockQuoteFontPicker = true
-                            } label: {
-                                Text(theme.blockQuoteFontName)
-                                    .font(blockQuoteFont)
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                            .disabled(!theme.enableBlockQuoteFont)
-                            
-                            Toggle("", isOn: $theme.enableBlockQuoteFont)
-                                .labelsHidden()
+                        Button {
+                            selectedFontPicker = .blockQuote
+                            showFontPicker = true
+                        } label: {
+                            Text(theme.blockQuoteFontName)
+                                .font(blockQuoteFont)
                         }
+                        .buttonStyle(PlainButtonStyle())
                     }
-                } 
+                    
+                    HStack {
+                        Text("Code Font")
+                        Spacer()
+                        Button {
+                            selectedFontPicker = .code
+                            showFontPicker = true
+                        } label: {
+                            Text(theme.codeFontName)
+                                .font(codeFontName)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
+                    
+                    
+                }
                 
+                // colors
+                Section {
+                    ColorPicker("Background", selection: $theme.canvasColor, supportsOpacity: true)
+                    ColorPicker("Body", selection: $theme.bodyColor, supportsOpacity: false)
+                    ColorPicker("Headings", selection: $theme.headingColor, supportsOpacity: false)
+                    ColorPicker("Style", selection: $theme.styleColor, supportsOpacity: false)
+                    ColorPicker("Block Quote", selection: $theme.blockQuoteColor, supportsOpacity: false)
+                    ColorPicker("Code", selection: $theme.codeColor, supportsOpacity: false)
+                }
+             
+                // theme blocks
                 Section {
                     
                 } header: {
-                    
-                } footer: {
-                    
                     VStack {
-                        
-                        HStack {
-                            Text("Default Themes")
-                            Spacer()
-                        }
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
@@ -168,23 +170,43 @@ struct ThemeOptionsView: View {
                                         .frame(width: 100, height: 60)
                                     })
                                     .buttonStyle(NeumorphicButtonStyle(bgColor: theme.getBackgroundColor))
-                                    .padding()
+                                    .padding(10)
                                 }
                             }
                         }
-                        .padding(.horizontal, -20)
+                        .padding(.horizontal, -10)
                     }
+                } footer: {
+                    
+                   
                     
                 }
-
+                
 
             }
             .sheet(isPresented: $showFontPicker) {
                 NavigationStack {
                     FontPicker { value in
                         let newValue = UIFont(descriptor: value.fontDescriptor, size: 16)
-                        theme.fontName = value.familyName
-                        font = Font(newValue)
+                        
+                        if let selectedFontPicker = selectedFontPicker {
+                            switch selectedFontPicker {
+                            case .body:
+                                theme.fontName = value.familyName
+                                font = Font(newValue)
+                            case .heading:
+                                theme.headingFontName = value.familyName
+                                headingFont = Font(newValue)
+                            case .blockQuote:
+                                theme.blockQuoteFontName = value.familyName
+                                blockQuoteFont = Font(newValue)
+                            case .code:
+                                theme.codeFontName = value.familyName
+                                codeFontName = Font(newValue)
+                            }
+                        }
+                        
+                        
 #if targetEnvironment(macCatalyst)
                 
 #else
@@ -211,68 +233,6 @@ struct ThemeOptionsView: View {
                 }
             }
         }
-        .sheet(isPresented: $showHeadingFontPicker) {
-            NavigationStack {
-                FontPicker { value in
-                    let newValue = UIFont(descriptor: value.fontDescriptor, size: 16)
-                    theme.headingFontName = value.familyName
-                    headingFont = Font(newValue)
-#if targetEnvironment(macCatalyst)
-            
-#else
-                    showHeadingFontPicker = false
-#endif
-                } onCancel: {
-#if targetEnvironment(macCatalyst)
-            
-#else
-                    showHeadingFontPicker = false
-#endif
-                }
-                .toolbar {
-                    Button {
-#if targetEnvironment(macCatalyst)
-            
-#else
-                        showHeadingFontPicker = false
-#endif
-                    } label: {
-                        Text("Done")
-                    }
-                }
-            }
-        }
-        .sheet(isPresented: $showBlockQuoteFontPicker) {
-            NavigationStack {
-                FontPicker { value in
-                    let newValue = UIFont(descriptor: value.fontDescriptor, size: 16)
-                    theme.blockQuoteFontName = value.familyName
-                    blockQuoteFont = Font(newValue)
-#if targetEnvironment(macCatalyst)
-            
-#else
-                    showBlockQuoteFontPicker = false
-#endif
-                } onCancel: {
-#if targetEnvironment(macCatalyst)
-            
-#else
-                    showBlockQuoteFontPicker = false
-#endif
-                }
-                .toolbar {
-                    Button {
-#if targetEnvironment(macCatalyst)
-            
-#else
-                        showBlockQuoteFontPicker = false
-#endif
-                    } label: {
-                        Text("Done")
-                    }
-                }
-            }
-        }
         .onAppear {
             if isFirstAppear {
                 updateFields()
@@ -294,6 +254,9 @@ struct ThemeOptionsView: View {
         }
         if let uifont = UIFont(name: theme.blockQuoteFontName, size: 16) {
             blockQuoteFont = Font(uifont)
+        }
+        if let uifont = UIFont(name: theme.codeFontName, size: 16) {
+            codeFontName = Font(uifont)
         }
     }
     
@@ -363,15 +326,15 @@ protocol NeumorphicShadowState {
 }
 
 struct DefaultNeumorphicState: NeumorphicShadowState {
-    static var radius: CGFloat = 8
-    static var x: CGFloat = 8
-    static var y: CGFloat = 8
+    static var radius: CGFloat = 4
+    static var x: CGFloat = 4
+    static var y: CGFloat = 4
 }
 
 struct PressedNeumorphicState: NeumorphicShadowState {
-    static var radius: CGFloat = 4
-    static var x: CGFloat = 3
-    static var y: CGFloat = 3
+    static var radius: CGFloat = 2
+    static var x: CGFloat = 1
+    static var y: CGFloat = 1
 }
 
 extension  ButtonStyleConfiguration {

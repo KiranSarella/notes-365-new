@@ -70,12 +70,19 @@ struct ThemesBaseView: View {
                 }
                 #endif
                 ToolbarItemGroup(placement: .topBarTrailing) {
-                   
+                    
                     Button {
                         persistThemeChanges()
 //                        dismiss()
                     } label: {
-                        Text("Save")
+                        Text("Snap")
+                    }
+                    
+                    Button {
+                        persistThemeChanges()
+//                        dismiss()
+                    } label: {
+                        Text("Apply")
                     }
                 }
             }

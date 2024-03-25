@@ -27,6 +27,7 @@ class DefaultThemes {
         
         theme.headingFontName = "Helvetica"
         theme.blockQuoteFontName = "Helvetica"
+        theme.codeFontName = "Menlo"
         
         theme.enableBackground = false
         theme.enableHeadingFont = false
@@ -37,8 +38,13 @@ class DefaultThemes {
     
     static func generateCustomizedLightTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
-        theme.fontName = "Helvetica"
         theme.fontSize = 24
+        
+        theme.fontName = "Helvetica"
+        theme.headingFontName = "Arial Rounded MT Bold"
+        theme.blockQuoteFontName = "Kefa"
+        theme.codeFontName = "Monaco"
+        
         theme.canvasColor = Color(hex: 0xE6F7FF)
         theme.bodyColor = Color.primary
         theme.headingColor = Color.orange
@@ -48,8 +54,6 @@ class DefaultThemes {
         theme.listColor = Color.mint
         theme.highlightColor = Color.yellow.opacity(0.45)
         
-        theme.headingFontName = "Arial Rounded MT Bold"
-        theme.blockQuoteFontName = "Kefa"
         
         theme.enableBackground = false
         theme.enableHeadingFont = true
@@ -76,6 +80,7 @@ class DefaultThemes {
         
         theme.headingFontName = "Georgia"
         theme.blockQuoteFontName = "Futura"
+        theme.codeFontName = "Courier New"
         
         theme.enableBackground = true
         theme.enableHeadingFont = true
@@ -99,6 +104,7 @@ class DefaultThemes {
         
         theme.headingFontName = "Georgia"
         theme.blockQuoteFontName = "Verdana"
+        theme.codeFontName = "Andale Mono"
         
         theme.enableBackground = true
         theme.enableHeadingFont = true
@@ -127,6 +133,7 @@ extension DefaultThemes {
         
         theme.headingFontName = "Helvetica"
         theme.blockQuoteFontName = "Helvetica"
+        theme.codeFontName = "Menlo"
         
         theme.enableBackground = false
         theme.enableHeadingFont = false
@@ -150,6 +157,7 @@ extension DefaultThemes {
         
         theme.headingFontName = "Impact"
         theme.blockQuoteFontName = "Futura"
+        theme.codeFontName = "Menlo"
         
         theme.enableBackground = false
         theme.enableHeadingFont = true
@@ -173,6 +181,7 @@ extension DefaultThemes {
         
         theme.headingFontName = "Georgia"
         theme.blockQuoteFontName = "Verdana"
+        theme.codeFontName = "Courier New"
         
         theme.enableBackground = true
         theme.enableHeadingFont = true

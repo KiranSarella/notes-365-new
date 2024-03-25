@@ -92,6 +92,7 @@ extension ThemeData {
         
         t.headingFontName = headingFontName
         t.blockQuoteFontName = blockQuoteFontName
+        t.codeFontName = codeFontName
         
         t.enableBackground = enableBackground
         t.enableHeadingFont = enableHeadingFont
@@ -121,6 +122,7 @@ extension Theme {
         
         t.headingFontName = headingFontName
         t.blockQuoteFontName = blockQuoteFontName
+        t.codeFontName = codeFontName
         
         t.enableBackground = enableBackground
         t.enableHeadingFont = enableHeadingFont

@@ -12,8 +12,15 @@ struct Theme: Identifiable {
     let id: UUID
     let themeName: String
     let appearanceType: AppearanceType
-    var fontName: String = ""
+
     var fontSize: Float = 16
+    
+    // font names
+    var fontName: String = ""
+    var headingFontName: String = ""
+    var blockQuoteFontName: String = ""
+    var codeFontName: String = ""
+    
     // body
     var canvasColor: Color = Color.white
     var bodyColor: Color = Color.primary
@@ -27,9 +34,7 @@ struct Theme: Identifiable {
     var blockQuoteColor: Color = Color.primary
     var listColor: Color = Color.primary
     var linkColor: Color = Color.primary
-    // font names
-    var headingFontName: String = ""
-    var blockQuoteFontName: String = ""
+
     
     var enableBackground: Bool = true
     var enableHeadingFont: Bool = true
