@@ -8,6 +8,10 @@
 import Foundation
 import UIKit
 
+
+let headingsPattern = #"((^#{1,6}) ([^\s])(.+))"#
+let headingsTrimPattern = #"((^#{1,6}) )"#
+
 public enum SymbolPattern: String {
     
 //    case bold = #"\s\*\*([a-zA-Z0-9 .,]+)\*\*"#
@@ -30,6 +34,8 @@ public enum SymbolPattern: String {
     case h4 = #"((^#{4}) ([^\s])(.+))"#
     case h5 = #"((^#{5}) ([^\s])(.+))"#
     case h6 = #"((^#{6}) ([^\s])(.+))"#
+    
+    
         
 //    case orderedList =  #"^[[:blank:]]*?[0-9]+\.(.*)"#  //#"\n[0-9]+\.(.*)"#
     case orderedList =  #"^[[:blank:]]*?[0-9]+\."#  //#"\n[0-9]+\.(.*)"#
