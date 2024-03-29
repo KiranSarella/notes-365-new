@@ -25,6 +25,7 @@ struct ThemesBaseView: View {
     
     @State var selectedDefaultTheme: ThemeVS?
     @State var deleteThemeEvent: ThemeVS?
+    @State var createThemeEvent: ThemeVS?
     
     @State var state = ThemesBaseViewState()
     
@@ -58,9 +59,9 @@ struct ThemesBaseView: View {
                 .padding()
                 switch appearanceType {
                 case .light:
-                    ThemeOptionsView(theme: $selectedLightTheme, onReset: $onReset, themes: $state.themes, selectedDefaultTheme: $selectedDefaultTheme, deletedThemeEvent: $deleteThemeEvent)
+                    ThemeOptionsView(theme: $selectedLightTheme, onReset: $onReset, themes: $state.themes, selectedDefaultTheme: $selectedDefaultTheme, deletedThemeEvent: $deleteThemeEvent, createThemeEvent: $createThemeEvent)
                 case .dark:
-                    ThemeOptionsView(theme: $selectedDarkTheme, onReset: $onReset,themes: $state.themes, selectedDefaultTheme: $selectedDefaultTheme, deletedThemeEvent: $deleteThemeEvent)
+                    ThemeOptionsView(theme: $selectedDarkTheme, onReset: $onReset,themes: $state.themes, selectedDefaultTheme: $selectedDefaultTheme, deletedThemeEvent: $deleteThemeEvent, createThemeEvent: $createThemeEvent)
                 }
             }
             .pickerStyle(.segmented)
@@ -73,13 +74,6 @@ struct ThemesBaseView: View {
                 }
                 #endif
                 ToolbarItemGroup(placement: .topBarTrailing) {
-                    
-                    Button {
-                        saveAsNewTheme()
-                    } label: {
-                        Text("Create As")
-                    }
-                    
                     Button {
                         persistThemeChanges()
                     } label: {
@@ -113,6 +107,12 @@ struct ThemesBaseView: View {
             state.deleteTheme(newValue: newValue, appearanceType: appearanceType)
             deleteThemeEvent = nil
         }
+        .onChange(of: createThemeEvent, { oldValue, newValue in
+            guard let newValue = newValue else { return }
+            saveAsNewTheme()
+            
+            createThemeEvent = nil
+        })
         .onChange(of: appearanceType) { oldValue, newValue in
             switch newValue {
             case .light:

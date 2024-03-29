@@ -38,6 +38,13 @@ struct ThemeOptionsView: View {
     @Binding var themes: [ThemeVS]
     @Binding var selectedDefaultTheme: ThemeVS?
     @Binding var deletedThemeEvent: ThemeVS?
+    @Binding var createThemeEvent: ThemeVS?
+    
+    let themesLimit = 25
+    
+    var canAddMoreThemes: Bool {
+        themes.count < themesLimit
+    }
     
     var body: some View {
         VStack {
@@ -153,6 +160,30 @@ struct ThemeOptionsView: View {
                                         Spacer()
                                     }
                                 }
+                                
+                                if canAddMoreThemes {
+                                    VStack {
+                                        VStack {
+                                            Spacer()
+                                            // create button
+                                            Button {
+                                                createThemeEvent = theme
+                                            } label: {
+                                               Image(systemName: "plus.circle.fill")
+                                                    .resizable()
+                                                    .frame(width: 50, height: 50)
+                                                    .padding()
+                                            }
+                                            
+                                            Spacer()
+                                        }
+                                        .frame(height: 120)
+                                        
+                                        Spacer()
+                                    }
+                                }
+                                
+                                
                             }
                         }
                         .padding(.horizontal, -10)
