@@ -28,7 +28,10 @@ struct LaunchView: View {
 struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.colorScheme) private var colorScheme
+    
+    @State var revisionExpanded = true
     @State var settingsExpanded = true
+    
     @State private var showThemes = false
     @State private var showFormattingSymbols = false
     @State private var showPurchases = false
@@ -55,14 +58,7 @@ struct ContentView: View {
             NavigationSplitView(columnVisibility: $navigationSplitViewVisibility) {
                 VStack {
                     List(selection: $sidebarItemSelected) {
-                        Label {
-                            Text("Timeline")
-                        } icon: {
-                            Image(systemName: "calendar")
-                                .circularIconStyle(background: Color("icon_purple", bundle: nil))
-                        }
-                        .tag(SidebarItem.timeline.id)
-                            
+                        
                         Label {
                             Text("Notebooks")
                         } icon: {
@@ -70,6 +66,7 @@ struct ContentView: View {
                                 .circularIconStyle(background: Color("icon_red", bundle: nil))
                         }
                         .tag(SidebarItem.notebooks.id)
+                       
                         
                         Label {
                             Text("Recents")
@@ -79,6 +76,9 @@ struct ContentView: View {
                         }
                         .tag(SidebarItem.recents.id)
                         
+                        
+                         
+                       
                         Label {
                             Text("Search")
                         } icon: {
@@ -87,6 +87,7 @@ struct ContentView: View {
                         }
                         .tag(SidebarItem.search.id)
                         
+                        
                         Label {
                             Text("Recently Deleted")
                         } icon: {
@@ -94,6 +95,17 @@ struct ContentView: View {
                                 .circularIconStyle(background: .gray)
                         }
                         .tag(SidebarItem.recentlyDeleted.id)
+                        
+                       
+                        Section("Revision", isExpanded: $revisionExpanded) {
+                            Label {
+                                Text("Timeline")
+                            } icon: {
+                                Image(systemName: "calendar")
+                                    .circularIconStyle(background: Color("icon_purple", bundle: nil))
+                            }
+                            .tag(SidebarItem.timeline.id)
+                        }
                         
                         Section("Settings", isExpanded: $settingsExpanded) {
                             Button {
@@ -222,11 +234,13 @@ struct ContentView: View {
                 
                 Task {
                     // start service
-                    try? await Task.sleep(nanoseconds: 5_000_000_000)
+//                    try? await Task.sleep(nanoseconds: 5_000_000_000)
                     await NotebooksPathService.shared.doRefreshIfNotLoaded()
+                    // delay to fix SwiftData issue with unique for UI loading is List
+                    try? await Task.sleep(nanoseconds: 5_000_000_000)
                     if UIDevice.current.userInterfaceIdiom != .phone {
                         Task { @MainActor in
-                            sidebarItemSelected = SidebarItem.timeline.id
+                            sidebarItemSelected = SidebarItem.notebooks.id
                         }
                     }
                 }

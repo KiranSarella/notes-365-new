@@ -201,7 +201,7 @@ private extension LayoutManager {
               return
             }
 //            let color = color0.withAlphaComponent(0.15)
-            let color = color0.withAlphaComponent(0.4)
+            let color = color0.withAlphaComponent(0.8)
             let verticalBarGlyphRange = glyphRange(forCharacterRange: range, actualCharacterRange: nil)
             enumerateLineFragments(forGlyphRange: verticalBarGlyphRange) { rect, _, _, _, _ in
 
@@ -218,18 +218,62 @@ private extension LayoutManager {
                 context.fill(verticalBarRect)
 
                 // background
-//                UIColor.quaternarySystemFill.setFill()
-//                UIColor.quaternarySystemFill.setFill()
-
-//                let r = rect.offsetBy(dx: origin.x + 20, dy: origin.y - 20)
-//                context.saveGState()
-//                context.setStrokeColor(UIColor.red.cgColor)
-//                context.setLineWidth(2.0)
-//                context.stroke(r)
-//                context.restoreGState()
+                var bgRect = rect
+                bgRect.size.width = bgRect.width - 40   // maintain trailing padding
+                let bgPath = UIBezierPath(rect: bgRect.offsetBy(dx: origin.x + gap, dy: origin.y - 4))
+                color0.withAlphaComponent(0.05).setFill()
+                bgPath.fill()
+                
+                
+                // highlight demo
+//                let path = UIBezierPath()
+//                path.lineWidth = 40.0
+//                path.lineCapStyle = .round
+//                
+//                let startX = rect.origin.x
+//                let startY = rect.origin.y + rect.size.height / 2.0
+//                
+//                path.move(to: CGPoint(x: startX, y: startY))
+//                
+//                for _ in stride(from: startX, to: startX + rect.size.width, by: 1) {
+//                    let randomYOffset = CGFloat(arc4random_uniform(UInt32(rect.size.height))) - rect.size.height / 2.0
+//                    path.addLine(to: CGPoint(x: startX + path.currentPoint.x - startX + 6, y: startY + randomYOffset))
+//                    path.move(to: CGPoint(x: startX + path.currentPoint.x - startX + 3, y: startY + randomYOffset))
+//                }
+//                
+//                UIColor.yellow.setStroke()
+//                path.stroke()
+                
             }
         }
     }
+    
+    
+//    func highlightText(forGlyphRange glyphsToShow: NSRange, at origin: CGPoint) {
+//        
+//        let paragraphRange = self.characterRange(forGlyphRange: glyphsToShow, actualGlyphRange: nil)
+//        let text: String = String(textStorage?.string.substring(with: paragraphRange) ?? "")
+//        let range = (textStorage?.string as NSString?)?.range(of: text)
+//        
+//        text.enumerateSubstrings(in: text.startIndex..<text.endIndex, options: .byParagraphs) { substring, substringRange, enclosingRange, isConverted in
+//            
+//            let fullRange = NSRange(location: enclosingRange.location + paragraphRange.location, length: substringRange.length)
+//            
+//            let attributes = textStorage?.attributes(at: fullRange.location, effectiveRange: nil)
+//            
+//            let isHighlight = (attributes?[.sketchHighlight] as? Bool) ?? false
+//            
+//            if isHighlight {
+//                let bounds = self.boundingRect(forGlyphRange: NSRange(substringRange, in: text), in: self.textContainers[0])
+//                let rect = CGRect(x: bounds.origin.x + origin.x, y: bounds.origin.y + origin.y, width: bounds.width, height: bounds.height)
+//                
+//                let path = UIBezierPath(roundedRect: rect.insetBy(dx: -5, dy: -2), cornerRadius: 8)
+//                UIColor.yellow.setStroke()
+//                path.lineWidth = 2
+//                path.stroke()
+//            }
+//        }
+//    }
 }
 
 

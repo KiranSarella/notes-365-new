@@ -19,11 +19,14 @@ struct ThemesBaseView: View {
     @Environment(\.colorScheme) private var colorScheme
     let themeBusiness = BusinessFactory.themeInteractor()
     @State private var appearanceType: AppearanceType = .light
-    @State private var selectedLightTheme: MarkdownTheme = BusinessFactory.themeInteractor().getLightTheme().markdownTheme
-    @State private var selectedDarkTheme: MarkdownTheme = BusinessFactory.themeInteractor().getDarkTheme().markdownTheme
+    @State private var selectedLightTheme: ThemeVS = BusinessFactory.themeInteractor().getLightTheme().markdownTheme
+    @State private var selectedDarkTheme: ThemeVS = BusinessFactory.themeInteractor().getDarkTheme().markdownTheme
     @State var onReset = false
     
-    @State var selectedDefaultTheme: Theme?
+    @State var selectedDefaultTheme: ThemeVS?
+    @State var deleteThemeEvent: ThemeVS?
+    
+    @State var state = ThemesBaseViewState()
     
     func updateWithDefault(_ theme: Theme) {
 //        self.theme.fontSize = theme.fontSize
@@ -55,9 +58,9 @@ struct ThemesBaseView: View {
                 .padding()
                 switch appearanceType {
                 case .light:
-                    ThemeOptionsView(theme: $selectedLightTheme, onReset: $onReset, defaultThemes: themeBusiness.getDefaultLightThemes(), selectedDefaultTheme: $selectedDefaultTheme)
+                    ThemeOptionsView(theme: $selectedLightTheme, onReset: $onReset, themes: $state.themes, selectedDefaultTheme: $selectedDefaultTheme, deletedThemeEvent: $deleteThemeEvent)
                 case .dark:
-                    ThemeOptionsView(theme: $selectedDarkTheme, onReset: $onReset, defaultThemes: themeBusiness.getDefaultDarkThemes(), selectedDefaultTheme: $selectedDefaultTheme)
+                    ThemeOptionsView(theme: $selectedDarkTheme, onReset: $onReset,themes: $state.themes, selectedDefaultTheme: $selectedDefaultTheme, deletedThemeEvent: $deleteThemeEvent)
                 }
             }
             .pickerStyle(.segmented)
@@ -72,15 +75,13 @@ struct ThemesBaseView: View {
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     
                     Button {
-                        persistThemeChanges()
-//                        dismiss()
+                        saveAsNewTheme()
                     } label: {
-                        Text("Snap")
+                        Text("Create As")
                     }
                     
                     Button {
                         persistThemeChanges()
-//                        dismiss()
                     } label: {
                         Text("Apply")
                     }
@@ -92,10 +93,13 @@ struct ThemesBaseView: View {
             switch colorScheme {
             case .light:
                 appearanceType = .light
+                state.setLightThemes()
             case .dark:
                 appearanceType = .dark
+                state.setDarkThemes()
             @unknown default:
                 appearanceType = .light
+                state.setLightThemes()
             }
         }
         .onChange(of: selectedDefaultTheme) { oldValue, newValue in
@@ -103,14 +107,28 @@ struct ThemesBaseView: View {
             
             reset(with: newValue)
         }
+        .onChange(of: deleteThemeEvent) { oldValue, newValue in
+            guard let newValue = newValue else { return }
+            
+            state.deleteTheme(newValue: newValue, appearanceType: appearanceType)
+            deleteThemeEvent = nil
+        }
+        .onChange(of: appearanceType) { oldValue, newValue in
+            switch newValue {
+            case .light:
+                state.setLightThemes()
+            case .dark:
+                state.setDarkThemes()
+            }
+        }
     }
     
-    func reset(with newTheme: Theme) {
+    func reset(with newTheme: ThemeVS) {
         switch appearanceType {
         case .light:
-            selectedLightTheme = newTheme.markdownTheme
+            selectedLightTheme = newTheme
         case .dark:
-            selectedDarkTheme = newTheme.markdownTheme
+            selectedDarkTheme = newTheme
         }
         onReset.toggle()
         persistThemeChanges()
@@ -140,6 +158,19 @@ struct ThemesBaseView: View {
             }
         }
     }
+    
+    func saveAsNewTheme() {
+        switch appearanceType {
+        case .light:
+            state.saveTheme(newValue: selectedLightTheme, appearanceType: appearanceType)
+        case .dark:
+            state.saveTheme(newValue: selectedDarkTheme, appearanceType: appearanceType)
+        }
+        
+    }
+    
+    
+    
 }
 
 #Preview {

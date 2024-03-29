@@ -255,7 +255,7 @@ extension UIEditorView: EditorViewDelegate {
     }
     
     
-    func updateTheme(theme: MarkdownTheme) {
+    func updateTheme(theme: ThemeVS) {
 //        logger.debug("\(#function)")
         self.theme = theme
         
@@ -268,7 +268,7 @@ extension UIEditorView: EditorViewDelegate {
         self.textView.textColor = theme.bodyColor.uiColor
         
         if isReadOnly == false {
-            self.textView.backgroundColor = theme.dynamicCanvasColor.uiColor
+            self.textView.backgroundColor = theme.canvasColor.uiColor
         }
     }
     
@@ -339,14 +339,6 @@ extension UIEditorView: EditorViewDelegate {
                 newStr = "#### \(substr)"
                 self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
                 textView.selectedRange = NSRange(location: selectedRange.location, length: selectedRange.length + 5)
-            } else if textStyle == .h5 {
-                newStr = "##### \(substr)"
-                self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
-                textView.selectedRange = NSRange(location: selectedRange.location, length: selectedRange.length + 6)
-            } else if textStyle == .h6 {
-                newStr = "###### \(substr)"
-                self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
-                textView.selectedRange = NSRange(location: selectedRange.location, length: selectedRange.length + 7)
             }
         } else {
             // append
@@ -367,14 +359,6 @@ extension UIEditorView: EditorViewDelegate {
                 newStr = "#### "
                 self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
                 textView.selectedRange = NSRange(location: selectedRange.location + 5, length: selectedRange.length)
-            } else if textStyle == .h5 {
-                newStr = "##### "
-                self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
-                textView.selectedRange = NSRange(location: selectedRange.location + 6, length: selectedRange.length)
-            } else if textStyle == .h6 {
-                newStr = "###### "
-                self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
-                textView.selectedRange = NSRange(location: selectedRange.location + 7, length: selectedRange.length)
             }
         }
         textView.delegate?.textViewDidChange?(textView)

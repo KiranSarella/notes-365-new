@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EditorViewRepresentable: UIViewRepresentable {
-    let theme: MarkdownTheme = ThemeState.shared.theme
+    let theme: ThemeVS = ThemeState.shared.theme
     let text: String
     var editorView: UIEditorView
     @Binding var contentEditedDate: Date?
@@ -166,7 +166,7 @@ extension NSAttributedString {
 
 
 struct SmartDocViewerRepresentable: UIViewRepresentable {
-    let theme: MarkdownTheme = ThemeState.shared.theme
+    let theme: ThemeVS = ThemeState.shared.theme
     let text: String
     
     @Binding var contentEditedDate: Date?

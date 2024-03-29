@@ -72,6 +72,32 @@ class ThemeStorageAdapter: ThemeStorageProvider {
         storage.fetchDarkTheme()?.theme
     }
     
+    // MARK: - custom light themes
+    func getCustomLightThemes() -> [Theme]? {
+        storage.getCustomLightThemes()?.map({ $0.theme })
+    }
+    
+    func appendCustomLightTheme(newTheme: Theme) {
+        storage.appendCustomLightTheme(newTheme: newTheme.themeData)
+    }
+    
+    func deleteCustomLightTheme(_ id: UUID) {
+        storage.deleteCustomLightTheme(id)
+    }
+    
+    // MARK: - custom dark themes
+    func getCustomDarkThemes() -> [Theme]? {
+        storage.getCustomDarkThemes()?.map({ $0.theme })
+    }
+    
+    func appendCustomDarkTheme(newTheme: Theme) {
+        storage.appendCustomDarkTheme(newTheme: newTheme.themeData)
+    }
+    
+    func deleteCustomDarkTheme(_ id: UUID) {
+        storage.deleteCustomDarkTheme(id)
+    }
+    
 }
 
 
@@ -93,10 +119,6 @@ extension ThemeData {
         t.headingFontName = headingFontName
         t.blockQuoteFontName = blockQuoteFontName
         t.codeFontName = codeFontName
-        
-        t.enableBackground = enableBackground
-        t.enableHeadingFont = enableHeadingFont
-        t.enableBlockQuoteFont = enableBlockQuoteFont
         
         return t
     }
@@ -123,10 +145,6 @@ extension Theme {
         t.headingFontName = headingFontName
         t.blockQuoteFontName = blockQuoteFontName
         t.codeFontName = codeFontName
-        
-        t.enableBackground = enableBackground
-        t.enableHeadingFont = enableHeadingFont
-        t.enableBlockQuoteFont = enableBlockQuoteFont
         
         return t
     }

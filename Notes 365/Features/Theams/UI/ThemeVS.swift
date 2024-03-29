@@ -8,31 +8,30 @@
 import Foundation
 import SwiftUI
 
-struct MarkdownTheme: Identifiable {
+struct ThemeVS: Identifiable {
     
     var id: UUID
     var themeName: String = "default"
     var appearanceType: AppearanceType = .light
+    var isCustomTheme: Bool = true
     
     var fontSize: Float = 16
-    var canvasColor: Color = Color.white
-    var bodyColor: Color = Color.primary
-    var headingColor: Color = Color.primary
-    var styleColor: Color = Color.primary
-    var highlightColor: Color = Color.primary
-    var codeColor: Color = Color.primary
-    var blockQuoteColor: Color = Color.primary
-    var listColor: Color = Color.primary
-    var linkColor: Color = Color.primary
-    
     var fontName: String = "Helvetica"
     var headingFontName: String = "Helvetica"
     var blockQuoteFontName: String = "Helvetica"
     var codeFontName: String = "Helvetica"
     
-    var enableHeadingFont: Bool = true
-    var enableBlockQuoteFont: Bool = true
-    var enableBackground: Bool = true
+    var canvasColor: Color = Color.white
+    var bodyColor: Color = Color.primary
+    var headingColor: Color = Color.primary
+    var styleColor: Color = Color.primary
+    var highlightColor: Color = Color.primary
+    
+    var codeColor: Color = Color.primary
+    var blockQuoteColor: Color = Color.primary
+    var listColor: Color = Color.primary
+    var linkColor: Color = Color.primary
+    
     
     init(id: UUID) {
         self.id = id
@@ -47,39 +46,23 @@ struct MarkdownTheme: Identifiable {
         }
     }
     
-    var dynamicCanvasColor: Color {
-        enableBackground ? canvasColor : defaultCalvasColor
-    }
-    
-    var dynamicHeadingFont: String {
-//        "CoasterBlack"
-        enableHeadingFont ? headingFontName : fontName
-    }
-    
-    var dynamicBlockQuoteFont: String {
-        enableBlockQuoteFont ? blockQuoteFontName : fontName
-    }
 }
 
-extension MarkdownTheme: Equatable {
+extension ThemeVS: Equatable {
     
 }
 
 
 import UIKit
-extension MarkdownTheme {
+extension ThemeVS {
     var font: UIFont {
-        if self.fontName == "Helvetica" {
-            return UIFont.systemFont(ofSize: CGFloat(self.fontSize))
-        } else {
-            return UIFont(name: self.fontName, size: CGFloat(self.fontSize)) ?? UIFont.systemFont(ofSize: CGFloat(self.fontSize))
-        }
+        return UIFont(name: self.fontName, size: CGFloat(self.fontSize)) ?? UIFont.systemFont(ofSize: CGFloat(self.fontSize))
     }
 }
 
 extension Theme {
-    var markdownTheme: MarkdownTheme {
-        var m = MarkdownTheme(id: id)
+    var markdownTheme: ThemeVS {
+        var m = ThemeVS(id: id)
         m.themeName = themeName
         m.fontName = fontName
         m.fontSize = fontSize
@@ -98,10 +81,6 @@ extension Theme {
         m.blockQuoteFontName = blockQuoteFontName
         m.codeFontName = codeFontName
         
-        m.enableHeadingFont = enableHeadingFont
-        m.enableBlockQuoteFont = enableBlockQuoteFont
-        m.enableBackground  = enableBackground
-        
         return m
     }
 }
@@ -112,7 +91,7 @@ extension Color {
     }
 }
 
-extension MarkdownTheme {
+extension ThemeVS {
     var theme: Theme {
         var m = Theme(id: id, themeName: themeName, appearanceType: appearanceType)
         m.fontName = fontName
@@ -130,11 +109,7 @@ extension MarkdownTheme {
         m.headingFontName = headingFontName
         m.blockQuoteFontName = blockQuoteFontName
         m.codeFontName = codeFontName
-        
-        m.enableHeadingFont = enableHeadingFont
-        m.enableBlockQuoteFont = enableBlockQuoteFont
-        m.enableBackground  = enableBackground
-        
+       
         return m
     }
 }

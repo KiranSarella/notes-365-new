@@ -15,7 +15,6 @@ struct NotebooksBaseDetailView: View {
             NotebooksLevelView(navigationTitle: "Notebooks", path: $path, parent: nil)
                 .navigationBarTitleDisplayMode(.large)
         }
-        .navigationBarTitleDisplayMode(.large)
     }
 }
 

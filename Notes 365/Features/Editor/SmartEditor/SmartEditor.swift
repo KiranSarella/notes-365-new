@@ -21,10 +21,13 @@ struct SmartEditor: View {
     @State private var showingPDFExporter = false
     @State private var pdfFileData: PDFFile = PDFFile(data: Data())
     
-    @State var showingIndexView = true
-    @State var headings = [ContentItem]()
-    @State var headingSelection: ContentItem.ID? = nil
-    @State var headingsRange = Set<HeadingRange>()
+    @State private var showingTextExporter = false
+    @State private var textFileData: TextFile = TextFile(data: Data())
+    
+    @AppStorage("showingIndexView") var showingIndexView = false
+    @State var state: SmartEditorViewState = SmartEditorViewState()
+    @State var refreshIndexEvent: Int = 0
+    
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -49,7 +52,7 @@ struct SmartEditor: View {
                     }
                 }
                 .inspector(isPresented: $showingIndexView) {
-                    IndexView(items: $headings, headingSelection: $headingSelection)
+                    IndexView(items: $state.headings, headingSelection: $state.headingSelection, refreshIndexEvent: $refreshIndexEvent)
                         .inspectorColumnWidth(440)
                         .toolbar(content: {
                             ToolbarItem {
@@ -81,9 +84,9 @@ struct SmartEditor: View {
             self.contentEditedDate = nil
             editorView.text = newValue
         })
-        .onChange(of: headingSelection) { oldValue, newValue in
+        .onChange(of: state.headingSelection) { oldValue, newValue in
             guard let newValue = newValue else { return }
-            let obj = headingsRange.first { h in
+            let obj = state.headingsRange.first { h in
                 h.id == newValue
             }
             
@@ -93,8 +96,11 @@ struct SmartEditor: View {
                 }
             }
             
-            headingSelection = nil
+            state.headingSelection = nil
         }
+        .onChange(of: refreshIndexEvent, { oldValue, newValue in
+            populateContents()
+        })
         .onDisappear {
             isTextFieldFocused = false
         }
@@ -150,6 +156,15 @@ struct SmartEditor: View {
                     }
                     .foregroundColor(.primary)
                     
+                    Button {
+                        let data =  Data(editorView.text.utf8)
+                        textFileData = TextFile(data: data)
+                        showingTextExporter = true
+                    } label: {
+                        Text("Export to Text")
+                    }
+                    .foregroundColor(.primary)
+                    
                 } label: {
                     Image(systemName: "ellipsis.circle")
                 }
@@ -158,6 +173,14 @@ struct SmartEditor: View {
         .pickerStyle(SegmentedPickerStyle())
         .navigationBarTitleDisplayMode(.inline)
         .fileExporter(isPresented: $showingPDFExporter, document: pdfFileData, contentType: .pdf, defaultFilename: fileName) { result in
+            switch result {
+            case .success(let url):
+                logger.debug("Saved to \(url)")
+            case .failure(let error):
+                logger.error("\(error)")
+            }
+        }
+        .fileExporter(isPresented: $showingTextExporter, document: textFileData, contentType: .text, defaultFilename: fileName) { result in
             switch result {
             case .success(let url):
                 logger.debug("Saved to \(url)")
@@ -213,119 +236,44 @@ extension SmartEditor {
             let range = heading.range
             if line.hasPrefix("# ") {
                 let line = String(line.dropFirst(2))
-                let item = ContentItem(id: id, name: line, range: range)
+                let item = ContentItem(id: id, name: line, level: .h1, range: range)
                 items.append(item)
-                
             } else if line.hasPrefix("## ") {
                 let line = String(line.dropFirst(3))
-                let item = ContentItem(id: id, name: line, range: range)
-                items.last?.children
-                    .append(item)
-                
+                let item = ContentItem(id: id, name: line, level: .h2, range: range)
+                items.append(item)
             } else if line.hasPrefix("### ") {
                 let line = String(line.dropFirst(4))
-                let item = ContentItem(id: id, name: line, range: range)
-                items.last?.children
-                    .last?.children
-                    .append(item)
+                let item = ContentItem(id: id, name: line, level: .h3, range: range)
+                items.append(item)
             } else if line.hasPrefix("#### ") {
                 let line = String(line.dropFirst(5))
-                let item = ContentItem(id: id, name: line, range: range)
-               items.last?.children
-                   .last?.children
-                   .last?.children
-                   .append(item)
-           } else if line.hasPrefix("##### ") {
-               let line = String(line.dropFirst(6))
-               let item = ContentItem(id: id, name: line, range: range)
-               items.last?.children
-                   .last?.children
-                   .last?.children
-                   .last?.children
-                   .append(item)
-           } else if line.hasPrefix("###### ") {
-               let line = String(line.dropFirst(7))
-               let item = ContentItem(id: id, name: line, range: range)
-               items.last?.children
-                   .last?.children
-                   .last?.children
-                   .last?.children
-                   .last?.children
-                   .append(item)
+                let item = ContentItem(id: id, name: line, level: .h4, range: range)
+                items.append(item)
            }
-            
         }
         
-        self.headings = items
-        self.headingsRange = Set(headings)
+        self.state.headings = items
+        self.state.headingsRange = Set(headings)
         
     }
     
 }
-
-//struct IndexView: View {
-//    
-//    let headings = ["Lorem Tellus", "Tortor Venenatis Condimentum Venenatis Venenatis", "Tortor Adipiscing", "Dapibus Purus", "Nibh Tortor", "Vestibulum"]
-//    
-//    
-//    var body: some View {
-//        List {
-//            
-//            Section {
-//                ForEach(headings, id: \.self) { heading in
-//                    Text(heading)
-//                        .lineLimit(1)
-////                        .listRowBackground(Color.clear)
-//                        .foregroundStyle(Color.white)
-////                        .font(.title2)
-//                }
-//            } header: {
-//                Text("Chapter 1")
-//                    .font(.largeTitle)
-//                    .fontWeight(.heavy)
-//            }
-//            
-//            Section {
-//                ForEach(headings, id: \.self) { heading in
-//                    Text(heading)
-//                        .lineLimit(1)
-////                        .listRowBackground(Color.clear)
-////                        .font(.title2)
-//                }
-//            } header: {
-//                Text("Chapter 2")
-//                    .font(.largeTitle)
-//                    .fontWeight(.heavy)
-//            }
-//            
-//            
-//            
-//        }
-////        .foregroundStyle(Color.white)
-////        List(fileHierarchyData, children: \.children) { item in
-////            Text(item.description)
-////                .listRowBackground(Color.clear)
-////                .foregroundStyle(Color.white)
-////                .font(.title)
-////        }
-////        .listStyle(PlainListStyle())
-////        .padding()
-//    }
-//}
 
 
 class ContentItem: Identifiable {
     let id: UUID
     let name: String
     let range: NSRange
-    
+    let level: MarkdownHeading
     var children = [ContentItem]()
 
     var isExpanded = true
     
-    init(id: UUID, name: String, range: NSRange) {
+    init(id: UUID, name: String, level: MarkdownHeading, range: NSRange) {
         self.id = id
         self.name = name
+        self.level = level
         self.range = range
     }
     
@@ -345,119 +293,79 @@ extension ContentItem: Hashable, Equatable {
     
 }
 
-//struct FileItemm: Hashable, Identifiable, CustomStringConvertible {
-//        var id: UUID = UUID()
-//        var name: String
-//        var children: [FileItemm]? = nil
-//        var description: String {
-//            switch children {
-//            case nil:
-//                return "\(name)"
-//            case .some(let children):
-//                return children.isEmpty ? "\(name)" : "\(name)"
-//            }
-//        }
-//    
-//        var containsChildren: Bool {
-//            children != nil && !(children?.isEmpty ?? false)
-//        }
-//}
-//
-//extension FileItemm: Equatable {
-//    static func == (lhs: Self, rhs: Self) -> Bool {
-//        lhs.id == rhs.id
-//    }
-//}
 
 struct IndexView: View {
     @Binding var items: [ContentItem]
     @Binding var headingSelection: ContentItem.ID?
-    let level: MarkdownHeading = .h1
+    @Binding var refreshIndexEvent: Int
     
-        var body: some View {
+    var body: some View {
+        VStack {
+                
+            HStack {
+                Spacer()
+                Button {
+                    refreshIndexEvent += 1
+                } label: {
+                    Image(systemName: "arrow.clockwise.circle")
+                        .padding()
+                }
+            }
+            
             List(selection: $headingSelection) {
                 ForEach($items, id: \.id) { $item in
-                    
-                    Section {
-                        if item.containsChildren {
-                            IndexGroupView(level: level, item: $item)
-                        } else {
-                            Text(item.name)
-                                .listRowBackground(Color.clear)
-                                .foregroundColor(level.indexColor)
-                                .fontWeight(level.indexWeight)
-                        }
+                    HStack {
+                        Spacer()
+                            .frame(width: item.level.indexSpace)
+                        Text(item.name)
+                            .listRowBackground(Color.clear)
+                            .foregroundColor(item.level.indexColor)
+//                            .fontWeight(item.level.indexWeight)
+                            .font(Font.system(size: item.level.indexFontSize, weight: item.level.indexWeight))
                     }
+                    
                 }
             }
             .listStyle(PlainListStyle())
-            .background(ThemeState.shared.theme.dynamicCanvasColor)
-//            .foregroundColor(Color.secondary)
+            .background(ThemeState.shared.theme.canvasColor.opacity(0.5))
+    //            .foregroundColor(Color.secondary)
             .lineLimit(1)
-            
         }
-}
-
-struct IndexGroupView: View {
-    let level: MarkdownHeading
-    @Binding var item: ContentItem
-    @State var isExpanded = true
-    
-    var body: some View {
         
-        DisclosureGroup(isExpanded: $isExpanded) {
-            NestedView(level: level.next(), items: $item.children)
-        } label: {
-            Text(item.name)
-                .listRowBackground(Color.clear)
-                .foregroundColor(level.indexColor)
-                .fontWeight(level.indexWeight)
-        }
-        .listRowBackground(Color.clear)
+        
     }
 }
-
-struct NestedView: View {
-    let level: MarkdownHeading
-    @Binding var items: [ContentItem]
-    
-    var body: some View {
-        ForEach($items, id: \.id) { $item in
-            if item.containsChildren {
-                IndexGroupView(level: level, item: $item)
-            } else {
-                Text(item.name)
-                    .listRowBackground(Color.clear)
-                    .foregroundColor(level.indexColor)
-                    .fontWeight(level.indexWeight)
-            }
-        }
-    }
-}
-
-
-
-//struct MyDisclosureStyle: DisclosureGroupStyle {
-//    func makeBody(configuration: Configuration) -> some View {
-//        VStack {
-//            Button {
-//                withAnimation {
-//                    configuration.isExpanded.toggle()
-//                }
-//            } label: {
-//                HStack(alignment: .firstTextBaseline) {
-//                    configuration.label
-//                    Spacer()
-//                    Text(configuration.isExpanded ? "hide" : "show")
-//                        .foregroundColor(.accentColor)
-//                        .font(.caption.lowercaseSmallCaps())
-//                        .animation(nil, value: configuration.isExpanded)
-//                }
-//                .contentShape(Rectangle())
-//            }
-//            .buttonStyle(.plain)
-//            if configuration.isExpanded {
-//                configuration.content
+//
+//struct IndexGroupView: View {
+//    @Binding var item: ContentItem
+//    @State var isExpanded = true
+//    
+//    var body: some View {
+//        
+//        DisclosureGroup(isExpanded: $isExpanded) {
+//            NestedView(items: $item.children)
+//        } label: {
+//            Text(item.name)
+//                .listRowBackground(Color.clear)
+//                .foregroundColor(item.level.indexColor)
+//                .fontWeight(item.level.indexWeight)
+//        }
+//        .listRowBackground(Color.clear)
+//    }
+//}
+//
+//struct NestedView: View {
+//    @Binding var items: [ContentItem]
+//    
+//    var body: some View {
+//        ForEach($items, id: \.id) { $item in
+//            if item.containsChildren {
+//                IndexGroupView(item: $item)
+//            } else {
+//                Text(item.name)
+//                    .listRowBackground(Color.clear)
+//                    .foregroundColor(item.level.indexColor)
+//                    .fontWeight(item.level.indexWeight)
 //            }
 //        }
 //    }
@@ -475,46 +383,51 @@ extension MarkdownHeading {
         case .h3:
             return MarkdownHeading.h4
         case .h4:
-            return MarkdownHeading.h5
-        case .h5:
-            return MarkdownHeading.h6
-        case .h6:
-            return MarkdownHeading.h6
+            return MarkdownHeading.h4
         }
     }
     
     var indexColor: Color {
-        switch self {
-        case .h1:
-            return Color.primary
-        case .h2:
-            return Color(hex: 0x941100)
-        case .h3:
-            return Color(hex: 0x929000)
-        case .h4:
-            return Color(hex: 0x009051)
-        case .h5:
-            return Color(hex: 0x005493)
-        case .h6:
-            return Color(hex: 0xe26c00)
-        }
+        
+        Color.primary
+        
+//        switch self {
+//        case .h1:
+//            return Color.primary
+//        case .h2:
+//            return Color(hex: 0x941100)
+//        case .h3:
+//            return Color(hex: 0x929000)
+//        case .h4:
+//            return Color(hex: 0x009051)
+//        }
     }
     
     var indexWeight: Font.Weight {
         
         switch self {
         case .h1:
-            return .black
+            return .bold
         case .h2:
-            return .bold
+            return .semibold
         case .h3:
-            return .bold
+            return .medium
         case .h4:
-            return .bold
-        case .h5:
-            return .bold
-        case .h6:
-            return .bold
+            return .regular
+        }
+    }
+    
+    var indexFontSize: CGFloat {
+        
+        switch self {
+        case .h1:
+            return 28
+        case .h2:
+            return 24
+        case .h3:
+            return 20
+        case .h4:
+            return 18
         }
     }
 

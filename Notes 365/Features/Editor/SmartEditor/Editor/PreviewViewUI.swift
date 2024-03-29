@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PreviewViewUI: UIViewRepresentable {
-    let theme: MarkdownTheme = ThemeState.shared.theme
+    let theme: ThemeVS = ThemeState.shared.theme
     let text: String
     var editorView: UIEditorView
     var editorType = EditorType.smart

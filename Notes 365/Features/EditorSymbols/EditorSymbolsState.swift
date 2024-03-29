@@ -19,6 +19,7 @@ class EditorSymbolsState {
     init() {
         symbolsList.append(prepareBoldSymbols())
         symbolsList.append(prepareItalicSymbols())
+        symbolsList.append(prepareBoldAndItalicSymbols())
         symbolsList.append(prepareStrikethroughSymbols())
         symbolsList.append(prepareHeadingSymbols())
         symbolsList.append(prepareOrderedListSymbols())
@@ -45,6 +46,14 @@ class EditorSymbolsState {
         return ReadonlyEditorCache(heading: heading, content: content)
     }
     
+    func prepareBoldAndItalicSymbols() -> ReadonlyEditorCache {
+        let heading = "Bold & Italic"
+        let content = """
+        This is ***Bold & italic***
+        """
+        return ReadonlyEditorCache(heading: heading, content: content)
+    }
+    
     func prepareStrikethroughSymbols() -> ReadonlyEditorCache {
         let heading = "Strikethrough"
         let content = """
@@ -56,21 +65,12 @@ class EditorSymbolsState {
     func prepareHeadingSymbols() -> ReadonlyEditorCache {
         let heading = "Headings"
         let content = """
-        # Large Title
-        ## Title
-        ### Title 2
-        #### Title 3
-        ##### Heading
-        ###### Subheading
+        # Title
+        ## Subtitle
+        ### Heading
+        #### Subheading
         """
-//        let content = """
-//        # Heading 1
-//        ## Heading 2
-//        ### Heading 3
-//        #### Heading 4
-//        ##### Heading 5
-//        ###### Heading 6
-//        """
+
         return ReadonlyEditorCache(heading: heading, content: content)
     }
     

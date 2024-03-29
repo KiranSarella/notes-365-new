@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import SwiftUI
 
 
 // MARK: - process markdown chars
@@ -27,7 +28,9 @@ extension UIEditorView {
             
             innerAttributedString.enumerateAttribute(.font, in: styleRange, options: []) { value, range, stop in
                 
-                let highlightColor = theme.styleColor.uiColor.withAlphaComponent(0.40)
+                let highlightColor = theme.highlightColor.uiColor
+//                let highlightColor = Color(hex: 0xD8BFD8).uiColor
+//                let highlightColor = Color.yellow.uiColor
                 
                 // update text color
                 innerAttributedString.addAttribute(.backgroundColor,
@@ -661,7 +664,7 @@ extension UIEditorView {
 //                    let newFont = UIFont(descriptor: fallbackDescriptor ?? font.fontDescriptor, size: CGFloat(theme.fontSize))
 //                    innerAttributedString.addAttribute(.font, value: newFont, range: range)
                     
-                    if let uiFont = UIFont(name: theme.dynamicBlockQuoteFont, size: CGFloat(theme.fontSize)) {
+                    if let uiFont = UIFont(name: theme.blockQuoteFontName, size: CGFloat(theme.fontSize)) {
                         innerAttributedString.addAttribute(.font, value: uiFont, range: range)
                     }
                     
@@ -725,8 +728,6 @@ extension UIEditorView {
         styleHeading(symbolPattern: .h2, innerAttributedString: textStorage, extendedRange: extendedRange, symbolLenght: 3, fontLevel: 2)
         styleHeading(symbolPattern: .h3, innerAttributedString: textStorage, extendedRange: extendedRange, symbolLenght: 4, fontLevel: 3)
         styleHeading(symbolPattern: .h4, innerAttributedString: textStorage, extendedRange: extendedRange, symbolLenght: 5, fontLevel: 4)
-        styleHeading(symbolPattern: .h5, innerAttributedString: textStorage, extendedRange: extendedRange, symbolLenght: 6, fontLevel: 5)
-        styleHeading(symbolPattern: .h6, innerAttributedString: textStorage, extendedRange: extendedRange, symbolLenght: 7, fontLevel: 6)
         
     }
     
@@ -760,7 +761,7 @@ extension UIEditorView {
 //                    let newFont = UIFont(descriptor: fallbackDescriptor ?? font.fontDescriptor, size: fontSize)
 //                    innerAttributedString.addAttribute(.font, value: newFont, range: range)
                     
-                    if let uiFont = UIFont(name: theme.dynamicHeadingFont, size: fontSize) {
+                    if let uiFont = UIFont(name: theme.headingFontName, size: fontSize) {
                         // bold
                         let fontDesc = uiFont.fontDescriptor.withSymbolicTraits(.traitBold) ?? uiFont.fontDescriptor
                         let newFont = UIFont(descriptor: fontDesc, size: fontSize)

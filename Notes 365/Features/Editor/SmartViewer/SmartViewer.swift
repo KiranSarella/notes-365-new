@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct SmartViewerRepresentable: UIViewRepresentable {
-    let theme: MarkdownTheme = ThemeState.shared.theme
+    let theme: ThemeVS = ThemeState.shared.theme
 
     @State private var editorView = UIEditorView()
     @Binding var content: String?

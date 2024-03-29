@@ -120,10 +120,16 @@ class NotebooksStorage {
     
     // MARK: - Info
     func getAllFilesInfo() throws -> [NotebookData] {
+        logger.debug("\(#function)")
         let predicate = #Predicate<NotebookData> { _ in true }
         var descriptor = FetchDescriptor(predicate: predicate)
         descriptor.propertiesToFetch = [\.id, \.parent, \.name, \.isFolder, \.deletedDate]
         return try modelContext.fetch(descriptor)
+    }
+    
+    func removeDuplicates() {
+        
+        
     }
     
     func getAllActiveFolders() throws -> [NotebookData] {

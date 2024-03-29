@@ -16,7 +16,7 @@ enum FontPickerInput: String {
 
 struct ThemeOptionsView: View {
     @Environment(\.dismiss) var dismiss
-    @Binding var theme: MarkdownTheme
+    @Binding var theme: ThemeVS
     @State var isFirstAppear = true
     
     @State var font: Font = Font.system(Font.TextStyle.body)
@@ -35,16 +35,13 @@ struct ThemeOptionsView: View {
     let step: Int = 2
     let range = 8...64
     
-    let defaultThemes: [Theme]
-    @Binding var selectedDefaultTheme: Theme?
-    
-
+    @Binding var themes: [ThemeVS]
+    @Binding var selectedDefaultTheme: ThemeVS?
+    @Binding var deletedThemeEvent: ThemeVS?
     
     var body: some View {
         VStack {
             List {
-                
-
                 // fonts
                 Section {
                     // font size
@@ -120,6 +117,7 @@ struct ThemeOptionsView: View {
                     ColorPicker("Body", selection: $theme.bodyColor, supportsOpacity: false)
                     ColorPicker("Headings", selection: $theme.headingColor, supportsOpacity: false)
                     ColorPicker("Style", selection: $theme.styleColor, supportsOpacity: false)
+                    ColorPicker("Highlight", selection: $theme.highlightColor, supportsOpacity: true)
                     ColorPicker("Block Quote", selection: $theme.blockQuoteColor, supportsOpacity: false)
                     ColorPicker("Code", selection: $theme.codeColor, supportsOpacity: false)
                 }
@@ -129,48 +127,31 @@ struct ThemeOptionsView: View {
                     
                 } header: {
                     VStack {
-                        
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
-                                ForEach(defaultThemes) { theme in
-                                    Button(action: {
-                                        selectedDefaultTheme = theme
-                                    }, label: {
-                                        VStack {
+                                ForEach(themes) { theme in
+                                    VStack {
+                                        Button(action: {
+                                            selectedDefaultTheme = theme
+                                        }, label: {
+                                            ThemeCard(theme: theme)
+                                        })
+                                        .buttonStyle(NeumorphicButtonStyle(bgColor: theme.canvasColor))
+                                        .padding(10)
+                                        
+                                        if theme.isCustomTheme {
                                             HStack {
-                                                Image(systemName: "text.word.spacing")
-                                                    .resizable()
-                                                    .aspectRatio(contentMode: .fit)
-                                                    .padding(.horizontal, 8)
-                                                    .foregroundStyle(theme.bodyColor)
                                                 Spacer()
-                                                Image(systemName: "paintbrush.pointed.fill")
-                                                    .resizable()
-                                                    .aspectRatio(contentMode: .fit)
-                                                    .foregroundStyle(theme.headingColor)
-                                            }
-                                            .frame(height: 40)
-                                            .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
-                                            
-                                            HStack(spacing: 8) {
-                                                Circle()
-                                                    .fill(theme.styleColor)
-                                                    .frame(height: 25)
-                                                Circle()
-                                                    .fill(theme.blockQuoteColor)
-                                                    .frame(height: 20)
-                                                Circle()
-                                                    .fill(theme.codeColor)
-                                                    .frame(height: 15)
-                                                Circle()
-                                                    .fill(theme.listColor)
-                                                    .frame(height: 10)
+                                                Button(role: .destructive) {
+                                                    deletedThemeEvent = theme
+                                                } label: {
+                                                    Image(systemName: "minus.circle.fill")
+                                                }
+                                                Spacer()
                                             }
                                         }
-                                        .frame(width: 100, height: 60)
-                                    })
-                                    .buttonStyle(NeumorphicButtonStyle(bgColor: theme.getBackgroundColor))
-                                    .padding(10)
+                                        Spacer()
+                                    }
                                 }
                             }
                         }
@@ -269,23 +250,63 @@ struct ThemeOptionsView: View {
 //}
 
 
-struct ThemeBoxStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .padding()
-            .background(
-                RoundedRectangle(
-                    cornerRadius: 20,
-                    style: .continuous
-                )
-                .stroke(.gray, lineWidth: 1)
-            )
-    }
-}
+//struct ThemeBoxStyle: ButtonStyle {
+//    func makeBody(configuration: Configuration) -> some View {
+//        configuration.label
+//            .padding()
+//            .background(
+//                RoundedRectangle(
+//                    cornerRadius: 20,
+//                    style: .continuous
+//                )
+//                .stroke(.gray, lineWidth: 1)
+//            )
+//    }
+//}
+//
+//extension ButtonStyle where Self == ThemeBoxStyle {
+//    static var themeBox: Self {
+//        return .init()
+//    }
+//}
 
-extension ButtonStyle where Self == ThemeBoxStyle {
-    static var themeBox: Self {
-        return .init()
+
+struct ThemeCard: View {
+    let theme: ThemeVS
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Image(systemName: "text.word.spacing")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .padding(.horizontal, 8)
+                    .foregroundStyle(theme.bodyColor)
+                Spacer()
+                Image(systemName: "paintbrush.pointed.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .foregroundStyle(theme.headingColor)
+            }
+            .frame(height: 40)
+            .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
+            
+            HStack(spacing: 8) {
+                Circle()
+                    .fill(theme.styleColor)
+                    .frame(height: 25)
+                Circle()
+                    .fill(theme.blockQuoteColor)
+                    .frame(height: 20)
+                Circle()
+                    .fill(theme.codeColor)
+                    .frame(height: 15)
+                Circle()
+                    .fill(theme.listColor)
+                    .frame(height: 10)
+            }
+        }
+        .frame(width: 100, height: 60)
     }
 }
 

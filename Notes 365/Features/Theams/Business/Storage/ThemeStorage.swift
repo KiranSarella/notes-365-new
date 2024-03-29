@@ -11,6 +11,11 @@ import SwiftData
 class ThemeStorage {
     private let themeLightKey = "com.sarella.notes365.theme_light"
     private let themeDarkKey = "com.sarella.notes365.theme_dark"
+    
+    private let customLightThemesKey = "com.sarella.notes365.light_themes"
+    private let customDarkThemesKey = "com.sarella.notes365.dark_themes"
+    
+    
     var modelContext: ModelContext
     var defaults = UserDefaults.standard
     
@@ -69,6 +74,63 @@ class ThemeStorage {
 //    func fetchDarkTheme() -> String?   {
 //        UserDefaults.standard.value(forKey: themeDarkKey) as? String
 //    }
+    
+    // light themes
+    func getCustomLightThemes() -> [ThemeData]? {
+        if let data = defaults.object(forKey: customLightThemesKey) as? Data {
+           return try? JSONDecoder().decode([ThemeData].self, from: data)
+        }
+        return nil
+    }
+    
+    func appendCustomLightTheme(newTheme: ThemeData) {
+        var lightThemes = getCustomLightThemes() ?? []
+        lightThemes.append(newTheme)
+        
+        persistListChanges(themes: lightThemes, key: customLightThemesKey)
+    }
+    
+    func deleteCustomLightTheme(_ id: UUID) {
+        var lightThemes = getCustomLightThemes() ?? []
+        lightThemes.removeAll { t in
+            t.id == id
+        }
+        
+        persistListChanges(themes: lightThemes, key: customLightThemesKey)
+    }
+    
+    // dark themes
+    func getCustomDarkThemes() -> [ThemeData]? {
+        if let data = defaults.object(forKey: customDarkThemesKey) as? Data {
+           return try? JSONDecoder().decode([ThemeData].self, from: data)
+        }
+        return nil
+    }
+    
+    func appendCustomDarkTheme(newTheme: ThemeData) {
+        var themes = getCustomDarkThemes() ?? []
+        themes.append(newTheme)
+        
+        persistListChanges(themes: themes, key: customDarkThemesKey)
+    }
+    
+    func deleteCustomDarkTheme(_ id: UUID) {
+        var themes = getCustomDarkThemes() ?? []
+        themes.removeAll { t in
+            t.id == id
+        }
+        
+        persistListChanges(themes: themes, key: customDarkThemesKey)
+    }
+    
+    // persist
+    private func persistListChanges(themes: [ThemeData], key: String) {
+        if let data = try? JSONEncoder().encode(themes) {
+            defaults.set(data, forKey: key)
+        }
+    }
+    
+    // MARK: - selected theme
     
     func saveLightTheme(_ theme: ThemeData) {
         if let data = try? JSONEncoder().encode(theme) {

@@ -12,4 +12,13 @@ protocol ThemeStorageProvider {
     func saveDarkTheme(_ theme: Theme)
     func fetchLightTheme() -> Theme?
     func fetchDarkTheme() -> Theme?
+    
+    // MARK: - custom light themes
+    func getCustomLightThemes() -> [Theme]?
+    func appendCustomLightTheme(newTheme: Theme)
+    func deleteCustomLightTheme(_ id: UUID)
+    // MARK: - custom dark themes
+    func getCustomDarkThemes() -> [Theme]?
+    func appendCustomDarkTheme(newTheme: Theme)
+    func deleteCustomDarkTheme(_ id: UUID)
 }

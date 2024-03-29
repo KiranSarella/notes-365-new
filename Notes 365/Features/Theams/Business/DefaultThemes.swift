@@ -12,29 +12,123 @@ class DefaultThemes {
     
     // MARK: - Light Themes
     
-    static func generateBasicLightTheme() -> Theme {
+    static func generateBasicWhiteTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
+        theme.fontSize = 32
+        
         theme.fontName = "Helvetica"
-        theme.fontSize = 24
+        theme.headingFontName = "Helvetica"
+        theme.blockQuoteFontName = "Helvetica"
+        theme.codeFontName = "Menlo"
+        
         theme.canvasColor = Color.white
         theme.bodyColor = Color.primary
         theme.headingColor = Color.primary
         theme.styleColor = Color.primary
         theme.codeColor = Color.primary
         theme.blockQuoteColor = Color.primary
-        theme.listColor = Color.primary
-        theme.highlightColor = Color.yellow.opacity(0.25)
         
+        return theme
+    }
+    
+    static func generateGrayTheme() -> Theme {
+        var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
+        theme.fontSize = 32
+        
+        theme.fontName = "Helvetica"
         theme.headingFontName = "Helvetica"
         theme.blockQuoteFontName = "Helvetica"
         theme.codeFontName = "Menlo"
         
-        theme.enableBackground = false
-        theme.enableHeadingFont = false
-        theme.enableBlockQuoteFont = false
+        theme.canvasColor = Color(hex: 0xF5F5F5)
+        theme.bodyColor = Color(hex: 0x333333)
+        theme.headingColor = Color(hex: 0x333333)
+        theme.styleColor = Color(hex: 0x333333)
+        theme.codeColor = Color.primary
+        theme.blockQuoteColor = Color.primary
         
         return theme
     }
+    
+    static func generateBlueTheme() -> Theme {
+        var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
+        theme.fontSize = 32
+        
+        theme.fontName = "Helvetica"
+        theme.headingFontName = "Helvetica"
+        theme.blockQuoteFontName = "Helvetica"
+        theme.codeFontName = "Menlo"
+        
+        theme.canvasColor = Color(hex: 0xE6F7FF)
+        theme.bodyColor = Color(hex: 0x0000FF)
+        theme.headingColor = Color(hex: 0x0000FF)
+        theme.styleColor = Color(hex: 0x0000FF)
+        theme.codeColor = Color.primary
+        theme.blockQuoteColor = Color.primary
+        
+        return theme
+    }
+    
+    static func generateGreenTheme() -> Theme {
+        var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
+        theme.fontSize = 32
+        
+        theme.fontName = "Helvetica"
+        theme.headingFontName = "Helvetica"
+        theme.blockQuoteFontName = "Helvetica"
+        theme.codeFontName = "Menlo"
+        
+        theme.canvasColor = Color(hex: 0xE6FFE6)
+        theme.bodyColor = Color(hex: 0x006600)
+        theme.headingColor = Color(hex: 0x006600)
+        theme.styleColor = Color(hex: 0x006600)
+        theme.codeColor = Color.primary
+        theme.blockQuoteColor = Color.primary
+        
+        return theme
+    }
+    
+    static func generateBeigeTheme() -> Theme {
+        var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
+        theme.fontSize = 34
+        
+        theme.fontName = "Avenir Next"
+        theme.headingFontName = "Helvetica"
+        theme.blockQuoteFontName = "Futura"
+        theme.codeFontName = "Menlo"
+        
+        theme.canvasColor = Color(hex: 0xFAF3E0)
+        theme.bodyColor = Color(hex: 0x663300)
+        theme.headingColor = Color(hex: 0x663300)
+        theme.styleColor = Color(hex: 0x663300)
+        theme.codeColor = Color.primary
+        theme.blockQuoteColor = Color(hex: 0x941751)
+        
+        return theme
+    }
+    
+    
+    static func generateLavenderTheme() -> Theme {
+        var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
+        theme.fontSize = 32
+        
+        theme.fontName = "Helvetica"
+        theme.headingFontName = "Helvetica"
+        theme.blockQuoteFontName = "Helvetica"
+        theme.codeFontName = "Menlo"
+        
+        theme.canvasColor = Color(hex: 0xE6E6FA)
+        theme.bodyColor = Color(hex: 0x660099)
+        theme.headingColor = Color(hex: 0x660099)
+        theme.styleColor = Color(hex: 0x660099)
+        theme.codeColor = Color.primary
+        theme.blockQuoteColor = Color.primary
+        
+        return theme
+    }
+    
+    
+    
     
     static func generateCustomizedLightTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
@@ -53,11 +147,6 @@ class DefaultThemes {
         theme.blockQuoteColor = Color.green
         theme.listColor = Color.mint
         theme.highlightColor = Color.yellow.opacity(0.45)
-        
-        
-        theme.enableBackground = false
-        theme.enableHeadingFont = true
-        theme.enableBlockQuoteFont = true
         
         return theme
     }
@@ -82,17 +171,18 @@ class DefaultThemes {
         theme.blockQuoteFontName = "Futura"
         theme.codeFontName = "Courier New"
         
-        theme.enableBackground = true
-        theme.enableHeadingFont = true
-        theme.enableBlockQuoteFont = true
-        
         return theme
     }
     
     static func lightPurpleLightTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
-        theme.fontName = "Times New Roman"
         theme.fontSize = 32
+        
+        theme.fontName = "Times New Roman"
+        theme.headingFontName = "Georgia"
+        theme.blockQuoteFontName = "Verdana"
+        theme.codeFontName = "Andale Mono"
+        
         theme.canvasColor = Color(hex: 0xAAA7CC, opacity: 0.16)
         theme.bodyColor = Color(hex: 0x000000)
         theme.headingColor = Color(hex: 0xFF4E00)
@@ -101,14 +191,6 @@ class DefaultThemes {
         theme.blockQuoteColor = Color(hex: 0x009B93)
         theme.listColor = Color(hex: 0x941751)
         theme.highlightColor = Color(hex: 0xFFD479, opacity: 0.50)
-        
-        theme.headingFontName = "Georgia"
-        theme.blockQuoteFontName = "Verdana"
-        theme.codeFontName = "Andale Mono"
-        
-        theme.enableBackground = true
-        theme.enableHeadingFont = true
-        theme.enableBlockQuoteFont = true
         
         return theme
     }
@@ -120,32 +202,55 @@ extension DefaultThemes {
     // MARK: - Dark Themes
     static func generateBasicDarkTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
+        theme.fontSize = 32
+        
         theme.fontName = "Helvetica"
-        theme.fontSize = 24
+        theme.headingFontName = "Helvetica"
+        theme.blockQuoteFontName = "Helvetica"
+        theme.codeFontName = "Menlo"
+        
         theme.canvasColor = Color.black
         theme.bodyColor = Color.white
         theme.headingColor = Color.white
         theme.styleColor = Color.white
         theme.codeColor = Color.white
         theme.blockQuoteColor = Color.white
-        theme.listColor = Color.white
-        theme.highlightColor = Color.yellow.opacity(0.45)
-        
-        theme.headingFontName = "Helvetica"
-        theme.blockQuoteFontName = "Helvetica"
-        theme.codeFontName = "Menlo"
-        
-        theme.enableBackground = false
-        theme.enableHeadingFont = false
-        theme.enableBlockQuoteFont = false
         
         return theme
     }
     
+    static func generateGoldCharcoalTheme() -> Theme {
+        var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
+        theme.fontSize = 32
+        
+//        theme.fontName = "Gyneric BRK"
+        theme.fontName = "Verdana"
+        theme.headingFontName = "Arial Rounded MT Bold"
+        theme.blockQuoteFontName = "Gelvji"
+        theme.codeFontName = "PT Mono"
+        
+        theme.canvasColor = Color(hex: 0x1B2627)
+        theme.bodyColor = Color(hex: 0xE0AF62)
+        theme.headingColor = Color(hex: 0x00C3DA)
+        theme.styleColor = Color(hex: 0xFFFB00)
+        theme.codeColor = Color(hex: 0x6CB36B)
+        theme.blockQuoteColor = Color(hex: 0xDB5C5B)
+        theme.highlightColor = Color(hex: 0x00DBFB, opacity: 0.40)
+        
+        return theme
+    }
+    
+    
+    
     static func generateCustomizedDarkTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
-        theme.fontName = "Helvetica Neue"
         theme.fontSize = 24
+        
+        theme.fontName = "Helvetica Neue"
+        theme.headingFontName = "Impact"
+        theme.blockQuoteFontName = "Futura"
+        theme.codeFontName = "Menlo"
+        
         theme.canvasColor = Color(hex: 0x28292A, opacity: 1)
         theme.bodyColor = Color.white
         theme.headingColor = Color.yellow
@@ -155,21 +260,18 @@ extension DefaultThemes {
         theme.listColor = Color.red
         theme.highlightColor = Color.purple.opacity(0.45)
         
-        theme.headingFontName = "Impact"
-        theme.blockQuoteFontName = "Futura"
-        theme.codeFontName = "Menlo"
-        
-        theme.enableBackground = false
-        theme.enableHeadingFont = true
-        theme.enableBlockQuoteFont = true
-        
         return theme
     }
     
     static func GrayDarkTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
-        theme.fontName = "Avenir"
         theme.fontSize = 30
+        
+        theme.fontName = "Avenir"
+        theme.headingFontName = "Georgia"
+        theme.blockQuoteFontName = "Verdana"
+        theme.codeFontName = "Courier New"
+        
         theme.canvasColor = Color(hex: 0x292A2F)
         theme.bodyColor = Color(hex: 0xFFFFFF)
         theme.headingColor = Color(hex: 0xFC6A5D)
@@ -178,14 +280,6 @@ extension DefaultThemes {
         theme.blockQuoteColor = Color(hex: 0x67B7A4)
         theme.listColor = Color(hex: 0x5BC67D)
         theme.highlightColor = Color(hex: 0x73FCD6, opacity: 0.38)
-        
-        theme.headingFontName = "Georgia"
-        theme.blockQuoteFontName = "Verdana"
-        theme.codeFontName = "Courier New"
-        
-        theme.enableBackground = true
-        theme.enableHeadingFont = true
-        theme.enableBlockQuoteFont = true
         
         return theme
     }

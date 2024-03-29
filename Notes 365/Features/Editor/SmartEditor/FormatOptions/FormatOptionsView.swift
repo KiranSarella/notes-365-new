@@ -68,37 +68,25 @@ struct FormattingOptionsView: View {
                                 editorView.heading(textStyle: .h1)
                                 contentEditedDate = DateTime.now()
                             } label: {
-                                Text("Large Title")
+                                Text(MarkdownHeading.h1.title)
                             }
                             Button {
                                 editorView.heading(textStyle: .h2)
                                 contentEditedDate = DateTime.now()
                             } label: {
-                                Text("Title")
+                                Text(MarkdownHeading.h2.title)
                             }
                             Button {
                                 editorView.heading(textStyle: .h3)
                                 contentEditedDate = DateTime.now()
                             } label: {
-                                Text("Title 2")
+                                Text(MarkdownHeading.h3.title)
                             }
                             Button {
                                 editorView.heading(textStyle: .h4)
                                 contentEditedDate = DateTime.now()
                             } label: {
-                                Text("Title 3")
-                            }
-                            Button {
-                                editorView.heading(textStyle: .h5)
-                                contentEditedDate = DateTime.now()
-                            } label: {
-                                Text("Heading")
-                            }
-                            Button {
-                                editorView.heading(textStyle: .h6)
-                                contentEditedDate = DateTime.now()
-                            } label: {
-                                Text("Subheading")
+                                Text(MarkdownHeading.h4.title)
                             }
                         }
                     } label: {

@@ -34,13 +34,7 @@ struct Theme: Identifiable {
     var blockQuoteColor: Color = Color.primary
     var listColor: Color = Color.primary
     var linkColor: Color = Color.primary
-
-    
-    var enableBackground: Bool = true
-    var enableHeadingFont: Bool = true
-    var enableBlockQuoteFont: Bool = true
-    
-    
+ 
 }
 
 extension Theme {
@@ -53,11 +47,7 @@ extension Theme {
             return Color.black
         }
     }
-    
-    var getBackgroundColor: Color {
-        enableBackground ? canvasColor : defaultCanvasColor
-    }
-    
+
     
 }
 

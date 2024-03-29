@@ -38,13 +38,51 @@ class ThemeBusiness {
     func saveDarkTheme(_ theme: Theme) {
         storage.saveDarkTheme(theme)
     }
+    
+    // MARK: - custom light themes
+    func getCustomLightThemes() -> [Theme]? {
+        storage.getCustomLightThemes()
+    }
+    
+    func appendCustomLightTheme(newTheme: Theme) {
+        storage.appendCustomLightTheme(newTheme: newTheme)
+    }
+    
+    func deleteCustomLightTheme(_ id: UUID) {
+        storage.deleteCustomLightTheme(id)
+    }
+    
+    // MARK: - custom dark themes
+    func getCustomDarkThemes() -> [Theme]? {
+        storage.getCustomDarkThemes()
+    }
+    
+    func appendCustomDarkTheme(newTheme: Theme) {
+        storage.appendCustomDarkTheme(newTheme: newTheme)
+    }
+    
+    func deleteCustomDarkTheme(_ id: UUID) {
+        storage.deleteCustomDarkTheme(id)
+    }
+    
 }
 
 extension ThemeBusiness {
     
     func getDefaultLightThemes() -> [Theme] {
         [
-            DefaultThemes.generateBasicLightTheme(),
+            DefaultThemes.generateBasicWhiteTheme(),
+            
+            DefaultThemes.generateGrayTheme(),
+            
+            DefaultThemes.generateBlueTheme(),
+            
+            DefaultThemes.generateGreenTheme(),
+            
+            DefaultThemes.generateBeigeTheme(),
+            
+            DefaultThemes.generateLavenderTheme(),
+            
             DefaultThemes.generateCustomizedLightTheme(),
             DefaultThemes.ashLightTheme(),
             DefaultThemes.lightPurpleLightTheme()
@@ -54,6 +92,7 @@ extension ThemeBusiness {
     func getDefaultDarkThemes() -> [Theme] {
         [
             DefaultThemes.generateBasicDarkTheme(),
+            DefaultThemes.generateGoldCharcoalTheme(),
             DefaultThemes.generateCustomizedDarkTheme(),
             DefaultThemes.GrayDarkTheme()
         ]

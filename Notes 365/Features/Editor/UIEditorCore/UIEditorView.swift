@@ -19,7 +19,7 @@ public class UIEditorView: UIView {
             textView.text = newValue
         }
     }
-    var theme: MarkdownTheme = ThemeState.shared.theme
+    var theme: ThemeVS = ThemeState.shared.theme
     var editorType = EditorType.smart {
         didSet {
             switch editorType {
@@ -35,7 +35,7 @@ public class UIEditorView: UIView {
     public private(set) lazy var textContainer = NSTextContainer()
     public private(set) var textView: UITextView!
    
-    convenience init(theme: MarkdownTheme) {
+    convenience init(theme: ThemeVS) {
         self.init(frame: CGRect.zero)
         self.theme = theme
     }
@@ -62,7 +62,7 @@ public class UIEditorView: UIView {
             .publisher(for: .themeUpdated)
             .sink { [weak self] notification in
                 // Unwrap the sent object
-                guard let newTheme = notification.object as? MarkdownTheme else { return }
+                guard let newTheme = notification.object as? ThemeVS else { return }
                 self?.updateTheme(theme: newTheme)
             }
             .store(in: &cancellables)
@@ -141,7 +141,7 @@ extension UIEditorView {
         // bottom scroll padding for convenience
         textView.contentInset.bottom = 440
         
-        self.textView.backgroundColor = theme.dynamicCanvasColor.uiColor
+        self.textView.backgroundColor = theme.canvasColor.uiColor
     }
     
     func setAsReadOnly() {

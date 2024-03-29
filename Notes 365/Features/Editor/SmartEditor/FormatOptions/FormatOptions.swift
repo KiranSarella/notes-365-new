@@ -18,8 +18,6 @@ public enum TextStyleKey {
     case h2
     case h3
     case h4
-    case h5
-    case h6
     
     case inline
     case codeBlock

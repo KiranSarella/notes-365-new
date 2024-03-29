@@ -23,6 +23,15 @@ protocol ThemeInteractor {
 //    func update(theme: Theme) throws
 //    func setLightTheme(id: String)
 //    func setDarkTheme(id: String)
+    
+    // MARK: - custom light themes
+    func getCustomLightThemes() -> [Theme]?
+    func appendCustomLightTheme(newTheme: Theme)
+    func deleteCustomLightTheme(_ id: UUID)
+    // MARK: - custom dark themes
+    func getCustomDarkThemes() -> [Theme]?
+    func appendCustomDarkTheme(newTheme: Theme)
+    func deleteCustomDarkTheme(_ id: UUID)
 }
 
 extension ThemeBusiness: ThemeInteractor {

@@ -12,7 +12,7 @@ import Combine
 class ThemeState {
     static let shared = ThemeState()
     private(set) var colorScheme: ColorScheme = .light
-    private(set) var theme: MarkdownTheme! = MarkdownTheme(id: UUID())
+    private(set) var theme: ThemeVS! = ThemeVS(id: UUID())
     private var cancellable: Cancellable? = nil
     var business = BusinessFactory.themeInteractor()
     
@@ -37,7 +37,7 @@ class ThemeState {
     }
     
     // trigged on 'save changes' action
-    func themeUpdated(newValue: MarkdownTheme) {
+    func themeUpdated(newValue: ThemeVS) {
         theme = newValue
         themeChangedNotification()
         
@@ -48,8 +48,9 @@ class ThemeState {
 //        }
     }
     
+    
     // trigged on 'set light/dark' action
-    func themeChanged(for mode: ColorScheme, newValue: MarkdownTheme) {
+    func themeChanged(for mode: ColorScheme, newValue: ThemeVS) {
         // if theme modified on current mode, the update with new theme
         if colorScheme == mode {
             theme = newValue

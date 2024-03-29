@@ -11,9 +11,9 @@ import UIKit
 // using for view only - timeline
 //  bcz of paragraph issue -- forgot the actual reason?
 class MarkdownAttriburedString {
-    var theme: MarkdownTheme
+    var theme: ThemeVS
     
-    init(theme: MarkdownTheme) {
+    init(theme: ThemeVS) {
         self.theme = theme
     }
     
@@ -1037,92 +1037,6 @@ class MarkdownAttriburedString {
             innerAttributedString.addAttribute(.markdownRange, value: SymbolPattern.h4, range: match!.range)
         }
         
-        
-        let patternH5 = SymbolPattern.h5.rawValue
-        
-        let regex5 = try! NSRegularExpression(pattern: patternH5, options: [.anchorsMatchLines])
-        
-        regex5.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
-            match, flags, stop in
-            
-            let charRange = NSRange(location: match!.range.location + 6, length: match!.range.length - 6)
-            
-            innerAttributedString.enumerateAttribute(.font, in: charRange, options: []) { value, range, stop in
-                guard let font = value as? UIFont else { return }
-                
-                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 5))
-                
-                innerAttributedString.addAttribute(.font, value: newFont, range: range)
-                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
-            }
-            
-            
-            //            innerAttributedString.addAttribute(NSAttributedString.Key.font,
-            //                                                    value: UIFont.boldSystemFont(ofSize: getHeadingFontSize(level: 5)),
-            //                                                    range: NSRange(location: match!.range.location + 6, length: match!.range.length - 6))
-            //
-            //            innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
-            //                                                    value: UIColor.systemIndigo,
-            //                                                    range: NSRange(location: match!.range.location + 6, length: match!.range.length - 6))
-            //
-            //            innerAttributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: match!.range)
-            
-            // add id key
-            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
-                                               value: 0,
-                                               range: NSRange(location: match!.range.location, length: 6))
-            
-            innerAttributedString.addAttribute(NSAttributedString.Key.font,
-                                               value: UIFont.systemFont(ofSize: 0.1),
-                                               range: NSRange(location: match!.range.location, length: 6))
-            
-            
-            innerAttributedString.addAttribute(.markdownRange, value: SymbolPattern.h5, range: match!.range)
-        }
-        
-        let patternH6 = SymbolPattern.h6.rawValue
-        
-        let regex6 = try! NSRegularExpression(pattern: patternH6, options: [.anchorsMatchLines])
-        
-        regex6.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
-            match, flags, stop in
-            
-            let charRange = NSRange(location: match!.range.location + 7, length: match!.range.length - 7)
-            
-            innerAttributedString.enumerateAttribute(.font, in: charRange, options: []) { value, range, stop in
-                guard let font = value as? UIFont else { return }
-                
-                let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold)
-                let newFont = UIFont(descriptor: fontDesc ?? font.fontDescriptor, size: getHeadingFontSize(level: 6))
-                
-                innerAttributedString.addAttribute(.font, value: newFont, range: range)
-                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
-            }
-            
-            //            innerAttributedString.addAttribute(NSAttributedString.Key.font,
-            //                                                    value: UIFont.boldSystemFont(ofSize: getHeadingFontSize(level: 6)),
-            //                                                    range: NSRange(location: match!.range.location + 7, length: match!.range.length - 7))
-            //
-            //            innerAttributedString.addAttribute(NSAttributedString.Key.foregroundColor,
-            //                                                    value: UIColor.systemMint,
-            //                                                    range: NSRange(location: match!.range.location + 7, length: match!.range.length - 7))
-            //
-            
-            //            innerAttributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: match!.range)
-            
-            // add id key
-            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
-                                               value: 0,
-                                               range: NSRange(location: match!.range.location, length: 7))
-            
-            innerAttributedString.addAttribute(NSAttributedString.Key.font,
-                                               value: UIFont.systemFont(ofSize: 0.1),
-                                               range: NSRange(location: match!.range.location, length: 7))
-            
-            
-            innerAttributedString.addAttribute(.markdownRange, value: SymbolPattern.h6, range: match!.range)
-        }
     }
     
     
