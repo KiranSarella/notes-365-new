@@ -40,6 +40,34 @@ class DefaultThemes {
         return theme
     }
     
+    static func generateLightYellowTheme() -> Theme {
+        var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
+        
+#if targetEnvironment(macCatalyst)
+        theme.fontSize = 32
+#else
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            theme.fontSize = 28
+        } else {
+            theme.fontSize = 22
+        }
+#endif
+        theme.fontName = "Gill Sans"
+        theme.headingFontName = "Arial Rounded MT Bold"
+        theme.blockQuoteFontName = "Avenir"
+        theme.codeFontName = "PT Mono"
+        
+        theme.canvasColor = Color(hex: 0xFFD479, opacity: 0.5)
+        theme.bodyColor = Color(hex: 0x5E5E5E)
+        theme.headingColor = Color(hex: 0x4C50A0)
+        theme.styleColor = Color(hex: 0xBA659D)
+        theme.highlightColor = Color(hex: 0xAF52DE, opacity: 0.2)
+        theme.blockQuoteColor = Color(hex: 0x077576)
+        theme.codeColor = Color(hex: 0x008249)
+        
+        return theme
+    }
+    
     static func generateBlueTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
         theme.fontSize = 32
