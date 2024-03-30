@@ -171,7 +171,7 @@ extension DefaultThemes {
         }
 #endif
         theme.fontName = "Helvetica Neue"
-        theme.headingFontName = "Impact"
+        theme.headingFontName = "Arial Black"
         theme.blockQuoteFontName = "Futura"
         theme.codeFontName = "Menlo"
         

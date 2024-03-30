@@ -52,8 +52,8 @@ struct SmartEditor: View {
                     }
                 }
                 .inspector(isPresented: $showingIndexView) {
-                    IndexView(items: $state.headings, headingSelection: $state.headingSelection, refreshIndexEvent: $refreshIndexEvent)
-                        .inspectorColumnWidth(440)
+                    TableOfContentsView(items: $state.headings, headingSelection: $state.headingSelection, refreshIndexEvent: $refreshIndexEvent)
+                        .inspectorColumnWidth(420)
                         .toolbar(content: {
                             ToolbarItem {
                                 Button {
@@ -128,9 +128,9 @@ struct SmartEditor: View {
                     } label: {
                         HStack {
                             if showingIndexView {
-                                Text("Hide Index")
+                                Text("Hide Table of Contents")
                             } else {
-                                Text("Show Index")
+                                Text("Show Table of Contents")
                             }
                         }
                     }
@@ -156,14 +156,14 @@ struct SmartEditor: View {
                     }
                     .foregroundColor(.primary)
                     
-                    Button {
-                        let data =  Data(editorView.text.utf8)
-                        textFileData = TextFile(data: data)
-                        showingTextExporter = true
-                    } label: {
-                        Text("Export to Text")
-                    }
-                    .foregroundColor(.primary)
+//                    Button {
+//                        let data =  Data(editorView.text.utf8)
+//                        textFileData = TextFile(data: data)
+//                        showingTextExporter = true
+//                    } label: {
+//                        Text("Export to Text")
+//                    }
+//                    .foregroundColor(.primary)
                     
                 } label: {
                     Image(systemName: "ellipsis.circle")
@@ -172,6 +172,14 @@ struct SmartEditor: View {
         }
         .pickerStyle(SegmentedPickerStyle())
         .navigationBarTitleDisplayMode(.inline)
+//        .fileExporter(isPresented: $showingTextExporter, document: textFileData, contentType: .text, defaultFilename: fileName) { result in
+//            switch result {
+//            case .success(let url):
+//                logger.debug("Saved to \(url)")
+//            case .failure(let error):
+//                logger.error("\(error)")
+//            }
+//        }
         .fileExporter(isPresented: $showingPDFExporter, document: pdfFileData, contentType: .pdf, defaultFilename: fileName) { result in
             switch result {
             case .success(let url):
@@ -180,14 +188,7 @@ struct SmartEditor: View {
                 logger.error("\(error)")
             }
         }
-        .fileExporter(isPresented: $showingTextExporter, document: textFileData, contentType: .text, defaultFilename: fileName) { result in
-            switch result {
-            case .success(let url):
-                logger.debug("Saved to \(url)")
-            case .failure(let error):
-                logger.error("\(error)")
-            }
-        }
+        
         
 //        .inspectorColumnWidth(min: 600, ideal: 600, max: 600)
         
@@ -294,7 +295,7 @@ extension ContentItem: Hashable, Equatable {
 }
 
 
-struct IndexView: View {
+struct TableOfContentsView: View {
     @Binding var items: [ContentItem]
     @Binding var headingSelection: ContentItem.ID?
     @Binding var refreshIndexEvent: Int
@@ -303,6 +304,10 @@ struct IndexView: View {
         VStack {
                 
             HStack {
+                Text("Contents")
+                    .fontWeight(.bold)
+                    .padding()
+                
                 Spacer()
                 Button {
                     refreshIndexEvent += 1
@@ -311,6 +316,7 @@ struct IndexView: View {
                         .padding()
                 }
             }
+//            .background(ThemeState.shared.theme.canvasColor.opacity(0.6))
             
             List(selection: $headingSelection) {
                 ForEach($items, id: \.id) { $item in
@@ -318,21 +324,19 @@ struct IndexView: View {
                         Spacer()
                             .frame(width: item.level.indexSpace)
                         Text(item.name)
-                            .listRowBackground(Color.clear)
+                            .lineLimit(1)
                             .foregroundColor(item.level.indexColor)
-//                            .fontWeight(item.level.indexWeight)
                             .font(Font.system(size: item.level.indexFontSize, weight: item.level.indexWeight))
                     }
-                    
+//                    .listRowBackground(Color.clear)
                 }
             }
             .listStyle(PlainListStyle())
-            .background(ThemeState.shared.theme.canvasColor.opacity(0.5))
-    //            .foregroundColor(Color.secondary)
-            .lineLimit(1)
+//            .background(ThemeState.shared.theme.canvasColor.opacity(0.6))
+//            .scrollContentBackground(.hidden)
+            
         }
-        
-        
+//        .background(ThemeState.shared.theme.canvasColor.opacity(0.6))
     }
 }
 //
@@ -418,17 +422,17 @@ extension MarkdownHeading {
     }
     
     var indexFontSize: CGFloat {
-        
-        switch self {
-        case .h1:
-            return 28
-        case .h2:
-            return 24
-        case .h3:
-            return 20
-        case .h4:
-            return 18
-        }
+        return 18
+//        switch self {
+//        case .h1:
+//            return 28
+//        case .h2:
+//            return 24
+//        case .h3:
+//            return 20
+//        case .h4:
+//            return 18
+//        }
     }
 
 }
