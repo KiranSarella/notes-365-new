@@ -71,8 +71,6 @@ extension ThemeBusiness {
     
     func getDefaultLightThemes() -> [Theme] {
         [
-            DefaultThemes.generateBasicWhiteTheme(),
-            
             DefaultThemes.generateGrayTheme(),
             
             DefaultThemes.generateBlueTheme(),

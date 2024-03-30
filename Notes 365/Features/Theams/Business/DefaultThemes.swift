@@ -12,40 +12,30 @@ class DefaultThemes {
     
     // MARK: - Light Themes
     
-    static func generateBasicWhiteTheme() -> Theme {
-        var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
-        theme.fontSize = 32
-        
-        theme.fontName = "Helvetica"
-        theme.headingFontName = "Helvetica"
-        theme.blockQuoteFontName = "Helvetica"
-        theme.codeFontName = "Menlo"
-        
-        theme.canvasColor = Color.white
-        theme.bodyColor = Color.primary
-        theme.headingColor = Color.primary
-        theme.styleColor = Color.primary
-        theme.codeColor = Color.primary
-        theme.blockQuoteColor = Color.primary
-        
-        return theme
-    }
-    
     static func generateGrayTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
-        theme.fontSize = 32
         
-        theme.fontName = "Helvetica"
+#if targetEnvironment(macCatalyst)
+        theme.fontSize = 32
+#else
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            theme.fontSize = 28
+        } else {
+            theme.fontSize = 22
+        }
+#endif
+        theme.fontName = "Avenir"
         theme.headingFontName = "Helvetica"
-        theme.blockQuoteFontName = "Helvetica"
-        theme.codeFontName = "Menlo"
+        theme.blockQuoteFontName = "Proxima Nova"
+        theme.codeFontName = "Courier New"
         
         theme.canvasColor = Color(hex: 0xF5F5F5)
         theme.bodyColor = Color(hex: 0x333333)
-        theme.headingColor = Color(hex: 0x333333)
-        theme.styleColor = Color(hex: 0x333333)
-        theme.codeColor = Color.primary
-        theme.blockQuoteColor = Color.primary
+        theme.headingColor = Color(hex: 0x000000)
+        theme.styleColor = Color(hex: 0xC91E03)
+        theme.highlightColor = Color(hex: 0xFFD479, opacity: 0.6)
+        theme.blockQuoteColor = Color(hex: 0x009051)
+        theme.codeColor = Color(hex: 0x0433FF)
         
         return theme
     }
