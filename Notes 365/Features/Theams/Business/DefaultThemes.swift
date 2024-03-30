@@ -43,11 +43,19 @@ class DefaultThemes {
     
     static func skyBlueTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
-        theme.fontSize = 24
+#if targetEnvironment(macCatalyst)
+        theme.fontSize = 28
+#else
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            theme.fontSize = 22
+        } else {
+            theme.fontSize = 18
+        }
+#endif
         
-        theme.fontName = "Helvetica"
+        theme.fontName = "Helvetica Neue"
         theme.headingFontName = "Arial Rounded MT Bold"
-        theme.blockQuoteFontName = "Kefa"
+        theme.blockQuoteFontName = "Futura"
         theme.codeFontName = "Monaco"
         
         theme.canvasColor = Color(hex: 0xE6F7FF)
@@ -57,7 +65,7 @@ class DefaultThemes {
         theme.codeColor = Color.blue
         theme.blockQuoteColor = Color.green
         theme.listColor = Color.mint
-        theme.highlightColor = Color.yellow.opacity(0.45)
+        theme.highlightColor = Color(hex: 0xffe941, opacity: 0.45)
         
         return theme
     }
@@ -66,7 +74,7 @@ class DefaultThemes {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
         
 #if targetEnvironment(macCatalyst)
-        theme.fontSize = 32
+        theme.fontSize = 34
 #else
         if UIDevice.current.userInterfaceIdiom == .pad {
             theme.fontSize = 28
@@ -74,18 +82,18 @@ class DefaultThemes {
             theme.fontSize = 22
         }
 #endif
-        theme.fontName = "Avenir"
-        theme.headingFontName = "Helvetica"
+        theme.fontName = "Times New Roman"
+        theme.headingFontName = "Georgia"
         theme.blockQuoteFontName = "Proxima Nova"
         theme.codeFontName = "Courier New"
         
         theme.canvasColor = Color(hex: 0xF5F5F5)
         theme.bodyColor = Color(hex: 0x333333)
-        theme.headingColor = Color(hex: 0x000000)
-        theme.styleColor = Color(hex: 0xC91E03)
+        theme.headingColor = Color(hex: 0x0160A8)
+        theme.styleColor = Color(hex: 0xC01D04)
         theme.highlightColor = Color(hex: 0xFFD479, opacity: 0.6)
         theme.blockQuoteColor = Color(hex: 0x009051)
-        theme.codeColor = Color(hex: 0x0433FF)
+        theme.codeColor = Color(hex: 0x5E5E5E)
         
         return theme
     }
@@ -112,7 +120,7 @@ class DefaultThemes {
         theme.headingColor = Color(hex: 0x4C50A0)
         theme.styleColor = Color(hex: 0xBA659D)
         theme.highlightColor = Color(hex: 0xAF52DE, opacity: 0.2)
-        theme.blockQuoteColor = Color(hex: 0x077576)
+        theme.blockQuoteColor = Color(hex: 0x058081)
         theme.codeColor = Color(hex: 0x008249)
         
         return theme
@@ -120,39 +128,29 @@ class DefaultThemes {
     
     static func beigeTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
+#if targetEnvironment(macCatalyst)
         theme.fontSize = 34
+#else
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            theme.fontSize = 26
+        } else {
+            theme.fontSize = 22
+        }
+#endif
         
         theme.fontName = "Avenir Next"
         theme.headingFontName = "Helvetica"
         theme.blockQuoteFontName = "Futura"
-        theme.codeFontName = "Menlo"
+        theme.codeFontName = "PT Mono"
         
         theme.canvasColor = Color(hex: 0xFAF3E0)
         theme.bodyColor = Color(hex: 0x663300)
         theme.headingColor = Color(hex: 0x663300)
-        theme.styleColor = Color(hex: 0x663300)
-        theme.codeColor = Color.primary
+        theme.styleColor = Color(hex: 0x006400)
+        theme.highlightColor = Color(hex: 0x8EEEF1, opacity: 0.50)
         theme.blockQuoteColor = Color(hex: 0x941751)
+        theme.codeColor = Color(hex: 0x005493)
         
-        return theme
-    }
-    
-    static func ashLightTheme() -> Theme {
-        var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .light)
-        theme.fontName = "Avenir"
-        theme.fontSize = 30
-        theme.canvasColor = Color(hex: 0xF6F1EC)
-        theme.bodyColor = Color(hex: 0x212121)
-        theme.headingColor = Color(hex: 0x0069B8)
-        theme.styleColor = Color(hex: 0xE87EC4)
-        theme.codeColor = Color(hex: 0x00A75E)
-        theme.blockQuoteColor = Color(hex: 0x0096FF)
-        theme.listColor = Color(hex: 0xFF2F92)
-        theme.highlightColor = Color(hex: 0xAF52DE, opacity: 0.30)
-        
-        theme.headingFontName = "Georgia"
-        theme.blockQuoteFontName = "Futura"
-        theme.codeFontName = "Courier New"
         
         return theme
     }

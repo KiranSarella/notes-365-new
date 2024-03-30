@@ -75,8 +75,7 @@ extension ThemeBusiness {
             DefaultThemes.skyBlueTheme(),
             DefaultThemes.grayTheme(),
             DefaultThemes.lightYellowTheme(),
-            DefaultThemes.beigeTheme(),
-            DefaultThemes.ashLightTheme()
+            DefaultThemes.beigeTheme()
         ]
     }
     
