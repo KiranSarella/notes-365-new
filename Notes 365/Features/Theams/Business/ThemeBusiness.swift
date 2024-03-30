@@ -18,7 +18,7 @@ class ThemeBusiness {
         if let theme = storage.fetchLightTheme() {
             return theme
         } else {
-            return DefaultThemes.generateCustomizedLightTheme()
+            return DefaultThemes.defaultWhiteTheme()
         }
     }
     
@@ -71,20 +71,12 @@ extension ThemeBusiness {
     
     func getDefaultLightThemes() -> [Theme] {
         [
-            DefaultThemes.generateGrayTheme(),
-            DefaultThemes.generateLightYellowTheme(),
-            
-            DefaultThemes.generateBlueTheme(),
-            
-            DefaultThemes.generateGreenTheme(),
-            
-            DefaultThemes.generateBeigeTheme(),
-            
-            DefaultThemes.generateLavenderTheme(),
-            
-            DefaultThemes.generateCustomizedLightTheme(),
-            DefaultThemes.ashLightTheme(),
-            DefaultThemes.lightPurpleLightTheme()
+            DefaultThemes.defaultWhiteTheme(),
+            DefaultThemes.skyBlueTheme(),
+            DefaultThemes.grayTheme(),
+            DefaultThemes.lightYellowTheme(),
+            DefaultThemes.beigeTheme(),
+            DefaultThemes.ashLightTheme()
         ]
     }
     
