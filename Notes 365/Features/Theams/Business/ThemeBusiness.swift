@@ -27,7 +27,7 @@ class ThemeBusiness {
         if let theme = storage.fetchDarkTheme() {
             return theme
         } else {
-            return DefaultThemes.generateCustomizedDarkTheme()
+            return DefaultThemes.defaultDarkTheme()
         }
     }
     
@@ -81,9 +81,9 @@ extension ThemeBusiness {
     
     func getDefaultDarkThemes() -> [Theme] {
         [
-            DefaultThemes.generateBasicDarkTheme(),
+            DefaultThemes.defaultDarkTheme(),
+            DefaultThemes.darkGaryYellowTheme(),
             DefaultThemes.generateGoldCharcoalTheme(),
-            DefaultThemes.generateCustomizedDarkTheme(),
             DefaultThemes.GrayDarkTheme()
         ]
     }

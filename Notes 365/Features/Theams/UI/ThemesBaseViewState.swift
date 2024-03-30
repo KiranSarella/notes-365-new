@@ -79,7 +79,7 @@ class ThemesBaseViewState {
             business.deleteCustomLightTheme(newValue.id)
             lightThemes.removeAll(where: { $0.id == newValue.id })
         } else {
-            business.appendCustomDarkTheme(newTheme: newValue.theme)
+            business.deleteCustomDarkTheme(newValue.id)
             darkThemes.removeAll(where: { $0.id == newValue.id })
         }
         themes.removeAll(where: { $0.id == newValue.id })

@@ -137,7 +137,6 @@ class DefaultThemes {
             theme.fontSize = 22
         }
 #endif
-        
         theme.fontName = "Avenir Next"
         theme.headingFontName = "Helvetica"
         theme.blockQuoteFontName = "Futura"
@@ -160,56 +159,49 @@ class DefaultThemes {
 extension DefaultThemes {
     
     // MARK: - Dark Themes
-    static func generateBasicDarkTheme() -> Theme {
+    static func defaultDarkTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
-        theme.fontSize = 32
-        
-        theme.fontName = "Helvetica"
-        theme.headingFontName = "Helvetica"
-        theme.blockQuoteFontName = "Helvetica"
-        theme.codeFontName = "Menlo"
-        
-        theme.canvasColor = Color.black
-        theme.bodyColor = Color.white
-        theme.headingColor = Color.white
-        theme.styleColor = Color.white
-        theme.codeColor = Color.white
-        theme.blockQuoteColor = Color.white
-        
-        return theme
-    }
-    
-    static func generateGoldCharcoalTheme() -> Theme {
-        var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
-        theme.fontSize = 32
-        
-//        theme.fontName = "Gyneric BRK"
-        theme.fontName = "Verdana"
-        theme.headingFontName = "Arial Rounded MT Bold"
-        theme.blockQuoteFontName = "Gelvji"
-        theme.codeFontName = "PT Mono"
-        
-        theme.canvasColor = Color(hex: 0x1B2627)
-        theme.bodyColor = Color(hex: 0xE0AF62)
-        theme.headingColor = Color(hex: 0x00C3DA)
-        theme.styleColor = Color(hex: 0xFFFB00)
-        theme.codeColor = Color(hex: 0x6CB36B)
-        theme.blockQuoteColor = Color(hex: 0xDB5C5B)
-        theme.highlightColor = Color(hex: 0x00DBFB, opacity: 0.40)
-        
-        return theme
-    }
-    
-    
-    
-    static func generateCustomizedDarkTheme() -> Theme {
-        var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
-        theme.fontSize = 24
-        
+#if targetEnvironment(macCatalyst)
+        theme.fontSize = 30
+#else
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            theme.fontSize = 24
+        } else {
+            theme.fontSize = 20
+        }
+#endif
         theme.fontName = "Helvetica Neue"
         theme.headingFontName = "Impact"
         theme.blockQuoteFontName = "Futura"
         theme.codeFontName = "Menlo"
+        
+        theme.canvasColor = Color.black
+        theme.bodyColor = Color.white
+        theme.headingColor = Color.yellow
+        theme.styleColor = Color.pink
+        theme.codeColor = Color.green
+        theme.blockQuoteColor = Color.mint
+        theme.listColor = Color.red
+        theme.highlightColor = Color.purple.opacity(0.55)
+        
+        return theme
+    }
+    
+    static func darkGaryYellowTheme() -> Theme {
+        var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
+#if targetEnvironment(macCatalyst)
+        theme.fontSize = 28
+#else
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            theme.fontSize = 22
+        } else {
+            theme.fontSize = 18
+        }
+#endif
+        theme.fontName = "Avenir"
+        theme.headingFontName = "Arial Rounded MT Bold"
+        theme.blockQuoteFontName = "Gill Sans"
+        theme.codeFontName = "PT Mono"
         
         theme.canvasColor = Color(hex: 0x28292A, opacity: 1)
         theme.bodyColor = Color.white
@@ -222,6 +214,37 @@ extension DefaultThemes {
         
         return theme
     }
+    
+    static func generateGoldCharcoalTheme() -> Theme {
+        var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
+#if targetEnvironment(macCatalyst)
+        theme.fontSize = 32
+#else
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            theme.fontSize = 24
+        } else {
+            theme.fontSize = 20
+        }
+#endif
+        theme.fontName = "Futura"
+        theme.headingFontName = "Georgia"
+        theme.blockQuoteFontName = "Gelvji"
+        theme.codeFontName = "Courier New"
+        
+        theme.canvasColor = Color(hex: 0x1B2627)
+        theme.bodyColor = Color(hex: 0xE0AF62)
+        theme.headingColor = Color(hex: 0xFFD97B)
+        theme.styleColor = Color(hex: 0xEFD700)
+        theme.highlightColor = Color(hex: 0xFF7E79, opacity: 0.45)
+        theme.blockQuoteColor = Color(hex: 0xDB5C5B)
+        theme.codeColor = Color(hex: 0x68BDE2)
+        
+        
+        
+        return theme
+    }
+    
+    
     
     static func GrayDarkTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
