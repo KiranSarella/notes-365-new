@@ -248,21 +248,27 @@ extension DefaultThemes {
     
     static func GrayDarkTheme() -> Theme {
         var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
+#if targetEnvironment(macCatalyst)
         theme.fontSize = 30
-        
-        theme.fontName = "Avenir"
-        theme.headingFontName = "Georgia"
-        theme.blockQuoteFontName = "Verdana"
+#else
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            theme.fontSize = 22
+        } else {
+            theme.fontSize = 20
+        }
+#endif
+        theme.fontName = "Verdana"
+        theme.headingFontName = "Arial Black"
+        theme.blockQuoteFontName = "Futura"
         theme.codeFontName = "Courier New"
         
         theme.canvasColor = Color(hex: 0x292A2F)
-        theme.bodyColor = Color(hex: 0xFFFFFF)
-        theme.headingColor = Color(hex: 0xFC6A5D)
-        theme.styleColor = Color(hex: 0xFC5FA3)
-        theme.codeColor = Color(hex: 0xB4B300)
+        theme.bodyColor = Color(hex: 0xD6D6D6)
+        theme.headingColor = Color(hex: 0xFF6F61)
+        theme.styleColor = Color(hex: 0x00A55D)
+        theme.highlightColor = Color(hex: 0x76D6FF, opacity: 0.35)
         theme.blockQuoteColor = Color(hex: 0x67B7A4)
-        theme.listColor = Color(hex: 0x5BC67D)
-        theme.highlightColor = Color(hex: 0x73FCD6, opacity: 0.38)
+        theme.codeColor = Color(hex: 0xFFFC79)
         
         return theme
     }
