@@ -98,6 +98,7 @@
 		5CBEF31C2B150359003A3972 /* TodayVersionStorageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBEF31B2B150359003A3972 /* TodayVersionStorageProvider.swift */; };
 		5CBEF31E2B150CE7003A3972 /* DayVersionInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBEF31D2B150CE7003A3972 /* DayVersionInteractor.swift */; };
 		5CBEF3202B151018003A3972 /* DayVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBEF31F2B151018003A3972 /* DayVersion.swift */; };
+		5CBF731A2BBBCC3100C78DD1 /* EditTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBF73192BBBCC3100C78DD1 /* EditTimelineView.swift */; };
 		5CC4C01F2A908D7000A4BE41 /* UIEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC4C01E2A908D7000A4BE41 /* UIEditorView.swift */; };
 		5CC4C0212A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CC4C0202A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift */; };
 		5CCABA802B1C9B7F009A9F2E /* ThemeInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCABA7F2B1C9B7F009A9F2E /* ThemeInteractor.swift */; };
@@ -339,6 +340,7 @@
 		5CBEF31B2B150359003A3972 /* TodayVersionStorageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayVersionStorageProvider.swift; sourceTree = "<group>"; };
 		5CBEF31D2B150CE7003A3972 /* DayVersionInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayVersionInteractor.swift; sourceTree = "<group>"; };
 		5CBEF31F2B151018003A3972 /* DayVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayVersion.swift; sourceTree = "<group>"; };
+		5CBF73192BBBCC3100C78DD1 /* EditTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTimelineView.swift; sourceTree = "<group>"; };
 		5CC4C01E2A908D7000A4BE41 /* UIEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIEditorView.swift; sourceTree = "<group>"; };
 		5CC4C0202A908DE000A4BE41 /* MarkdownAttributedString+iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MarkdownAttributedString+iOS.swift"; sourceTree = "<group>"; };
 		5CCABA7F2B1C9B7F009A9F2E /* ThemeInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeInteractor.swift; sourceTree = "<group>"; };
@@ -872,6 +874,7 @@
 				5C3DE6B12B13722C004E3621 /* RangeTimelineView.swift */,
 				5C3DE6B62B13A8A2004E3621 /* RangeTimelineState.swift */,
 				5C3DE6AE2B132155004E3621 /* SingleDayView.swift */,
+				5CBF73192BBBCC3100C78DD1 /* EditTimelineView.swift */,
 				9F45BCFA2920CCCE003DE332 /* NoteChangeHeadingView.swift */,
 			);
 			path = TimelineDetail;
@@ -1511,6 +1514,7 @@
 				5CCCF7F52AC2CB6B00F5923E /* TimelineStorage.swift in Sources */,
 				9F3DB0C6292E1D9200704860 /* ThemeBusiness.swift in Sources */,
 				9F14B491298A684F0079D23B /* ThemeOptionsView.swift in Sources */,
+				5CBF731A2BBBCC3100C78DD1 /* EditTimelineView.swift in Sources */,
 				5C74AD062B3A9B21006B33B0 /* RecentsDataService.swift in Sources */,
 				5C5668172B10C84A00CB873F /* TimelineStorageAdapter.swift in Sources */,
 				5C0A7B4E2B20DA530099F0A3 /* WeekCalendarView.swift in Sources */,
@@ -1752,7 +1756,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Notes 365/Notes 365Debug.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 34;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Notes 365/Preview Content\"";
 				DEVELOPMENT_TEAM = Z5MSV52AV7;
@@ -1775,7 +1779,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 2.8.7;
+				MARKETING_VERSION = 2.8.8;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sarella.MyNotes-local";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -1796,7 +1800,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Notes 365/Notes 365Release.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 34;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Notes 365/Preview Content\"";
 				DEVELOPMENT_TEAM = Z5MSV52AV7;
@@ -1819,7 +1823,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 2.8.7;
+				MARKETING_VERSION = 2.8.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sarella.MyNotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1988,7 +1992,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Notes 365/Notes_365.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 34;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Notes 365/Preview Content\"";
 				DEVELOPMENT_TEAM = Z5MSV52AV7;
@@ -2011,7 +2015,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 2.8.7;
+				MARKETING_VERSION = 2.8.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sarella.MyNotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

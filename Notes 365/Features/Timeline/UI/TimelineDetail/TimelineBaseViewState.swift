@@ -9,6 +9,58 @@ import Foundation
 import SwiftUI
 import Combine
 
+
+enum TimelineDateRangeType {
+    case today
+    case previousSevenDays
+    case month
+    case dynamic
+}
+
+
+
+extension Date {
+    func startOfMonth() -> Date {
+        let cal = Calendar.current
+        let comps = cal.dateComponents([.year, .month], from: self)
+        return cal.date(from: comps)!
+    }
+    
+    func endOfMonth() -> Date {
+        let cal = Calendar.current
+        let comps = cal.dateComponents([.year, .month], from: self)
+        let date = cal.date(from: comps)!
+        let lastDayOfMonth = cal.date(byAdding: DateComponents(month: 1, day: -1), to: date)!
+        return lastDayOfMonth
+    }
+    
+    func getDaysOfMonth() -> [Date] {
+        
+        //get the current Calendar for our calculations
+        let cal = Calendar.current
+        //get the days in the month as a range, e.g. 1..<32 for March
+        let monthRange = cal.range(of: .day, in: .month, for: self)!
+        //get first day of the month
+        let comps = cal.dateComponents([.year, .month], from: self)
+        //start with the first day
+        //building a date from just a year and a month gets us day 1
+        var date = cal.date(from: comps)!
+        
+        //somewhere to store our output
+        var dates: [Date] = []
+        //loop thru the days of the month
+        for _ in monthRange {
+            //add to our output array...
+            dates.append(date)
+            //and increment the day
+            date = cal.date(byAdding: .day, value: 1, to: date)!
+        }
+        return dates
+    }
+}
+
+
+
 class ContentCache {
     var contentsDB = [UUID: AttributedString]()
 }

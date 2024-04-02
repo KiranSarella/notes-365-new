@@ -49,7 +49,7 @@ class EditorSymbolsState {
     func prepareBoldAndItalicSymbols() -> ReadonlyEditorCache {
         let heading = "Bold & Italic"
         let content = """
-        This is ***Bold & italic***
+        This is ***bold & italic***
         """
         return ReadonlyEditorCache(heading: heading, content: content)
     }

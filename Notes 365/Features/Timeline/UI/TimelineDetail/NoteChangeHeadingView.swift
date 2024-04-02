@@ -14,6 +14,7 @@ struct NoteChangeHeadingView: View {
     @State var fullPath: String?
     @Binding var discardTimeline: Timeline?
     @Binding var openTimeline: Timeline?
+    @Binding var editTimeline: Timeline?
    
     var body: some View {
         HStack {
@@ -34,25 +35,66 @@ struct NoteChangeHeadingView: View {
             Spacer()
             // discard button
             if isFocused {
-                if !noteChange.fileName.isEmpty {
-                    Button {
-                        Task { @MainActor in
-                            openTimeline = noteChange
-                        }
-                    } label: {
-                        Text("Open")
-                    }
-                }
                 
-                Button {
-                    discardTimeline = noteChange
+                Menu {
+                    Button(role: .destructive) {
+                        discardTimeline = noteChange
+                    } label: {
+                        Text("Discard Timeline")
+                    }
+                    .foregroundColor(.primary)
+                    
+                    Button {
+                        editTimeline = noteChange
+                    } label: {
+                        Text("Edit Timeline")
+                    }
+                    .foregroundColor(.primary)
+                    
+                    if !noteChange.fileName.isEmpty {
+                        Button {
+                            Task { @MainActor in
+                                openTimeline = noteChange
+                            }
+                        } label: {
+                            Text("Open Notebook")
+                        }
+                        .foregroundColor(.primary)
+                    }
                 } label: {
-                    Text("Discard")
-    //                Image(systemName: "trash")
-                        .foregroundColor(.red)
+                    Image(systemName: "ellipsis.circle")
                 }
-                .help("Ignore changes in timeline")
                 .padding()
+                
+//                if !noteChange.fileName.isEmpty {
+//                    Button {
+//                        Task { @MainActor in
+//                            editTimline = noteChange
+//                        }
+//                    } label: {
+//                        Text("Edit")
+//                    }
+//                }
+//                
+//                if !noteChange.fileName.isEmpty {
+//                    Button {
+//                        Task { @MainActor in
+//                            openTimeline = noteChange
+//                        }
+//                    } label: {
+//                        Text("Open")
+//                    }
+//                }
+//                
+//                Button {
+//                    discardTimeline = noteChange
+//                } label: {
+//                    Text("Discard")
+//    //                Image(systemName: "trash")
+//                        .foregroundColor(.red)
+//                }
+//                .help("Ignore changes in timeline")
+//                .padding()
 //                .opacity(showDiscard && isFocused ? 1 : 0)
             }
         }

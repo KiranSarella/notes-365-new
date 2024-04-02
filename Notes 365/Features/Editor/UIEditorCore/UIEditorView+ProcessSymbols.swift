@@ -724,7 +724,7 @@ extension UIEditorView {
     func processHeadings(extendedRange: NSRange, textStorage innerAttributedString: NSTextStorage) {
 //        logger.debug("\(#function)")
         
-        styleHeading(symbolPattern: .h1, innerAttributedString: textStorage, extendedRange: extendedRange, symbolLenght: 2, fontLevel: 1)
+        styleHeadingTitle(symbolPattern: .h1, innerAttributedString: textStorage, extendedRange: extendedRange, symbolLenght: 2, fontLevel: 1)
         styleHeading(symbolPattern: .h2, innerAttributedString: textStorage, extendedRange: extendedRange, symbolLenght: 3, fontLevel: 2)
         styleHeading(symbolPattern: .h3, innerAttributedString: textStorage, extendedRange: extendedRange, symbolLenght: 4, fontLevel: 3)
         styleHeading(symbolPattern: .h4, innerAttributedString: textStorage, extendedRange: extendedRange, symbolLenght: 5, fontLevel: 4)
@@ -769,6 +769,7 @@ extension UIEditorView {
                     }
                     
                 } else {
+                    
                     // bold
                     let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold) ?? font.fontDescriptor
                     let newFont = UIFont(descriptor: fontDesc, size: fontSize)
@@ -791,6 +792,53 @@ extension UIEditorView {
         
     }
     
+    
+    func styleHeadingTitle(symbolPattern: SymbolPattern, innerAttributedString: NSTextStorage, extendedRange: NSRange, symbolLenght: Int, fontLevel: CGFloat) {
+//        logger.debug("\(#function)")
+        let pattern = symbolPattern.rawValue
+        let regex = try! NSRegularExpression(pattern: pattern, options: [.anchorsMatchLines])
+        let fontSize = getHeadingFontSize(level: fontLevel)
+        
+        regex.enumerateMatches(in: innerAttributedString.string, options: [], range: extendedRange) {
+            match, flags, stop in
+            
+            let range = NSRange(location: match!.range.location + symbolLenght, length: match!.range.length - symbolLenght)
+            
+            innerAttributedString.enumerateAttribute(.font, in: range, options: []) { value, range, stop in
+                guard let font = value as? UIFont else { return }
+                let aStr = innerAttributedString.attributedSubstring(from: range)
+                
+                let thinFont = UIFont.systemFont(ofSize: fontSize, weight: .thin)
+                innerAttributedString.addAttribute(.font, value: thinFont, range: range)
+                
+//                if font.familyName == theme.fontName || font.familyName == "Helvetica" {
+//                    if let uiFont = UIFont(name: theme.headingFontName, size: fontSize) {
+//                        // bold
+//                        let fontDesc = uiFont.fontDescriptor.withSymbolicTraits(.traitBold) ?? uiFont.fontDescriptor
+//                        let newFont = UIFont(descriptor: fontDesc, size: fontSize)
+//                        innerAttributedString.addAttribute(.font, value: newFont, range: range)
+//                    }
+//                } else {
+//                    // bold
+//                    let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold) ?? font.fontDescriptor
+//                    let newFont = UIFont(descriptor: fontDesc, size: fontSize)
+//                    innerAttributedString.addAttribute(.font, value: newFont, range: range)
+//                }
+                
+                // foreground color
+                innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)
+            }
+
+            // add id key
+            innerAttributedString.addAttribute(NSAttributedString.Key.markdown,
+                                                    value: 0,
+                                                    range: NSRange(location: match!.range.location, length: symbolLenght))
+            
+            innerAttributedString.addAttribute(.markdownRange, value: symbolPattern, range: match!.range)
+        }
+        
+        
+    }
     
     func getHeadingFontSize(level: CGFloat) -> CGFloat {
 //        logger.debug("\(#function)")

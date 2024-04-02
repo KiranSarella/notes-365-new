@@ -25,54 +25,6 @@ struct DiscardTimelineInfo: Equatable {
 }
 
 
-//struct SingleDayView: View {
-//    @Binding var dayTimelines: DayTimelineModel
-//    @Binding var discardTimelineInfo: DiscardTimelineInfo?
-//    @State var discardTimeline: Timeline?
-//    @State var openTimeline: Timeline?
-//    var geometryProxy: GeometryProxy
-//    @Binding var width: CGFloat
-//    @State private var notebookContentState = NotebookContentState(business: BusinessFactory.createNotebookContentBusinessFactory())
-//    
-//    
-//    var body: some View {
-//        VStack(spacing: 0) {
-//            DayHeaderView(date: dayTimelines.date)
-//            SingleDayChangesListView(timelines: $dayTimelines.timelines, discardTimeline: $discardTimeline, openTimeline: $openTimeline, geometryProxy: geometryProxy, width: $width)
-////                .background(Color("editor_background", bundle: nil))
-//        }
-////        .onAppear(perform: {
-////            displayOneByOne()
-////        })
-////        .background(Color("editor_background", bundle: nil))
-//        .onChange(of: discardTimeline) { oldValue, newValue in
-//            if let newValue = newValue {
-//                discardTimelineInfo =
-//                DiscardTimelineInfo(date: dayTimelines.date, fileId: newValue.fileUUID, changeId: newValue.id)
-//            }
-//        }
-//        .onChange(of: openTimeline) { oldValue, newValue in
-//            if let newValue = newValue {
-////                newValue.fileUUID
-//                
-//                // if notebook id valid
-//                // present it
-//                
-////                NotebookContentView(isReadOnly: false, notebookId: newValue.fileUUID, fileName: newValue.fileName, notebookContentState: notebookContentState)
-//            }
-//        }
-////        .onAppear {
-//////            state.loadDay(date)
-//////            dayTimelines.timelines.removeFirst()
-////        }
-////        .onChange(of: state.isLoaded) { oldValue, newValue in
-////            logger.info("isLoaded")
-////            if newValue {
-////                currentDateLoadingState = CurrentDateLoadingState(date: date, timmelinesCount: state.timelines.count)
-////            }
-////        }
-//    }
-//}
 
 struct DayHeaderView: View {
     let date: Date
@@ -127,10 +79,13 @@ struct SingleDayChangesListView: View {
     @Binding var timelines: [Timeline]
     @Binding var discardTimeline: Timeline?
     @Binding var openTimeline: Timeline?
+    @Binding var editTimeline: Timeline?
+    
     var geometryProxy: GeometryProxy
     @Binding var width: CGFloat
 //    @State var state = SingleDayTimelinesListState()
-  
+    
+    
     
     var body: some View {
             // each note change content list
@@ -141,22 +96,36 @@ struct SingleDayChangesListView: View {
                         DayHeaderView(date: noteChange.date)
                     }
                     List {
-                        NoteChangeHeadingView(noteChange: noteChange, discardTimeline: $discardTimeline, openTimeline: $openTimeline)
+                        NoteChangeHeadingView(noteChange: noteChange, discardTimeline: $discardTimeline, openTimeline: $openTimeline, editTimeline: $editTimeline)
 #if !targetEnvironment(macCatalyst)
                             .swipeActions(edge: .trailing) {
-                                if !noteChange.fileName.isEmpty {
-                                    Button {
-                                        Task { @MainActor in
-                                            openTimeline = noteChange
-                                        }
+                                Menu {
+                                    Button(role: .destructive) {
+                                        discardTimeline = noteChange
                                     } label: {
-                                        Text("Open")
+                                        Text("Discard Timeline")
                                     }
-                                }
-                                Button(role: .destructive) {
-                                    discardTimeline = noteChange
+//                                    .foregroundColor(.primary)
+                                    
+                                    Button {
+                                        editTimeline = noteChange
+                                    } label: {
+                                        Text("Edit Timeline")
+                                    }
+                                    .foregroundColor(.primary)
+                                    
+                                    if !noteChange.fileName.isEmpty {
+                                        Button {
+                                            Task { @MainActor in
+                                                openTimeline = noteChange
+                                            }
+                                        } label: {
+                                            Text("Open Notebook")
+                                        }
+                                        .foregroundColor(.primary)
+                                    }
                                 } label: {
-                                    Text("Discard")
+                                    Image(systemName: "ellipsis.circle")
                                 }
                             }
 #endif
@@ -194,8 +163,6 @@ struct SingleDayChangesListView: View {
                         .listRowSeparator(.hidden)
                     
                     
-                        
-                    
 //                        Spacer()
 //                        .background(Color("editor_background", bundle: nil))
 //                    }
@@ -212,4 +179,3 @@ struct SingleDayChangesListView: View {
 //        })
     }
 }
-

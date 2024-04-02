@@ -15,6 +15,8 @@ struct RangeTimelineView: View {
     @Binding var width: CGFloat
     
     @State var discardTimeline: Timeline?
+    @State var editTimeline: Timeline?
+    @State var presentEditTimelineView = false
     
     @State private var notebookContentState = NotebookContentState(business: BusinessFactory.createNotebookContentBusinessFactory())
     
@@ -23,7 +25,7 @@ struct RangeTimelineView: View {
         VStack {
             ScrollView(.vertical, showsIndicators: true) {
                 VStack {
-                    SingleDayChangesListView(timelines: $state.dayTimelineModels, discardTimeline: $discardTimeline, openTimeline: $timelineBaseState.openTimeline, geometryProxy: geometryProxy, width: $width)
+                    SingleDayChangesListView(timelines: $state.dayTimelineModels, discardTimeline: $discardTimeline, openTimeline: $timelineBaseState.openTimeline, editTimeline: $editTimeline, geometryProxy: geometryProxy, width: $width)
                     VStack {
                         if state.loadingState.displayMessage != nil {
                             HStack {
@@ -98,6 +100,25 @@ struct RangeTimelineView: View {
                 }
             }
         }
+        .onChange(of: editTimeline) { oldValue, newValue in
+            if newValue != nil {
+                Task { @MainActor in
+                    presentEditTimelineView = true
+                }
+            }
+        }
+        .onChange(of: presentEditTimelineView) { oldValue, newValue in
+            if newValue == false {
+                editTimeline = nil
+            }
+        }
+        .sheet(isPresented: $presentEditTimelineView, content: {
+            EditTimelineView(timeline: editTimeline!, presentEditTimelineView: $presentEditTimelineView)
+                .presentationDetents([.large])
+        })
+//        .popover(isPresented: $presentEditTimelineView, content: {
+//            EditTimelineView(timeline: editTimeline!)
+//        })
     }
 }
 

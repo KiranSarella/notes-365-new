@@ -1,23 +1,14 @@
 # Next Releases
-[-] default themes - 3 light and 3 dark
-[ ] index
+[-] table of contents - not working - for emtpy notebook filled
 [ ] timeline index > 7 days, > 30 days, > 60 days
-[ ] switch to disable timeline saving
-
-
-[ ] default themes cells view
-    - 1. gray - menlo
-    - 2. 
-    - 3. 
-    - 4.
-    - check text editors and prepare 
-    - atleast 4 themes
-
+[ ] edit timeline inplace
+[ ] wrap all timeline options under a menu button
+[ ] line spacing
+[ ] pdf font - set right
+[ ] previous 7 days to yesterday, daybefore, last five days
+[ ] this month, last month
 
 # Backlogs
-[ ] on hover on headings when special chars are not showing display 1...6 small number infront of heading to identify.
-
-    
 [ ] read text
 [ ] read in background audio
 [ ] TipKit
@@ -31,16 +22,18 @@
 [ ] do not track flag - (until that book closed)
 [ ] table block - new syntax
 [ ] keyboard shortcuts
+// headings
+[ ] icon before headings
+[ ] shadow
 
 # Issues 
-
 [ ] show year in timeline if year is not current year (for folders) 
 [ ] update UI for search content
 [ ] calendar state not preserving on sidebar navigation change
 [ ] cancel loading timelines if user moved to other sidebar.
 [ ] scroll to top while typing at bottom
 // search
-[ ] searc results - use load more
+[ ] searc results - use load more 
 [ ] search results sort based on alphabetic or (count if possible) 
 [ ] search is crasing for 'ipad' keyword
 [ ] search not working for two chars
@@ -59,4 +52,5 @@
 
 
 # Completed
+[x] thin weight for large heading
 
