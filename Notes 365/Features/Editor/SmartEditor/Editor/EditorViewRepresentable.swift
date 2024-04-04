@@ -37,7 +37,7 @@ struct EditorViewRepresentable: UIViewRepresentable {
         var attributes = [NSAttributedString.Key: Any]()
         let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
 //        paragraphStyle.lineHeightMultiple = 1.1
-        paragraphStyle.lineSpacing = 10
+        paragraphStyle.lineSpacing = EditorSettings.lineSpacing
         attributes[NSAttributedString.Key.paragraphStyle] = paragraphStyle
         attributes[NSAttributedString.Key.font] = theme.font
         editorView.textView.typingAttributes = attributes
@@ -192,7 +192,7 @@ struct SmartDocViewerRepresentable: UIViewRepresentable {
         var attributes = [NSAttributedString.Key: Any]()
         let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
 //        paragraphStyle.lineHeightMultiple = 1.1
-        paragraphStyle.lineSpacing = 10
+        paragraphStyle.lineSpacing = EditorSettings.lineSpacing
         attributes[NSAttributedString.Key.paragraphStyle] = paragraphStyle
         attributes[NSAttributedString.Key.font] = theme.font
         editorView.textView.typingAttributes = attributes

@@ -131,9 +131,18 @@ extension UIEditorView {
         isReadOnly = false
         layoutManager.isReadOnly = false
         
+#if targetEnvironment(macCatalyst)
         textContainer.lineFragmentPadding = 20  // margin padding
-        textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        
+        textView.textContainerInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
+#else
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            textContainer.lineFragmentPadding = 15  // margin padding
+            textView.textContainerInset = UIEdgeInsets(top: 10, left: 6, bottom: 10, right: 6)
+        } else {
+            textContainer.lineFragmentPadding = 10  // margin padding
+            textView.textContainerInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        }
+#endif
         textView.isEditable = isEditable
         textView.showsVerticalScrollIndicator = true
         textView.isScrollEnabled = true
@@ -147,10 +156,18 @@ extension UIEditorView {
     func setAsReadOnly() {
         isReadOnly = true
         layoutManager.isReadOnly = true
-        
+#if targetEnvironment(macCatalyst)
         textContainer.lineFragmentPadding = 10  // margin padding
         textView.textContainerInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        
+#else
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            textContainer.lineFragmentPadding = 8  // margin padding
+            textView.textContainerInset = UIEdgeInsets(top: 10, left: 6, bottom: 10, right: 6)
+        } else {
+            textContainer.lineFragmentPadding = 5  // margin padding
+            textView.textContainerInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        }
+#endif
         textView.isEditable = false
         textView.showsVerticalScrollIndicator = false
         textView.isScrollEnabled = false

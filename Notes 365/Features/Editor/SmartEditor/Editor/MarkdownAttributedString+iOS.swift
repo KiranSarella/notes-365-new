@@ -25,7 +25,7 @@ class MarkdownAttriburedString {
         }
         // default attrubutes
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 10
+        paragraphStyle.lineSpacing = EditorSettings.lineSpacing
         let defaultAtts: [NSAttributedString.Key: Any] = [
             .font: theme.font,
             .foregroundColor: theme.bodyColor.uiColor,// theme.bodyColor.uiColor,
@@ -70,7 +70,7 @@ class MarkdownAttriburedString {
         
         // default attrubutes
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 10
+        paragraphStyle.lineSpacing = EditorSettings.lineSpacing
         
         let defaultAtts: [NSAttributedString.Key: Any] = [
             .font: theme.font,

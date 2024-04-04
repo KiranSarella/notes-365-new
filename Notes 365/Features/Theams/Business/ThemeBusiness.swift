@@ -84,7 +84,8 @@ extension ThemeBusiness {
             DefaultThemes.defaultDarkTheme(),
             DefaultThemes.darkGaryYellowTheme(),
             DefaultThemes.generateGoldCharcoalTheme(),
-            DefaultThemes.GrayDarkTheme()
+            DefaultThemes.GrayDarkTheme(),
+            DefaultThemes.DarkBlueTheme()
         ]
     }
     

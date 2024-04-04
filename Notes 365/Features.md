@@ -7,6 +7,7 @@
 [ ] pdf font - set right
 [ ] previous 7 days to yesterday, daybefore, last five days
 [ ] this month, last month
+[ ] update headings changes in timeline, pdf generation also
 
 # Backlogs
 [ ] read text

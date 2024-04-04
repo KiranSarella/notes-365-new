@@ -42,8 +42,9 @@ extension UIEditorView: NSTextStorageDelegate {
         
         textStorage.addAttribute(.markdownRange, value: SymbolPattern.body, range: extendedRange)
         
+        // imp for spacing
         let para = NSMutableParagraphStyle()
-        para.lineSpacing = 10
+        para.lineSpacing = EditorSettings.lineSpacing
         textStorage.addAttribute(.paragraphStyle, value: para, range: extendedRange)
         
         // FIXIT: - ** if enabled, telugu font will not work. if disabled, code block and below lines font

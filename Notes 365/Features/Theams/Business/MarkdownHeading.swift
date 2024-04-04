@@ -15,25 +15,25 @@ enum MarkdownHeading: Int, CaseIterable {
     case h3 = 3
     case h4 = 4
     
-    var shortTitle: String {
-        switch self {
-        case .h1:
-            return "Title"
-        case .h2:
-            return "Subtitle"
-        case .h3:
-            return "Heading"
-        case .h4:
-            return "Subheading"
-        }
-    }
+//    var shortTitle: String {
+//        switch self {
+//        case .h1:
+//            return "Large Title"
+//        case .h2:
+//            return "Title"
+//        case .h3:
+//            return "Heading"
+//        case .h4:
+//            return "Subheading"
+//        }
+//    }
     
     var title: String {
         switch self {
         case .h1:
-            return "Title"
+            return "Large Title"
         case .h2:
-            return "Subtitle"
+            return "Title"
         case .h3:
             return "Heading"
         case .h4:
@@ -45,15 +45,14 @@ enum MarkdownHeading: Int, CaseIterable {
         getHeadingFontSize()
     }
     
-    
     var sizePercent: CGFloat {
         switch self {
         case .h1:
-            return 2.2
+            return 2.4
         case .h2:
-            return 1.5
+            return 1.7
         case .h3:
-            return 1.0
+            return 1.1
         case .h4:
             return 0.80
         }

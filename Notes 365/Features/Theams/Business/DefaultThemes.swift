@@ -274,5 +274,30 @@ extension DefaultThemes {
     }
     
     
-    
+    static func DarkBlueTheme() -> Theme {
+        var theme = Theme(id: UUID(), themeName: "Color", appearanceType: .dark)
+#if targetEnvironment(macCatalyst)
+        theme.fontSize = 30
+#else
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            theme.fontSize = 22
+        } else {
+            theme.fontSize = 20
+        }
+#endif
+        theme.fontName = "Courier Prime"
+        theme.headingFontName = "Helvetica"
+        theme.blockQuoteFontName = "Futura"
+        theme.codeFontName = "Courier New"
+        
+        theme.canvasColor = Color(hex: 0x002456)
+        theme.bodyColor = Color(hex: 0xFFFFFF)
+        theme.headingColor = Color(hex: 0xFFFB00)
+        theme.styleColor = Color(hex: 0x00F900)
+        theme.highlightColor = Color(hex: 0x76D6FF, opacity: 0.35)
+        theme.blockQuoteColor = Color(hex: 0x67B7A4)
+        theme.codeColor = Color(hex: 0xFFFC79)
+        
+        return theme
+    }
 }
