@@ -77,16 +77,19 @@ extension UIEditorView: EditorViewDelegate {
     }
     
     func findAction() {
+        logger.info("\(#function)")
         textView.findInteraction?.presentFindNavigator(showingReplace: false)
     }
     
     func findAction(with searchText: String) {
+        logger.info("\(#function)")
         textView.findInteraction?.presentFindNavigator(showingReplace: false)
         textView.findInteraction?.searchText = searchText
         textView.find(nil)
     }
     
     func markBold() {
+        logger.info("\(#function)")
         guard let selectedTextRange = textView.selectedTextRange else { return }
         let selectedRange = textView.selectedRange
         
@@ -112,6 +115,7 @@ extension UIEditorView: EditorViewDelegate {
     }
     
     func markHighlight() {
+        logger.info("\(#function)")
         guard let selectedTextRange = textView.selectedTextRange else { return }
 //        textView.undoManager?.beginUndoGrouping()
         
@@ -141,7 +145,7 @@ extension UIEditorView: EditorViewDelegate {
     
     
     func markItalic() {
-        
+        logger.info("\(#function)")
         let selectedRange = textView.selectedRange
         // get string from the selected Range
         let str = textView.text as NSString?   // So we cast String? to NSString?
@@ -173,6 +177,7 @@ extension UIEditorView: EditorViewDelegate {
     }
     
     func markStrikethrough() {
+        logger.info("\(#function)")
         let selectedRange = textView.selectedRange
         // get string from the selected Range
         let str = textView.text as NSString?   // So we cast String? to NSString?
@@ -193,6 +198,7 @@ extension UIEditorView: EditorViewDelegate {
     }
     
     func markInline() {
+        logger.info("\(#function)")
         let selectedRange = textView.selectedRange
         // get string from the selected Range
         let str = textView.text as NSString?   // So we cast String? to NSString?
@@ -213,6 +219,7 @@ extension UIEditorView: EditorViewDelegate {
     }
     
     func markCodeblock() {
+        logger.info("\(#function)")
         let selectedRange = textView.selectedRange
         // get string from the selected Range
         let str = textView.text as NSString?   // So we cast String? to NSString?
@@ -235,6 +242,7 @@ extension UIEditorView: EditorViewDelegate {
     }
     
     func markBlockQuote() {
+        logger.info("\(#function)")
         let selectedRange = textView.selectedRange
         // get string from the selected Range
         let str = textView.text as NSString?   // So we cast String? to NSString?
@@ -256,7 +264,7 @@ extension UIEditorView: EditorViewDelegate {
     
     
     func updateTheme(theme: ThemeVS) {
-//        logger.debug("\(#function)")
+        logger.debug("\(#function)")
         self.theme = theme
         
         // TODO: fix textview.text to textView.text
@@ -294,7 +302,7 @@ extension UIEditorView: EditorViewDelegate {
     }
     
     func clearFormat() {
-        
+        logger.info("\(#function)")
         // remove special chars
         // * # ~ `
         let selectedRange = textView.selectedRange
@@ -317,6 +325,7 @@ extension UIEditorView: EditorViewDelegate {
     
     
     func heading(textStyle: TextStyleKey) {
+        logger.info("\(#function)")
         let selectedRange = textView.selectedRange
         // get string from the selected Range
         let str = textView.text as NSString?   // So we cast String? to NSString?
@@ -366,10 +375,12 @@ extension UIEditorView: EditorViewDelegate {
     
     
     func performUndo() {
+        logger.info("\(#function)")
         textView.undoManager?.undo()
     }
     
     func performRedo() {
+        logger.info("\(#function)")
         textView.undoManager?.redo()
     }
 }

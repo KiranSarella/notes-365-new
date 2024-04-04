@@ -30,7 +30,7 @@ struct SmartViewerRepresentable: UIViewRepresentable {
         paragraphStyle.lineSpacing = EditorSettings.lineSpacing
         attributes[NSAttributedString.Key.paragraphStyle] = paragraphStyle
         attributes[NSAttributedString.Key.font] = theme.font
-        editorView.textView.typingAttributes = attributes
+//        editorView.textView.typingAttributes = attributes
         
         editorView.textView.text = content
         editorView.setAsReadOnly()

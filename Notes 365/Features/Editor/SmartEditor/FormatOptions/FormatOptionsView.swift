@@ -149,7 +149,40 @@ struct FormattingOptionsView: View {
                     }
                 }
                 .padding([.leading], groupPadding)
-                Spacer()
+                
+                HStack {
+                    Divider().frame(height: 28)
+                }
+                .padding([.leading], groupPadding)
+                
+                
+                HStack {
+                    Group {
+                        Button {
+                            // make selected range as bold
+                            editorView.performUndo()
+                            contentEditedDate = DateTime.now()
+                            EditorOutputBuffer.shared.canUndo = editorView.textView.undoManager?.canUndo ?? false
+                        } label: {
+                            Image(systemName: "arrow.uturn.backward")
+                                .frame(width: 28, height: buttonHeight)
+                                .help("Undo")
+                        }
+                        .disabled(!EditorOutputBuffer.shared.canUndo)
+                        
+                        Button {
+                            // make selected range as bold
+                            editorView.performRedo()
+                            contentEditedDate = DateTime.now()
+                            EditorOutputBuffer.shared.canRedo = editorView.textView.undoManager?.canRedo ?? false
+                        } label: {
+                            Image(systemName: "arrow.uturn.forward")
+                                .frame(width: 28, height: buttonHeight)
+                                .help("Redo")
+                        }
+                        .disabled(!EditorOutputBuffer.shared.canRedo)
+                    }
+                }.padding([.leading], groupPadding)
                 
                 HStack {
                     Group {
@@ -163,31 +196,10 @@ struct FormattingOptionsView: View {
                                 .help("Clear format")
                         }
                         .disabled(!enableEraser)
-                        
-//                        Button {
-//                            // make selected range as bold
-//                            editorView.performUndo()
-//                            contentEditedDate = DateTime.now()
-//                        } label: {
-//                            Image(systemName: "arrow.uturn.backward")
-//                                .frame(width: 28, height: buttonHeight)
-//                                .help("Undo")
-//                        }
-//                        .disabled(!EditorOutputBuffer.shared.canUndo)
-//                        
-//                        Button {
-//                            // make selected range as bold
-//                            editorView.performRedo()
-//                            contentEditedDate = DateTime.now()
-//                        } label: {
-//                            Image(systemName: "arrow.uturn.forward")
-//                                .frame(width: 28, height: buttonHeight)
-//                                .help("Redo")
-//                        }
-//                        .disabled(!EditorOutputBuffer.shared.canRedo)
                     }
                 }.padding([.leading], groupPadding)
                 
+                Spacer()
             }
             .padding(5)
         }

@@ -25,8 +25,14 @@ struct EditorViewRepresentable: UIViewRepresentable {
         if isConfigured {
             return editorView
         }
+        
+//        let editorView = UIEditorView()
+        
         editorView.editorType = editorType
         editorView.textView.delegate = context.coordinator
+        
+            
+        
         editorView.textView.font = theme.font
         editorView.textView.textColor = theme.bodyColor.uiColor
         editorView.textView.keyboardDismissMode = .interactive
@@ -40,7 +46,7 @@ struct EditorViewRepresentable: UIViewRepresentable {
         paragraphStyle.lineSpacing = EditorSettings.lineSpacing
         attributes[NSAttributedString.Key.paragraphStyle] = paragraphStyle
         attributes[NSAttributedString.Key.font] = theme.font
-        editorView.textView.typingAttributes = attributes
+//        editorView.textView.typingAttributes = attributes
         // set content
         editorView.textView.text = text
 
@@ -54,7 +60,7 @@ struct EditorViewRepresentable: UIViewRepresentable {
     }
     
     func updateUIView(_ editorView: UIEditorView, context: Context) {
-//        logger.debug("\(#function)")
+        logger.debug("\(#function)")
     }
     
     typealias NSViewType = UIEditorView
@@ -77,6 +83,7 @@ class EditorUICoordinator: NSObject {
 
 extension EditorUICoordinator: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
+        logger.debug("\(#function)")
 //        DispatchQueue.main.async {
 //            self.output = textView.text
 //        }
@@ -87,9 +94,38 @@ extension EditorUICoordinator: UITextViewDelegate {
     }
     
     func textViewDidChangeSelection(_ textView: UITextView) {
+        logger.debug("\(#function)")
         EditorOutputBuffer.shared.selectedRange = textView.selectedRange
     }
+    
 }
+
+//extension EditorUICoordinator {
+//    
+//    func registerNotifications() {
+//        let nc = NotificationCenter.default
+//        
+//        nc.addObserver(self, selector: #selector(context.coordinator.undoManagerDidUndo), name: NSNotification.Name.NSUndoManagerDidUndoChange, object: editorView.textView.undoManager)
+//        
+//        nc.addObserver(self, selector: #selector(context.coordinator.undoManagerDidRedo), name: NSNotification.Name.NSUndoManagerDidRedoChange, object: editorView.textView.undoManager)
+//
+//    }
+//    
+//    @objc func undoManagerDidUndo() {
+//        logger.debug("\(#function)")
+//        DispatchQueue.main.async {
+//            EditorOutputBuffer.shared.canUndo = self.parent.editorView.textView.undoManager?.canUndo ?? false
+//        }
+//    }
+//
+//    @objc func undoManagerDidRedo() {
+//        logger.debug("\(#function)")
+//        DispatchQueue.main.async {
+//            EditorOutputBuffer.shared.canUndo = self.parent.editorView.textView.undoManager?.canRedo ?? false
+//        }
+//    }
+//
+//}
 
 struct ReadOnlyMarkDownView: View {
     @State var editorView = UIEditorView()

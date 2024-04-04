@@ -133,7 +133,7 @@ extension UIEditorView {
         
 #if targetEnvironment(macCatalyst)
         textContainer.lineFragmentPadding = 20  // margin padding
-        textView.textContainerInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
+        textView.textContainerInset = UIEdgeInsets(top: 20, left: 10, bottom: 100, right: 10)
 #else
         if UIDevice.current.userInterfaceIdiom == .pad {
             textContainer.lineFragmentPadding = 15  // margin padding
@@ -148,8 +148,10 @@ extension UIEditorView {
         textView.isScrollEnabled = true
         textView.sizeToFit()
         // bottom scroll padding for convenience
-        textView.contentInset.bottom = 440
+//        textView.contentInset.bottom = 440    // ** causing text selection and scroll issues
         
+        
+        self.textView.spellCheckingType = .no   // ** bug - selected text is replacing dynamically
         self.textView.backgroundColor = theme.canvasColor.uiColor
     }
     
@@ -176,9 +178,9 @@ extension UIEditorView {
         self.textView.backgroundColor = nil // applied in timeline
     }
     
-    func refreshLayout() {
-        self.layoutManager.invalidateDisplay(forCharacterRange: NSRange())
-    }
+//    func refreshLayout() {
+//        self.layoutManager.invalidateDisplay(forCharacterRange: NSRange())
+//    }
     
     func switchToSmartEditorMode() {
         

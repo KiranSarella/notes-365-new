@@ -19,6 +19,7 @@ class EditorOutputBuffer {
     var canRedo: Bool = false
     
     func reset(_ input: String) {
+        logger.debug("\(#function)")
         self.output = input
         selectedRange = NSRange()
         canUndo = false

@@ -32,7 +32,7 @@ struct PreviewViewUI: UIViewRepresentable {
 //        paragraphStyle.lineSpacing = 10
         attributes[NSAttributedString.Key.paragraphStyle] = paragraphStyle
         attributes[NSAttributedString.Key.font] = theme.font
-        editorView.textView.typingAttributes = attributes
+//        editorView.textView.typingAttributes = attributes
         // set content
         editorView.textView.text = text
         editorView.setAsReadOnly()
