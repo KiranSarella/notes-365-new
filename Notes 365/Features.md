@@ -1,9 +1,8 @@
 # Next Releases
-[-] table of contents - not working - for emtpy notebook filled
 [ ] timeline index > 7 days, > 30 days, > 60 days
 [ ] previous 7 days to yesterday, daybefore, last five days
 [ ] this month, last month
-[ ] update headings changes in timeline, pdf generation also
+
 
 # Backlogs
 [ ] read text
@@ -11,7 +10,6 @@
 [ ] TipKit
 [ ] MetricKit
 [ ] update search UI
-[ ] minimap with headings selection and with horizontal interactive scroll bar
 [ ] folding - expand collapse heading sections as scope
 // editor related
 [] on hover on a line or block, control chars should visible
@@ -51,3 +49,4 @@
 # Completed
 [x] thin weight for large heading
 [x] edit timeline inplace
+[x] table of contents - not working - for emtpy notebook filled

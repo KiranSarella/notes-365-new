@@ -89,8 +89,6 @@
 		<string>solid-3d.ttf</string>
 		<string>caracas-fina2.0.ttf</string>
 	</array>
-	<key>UIApplicationSupportsPrintCommand</key>
-	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

@@ -82,9 +82,6 @@
 		5C8FADF92B0A06F600B80BD9 /* StringDiffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F45BD302920CCCE003DE332 /* StringDiffTests.swift */; };
 		5C8FADFB2B0A072600B80BD9 /* NotebooksListStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8FADFA2B0A072600B80BD9 /* NotebooksListStateTests.swift */; };
 		5C9060522B0F46060068DD65 /* CurrentLevelState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9060512B0F46060068DD65 /* CurrentLevelState.swift */; };
-		5CA77C162A24AE220030EFB2 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C152A24AE220030EFB2 /* Collections */; };
-		5CA77C182A24AE220030EFB2 /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C172A24AE220030EFB2 /* DequeModule */; };
-		5CA77C1A2A24AE220030EFB2 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 5CA77C192A24AE220030EFB2 /* OrderedCollections */; };
 		5CAF9E7F2B679A730020E9CB /* ChallengeContour.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF9E7D2B679A730020E9CB /* ChallengeContour.ttf */; };
 		5CAF9E802B679A730020E9CB /* ChallengeShadow.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF9E7E2B679A730020E9CB /* ChallengeShadow.ttf */; };
 		5CAF9E822B679A950020E9CB /* FredokaOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF9E812B679A950020E9CB /* FredokaOne-Regular.ttf */; };
@@ -198,7 +195,6 @@
 		5CF877262B63C057001F509C /* IMFeENit29P.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5CF877232B63C057001F509C /* IMFeENit29P.ttf */; };
 		5CF877272B63C057001F509C /* IMFeENsc29P.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5CF877242B63C057001F509C /* IMFeENsc29P.ttf */; };
 		5CFCF5E62ABEDFA400351EEA /* NotebookData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFCF5E52ABEDF7000351EEA /* NotebookData.swift */; };
-		5CFCF5E92ABEFDAF00351EEA /* Fakery in Frameworks */ = {isa = PBXBuildFile; productRef = 5CFCF5E82ABEFDAF00351EEA /* Fakery */; };
 		9F09CEB129267FBC00609D99 /* TodayVersionBusiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F09CEB029267FBC00609D99 /* TodayVersionBusiness.swift */; };
 		9F14B491298A684F0079D23B /* ThemeOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B490298A684F0079D23B /* ThemeOptionsView.swift */; };
 		9F14B4AE298F98900079D23B /* FontPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F14B4AD298F98900079D23B /* FontPicker.swift */; };
@@ -502,10 +498,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5CFCF5E92ABEFDAF00351EEA /* Fakery in Frameworks */,
-				5CA77C162A24AE220030EFB2 /* Collections in Frameworks */,
-				5CA77C182A24AE220030EFB2 /* DequeModule in Frameworks */,
-				5CA77C1A2A24AE220030EFB2 /* OrderedCollections in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1265,10 +1257,6 @@
 			);
 			name = "Notes 365";
 			packageProductDependencies = (
-				5CA77C152A24AE220030EFB2 /* Collections */,
-				5CA77C172A24AE220030EFB2 /* DequeModule */,
-				5CA77C192A24AE220030EFB2 /* OrderedCollections */,
-				5CFCF5E82ABEFDAF00351EEA /* Fakery */,
 			);
 			productName = "Notes 365";
 			productReference = 9F45BC9E2920CAAE003DE332 /* Notes 365.app */;
@@ -1343,8 +1331,6 @@
 			);
 			mainGroup = 9F45BC952920CAAE003DE332;
 			packageReferences = (
-				5CA77C142A24AE220030EFB2 /* XCRemoteSwiftPackageReference "swift-collections" */,
-				5CFCF5E72ABEFDAF00351EEA /* XCRemoteSwiftPackageReference "Fakery" */,
 			);
 			productRefGroup = 9F45BC9F2920CAAE003DE332 /* Products */;
 			projectDirPath = "";
@@ -1760,7 +1746,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Notes 365/Notes 365Debug.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 34;
+				CURRENT_PROJECT_VERSION = 35;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Notes 365/Preview Content\"";
 				DEVELOPMENT_TEAM = Z5MSV52AV7;
@@ -1783,7 +1769,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 2.8.8;
+				MARKETING_VERSION = 2.8.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.sarella.MyNotes-local";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -1804,7 +1790,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Notes 365/Notes 365Release.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 34;
+				CURRENT_PROJECT_VERSION = 35;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Notes 365/Preview Content\"";
 				DEVELOPMENT_TEAM = Z5MSV52AV7;
@@ -1827,7 +1813,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 2.8.8;
+				MARKETING_VERSION = 2.8.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sarella.MyNotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1996,7 +1982,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Notes 365/Notes_365.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 34;
+				CURRENT_PROJECT_VERSION = 35;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Notes 365/Preview Content\"";
 				DEVELOPMENT_TEAM = Z5MSV52AV7;
@@ -2019,7 +2005,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 2.8.8;
+				MARKETING_VERSION = 2.8.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sarella.MyNotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2124,48 +2110,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		5CA77C142A24AE220030EFB2 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/swift-collections.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
-		5CFCF5E72ABEFDAF00351EEA /* XCRemoteSwiftPackageReference "Fakery" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/vadymmarkov/Fakery";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.1.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		5CA77C152A24AE220030EFB2 /* Collections */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5CA77C142A24AE220030EFB2 /* XCRemoteSwiftPackageReference "swift-collections" */;
-			productName = Collections;
-		};
-		5CA77C172A24AE220030EFB2 /* DequeModule */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5CA77C142A24AE220030EFB2 /* XCRemoteSwiftPackageReference "swift-collections" */;
-			productName = DequeModule;
-		};
-		5CA77C192A24AE220030EFB2 /* OrderedCollections */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5CA77C142A24AE220030EFB2 /* XCRemoteSwiftPackageReference "swift-collections" */;
-			productName = OrderedCollections;
-		};
-		5CFCF5E82ABEFDAF00351EEA /* Fakery */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5CFCF5E72ABEFDAF00351EEA /* XCRemoteSwiftPackageReference "Fakery" */;
-			productName = Fakery;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9F45BC962920CAAE003DE332 /* Project object */;
 }
