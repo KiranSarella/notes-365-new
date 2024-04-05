@@ -44,7 +44,7 @@ extension UIEditorView: EditorViewDelegate {
     func generatePDFData() -> Data? {
         logger.info("\(#function)")
         var pdfTheme = BusinessFactory.themeInteractor().getLightTheme()
-        pdfTheme.fontSize = pdfTheme.fontSize * 0.6
+        pdfTheme.fontSize = 11 //pdfTheme.fontSize * 0.2
         let attrStrGen = MarkdownAttriburedString(theme: pdfTheme.markdownTheme)
         let attrStr = attrStrGen.getAttriburedString(forMarkdown: self.text)
         
@@ -55,7 +55,7 @@ extension UIEditorView: EditorViewDelegate {
         let pageSize = CGSize(width: 595.2, height: 841.8)
         // Use this to get US Letter size instead
         // let pageSize = CGSize(width: 612, height: 792)
-        let padding: CGFloat = 40 // 72
+        let padding: CGFloat = 50 // 72
         // create some sensible margins
         let pageMargins = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         // calculate the printable rect from the above two
