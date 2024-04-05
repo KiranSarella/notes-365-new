@@ -156,6 +156,7 @@ struct ReadOnlyMarkDownView: View {
 //            editedDate = DateTime.now()
 //            logger.debug("\(newValue ?? "")")
             editorView.textView.text = newValue ?? ""
+            updateHeight()
         }
     }
     

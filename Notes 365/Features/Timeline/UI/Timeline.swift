@@ -15,6 +15,7 @@ struct Timeline: Identifiable, Hashable {
     var fileName: String
     var filePath: String
     var date: Date
+    var updatedTime: Date
     
     var isDeleted: Bool
     var content: String?
@@ -34,4 +35,14 @@ struct Timeline: Identifiable, Hashable {
 
 extension Timeline: Equatable {
     
+}
+
+
+extension Timeline {
+    func timelineB() -> TimelineB {
+        var b = TimelineB(notebookId: fileUUID, date: date)
+        b.content = content ?? ""
+        b.updatedTime = updatedTime
+        return b
+    }
 }

@@ -11,6 +11,7 @@ import SwiftUI
 struct EditTimelineView: View {
     let timeline: Timeline
     @Binding var presentEditTimelineView: Bool
+    @Binding var editedTimeline: Timeline?
     
     @State private var editorView = UIEditorView()
     @State private var showSymbols = false
@@ -43,9 +44,6 @@ struct EditTimelineView: View {
                     .lineSpacing(EditorSettings.lineSpacing)
             }
             .toolbar(content: {
-                
-                
-                
                 ToolbarItem(placement: .topBarLeading) {
                     Button(action: {
                         presentEditTimelineView = false
@@ -71,13 +69,14 @@ struct EditTimelineView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
-                        
+                        var updatedTimeline = timeline
+                        updatedTimeline.content = editorView.text
+                        editedTimeline = updatedTimeline
+                        presentEditTimelineView = false
                     }, label: {
                         Text("Update")
                     })
                 }
-                
-                
             })
         }
 //        .frame(width: 1600, height: 900)

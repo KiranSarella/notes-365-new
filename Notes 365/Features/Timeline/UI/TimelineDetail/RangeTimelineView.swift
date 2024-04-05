@@ -16,6 +16,7 @@ struct RangeTimelineView: View {
     
     @State var discardTimeline: Timeline?
     @State var editTimeline: Timeline?
+    @State var editedTimeline: Timeline?
     @State var presentEditTimelineView = false
     
     @State private var notebookContentState = NotebookContentState(business: BusinessFactory.createNotebookContentBusinessFactory())
@@ -61,10 +62,13 @@ struct RangeTimelineView: View {
                     }
                 }
             } else {
-                // if recently opended is today, refetch content, if not exists - remove it.
                 Task {
                     try? await Task.sleep(nanoseconds: 2_000_000_000)
-                    state.refreshOpenedTimelineContent(&timelineBaseState.openTimeline)
+                    // refresh if todays notebook updated
+                    if timelineBaseState.openTimeline != nil {
+                        state.refreshOpenedTimelineContent(timelineBaseState.openTimeline!)
+                        timelineBaseState.openTimeline = nil
+                    }
                 }
             }
         }
@@ -112,9 +116,20 @@ struct RangeTimelineView: View {
                 editTimeline = nil
             }
         }
+        .onChange(of: editedTimeline) { oldValue, newValue in
+            if let newValue = newValue {
+                state.updateTimelineContent(newValue)
+                
+                // clear selections
+                editedTimeline = nil
+                editTimeline = nil
+            }
+        }
         .sheet(isPresented: $presentEditTimelineView, content: {
-            EditTimelineView(timeline: editTimeline!, presentEditTimelineView: $presentEditTimelineView)
-                .presentationDetents([.large])
+            if let editTimeline = editTimeline {
+                EditTimelineView(timeline: editTimeline, presentEditTimelineView: $presentEditTimelineView, editedTimeline: $editedTimeline)
+                    .presentationDetents([.large])
+            }
         })
 //        .popover(isPresented: $presentEditTimelineView, content: {
 //            EditTimelineView(timeline: editTimeline!)

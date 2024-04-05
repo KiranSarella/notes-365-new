@@ -14,6 +14,7 @@ protocol TimelineInteractor {
     func stopTimelineCreationProcess()
     func getFirstAvailableTimelineDate() -> Date?
     func discard(changeId: String, date: Date, fileId: UUID) throws
+    func updateTimelineContent(_ timeline: TimelineB) throws
 }
 
 extension TimelineBusiness: TimelineInteractor {

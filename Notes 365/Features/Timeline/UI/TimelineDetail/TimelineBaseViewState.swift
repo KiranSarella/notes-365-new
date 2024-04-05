@@ -113,7 +113,10 @@ extension TimelineB {
         var t = Timeline(id: id,
                          fileUUID: notebookId,
                          fileName: fileName ?? "",
-                         filePath: "", date: date, isDeleted: isDeleted)
+                         filePath: "", 
+                         date: date,
+                         updatedTime: updatedTime, 
+                         isDeleted: isDeleted)
         t.content = content
         return t
     }

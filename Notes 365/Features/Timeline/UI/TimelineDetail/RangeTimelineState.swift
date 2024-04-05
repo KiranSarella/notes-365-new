@@ -362,11 +362,11 @@ class RangeTimelineState {
         }
     }
     
-    func refreshOpenedTimelineContent(_ newValue: inout Timeline?) {
-        guard let openTimeline = newValue else { return }
-        // if today
+    /// if recently opended is today, refetch content
+    func refreshOpenedTimelineContent(_ newValue: Timeline) {
+        let openTimeline = newValue
+        // refresh if today only, else skip
         if !openTimeline.date.isToday {
-            newValue = nil
             return
         }
         
@@ -393,8 +393,20 @@ class RangeTimelineState {
                 dayTimelineModels.remove(at: index)
             }
         }
-        // deselect
-        newValue = nil
     }
     
+    
+    func updateTimelineContent(_ timeline: Timeline) {
+        logger.info("\(#function)")
+        do {
+            try timelineBusiness.updateTimelineContent(timeline.timelineB())
+            
+            guard let index = dayTimelineModels.firstIndex(where: { $0.id == timeline.id }) else { return }
+            Task { @MainActor in
+                dayTimelineModels[index].content = timeline.content
+            }
+        } catch let error {
+            logger.error("\(error)")
+        }
+    }
 }

@@ -50,7 +50,7 @@ enum MarkdownHeading: Int, CaseIterable {
         case .h1:
             return 2.4
         case .h2:
-            return 1.7
+            return 1.6
         case .h3:
             return 1.1
         case .h4:

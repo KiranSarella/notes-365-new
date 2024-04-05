@@ -44,12 +44,15 @@ struct NoteChangeHeadingView: View {
                     }
                     .foregroundColor(.primary)
                     
-                    Button {
-                        editTimeline = noteChange
-                    } label: {
-                        Text("Edit Timeline")
+                    if noteChange.date.isToday == false {
+                        Button {
+                            editTimeline = noteChange
+                        } label: {
+                            Text("Edit Timeline")
+                        }
+                        .foregroundColor(.primary)
                     }
-                    .foregroundColor(.primary)
+                    
                     
                     if !noteChange.fileName.isEmpty {
                         Button {

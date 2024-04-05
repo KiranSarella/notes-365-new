@@ -37,6 +37,11 @@ class TimelineBusiness {
             logger.error("\(error)")
         }
     }
+   
+    func updateTimelineContent(_ timeline: TimelineB) throws {
+        logger.info("\(#function)")
+        return try storage.save(dayNotebookChange: timeline)
+    }
     
     func getFirstAvailableTimelineDate() -> Date? {
         logger.info("\(#function)")
