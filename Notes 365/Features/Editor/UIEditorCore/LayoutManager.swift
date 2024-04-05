@@ -57,7 +57,7 @@ private extension LayoutManager {
                 r.origin.x += origin.x
                 r.origin.y += origin.y
                 
-                r = r.offsetBy(dx: origin.x - 10, dy: origin.y + 3)
+                r = r.offsetBy(dx: origin.x - 2, dy: origin.y)
                 
                 //                    let c = UIGraphicsGetCurrentContext()!
                 //                    c.saveGState()
@@ -220,7 +220,7 @@ private extension LayoutManager {
                 // background
                 var bgRect = rect
                 bgRect.size.width = bgRect.width - 40   // maintain trailing padding
-                let bgPath = UIBezierPath(rect: bgRect.offsetBy(dx: origin.x + gap, dy: origin.y - 4))
+                let bgPath = UIBezierPath(rect: bgRect.offsetBy(dx: origin.x + gap, dy: origin.y - 2))
                 color0.withAlphaComponent(0.05).setFill()
                 bgPath.fill()
                 

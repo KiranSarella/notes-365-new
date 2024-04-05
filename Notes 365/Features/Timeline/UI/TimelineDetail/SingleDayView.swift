@@ -100,12 +100,14 @@ struct SingleDayChangesListView: View {
 #if !targetEnvironment(macCatalyst)
                             .swipeActions(edge: .trailing) {
                                 Menu {
+                                    
                                     Button(role: .destructive) {
                                         discardTimeline = noteChange
                                     } label: {
                                         Text("Discard Timeline")
+                                            .foregroundColor(.red)
                                     }
-//                                    .foregroundColor(.primary)
+                                    .foregroundColor(.red)
                                     
                                     if noteChange.date.isToday == false {
                                         Button {

@@ -528,8 +528,9 @@ extension UIEditorView {
             let para = NSMutableParagraphStyle()
             para.firstLineHeadIndent = 20
             para.headIndent = 20
+            para.tailIndent = -10
             para.lineSpacing = 10
-//            para.tailIndent = 10
+            
             innerAttributedString.addAttribute(.paragraphStyle, value: para, range: textRange)
 //            print(lineRange)
         }
@@ -715,10 +716,10 @@ extension UIEditorView {
             let para = NSMutableParagraphStyle()
             para.firstLineHeadIndent = 20
             para.headIndent = 20
+            para.tailIndent = -10
             para.lineSpacing = 10
             para.paragraphSpacing = 10
             para.paragraphSpacingBefore = 10
-//            para.tailIndent = 10
             innerAttributedString.addAttribute(.paragraphStyle, value: para, range: fullRange)
         }
     }

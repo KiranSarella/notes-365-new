@@ -41,8 +41,9 @@ struct NoteChangeHeadingView: View {
                         discardTimeline = noteChange
                     } label: {
                         Text("Discard Timeline")
+                            .foregroundColor(.red)
                     }
-                    .foregroundColor(.primary)
+                    .foregroundColor(.red)
                     
                     if noteChange.date.isToday == false {
                         Button {
