@@ -65,8 +65,8 @@ class EditorSymbolsState {
     func prepareHeadingSymbols() -> ReadonlyEditorCache {
         let heading = "Headings"
         let content = """
-        # Title
-        ## Subtitle
+        # Large Title
+        ## Title
         ### Heading
         #### Subheading
         """

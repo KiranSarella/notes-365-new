@@ -749,7 +749,7 @@ extension UIEditorView {
             innerAttributedString.enumerateAttribute(.font, in: range, options: []) { value, range, stop in
                 guard let font = value as? UIFont else { return }
 //                print("enumerateAttribute: .font", range)
-                let aStr = innerAttributedString.attributedSubstring(from: range)
+//                let aStr = innerAttributedString.attributedSubstring(from: range)
 //                print(aStr.string)
 //                print(font)
 //                print(font.familyName, theme.fontName)

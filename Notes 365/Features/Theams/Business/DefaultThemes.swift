@@ -171,7 +171,7 @@ extension DefaultThemes {
         }
 #endif
         theme.fontName = "Helvetica Neue"
-        theme.headingFontName = "Arial Black"
+        theme.headingFontName = "Helvetica"
         theme.blockQuoteFontName = "Futura"
         theme.codeFontName = "Menlo"
         
@@ -258,7 +258,7 @@ extension DefaultThemes {
         }
 #endif
         theme.fontName = "Verdana"
-        theme.headingFontName = "Arial Black"
+        theme.headingFontName = "Helvetica"
         theme.blockQuoteFontName = "Futura"
         theme.codeFontName = "Courier New"
         
@@ -296,7 +296,7 @@ extension DefaultThemes {
         theme.styleColor = Color(hex: 0x00F900)
         theme.highlightColor = Color(hex: 0x76D6FF, opacity: 0.35)
         theme.blockQuoteColor = Color(hex: 0x67B7A4)
-        theme.codeColor = Color(hex: 0xFFFC79)
+        theme.codeColor = Color(hex: 0xFF1400)
         
         return theme
     }
