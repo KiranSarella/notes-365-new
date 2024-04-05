@@ -1,10 +1,6 @@
 # Next Releases
 [-] table of contents - not working - for emtpy notebook filled
 [ ] timeline index > 7 days, > 30 days, > 60 days
-[ ] edit timeline inplace
-[ ] wrap all timeline options under a menu button
-[ ] line spacing
-[ ] pdf font - set right
 [ ] previous 7 days to yesterday, daybefore, last five days
 [ ] this month, last month
 [ ] update headings changes in timeline, pdf generation also
@@ -54,4 +50,4 @@
 
 # Completed
 [x] thin weight for large heading
-
+[x] edit timeline inplace
