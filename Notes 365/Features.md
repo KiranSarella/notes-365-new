@@ -1,8 +1,8 @@
 # Next Releases
-[ ] timeline index > 7 days, > 30 days, > 60 days
+[ ] remove recent folders - list
 [ ] previous 7 days to yesterday, daybefore, last five days
 [ ] this month, last month
-
+[ ] table of contents - h1 - centered, convert list to sections list
 
 # Backlogs
 [ ] read text
@@ -47,6 +47,5 @@
 
 
 # Completed
-[x] thin weight for large heading
-[x] edit timeline inplace
-[x] table of contents - not working - for emtpy notebook filled
+[x] large title - telugu not working
+

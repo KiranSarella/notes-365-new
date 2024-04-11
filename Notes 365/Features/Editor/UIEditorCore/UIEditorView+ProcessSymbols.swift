@@ -908,24 +908,20 @@ extension UIEditorView {
             
             innerAttributedString.enumerateAttribute(.font, in: range, options: []) { value, range, stop in
                 guard let font = value as? UIFont else { return }
-                let aStr = innerAttributedString.attributedSubstring(from: range)
+//                let aStr = innerAttributedString.attributedSubstring(from: range)
+//                
+//                let thinFont = UIFont.systemFont(ofSize: fontSize, weight: .thin)
+//                innerAttributedString.addAttribute(.font, value: thinFont, range: range)
                 
-                let thinFont = UIFont.systemFont(ofSize: fontSize, weight: .thin)
-                innerAttributedString.addAttribute(.font, value: thinFont, range: range)
-                
-//                if font.familyName == theme.fontName || font.familyName == "Helvetica" {
-//                    if let uiFont = UIFont(name: theme.headingFontName, size: fontSize) {
-//                        // bold
-//                        let fontDesc = uiFont.fontDescriptor.withSymbolicTraits(.traitBold) ?? uiFont.fontDescriptor
-//                        let newFont = UIFont(descriptor: fontDesc, size: fontSize)
-//                        innerAttributedString.addAttribute(.font, value: newFont, range: range)
-//                    }
-//                } else {
-//                    // bold
-//                    let fontDesc = font.fontDescriptor.withSymbolicTraits(.traitBold) ?? font.fontDescriptor
-//                    let newFont = UIFont(descriptor: fontDesc, size: fontSize)
-//                    innerAttributedString.addAttribute(.font, value: newFont, range: range)
-//                }
+                if font.familyName == theme.fontName || font.familyName == "Helvetica" {
+                    let thinFont = UIFont.systemFont(ofSize: fontSize, weight: .thin)
+                    innerAttributedString.addAttribute(.font, value: thinFont, range: range)
+                } else {
+                    // bold
+                    let fontDesc = font.fontDescriptor
+                    let newFont = UIFont(descriptor: fontDesc, size: fontSize)
+                    innerAttributedString.addAttribute(.font, value: newFont, range: range)
+                }
                 
                 // foreground color
                 innerAttributedString.addAttribute(.foregroundColor, value: theme.headingColor.uiColor, range: range)

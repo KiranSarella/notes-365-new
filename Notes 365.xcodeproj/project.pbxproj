@@ -1127,8 +1127,8 @@
 			children = (
 				9F93E14929E59E3200210E99 /* MarkdownEditor.md */,
 				9F93E14F29E6A2AC00210E99 /* SmartEditor.swift */,
-				5CC852DE2BC03E6100DD92C5 /* TableOfContentsView.swift */,
 				5C7CE61B2BB1877C00A5AAEF /* SmartEditorViewState.swift */,
+				5CC852DE2BC03E6100DD92C5 /* TableOfContentsView.swift */,
 				9F93E14C29E5B16700210E99 /* FormatOptions */,
 				9F93E14B29E5B02E00210E99 /* Editor */,
 			);

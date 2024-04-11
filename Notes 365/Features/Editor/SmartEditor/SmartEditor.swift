@@ -234,6 +234,7 @@ extension SmartEditor {
             headings.append(HeadingRange(line: line, range: range))
         }
         
+        var sections = [[ContentItem]]()
         var items = [ContentItem]()
         
         for heading in headings {
@@ -259,8 +260,14 @@ extension SmartEditor {
            }
         }
         
-        self.state.headings = items
         self.state.headingsRange = Set(headings)
+        //        self.state.headings = items
+        
+        // convert to sections
+        
+
+        
+        
     }
     
 }
