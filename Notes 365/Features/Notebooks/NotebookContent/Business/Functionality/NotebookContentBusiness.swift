@@ -52,8 +52,9 @@ class NotebookContentBusinessNew {
     }
     
     func update(notebookContent: NotebookContentB) throws {
+        sendUpdatedNotification(notebookContent)
         try notebookContent.update(in: storage)
-        do { sendUpdatedNotification(notebookContent) }
+//        do { sendUpdatedNotification(notebookContent) }
     }
     
     /// send edited notification
@@ -65,7 +66,7 @@ class NotebookContentBusinessNew {
             "notebook_id": notebookContent.notebookID,
             "content": notebookContent.content
         ] as [String : Any]
-        NotificationCenter.default.post(name: Notification.Name.notebookContentUpdated, object: nil, userInfo: info)
+        NotificationCenter.default.post(name: Notification.Name.notebookContentWillUpdate, object: nil, userInfo: info)
     }
 }
 

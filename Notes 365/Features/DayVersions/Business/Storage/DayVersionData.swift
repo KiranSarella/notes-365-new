@@ -16,9 +16,13 @@ class DayVersionData {
     var date: Date = DateTime.now()
     
     init(notebookID: UUID, content: String = "") {
-        self.id = "\(date.string(format: "yyyy-MM-dd"))-\(notebookID)"
+        self.id = Self.createID(for: notebookID, date: date)
         self.notebookID = notebookID
         self.content = content
+    }
+    
+    static func createID(for notebookID: UUID, date: Date) -> String {
+        "\(date.string(format: "yyyy-MM-dd"))-\(notebookID)"
     }
 }
 
@@ -28,5 +32,11 @@ extension DayVersionData: CustomStringConvertible {
         str.append("\(id)\n")
         str.append("\(content)\n")
         return str
+    }
+}
+
+extension DayVersionData: Equatable {
+    static func == (lhs: DayVersionData, rhs: DayVersionData) -> Bool {
+        lhs.id == rhs.id
     }
 }

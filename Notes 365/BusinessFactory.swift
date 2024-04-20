@@ -60,8 +60,8 @@ class BusinessFactory {
     
     static func dayVersionInteractor() -> DayVersionInteractor {
         let modelContext = SharedContext.shared.getModelContext()
-        let storage = TodayVersionStorageAdapter(modelContext: modelContext)
-        return TodayVersionBusiness(storage: storage)
+        let storage = DayVersionStorageAdapter(modelContext: modelContext)
+        return DayVersionBusiness(storage: storage)
     }
     
     static func contentSearchInteractor() -> ContentSearchInteractor {

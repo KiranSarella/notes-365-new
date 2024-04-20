@@ -224,7 +224,7 @@ struct ContentView: View {
                     await NotebooksPathService.shared.startObservingServices()
                 }
                 
-                BusinessFactory.dayVersionInteractor().setupDayVersionCreationProcess()
+                BusinessFactory.dayVersionInteractor().cleanOlderDayVersions()
                 BusinessFactory.timelineInteractor().setupTimeineCreationProcess()
                 BusinessFactory.recentsInteractor().setupRecentsAddingProcess()
                 
@@ -237,7 +237,7 @@ struct ContentView: View {
 //                    try? await Task.sleep(nanoseconds: 5_000_000_000)
                     await NotebooksPathService.shared.doRefreshIfNotLoaded()
                     // delay to fix SwiftData issue with unique for UI loading is List
-                    try? await Task.sleep(nanoseconds: 5_000_000_000)
+                    try? await Task.sleep(nanoseconds: 4_000_000_000)
                     if UIDevice.current.userInterfaceIdiom != .phone {
                         Task { @MainActor in
                             sidebarItemSelected = SidebarItem.notebooks.id

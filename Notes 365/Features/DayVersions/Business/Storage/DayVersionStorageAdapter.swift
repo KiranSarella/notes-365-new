@@ -8,12 +8,12 @@
 import Foundation
 import SwiftData
 
-class TodayVersionStorageAdapter: TodayVersionStorageProvider {
+class DayVersionStorageAdapter: DayVersionStorageProvider {
     
-    let storage: TodayVersionStorage
+    let storage: DayVersionStorage
     
     init(modelContext: ModelContext) {
-        storage = TodayVersionStorage(modelContext: modelContext)
+        storage = DayVersionStorage(modelContext: modelContext)
     }
     
     func deleteAllVersions(belowDate: Date) throws {
@@ -28,7 +28,7 @@ class TodayVersionStorageAdapter: TodayVersionStorageProvider {
         try storage.create(todayVersion: todayVersion)
     }
     
-    func getTodayVersion(for versionId: String) throws -> String? {
+    func getTodayVersion(for versionId: String) throws -> DayVersionData? {
         try storage.getTodayVersion(for: versionId)
     }
     

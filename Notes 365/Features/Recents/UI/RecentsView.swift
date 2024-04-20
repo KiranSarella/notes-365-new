@@ -38,7 +38,7 @@ fileprivate struct RecentsView: View {
                     emptyView
                 }
                 fileSection
-                folderSection
+//                folderSection     // deprecating folders section in recents
             }
         }
         .navigationTitle(navigationTitle)

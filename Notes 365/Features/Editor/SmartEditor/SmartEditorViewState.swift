@@ -9,7 +9,8 @@ import Foundation
 
 @Observable
 class SmartEditorViewState {
-    var headings = [ContentItem]()
+//    var headings = [ContentItem]()
+    var headingsNested = [[ContentItem]]()
     var headingSelection: ContentItem.ID? = nil
     var headingsRange = Set<HeadingRange>()
     

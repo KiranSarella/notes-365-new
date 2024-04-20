@@ -1,8 +1,10 @@
 # Next Releases
-[ ] remove recent folders - list
-[ ] previous 7 days to yesterday, daybefore, last five days
+[ ] convert to list for selected lines
+[ ] headings - convert cursor line - using tokenizer
+[ ] clean - current para/line if it works
 [ ] this month, last month
-[ ] table of contents - h1 - centered, convert list to sections list
+[ ] previous 7 days to yesterday, daybefore, last five days
+
 
 # Backlogs
 [ ] read text
@@ -48,4 +50,7 @@
 
 # Completed
 [x] large title - telugu not working
+[x] remove recent folders - list
+[x] table of contents - h1 - centered, convert list to sections list
+[x] must save as a separate timeline when day changed
 

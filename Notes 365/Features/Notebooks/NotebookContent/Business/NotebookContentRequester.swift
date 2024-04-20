@@ -19,7 +19,7 @@ extension NotebookContentBusinessNew: NotebookContentRequester {
 }
 
 extension Notification.Name {
-    public static let notebookContentUpdated = Notification.Name("com.notes365.notebookContentUpdated")
+    public static let notebookContentWillUpdate = Notification.Name("com.notes365.notebookContentWillUpdate")
     public static let notebookContentLoaded = Notification.Name("com.notes365.notebookContentLoaded")
 }
 

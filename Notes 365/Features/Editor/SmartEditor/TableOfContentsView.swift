@@ -58,9 +58,9 @@ extension MarkdownHeading {
         return 18
 //        switch self {
 //        case .h1:
-//            return 28
-//        case .h2:
 //            return 24
+//        case .h2:
+//            return 22
 //        case .h3:
 //            return 20
 //        case .h4:
@@ -68,11 +68,23 @@ extension MarkdownHeading {
 //        }
     }
 
+    var indexSpace: CGFloat {
+        switch self {
+        case .h1:
+            return 0
+        case .h2:
+            return 0
+        case .h3:
+            return 20
+        case .h4:
+            return 40
+        }
+    }
 }
 
 
 struct TableOfContentsView: View {
-    @Binding var items: [ContentItem]
+    @Binding var items: [[ContentItem]]
     @Binding var headingSelection: ContentItem.ID?
     @Binding var refreshIndexEvent: Int
     
@@ -95,21 +107,51 @@ struct TableOfContentsView: View {
 //            .background(ThemeState.shared.theme.canvasColor.opacity(0.6))
             
             List(selection: $headingSelection) {
-                ForEach($items, id: \.id) { $item in
-                    HStack {
-                        Spacer()
-                            .frame(width: item.level.indexSpace)
-                        Text(item.name)
-                            .lineLimit(1)
-                            .foregroundColor(item.level.indexColor)
-                            .font(Font.system(size: item.level.indexFontSize, weight: item.level.indexWeight))
+                ForEach($items, id: \.self) { $subItem in
+                    
+                    Section {
+                        ForEach($subItem, id: \.id) { $item in
+                            
+                            if item.level == .h1 {
+                                HStack {
+                                    Spacer()
+//                                        .frame(width: item.level.indexSpace)
+                                    Text(item.name)
+                                        .lineLimit(2)
+                                        .multilineTextAlignment(.center)
+                                        .foregroundColor(Color.primary.opacity(0.9))
+                                        .fontWeight(item.level.indexWeight)
+//                                        .font(.headline)
+//                                        .font(Font.system(size: item.level.indexFontSize, weight: item.level.indexWeight))
+                                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 2, trailing: 20))
+//                                        .padding()
+                                    Spacer()
+//                                        .frame(width: item.level.indexSpace)
+                                }
+//                                .listRowBackground(ThemeState.shared.theme.canvasColor.secondary)
+                                .listRowBackground(Color.primary.colorInvert().opacity(0.6))
+                                .listRowSeparator(.hidden)
+//                                .foregroundColor(Color.secondary)
+                            } else {
+                                HStack {
+                                    Spacer()
+                                        .frame(width: item.level.indexSpace)
+                                    Text(item.name)
+                                        .lineLimit(1)
+                                        .foregroundColor(item.level.indexColor)
+                                        .fontWeight(item.level.indexWeight)
+//                                        .font(Font.system(size: item.level.indexFontSize, weight: item.level.indexWeight))
+                                }
+                            }
+                        }
                     }
+                    
 //                    .listRowBackground(Color.clear)
                 }
             }
-            .listStyle(PlainListStyle())
-//            .background(ThemeState.shared.theme.canvasColor.opacity(0.6))
-//            .scrollContentBackground(.hidden)
+//            .listStyle(PlainListStyle())
+            .background(ThemeState.shared.theme.canvasColor.opacity(0.6))
+            .scrollContentBackground(.hidden)
             
         }
 //        .background(ThemeState.shared.theme.canvasColor.opacity(0.6))

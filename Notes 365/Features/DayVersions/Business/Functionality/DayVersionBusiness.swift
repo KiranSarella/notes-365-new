@@ -8,10 +8,10 @@
 import Foundation
 import SwiftData
 
-class TodayVersionBusiness {
-    var storage: TodayVersionStorageProvider
+class DayVersionBusiness {
+    var storage: DayVersionStorageProvider
     
-    init(storage: TodayVersionStorageProvider) {
+    init(storage: DayVersionStorageProvider) {
         self.storage = storage
     }
     
@@ -22,6 +22,21 @@ class TodayVersionBusiness {
             try storage.deleteAllVersions(belowDate: yesterday)
         } catch let error {
             logger.error("\(error)")
+        }
+    }
+    
+    func createBaseVersion(for notebookId: UUID) -> DayVersionData? {
+        logger.debug("\(#function)")
+        do {
+            let notebookContentBusiness = BusinessFactory.createNotebookContentBusinessFactory()
+            let notebookContent = try notebookContentBusiness.retrieveOrInstantiateNotebookContent(for: notebookId)
+            let dayVersion = DayVersionData(notebookID: notebookId, content: notebookContent.content)
+            try storage.create(todayVersion: dayVersion)
+            logger.debug("new base version created")
+            return dayVersion
+        } catch let error {
+            logger.error("\(error)")
+            return nil
         }
     }
     
@@ -51,7 +66,7 @@ class TodayVersionBusiness {
         return false
     }
     
-    func getTodayVersion(for notebookId: UUID) -> String? {
+    func getTodayVersion(for notebookId: UUID) -> DayVersionData? {
         logger.debug("getTodayVersion - \(notebookId)")
         do {
             let todayVersionId = DayVersionData(notebookID: notebookId).id
@@ -75,16 +90,16 @@ class TodayVersionBusiness {
 }
 
 
-extension TodayVersionBusiness {
+extension DayVersionBusiness {
     
-    func setupDayVersionCreationProcess() {
-        logger.info("\(#function)")
-        DayVersionCreator.shared.startProviding(for: self)
-        cleanOlderDayVersions()
-    }
-    
-    func stopDayVersionCreationProcess() {
-        logger.info("\(#function)")
-        DayVersionCreator.shared.stopProviding()
-    }
+//    func setupDayVersionCreationProcess() {
+//        logger.info("\(#function)")
+////        DayVersionCreator.shared.startProviding(for: self)
+//        cleanOlderDayVersions()
+//    }
+//    
+//    func stopDayVersionCreationProcess() {
+//        logger.info("\(#function)")
+//        DayVersionCreator.shared.stopProviding()
+//    }
 }

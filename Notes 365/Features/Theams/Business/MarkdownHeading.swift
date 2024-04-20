@@ -66,16 +66,5 @@ enum MarkdownHeading: Int, CaseIterable {
         self.fontSizePercent * baseFontSize
     }
     
-    var indexSpace: CGFloat {
-        switch self {
-        case .h1:
-            return 0
-        case .h2:
-            return 20
-        case .h3:
-            return 40
-        case .h4:
-            return 60
-        }
-    }
+    
 }

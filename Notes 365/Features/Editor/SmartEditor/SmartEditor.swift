@@ -52,7 +52,7 @@ struct SmartEditor: View {
                     }
                 }
                 .inspector(isPresented: $showingIndexView) {
-                    TableOfContentsView(items: $state.headings, headingSelection: $state.headingSelection, refreshIndexEvent: $refreshIndexEvent)
+                    TableOfContentsView(items: $state.headingsNested, headingSelection: $state.headingSelection, refreshIndexEvent: $refreshIndexEvent)
                         .inspectorColumnWidth(420)
                         .toolbar(content: {
                             ToolbarItem {
@@ -212,7 +212,7 @@ extension SmartEditor {
     func populateTableOfContents() {
         
         if editorView.text.isEmpty {
-            self.state.headings.removeAll()
+            self.state.headingsNested.removeAll()
             self.state.headingsRange.removeAll()
             return
         }
@@ -234,7 +234,6 @@ extension SmartEditor {
             headings.append(HeadingRange(line: line, range: range))
         }
         
-        var sections = [[ContentItem]]()
         var items = [ContentItem]()
         
         for heading in headings {
@@ -264,8 +263,25 @@ extension SmartEditor {
         //        self.state.headings = items
         
         // convert to sections
-        
+        var sections = [[ContentItem]]()
+        var nested = [ContentItem]()
+        for item in items {
+            // for each new h1 heading, should start new section
+            if item.level == .h1 {
+                // append if previous list items
+                if !nested.isEmpty {
+                    sections.append(nested)
+                }
+                // start new list
+                nested = [ContentItem]()
+            }
+            nested.append(item)
+        }
+        if !nested.isEmpty {
+            sections.append(nested)
+        }
 
+        self.state.headingsNested = sections
         
         
     }

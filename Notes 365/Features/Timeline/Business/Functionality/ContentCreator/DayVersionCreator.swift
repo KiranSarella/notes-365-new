@@ -10,13 +10,13 @@ import Foundation
 class DayVersionCreator {
     
     static let shared = DayVersionCreator()
-    var business: TodayVersionBusiness?
+    var business: DayVersionBusiness?
     
     private init() {
         
     }
     
-    func startProviding(for business: TodayVersionBusiness) {
+    func startProviding(for business: DayVersionBusiness) {
         self.business = business
         observeNotebooksLoadedNotification()
     }

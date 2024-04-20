@@ -31,8 +31,6 @@ struct EditorViewRepresentable: UIViewRepresentable {
         editorView.editorType = editorType
         editorView.textView.delegate = context.coordinator
         
-            
-        
         editorView.textView.font = theme.font
         editorView.textView.textColor = theme.bodyColor.uiColor
         editorView.textView.keyboardDismissMode = .interactive

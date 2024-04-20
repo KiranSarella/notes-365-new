@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 
-class TodayVersionStorage {
+class DayVersionStorage {
     var modelContext: ModelContext
     
     init(modelContext: ModelContext) {
@@ -37,13 +37,13 @@ class TodayVersionStorage {
         try modelContext.save()
     }
     
-    func getTodayVersion(for versionId: String) throws -> String? {
+    func getTodayVersion(for versionId: String) throws -> DayVersionData? {
         let predicate = #Predicate<DayVersionData> {
             $0.id == versionId
         }
         var descriptor = FetchDescriptor(predicate: predicate)
         descriptor.fetchLimit = 1
-        return try modelContext.fetch(descriptor).first?.content
+        return try modelContext.fetch(descriptor).first
     }
     
     func removeDayVersion(for verionId: String) throws {

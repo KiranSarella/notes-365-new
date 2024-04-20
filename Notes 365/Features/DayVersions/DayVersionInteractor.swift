@@ -9,14 +9,15 @@ import Foundation
 
 protocol DayVersionInteractor {
     func cleanOlderDayVersions()
+    func createBaseVersion(for notebookId: UUID) -> DayVersionData?
     func createBaseVersionIfNotExists(for notebookId: UUID, with content: String)
     func isBaseVersionExists(notebookId: UUID) -> Bool
-    func getTodayVersion(for notebookId: UUID) -> String?
+    func getTodayVersion(for notebookId: UUID) -> DayVersionData?
     func removeDayVersion(for notebookId: UUID)
-    func setupDayVersionCreationProcess()
-    func stopDayVersionCreationProcess()
+//    func setupDayVersionCreationProcess()
+//    func stopDayVersionCreationProcess()
 }
 
-extension TodayVersionBusiness: DayVersionInteractor {
+extension DayVersionBusiness: DayVersionInteractor {
     
 }
