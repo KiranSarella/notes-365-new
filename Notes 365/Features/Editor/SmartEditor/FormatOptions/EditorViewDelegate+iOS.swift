@@ -323,56 +323,94 @@ extension UIEditorView: EditorViewDelegate {
         textView.delegate?.textViewDidChange?(textView)
     }
     
+    private func headingSymbol(for textStyle: TextStyleKey) -> String? {
+        if textStyle == .h1 {
+            return "#"
+        } else if textStyle == .h2 {
+            return "##"
+        } else if textStyle == .h3 {
+            return "###"
+        } else if textStyle == .h4 {
+            return "####"
+        }
+        
+        return nil
+    }
     
     func heading(textStyle: TextStyleKey) {
         logger.info("\(#function)")
-        let selectedRange = textView.selectedRange
-        // get string from the selected Range
-        let str = textView.text as NSString?   // So we cast String? to NSString?
-        if let substr = str?.substring(with: selectedRange), substr.count > 0 {
-            // append
-            var newStr: String!
-            if textStyle == .h1 {
-                newStr = "# \(substr)"
-                self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
-                textView.selectedRange = NSRange(location: selectedRange.location, length: selectedRange.length + 2)
-            } else if textStyle == .h2 {
-                newStr = "## \(substr)"
-                self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
-                textView.selectedRange = NSRange(location: selectedRange.location, length: selectedRange.length + 3)
-            } else if textStyle == .h3 {
-                newStr = "### \(substr)"
-                self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
-                textView.selectedRange = NSRange(location: selectedRange.location, length: selectedRange.length + 4)
-            } else if textStyle == .h4 {
-                newStr = "#### \(substr)"
-                self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
-                textView.selectedRange = NSRange(location: selectedRange.location, length: selectedRange.length + 5)
-            }
-        } else {
-            // append
-            var newStr: String!
-            if textStyle == .h1 {
-                newStr = "# "
-                self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
-                textView.selectedRange = NSRange(location: selectedRange.location + 2, length: selectedRange.length)
-            } else if textStyle == .h2 {
-                newStr = "## "
-                self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
-                textView.selectedRange = NSRange(location: selectedRange.location + 3, length: selectedRange.length)
-            } else if textStyle == .h3 {
-                newStr = "### "
-                self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
-                textView.selectedRange = NSRange(location: selectedRange.location + 4, length: selectedRange.length)
-            } else if textStyle == .h4 {
-                newStr = "#### "
-                self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
-                textView.selectedRange = NSRange(location: selectedRange.location + 5, length: selectedRange.length)
-            }
-        }
+        var markdown = headingSymbol(for: textStyle) ?? ""
+        headingNew(markdown: markdown)
         textView.delegate?.textViewDidChange?(textView)
+        return
+        
+//        let selectedRange = textView.selectedRange
+//        // get string from the selected Range
+//        let str = textView.text as NSString?   // So we cast String? to NSString?
+//        if let substr = str?.substring(with: selectedRange), substr.count > 0 {
+//            // append
+//            var newStr: String!
+//            if textStyle == .h1 {
+//                newStr = "# \(substr)"
+//                self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
+//                textView.selectedRange = NSRange(location: selectedRange.location, length: selectedRange.length + 2)
+//            } else if textStyle == .h2 {
+//                newStr = "## \(substr)"
+//                self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
+//                textView.selectedRange = NSRange(location: selectedRange.location, length: selectedRange.length + 3)
+//            } else if textStyle == .h3 {
+//                newStr = "### \(substr)"
+//                self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
+//                textView.selectedRange = NSRange(location: selectedRange.location, length: selectedRange.length + 4)
+//            } else if textStyle == .h4 {
+//                newStr = "#### \(substr)"
+//                self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
+//                textView.selectedRange = NSRange(location: selectedRange.location, length: selectedRange.length + 5)
+//            }
+//        } else {
+//            // append
+//            var newStr: String!
+//            if textStyle == .h1 {
+//                newStr = "# "
+//                self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
+//                textView.selectedRange = NSRange(location: selectedRange.location + 2, length: selectedRange.length)
+//            } else if textStyle == .h2 {
+//                newStr = "## "
+//                self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
+//                textView.selectedRange = NSRange(location: selectedRange.location + 3, length: selectedRange.length)
+//            } else if textStyle == .h3 {
+//                newStr = "### "
+//                self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
+//                textView.selectedRange = NSRange(location: selectedRange.location + 4, length: selectedRange.length)
+//            } else if textStyle == .h4 {
+//                newStr = "#### "
+//                self.textView.textStorage.replaceCharacters(in: selectedRange, with: newStr)
+//                textView.selectedRange = NSRange(location: selectedRange.location + 5, length: selectedRange.length)
+//            }
+//        }
+//        textView.delegate?.textViewDidChange?(textView)
     }
     
+    
+    func headingNew(markdown: String) {
+        if let textView = textView {
+            if let selectedRange = textView.selectedTextRange {
+                // Get the start position of the current line
+                if let startPosition = textView.position(from: selectedRange.start, offset: 0) {
+                    if let range = textView.tokenizer.rangeEnclosingPosition(startPosition, with: .paragraph, inDirection: UITextDirection(rawValue: UITextLayoutDirection.left.rawValue)) {
+                        // Set the cursor position to the start of the line
+                        if let newRange = textView.textRange(from: range.start, to: range.start) {
+                            textView.selectedTextRange = newRange
+                            textView.replace(newRange, withText: markdown + " ")
+                        }
+                    } else {
+                        textView.replace(selectedRange, withText: markdown + " ")
+                    }
+                }
+            }
+        }
+
+    }
     
     func performUndo() {
         logger.info("\(#function)")
@@ -383,6 +421,15 @@ extension UIEditorView: EditorViewDelegate {
         logger.info("\(#function)")
         textView.undoManager?.redo()
     }
+    
 }
 
 
+extension UITextInput {
+    var selectedRange: NSRange? {
+        guard let range = selectedTextRange else { return nil }
+        let location = offset(from: beginningOfDocument, to: range.start)
+        let length = offset(from: range.start, to: range.end)
+        return NSRange(location: location, length: length)
+    }
+}

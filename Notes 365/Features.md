@@ -1,5 +1,4 @@
 # Next Releases
-[ ] convert to list for selected lines
 [ ] headings - convert cursor line - using tokenizer
 [ ] clean - current para/line if it works
 [ ] this month, last month
@@ -22,6 +21,8 @@
 // headings
 [ ] icon before headings
 [ ] shadow
+
+[ ] convert to list for selected lines
 
 # Issues 
 [ ] show year in timeline if year is not current year (for folders) 
