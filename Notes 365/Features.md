@@ -1,5 +1,4 @@
 # Next Releases
-[ ] fibnocci series
 [ ] calendar - selection not saving on tab change
 
 # Backlogs
@@ -52,3 +51,5 @@
 [x] table of contents - h1 - centered, convert list to sections list
 [x] must save as a separate timeline when day changed
 [x] headings - convert cursor line - using tokenizer
+[x] fibnocci series
+
