@@ -315,13 +315,29 @@ extension UIEditorView: EditorViewDelegate {
         let str = textView.text as NSString?   // So we cast String? to NSString?
         if let substr = str?.substring(with: selectedRange) {
             // append
-            
             let cleanStr = substr.replacingOccurrences(of: "[*#~`=]", with: "", options: .regularExpression, range: nil)
             
             self.textView.textStorage.replaceCharacters(in: selectedRange, with: cleanStr)
         }
         textView.delegate?.textViewDidChange?(textView)
     }
+    
+//    func clearFormatPara() {
+//        if let textView = textView {
+//            if let selectedRange = textView.selectedTextRange {
+//                // Get the start position of the current line
+//                if let startPosition = textView.position(from: selectedRange.start, offset: 0) {
+//                    if let paraRange = textView.tokenizer.rangeEnclosingPosition(startPosition, with: .paragraph, inDirection: UITextDirection(rawValue: UITextLayoutDirection.left.rawValue)) {
+////                        textView.selectedTextRange = newRange
+////                        textView.replace(<#T##range: UITextRange##UITextRange#>, withText: <#T##String#>)
+//                    } else {
+////                        textView.replace(selectedRange, withText: markdown + " ")
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    
     
     private func headingSymbol(for textStyle: TextStyleKey) -> String? {
         if textStyle == .h1 {
@@ -409,7 +425,6 @@ extension UIEditorView: EditorViewDelegate {
                 }
             }
         }
-
     }
     
     func performUndo() {

@@ -41,6 +41,8 @@ struct FormattingOptionsView: View {
                                 .frame(width: 28, height: buttonHeight)
                                 .help("Bold")
                         }
+                        .keyboardShortcut("b")
+                        
                         Button {
                             // make selected range as italic
                             editorView.markItalic()
@@ -50,6 +52,8 @@ struct FormattingOptionsView: View {
                                 .frame(width: 28, height: buttonHeight)
                                 .help("Italic")
                         }
+                        .keyboardShortcut("i")
+                        
                         Button {
                             editorView.markStrikethrough()
                             contentEditedDate = DateTime.now()
@@ -58,6 +62,7 @@ struct FormattingOptionsView: View {
                                 .frame(width: 28, height: buttonHeight)
                                 .help("Strikethrough")
                         }
+                        .keyboardShortcut("d")
                     }
                 }
                 // Headings
@@ -70,24 +75,31 @@ struct FormattingOptionsView: View {
                             } label: {
                                 Text(MarkdownHeading.h1.title)
                             }
+//                            .keyboardShortcut("1", modifiers: [.command, .option])
+                            
                             Button {
                                 editorView.heading(textStyle: .h2)
                                 contentEditedDate = DateTime.now()
                             } label: {
                                 Text(MarkdownHeading.h2.title)
                             }
+//                            .keyboardShortcut("2", modifiers: [.command, .option])
+                            
                             Button {
                                 editorView.heading(textStyle: .h3)
                                 contentEditedDate = DateTime.now()
                             } label: {
                                 Text(MarkdownHeading.h3.title)
                             }
+//                            .keyboardShortcut("3", modifiers: [.command, .option])
+                            
                             Button {
                                 editorView.heading(textStyle: .h4)
                                 contentEditedDate = DateTime.now()
                             } label: {
                                 Text(MarkdownHeading.h4.title)
                             }
+//                            .keyboardShortcut("4", modifiers: [.command, .option])
                         }
                     } label: {
                         Text("Headings")
