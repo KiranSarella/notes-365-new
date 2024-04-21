@@ -12,11 +12,9 @@ import Combine
 
 enum TimelineDateRangeType {
     case today
-    case previousSevenDays
-    case month
-    case dynamic
+    case daysAgo
+    case calendar
 }
-
 
 
 extension Date {
@@ -218,7 +216,7 @@ class TimelineBaseViewState {
                 let seperator = SeperatorOption()
                 filterOptions.append(seperator)
                 try? await Task.sleep(nanoseconds: 1_000_000_000)
-                filterOptions.append(contentsOf: await conctructTopLevelFolders())
+                filterOptions.append(contentsOf: await constructTopLevelFolders())
                 loadedDate = DateTime.now()
                 logger.debug("dateRanges.count - \(self.filterOptions.count)")
             }
@@ -231,7 +229,7 @@ class TimelineBaseViewState {
                     f.filterType == .folder
                 }
                 
-                filterOptions.append(contentsOf: await conctructTopLevelFolders())
+                filterOptions.append(contentsOf: await constructTopLevelFolders())
 //                loadedDate = DateTime.now()
                 logger.debug("dateRanges.count - \(self.filterOptions.count)")
                 
@@ -266,32 +264,46 @@ class TimelineBaseViewState {
         var ranges = [TimelineDateRange]()
         
         var today = TimelineDateRange(title: "Today", type: .today, date: DateTime.now())
-        today.dateRange = getDates(for: today)
+        today.dateRange = [today.date]
         ranges.append(today)
         
-        // add previous 7 days by default
-        var sevenDays = TimelineDateRange(title: "Previous 7 Days", type: .previousSevenDays, date: DateTime.now().dayBefore)
-        sevenDays.dateRange = getDates(for: sevenDays)
-        ranges.append(sevenDays)
+        var yesderday = TimelineDateRange(title: "Yesterday", type: .daysAgo, date: DateTime.now().dayBefore)
+        yesderday.dateRange = [yesderday.date]
+        ranges.append(yesderday)
         
-        // add current month by default
-        var currenMonth = DateTime.now().startOfMonth()
-        var currentMonthRange = TimelineDateRange(title: "This Month", type: .month, date: currenMonth)
-        currentMonthRange.dateRange = getDates(for: currentMonthRange)
-        ranges.append(currentMonthRange)
         
-        // populate previous 3 months
-        currenMonth = currenMonth.monthBefore
-        var count = 3
-        while count > 0 {
-            var monthRange = TimelineDateRange(title: currenMonth.monthName, type: .month, date: currenMonth)
-            monthRange.dateRange = getDates(for: monthRange)
-            ranges.append(monthRange)
-            currenMonth = currenMonth.monthBefore
-            count -= 1
+        let fibDays = fibonacciSeries(upTo: 365)
+        for fibDay in fibDays {
+            let agoDate = getAgoDate(value: fibDay)
+            var timelineDate = TimelineDateRange(title: "\(fibDay) days ago", type: .daysAgo, date: agoDate)
+            timelineDate.dateRange = [agoDate]
+            ranges.append(timelineDate)
         }
         
+        // last year same day
+        let yearAgoDate = Calendar.current.date(byAdding: .year, value: -1, to: DateTime.now())!
+        var timelineDate = TimelineDateRange(title: "a year ago", type: .daysAgo, date: yearAgoDate)
+        timelineDate.dateRange = [yearAgoDate]
+        ranges.append(timelineDate)
+        
         return ranges
+    }
+    
+    func getAgoDate(value: Int) -> Date {
+        Calendar.current.date(byAdding: .day, value: -value, to: DateTime.now())!
+    }
+    
+    func fibonacciSeries(upTo limit: Int) -> [Int] {
+        var sequence = [3, 5]
+        while sequence.last! < limit {
+            let nextNumber = sequence[sequence.count - 1] + sequence[sequence.count - 2]
+            if nextNumber < limit {
+                sequence.append(nextNumber)
+            } else {
+                break
+            }
+        }
+        return sequence
     }
     
     func isSelected(input: any TopFilterOption) -> Bool {
@@ -309,26 +321,26 @@ class TimelineBaseViewState {
         return false
     }
     
-    func getDates(for dateRange: TimelineDateRange) -> [Date] {
-        switch dateRange.type {
-        case .today:
-            return [DateTime.now()]
-        case .previousSevenDays:
-            var today = DateTime.now()
-            var dates = [Date]()
-            for _ in 0..<7 {
-                today = today.dayBefore
-                dates.append(today)
-            }
-            return dates
-        case .month:
-            return dateRange.date.getDaysOfMonth()
-        case .dynamic:
-            return []
-        }
-    }
-    
-    func conctructTopLevelFolders() async -> [TimelineFolderRange] {
+//    func getDates(for dateRange: TimelineDateRange) -> [Date] {
+//        switch dateRange.type {
+//        case .today:
+//            return [DateTime.now()]
+//        case .previousSevenDays:
+//            var today = DateTime.now()
+//            var dates = [Date]()
+//            for _ in 0..<7 {
+//                today = today.dayBefore
+//                dates.append(today)
+//            }
+//            return dates
+//        case .month:
+//            return dateRange.date.getDaysOfMonth()
+//        case .dynamic:
+//            return []
+//        }
+//    }
+//    
+    func constructTopLevelFolders() async -> [TimelineFolderRange] {
         logger.debug("\(#function)")
         let topLevel = await NotebooksPathService.shared.folders.filter { nb in
             nb.parentId == nil && nb.deletedDate == nil

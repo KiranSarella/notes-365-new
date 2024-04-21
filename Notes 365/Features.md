@@ -1,8 +1,6 @@
 # Next Releases
-[ ] clean - current para/line if it works
-[ ] this month, last month
-[ ] previous 7 days to yesterday, daybefore, last five days
-
+[ ] fibnocci series
+[ ] calendar - selection not saving on tab change
 
 # Backlogs
 [ ] read text

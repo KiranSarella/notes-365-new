@@ -35,7 +35,7 @@ extension DayVersionData: CustomStringConvertible {
     }
 }
 
-extension DayVersionData: Equatable {
+extension DayVersionData: Equatable, Hashable {
     static func == (lhs: DayVersionData, rhs: DayVersionData) -> Bool {
         lhs.id == rhs.id
     }

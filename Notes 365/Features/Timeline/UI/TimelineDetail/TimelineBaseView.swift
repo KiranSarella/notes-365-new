@@ -51,7 +51,7 @@ struct TimelineBaseView: View {
     //        })
             .onChange(of: state.selectedFilterOption.id, { oldValue, newValue in
                 if let filterOption = state.selectedFilterOption as? TimelineDateRange {
-                    if filterOption.type != .dynamic {
+                    if filterOption.type != .calendar {
                         caldendarState = .none
                     }
                 } else {
@@ -62,7 +62,7 @@ struct TimelineBaseView: View {
                 if newValue == .none {
                     return
                 }
-                var filter =  TimelineDateRange(title: "", filterType: .dateRange, type: TimelineDateRangeType.dynamic, date: DateTime.now())
+                var filter =  TimelineDateRange(title: "", filterType: .dateRange, type: TimelineDateRangeType.calendar, date: DateTime.now())
                 
                 switch newValue {
                 case .day(let dayDate):

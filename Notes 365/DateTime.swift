@@ -12,7 +12,7 @@ class DateTime {
     
     #if DEBUG
     private(set) var date = Date()
-//    private(set) var date = Date.fromString(dateStr: "29/01/2024")!
+//    private(set) var date = Date.fromString(dateStr: "21/04/2025")!
     #else
     private(set) var date = Date()
     #endif
